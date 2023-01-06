@@ -7,6 +7,7 @@ export interface RegisterPropsType {
   registrationType: RegistrationType;
   image?: string;
   phoneNumber?: string;
+  externalUserID?: string;
 }
 
 export interface RegisterResponseType {

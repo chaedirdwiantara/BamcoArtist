@@ -51,7 +51,7 @@ export const EditProfileScreen: React.FC<ProfileProps> = (
         type={'edit'}
         onPressSave={onPressSave}
         dataImage={dataImage}
-        setUploadImage={(image: string) => setUploadImage(image)}
+        setUploadImage={(image: any) => setUploadImage(image)}
       />
     </View>
   );

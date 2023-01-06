@@ -1,30 +1,28 @@
 import React, {useState, useEffect} from 'react';
-import {FlashList} from '@shopify/flash-list';
 import {StyleSheet, View, Text} from 'react-native';
 
-import {
-  elipsisText,
-  height,
-  heightPercentage,
-  widthPercentage,
-} from '../../../utils';
 import {
   AddCircleIcon,
   ArrowLeftIcon,
   TickCircleIcon,
 } from '../../../assets/icon';
-import {ListCard} from '../ListCard';
 import Color from '../../../theme/Color';
 import {TopNavigation} from '../TopNavigation';
 import {color, typography} from '../../../theme';
 import {Gap, SearchBar, SsuToast} from '../../atom';
-import {TopSongListData} from '../../../data/topSong';
+import TopSong from '../../../screen/ListCard/TopSong';
+import {SongList} from '../../../interface/song.interface';
+import {height, heightPercentage, widthPercentage} from '../../../utils';
 
 interface AddSongProps {
+  listSongs: SongList[];
   onPressGoBack: () => void;
 }
 
-export const AddSongContent: React.FC<AddSongProps> = ({onPressGoBack}) => {
+export const AddSongContent: React.FC<AddSongProps> = ({
+  listSongs,
+  onPressGoBack,
+}) => {
   const [search, setSearch] = useState('');
   const [toastVisible, setToastVisible] = useState(false);
 
@@ -61,23 +59,12 @@ export const AddSongContent: React.FC<AddSongProps> = ({onPressGoBack}) => {
           height: height,
           paddingHorizontal: widthPercentage(20),
         }}>
-        <FlashList
-          data={TopSongListData}
-          showsVerticalScrollIndicator={false}
-          keyExtractor={item => item.id}
-          renderItem={({item}: any) => (
-            <ListCard.MusicList
-              rightIcon={true}
-              rightIconComponent={<AddCircleIcon />}
-              onPressIcon={onPressIcon}
-              imgUri={item.imgUri}
-              musicNum={item.musicNum}
-              musicTitle={elipsisText(item.musicTitle, 22)}
-              singerName={item.singerName}
-              containerStyles={{marginTop: heightPercentage(20)}}
-            />
-          )}
-          estimatedItemSize={TopSongListData.length}
+        <TopSong
+          dataSong={listSongs}
+          onPress={() => null}
+          rightIcon={true}
+          rightIconComponent={<AddCircleIcon />}
+          onPressIcon={onPressIcon}
         />
       </View>
 

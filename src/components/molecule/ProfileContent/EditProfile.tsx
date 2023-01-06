@@ -18,7 +18,7 @@ interface EditProfileProps {
   onPressGoBack: () => void;
   onPressSave: (params: any) => void;
   dataImage: UploadImageResponseType | undefined;
-  setUploadImage: (image: string) => void;
+  setUploadImage: (image: any) => void;
 }
 
 export const EditProfile: React.FC<EditProfileProps> = ({
@@ -68,7 +68,7 @@ export const EditProfile: React.FC<EditProfileProps> = ({
   };
 
   const sendUri = (val: {assets: string[]; path: string}) => {
-    setUploadImage(val.path);
+    setUploadImage(val);
     setUri({...uri, [uriType]: val});
   };
 

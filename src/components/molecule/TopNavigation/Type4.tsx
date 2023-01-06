@@ -2,7 +2,6 @@ import React from 'react';
 import {Text, TouchableOpacity, View, ViewStyle} from 'react-native';
 import {font} from '../../../theme';
 import topNavstyles from './topNavstyles';
-import {elipsisText} from '../../../utils';
 import {HomeIcon} from '../../../assets/icon';
 
 /** === INTERFACE === */

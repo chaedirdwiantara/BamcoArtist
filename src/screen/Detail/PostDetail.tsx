@@ -1,11 +1,22 @@
-import {LogBox, ScrollView, StyleSheet, Text, View} from 'react-native';
+import {
+  InteractionManager,
+  LogBox,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import React, {FC, useCallback, useEffect, useState} from 'react';
-import {color, font} from '../../theme';
+import {color, font, typography} from '../../theme';
 import {
   CommentInputModal,
   DetailPost,
   Gap,
+  ModalDonate,
+  ModalShare,
+  ModalSuccessDonate,
   SsuDivider,
+  SsuToast,
   TopNavigation,
 } from '../../components';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
@@ -27,7 +38,15 @@ import {
   DetailPostData,
 } from '../../interface/feed.interface';
 import {useProfileHook} from '../../hooks/use-profile.hook';
-import {duplicateFilter} from './function';
+import {TickCircleIcon} from '../../assets/icon';
+import {makeId} from './function';
+
+type cmntToCmnt = {
+  id: string;
+  userName: string;
+  commentLvl: number;
+  parentID: string;
+};
 
 type PostDetailProps = NativeStackScreenProps<RootStackParams, 'PostDetail'>;
 
@@ -62,25 +81,32 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   const [readMore, setReadMore] = useState<boolean>(false);
   const [isModalVisible, setModalVisible] = useState<boolean>(false);
   const [inputCommentModal, setInputCommentModal] = useState<boolean>(false);
-  const [imgUrl, setImgUrl] = useState<string>('');
+  const [imgUrl, setImgUrl] = useState<number>(-1);
   const [musicianId, setMusicianId] = useState<string>('');
   const [userName, setUserName] = useState<string>('');
   const [commentType, setCommentType] = useState<string>('');
   const [likeCommentId, setLikeCommentId] = useState<string>('');
   const [unlikeCommentId, setUnlikeCommentId] = useState<string>('');
-  const [cmntToCmnt, setCmntToCmnt] = useState<{
-    id: string;
-    userName: string;
-  }>();
+  const [cmntToCmnt, setCmntToCmnt] = useState<cmntToCmnt>();
+  const [cmntToCmntLvl0, setCmntToCmntLvl0] = useState<cmntToCmnt>();
   const [viewMore, setViewMore] = useState<string>('');
-  const [dataMainComment, setDataMainComment] = useState<DetailPostData>();
   const [dataProfileImg, setDataProfileImg] = useState<string>('');
-  const [commentLvl1, setCommentLvl1] = useState<CommentList[] | undefined>();
-  const [commentLvl2, setCommentLvl2] = useState<CommentList2[] | undefined>();
-  const [commentLvl3, setCommentLvl3] = useState<CommentList3[] | undefined>();
-  const [perPage, setPerPage] = useState<number>(10);
-  const [perPage2, setPerPage2] = useState<number>(1);
+  const [commentLvl1, setCommentLvl1] = useState<CommentList[]>();
+  const [commentLvl2, setCommentLvl2] = useState<CommentList2[]>();
+  const [commentLvl3, setCommentLvl3] = useState<CommentList3[]>();
   const [activePage, setActivePage] = useState<number>(0);
+  const [value, setValue] = useState<number>(0);
+  const [modalShare, setModalShare] = useState<boolean>(false);
+  const [toastVisible, setToastVisible] = useState(false);
+  const [modalDonate, setModalDonate] = useState<boolean>(false);
+  const [modalSuccessDonate, setModalSuccessDonate] = useState<boolean>(false);
+  const [trigger2ndModal, setTrigger2ndModal] = useState<boolean>(false);
+  const [delStaticComment, setDelStaticComment] = useState<number>(-1);
+  const [staticId, setStaticId] = useState<string[]>([]);
+  const [dataParent, setDataParent] = useState<
+    {parentId: string; value: number}[]
+  >([]);
+  const [goView, setGoView] = useState<boolean>(false);
 
   // ? Get Profile
   useEffect(() => {
@@ -137,7 +163,7 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
     unlikeCommentId !== '' && setUnlikeComment({id: unlikeCommentId});
   }, [unlikeCommentId]);
 
-  // !Comment Area
+  // !LoadMore Area
   // * First Condition
   useEffect(() => {
     if (dataPostDetail !== null) {
@@ -152,60 +178,189 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
     if (dataLoadMore !== null) {
       setViewMore('');
       dataLoadMore?.map((item: CommentList) => {
-        if (item.commentLevel === 1) {
+        if (item.commentLevel === 1 && commentLvl1 === undefined) {
           return setCommentLvl1(dataLoadMore);
+        } else if (item.commentLevel === 1 && commentLvl1 !== undefined) {
+          return setCommentLvl2([...commentLvl1, ...dataLoadMore]);
         } else if (item.commentLevel === 2 && commentLvl2 === undefined) {
           return setCommentLvl2(dataLoadMore);
         } else if (item.commentLevel === 2 && commentLvl2 !== undefined) {
-          let dataX = duplicateFilter(dataLoadMore, commentLvl2);
-          const mergedArray = [...commentLvl2, ...dataX];
+          const mergedArray = [...commentLvl2, ...dataLoadMore];
           return setCommentLvl2(mergedArray);
         } else if (item.commentLevel === 3 && commentLvl3 === undefined) {
           return setCommentLvl3(dataLoadMore);
         } else if (item.commentLevel === 3 && commentLvl3 !== undefined) {
-          let dataX = duplicateFilter(dataLoadMore, commentLvl3);
-          const mergedArray = [...commentLvl3, ...dataX];
+          const mergedArray = [...commentLvl3, ...dataLoadMore];
           return setCommentLvl3(mergedArray);
         }
       });
     }
   }, [dataLoadMore]);
-  // !End of Comment
 
   useEffect(() => {
-    dataPostDetail !== null ? setDataMainComment(dataPostDetail) : null;
-  }, [dataPostDetail]);
-
-  //? handle comment in commentsection & open modal comment
-  useEffect(() => {
-    if (cmntToCmnt !== undefined) {
-      setUserName(cmntToCmnt.userName);
-      setInputCommentModal(!inputCommentModal);
-    }
-  }, [cmntToCmnt]);
-
-  useEffect(() => {
-    dataCmntToCmnt !== null && viewMore === ''
+    viewMore === '' && value === 0
       ? getDetailPost({id: data.id})
-      : dataCmntToCmnt !== null && viewMore !== ''
+      : viewMore !== '' && value === 1
       ? setLoadMore({
           id: viewMore,
-          params: {page: 1, perPage: activePage === 1 ? perPage : perPage2},
+          params: {page: activePage, perPage: 3},
         })
+      : viewMore !== '' &&
+        value >= 2 &&
+        dataParent.length !== 0 &&
+        goView === true
+      ? (setLoadMore({
+          id: viewMore,
+          params: {
+            page: dataParent[
+              dataParent.findIndex(obj => obj.parentId == viewMore)
+            ]?.value,
+            perPage: 3,
+          },
+        }),
+        setGoView(false))
       : null;
-  }, [dataCmntToCmnt, viewMore, activePage]);
+  }, [dataCmntToCmnt, viewMore, activePage, dataParent, goView]);
 
-  //? handle viewMore in commentsection & call the api list comment
   useEffect(() => {
-    viewMore !== ''
-      ? setLoadMore({id: viewMore, params: {page: 1, perPage: perPage}})
-      : null;
+    if (viewMore !== '') {
+      return handleViewMore();
+    }
   }, [viewMore]);
 
+  const handleViewMore = () => {
+    if (value === 1) {
+      setActivePage(activePage + 1);
+    } else if (value !== 1 && viewMore !== '') {
+      let viewMoreInit = {parentId: viewMore, value: 1};
+      let objIndex = dataParent.findIndex(obj => obj.parentId == viewMore);
+      if (objIndex !== -1) {
+        let viewMoreX = {
+          parentId: viewMore,
+          value: dataParent[objIndex].value + 1,
+        };
+        let dataParentX = dataParent.filter(obj => obj.parentId !== viewMore);
+        return setDataParent([...dataParentX, viewMoreX]), setGoView(true);
+      } else {
+        return setDataParent([...dataParent, viewMoreInit]), setGoView(true);
+      }
+    }
+  };
+
+  const handleSetPage = (value: number) => {
+    setDelStaticComment(value);
+    setValue(value);
+  };
+  // !End of LoadMore
+
+  // ! Comment Area
   const commentOnPress = (id: string, username: string) => {
-    setInputCommentModal(!inputCommentModal);
+    setInputCommentModal(true);
     setMusicianId(id);
     setUserName(username);
+    setCmntToCmntLvl0({
+      id: makeId(5),
+      userName: dataProfile?.data.fullname ? dataProfile.data.fullname : '',
+      commentLvl: 0,
+      parentID: dataPostDetail?.id ? dataPostDetail.id : '0',
+    });
+  };
+
+  useEffect(() => {
+    if (delStaticComment == 1 && commentLvl1?.length == 11) {
+      for (var i = 0; i < commentLvl1.length; i++) {
+        return setCommentLvl1(
+          commentLvl1.filter((x: CommentList) => !staticId.includes(x.id)),
+        );
+      }
+    } else if (
+      delStaticComment == 2 &&
+      commentLvl2 &&
+      commentLvl2?.length >= 1 &&
+      commentLvl2?.length <= 4
+    ) {
+      for (var i = 0; i < commentLvl2.length; i++) {
+        return setCommentLvl2(
+          commentLvl2.filter((x: CommentList2) => !staticId.includes(x.id)),
+        );
+      }
+    } else if (
+      delStaticComment == 3 &&
+      commentLvl3 &&
+      commentLvl3?.length >= 1 &&
+      commentLvl3?.length <= 4
+    ) {
+      for (var i = 0; i < commentLvl3.length; i++) {
+        return setCommentLvl3(
+          commentLvl3.filter((x: CommentList3) => !staticId.includes(x.id)),
+        );
+      }
+    }
+  }, [delStaticComment, commentLvl1]);
+
+  const handleRealTimeComment = () => {
+    setDelStaticComment(-1);
+    let comment = [
+      {
+        id: makeId(5),
+        caption: commentType,
+        likesCount: 0,
+        repliedTo: cmntToCmnt?.userName ? cmntToCmnt?.userName : '',
+        parentID: cmntToCmnt?.id ? cmntToCmnt?.id : '',
+        commentsCount: 0,
+        commentLevel: cmntToCmnt?.commentLvl,
+        createdAt: '',
+        comments: [],
+        isLiked: false,
+        timeAgo: 'just now',
+        commentOwner: {
+          UUID: dataProfile?.data.uuid ? dataProfile?.data.uuid : '',
+          fullname: dataProfile?.data.fullname
+            ? dataProfile?.data.fullname
+            : '',
+          username: dataProfile?.data.username
+            ? dataProfile?.data.username
+            : '',
+          image: dataProfile?.data.imageProfileUrl
+            ? dataProfile?.data.imageProfileUrl
+            : '',
+        },
+      },
+    ];
+    if (cmntToCmntLvl0?.commentLvl === 0 && commentLvl1 !== undefined) {
+      return (
+        setCommentLvl1([...commentLvl1, ...comment]),
+        setCmntToCmntLvl0(undefined),
+        setStaticId([...staticId, comment[0].id])
+      );
+    } else if (cmntToCmntLvl0?.commentLvl === 0 && commentLvl1 === undefined) {
+      return (
+        setCommentLvl1(comment),
+        setCmntToCmntLvl0(undefined),
+        setStaticId([...staticId, comment[0].id])
+      );
+    } else if (cmntToCmnt?.commentLvl === 1 && commentLvl2 !== undefined) {
+      return (
+        setCommentLvl2([...commentLvl2, ...comment]),
+        setStaticId([...staticId, comment[0].id])
+      );
+    } else if (cmntToCmnt?.commentLvl === 1 && commentLvl2 === undefined) {
+      return setCommentLvl2(comment), setStaticId([...staticId, comment[0].id]);
+    } else if (cmntToCmnt?.commentLvl === 2 && commentLvl3 !== undefined) {
+      return (
+        setCommentLvl3([...commentLvl3, ...comment]),
+        setStaticId([...staticId, comment[0].id])
+      );
+    } else if (cmntToCmnt?.commentLvl === 2 && commentLvl3 === undefined) {
+      return setCommentLvl3(comment), setStaticId([...staticId, comment[0].id]);
+    } else if (cmntToCmnt?.commentLvl === 3 && commentLvl3 !== undefined) {
+      return (
+        setCommentLvl3([...commentLvl3, ...comment]),
+        setStaticId([...staticId, comment[0].id])
+      );
+    } else if (cmntToCmnt?.commentLvl === 3 && commentLvl3 === undefined) {
+      return setCommentLvl3(comment), setStaticId([...staticId, comment[0].id]);
+    }
   };
 
   const handleReplyOnPress = () => {
@@ -220,33 +375,45 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
           content: {content: commentType},
         })
       : null;
+    handleRealTimeComment();
     setInputCommentModal(false);
     setCommentType('');
   };
+  // ! End Of Comment area
 
+  //? handle comment in commentsection & open modal comment
+  useEffect(() => {
+    if (cmntToCmnt !== undefined) {
+      setUserName(cmntToCmnt.userName);
+      setInputCommentModal(!inputCommentModal);
+    }
+  }, [cmntToCmnt]);
+
+  //? Credit onPress
   const tokenOnPress = () => {
-    console.log('token');
+    setModalDonate(true);
   };
 
   const shareOnPress = () => {
-    console.log('share');
+    setModalShare(true);
   };
 
   const readMoreOnPress = () => {
     setReadMore(!readMore);
   };
 
-  const toggleModalOnPress = (uri: string) => {
+  const toggleModalOnPress = (index: number) => {
     setModalVisible(!isModalVisible);
-    setImgUrl(uri);
+    setImgUrl(index);
   };
 
-  const handleSetPage = (value: number) => {
-    if (value === 1) {
-      return setActivePage(1), setPerPage(perPage + 3);
-    } else {
-      return setActivePage(2), setPerPage2(perPage2 + 3);
-    }
+  const onPressDonate = () => {
+    setModalDonate(false);
+    setTrigger2ndModal(true);
+  };
+
+  const onPressSuccess = () => {
+    setModalSuccessDonate(false);
   };
 
   return (
@@ -366,7 +533,8 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
         <ImageModal
           toggleModal={() => setModalVisible(!isModalVisible)}
           modalVisible={isModalVisible}
-          image={imgUrl}
+          imageIdx={imgUrl}
+          dataImage={dataPostDetail?.image}
         />
         <CommentInputModal
           toggleModal={() => setInputCommentModal(!inputCommentModal)}
@@ -377,6 +545,48 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
           handleOnPress={handleReplyOnPress}
           onModalHide={() => setCmntToCmnt(undefined)}
           userAvatarUri={dataProfileImg}
+        />
+        <ModalShare
+          url={
+            'https://open.ssu.io/track/19AiJfAtRiccvSU1EWcttT?si=36b9a686dad44ae0'
+          }
+          modalVisible={modalShare}
+          onPressClose={() => setModalShare(false)}
+          titleModal={'Share Feed'}
+          hideMusic
+          onPressCopy={() =>
+            InteractionManager.runAfterInteractions(() => setToastVisible(true))
+          }
+        />
+        <SsuToast
+          modalVisible={toastVisible}
+          onBackPressed={() => setToastVisible(false)}
+          children={
+            <View style={[styles.modalContainer]}>
+              <TickCircleIcon
+                width={widthResponsive(21)}
+                height={heightPercentage(20)}
+                stroke={color.Neutral[10]}
+              />
+              <Gap width={widthResponsive(7)} />
+              <Text style={[typography.Button2, styles.textStyle]}>
+                Link have been copied to clipboard!
+              </Text>
+            </View>
+          }
+          modalStyle={{marginHorizontal: widthResponsive(24)}}
+        />
+        <ModalDonate
+          totalCoin={'1000'}
+          onPressDonate={onPressDonate}
+          modalVisible={modalDonate}
+          onPressClose={() => setModalDonate(false)}
+          onModalHide={() => setModalSuccessDonate(true)}
+        />
+
+        <ModalSuccessDonate
+          modalVisible={modalSuccessDonate && trigger2ndModal}
+          toggleModal={onPressSuccess}
         />
       </ScrollView>
     </SafeAreaView>
@@ -406,5 +616,20 @@ const styles = StyleSheet.create({
   commentContainer: {
     width: '100%',
     paddingHorizontal: widthResponsive(24),
+  },
+  modalContainer: {
+    width: '100%',
+    position: 'absolute',
+    bottom: heightPercentage(22),
+    height: heightPercentage(36),
+    backgroundColor: color.Success[400],
+    paddingHorizontal: widthResponsive(12),
+    borderRadius: 4,
+    flexDirection: 'row',
+    alignItems: 'center',
+    zIndex: 1,
+  },
+  textStyle: {
+    color: color.Neutral[10],
   },
 });

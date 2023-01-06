@@ -16,12 +16,14 @@ import {
 } from '../../../utils';
 import {Dropdown} from '../DropDown';
 import {dataVisibility} from '../../../data/playlist';
+import {updatePlaylist} from '../../../api/playlist.api';
+import {Playlist} from '../../../interface/playlist.interface';
 
 // note: title menggunakan text area dan dan description sebaliknya
 // itu karena, menyesuaikan UI di figma dengan component yang sudah dibuat (border)
 
 interface EditPlaylistProps {
-  playlist: any;
+  playlist: Playlist;
   goToPlaylist: (params: any) => void;
   onPressGoBack: () => void;
 }
@@ -32,15 +34,16 @@ export const EditPlaylistContent: React.FC<EditPlaylistProps> = ({
   onPressGoBack,
 }) => {
   const [state, setState] = useState({
-    playlistName: playlist.playlistName || '',
-    playlistDesc: playlist.playlistDesc || '',
+    playlistName: playlist.name || '',
+    playlistDesc: playlist.description || '',
+    isPublic: playlist.isPublic || true,
   });
   const [isModalVisible, setModalVisible] = useState({
     modalConfirm: false,
     modalImage: false,
   });
   const [playlistUri, setPlaylistUri] = useState({
-    path: playlist.playlistUri?.path || undefined,
+    path: playlist.thumbnailUrl || undefined,
   });
   const [focusInput, setFocusInput] = useState<'name' | 'description' | null>(
     null,
@@ -81,6 +84,22 @@ export const EditPlaylistContent: React.FC<EditPlaylistProps> = ({
 
   const handleFocusInput = (focus: 'name' | 'description' | null) => {
     setFocusInput(focus);
+  };
+
+  const onPressConfirm = async () => {
+    try {
+      const payload = {
+        name: state.playlistName,
+        description: state.playlistDesc,
+        thumbnailUrl: '',
+        isPublic: true,
+      };
+      const response = await updatePlaylist(playlist, payload);
+      goToPlaylist(response.data.id);
+      closeModal();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const hideMenuDelete =
@@ -167,7 +186,7 @@ export const EditPlaylistContent: React.FC<EditPlaylistProps> = ({
           data={dataVisibility}
           placeHolder={'Visibility'}
           dropdownLabel={'Visibility'}
-          textTyped={(newText: string) => onChangeText('gender', newText)}
+          textTyped={(newText: string) => onChangeText('isPublic', newText)}
           containerStyles={{marginTop: heightPercentage(15)}}
         />
       </View>
@@ -186,7 +205,7 @@ export const EditPlaylistContent: React.FC<EditPlaylistProps> = ({
         title="Save"
         subtitle="Are you sure you want to update your playlist?"
         onPressClose={closeModal}
-        onPressOk={() => goToPlaylist({...state, playlistUri})}
+        onPressOk={onPressConfirm}
       />
     </View>
   );

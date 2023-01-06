@@ -96,6 +96,7 @@ export const confirmEmailOtpRegister = async (
 export const confirmSmsOtpLogin = async (
   phoneNumber: string,
   code: string,
+  context: string,
 ): Promise<ConfirmSmsOTPLoginResponseType> => {
   const {data} = await SsuAPI().request<ConfirmSmsOTPLoginResponseType>({
     url: '/confirm-otp/sms/login',
@@ -103,6 +104,7 @@ export const confirmSmsOtpLogin = async (
     data: {
       phoneNumber: phoneNumber,
       code: code,
+      context: context,
     },
   });
 

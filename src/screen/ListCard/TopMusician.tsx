@@ -5,9 +5,9 @@ import {
   FollowMusicianPropsType,
   MusicianList,
 } from '../../interface/musician.interface';
-import {heightResponsive} from '../../utils';
 import {ParamsProps} from '../../interface/base.interface';
 import MusicianSection from '../../components/molecule/MusicianSection/MusicianSection';
+import {heightResponsive} from '../../utils';
 
 interface TopMusicianProps {
   type?: string;
@@ -60,7 +60,7 @@ const TopMusician: FC<TopMusicianProps> = ({
           followOnPress={() => followOnPress(item.uuid, item.isFollowed)}
         />
       )}
-      // estimatedItemSize={heightResponsive(500)}
+      estimatedItemSize={heightResponsive(500)}
     />
   );
 };

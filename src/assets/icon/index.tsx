@@ -60,6 +60,7 @@ import PlayIcon from './Play.icon';
 import PlayIcon2 from './Play2.icon';
 import PreviousIcon from './Previous.icon';
 import ProcessingIcon from './Processing.icon';
+import PublicIcon from './Public.icon';
 import SaveIcon from './Save.icon';
 import SearchIcon from './Search.icon';
 import SettingIcon from './Setting.icon';
@@ -143,6 +144,7 @@ export {
   PlayIcon2,
   PreviousIcon,
   ProcessingIcon,
+  PublicIcon,
   RepeatIcon,
   SaveIcon,
   SearchIcon,

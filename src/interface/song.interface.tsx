@@ -21,6 +21,7 @@ export type ListSongResponseType = {
 };
 
 export type FeaturingArtist = {
+  Uuid: string;
   ImageURL: string;
   ArtistsName: string;
 };
@@ -97,6 +98,7 @@ export type DataDetailSong = {
   publishedDate: string;
   isPublished: boolean;
   isFeaturing: boolean;
+  featuringArtist: FeaturingArtist[];
   likesCount: number;
   shareCount: number;
   listenerCount: number;

@@ -12,4 +12,5 @@ export type ParamsProps = {
   sortBy?: string;
   filterBy?: string;
   fansUUID?: string;
+  keyword?: string;
 };

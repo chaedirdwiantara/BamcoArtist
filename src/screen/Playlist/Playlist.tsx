@@ -1,36 +1,43 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import {StyleSheet, View} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {useFocusEffect} from '@react-navigation/native';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
 
 import Color from '../../theme/Color';
 import {RootStackParams} from '../../navigations';
 import {PlaylistContent} from '../../components';
+import {usePlaylistHook} from '../../hooks/use-playlist.hook';
 
-interface PlaylistProps {
-  props: {};
-  route: any;
-}
+type PlaylistProps = NativeStackScreenProps<RootStackParams, 'Playlist'>;
 
-export const PlaylistScreen: React.FC<PlaylistProps> = (
-  props: PlaylistProps,
-) => {
-  const {params} = props?.route;
+export const PlaylistScreen: React.FC<PlaylistProps> = ({
+  navigation,
+  route,
+}: PlaylistProps) => {
+  const {
+    dataDetailPlaylist,
+    dataSongsPlaylist,
+    getDetailPlaylist,
+    getListSongsPlaylist,
+  } = usePlaylistHook();
 
-  const navigation =
-    useNavigation<NativeStackNavigationProp<RootStackParams>>();
+  useFocusEffect(
+    useCallback(() => {
+      getDetailPlaylist({id: route.params.id});
+      getListSongsPlaylist({id: route.params.id});
+    }, []),
+  );
 
   const onPressGoBack = () => {
     navigation.goBack();
   };
 
   const goToEditPlaylist = () => {
-    navigation.navigate('EditPlaylist', {...params});
+    navigation.navigate('EditPlaylist', dataDetailPlaylist);
   };
 
-  const goBackProfile = (type: string) => {
-    const newParams = type === 'delete' ? {} : {...params};
-    navigation.navigate('Profile', newParams);
+  const goBackProfile = () => {
+    navigation.navigate('Profile');
   };
 
   const goToAddSong = () => {
@@ -39,13 +46,16 @@ export const PlaylistScreen: React.FC<PlaylistProps> = (
 
   return (
     <View style={styles.root}>
-      <PlaylistContent
-        playlist={params}
-        onPressGoBack={onPressGoBack}
-        goToEditPlaylist={goToEditPlaylist}
-        goBackProfile={goBackProfile}
-        goToAddSong={goToAddSong}
-      />
+      {dataDetailPlaylist && (
+        <PlaylistContent
+          onPressGoBack={onPressGoBack}
+          goToEditPlaylist={goToEditPlaylist}
+          goBackProfile={goBackProfile}
+          goToAddSong={goToAddSong}
+          dataDetail={dataDetailPlaylist}
+          listSongs={dataSongsPlaylist}
+        />
+      )}
     </View>
   );
 };

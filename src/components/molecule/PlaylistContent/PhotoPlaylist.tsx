@@ -2,12 +2,7 @@ import React from 'react';
 import {StyleSheet, TouchableOpacity, ImageBackground} from 'react-native';
 import {color} from '../../../theme';
 import {GalleryAddIcon} from '../../../assets/icon';
-import {
-  heightPercentage,
-  heightResponsive,
-  widthPercentage,
-  widthResponsive,
-} from '../../../utils';
+import {heightResponsive, widthResponsive} from '../../../utils';
 
 interface Props {
   uri?: string | undefined;

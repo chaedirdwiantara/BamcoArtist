@@ -26,6 +26,9 @@ interface ListProps {
   containerStyles?: ViewStyle;
   played?: boolean;
   hideDropdownMore?: boolean;
+  rightIcon?: boolean;
+  rightIconComponent?: React.ReactNode;
+  onPressIcon?: (data: any) => void;
 }
 
 interface DataMore {

@@ -17,11 +17,11 @@ const TermAndConditions: React.FC<
       <View style={styles.container}>
         <CheckBox handleOnPress={handleOnPress} active={active} />
         <Text style={styles.textStyle}>
-          I Agree with SunnySideUp Terms{' '}
+          I Agree with SunnySideUp{' '}
           <Text
             style={[styles.textStyle, {color: color.Success[400]}]}
             onPress={onTncPress}>
-            Conditions{' '}
+            Terms Conditions{' '}
           </Text>
           and{' '}
           <Text
@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
     maxWidth: '90%',
     fontFamily: font.InterRegular,
     fontWeight: '400',
-    fontSize: mvs(12),
+    fontSize: mvs(10),
     color: color.Neutral[10],
     marginLeft: widthResponsive(8),
   },

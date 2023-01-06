@@ -21,15 +21,13 @@ import {TopNavigation} from '../TopNavigation';
 import {ArrowLeftIcon} from '../../../assets/icon';
 import {ModalConfirm} from '../Modal/ModalConfirm';
 import {dataVisibility} from '../../../data/playlist';
+import {createPlaylist} from '../../../api/playlist.api';
 import {ModalImagePicker} from '../Modal/ModalImagePicker';
 import {Button, ButtonGradient, SsuInput} from '../../atom';
 import checkEmptyProperties from '../../../utils/checkEmptyProperties';
 
-// note: title menggunakan text area dan dan description sebaliknya
-// itu karena, menyesuaikan UI di figma dengan component yang sudah dibuat (border)
-
 interface Props {
-  goToPlaylist: (params: any) => void;
+  goToPlaylist: (id: number) => void;
   onPressGoBack: () => void;
 }
 
@@ -40,6 +38,7 @@ export const CreateNewPlaylistContent: React.FC<Props> = ({
   const [state, setState] = useState({
     playlistName: '',
     playlistDesc: '',
+    isPublic: true,
   });
   const [isModalVisible, setModalVisible] = useState({
     modalConfirm: false,
@@ -86,9 +85,20 @@ export const CreateNewPlaylistContent: React.FC<Props> = ({
     });
   };
 
-  const onPressConfirm = () => {
-    goToPlaylist({...state, playlistUri});
-    closeModal();
+  const onPressConfirm = async () => {
+    try {
+      const payload = {
+        name: state.playlistName,
+        description: state.playlistDesc,
+        thumbnailUrl: '',
+        isPublic: true,
+      };
+      const response = await createPlaylist(payload);
+      goToPlaylist(response.data.id);
+      closeModal();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const disabledButton = checkEmptyProperties({
@@ -184,7 +194,7 @@ export const CreateNewPlaylistContent: React.FC<Props> = ({
             data={dataVisibility}
             placeHolder={'Visibility'}
             dropdownLabel={'Visibility'}
-            textTyped={(newText: string) => onChangeText('gender', newText)}
+            textTyped={(newText: string) => onChangeText('isPublic', newText)}
             containerStyles={{marginTop: heightPercentage(15)}}
           />
 

@@ -72,9 +72,14 @@ import {CrownIcon, FeedIcon, HomeIcon, UserProfileIcon} from '../assets/icon';
 import Font from '../theme/Font';
 import Color from '../theme/Color';
 import {normalize} from '../utils';
-import {PostList} from '../interface/feed.interface';
 import {MerchListType} from '../data/merchList';
 import {ConcertDetail} from '../screen/ConcertDetail';
+import {SignupSSOScreen} from '../screen/SignupSSO';
+import {RegistrationType} from '../interface/profile.interface';
+
+// interface
+import {PostList} from '../interface/feed.interface';
+import {Playlist} from '../interface/playlist.interface';
 
 export type RootStackParams = {
   Account: undefined;
@@ -87,7 +92,7 @@ export type RootStackParams = {
   CreateNewPlaylist: undefined;
   DonationAndSubscription: undefined;
   EditProfile: undefined;
-  EditPlaylist: undefined;
+  EditPlaylist: Playlist;
   Email: undefined;
   ExclusiveContent: undefined;
   Following: undefined;
@@ -100,15 +105,23 @@ export type RootStackParams = {
     type: 'email' | 'phoneNumber';
     title: string;
     subtitle: string;
+    context?: string;
   };
   PhoneNumber: undefined;
-  Playlist: undefined;
+  Playlist: {
+    id: number;
+  };
   Preference: undefined;
   Referral: undefined;
   ReferralCode: undefined;
   SendReport: undefined;
   Setting: undefined;
   Signup: undefined;
+  SignupSSO: {
+    email: string;
+    ssoType: RegistrationType;
+    ssoId: string;
+  };
   SignInGuest: undefined;
   ShippingInformation: undefined;
   ShowCredit: undefined;
@@ -218,8 +231,8 @@ export const RootStackScreen = () => (
     initialRouteName={
       storage.getBoolean('isLogin')
         ? 'MainTab'
-        : storage.getBoolean('isOnboard')
-        ? 'SignInGuest'
+        : storage.getBoolean('isGuest')
+        ? 'MainTab'
         : 'Boarding'
     }>
     <RootStack.Screen name="Boarding" component={OnboardScreen} />
@@ -257,6 +270,7 @@ export const RootStackScreen = () => (
     <RootStack.Screen name="Album" component={AlbumScreen} />
     <RootStack.Screen name="SignInGuest" component={SignInGuestScreen} />
     <RootStack.Screen name="Signup" component={SignupScreen} />
+    <RootStack.Screen name="SignupSSO" component={SignupSSOScreen} />
     <RootStack.Screen name="MainTab" component={TabScreen} />
     <RootStack.Screen name="Notification" component={Notification} />
     <RootStack.Screen

@@ -1,13 +1,19 @@
-import React, {useEffect} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import {View, StyleSheet} from 'react-native';
-import {useIsFocused, useNavigation} from '@react-navigation/native';
+import {
+  useFocusEffect,
+  useIsFocused,
+  useNavigation,
+} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+
 import Color from '../../theme/Color';
 import {RootStackParams} from '../../navigations';
 import {storage} from '../../hooks/use-storage.hook';
+import {usePlayerHook} from '../../hooks/use-player.hook';
 import {useProfileHook} from '../../hooks/use-profile.hook';
 import {GuestContent, ProfileContent} from '../../components';
-import {usePlayerHook} from '../../hooks/use-player.hook';
+import {usePlaylistHook} from '../../hooks/use-playlist.hook';
 
 interface ProfileProps {
   props: {};
@@ -18,7 +24,8 @@ export const ProfileScreen: React.FC<ProfileProps> = (props: ProfileProps) => {
   const {params} = props?.route;
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
-  const {isLoading, dataProfile, getProfileUser} = useProfileHook();
+  const {dataProfile, getProfileUser} = useProfileHook();
+  const {dataPlaylist, getPlaylist} = usePlaylistHook();
   const isLogin = storage.getString('profile');
   const isFocused = useIsFocused();
   const {isPlay, showPlayer, hidePlayer} = usePlayerHook();
@@ -31,9 +38,12 @@ export const ProfileScreen: React.FC<ProfileProps> = (props: ProfileProps) => {
     }
   }, [isFocused]);
 
-  useEffect(() => {
-    getProfileUser();
-  }, [isLoading]);
+  useFocusEffect(
+    useCallback(() => {
+      getPlaylist();
+      getProfileUser();
+    }, []),
+  );
 
   const onPressGoTo = (
     screenName: 'Setting' | 'Following' | 'CreateNewPlaylist',
@@ -45,8 +55,8 @@ export const ProfileScreen: React.FC<ProfileProps> = (props: ProfileProps) => {
     navigation.navigate('EditProfile', {...params, ...dataProfile});
   };
 
-  const goToPlaylist = () => {
-    navigation.navigate('Playlist', {...params});
+  const goToPlaylist = (id: number) => {
+    navigation.navigate('Playlist', {id});
   };
 
   const profile = {
@@ -67,10 +77,10 @@ export const ProfileScreen: React.FC<ProfileProps> = (props: ProfileProps) => {
       {isLogin ? (
         <ProfileContent
           profile={profile}
-          playlist={params}
-          onPressGoTo={screenName => onPressGoTo(screenName)}
-          goToEditProfile={goToEditProfile}
           goToPlaylist={goToPlaylist}
+          dataPlaylist={dataPlaylist}
+          goToEditProfile={goToEditProfile}
+          onPressGoTo={screenName => onPressGoTo(screenName)}
         />
       ) : (
         <GuestContent />

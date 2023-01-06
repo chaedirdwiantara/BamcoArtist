@@ -5,7 +5,7 @@ import {Avatar, Gap} from '../../atom';
 import topNavstyles from './topNavstyles';
 import {font} from '../../../theme';
 import {ChipMoney} from '../../atom/ChipMoney/ChipMoney';
-import {DefaultAvatarIcon} from '../../../assets/icon';
+import {DefaultAvatar} from '../../../assets/icon';
 
 /** === INTERFACE === */
 type Props = {
@@ -58,7 +58,7 @@ const Type5: React.FC<Props> = (props: Props) => {
           props.containerStyles,
         ]}>
         <View style={topNavstyles.leftContainer}>
-          {props.guest ? <DefaultAvatarIcon /> : iconLeft()}
+          {props.guest ? <DefaultAvatar.ProfileIcon /> : iconLeft()}
           <Gap width={8} />
           <Text
             numberOfLines={1}

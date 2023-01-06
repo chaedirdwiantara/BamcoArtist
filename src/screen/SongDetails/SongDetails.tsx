@@ -23,7 +23,7 @@ export const SongDetailsScreen: React.FC<SongDetailProps> = ({
   const {isLoadingSong, isErrorSong, dataDetailSong, getDetailSong} =
     useSongHook();
 
-  //  ? Get Detail Post
+  //  ? Get Detail Song
   useFocusEffect(
     useCallback(() => {
       getDetailSong({id: songId.toString()});

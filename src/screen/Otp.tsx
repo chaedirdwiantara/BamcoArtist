@@ -19,6 +19,7 @@ import {useAuthHook} from '../hooks/use-auth.hook';
 import {ModalLoading} from '../components/molecule/ModalLoading/ModalLoading';
 import RenderMessage from '../components/molecule/OtpInput/RenderMessage';
 import {SSULogo} from '../assets/logo';
+import {storage} from '../hooks/use-storage.hook';
 
 const {width, height} = Dimensions.get('screen');
 
@@ -40,14 +41,14 @@ export const Otp: FC<OtpProps> = ({navigation, route}: OtpProps) => {
 
   useEffect(() => {
     if (!isLoading && !isError && isOtpValid === true) {
+      storage.set('isLogin', true);
       if (loginResult === 'preference') {
         navigation.replace('Preference');
       } else if (loginResult === 'home') {
         navigation.replace('MainTab');
       }
-    } else if (!isLoading && isError && errorMsg !== '') {
-      // TODO: display error message
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isError, errorMsg, isOtpValid, isLoading, loginResult]);
 
   const handleBack = () => {
@@ -58,7 +59,7 @@ export const Otp: FC<OtpProps> = ({navigation, route}: OtpProps) => {
     if (route.params.type === 'email') {
       confirmEmailOtp(route.params.id, code);
     } else if (route.params.type === 'phoneNumber') {
-      confirmSmsOtp(route.params.id, code);
+      confirmSmsOtp(route.params.id, code, route.params.context as string);
     }
   };
 

@@ -1,23 +1,20 @@
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
 
 import Color from '../../theme/Color';
 import {RootStackParams} from '../../navigations';
 import {EditPlaylistContent} from '../../components';
 
-interface PlaylistProps {
-  props: {};
-  route: any;
-}
+type EditPlaylistProps = NativeStackScreenProps<
+  RootStackParams,
+  'EditPlaylist'
+>;
 
-export const EditPlaylist: React.FC<PlaylistProps> = (props: PlaylistProps) => {
-  const {params} = props?.route;
-
-  const navigation =
-    useNavigation<NativeStackNavigationProp<RootStackParams>>();
-
+export const EditPlaylist: React.FC<EditPlaylistProps> = ({
+  navigation,
+  route,
+}: EditPlaylistProps) => {
   const onPressGoBack = () => {
     navigation.goBack();
   };
@@ -29,7 +26,7 @@ export const EditPlaylist: React.FC<PlaylistProps> = (props: PlaylistProps) => {
   return (
     <View style={styles.root}>
       <EditPlaylistContent
-        playlist={params}
+        playlist={route.params}
         onPressGoBack={onPressGoBack}
         goToPlaylist={goToPlaylist}
       />

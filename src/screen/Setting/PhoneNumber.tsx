@@ -42,6 +42,7 @@ export const PhoneNumberScreen: React.FC = () => {
         countryData={countryData}
         numberTyped={resultData}
         onChangeText={(text: string) => setPhoneNo(text)}
+        onSelectCountry={() => null}
       />
       <MenuText.RightIcon
         text={'Add Phone Number'}

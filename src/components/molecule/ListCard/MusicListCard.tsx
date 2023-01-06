@@ -17,7 +17,7 @@ import {
 import {Dropdown} from '../DropDown';
 import {color, font} from '../../../theme';
 import {Gap, SquareImage} from '../../atom';
-import {DefaultAvatar, DefaultImage, SoundIcon} from '../../../assets/icon';
+import {DefaultImage, SoundIcon} from '../../../assets/icon';
 
 interface ListProps {
   imgUri: string | null;

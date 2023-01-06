@@ -15,7 +15,7 @@ export const OnboardScreen: React.FC = () => {
 
   const goToScreenGuest = () => {
     navigation.replace('SignInGuest');
-    storage.set('isOnboard', true);
+    storage.set('isGuest', true);
   };
 
   return (

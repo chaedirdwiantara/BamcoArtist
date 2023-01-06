@@ -1,12 +1,11 @@
-import {FlatList, StyleSheet, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import React, {FC} from 'react';
 import {Gap, SquareImage} from '../../components';
-import {heightPercentage, widthPercentage, widthResponsive} from '../../utils';
-import {object} from 'yup';
+import {heightPercentage, widthResponsive} from '../../utils';
 
 interface ImageListProps {
   disabled?: boolean;
-  onPress: (uri: string) => void;
+  onPress: (uri: number) => void;
   width: number;
   height: number;
   heightType2?: number;
@@ -37,7 +36,7 @@ const ImageList: FC<ImageListProps> = (props: ImageListProps) => {
               marginRight: widthResponsive(3),
             }}
             disabled={disabled}
-            onPress={() => onPress(imgData[0])}
+            onPress={() => onPress(0)}
           />
         </>
       )}
@@ -51,7 +50,7 @@ const ImageList: FC<ImageListProps> = (props: ImageListProps) => {
               marginRight: widthResponsive(3),
             }}
             disabled={disabled}
-            onPress={() => onPress(imgData[0])}
+            onPress={() => onPress(0)}
           />
           <SquareImage
             imgUri={imgData && imgData[1]}
@@ -61,7 +60,7 @@ const ImageList: FC<ImageListProps> = (props: ImageListProps) => {
               marginRight: widthResponsive(3),
             }}
             disabled={disabled}
-            onPress={() => onPress(imgData[1])}
+            onPress={() => onPress(1)}
           />
         </>
       )}
@@ -75,7 +74,7 @@ const ImageList: FC<ImageListProps> = (props: ImageListProps) => {
               marginRight: widthResponsive(3),
             }}
             disabled={disabled}
-            onPress={() => onPress(imgData[0])}
+            onPress={() => onPress(0)}
           />
           <View>
             <SquareImage
@@ -83,7 +82,7 @@ const ImageList: FC<ImageListProps> = (props: ImageListProps) => {
               size={widthResponsive(width, 375)}
               height={heightPercentage(height)}
               disabled={disabled}
-              onPress={() => onPress(imgData[1])}
+              onPress={() => onPress(1)}
             />
             <Gap height={3} />
             <SquareImage
@@ -91,7 +90,7 @@ const ImageList: FC<ImageListProps> = (props: ImageListProps) => {
               size={widthResponsive(width, 375)}
               height={heightPercentage(height)}
               disabled={disabled}
-              onPress={() => onPress(imgData[2])}
+              onPress={() => onPress(2)}
             />
           </View>
         </>
@@ -104,7 +103,7 @@ const ImageList: FC<ImageListProps> = (props: ImageListProps) => {
               size={widthResponsive(width, 375)}
               height={heightPercentage(height)}
               disabled={disabled}
-              onPress={() => onPress(imgData[0])}
+              onPress={() => onPress(0)}
             />
             <Gap height={3} />
             <SquareImage
@@ -112,7 +111,7 @@ const ImageList: FC<ImageListProps> = (props: ImageListProps) => {
               size={widthResponsive(width, 375)}
               height={heightPercentage(height)}
               disabled={disabled}
-              onPress={() => onPress(imgData[2])}
+              onPress={() => onPress(2)}
             />
           </View>
           <Gap width={3} />
@@ -122,7 +121,7 @@ const ImageList: FC<ImageListProps> = (props: ImageListProps) => {
               size={widthResponsive(width, 375)}
               height={heightPercentage(height)}
               disabled={disabled}
-              onPress={() => onPress(imgData[1])}
+              onPress={() => onPress(1)}
             />
             <Gap height={3} />
             <SquareImage
@@ -130,7 +129,7 @@ const ImageList: FC<ImageListProps> = (props: ImageListProps) => {
               size={widthResponsive(width, 375)}
               height={heightPercentage(height)}
               disabled={disabled}
-              onPress={() => onPress(imgData[3])}
+              onPress={() => onPress(3)}
             />
           </View>
         </>

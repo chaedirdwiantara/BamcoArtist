@@ -6,12 +6,16 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {FC} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import Modal from 'react-native-modal';
-import {heightPercentage, normalize, widthResponsive} from '../../../utils';
+import {
+  heightPercentage,
+  heightResponsive,
+  widthResponsive,
+} from '../../../utils';
 import {Avatar, Gap, SsuInput} from '../..';
 import {color, font} from '../../../theme';
-import {ms} from 'react-native-size-matters';
+import {ms, mvs} from 'react-native-size-matters';
 import {CloseIcon} from '../../../assets/icon';
 
 interface ModalImageProps {
@@ -67,17 +71,32 @@ const CommentInputModal: FC<ModalImageProps> = (props: ModalImageProps) => {
               onChangeText={(newText: string) => onCommentChange?.(newText)}
               placeholder={'Reply as <your name>...'}
               containerStyles={{
-                width: widthResponsive(209),
+                width: widthResponsive(290),
                 backgroundColor: 'transparent',
                 paddingLeft: 0,
               }}
               multiline={true}
+              maxLength={200}
             />
           </View>
-          <TouchableOpacity style={styles.buttonStyle} onPress={handleOnPress}>
-            <Text style={styles.buttonText}>Reply</Text>
-          </TouchableOpacity>
         </View>
+      </View>
+      <View style={styles.footerComment}>
+        <Text
+          style={[
+            styles.footerText,
+            {
+              color:
+                commentValue?.length == 200
+                  ? color.Error[400]
+                  : color.Neutral[10],
+            },
+          ]}>
+          {commentValue?.length}/200
+        </Text>
+        <TouchableOpacity style={styles.buttonStyle} onPress={handleOnPress}>
+          <Text style={styles.buttonText}>Reply</Text>
+        </TouchableOpacity>
       </View>
       <KeyboardAvoidingView
         behavior={
@@ -111,11 +130,27 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
+  footerComment: {
+    flexDirection: 'row',
+    width: '100%',
+    borderTopWidth: 1,
+    borderColor: color.Dark[500],
+    paddingHorizontal: widthResponsive(24),
+    paddingVertical: heightPercentage(6),
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    backgroundColor: color.Dark[800],
+  },
+  footerText: {
+    fontFamily: font.InterRegular,
+    fontWeight: '500',
+    fontSize: mvs(13),
+  },
   textHeader: {
     color: color.Dark[50],
     fontFamily: font.InterRegular,
     fontWeight: '500',
-    fontSize: normalize(10),
+    fontSize: mvs(10),
   },
   inputContainer: {
     flexDirection: 'row',
@@ -128,8 +163,9 @@ const styles = StyleSheet.create({
   buttonStyle: {
     backgroundColor: color.Pink[2],
     borderRadius: 4,
-    paddingVertical: ms(6),
-    width: widthResponsive(62),
+    // paddingVertical: mvs(6),
+    width: widthResponsive(64),
+    height: heightResponsive(24),
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -137,7 +173,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontFamily: font.InterRegular,
     fontWeight: '600',
-    fontSize: normalize(11),
+    fontSize: mvs(11),
   },
   closeButton: {
     width: widthResponsive(24),
