@@ -1,4 +1,4 @@
-package com.ssumusician.newarchitecture.components;
+package io.ssumusician.android.newarchitecture.components;
 
 import com.facebook.jni.HybridData;
 import com.facebook.proguard.annotations.DoNotStrip;

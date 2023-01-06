@@ -38,6 +38,7 @@
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = SsuMusician/main.m; sourceTree = "<group>"; };
 		19F6CBCC0A4E27FBF8BF4A61 /* libPods-SsuMusician-SsuMusicianTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SsuMusician-SsuMusicianTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B4392A12AC88292D35C810B /* Pods-SsuMusician.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SsuMusician.debug.xcconfig"; path = "Target Support Files/Pods-SsuMusician/Pods-SsuMusician.debug.xcconfig"; sourceTree = "<group>"; };
+		46914D7429683122003AE31D /* SsuMusician.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = SsuMusician.entitlements; path = SsuMusician/SsuMusician.entitlements; sourceTree = "<group>"; };
 		5709B34CF0A7D63546082F79 /* Pods-SsuMusician.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SsuMusician.release.xcconfig"; path = "Target Support Files/Pods-SsuMusician/Pods-SsuMusician.release.xcconfig"; sourceTree = "<group>"; };
 		5B7EB9410499542E8C5724F5 /* Pods-SsuMusician-SsuMusicianTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SsuMusician-SsuMusicianTests.debug.xcconfig"; path = "Target Support Files/Pods-SsuMusician-SsuMusicianTests/Pods-SsuMusician-SsuMusicianTests.debug.xcconfig"; sourceTree = "<group>"; };
 		5DCACB8F33CDC322A6C60F78 /* libPods-SsuMusician.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SsuMusician.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -86,6 +87,7 @@
 		13B07FAE1A68108700A75B9A /* SsuMusician */ = {
 			isa = PBXGroup;
 			children = (
+				46914D7429683122003AE31D /* SsuMusician.entitlements */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
@@ -485,19 +487,24 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = SsuMusician/SsuMusician.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2385WX7747;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = SsuMusician/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Sunny Side Up Musician";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.music";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = io.ssumusician.ios;
 				PRODUCT_NAME = SsuMusician;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -511,18 +518,23 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = SsuMusician/SsuMusician.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2385WX7747;
 				INFOPLIST_FILE = SsuMusician/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Sunny Side Up Musician";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.music";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = io.ssumusician.ios;
 				PRODUCT_NAME = SsuMusician;
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
