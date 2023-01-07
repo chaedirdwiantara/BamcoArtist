@@ -9,7 +9,7 @@ let API: AxiosInstance;
 
 const setupAPIClient = () => {
   API = axios.create({
-    baseURL: 'https://rinjani-dev.ssudev.space/api/v1/fans-app',
+    baseURL: 'https://rinjani-dev.ssudev.space/api/v1/musician-app',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
