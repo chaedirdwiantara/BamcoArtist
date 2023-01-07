@@ -1,5 +1,6 @@
 import AddIcon from './Add.icon';
 import AddCircleIcon from './AddCircle.icon';
+import AddPostIcon from './AddPost.icon';
 import ArrowLeftIcon from './ArrowLeft.icon';
 import ArrowRightIcon from './ArrowRight.icon';
 import AudioMusic from './AudioMusic.icon';
@@ -85,6 +86,7 @@ import TicketIcon from './Ticket.icon';
 export {
   AddIcon,
   AddCircleIcon,
+  AddPostIcon,
   ArrowLeftIcon,
   ArrowRightIcon,
   AudioMusic,
