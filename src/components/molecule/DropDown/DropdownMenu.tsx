@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {StyleSheet, Text, View, ViewStyle} from 'react-native';
+import {StyleSheet, Text, TextStyle, View, ViewStyle} from 'react-native';
 import {Dropdown} from 'react-native-element-dropdown';
 import {ms, mvs} from 'react-native-size-matters';
 import {color, font} from '../../../theme';
@@ -15,6 +15,7 @@ interface DropdownMenuProps {
   placeHolder: string;
   selectedMenu: (data: any) => void;
   containerStyle?: ViewStyle;
+  placeHolderStyles?: TextStyle;
 }
 
 const itemBg = color.Dark[900];
@@ -22,7 +23,8 @@ const itemBg = color.Dark[900];
 const DropdownMenu: React.FC<DropdownMenuProps> = (
   props: DropdownMenuProps,
 ) => {
-  const {data, placeHolder, selectedMenu, containerStyle} = props;
+  const {data, placeHolder, selectedMenu, containerStyle, placeHolderStyles} =
+    props;
   const [value, setValue] = useState(null);
   const [isFocus, setIsFocus] = useState(false);
 
@@ -31,7 +33,7 @@ const DropdownMenu: React.FC<DropdownMenuProps> = (
       <Dropdown
         style={[styles.dropdown, isFocus && {borderColor: color.Success[500]}]}
         containerStyle={[styles.containerStyle, containerStyle]}
-        placeholderStyle={styles.placeholderStyle}
+        placeholderStyle={[styles.placeholderStyle, placeHolderStyles]}
         selectedTextStyle={styles.fontAll}
         itemTextStyle={styles.fontAll}
         itemContainerStyle={[styles.itemContainer]}

@@ -98,3 +98,8 @@ export const dropDownSubscription: DataDropDownType[] = [
   {label: 'Go To Musician', value: '1'},
   {label: 'Unsubscribe', value: '2'},
 ];
+
+export const dropDownSetAudience: DataDropDownType[] = [
+  {label: 'Public', value: '1'},
+  {label: 'Exclusive', value: '2'},
+];

@@ -1,10 +1,11 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React, {useState} from 'react';
 import {color, font} from '../../theme';
 import {
   Avatar,
   Button,
   ButtonGradient,
+  Dropdown,
   Gap,
   SsuInput,
   TopNavigation,
@@ -14,12 +15,18 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParams} from '../../navigations';
 import {heightResponsive, widthResponsive} from '../../utils';
 import {ms, mvs} from 'react-native-size-matters';
+import {ImportPhotoIcon, OpenCameraIcon} from '../../assets/icon';
+import {DataDropDownType, dropDownSetAudience} from '../../data/dropdown';
 
 const CreatePost = () => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
 
   const [inputText, setInputText] = useState<string>('');
+
+  const resultDataCategory = (dataResultCategory: DataDropDownType) => {
+    console.log(dataResultCategory, 'dataResultCategory');
+  };
 
   return (
     <View style={styles.container}>
@@ -65,7 +72,30 @@ const CreatePost = () => {
           </View>
         </View>
         <View style={styles.footerBody}>
-          <View></View>
+          <View style={styles.iconsAndCategory}>
+            <View style={styles.iconsContainer}>
+              <TouchableOpacity>
+                <OpenCameraIcon />
+              </TouchableOpacity>
+              <Gap width={16} />
+              <TouchableOpacity>
+                <ImportPhotoIcon />
+              </TouchableOpacity>
+            </View>
+            <View style={styles.dropdownContainer}>
+              <Dropdown.Menu
+                data={dropDownSetAudience}
+                placeHolder={'Set Audience'}
+                selectedMenu={resultDataCategory}
+                containerStyle={{
+                  width: widthResponsive(138),
+                  marginLeft: widthResponsive(-57),
+                  // justifyContent: 'flex-end',
+                }}
+                placeHolderStyles={styles.placeHolderStyle}
+              />
+            </View>
+          </View>
           <View style={styles.textCounter}>
             <Text
               style={[
@@ -124,7 +154,6 @@ const styles = StyleSheet.create({
   },
   footerBody: {
     paddingBottom: widthResponsive(16),
-    paddingHorizontal: widthResponsive(24),
   },
   userCategory: {
     flexDirection: 'row',
@@ -139,5 +168,30 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+    paddingHorizontal: widthResponsive(24),
+  },
+  iconsAndCategory: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
+    borderColor: color.Dark[50],
+    paddingHorizontal: widthResponsive(24),
+    paddingVertical: widthResponsive(8),
+    marginBottom: heightResponsive(12),
+  },
+  iconsContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  dropdownContainer: {
+    width: widthResponsive(95),
+  },
+  placeHolderStyle: {
+    color: color.Neutral[10],
+    fontFamily: font.InterMedium,
+    fontWeight: '500',
+    fontSize: mvs(12),
   },
 });
