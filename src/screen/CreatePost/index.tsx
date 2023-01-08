@@ -1,10 +1,11 @@
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {color, font} from '../../theme';
 import {
   Avatar,
   Button,
   ButtonGradient,
+  ButtonGradientwithIcon,
   Dropdown,
   Gap,
   SsuInput,
@@ -16,17 +17,32 @@ import {RootStackParams} from '../../navigations';
 import {heightResponsive, widthResponsive} from '../../utils';
 import {ms, mvs} from 'react-native-size-matters';
 import {ImportPhotoIcon, OpenCameraIcon} from '../../assets/icon';
-import {DataDropDownType, dropDownSetAudience} from '../../data/dropdown';
+import {
+  DataDropDownType,
+  dropdownCategoryMusician,
+  dropDownSetAudience,
+} from '../../data/dropdown';
+import FilterModal from './modalFilter';
 
 const CreatePost = () => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
 
   const [inputText, setInputText] = useState<string>('');
+  const [isModalVisible, setModalVisible] = useState<boolean>(false);
+  const [label, setLabel] = useState<string>();
 
   const resultDataCategory = (dataResultCategory: DataDropDownType) => {
     console.log(dataResultCategory, 'dataResultCategory');
   };
+
+  const resultDataAudience = (dataAudience: DataDropDownType) => {
+    console.log(dataAudience, 'dataResultCategory');
+  };
+
+  useEffect(() => {
+    console.log(label, 'label');
+  }, [label]);
 
   return (
     <View style={styles.container}>
@@ -41,14 +57,10 @@ const CreatePost = () => {
           <View style={styles.userCategory}>
             <Avatar />
             <Gap width={12} />
-            <ButtonGradient
-              label={'Select Category'}
-              onPress={() => {}}
-              gradientStyles={{
-                borderRadius: 10,
-                width: widthResponsive(91),
-                aspectRatio: heightResponsive(279 / 77),
-              }}
+            <ButtonGradientwithIcon
+              label={label ? label : 'Select Category'}
+              onPress={() => setModalVisible(true)}
+              gradientStyles={{}}
               textStyles={{
                 fontFamily: font.InterRegular,
                 fontWeight: '500',
@@ -86,11 +98,10 @@ const CreatePost = () => {
               <Dropdown.Menu
                 data={dropDownSetAudience}
                 placeHolder={'Set Audience'}
-                selectedMenu={resultDataCategory}
+                selectedMenu={resultDataAudience}
                 containerStyle={{
                   width: widthResponsive(138),
                   marginLeft: widthResponsive(-57),
-                  // justifyContent: 'flex-end',
                 }}
                 placeHolderStyles={styles.placeHolderStyle}
               />
@@ -133,6 +144,12 @@ const CreatePost = () => {
           </View>
         </View>
       </View>
+      <FilterModal
+        toggleModal={() => setModalVisible(!isModalVisible)}
+        modalVisible={isModalVisible}
+        dataFilter={dropdownCategoryMusician}
+        filterOnPress={setLabel}
+      />
     </View>
   );
 };
@@ -174,7 +191,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    borderTopWidth: 1,
+    borderTopWidth: ms(1),
     borderBottomWidth: 1,
     borderColor: color.Dark[50],
     paddingHorizontal: widthResponsive(24),

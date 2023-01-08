@@ -52,6 +52,15 @@ export const dropDownDataCategory: DataDropDownType[] = [
   {label: 'Backstage', value: 'backstage'},
 ];
 
+export const dropdownCategoryMusician: DataDropDownType[] = [
+  {label: 'Coming Up', value: 'coming_up'},
+  {label: 'Tour', value: 'otr'},
+  {label: 'Daily Life', value: 'day_in_life'},
+  {label: 'Behind The Scene', value: 'behind_the_scene'},
+  {label: 'Highlight Post', value: 'highlight'},
+  {label: 'Backstage', value: 'backstage'},
+];
+
 export interface DropDownFilterType {
   label: string;
   value: string;

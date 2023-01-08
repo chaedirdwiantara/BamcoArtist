@@ -3,7 +3,7 @@ import {StyleSheet, Text, TextStyle, View, ViewStyle} from 'react-native';
 import {Dropdown} from 'react-native-element-dropdown';
 import {ms, mvs} from 'react-native-size-matters';
 import {color, font} from '../../../theme';
-import {normalize, widthPercentage} from '../../../utils';
+import {normalize} from '../../../utils';
 
 interface dataProps {
   label: string;
