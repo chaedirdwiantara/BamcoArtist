@@ -146,13 +146,13 @@ export const LoginScreen: React.FC = () => {
     if (!isLoading && !isError) {
       if (watch('loginType') !== 'phoneNumber' && loginResult !== null) {
         storage.set('isLogin', true);
+        navigation.pop();
         if (loginResult === 'preference') {
           navigation.replace('Preference');
         } else {
           navigation.replace('MainTab');
         }
       } else if (watch('loginType') === 'phoneNumber') {
-        storage.set('isLogin', true);
         navigation.navigate('Otp', {
           id: countryNumber + watch('phoneNumber'),
           type: 'phoneNumber',

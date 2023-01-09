@@ -222,6 +222,7 @@ export const SignupScreen: React.FC = () => {
       loginResult !== null
     ) {
       storage.set('isLogin', true);
+      navigation.pop();
       if (loginResult === 'preference') {
         navigation.replace('Preference');
       } else {
