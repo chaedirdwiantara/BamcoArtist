@@ -20,14 +20,17 @@ interface ModalFilterProps {
   modalVisible: boolean;
   dataFilter: DataDropDownType[];
   filterOnPress: (label: string) => void;
+  sendCategory: (value: string) => void;
 }
 
 const FilterModal: FC<ModalFilterProps> = (props: ModalFilterProps) => {
-  const {toggleModal, modalVisible, dataFilter, filterOnPress} = props;
+  const {toggleModal, modalVisible, dataFilter, filterOnPress, sendCategory} =
+    props;
 
-  const filterButtonHandler = (label: string) => {
+  const filterButtonHandler = (data: DataDropDownType) => {
     toggleModal();
-    filterOnPress?.(label);
+    filterOnPress?.(data.label);
+    sendCategory?.(data.value);
   };
 
   return (
@@ -49,7 +52,7 @@ const FilterModal: FC<ModalFilterProps> = (props: ModalFilterProps) => {
           renderItem={({item}) => (
             <TouchableOpacity
               style={styles.textContainer}
-              onPress={() => filterButtonHandler(item.label)}>
+              onPress={() => filterButtonHandler(item)}>
               <Text style={styles.textFilter}>{item.label}</Text>
             </TouchableOpacity>
           )}

@@ -17,6 +17,13 @@ export type LoadMoreProps = {
   };
 };
 
+export type CreatePostProps = {
+  caption: string;
+  category: string;
+  image?: string[];
+  isPremium: boolean;
+};
+
 export type DataComment = {id: string; created_at: string};
 
 // => PostList Area
@@ -191,6 +198,23 @@ export type commentUpdateData = {
 export type CommentUpdateResponseType = {
   code: number;
   data: commentUpdateData;
+  message: string;
+  status: number;
+};
+
+export type CreatePostResponseData = {
+  id: string;
+  caption: string;
+  likesCount?: number;
+  category: string;
+  image: string[];
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type CreatePostResponseType = {
+  code: number;
+  data: CreatePostResponseData;
   message: string;
   status: number;
 };

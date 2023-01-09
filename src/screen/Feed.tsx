@@ -6,7 +6,7 @@ import {color} from '../theme';
 import {storage} from '../hooks/use-storage.hook';
 import PostListPublic from './ListCard/PostListPublic';
 import {heightPercentage, widthResponsive} from '../utils';
-import PostListExclusive from './ListCard/PostListExclusive';
+import PostListMyPost from './ListCard/PostListMyPost';
 import {GuestContent, TabFilter, TopNavigation} from '../components';
 import {PostlistData, PostlistDataExclusive} from '../data/postlist';
 import {dropDownDataCategory, dropDownDataSort} from '../data/dropdown';
@@ -21,10 +21,7 @@ export const FeedScreen: React.FC = () => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
   const [selectedIndex, setSelectedIndex] = useState(-0);
-  const [filter] = useState([
-    {filterName: 'Public'},
-    {filterName: 'Exclusive'},
-  ]);
+  const [filter] = useState([{filterName: 'My Post'}, {filterName: 'Public'}]);
   const isLogin = storage.getString('profile');
   const isFocused = useIsFocused();
   const {isPlay, showPlayer, hidePlayer} = usePlayerHook();
@@ -76,7 +73,7 @@ export const FeedScreen: React.FC = () => {
                 data={PostlistData}
               />
             ) : (
-              <PostListExclusive
+              <PostListMyPost
                 dataRightDropdown={dropDownDataCategory}
                 dataLeftDropdown={dropDownDataSort}
                 data={PostlistDataExclusive}

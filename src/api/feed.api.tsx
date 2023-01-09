@@ -1,8 +1,10 @@
-import SsuAPI from './base';
+import SsuAPI from './baseMusician';
 import {
   CommentDetailResponseType,
   CommentResponseType,
   CommentUpdateResponseType,
+  CreatePostProps,
+  CreatePostResponseType,
   DetailPostResponseType,
   LikePostResponseType,
   ListCommentResponseType,
@@ -19,7 +21,7 @@ export const listPost = async (
   props?: ParamsProps,
 ): Promise<ListPostResponseType> => {
   const {data} = await SsuAPI().request<ListPostResponseType>({
-    url: '/posts',
+    url: '/post/public',
     method: 'GET',
     params: props,
   });
@@ -27,11 +29,11 @@ export const listPost = async (
   return data;
 };
 
-export const listPostExclusive = async (
+export const listMyPost = async (
   props?: ParamsProps,
 ): Promise<ListPostResponseType> => {
   const {data} = await SsuAPI().request<ListPostResponseType>({
-    url: '/posts/premium',
+    url: '/posts',
     method: 'GET',
     params: props,
   });
@@ -44,7 +46,7 @@ export const detailPost = async (
   props?: PostPropsTypeA,
 ): Promise<DetailPostResponseType> => {
   const {data} = await SsuAPI().request<DetailPostResponseType>({
-    url: `/posts/${props?.id}`,
+    url: `/post/find/${props?.id}`,
     method: 'GET',
   });
 
@@ -56,7 +58,7 @@ export const likePost = async (
   props?: PostPropsTypeA,
 ): Promise<LikePostResponseType> => {
   const {data} = await SsuAPI().request<LikePostResponseType>({
-    url: `/posts/${props?.id}/like`,
+    url: `/post/like/${props?.id}`,
     method: 'POST',
   });
 
@@ -67,7 +69,7 @@ export const unlikePost = async (
   props?: PostPropsTypeA,
 ): Promise<UnlikePostResponseType> => {
   const {data} = await SsuAPI().request<UnlikePostResponseType>({
-    url: `/posts/${props?.id}/unlike`,
+    url: `/post/unlike/${props?.id}`,
     method: 'POST',
   });
 
@@ -79,7 +81,7 @@ export const likeComment = async (
   props?: PostPropsTypeA,
 ): Promise<LikePostResponseType> => {
   const {data} = await SsuAPI().request<LikePostResponseType>({
-    url: `/comments/${props?.id}/like`,
+    url: `/comment/like/${props?.id}`,
     method: 'POST',
   });
 
@@ -90,7 +92,7 @@ export const unlikeComment = async (
   props?: PostPropsTypeA,
 ): Promise<UnlikePostResponseType> => {
   const {data} = await SsuAPI().request<UnlikePostResponseType>({
-    url: `/comments/${props?.id}/unlike`,
+    url: `/comment/unlike/${props?.id}`,
     method: 'POST',
   });
 
@@ -124,9 +126,9 @@ export const commmentToPost = async (
   props?: PostPropsTypeB,
 ): Promise<CommentResponseType> => {
   const {data} = await SsuAPI().request<CommentResponseType>({
-    url: `/posts/${props?.id}/comments/create`,
+    url: `/post/comment/create`,
     method: 'POST',
-    data: props?.content,
+    data: props,
   });
 
   return data;
@@ -136,7 +138,7 @@ export const commmentToComment = async (
   props?: PostPropsTypeB,
 ): Promise<CommentResponseType> => {
   const {data} = await SsuAPI().request<CommentResponseType>({
-    url: `/comments/${props?.id}/create`,
+    url: `/comment/create/${props?.id}`,
     method: 'POST',
     data: props?.content,
   });
@@ -148,7 +150,7 @@ export const commmentUpdate = async (
   props?: PostPropsTypeB,
 ): Promise<CommentUpdateResponseType> => {
   const {data} = await SsuAPI().request<CommentUpdateResponseType>({
-    url: `/comments/${props?.id}/update`,
+    url: `/comment/update/${props?.id}`,
     method: 'PATCH',
     data: props?.content,
   });
@@ -160,8 +162,20 @@ export const commmentDelete = async (
   props?: PostPropsTypeA,
 ): Promise<CommentResponseType> => {
   const {data} = await SsuAPI().request<CommentResponseType>({
-    url: `/comments/${props?.id}/delete`,
+    url: `/comment/delete/${props?.id}`,
     method: 'DELETE',
+  });
+
+  return data;
+};
+
+export const createPost = async (
+  props?: CreatePostProps,
+): Promise<CreatePostResponseType> => {
+  const {data} = await SsuAPI().request<CreatePostResponseType>({
+    url: `/post/create`,
+    method: 'POST',
+    data: props,
   });
 
   return data;

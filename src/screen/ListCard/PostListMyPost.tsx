@@ -51,7 +51,7 @@ interface PostListProps {
   data: PostListType[];
 }
 
-const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
+const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
   const {dataRightDropdown, dataLeftDropdown, data} = props;
@@ -74,7 +74,7 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
     feedIsError,
     feedMessage,
     dataPostList,
-    getListDataExclusivePost,
+    getListDataMyPost,
     setLikePost,
     setUnlikePost,
     setCommentToPost,
@@ -95,17 +95,17 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
 
   useFocusEffect(
     useCallback(() => {
-      getListDataExclusivePost();
+      getListDataMyPost();
     }, []),
   );
 
   const resultDataFilter = (dataResultFilter: DataDropDownType) => {
-    getListDataExclusivePost({sortBy: dataResultFilter.label.toLowerCase()});
+    getListDataMyPost({sortBy: dataResultFilter.label.toLowerCase()});
   };
   const resultDataCategory = (dataResultCategory: DataDropDownType) => {
     dataResultCategory.label === 'All'
-      ? getListDataExclusivePost()
-      : getListDataExclusivePost({category: dataResultCategory.value});
+      ? getListDataMyPost()
+      : getListDataMyPost({category: dataResultCategory.value});
   };
 
   const cardOnPress = (data: PostList) => {
@@ -429,7 +429,7 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
   );
 };
 
-export default PostListExclusive;
+export default PostListMyPost;
 
 const styles = StyleSheet.create({
   childrenPostTitle: {

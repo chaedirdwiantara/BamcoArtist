@@ -10,7 +10,7 @@ import {
   UsernameAvailabilityResponseType,
 } from '../interface/auth.interface';
 import {RegistrationType} from '../interface/profile.interface';
-import SsuAPI from './base';
+import SsuAPI from './baseMusician';
 
 export const registerUser = async (
   registerProps: RegisterPropsType,

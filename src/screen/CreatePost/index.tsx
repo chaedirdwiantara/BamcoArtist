@@ -25,6 +25,7 @@ import {
 } from '../../data/dropdown';
 import FilterModal from './modalFilter';
 import ImageList from './showImage';
+import {useFeedHook} from '../../hooks/use-feed.hook';
 
 interface uriProps {
   assets: string[];
@@ -41,8 +42,14 @@ const CreatePost = () => {
     modalFilter: false,
     modalImagePicker: false,
   });
+
+  const {dataCreatePost, createPostLoading, createPostError, setCreatePost} =
+    useFeedHook();
+
   const [label, setLabel] = useState<string>();
+  const [valueFilter, setValueFilter] = useState<string>();
   const [uri, setUri] = useState<uriProps[]>([]);
+  const [dataAudience, setDataAudience] = useState<string>('');
 
   const resultDataCategory = (dataResultCategory: DataDropDownType) => {
     console.log(dataResultCategory, 'dataResultCategory');
@@ -50,6 +57,7 @@ const CreatePost = () => {
 
   const resultDataAudience = (dataAudience: DataDropDownType) => {
     console.log(dataAudience, 'dataResultCategory');
+    setDataAudience(dataAudience.label);
   };
 
   const sendUri = (val: {assets: string[]; path: string}) => {
@@ -66,6 +74,15 @@ const CreatePost = () => {
     setModalVisible({
       modalFilter: false,
       modalImagePicker: false,
+    });
+  };
+
+  const handlePostOnPress = () => {
+    setCreatePost({
+      caption: inputText,
+      category: valueFilter ? valueFilter : 'highlight',
+      // image: uri,
+      isPremium: dataAudience === 'Exclusive' ? true : false,
     });
   };
 
@@ -172,6 +189,7 @@ const CreatePost = () => {
                   backgroundColor: color.Dark[50],
                 }}
                 textStyles={{}}
+                onPress={handlePostOnPress}
               />
             ) : (
               <ButtonGradient
@@ -181,7 +199,7 @@ const CreatePost = () => {
                   aspectRatio: heightResponsive(279 / 77),
                 }}
                 textStyles={{}}
-                onPress={() => {}}
+                onPress={handlePostOnPress}
               />
             )}
           </View>
@@ -197,6 +215,7 @@ const CreatePost = () => {
         modalVisible={isModalVisible.modalFilter}
         dataFilter={dropdownCategoryMusician}
         filterOnPress={setLabel}
+        sendCategory={setValueFilter}
       />
       <ModalImagePicker
         title={'Upload media'}
