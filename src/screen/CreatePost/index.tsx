@@ -8,6 +8,7 @@ import {
   ButtonGradientwithIcon,
   Dropdown,
   Gap,
+  ModalImagePicker,
   SsuInput,
   TopNavigation,
 } from '../../components';
@@ -23,14 +24,25 @@ import {
   dropDownSetAudience,
 } from '../../data/dropdown';
 import FilterModal from './modalFilter';
+import ImageList from './showImage';
+
+interface uriProps {
+  assets: string[];
+  path: string;
+}
 
 const CreatePost = () => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
 
   const [inputText, setInputText] = useState<string>('');
-  const [isModalVisible, setModalVisible] = useState<boolean>(false);
+  // const [isModalVisible, setModalVisible] = useState<boolean>(false);
+  const [isModalVisible, setModalVisible] = useState({
+    modalFilter: false,
+    modalImagePicker: false,
+  });
   const [label, setLabel] = useState<string>();
+  const [uri, setUri] = useState<uriProps[]>([]);
 
   const resultDataCategory = (dataResultCategory: DataDropDownType) => {
     console.log(dataResultCategory, 'dataResultCategory');
@@ -40,9 +52,22 @@ const CreatePost = () => {
     console.log(dataAudience, 'dataResultCategory');
   };
 
-  useEffect(() => {
-    console.log(label, 'label');
-  }, [label]);
+  const sendUri = (val: {assets: string[]; path: string}) => {
+    //setUploadImage(val);
+    setUri([...uri, val]);
+  };
+
+  const resetImage = () => {
+    setUri([]);
+    closeModal();
+  };
+
+  const closeModal = () => {
+    setModalVisible({
+      modalFilter: false,
+      modalImagePicker: false,
+    });
+  };
 
   return (
     <View style={styles.container}>
@@ -59,7 +84,12 @@ const CreatePost = () => {
             <Gap width={12} />
             <ButtonGradientwithIcon
               label={label ? label : 'Select Category'}
-              onPress={() => setModalVisible(true)}
+              onPress={() =>
+                setModalVisible({
+                  modalFilter: true,
+                  modalImagePicker: false,
+                })
+              }
               gradientStyles={{}}
               textStyles={{
                 fontFamily: font.InterRegular,
@@ -81,16 +111,29 @@ const CreatePost = () => {
               multiline={true}
               maxLength={400}
             />
+            <ImageList
+              imgData={uri}
+              disabled={false}
+              width={162}
+              height={79}
+              // onPress={toggleModalOnPress}
+            />
           </View>
         </View>
         <View style={styles.footerBody}>
           <View style={styles.iconsAndCategory}>
             <View style={styles.iconsContainer}>
-              <TouchableOpacity>
+              {/* <TouchableOpacity>
                 <OpenCameraIcon />
               </TouchableOpacity>
-              <Gap width={16} />
-              <TouchableOpacity>
+              <Gap width={16} /> */}
+              <TouchableOpacity
+                onPress={() =>
+                  setModalVisible({
+                    modalFilter: false,
+                    modalImagePicker: true,
+                  })
+                }>
                 <ImportPhotoIcon />
               </TouchableOpacity>
             </View>
@@ -145,10 +188,22 @@ const CreatePost = () => {
         </View>
       </View>
       <FilterModal
-        toggleModal={() => setModalVisible(!isModalVisible)}
-        modalVisible={isModalVisible}
+        toggleModal={() =>
+          setModalVisible({
+            modalFilter: !isModalVisible.modalFilter,
+            modalImagePicker: false,
+          })
+        }
+        modalVisible={isModalVisible.modalFilter}
         dataFilter={dropdownCategoryMusician}
         filterOnPress={setLabel}
+      />
+      <ModalImagePicker
+        title={'Upload media'}
+        modalVisible={isModalVisible.modalImagePicker}
+        sendUri={sendUri}
+        onDeleteImage={resetImage}
+        onPressClose={closeModal}
       />
     </View>
   );
