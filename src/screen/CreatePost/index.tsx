@@ -26,6 +26,7 @@ import {
 import FilterModal from './modalFilter';
 import ImageList from './showImage';
 import {useFeedHook} from '../../hooks/use-feed.hook';
+import {useUploadImageHook} from '../../hooks/use-uploadImage.hook';
 
 interface uriProps {
   assets: string[];
@@ -46,13 +47,43 @@ const CreatePost = () => {
   const {dataCreatePost, createPostLoading, createPostError, setCreatePost} =
     useFeedHook();
 
+  const {dataImage, setUploadImage} = useUploadImageHook();
+
   const [label, setLabel] = useState<string>();
   const [valueFilter, setValueFilter] = useState<string>();
   const [uri, setUri] = useState<uriProps[]>([]);
   const [dataAudience, setDataAudience] = useState<string>('');
+  const [dataResponseImg, setDataResponseImg] = useState<string[]>([]);
 
-  const resultDataCategory = (dataResultCategory: DataDropDownType) => {
-    console.log(dataResultCategory, 'dataResultCategory');
+  useEffect(() => {
+    dataImage?.data !== undefined
+      ? setDataResponseImg([...dataResponseImg, dataImage?.data])
+      : null;
+  }, [dataImage]);
+
+  useEffect(() => {
+    uri.length !== 0 && dataResponseImg.length === uri.length
+      ? setCreatePost({
+          caption: inputText,
+          category: valueFilter ? valueFilter : 'highlight',
+          image: dataResponseImg,
+          isPremium: dataAudience === 'Exclusive' ? true : false,
+        })
+      : null;
+  }, [dataResponseImg]);
+
+  const handlePostOnPress = () => {
+    if (uri.length !== 0) {
+      for (let i = 0; i < uri.length; i++) {
+        return setUploadImage(uri[i]);
+      }
+    } else {
+      return setCreatePost({
+        caption: inputText,
+        category: valueFilter ? valueFilter : 'highlight',
+        isPremium: dataAudience === 'Exclusive' ? true : false,
+      });
+    }
   };
 
   const resultDataAudience = (dataAudience: DataDropDownType) => {
@@ -61,7 +92,6 @@ const CreatePost = () => {
   };
 
   const sendUri = (val: {assets: string[]; path: string}) => {
-    //setUploadImage(val);
     setUri([...uri, val]);
   };
 
@@ -74,15 +104,6 @@ const CreatePost = () => {
     setModalVisible({
       modalFilter: false,
       modalImagePicker: false,
-    });
-  };
-
-  const handlePostOnPress = () => {
-    setCreatePost({
-      caption: inputText,
-      category: valueFilter ? valueFilter : 'highlight',
-      // image: uri,
-      isPremium: dataAudience === 'Exclusive' ? true : false,
     });
   };
 
