@@ -52,7 +52,7 @@ export const ChangePasswordContent: React.FC<ChangePasswordProps> = ({
         value={state.oldPassword}
         isError={error.oldPassword}
         onChangeText={(newText: string) => onChangeText('oldPassword', newText)}
-        containerStyles={{marginTop: heightPercentage(15)}}
+        containerStyles={{marginTop: heightPercentage(15), width: '90%'}}
       />
 
       <SsuInput.InputLabel
@@ -62,7 +62,7 @@ export const ChangePasswordContent: React.FC<ChangePasswordProps> = ({
         value={state.newPassword}
         isError={error.newPassword}
         onChangeText={(newText: string) => onChangeText('newPassword', newText)}
-        containerStyles={{marginTop: heightPercentage(15)}}
+        containerStyles={{marginTop: heightPercentage(15), width: '90%'}}
       />
 
       <SsuInput.InputLabel
@@ -74,7 +74,7 @@ export const ChangePasswordContent: React.FC<ChangePasswordProps> = ({
         onChangeText={(newText: string) =>
           onChangeText('confirmNewPassword', newText)
         }
-        containerStyles={{marginTop: heightPercentage(15)}}
+        containerStyles={{marginTop: heightPercentage(15), width: '90%'}}
       />
 
       <Button

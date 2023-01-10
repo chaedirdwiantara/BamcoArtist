@@ -7,20 +7,21 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import {ArrowLeftIcon, LogOutIcon} from '../../../assets/icon';
 import {menuSetting} from '../../../data/Settings/setting';
+import {ArrowLeftIcon, LogOutIcon} from '../../../assets/icon';
 
 import {TopNavigation} from '../TopNavigation';
 import {color, typography} from '../../../theme';
 import {ModalCustom} from '../Modal/ModalCustom';
 import Typography from '../../../theme/Typography';
 import {MenuText} from '../../atom/MenuText/MenuText';
-import {heightPercentage, width, widthPercentage} from '../../../utils';
-import {useAuthHook} from '../../../hooks/use-auth.hook';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParams} from '../../../navigations';
-import * as FCMService from '../../../service/notification';
 import {useFcmHook} from '../../../hooks/use-fcm.hook';
+import {useAuthHook} from '../../../hooks/use-auth.hook';
+import * as FCMService from '../../../service/notification';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {height, heightPercentage, width, widthPercentage} from '../../../utils';
+import {ModalConfirm} from '../Modal/ModalConfirm';
 
 interface SettingProps {
   onPressGoBack: () => void;
@@ -34,7 +35,10 @@ export const SettingContent: React.FC<SettingProps> = ({
   handleWebview,
 }) => {
   const listMenu = menuSetting;
-  const [isVisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState({
+    modalReport: false,
+    modalConfirm: false,
+  });
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
   const {onLogout} = useAuthHook();
@@ -42,10 +46,17 @@ export const SettingContent: React.FC<SettingProps> = ({
 
   const onPress = (val: string) => {
     if (val === 'Send Report') {
-      setIsVisible(true);
-    } else if (val === 'Terms Conditions' || val === 'Privacy Policy') {
-      const path = val === 'Terms Conditions' ? 'tos' : 'privacy-policy';
+      setIsVisible({
+        modalReport: true,
+        modalConfirm: false,
+      });
+    } else if (val === 'Terms and Conditions' || val === 'Privacy Policy') {
+      const path = val === 'Terms and Conditions' ? 'tos' : 'privacy-policy';
       handleWebview(val, `https://sunnysideup.io/marketplace/${path}`);
+    } else if (val === 'Donation & Subscription') {
+      onPressGoTo('DonationAndSubscription');
+    } else if (val === 'Preference') {
+      onPressGoTo('PreferenceSetting');
     } else {
       onPressGoTo(val.replace(/\s/g, ''));
     }
@@ -57,7 +68,7 @@ export const SettingContent: React.FC<SettingProps> = ({
         style={{marginTop: heightPercentage(10)}}
         onPress={() => {
           onPressGoTo('SendReport', {title});
-          setIsVisible(false);
+          closeModal();
         }}>
         <Text style={[typography.Subtitle1, {color: color.Neutral[10]}]}>
           {title}
@@ -87,6 +98,13 @@ export const SettingContent: React.FC<SettingProps> = ({
         />
       </View>
     );
+  };
+
+  const closeModal = () => {
+    setIsVisible({
+      modalConfirm: false,
+      modalReport: false,
+    });
   };
 
   const onPressSignout = () => {
@@ -127,10 +145,15 @@ export const SettingContent: React.FC<SettingProps> = ({
         </View>
       </ScrollView>
 
-      <View style={styles.containerText}>
+      <View style={styles.containerSignOut}>
         <TouchableOpacity
-          style={styles.containerSignout}
-          onPress={onPressSignout}>
+          style={styles.signOut}
+          onPress={() =>
+            setIsVisible({
+              modalConfirm: true,
+              modalReport: false,
+            })
+          }>
           <LogOutIcon />
           <Text style={[Typography.Button2, styles.textSignOut]}>
             {'Sign Out'}
@@ -139,9 +162,17 @@ export const SettingContent: React.FC<SettingProps> = ({
       </View>
 
       <ModalCustom
-        modalVisible={isVisible}
+        modalVisible={isVisible.modalReport}
         children={children()}
-        onPressClose={() => setIsVisible(false)}
+        onPressClose={closeModal}
+      />
+
+      <ModalConfirm
+        modalVisible={isVisible.modalConfirm}
+        title="Sign Out"
+        subtitle="Are you sure you want to sign out?"
+        onPressClose={closeModal}
+        onPressOk={onPressSignout}
       />
     </View>
   );
@@ -161,13 +192,20 @@ const styles = StyleSheet.create({
     color: color.Neutral[10],
     paddingLeft: widthPercentage(15),
   },
-  containerSignout: {
+  signOut: {
     flexDirection: 'row',
     position: 'absolute',
     bottom: heightPercentage(25),
   },
   containerText: {
     width: width * 0.9,
+    flexDirection: 'row',
+    alignSelf: 'center',
+    marginBottom: heightPercentage(10),
+  },
+  containerSignOut: {
+    width: width * 0.9,
+    height: height * 0.1,
     flexDirection: 'row',
     alignSelf: 'center',
   },

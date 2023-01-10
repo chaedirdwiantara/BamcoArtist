@@ -6,6 +6,7 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import Color from '../theme/Color';
 import {RootStackParams} from '../navigations';
 import {dataOnboard} from '../data/onboard';
+import {storage} from '../hooks/use-storage.hook';
 import {ImageSlider, SsuStatusBar} from '../components';
 
 export const OnboardScreen: React.FC = () => {
@@ -14,17 +15,13 @@ export const OnboardScreen: React.FC = () => {
 
   const goToScreenGuest = () => {
     navigation.replace('SignInGuest');
+    storage.set('skipOnboard', true);
   };
 
   return (
     <View style={styles.root}>
       <SsuStatusBar type="black" />
-      <ImageSlider
-        data={dataOnboard}
-        onPress={goToScreenGuest}
-        setFollowMusician={() => null}
-        setUnfollowMusician={() => null}
-      />
+      <ImageSlider data={dataOnboard} onPress={goToScreenGuest} />
     </View>
   );
 };

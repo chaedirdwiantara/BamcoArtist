@@ -38,6 +38,8 @@ import {PhoneNumberScreen} from '../screen/Setting/PhoneNumber';
 import {ShippingInformationScreen} from '../screen/Setting/ShippingInformation';
 import {DonationAndSubscription} from '../screen/Setting/DonationAndSubscription';
 import {SendReportScreen} from '../screen/Setting/SendReport';
+import {PushNotificationScreen} from '../screen/Setting/PushNotification';
+import {PreferenceSettingScreen} from '../screen/Setting/Preference';
 
 // Profile
 import {ProfileScreen} from '../screen/Profile/Profile';
@@ -113,6 +115,8 @@ export type RootStackParams = {
     id: number;
   };
   Preference: undefined;
+  PreferenceSetting: undefined;
+  PushNotification: undefined;
   Referral: undefined;
   ReferralCode: undefined;
   SendReport: undefined;
@@ -230,7 +234,13 @@ const RootStack = createNativeStackNavigator<RootStackParams>();
 export const RootStackScreen = () => (
   <RootStack.Navigator
     screenOptions={screenOption}
-    initialRouteName={storage.getBoolean('isLogin') ? 'MainTab' : 'Boarding'}>
+    initialRouteName={
+      storage.getBoolean('isLogin')
+        ? 'MainTab'
+        : storage.getBoolean('skipOnboard')
+        ? 'SignInGuest'
+        : 'Boarding'
+    }>
     <RootStack.Screen name="Boarding" component={OnboardScreen} />
     <RootStack.Screen name="EditProfile" component={EditProfileScreen} />
     <RootStack.Screen name="AddToPlaylist" component={AddToPlaylistScreen} />
@@ -248,6 +258,14 @@ export const RootStackScreen = () => (
     <RootStack.Screen name="ChangeEmail" component={ChangeEmailScreen} />
     <RootStack.Screen name="Email" component={EmailScreen} />
     <RootStack.Screen name="PhoneNumber" component={PhoneNumberScreen} />
+    <RootStack.Screen
+      name="PreferenceSetting"
+      component={PreferenceSettingScreen}
+    />
+    <RootStack.Screen
+      name="PushNotification"
+      component={PushNotificationScreen}
+    />
     <RootStack.Screen name="ChangePassword" component={ChangePasswordScreen} />
     <RootStack.Screen name="ReferralCode" component={ReferralCodeSetting} />
     <RootStack.Screen name="Language" component={LanguageScreen} />

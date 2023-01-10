@@ -112,7 +112,6 @@ const styles = StyleSheet.create({
   root: {
     flex: 1,
     backgroundColor: Color.Dark[800],
-    marginHorizontal: widthPercentage(12),
   },
   containerTab: {
     width: '100%',

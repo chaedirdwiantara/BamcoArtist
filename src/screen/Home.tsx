@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {
   View,
   StyleSheet,
@@ -7,7 +7,11 @@ import {
   NativeScrollEvent,
   NativeSyntheticEvent,
 } from 'react-native';
-import {useNavigation, useIsFocused} from '@react-navigation/native';
+import {
+  useNavigation,
+  useIsFocused,
+  useFocusEffect,
+} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
 import {
@@ -29,11 +33,11 @@ import {RootStackParams} from '../navigations';
 import TopMusician from './ListCard/TopMusician';
 import {useFcmHook} from '../hooks/use-fcm.hook';
 import {storage} from '../hooks/use-storage.hook';
-import {useSongHook} from '../hooks/use-song.hook';
 import {SongList} from '../interface/song.interface';
 import * as FCMService from '../service/notification';
 import {usePlayerHook} from '../hooks/use-player.hook';
 import {useBannerHook} from '../hooks/use-banner.hook';
+import {useSearchHook} from '../hooks/use-search.hook';
 import {ParamsProps} from '../interface/base.interface';
 import {profileStorage} from '../hooks/use-storage.hook';
 import {useMusicianHook} from '../hooks/use-musician.hook';
@@ -50,13 +54,7 @@ type OnScrollEventHandler = (
 export const HomeScreen: React.FC = () => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
-  const {
-    dataMusician,
-    getListDataMusician,
-    setFollowMusician,
-    setUnfollowMusician,
-  } = useMusicianHook();
-  const {dataSong, getListDataSong} = useSongHook();
+  const {setFollowMusician, setUnfollowMusician} = useMusicianHook();
   const {dataBanner, getListDataBanner} = useBannerHook();
   const {addFcmToken} = useFcmHook();
   const {
@@ -67,16 +65,27 @@ export const HomeScreen: React.FC = () => {
     seekPlayer,
     setMusicDataPlayer,
   } = usePlayerHook();
+  const {
+    dataSearchMusicians,
+    dataSearchSongs,
+    getSearchMusicians,
+    getSearchSongs,
+  } = useSearchHook();
 
   const isLogin = storage.getBoolean('isLogin');
   const isFocused = useIsFocused();
 
   useEffect(() => {
-    getListDataMusician({filterBy: 'top'});
     getListDataBanner();
-    getListDataSong();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      getSearchMusicians({keyword: '', filterBy: 'top'});
+      getSearchSongs({keyword: '', filterBy: 'top'});
+    }, []),
+  );
 
   useEffect(() => {
     if (isFocused && isPlay) {
@@ -231,7 +240,7 @@ export const HomeScreen: React.FC = () => {
           />
           {filter[selectedIndex].filterName === 'TOP MUSICIAN' ? (
             <TopMusician
-              dataMusician={dataMusician ? dataMusician : []}
+              dataMusician={dataSearchMusicians}
               setFollowMusician={(
                 props?: FollowMusicianPropsType,
                 params?: ParamsProps,
@@ -243,7 +252,7 @@ export const HomeScreen: React.FC = () => {
             />
           ) : filter[selectedIndex].filterName === 'TOP SONG' ? (
             <TopSong
-              dataSong={dataSong ? dataSong : []}
+              dataSong={dataSearchSongs}
               onPress={onPressTopSong}
               type={'home'}
             />

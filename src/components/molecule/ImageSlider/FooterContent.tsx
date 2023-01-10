@@ -57,7 +57,7 @@ export const FooterContent: React.FC<FooterContentProps> = ({
             onPress={onPressGoTo}
           />
           <ButtonGradient
-            label={activeIndexSlide === 3 ? 'Finish' : 'Next'}
+            label={activeIndexSlide === 2 ? 'Finish' : 'Next'}
             onPress={onPressNext}
             gradientStyles={styles.btnContainer}
           />
@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
     width: widthPercentage(327),
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginVertical: heightPercentage(40),
+    marginTop: heightPercentage(40),
   },
   btnContainer: {
     width: widthPercentage(155),
