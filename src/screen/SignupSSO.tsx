@@ -100,8 +100,10 @@ export const SignupSSOScreen: React.FC<RegisterProps> = ({
     if (!isLoading && !isError && authResult !== null) {
       storage.set('profile', JSON.stringify(authResult.data));
       storage.set('isLogin', true);
-      navigation.pop();
-      navigation.replace('Preference');
+      navigation.reset({
+        index: 0,
+        routes: [{name: 'Preference'}],
+      });
     } else if (!isLoading && isError !== null) {
       setError('termsCondition', {
         type: 'value',
