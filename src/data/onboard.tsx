@@ -9,20 +9,20 @@ export interface DataOnboardType {
 export const dataOnboard: DataOnboardType[] = [
   {
     uri: require('../assets/background/onboard-1.png'),
-    title: "Let's the fans",
+    title: "Let's the fans grow with their musician",
     subtitle:
-      'Lorem ipsum dolor sit amet, consectetur adispicing elit. Vestibulum porta ipsum Lorem ipsum dolor sit amet.',
+      "Welcome to the our music player! We're excited to have you join our community of musicians and fans.",
   },
   {
     uri: require('../assets/background/onboard-2.png'),
-    title: 'with their musician',
+    title: "Let's the fans grow with their musician",
     subtitle:
-      'Lorem ipsum dolor sit amet, consectetur adispicing elit. Vestibulum porta ipsum Lorem ipsum dolor sit amet.',
+      'Our platform is designed to support the growth and success of musicians by providing tools and resources to help them share and promote their music.',
   },
   {
     uri: require('../assets/background/onboard-3.png'),
-    title: "Let's Let's Let's",
+    title: "Let's the fans grow with their musician",
     subtitle:
-      'Lorem ipsum dolor sit amet, consectetur adispicing elit. Vestibulum porta ipsum Lorem ipsum dolor sit amet.',
+      "We're committed to supporting fans and musician growth together, and we look forward to seeing you thrive on our platform.",
   },
 ];
