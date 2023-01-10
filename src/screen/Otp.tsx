@@ -43,9 +43,15 @@ export const Otp: FC<OtpProps> = ({navigation, route}: OtpProps) => {
     if (!isLoading && !isError && isOtpValid === true) {
       storage.set('isLogin', true);
       if (loginResult === 'preference') {
-        navigation.replace('Preference');
+        navigation.reset({
+          index: 0,
+          routes: [{name: 'Preference'}],
+        });
       } else if (loginResult === 'home') {
-        navigation.replace('MainTab');
+        navigation.reset({
+          index: 0,
+          routes: [{name: 'MainTab'}],
+        });
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

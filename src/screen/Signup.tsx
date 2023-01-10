@@ -222,11 +222,16 @@ export const SignupScreen: React.FC = () => {
       loginResult !== null
     ) {
       storage.set('isLogin', true);
-      navigation.pop();
       if (loginResult === 'preference') {
-        navigation.replace('Preference');
+        navigation.reset({
+          index: 0,
+          routes: [{name: 'Preference'}],
+        });
       } else {
-        navigation.replace('MainTab');
+        navigation.reset({
+          index: 0,
+          routes: [{name: 'MainTab'}],
+        });
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
