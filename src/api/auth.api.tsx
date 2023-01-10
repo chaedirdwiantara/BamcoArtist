@@ -10,7 +10,7 @@ import {
   UsernameAvailabilityResponseType,
 } from '../interface/auth.interface';
 import {RegistrationType} from '../interface/profile.interface';
-import SsuAPI from './base';
+import SsuAPI from './baseMusician';
 
 export const registerUser = async (
   registerProps: RegisterPropsType,
@@ -87,6 +87,7 @@ export const confirmEmailOtpRegister = async (
     data: {
       email: email,
       code: code,
+      context: 'register',
     },
   });
 
@@ -99,7 +100,7 @@ export const confirmSmsOtpLogin = async (
   context: string,
 ): Promise<ConfirmSmsOTPLoginResponseType> => {
   const {data} = await SsuAPI().request<ConfirmSmsOTPLoginResponseType>({
-    url: '/confirm-otp/sms/login',
+    url: '/confirm-otp/sms',
     method: 'POST',
     data: {
       phoneNumber: phoneNumber,

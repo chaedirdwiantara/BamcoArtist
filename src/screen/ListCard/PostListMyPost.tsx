@@ -29,6 +29,7 @@ import {color, font, typography} from '../../theme';
 import {
   elipsisText,
   heightPercentage,
+  heightResponsive,
   normalize,
   widthPercentage,
   widthResponsive,
@@ -44,6 +45,7 @@ import {useFeedHook} from '../../hooks/use-feed.hook';
 import {PostList} from '../../interface/feed.interface';
 import {dateFormat} from '../../utils/date-format';
 import {useProfileHook} from '../../hooks/use-profile.hook';
+import categoryNormalize from '../../utils/categoryNormalize';
 
 interface PostListProps {
   dataRightDropdown: DataDropDownType[];
@@ -51,7 +53,7 @@ interface PostListProps {
   data: PostListType[];
 }
 
-const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
+const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
   const {dataRightDropdown, dataLeftDropdown, data} = props;
@@ -74,7 +76,7 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
     feedIsError,
     feedMessage,
     dataPostList,
-    getListDataExclusivePost,
+    getListDataMyPost,
     setLikePost,
     setUnlikePost,
     setCommentToPost,
@@ -95,17 +97,17 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
 
   useFocusEffect(
     useCallback(() => {
-      getListDataExclusivePost();
+      getListDataMyPost();
     }, []),
   );
 
   const resultDataFilter = (dataResultFilter: DataDropDownType) => {
-    getListDataExclusivePost({sortBy: dataResultFilter.label.toLowerCase()});
+    getListDataMyPost({sortBy: dataResultFilter.label.toLowerCase()});
   };
   const resultDataCategory = (dataResultCategory: DataDropDownType) => {
     dataResultCategory.label === 'All'
-      ? getListDataExclusivePost()
-      : getListDataExclusivePost({category: dataResultCategory.value});
+      ? getListDataMyPost()
+      : getListDataMyPost({category: dataResultCategory.value});
   };
 
   const cardOnPress = (data: PostList) => {
@@ -198,7 +200,7 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
 
   const handleReplyOnPress = () => {
     commentType.length > 0
-      ? setCommentToPost({id: musicianId, content: {content: commentType}})
+      ? setCommentToPost({postId: musicianId, content: commentType})
       : null;
     setInputCommentModal(false);
     setCommentType('');
@@ -273,8 +275,8 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
           contentContainerStyle={{
             paddingBottom:
               Platform.OS === 'ios'
-                ? heightPercentage(130)
-                : heightPercentage(180),
+                ? heightResponsive(160)
+                : heightResponsive(220),
           }}
           renderItem={({item}) => (
             <ListCard.PostList
@@ -282,7 +284,7 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
               musicianId={`@${item.musician.username}`}
               imgUri={item.musician.imageProfileUrl}
               postDate={dateFormat(item.createdAt)}
-              category={item.category}
+              category={categoryNormalize(item.category)}
               onPress={() => cardOnPress(item)}
               likeOnPress={() => likeOnPress(item.id, item.isLiked)}
               likePressed={
@@ -335,14 +337,16 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
                       flexDirection: 'row',
                     }}>
                     <SafeAreaView style={{flex: 1}}>
-                      <ImageList
-                        imgData={item.image}
-                        width={143}
-                        height={69.5}
-                        heightType2={142}
-                        widthType2={289}
-                        onPress={() => {}}
-                      />
+                      {item.image !== null ? (
+                        <ImageList
+                          imgData={item.image}
+                          width={143}
+                          height={69.5}
+                          heightType2={142}
+                          widthType2={289}
+                          onPress={() => {}}
+                        />
+                      ) : null}
                     </SafeAreaView>
                   </View>
                 </View>
@@ -354,9 +358,9 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
         feedMessage === 'you not follow anyone' ? (
         <ListToFollowMusician />
       ) : dataPostList?.length === 0 &&
-        feedMessage === 'you not subscribe any premium content' ? (
+        feedMessage === `You don't have any post` ? (
         <EmptyState
-          text={`You don't have any exclusive content, try to subscribe your favorite musician`}
+          text={feedMessage}
           containerStyle={{
             justifyContent: 'flex-start',
             paddingTop: heightPercentage(24),
@@ -429,7 +433,7 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
   );
 };
 
-export default PostListExclusive;
+export default PostListMyPost;
 
 const styles = StyleSheet.create({
   childrenPostTitle: {

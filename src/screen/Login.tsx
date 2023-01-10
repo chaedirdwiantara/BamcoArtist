@@ -38,7 +38,7 @@ import {heightResponsive, normalize} from '../utils';
 const {width, height} = Dimensions.get('screen');
 
 interface LoginInput {
-  user: string;
+  username: string;
   password: string;
   phoneNumber: string;
   loginType: string;
@@ -46,7 +46,7 @@ interface LoginInput {
 
 const loginValidation = yup.object({
   loginType: yup.string(),
-  user: yup.string().when('loginType', {
+  username: yup.string().when('loginType', {
     is: (val: RegistrationType) => val === 'email',
     then: yup.string().required('This field is required'),
   }),
@@ -99,7 +99,7 @@ export const LoginScreen: React.FC = () => {
   } = useForm<LoginInput>({
     resolver: yupResolver(loginValidation),
     defaultValues: {
-      user: '',
+      username: '',
       password: '',
       phoneNumber: '',
       loginType: 'email',
@@ -114,7 +114,7 @@ export const LoginScreen: React.FC = () => {
     if (watch('loginType') === 'email') {
       onLoginUser(
         {
-          user: data.user,
+          username: data.username,
           password: data.password,
         },
         'email',
@@ -146,13 +146,13 @@ export const LoginScreen: React.FC = () => {
     if (!isLoading && !isError) {
       if (watch('loginType') !== 'phoneNumber' && loginResult !== null) {
         storage.set('isLogin', true);
+        navigation.pop();
         if (loginResult === 'preference') {
           navigation.replace('Preference');
         } else {
           navigation.replace('MainTab');
         }
       } else if (watch('loginType') === 'phoneNumber') {
-        storage.set('isLogin', true);
         navigation.navigate('Otp', {
           id: countryNumber + watch('phoneNumber'),
           type: 'phoneNumber',
@@ -286,7 +286,7 @@ export const LoginScreen: React.FC = () => {
         {watch('loginType') === 'email' && (
           <View>
             <Controller
-              name="user"
+              name="username"
               control={control}
               render={({field: {onChange, value}}) => (
                 <SsuInput.InputText
@@ -305,8 +305,8 @@ export const LoginScreen: React.FC = () => {
                   onBlur={() => {
                     handleFocusInput(null);
                   }}
-                  isError={errors?.user ? true : false}
-                  errorMsg={errors?.user?.message}
+                  isError={errors?.username ? true : false}
+                  errorMsg={errors?.username?.message}
                   isFocus={focusInput === 'email'}
                 />
               )}

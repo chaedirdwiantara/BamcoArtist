@@ -2,9 +2,10 @@ import React from 'react';
 import FastImage from 'react-native-fast-image';
 import {StyleSheet, View} from 'react-native';
 import {ms} from 'react-native-size-matters';
+import {DefaultAvatar} from '../../../assets/icon';
 
 interface AvatarProps {
-  imgUri: string;
+  imgUri?: string;
   size?: number;
 }
 
@@ -13,11 +14,19 @@ export const Avatar: React.FC<AvatarProps> = (props: AvatarProps) => {
 
   return (
     <View>
-      <FastImage
-        source={{uri: imgUri}}
-        style={[styles.root, {width: size}]}
-        testID={'ssu-avatar'}
-      />
+      {imgUri ? (
+        <FastImage
+          source={{uri: imgUri}}
+          style={[styles.root, {width: size}]}
+          testID={'ssu-avatar'}
+        />
+      ) : (
+        <DefaultAvatar.MusicianIcon
+          style={styles.root}
+          width={size}
+          height={size}
+        />
+      )}
     </View>
   );
 };

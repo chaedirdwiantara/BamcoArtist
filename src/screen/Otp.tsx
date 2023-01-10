@@ -59,6 +59,7 @@ export const Otp: FC<OtpProps> = ({navigation, route}: OtpProps) => {
     if (route.params.type === 'email') {
       confirmEmailOtp(route.params.id, code);
     } else if (route.params.type === 'phoneNumber') {
+      console.log(route.params.id, code, route.params.context);
       confirmSmsOtp(route.params.id, code, route.params.context as string);
     }
   };

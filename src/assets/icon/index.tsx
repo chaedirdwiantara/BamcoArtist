@@ -1,5 +1,6 @@
 import AddIcon from './Add.icon';
 import AddCircleIcon from './AddCircle.icon';
+import AddPostIcon from './AddPost.icon';
 import ArrowLeftIcon from './ArrowLeft.icon';
 import ArrowRightIcon from './ArrowRight.icon';
 import AudioMusic from './AudioMusic.icon';
@@ -43,6 +44,7 @@ import GiftIcon from './Gift.icon';
 import HeartIcon from './Heart.icon';
 import HomeIcon from './Home.icon';
 import InstagramIcon from './Instagram.icon';
+import ImportPhotoIcon from './ImportPhoto.icon';
 import KeyIcon from './Key.icon';
 import LockIcon from './Lock.icon.';
 import LogOutIcon from './Logout.icon';
@@ -53,6 +55,7 @@ import MusicSquareIcon from './MusicSquare.icon';
 import MusicSquareAddIcon from './MusicSquareAdd.icon';
 import NextIcon from './Next.icon';
 import NotificationIcon from './Notification.icon';
+import OpenCameraIcon from './OpenCamera.icon';
 import RepeatIcon from './RepeatOne.icon';
 import PauseIcon from './Pause.icon';
 import PauseIcon2 from './Pause2.icon';
@@ -85,6 +88,7 @@ import TicketIcon from './Ticket.icon';
 export {
   AddIcon,
   AddCircleIcon,
+  AddPostIcon,
   ArrowLeftIcon,
   ArrowRightIcon,
   AudioMusic,
@@ -128,6 +132,7 @@ export {
   HeartIcon,
   HomeIcon,
   InstagramIcon,
+  ImportPhotoIcon,
   KeyIcon,
   LockIcon,
   LogOutIcon,
@@ -138,6 +143,7 @@ export {
   MusicSquareAddIcon,
   NextIcon,
   NotificationIcon,
+  OpenCameraIcon,
   PauseIcon,
   PauseIcon2,
   PlayIcon,

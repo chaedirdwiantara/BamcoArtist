@@ -1,6 +1,7 @@
 import {Avatar} from './Avatar/Avatar';
 import {Button} from './Button/Button';
 import {ButtonGradient} from './Button/ButtonGradient';
+import {ButtonGradientwithIcon} from './Button/ButtonGradientWithIcon';
 import CheckBox from './CheckBox';
 import {Indicator} from './Indicator/Indicator';
 import Gap from './Gap/Gap';
@@ -17,6 +18,7 @@ export {
   Avatar,
   Button,
   ButtonGradient,
+  ButtonGradientwithIcon,
   CheckBox,
   Gap,
   Indicator,

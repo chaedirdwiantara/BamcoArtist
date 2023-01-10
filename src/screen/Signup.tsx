@@ -83,6 +83,7 @@ export const SignupScreen: React.FC = () => {
     errorMsg,
     onRegisterUser,
     onLoginApple,
+    onLoginGoogle,
     ssoEmail,
     ssoRegistered,
     ssoError,
@@ -221,6 +222,7 @@ export const SignupScreen: React.FC = () => {
       loginResult !== null
     ) {
       storage.set('isLogin', true);
+      navigation.pop();
       if (loginResult === 'preference') {
         navigation.replace('Preference');
       } else {
@@ -250,7 +252,9 @@ export const SignupScreen: React.FC = () => {
                 justifyContent: 'center',
                 alignItems: 'center',
               }}>
-              <GoogleLogo />
+              <TouchableOpacity onPress={onLoginGoogle}>
+                <GoogleLogo />
+              </TouchableOpacity>
               <Gap width={24} />
               <FacebookLogo />
               {Platform.OS === 'ios' ? <Gap width={24} /> : null}

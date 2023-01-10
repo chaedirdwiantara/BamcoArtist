@@ -29,6 +29,7 @@ import {color, font, typography} from '../../theme';
 import {
   elipsisText,
   heightPercentage,
+  heightResponsive,
   normalize,
   widthPercentage,
   widthResponsive,
@@ -44,6 +45,7 @@ import {PostList} from '../../interface/feed.interface';
 import {dateFormat} from '../../utils/date-format';
 import {useProfileHook} from '../../hooks/use-profile.hook';
 import {TickCircleIcon} from '../../assets/icon';
+import categoryNormalize from '../../utils/categoryNormalize';
 
 interface PostListProps {
   dataRightDropdown: DataDropDownType[];
@@ -198,7 +200,7 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
 
   const handleReplyOnPress = () => {
     commentType.length > 0
-      ? setCommentToPost({id: musicianId, content: {content: commentType}})
+      ? setCommentToPost({postId: musicianId, content: commentType})
       : null;
     setInputCommentModal(false);
     setCommentType('');
@@ -273,8 +275,8 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
           contentContainerStyle={{
             paddingBottom:
               Platform.OS === 'ios'
-                ? heightPercentage(160)
-                : heightPercentage(180),
+                ? heightResponsive(160)
+                : heightResponsive(220),
           }}
           renderItem={({item}) => (
             <ListCard.PostList
@@ -282,7 +284,7 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
               musicianId={`@${item.musician.username}`}
               imgUri={item.musician.imageProfileUrl}
               postDate={dateFormat(item.createdAt)}
-              category={item.category}
+              category={categoryNormalize(item.category)}
               onPress={() => cardOnPress(item)}
               likeOnPress={() => likeOnPress(item.id, item.isLiked)}
               likePressed={
@@ -335,14 +337,16 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
                       flexDirection: 'row',
                     }}>
                     <SafeAreaView style={{flex: 1}}>
-                      <ImageList
-                        imgData={item.image}
-                        width={143}
-                        height={69.5}
-                        heightType2={142}
-                        widthType2={289}
-                        onPress={() => {}}
-                      />
+                      {item?.image !== null ? (
+                        <ImageList
+                          imgData={item.image}
+                          width={143}
+                          height={69.5}
+                          heightType2={142}
+                          widthType2={289}
+                          onPress={() => {}}
+                        />
+                      ) : null}
                     </SafeAreaView>
                   </View>
                 </View>
@@ -354,7 +358,7 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
         feedMessage === 'you not follow anyone' ? (
         <ListToFollowMusician />
       ) : dataPostList?.length === 0 &&
-        feedMessage === 'musician not have post' ? (
+        feedMessage === 'Musician have no posts' ? (
         <EmptyState
           text={`Your following musician don't have any post, try to follow more musician`}
           containerStyle={{

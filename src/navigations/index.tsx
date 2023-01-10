@@ -24,6 +24,7 @@ import {SearchScreen} from '../screen/Search/Search';
 import MusicianProfile from '../screen/MusicianProfile';
 import {WebviewPage} from '../screen/Webview';
 import {MusicPlayer} from '../screen/Music';
+import CreatePost from '../screen/CreatePost';
 
 // Setting
 import {SettingScreen} from '../screen/Setting/Setting';
@@ -142,6 +143,7 @@ export type RootStackParams = {
   MusicPlayer: undefined;
   MerchDetail: MerchListType;
   ConcertDetail: MerchListType;
+  CreatePost: undefined;
 };
 
 export type MainTabParams = {
@@ -229,7 +231,7 @@ export const RootStackScreen = () => (
   <RootStack.Navigator
     screenOptions={screenOption}
     initialRouteName={
-      storage.getBoolean('isLogin') || storage.getBoolean('isGuest')
+      storage.getBoolean('isLogin')
         ? 'MainTab'
         : storage.getBoolean('skipOnboard')
         ? 'SignInGuest'
@@ -285,6 +287,7 @@ export const RootStackScreen = () => (
     <RootStack.Screen name="TopupCoin" component={TopupCoinScreen} />
     <RootStack.Screen name="MerchDetail" component={MerchDetail} />
     <RootStack.Screen name="ConcertDetail" component={ConcertDetail} />
+    <RootStack.Screen name="CreatePost" component={CreatePost} />
   </RootStack.Navigator>
 );
 
