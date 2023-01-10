@@ -229,10 +229,10 @@ export const RootStackScreen = () => (
   <RootStack.Navigator
     screenOptions={screenOption}
     initialRouteName={
-      storage.getBoolean('isLogin')
+      storage.getBoolean('isLogin') || storage.getBoolean('isGuest')
         ? 'MainTab'
-        : storage.getBoolean('isGuest')
-        ? 'MainTab'
+        : storage.getBoolean('skipOnboard')
+        ? 'SignInGuest'
         : 'Boarding'
     }>
     <RootStack.Screen name="Boarding" component={OnboardScreen} />
