@@ -5,14 +5,15 @@ import {
   FollowMusicianPropsType,
   MusicianList,
 } from '../../interface/musician.interface';
-import {ParamsProps} from '../../interface/base.interface';
-import MusicianSection from '../../components/molecule/MusicianSection/MusicianSection';
 import {heightResponsive} from '../../utils';
+import {ParamsProps} from '../../interface/base.interface';
+import {ListDataSearchMusician} from '../../interface/search.interface';
+import MusicianSection from '../../components/molecule/MusicianSection/MusicianSection';
 
 interface TopMusicianProps {
   type?: string;
   scrollable?: boolean;
-  dataMusician?: MusicianList[];
+  dataMusician?: MusicianList[] | ListDataSearchMusician[] | null;
   setFollowMusician: (
     props?: FollowMusicianPropsType,
     params?: ParamsProps,
