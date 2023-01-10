@@ -87,6 +87,7 @@ export const confirmEmailOtpRegister = async (
     data: {
       email: email,
       code: code,
+      context: 'register',
     },
   });
 
