@@ -16,7 +16,7 @@ export const PreferenceScreen: React.FC = () => {
   const {updateProfilePreference} = useProfileHook();
 
   const goToScreenReferral = () => {
-    navigation.navigate('Referral');
+    navigation.navigate('MainTab');
   };
 
   return (
