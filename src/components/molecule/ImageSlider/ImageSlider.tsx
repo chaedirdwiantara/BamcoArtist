@@ -18,6 +18,7 @@ import {heightPercentage, width} from '../../../utils';
 import {DataFavouritesType} from '../../../data/preference';
 import {UpdateProfilePropsType} from '../../../api/profile.api';
 import {MusicianList} from '../../../interface/musician.interface';
+import {profileStorage} from '../../../hooks/use-storage.hook';
 
 type OnScrollEventHandler = (
   event: NativeSyntheticEvent<NativeScrollEvent>,
@@ -48,14 +49,17 @@ export const ImageSlider: React.FC<ImageSliderProps> = ({
   const handleNextSlide = () => {
     if (activeIndexSlide === 0 && onUpdatePreference) {
       onUpdatePreference({
+        fullname: profileStorage()?.fullname,
         favoriteGeneres: selectedGenres,
       });
     } else if (activeIndexSlide === 1 && onUpdatePreference) {
       onUpdatePreference({
+        fullname: profileStorage()?.fullname,
         moods: selectedMoods,
       });
     } else if (activeIndexSlide === 2 && onUpdatePreference) {
       onUpdatePreference({
+        fullname: profileStorage()?.fullname,
         expectations: selectedExpectations,
       });
     }
