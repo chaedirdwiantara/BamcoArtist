@@ -5,7 +5,7 @@ export const storage = new MMKV({
   encryptionKey: 'ssuplayer',
 });
 
-export const profileStorage = (): {
+export type ProfileProps = {
   id: number;
   uuid: string;
   username: string;
@@ -16,19 +16,10 @@ export const profileStorage = (): {
   refreshToken: string;
   refreshTokenExpiresAt: string;
   lastLoginAt: string | null;
-} | null => {
-  let profile: {
-    id: number;
-    uuid: string;
-    username: string;
-    email: string;
-    fullname: string;
-    accessToken: string;
-    accessTokenExpiresAt: string;
-    refreshToken: string;
-    refreshTokenExpiresAt: string;
-    lastLoginAt: string | null;
-  } | null = null;
+};
+
+export const profileStorage = (): ProfileProps | null => {
+  let profile: ProfileProps | null = null;
   const profileJSON = storage.getString('profile');
   if (profileJSON) {
     profile = JSON.parse(profileJSON);
