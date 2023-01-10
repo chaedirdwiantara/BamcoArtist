@@ -114,7 +114,7 @@ export const LoginScreen: React.FC = () => {
     if (watch('loginType') === 'email') {
       onLoginUser(
         {
-          user: data.user,
+          username: data.user,
           password: data.password,
         },
         'email',

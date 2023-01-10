@@ -335,14 +335,16 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
                       flexDirection: 'row',
                     }}>
                     <SafeAreaView style={{flex: 1}}>
-                      <ImageList
-                        imgData={item.image}
-                        width={143}
-                        height={69.5}
-                        heightType2={142}
-                        widthType2={289}
-                        onPress={() => {}}
-                      />
+                      {item.image !== null ? (
+                        <ImageList
+                          imgData={item.image}
+                          width={143}
+                          height={69.5}
+                          heightType2={142}
+                          widthType2={289}
+                          onPress={() => {}}
+                        />
+                      ) : null}
                     </SafeAreaView>
                   </View>
                 </View>
@@ -354,9 +356,9 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
         feedMessage === 'you not follow anyone' ? (
         <ListToFollowMusician />
       ) : dataPostList?.length === 0 &&
-        feedMessage === 'you not subscribe any premium content' ? (
+        feedMessage === `You don't have any post` ? (
         <EmptyState
-          text={`You don't have any exclusive content, try to subscribe your favorite musician`}
+          text={feedMessage}
           containerStyle={{
             justifyContent: 'flex-start',
             paddingTop: heightPercentage(24),

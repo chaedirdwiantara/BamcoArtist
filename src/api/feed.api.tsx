@@ -33,7 +33,7 @@ export const listMyPost = async (
   props?: ParamsProps,
 ): Promise<ListPostResponseType> => {
   const {data} = await SsuAPI().request<ListPostResponseType>({
-    url: '/posts',
+    url: '/post',
     method: 'GET',
     params: props,
   });

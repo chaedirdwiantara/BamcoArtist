@@ -335,14 +335,16 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
                       flexDirection: 'row',
                     }}>
                     <SafeAreaView style={{flex: 1}}>
-                      <ImageList
-                        imgData={item.image}
-                        width={143}
-                        height={69.5}
-                        heightType2={142}
-                        widthType2={289}
-                        onPress={() => {}}
-                      />
+                      {item?.image !== null ? (
+                        <ImageList
+                          imgData={item.image}
+                          width={143}
+                          height={69.5}
+                          heightType2={142}
+                          widthType2={289}
+                          onPress={() => {}}
+                        />
+                      ) : null}
                     </SafeAreaView>
                   </View>
                 </View>
@@ -354,7 +356,7 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
         feedMessage === 'you not follow anyone' ? (
         <ListToFollowMusician />
       ) : dataPostList?.length === 0 &&
-        feedMessage === 'musician not have post' ? (
+        feedMessage === 'Musician have no posts' ? (
         <EmptyState
           text={`Your following musician don't have any post, try to follow more musician`}
           containerStyle={{

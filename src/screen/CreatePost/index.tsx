@@ -27,6 +27,7 @@ import FilterModal from './modalFilter';
 import ImageList from './showImage';
 import {useFeedHook} from '../../hooks/use-feed.hook';
 import {useUploadImageHook} from '../../hooks/use-uploadImage.hook';
+import {ModalLoading} from '../../components/molecule/ModalLoading/ModalLoading';
 
 interface uriProps {
   assets: string[];
@@ -54,6 +55,12 @@ const CreatePost = () => {
   const [uri, setUri] = useState<uriProps[]>([]);
   const [dataAudience, setDataAudience] = useState<string>('');
   const [dataResponseImg, setDataResponseImg] = useState<string[]>([]);
+
+  useEffect(() => {
+    if (dataCreatePost !== null) {
+      navigation.goBack();
+    }
+  }, [dataCreatePost]);
 
   useEffect(() => {
     dataImage?.data !== undefined
@@ -245,6 +252,7 @@ const CreatePost = () => {
         onDeleteImage={resetImage}
         onPressClose={closeModal}
       />
+      <ModalLoading visible={createPostLoading} />
     </View>
   );
 };

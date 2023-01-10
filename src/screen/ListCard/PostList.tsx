@@ -226,14 +226,16 @@ const PostListHome: FC<PostListProps> = (props: PostListProps) => {
                       flexDirection: 'row',
                     }}>
                     <SafeAreaView style={{flex: 1}}>
-                      <ImageList
-                        imgData={item.image}
-                        width={143}
-                        height={69.5}
-                        heightType2={142}
-                        widthType2={289}
-                        onPress={() => {}}
-                      />
+                      {item.image !== null ? (
+                        <ImageList
+                          imgData={item.image}
+                          width={143}
+                          height={69.5}
+                          heightType2={142}
+                          widthType2={289}
+                          onPress={() => {}}
+                        />
+                      ) : null}
                     </SafeAreaView>
                   </View>
                 </View>
