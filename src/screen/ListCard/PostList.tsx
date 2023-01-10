@@ -40,6 +40,7 @@ import ListToFollowMusician from './ListToFollowMusician';
 import {PostList} from '../../interface/feed.interface';
 import {useFeedHook} from '../../hooks/use-feed.hook';
 import {dateFormat} from '../../utils/date-format';
+import categoryNormalize from '../../utils/categoryNormalize';
 
 interface PostListProps {
   dataRightDropdown: DataDropDownType[];
@@ -203,7 +204,7 @@ const PostListHome: FC<PostListProps> = (props: PostListProps) => {
               musicianId={`@${item.musician.username}`}
               imgUri={item.musician.imageProfileUrl}
               postDate={dateFormat(item.createdAt)}
-              category={item.category}
+              category={categoryNormalize(item.category)}
               onPress={() => cardOnPress(item)}
               likeOnPress={() => likeOnPress(item.id, item.isLiked)}
               likeCount={item.likesCount}
