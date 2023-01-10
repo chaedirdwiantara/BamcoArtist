@@ -45,8 +45,7 @@ const CreatePost = () => {
     modalImagePicker: false,
   });
 
-  const {dataCreatePost, createPostLoading, createPostError, setCreatePost} =
-    useFeedHook();
+  const {dataCreatePost, createPostLoading, setCreatePost} = useFeedHook();
 
   const {dataImage, setUploadImage} = useUploadImageHook();
 
