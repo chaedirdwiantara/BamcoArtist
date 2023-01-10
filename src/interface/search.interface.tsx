@@ -1,5 +1,6 @@
 export type SearchProps = {
   keyword: string;
+  filterBy?: string;
 };
 export type ListDataSearchFans = {
   uuid: string;
