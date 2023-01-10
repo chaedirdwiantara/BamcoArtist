@@ -38,13 +38,6 @@ export const SignInGuestContent: React.FC<GuestProps> = ({onPress}) => {
           containerStyles={{marginVertical: mvs(6)}}
           onPress={() => onPress('Signup')}
         />
-        <Button
-          type="border"
-          label="Explore As Guest"
-          borderColor="transparent"
-          textStyles={{fontSize: normalize(14), color: Color.Pink.linear}}
-          onPress={() => onPress('MainTab')}
-        />
       </View>
     </View>
   );

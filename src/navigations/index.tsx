@@ -230,13 +230,7 @@ const RootStack = createNativeStackNavigator<RootStackParams>();
 export const RootStackScreen = () => (
   <RootStack.Navigator
     screenOptions={screenOption}
-    initialRouteName={
-      storage.getBoolean('isLogin')
-        ? 'MainTab'
-        : storage.getBoolean('isGuest')
-        ? 'MainTab'
-        : 'Boarding'
-    }>
+    initialRouteName={storage.getBoolean('isLogin') ? 'MainTab' : 'Boarding'}>
     <RootStack.Screen name="Boarding" component={OnboardScreen} />
     <RootStack.Screen name="EditProfile" component={EditProfileScreen} />
     <RootStack.Screen name="AddToPlaylist" component={AddToPlaylistScreen} />

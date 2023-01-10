@@ -96,6 +96,7 @@ export const SettingContent: React.FC<SettingProps> = ({
         removeFcmToken(token);
       },
     });
+    navigation.pop();
     navigation.replace('SignInGuest');
   };
 
