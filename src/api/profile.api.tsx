@@ -27,7 +27,7 @@ export const updateProfile = async (
   props?: UpdateProfilePropsType,
 ): Promise<UpdateProfileResponseType> => {
   const {data} = await SsuAPI().request<UpdateProfileResponseType>({
-    url: '/update-profile',
+    url: '/profile/update',
     method: 'PATCH',
     data: props,
   });
