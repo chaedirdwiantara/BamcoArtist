@@ -52,6 +52,15 @@ export const dropDownDataCategory: DataDropDownType[] = [
   {label: 'Backstage', value: 'backstage'},
 ];
 
+export const dropdownCategoryMusician: DataDropDownType[] = [
+  {label: 'Coming Up', value: 'coming_up'},
+  {label: 'Tour', value: 'otr'},
+  {label: 'Daily Life', value: 'day_in_life'},
+  {label: 'Behind The Scene', value: 'behind_the_scene'},
+  {label: 'Highlight Post', value: 'highlight'},
+  {label: 'Backstage', value: 'backstage'},
+];
+
 export interface DropDownFilterType {
   label: string;
   value: string;
@@ -97,4 +106,9 @@ export const dropDownHeaderSongDetails: DataDropDownType[] = [
 export const dropDownSubscription: DataDropDownType[] = [
   {label: 'Go To Musician', value: '1'},
   {label: 'Unsubscribe', value: '2'},
+];
+
+export const dropDownSetAudience: DataDropDownType[] = [
+  {label: 'Public', value: '1'},
+  {label: 'Exclusive', value: '2'},
 ];

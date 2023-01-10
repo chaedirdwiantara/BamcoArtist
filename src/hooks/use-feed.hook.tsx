@@ -9,21 +9,25 @@ import {
   likeComment,
   likePost,
   listPost,
-  listPostExclusive,
+  listMyPost,
   loadMore,
   unlikeComment,
   unlikePost,
+  createPost,
 } from '../api/feed.api';
 import {ParamsProps} from '../interface/base.interface';
 import {
   CommentDetailData,
   CommentList,
+  CreatePostProps,
+  CreatePostResponseData,
   DataComment,
   DetailPostData,
   LoadMoreProps,
   PostList,
   PostPropsTypeA,
   PostPropsTypeB,
+  PostPropsTypeC,
 } from '../interface/feed.interface';
 
 export const useFeedHook = () => {
@@ -47,11 +51,11 @@ export const useFeedHook = () => {
     }
   };
 
-  const getListDataExclusivePost = async (props?: ParamsProps) => {
+  const getListDataMyPost = async (props?: ParamsProps) => {
     setFeedIsLoading(true);
     setFeedIsError(false);
     try {
-      const response = await listPostExclusive(props);
+      const response = await listMyPost(props);
       setDataPostList(response.data);
       setFeedMessage(response.message);
     } catch (error) {
@@ -172,7 +176,7 @@ export const useFeedHook = () => {
     }
   };
 
-  const setCommentToPost = async (props?: PostPropsTypeB) => {
+  const setCommentToPost = async (props?: PostPropsTypeC) => {
     setCommentLoading(true);
     try {
       const response = await commmentToPost(props);
@@ -224,6 +228,26 @@ export const useFeedHook = () => {
     }
   };
 
+  // CREATE POST AREA
+  const [dataCreatePost, setDataCreatePost] =
+    useState<CreatePostResponseData | null>(null);
+  const [createPostLoading, setCreatePostLoading] = useState<boolean>(false);
+  const [createPostError, setCreatePostError] = useState<boolean>(false);
+
+  const setCreatePost = async (props?: CreatePostProps) => {
+    setCreatePostLoading(true);
+    try {
+      const response = await createPost(props);
+      setDataCreatePost(response.data);
+    } catch (error) {
+      console.log(error);
+      setDataCreatePost(null);
+      setCreatePostError(true);
+    } finally {
+      setCreatePostLoading(false);
+    }
+  };
+
   return {
     feedIsLoading,
     likePostLoading,
@@ -243,9 +267,12 @@ export const useFeedHook = () => {
     dataCmntToCmnt,
     dataLikeComment,
     likeCommentLoading,
+    dataCreatePost,
+    createPostLoading,
+    createPostError,
     setDataCmntToCmnt,
     getListDataPost,
-    getListDataExclusivePost,
+    getListDataMyPost,
     setLikePost,
     setUnlikePost,
     setCommentToPost,
@@ -257,5 +284,6 @@ export const useFeedHook = () => {
     getDetailPost,
     setLikeComment,
     setUnlikeComment,
+    setCreatePost,
   };
 };

@@ -4,3 +4,4 @@ export * from './dimensionFormat';
 export * from './formatter';
 export * from './initialname';
 export * from './regexNumber';
+export * from './categoryNormalize';

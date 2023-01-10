@@ -30,7 +30,7 @@ export interface RegisterResponseType {
 }
 
 export interface LoginPropsType {
-  user: string;
+  username: string;
   password: string;
 }
 

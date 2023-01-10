@@ -2,7 +2,7 @@ import {
   ProfileResponseType,
   UpdateProfileResponseType,
 } from '../interface/profile.interface';
-import SsuAPI from './base';
+import SsuAPI from './baseMusician';
 
 export type UpdateProfilePropsType = {
   fullname?: string;

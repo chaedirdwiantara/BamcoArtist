@@ -1,24 +1,27 @@
 import React, {useEffect, useState} from 'react';
-import {View, StyleSheet} from 'react-native';
+import {View, StyleSheet, TouchableOpacity} from 'react-native';
 import {widthPercentageToDP} from 'react-native-responsive-screen';
 
 import {color} from '../theme';
 import {storage} from '../hooks/use-storage.hook';
 import PostListPublic from './ListCard/PostListPublic';
 import {heightPercentage, widthResponsive} from '../utils';
-import PostListExclusive from './ListCard/PostListExclusive';
+import PostListMyPost from './ListCard/PostListMyPost';
 import {GuestContent, TabFilter, TopNavigation} from '../components';
 import {PostlistData, PostlistDataExclusive} from '../data/postlist';
 import {dropDownDataCategory, dropDownDataSort} from '../data/dropdown';
 import {useIsFocused} from '@react-navigation/native';
 import {usePlayerHook} from '../hooks/use-player.hook';
+import {AddPostIcon} from '../assets/icon';
+import {useNavigation} from '@react-navigation/native';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {RootStackParams} from '../navigations';
 
 export const FeedScreen: React.FC = () => {
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParams>>();
   const [selectedIndex, setSelectedIndex] = useState(-0);
-  const [filter] = useState([
-    {filterName: 'Public'},
-    {filterName: 'Exclusive'},
-  ]);
+  const [filter] = useState([{filterName: 'My Post'}, {filterName: 'Public'}]);
   const isLogin = storage.getString('profile');
   const isFocused = useIsFocused();
   const {isPlay, showPlayer, hidePlayer} = usePlayerHook();
@@ -33,6 +36,10 @@ export const FeedScreen: React.FC = () => {
 
   const filterData = (item: any, index: any) => {
     setSelectedIndex(index);
+  };
+
+  const handleFloatingIcon = () => {
+    navigation.navigate('CreatePost');
   };
   return (
     <View style={styles.root}>
@@ -66,13 +73,18 @@ export const FeedScreen: React.FC = () => {
                 data={PostlistData}
               />
             ) : (
-              <PostListExclusive
+              <PostListMyPost
                 dataRightDropdown={dropDownDataCategory}
                 dataLeftDropdown={dropDownDataSort}
                 data={PostlistDataExclusive}
               />
             )}
           </View>
+          <TouchableOpacity
+            style={styles.buttonStyle}
+            onPress={handleFloatingIcon}>
+            <AddPostIcon style={styles.floatingIcon} />
+          </TouchableOpacity>
         </View>
       ) : (
         <GuestContent />
@@ -85,5 +97,19 @@ const styles = StyleSheet.create({
   root: {
     flex: 1,
     backgroundColor: color.Dark[800],
+  },
+  buttonStyle: {
+    position: 'absolute',
+    height: widthResponsive(50),
+    width: widthResponsive(50),
+    justifyContent: 'center',
+    alignItems: 'center',
+    right: widthResponsive(36),
+    bottom: widthResponsive(94),
+  },
+  floatingIcon: {
+    resizeMode: 'contain',
+    width: '100%',
+    height: '100%',
   },
 });

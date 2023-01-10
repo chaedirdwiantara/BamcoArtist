@@ -1,5 +1,5 @@
 import {UploadImageResponseType} from '../interface/uploadImage.interface';
-import SsuAPI from './base';
+import SsuAPI from './baseMusician';
 
 export const uploadImage = async (
   image: any,
