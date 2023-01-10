@@ -4,8 +4,9 @@ import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
 import Color from '../../theme/Color';
-import {RootStackParams} from '../../navigations';
 import {AccountContent} from '../../components';
+import {RootStackParams} from '../../navigations';
+import {profileStorage} from '../../hooks/use-storage.hook';
 
 export const AccountScreen: React.FC = () => {
   const navigation =
@@ -17,7 +18,10 @@ export const AccountScreen: React.FC = () => {
 
   return (
     <View style={styles.root}>
-      <AccountContent onPressGoBack={onPressGoBack} />
+      <AccountContent
+        profile={profileStorage()}
+        onPressGoBack={onPressGoBack}
+      />
     </View>
   );
 };
