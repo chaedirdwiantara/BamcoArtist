@@ -501,13 +501,15 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
                     style={{
                       flexDirection: 'row',
                     }}>
-                    <ImageList
-                      imgData={data.image}
-                      disabled={false}
-                      width={162}
-                      height={79}
-                      onPress={toggleModalOnPress}
-                    />
+                    {data.image !== null ? (
+                      <ImageList
+                        imgData={data.image}
+                        disabled={false}
+                        width={162}
+                        height={79}
+                        onPress={toggleModalOnPress}
+                      />
+                    ) : null}
                   </View>
                 </View>
               }

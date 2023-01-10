@@ -29,6 +29,7 @@ import {color, font, typography} from '../../theme';
 import {
   elipsisText,
   heightPercentage,
+  heightResponsive,
   normalize,
   widthPercentage,
   widthResponsive,
@@ -274,8 +275,8 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
           contentContainerStyle={{
             paddingBottom:
               Platform.OS === 'ios'
-                ? heightPercentage(160)
-                : heightPercentage(180),
+                ? heightResponsive(160)
+                : heightResponsive(220),
           }}
           renderItem={({item}) => (
             <ListCard.PostList
