@@ -15,18 +15,13 @@ export const OnboardScreen: React.FC = () => {
 
   const goToScreenGuest = () => {
     navigation.replace('SignInGuest');
-    storage.set('isGuest', true);
+    storage.set('skipOnboard', true);
   };
 
   return (
     <View style={styles.root}>
       <SsuStatusBar type="black" />
-      <ImageSlider
-        data={dataOnboard}
-        onPress={goToScreenGuest}
-        setFollowMusician={() => null}
-        setUnfollowMusician={() => null}
-      />
+      <ImageSlider data={dataOnboard} onPress={goToScreenGuest} />
     </View>
   );
 };
