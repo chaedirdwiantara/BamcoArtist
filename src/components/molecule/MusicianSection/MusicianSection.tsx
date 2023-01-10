@@ -47,7 +47,7 @@ const MusicianSection: React.FC<MusicianProps> = (props: MusicianProps) => {
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
   const isLogin = storage.getString('profile');
   const dataMore = [
-    {label: dropdownText, value: '1'},
+    // {label: dropdownText, value: '1'},
     {label: 'Send Donation', value: '2'},
     {label: 'Go To Musician', value: '3'},
   ];
