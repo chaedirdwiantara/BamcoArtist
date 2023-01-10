@@ -374,8 +374,8 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
         })
       : commentType.length > 0 && cmntToCmnt === undefined
       ? setCommentToPost({
-          id: musicianId,
-          content: {content: commentType},
+          postId: musicianId,
+          content: commentType,
         })
       : null;
     handleRealTimeComment();

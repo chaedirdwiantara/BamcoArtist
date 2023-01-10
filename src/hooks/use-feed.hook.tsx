@@ -27,6 +27,7 @@ import {
   PostList,
   PostPropsTypeA,
   PostPropsTypeB,
+  PostPropsTypeC,
 } from '../interface/feed.interface';
 
 export const useFeedHook = () => {
@@ -175,7 +176,7 @@ export const useFeedHook = () => {
     }
   };
 
-  const setCommentToPost = async (props?: PostPropsTypeB) => {
+  const setCommentToPost = async (props?: PostPropsTypeC) => {
     setCommentLoading(true);
     try {
       const response = await commmentToPost(props);

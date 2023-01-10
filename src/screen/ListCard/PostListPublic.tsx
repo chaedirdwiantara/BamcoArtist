@@ -199,7 +199,7 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
 
   const handleReplyOnPress = () => {
     commentType.length > 0
-      ? setCommentToPost({id: musicianId, content: {content: commentType}})
+      ? setCommentToPost({postId: musicianId, content: commentType})
       : null;
     setInputCommentModal(false);
     setCommentType('');

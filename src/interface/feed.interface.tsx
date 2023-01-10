@@ -9,6 +9,11 @@ export type PostPropsTypeB = {
   content: {content: string};
 };
 
+export type PostPropsTypeC = {
+  postId: string;
+  content: string;
+};
+
 export type LoadMoreProps = {
   id: string;
   params: {

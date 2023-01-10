@@ -12,6 +12,7 @@ import {
   LoadMoreProps,
   PostPropsTypeA,
   PostPropsTypeB,
+  PostPropsTypeC,
   UnlikePostResponseType,
 } from '../interface/feed.interface';
 import {ParamsProps} from '../interface/base.interface';
@@ -123,7 +124,7 @@ export const commentDetail = async (
 };
 
 export const commmentToPost = async (
-  props?: PostPropsTypeB,
+  props?: PostPropsTypeC,
 ): Promise<CommentResponseType> => {
   const {data} = await SsuAPI().request<CommentResponseType>({
     url: `/post/comment/create`,
