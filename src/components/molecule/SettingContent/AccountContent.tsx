@@ -1,22 +1,27 @@
 import React, {useState} from 'react';
 import {StyleSheet, View} from 'react-native';
 
-import {Button, SsuInput} from '../../atom';
 import {Dropdown} from '../DropDown';
 import Color from '../../../theme/Color';
+import {Button, SsuInput} from '../../atom';
 import {TopNavigation} from '../TopNavigation';
 import {ArrowLeftIcon} from '../../../assets/icon';
+import {ProfileProps} from '../../../hooks/use-storage.hook';
 import {heightPercentage, width, widthPercentage} from '../../../utils';
 import {dataGender, dataLocation} from '../../../data/Settings/account';
 
 interface AccountProps {
+  profile: ProfileProps | null;
   onPressGoBack: () => void;
 }
 
-export const AccountContent: React.FC<AccountProps> = ({onPressGoBack}) => {
+export const AccountContent: React.FC<AccountProps> = ({
+  profile,
+  onPressGoBack,
+}) => {
   const [state, setState] = useState({
-    username: 'sunnysideup',
-    fullname: '',
+    username: profile?.username || '',
+    fullname: profile?.fullname || '',
     gender: '',
     location: '',
   });
