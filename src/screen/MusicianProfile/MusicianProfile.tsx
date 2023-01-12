@@ -7,14 +7,12 @@ import {
   NativeSyntheticEvent,
 } from 'react-native';
 import {
-  EmptyState,
   Gap,
   SsuStatusBar,
   TabFilter,
   TopNavigation,
   UserInfoCard,
 } from '../../components';
-import {MusicianListData} from '../../data/topMusician';
 import {heightPercentage, heightResponsive, widthResponsive} from '../../utils';
 import {ProfileHeader} from './ProfileHeader';
 import {useNavigation} from '@react-navigation/native';
@@ -26,6 +24,10 @@ import ProfileComponent from './ProfileComponent';
 import Album from './Album';
 import Photo from './Photo';
 import {DataDetailMusician} from '../../interface/musician.interface';
+import {PostList} from '../../interface/feed.interface';
+import PostListPublic from '../ListCard/PostListPublic';
+import {dropDownDataCategory, dropDownDataSort} from '../../data/dropdown';
+import PostListExclusive from '../ListCard/PostListExclusive';
 
 type OnScrollEventHandler = (
   event: NativeSyntheticEvent<NativeScrollEvent>,
@@ -37,6 +39,7 @@ interface ProfileContentProps {
   onPressGoTo: (
     screenName: 'Setting' | 'Following' | 'CreateNewPlaylist',
   ) => void;
+  uuid: string;
 }
 
 export const ProfileContent: React.FC<ProfileContentProps> = ({
@@ -44,6 +47,7 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
   goToEditProfile,
   goToPlaylist,
   onPressGoTo,
+  uuid,
 }) => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
@@ -69,6 +73,10 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
     let offsetY = event.nativeEvent.contentOffset.y;
     const scrolled = offsetY > 10;
     setScrollEffect(scrolled);
+  };
+
+  const cardOnPress = (data: PostList) => {
+    navigation.navigate('PostDetail', data);
   };
 
   return (
@@ -167,16 +175,30 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
                 />
               </View>
             ) : filter[selectedIndex].filterName === 'POST' ? (
-              MusicianListData.length > 0 ? (
-                <View></View>
-              ) : (
-                <EmptyState text="This musician don't have any post" />
-              )
-            ) : MusicianListData.length > 0 ? (
-              <View></View>
-            ) : (
-              <EmptyState text="This musician don't have any post" />
-            )}
+              <View
+                style={{
+                  paddingHorizontal: widthResponsive(24),
+                  width: '100%',
+                }}>
+                <PostListPublic
+                  uuidMusician={uuid}
+                  dataRightDropdown={dropDownDataCategory}
+                  dataLeftDropdown={dropDownDataSort}
+                />
+              </View>
+            ) : filter[selectedIndex].filterName === 'EXCLUSIVE' ? (
+              <View
+                style={{
+                  paddingHorizontal: widthResponsive(24),
+                  width: '100%',
+                }}>
+                <PostListExclusive
+                  uuidMusician={uuid}
+                  dataRightDropdown={dropDownDataCategory}
+                  dataLeftDropdown={dropDownDataSort}
+                />
+              </View>
+            ) : null}
           </View>
         </View>
       </ScrollView>
@@ -190,7 +212,7 @@ const styles = StyleSheet.create({
   },
   infoCard: {
     width: '100%',
-    marginTop: heightResponsive(-50),
+    marginTop: heightResponsive(-20),
     marginBottom: heightResponsive(24),
     alignItems: 'center',
   },

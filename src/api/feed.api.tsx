@@ -42,6 +42,18 @@ export const listMyPost = async (
   return data;
 };
 
+export const listPostExclusive = async (
+  props?: ParamsProps,
+): Promise<ListPostResponseType> => {
+  const {data} = await SsuAPI().request<ListPostResponseType>({
+    url: '/posts/premium',
+    method: 'GET',
+    params: props,
+  });
+
+  return data;
+};
+
 // => Detail Post Area
 export const detailPost = async (
   props?: PostPropsTypeA,

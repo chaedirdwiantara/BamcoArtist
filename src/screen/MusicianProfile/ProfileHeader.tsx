@@ -4,17 +4,15 @@ import {
   View,
   StyleSheet,
   ViewStyle,
-  TouchableOpacity,
   Platform,
   ImageBackground,
 } from 'react-native';
 
 import {mvs} from 'react-native-size-matters';
-import {CameraIcon, GalleryEditIcon, SettingIcon} from '../../assets/icon';
+import {CameraIcon} from '../../assets/icon';
 import {AvatarProfile, Button, ButtonGradient, Gap} from '../../components';
 import {color, font} from '../../theme';
-import Typography from '../../theme/Typography';
-import {heightPercentage, normalize, width, widthResponsive} from '../../utils';
+import {heightPercentage, width, widthResponsive} from '../../utils';
 import initialname from '../../utils/initialname';
 
 export interface ProfileHeaderProps {
@@ -64,12 +62,14 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = (
           icon={<CameraIcon />}
           // onPress={() => iconPress('avatarUri')}
         />
-        <Text style={[Typography.Heading5, styles.fullname]}>{fullname}</Text>
+        <Gap height={12} />
+        <Text style={styles.fullname}>{fullname}</Text>
         <Text style={styles.username}>{username}</Text>
-
+        <Gap height={19} />
         {type === '' && (
           <View style={styles.containerFooter}>
             <Text style={styles.description}>{bio}</Text>
+            <Gap height={16} />
             <View style={{flexDirection: 'row'}}>
               {isFollowed ? (
                 <>
@@ -120,38 +120,33 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   fullname: {
-    marginTop: heightPercentage(20),
     color: color.Neutral[10],
+    fontFamily: font.InterRegular,
+    fontWeight: 'bold',
+    fontSize: mvs(18),
   },
-  containerFooter: {
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
+  containerFooter: {},
   username: {
-    fontSize: normalize(12),
-    lineHeight: mvs(20),
+    fontSize: mvs(12),
     color: color.Neutral[10],
     fontFamily: font.InterRegular,
   },
   description: {
-    fontSize: normalize(12),
+    fontSize: mvs(12),
     color: color.Neutral[10],
     fontFamily: font.InterRegular,
     maxWidth: width * 0.9,
-    marginTop: heightPercentage(15),
     textAlign: 'center',
   },
   btnContainer: {
     height: undefined,
     width: widthResponsive(100),
     aspectRatio: heightPercentage(100 / 32),
-    marginVertical: heightPercentage(10),
   },
   btnContainer2: {
     height: undefined,
     width: widthResponsive(100),
     aspectRatio: heightPercentage(100 / 32),
-    marginVertical: heightPercentage(10),
     backgroundColor: color.Success[400],
   },
   editIcon: {
