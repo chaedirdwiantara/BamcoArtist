@@ -269,7 +269,7 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
         </View>
       </View>
       {dataPostList !== null && dataPostList.length !== 0 ? (
-        <View>
+        <View style={{flex: 1}}>
           <FlatList
             data={dataPostList}
             showsVerticalScrollIndicator={false}
@@ -277,11 +277,7 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
             contentContainerStyle={{
               flexGrow: 1,
               paddingBottom:
-                uuidMusician !== ''
-                  ? undefined
-                  : height >= 800
-                  ? heightResponsive(220)
-                  : heightResponsive(160),
+                height >= 800 ? heightResponsive(220) : heightResponsive(160),
             }}
             renderItem={({item}) => (
               <ListCard.PostList
