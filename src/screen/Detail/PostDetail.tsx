@@ -84,8 +84,6 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   const [readMore, setReadMore] = useState<boolean>(false);
   const [isModalVisible, setModalVisible] = useState<boolean>(false);
   const [imgUrl, setImgUrl] = useState<number>(-1);
-  const [likeCommentId, setLikeCommentId] = useState<string>('');
-  const [unlikeCommentId, setUnlikeCommentId] = useState<string>('');
   const [dataProfileImg, setDataProfileImg] = useState<string>('');
   const [modalShare, setModalShare] = useState<boolean>(false);
   const [toastVisible, setToastVisible] = useState(false);
@@ -114,6 +112,10 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   const [commentLvl2, setCommentLvl2] = useState<CommentList2[]>();
   const [commentLvl3, setCommentLvl3] = useState<CommentList3[]>();
   const [staticId, setStaticId] = useState<string[]>([]);
+
+  // * LIKE / UNLIKE HOOKS
+  const [likeCommentId, setLikeCommentId] = useState<string>('');
+  const [unlikeCommentId, setUnlikeCommentId] = useState<string>('');
 
   // ! FIRST LOAD when open the screen
   // ? Get Profile
@@ -145,42 +147,6 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
     }
   }, [dataPostDetail]);
   // ! End of FIRST LOAD
-
-  // ? Set Like / Unlike
-  const likeOnPress = (id: string, isLiked: boolean) => {
-    if (isLiked === true) {
-      if (likePressed === true) {
-        setUnlikePost({id});
-        setLikePressed(false);
-      } else if (likePressed === false) {
-        setLikePost({id});
-        setLikePressed(true);
-      } else {
-        setUnlikePost({id});
-        setLikePressed(false);
-      }
-    } else if (isLiked === false) {
-      if (likePressed === true) {
-        setUnlikePost({id});
-        setLikePressed(false);
-      } else if (likePressed === false) {
-        setLikePost({id});
-        setLikePressed(true);
-      } else {
-        setLikePost({id});
-        setLikePressed(true);
-      }
-    }
-  };
-
-  // ? Set LikeComment / UnlikeComment
-  useEffect(() => {
-    likeCommentId !== '' && setLikeComment({id: likeCommentId});
-  }, [likeCommentId]);
-
-  useEffect(() => {
-    unlikeCommentId !== '' && setUnlikeComment({id: unlikeCommentId});
-  }, [unlikeCommentId]);
 
   // ! VIEW MORE AREA
   // * 1ST call with viewMore when view more reply onPress
@@ -414,9 +380,47 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
       return setCommentLvl3(comment), setStaticId([...staticId, comment[0].id]);
     }
   };
-  // ! End Of Comment area
+  // ! End Of COMMENT AREA
 
-  //? Credit onPress
+  // ! LIKE AREA
+  // * Handle Like / Unlike on Post
+  const likeOnPress = (id: string, isLiked: boolean) => {
+    if (isLiked === true) {
+      if (likePressed === true) {
+        setUnlikePost({id});
+        setLikePressed(false);
+      } else if (likePressed === false) {
+        setLikePost({id});
+        setLikePressed(true);
+      } else {
+        setUnlikePost({id});
+        setLikePressed(false);
+      }
+    } else if (isLiked === false) {
+      if (likePressed === true) {
+        setUnlikePost({id});
+        setLikePressed(false);
+      } else if (likePressed === false) {
+        setLikePost({id});
+        setLikePressed(true);
+      } else {
+        setLikePost({id});
+        setLikePressed(true);
+      }
+    }
+  };
+
+  // * Handle Like / Unlike on Comment Section
+  useEffect(() => {
+    likeCommentId !== '' && setLikeComment({id: likeCommentId});
+  }, [likeCommentId]);
+
+  useEffect(() => {
+    unlikeCommentId !== '' && setUnlikeComment({id: unlikeCommentId});
+  }, [unlikeCommentId]);
+  // ! End Of LIKE AREA
+
+  // ? Credit onPress
   const tokenOnPress = () => {
     setModalDonate(true);
   };
