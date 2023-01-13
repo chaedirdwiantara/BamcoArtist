@@ -20,33 +20,22 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParams} from '../../navigations';
 import {color} from '../../theme';
 import ExclusiveDailyContent from './ExclusiveDailyContent';
-import ProfileComponent from './ProfileComponent';
-import Album from './Album';
-import Photo from './Photo';
 import {DataDetailMusician} from '../../interface/musician.interface';
-import {PostList} from '../../interface/feed.interface';
 import PostListPublic from '../ListCard/PostListPublic';
 import {dropDownDataCategory, dropDownDataSort} from '../../data/dropdown';
 import PostListExclusive from '../ListCard/PostListExclusive';
+import DataMusician from './DataMusician';
 
 type OnScrollEventHandler = (
   event: NativeSyntheticEvent<NativeScrollEvent>,
 ) => void;
-interface ProfileContentProps {
+interface MusicianDetailProps {
   profile: DataDetailMusician;
-  goToEditProfile?: () => void;
-  goToPlaylist: () => void;
-  onPressGoTo: (
-    screenName: 'Setting' | 'Following' | 'CreateNewPlaylist',
-  ) => void;
   uuid: string;
 }
 
-export const ProfileContent: React.FC<ProfileContentProps> = ({
+export const MusicianDetail: React.FC<MusicianDetailProps> = ({
   profile,
-  goToEditProfile,
-  goToPlaylist,
-  onPressGoTo,
   uuid,
 }) => {
   const navigation =
@@ -61,10 +50,6 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
     {filterName: 'FANS'},
   ]);
 
-  const noDataText = 'No information given.';
-  const noAlbumText = 'No Album Available.';
-  const noMerch = 'No Merch Available';
-
   const filterData = (item: string, index: number) => {
     setSelectedIndex(index);
   };
@@ -73,10 +58,6 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
     let offsetY = event.nativeEvent.contentOffset.y;
     const scrolled = offsetY > 10;
     setScrollEffect(scrolled);
-  };
-
-  const cardOnPress = (data: PostList) => {
-    navigation.navigate('PostDetail', data);
   };
 
   return (
@@ -101,13 +82,11 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
           username={profile.username}
           bio={profile.bio}
           isFollowed={profile.isFollowed}
-          onPress={goToEditProfile}
-          iconPress={() => onPressGoTo('Setting')}
         />
         <View style={styles.infoCard}>
           <UserInfoCard
             containerStyles={{paddingHorizontal: widthResponsive(18)}}
-            onPress={() => onPressGoTo('Following')}
+            onPress={() => {}}
           />
           <ExclusiveDailyContent />
           <Gap height={10} />
@@ -119,61 +98,7 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
               flatlistContainerStyle={{paddingHorizontal: widthResponsive(24)}}
             />
             {filter[selectedIndex].filterName === 'PROFILE' ? (
-              <View style={{width: '100%'}}>
-                <Gap height={24} />
-                <ProfileComponent
-                  title={'About'}
-                  content={profile.about ? profile.about : noDataText}
-                  gap={16}
-                />
-                <Gap height={24} />
-                <ProfileComponent
-                  title={'Social Media'}
-                  gap={16}
-                  socmedSection
-                  socmed={profile.socialMedia}
-                />
-                <Gap height={24} />
-                <ProfileComponent
-                  title={'Origin'}
-                  content={
-                    profile.originCity && profile.originCountry
-                      ? `${profile.originCity}, ${profile.originCountry}`
-                      : noDataText
-                  }
-                />
-                <Gap height={24} />
-                <ProfileComponent
-                  title={'Years Active'}
-                  content={
-                    profile.yearsActiveFrom && profile.yearsActiveTo
-                      ? `${profile.yearsActiveFrom} - ${profile.yearsActiveTo}`
-                      : noDataText
-                  }
-                />
-                <Gap height={24} />
-                <ProfileComponent
-                  title={'Members'}
-                  memberSection
-                  members={profile.members}
-                />
-                <Gap height={24} />
-                <ProfileComponent title={'Website'} content={profile.website} />
-                <Gap height={24} />
-                <Photo title={'Photos'} data={profile.photos} />
-                <Gap height={24} />
-                <Album
-                  title={'Album'}
-                  data={profile.albums}
-                  errorText={noAlbumText}
-                />
-                <Gap height={24} />
-                <Album
-                  title={'Merch'}
-                  data={profile.merchs}
-                  errorText={noMerch}
-                />
-              </View>
+              <DataMusician profile={profile} />
             ) : filter[selectedIndex].filterName === 'POST' ? (
               <View
                 style={{
