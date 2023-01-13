@@ -1,26 +1,24 @@
-import React, {FC, useCallback} from 'react';
+import React, {FC} from 'react';
 import {StyleSheet} from 'react-native';
 import {heightPercentage, heightResponsive, widthResponsive} from '../../utils';
 import {FlashList} from '@shopify/flash-list';
 import MerchListCard from '../../components/molecule/ListCard/MerchListCard';
 import {useEventHook} from '../../hooks/use-event.hook';
-import {useFocusEffect} from '@react-navigation/native';
 import {ModalLoading} from '../../components/molecule/ModalLoading/ModalLoading';
 import {EmptyState} from '../../components';
 import {BoxStore} from '../../assets/icon';
 import Color from '../../theme/Color';
+import {useQuery} from 'react-query';
+import {MerchData} from '../../interface/event.interface';
 
 const MerchList: FC = () => {
-  const {dataMerchList, getListDataMerch, merchIsLoading} = useEventHook();
+  const {getListDataMerch} = useEventHook();
 
-  useFocusEffect(
-    useCallback(() => {
-      getListDataMerch();
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []),
+  const {data: dataMerchList, isLoading} = useQuery(['/merch'], () =>
+    getListDataMerch(),
   );
 
-  const filterList = dataMerchList.find(merch => {
+  const filterList: MerchData | undefined = dataMerchList?.data.find(merch => {
     return merch.name === 'product_latest';
   });
 
@@ -64,7 +62,7 @@ const MerchList: FC = () => {
         estimatedItemSize={150}
         numColumns={2}
       />
-      <ModalLoading visible={merchIsLoading} />
+      <ModalLoading visible={isLoading} />
     </>
   );
 };
