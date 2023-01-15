@@ -1,4 +1,4 @@
-import React, {FC, useCallback} from 'react';
+import React, {FC} from 'react';
 import {StyleSheet} from 'react-native';
 import {TicketIcon} from '../../assets/icon';
 import Color from '../../theme/Color';
@@ -7,23 +7,22 @@ import {EmptyState} from '../../components';
 import {FlashList} from '@shopify/flash-list';
 import MerchListCard from '../../components/molecule/ListCard/MerchListCard';
 import {useEventHook} from '../../hooks/use-event.hook';
-import {useFocusEffect} from '@react-navigation/native';
 import {ModalLoading} from '../../components/molecule/ModalLoading/ModalLoading';
+import {MerchData} from '../../interface/event.interface';
+import {useQuery} from 'react-query';
 
 const ConcertList: FC = () => {
-  const {dataConcertList, getListDataConcert, concertIsLoading} =
-    useEventHook();
+  const {getListDataConcert} = useEventHook();
 
-  useFocusEffect(
-    useCallback(() => {
-      getListDataConcert();
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []),
+  const {data: dataConcertList, isLoading} = useQuery(['/concert'], () =>
+    getListDataConcert(),
   );
 
-  const filterList = dataConcertList.find(concert => {
-    return concert.name === 'event_latest';
-  });
+  const filterList: MerchData | undefined = dataConcertList?.data.find(
+    concert => {
+      return concert.name === 'event_latest';
+    },
+  );
 
   return (
     <>
@@ -65,7 +64,7 @@ const ConcertList: FC = () => {
         estimatedItemSize={150}
         numColumns={2}
       />
-      <ModalLoading visible={concertIsLoading} />
+      <ModalLoading visible={isLoading} />
     </>
   );
 };

@@ -50,7 +50,7 @@ const MusicianProfile: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   };
 
   const goToPlaylist = () => {
-    navigation.navigate('Playlist');
+    // navigation.navigate('Playlist');
   };
 
   return (
@@ -61,6 +61,7 @@ const MusicianProfile: FC<PostDetailProps> = ({route}: PostDetailProps) => {
           onPressGoTo={screenName => onPressGoTo(screenName)}
           goToEditProfile={goToEditProfile}
           goToPlaylist={goToPlaylist}
+          uuid={uuid}
         />
       )}
     </View>

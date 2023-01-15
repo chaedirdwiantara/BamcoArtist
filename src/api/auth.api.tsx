@@ -138,3 +138,52 @@ export const resendOtpSms = async (
 
   return data;
 };
+
+export const forgotPasswordEmail = async (
+  email: string,
+): Promise<ResendOTPResponseType> => {
+  const {data} = await SsuAPI().request<ResendOTPResponseType>({
+    url: '/forgot-password',
+    method: 'POST',
+    data: {
+      identifier: email,
+    },
+  });
+
+  return data;
+};
+
+export const confirmEmailOtpForgotPassword = async (
+  email: string,
+  code: string,
+): Promise<ConfirmEmailOTPRegisterResponseType> => {
+  const {data} = await SsuAPI().request<ConfirmEmailOTPRegisterResponseType>({
+    url: '/confirm-otp/email/register',
+    method: 'POST',
+    data: {
+      email: email,
+      code: code,
+      context: 'forgotPassword',
+    },
+  });
+
+  return data;
+};
+
+export const changePassword = async (
+  email: string,
+  code: string,
+  password: string,
+): Promise<LoginResponseType> => {
+  const {data} = await SsuAPI().request<LoginResponseType>({
+    url: '/confirm-change-password',
+    method: 'POST',
+    data: {
+      identifier: email,
+      code: code,
+      newPassword: password,
+    },
+  });
+
+  return data;
+};

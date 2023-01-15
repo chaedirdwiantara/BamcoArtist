@@ -83,39 +83,47 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   const [likePressed, setLikePressed] = useState<boolean>();
   const [readMore, setReadMore] = useState<boolean>(false);
   const [isModalVisible, setModalVisible] = useState<boolean>(false);
-  const [inputCommentModal, setInputCommentModal] = useState<boolean>(false);
   const [imgUrl, setImgUrl] = useState<number>(-1);
-  const [musicianId, setMusicianId] = useState<string>('');
-  const [userName, setUserName] = useState<string>('');
-  const [commentType, setCommentType] = useState<string>('');
-  const [likeCommentId, setLikeCommentId] = useState<string>('');
-  const [unlikeCommentId, setUnlikeCommentId] = useState<string>('');
-  const [cmntToCmnt, setCmntToCmnt] = useState<cmntToCmnt>();
-  const [cmntToCmntLvl0, setCmntToCmntLvl0] = useState<cmntToCmnt>();
-  const [viewMore, setViewMore] = useState<string>('');
   const [dataProfileImg, setDataProfileImg] = useState<string>('');
-  const [commentLvl1, setCommentLvl1] = useState<CommentList[]>();
-  const [commentLvl2, setCommentLvl2] = useState<CommentList2[]>();
-  const [commentLvl3, setCommentLvl3] = useState<CommentList3[]>();
-  const [activePage, setActivePage] = useState<number>(0);
-  const [value, setValue] = useState<number>(0);
   const [modalShare, setModalShare] = useState<boolean>(false);
   const [toastVisible, setToastVisible] = useState(false);
   const [modalDonate, setModalDonate] = useState<boolean>(false);
   const [modalSuccessDonate, setModalSuccessDonate] = useState<boolean>(false);
   const [trigger2ndModal, setTrigger2ndModal] = useState<boolean>(false);
+
+  // * VIEW MORE HOOKS
+  const [viewMore, setViewMore] = useState<string>('');
+  const [value, setValue] = useState<number>(0);
   const [delStaticComment, setDelStaticComment] = useState<number>(-1);
-  const [staticId, setStaticId] = useState<string[]>([]);
+  const [callLoadMoreApi, setCallLoadMoreApi] = useState<boolean>(false);
   const [dataParent, setDataParent] = useState<
     {parentId: string; value: number}[]
   >([]);
-  const [goView, setGoView] = useState<boolean>(false);
+  const [activePage, setActivePage] = useState<number>(0);
 
+  // * COMMENT HOOKS
+  const [inputCommentModal, setInputCommentModal] = useState<boolean>(false);
+  const [musicianId, setMusicianId] = useState<string>('');
+  const [userName, setUserName] = useState<string>('');
+  const [cmntToCmnt, setCmntToCmnt] = useState<cmntToCmnt>();
+  const [cmntToCmntLvl0, setCmntToCmntLvl0] = useState<cmntToCmnt>();
+  const [commentCaption, setCommentCaption] = useState<string>('');
+  const [commentLvl1, setCommentLvl1] = useState<CommentList[]>();
+  const [commentLvl2, setCommentLvl2] = useState<CommentList2[]>();
+  const [commentLvl3, setCommentLvl3] = useState<CommentList3[]>();
+  const [staticId, setStaticId] = useState<string[]>([]);
+
+  // * LIKE / UNLIKE HOOKS
+  const [likeCommentId, setLikeCommentId] = useState<string>('');
+  const [unlikeCommentId, setUnlikeCommentId] = useState<string>('');
+
+  // ! FIRST LOAD when open the screen
   // ? Get Profile
   useEffect(() => {
     getProfileUser();
   }, []);
 
+  // ? Set profile picture for profile img
   useEffect(() => {
     dataProfile?.data.imageProfileUrl !== null &&
     dataProfile?.data.imageProfileUrl !== undefined
@@ -130,44 +138,7 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
     }, []),
   );
 
-  // ? Set Like / Unlike
-  const likeOnPress = (id: string, isLiked: boolean) => {
-    if (isLiked === true) {
-      if (likePressed === true) {
-        setUnlikePost({id});
-        setLikePressed(false);
-      } else if (likePressed === false) {
-        setLikePost({id});
-        setLikePressed(true);
-      } else {
-        setUnlikePost({id});
-        setLikePressed(false);
-      }
-    } else if (isLiked === false) {
-      if (likePressed === true) {
-        setUnlikePost({id});
-        setLikePressed(false);
-      } else if (likePressed === false) {
-        setLikePost({id});
-        setLikePressed(true);
-      } else {
-        setLikePost({id});
-        setLikePressed(true);
-      }
-    }
-  };
-
-  // ? Set LikeComment / UnlikeComment
-  useEffect(() => {
-    likeCommentId !== '' && setLikeComment({id: likeCommentId});
-  }, [likeCommentId]);
-
-  useEffect(() => {
-    unlikeCommentId !== '' && setUnlikeComment({id: unlikeCommentId});
-  }, [unlikeCommentId]);
-
-  // !LoadMore Area
-  // * First Condition
+  // ? Set data comment lvl 1 when dataPostDetail is there
   useEffect(() => {
     if (dataPostDetail !== null) {
       if (commentLvl1 == undefined) {
@@ -175,11 +146,76 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
       }
     }
   }, [dataPostDetail]);
+  // ! End of FIRST LOAD
 
-  // * Load More Condition
+  // ! VIEW MORE AREA
+  // * 1ST call with viewMore when view more reply onPress
+  const handleSetPage = (value: number) => {
+    setValue(value);
+    setDelStaticComment(value);
+  };
+
+  //  * 2ND call after viewMore not empty string
+  useEffect(() => {
+    if (viewMore !== '' && value !== 0) {
+      return handleViewMore();
+    }
+  }, [viewMore]);
+
+  // * 3RD call call by viewMore hook
+  const handleViewMore = () => {
+    if (value === 1) {
+      return setCallLoadMoreApi(true);
+    } else if (value > 1) {
+      let viewMoreInit = {parentId: viewMore, value: 1};
+      let objIndex = dataParent.findIndex(obj => obj.parentId == viewMore);
+      if (objIndex !== -1) {
+        let viewMoreX = {
+          parentId: viewMore,
+          value: dataParent[objIndex].value + 1,
+        };
+        let dataParentX = dataParent.filter(obj => obj.parentId !== viewMore);
+        return (
+          setDataParent([...dataParentX, viewMoreX]), setCallLoadMoreApi(true)
+        );
+      } else {
+        return (
+          setDataParent([...dataParent, viewMoreInit]), setCallLoadMoreApi(true)
+        );
+      }
+    }
+  };
+
+  // * 4TH call LoadMore api when callLoadMoreApi === true
+  useEffect(() => {
+    callLoadMoreApi === true && value === 1
+      ? (setLoadMore({
+          id: viewMore,
+          params: {page: activePage + 1, perPage: 3},
+        }),
+        setActivePage(activePage + 1),
+        setCallLoadMoreApi(false),
+        setValue(0),
+        setViewMore(''))
+      : callLoadMoreApi === true && value > 1 && dataParent.length !== 0
+      ? (setLoadMore({
+          id: viewMore,
+          params: {
+            page: dataParent[
+              dataParent.findIndex(obj => obj.parentId == viewMore)
+            ]?.value,
+            perPage: 3,
+          },
+        }),
+        setCallLoadMoreApi(false),
+        setValue(0),
+        setViewMore(''))
+      : null;
+  }, [dataCmntToCmnt, viewMore, activePage, dataParent, callLoadMoreApi]);
+
+  // * 5TH call when data load received from api
   useEffect(() => {
     if (dataLoadMore !== null) {
-      setViewMore('');
       dataLoadMore?.map((item: CommentList) => {
         if (item.commentLevel === 1 && commentLvl1 === undefined) {
           return setCommentLvl1(dataLoadMore);
@@ -200,63 +236,45 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
     }
   }, [dataLoadMore]);
 
+  // * 6TH call, delete static comments when comment level reach certain value
+  // TODO: need implement more logic to delete the static comments
   useEffect(() => {
-    viewMore === '' && value === 0
-      ? getDetailPost({id: data.id})
-      : viewMore !== '' && value === 1
-      ? setLoadMore({
-          id: viewMore,
-          params: {page: activePage, perPage: 3},
-        })
-      : viewMore !== '' &&
-        value >= 2 &&
-        dataParent.length !== 0 &&
-        goView === true
-      ? (setLoadMore({
-          id: viewMore,
-          params: {
-            page: dataParent[
-              dataParent.findIndex(obj => obj.parentId == viewMore)
-            ]?.value,
-            perPage: 3,
-          },
-        }),
-        setGoView(false))
-      : null;
-  }, [dataCmntToCmnt, viewMore, activePage, dataParent, goView]);
-
-  useEffect(() => {
-    if (viewMore !== '') {
-      return handleViewMore();
-    }
-  }, [viewMore]);
-
-  const handleViewMore = () => {
-    if (value === 1) {
-      setActivePage(activePage + 1);
-    } else if (value !== 1 && viewMore !== '') {
-      let viewMoreInit = {parentId: viewMore, value: 1};
-      let objIndex = dataParent.findIndex(obj => obj.parentId == viewMore);
-      if (objIndex !== -1) {
-        let viewMoreX = {
-          parentId: viewMore,
-          value: dataParent[objIndex].value + 1,
-        };
-        let dataParentX = dataParent.filter(obj => obj.parentId !== viewMore);
-        return setDataParent([...dataParentX, viewMoreX]), setGoView(true);
-      } else {
-        return setDataParent([...dataParent, viewMoreInit]), setGoView(true);
+    if (dataLoadMore !== null) {
+      if (delStaticComment == 1 && commentLvl1?.length == 11) {
+        for (var i = 0; i < commentLvl1.length; i++) {
+          return setCommentLvl1(
+            commentLvl1.filter((x: CommentList) => !staticId.includes(x.id)),
+          );
+        }
+      } else if (
+        delStaticComment == 2 &&
+        commentLvl2 &&
+        commentLvl2?.length >= 1 &&
+        commentLvl2?.length <= 4
+      ) {
+        for (var i = 0; i < commentLvl2.length; i++) {
+          return setCommentLvl2(
+            commentLvl2.filter((x: CommentList2) => !staticId.includes(x.id)),
+          );
+        }
+      } else if (
+        delStaticComment == 3 &&
+        commentLvl3 &&
+        commentLvl3?.length >= 1 &&
+        commentLvl3?.length <= 4
+      ) {
+        for (var i = 0; i < commentLvl3.length; i++) {
+          return setCommentLvl3(
+            commentLvl3.filter((x: CommentList3) => !staticId.includes(x.id)),
+          );
+        }
       }
     }
-  };
+  }, [dataLoadMore, delStaticComment, commentLvl1]);
+  // !END OF VIEW MORE
 
-  const handleSetPage = (value: number) => {
-    setDelStaticComment(value);
-    setValue(value);
-  };
-  // !End of LoadMore
-
-  // ! Comment Area
+  // ! COMMENT AREA
+  // ? Handle Comment To Post
   const commentOnPress = (id: string, username: string) => {
     setInputCommentModal(true);
     setMusicianId(id);
@@ -269,44 +287,41 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
     });
   };
 
+  // ? Handle Comment To Comment
+  // * hook to detect comment onPress, Open Comment Modal
   useEffect(() => {
-    if (delStaticComment == 1 && commentLvl1?.length == 11) {
-      for (var i = 0; i < commentLvl1.length; i++) {
-        return setCommentLvl1(
-          commentLvl1.filter((x: CommentList) => !staticId.includes(x.id)),
-        );
-      }
-    } else if (
-      delStaticComment == 2 &&
-      commentLvl2 &&
-      commentLvl2?.length >= 1 &&
-      commentLvl2?.length <= 4
-    ) {
-      for (var i = 0; i < commentLvl2.length; i++) {
-        return setCommentLvl2(
-          commentLvl2.filter((x: CommentList2) => !staticId.includes(x.id)),
-        );
-      }
-    } else if (
-      delStaticComment == 3 &&
-      commentLvl3 &&
-      commentLvl3?.length >= 1 &&
-      commentLvl3?.length <= 4
-    ) {
-      for (var i = 0; i < commentLvl3.length; i++) {
-        return setCommentLvl3(
-          commentLvl3.filter((x: CommentList3) => !staticId.includes(x.id)),
-        );
-      }
+    if (cmntToCmnt !== undefined) {
+      setUserName(cmntToCmnt.userName);
+      setInputCommentModal(!inputCommentModal);
     }
-  }, [delStaticComment, commentLvl1]);
+  }, [cmntToCmnt]);
 
-  const handleRealTimeComment = () => {
+  // * 1ST Handler to decide whether hit api comment to Post or comment to Comment
+  const handleReplyOnPress = () => {
+    commentCaption.length > 0 && cmntToCmnt !== undefined
+      ? (setCommentToComment({
+          id: cmntToCmnt.id,
+          content: {content: commentCaption},
+        }),
+        setCommentCaption(''))
+      : commentCaption.length > 0 && cmntToCmnt === undefined
+      ? (setCommentToPost({
+          postId: musicianId,
+          content: commentCaption,
+        }),
+        setCommentCaption(''))
+      : null;
+    handleStaticComment();
+    setInputCommentModal(false);
+  };
+
+  // * 2ND handle static comment to show it at screen in real time
+  const handleStaticComment = () => {
     setDelStaticComment(-1);
     let comment = [
       {
         id: makeId(5),
-        caption: commentType,
+        caption: commentCaption,
         likesCount: 0,
         repliedTo: cmntToCmnt?.userName ? cmntToCmnt?.userName : '',
         parentID: cmntToCmnt?.id ? cmntToCmnt?.id : '',
@@ -365,34 +380,47 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
       return setCommentLvl3(comment), setStaticId([...staticId, comment[0].id]);
     }
   };
+  // ! End Of COMMENT AREA
 
-  const handleReplyOnPress = () => {
-    commentType.length > 0 && cmntToCmnt !== undefined
-      ? setCommentToComment({
-          id: cmntToCmnt.id,
-          content: {content: commentType},
-        })
-      : commentType.length > 0 && cmntToCmnt === undefined
-      ? setCommentToPost({
-          postId: musicianId,
-          content: commentType,
-        })
-      : null;
-    handleRealTimeComment();
-    setInputCommentModal(false);
-    setCommentType('');
-  };
-  // ! End Of Comment area
-
-  //? handle comment in commentsection & open modal comment
-  useEffect(() => {
-    if (cmntToCmnt !== undefined) {
-      setUserName(cmntToCmnt.userName);
-      setInputCommentModal(!inputCommentModal);
+  // ! LIKE AREA
+  // * Handle Like / Unlike on Post
+  const likeOnPress = (id: string, isLiked: boolean) => {
+    if (isLiked === true) {
+      if (likePressed === true) {
+        setUnlikePost({id});
+        setLikePressed(false);
+      } else if (likePressed === false) {
+        setLikePost({id});
+        setLikePressed(true);
+      } else {
+        setUnlikePost({id});
+        setLikePressed(false);
+      }
+    } else if (isLiked === false) {
+      if (likePressed === true) {
+        setUnlikePost({id});
+        setLikePressed(false);
+      } else if (likePressed === false) {
+        setLikePost({id});
+        setLikePressed(true);
+      } else {
+        setLikePost({id});
+        setLikePressed(true);
+      }
     }
-  }, [cmntToCmnt]);
+  };
 
-  //? Credit onPress
+  // * Handle Like / Unlike on Comment Section
+  useEffect(() => {
+    likeCommentId !== '' && setLikeComment({id: likeCommentId});
+  }, [likeCommentId]);
+
+  useEffect(() => {
+    unlikeCommentId !== '' && setUnlikeComment({id: unlikeCommentId});
+  }, [unlikeCommentId]);
+  // ! End Of LIKE AREA
+
+  // ? Credit onPress
   const tokenOnPress = () => {
     setModalDonate(true);
   };
@@ -545,8 +573,8 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
           toggleModal={() => setInputCommentModal(!inputCommentModal)}
           modalVisible={inputCommentModal}
           name={userName}
-          commentValue={commentType}
-          onCommentChange={setCommentType}
+          commentValue={commentCaption}
+          onCommentChange={setCommentCaption}
           handleOnPress={handleReplyOnPress}
           onModalHide={() => setCmntToCmnt(undefined)}
           userAvatarUri={dataProfileImg}

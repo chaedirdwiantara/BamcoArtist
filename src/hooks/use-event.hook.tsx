@@ -1,49 +1,30 @@
-import {useState} from 'react';
 import {listConcert, listMerch} from '../api/event.api';
-import {MerchData} from '../interface/event.interface';
 
 export const useEventHook = () => {
-  const [merchIsLoading, setMerchIsLoading] = useState<boolean>(false);
-  const [dataMerchList, setDataMerchList] = useState<MerchData[]>([]);
-  const [merchIsError, setMerchIsError] = useState<boolean>(false);
-  const [concertIsLoading, setConcertIsLoading] = useState<boolean>(false);
-  const [dataConcertList, setDataConcertList] = useState<MerchData[]>([]);
-  const [concertIsError, setConcertIsError] = useState<boolean>(false);
-
-  const getListDataMerch = async (props?: any) => {
-    setMerchIsLoading(true);
-    setMerchIsError(false);
+  const getListDataMerch = async () => {
     try {
-      const response = await listMerch(props);
-      setDataMerchList(response.data);
+      const response = await listMerch();
+      return {
+        data: response?.data,
+      };
     } catch (error) {
-      setMerchIsError(true);
-    } finally {
-      setMerchIsLoading(false);
+      console.log(error);
     }
   };
 
-  const getListDataConcert = async (props?: any) => {
-    setConcertIsLoading(true);
-    setConcertIsError(false);
+  const getListDataConcert = async () => {
     try {
-      const response = await listConcert(props);
-      setDataConcertList(response.data);
+      const response = await listConcert();
+      return {
+        data: response?.data,
+      };
     } catch (error) {
-      setConcertIsError(true);
-    } finally {
-      setConcertIsLoading(false);
+      console.log(error);
     }
   };
 
   return {
-    merchIsLoading,
-    merchIsError,
-    dataMerchList,
     getListDataMerch,
-    concertIsLoading,
-    dataConcertList,
-    concertIsError,
     getListDataConcert,
   };
 };

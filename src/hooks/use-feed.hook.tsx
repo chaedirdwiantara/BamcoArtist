@@ -14,6 +14,7 @@ import {
   unlikeComment,
   unlikePost,
   createPost,
+  listPostExclusive,
 } from '../api/feed.api';
 import {ParamsProps} from '../interface/base.interface';
 import {
@@ -56,6 +57,20 @@ export const useFeedHook = () => {
     setFeedIsError(false);
     try {
       const response = await listMyPost(props);
+      setDataPostList(response.data);
+      setFeedMessage(response.message);
+    } catch (error) {
+      setFeedIsError(true);
+    } finally {
+      setFeedIsLoading(false);
+    }
+  };
+
+  const getListDataExclusivePost = async (props?: ParamsProps) => {
+    setFeedIsLoading(true);
+    setFeedIsError(false);
+    try {
+      const response = await listPostExclusive(props);
       setDataPostList(response.data);
       setFeedMessage(response.message);
     } catch (error) {
@@ -273,6 +288,7 @@ export const useFeedHook = () => {
     setDataCmntToCmnt,
     getListDataPost,
     getListDataMyPost,
+    getListDataExclusivePost,
     setLikePost,
     setUnlikePost,
     setCommentToPost,

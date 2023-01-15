@@ -35,14 +35,14 @@ import {
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParams} from '../../navigations';
-import {EmptyState} from '../../components/molecule/EmptyState/EmptyState';
-import ListToFollowMusician from './ListToFollowMusician';
 import ImageList from './ImageList';
+import {EmptyState} from '../../components/molecule/EmptyState/EmptyState';
+import {FriedEggIcon, TickCircleIcon} from '../../assets/icon';
+import ListToFollowMusician from './ListToFollowMusician';
 import {useFeedHook} from '../../hooks/use-feed.hook';
 import {PostList} from '../../interface/feed.interface';
 import {dateFormat} from '../../utils/date-format';
 import {useProfileHook} from '../../hooks/use-profile.hook';
-import {TickCircleIcon} from '../../assets/icon';
 import categoryNormalize from '../../utils/categoryNormalize';
 
 const {height} = Dimensions.get('screen');
@@ -53,7 +53,7 @@ interface PostListProps {
   uuidMusician?: string;
 }
 
-const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
+const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
   const {dataRightDropdown, dataLeftDropdown, uuidMusician = ''} = props;
@@ -76,7 +76,7 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
     feedIsError,
     feedMessage,
     dataPostList,
-    getListDataPost,
+    getListDataExclusivePost,
     setLikePost,
     setUnlikePost,
     setCommentToPost,
@@ -98,18 +98,18 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
   useFocusEffect(
     useCallback(() => {
       uuidMusician !== ''
-        ? getListDataPost({musician_uuid: uuidMusician})
-        : getListDataPost();
+        ? getListDataExclusivePost({musician_uuid: uuidMusician})
+        : getListDataExclusivePost();
     }, [uuidMusician]),
   );
 
   const resultDataFilter = (dataResultFilter: DataDropDownType) => {
-    getListDataPost({sortBy: dataResultFilter.label.toLowerCase()});
+    getListDataExclusivePost({sortBy: dataResultFilter.label.toLowerCase()});
   };
   const resultDataCategory = (dataResultCategory: DataDropDownType) => {
     dataResultCategory.label === 'All'
-      ? getListDataPost()
-      : getListDataPost({category: dataResultCategory.value});
+      ? getListDataExclusivePost()
+      : getListDataExclusivePost({category: dataResultCategory.value});
   };
 
   const cardOnPress = (data: PostList) => {
@@ -367,13 +367,25 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
         feedMessage === 'you not follow anyone' ? (
         <ListToFollowMusician />
       ) : dataPostList?.length === 0 &&
-        feedMessage === 'musician not have post' ? (
+        feedMessage === 'you not subscribe any premium content' ? (
         <EmptyState
-          text={`Your following musician don't have any post, try to follow more musician`}
+          text={`You don't have any exclusive content, try to subscribe your favorite musician`}
           containerStyle={{
             justifyContent: 'flex-start',
             paddingTop: heightPercentage(24),
           }}
+          icon={<FriedEggIcon />}
+        />
+      ) : dataPostList?.length === 0 &&
+        feedMessage ===
+          'Your subscribed musician has not yet posted any exclusive content.' ? (
+        <EmptyState
+          text={feedMessage}
+          containerStyle={{
+            justifyContent: 'flex-start',
+            paddingTop: heightPercentage(24),
+          }}
+          icon={<FriedEggIcon />}
         />
       ) : null}
       <CommentInputModal
@@ -430,7 +442,7 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
   );
 };
 
-export default PostListPublic;
+export default PostListExclusive;
 
 const styles = StyleSheet.create({
   childrenPostTitle: {
