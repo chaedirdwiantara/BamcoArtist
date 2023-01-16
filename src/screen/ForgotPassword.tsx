@@ -1,5 +1,12 @@
-import {Dimensions, Image, StyleSheet, Text, View} from 'react-native';
-import React, {FC, useState} from 'react';
+import {
+  Dimensions,
+  Image,
+  StyleSheet,
+  Text,
+  View,
+  BackHandler,
+} from 'react-native';
+import React, {FC, useEffect, useState} from 'react';
 import {color, font} from '../theme';
 import {normalize} from '../utils';
 import {mvs} from 'react-native-size-matters';
@@ -7,44 +14,202 @@ import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParams} from '../navigations';
 import SsuSheet from '../components/atom/SsuSheet';
-import {Button, Gap, SsuInput, SsuOTPInput, SsuOTPTimer} from '../components';
+import {
+  Button,
+  Gap,
+  ModalConfirm,
+  SsuInput,
+  SsuOTPInput,
+  SsuOTPTimer,
+} from '../components';
 import {EmailIcon, LockIcon} from '../assets/icon';
+import {useAuthHook} from '../hooks/use-auth.hook';
+import {ModalLoading} from '../components/molecule/ModalLoading/ModalLoading';
+import * as yup from 'yup';
+import {Controller, SubmitHandler, useForm} from 'react-hook-form';
+import {yupResolver} from '@hookform/resolvers/yup';
+import RenderMessage from '../components/molecule/OtpInput/RenderMessage';
+import {storage} from '../hooks/use-storage.hook';
 
 const {width, height} = Dimensions.get('screen');
+type PageProps = 'emailInput' | 'otp' | 'newPass';
 interface ForgotPasswordProps {
-  userCredentials?: string;
-  timer?: number;
+  email: string;
+  password: string;
+  confirmPassword: string;
+  page: PageProps;
 }
 
-export const ForgotPassword: FC<ForgotPasswordProps> = (
-  props: ForgotPasswordProps,
-) => {
-  const {userCredentials = 'name@domain.com', timer = 12} = props;
+const validationSchema = yup.object({
+  email: yup.string().when('page', {
+    is: (val: PageProps) => val === 'emailInput',
+    then: yup
+      .string()
+      .required('This field is required')
+      .email('Please use valid email'),
+  }),
+  password: yup.string().when('page', {
+    is: (val: PageProps) => val === 'newPass',
+    then: yup
+      .string()
+      .required('This field is required')
+      .matches(/^.{8,40}$/, 'Password should be between 8 to 40 characters'),
+  }),
+  confirmPassword: yup.string().when('page', {
+    is: (val: PageProps) => val === 'newPass',
+    then: yup
+      .string()
+      .required('Field is required')
+      .oneOf([yup.ref('password'), null], `Password didn't match`),
+  }),
+});
+
+export const ForgotPassword: FC = () => {
+  const {
+    isError,
+    errorMsg,
+    isOtpValid,
+    isLoading,
+    loginResult,
+    forgotPassword,
+    confirmEmailOtpFP,
+    onChangePassword,
+  } = useAuthHook();
+
+  const {
+    control,
+    handleSubmit,
+    formState: {errors},
+    setError,
+    setValue,
+    watch,
+  } = useForm<ForgotPasswordProps>({
+    resolver: yupResolver(validationSchema),
+    defaultValues: {
+      email: '',
+      password: '',
+      confirmPassword: '',
+      page: 'emailInput',
+    },
+  });
 
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
 
-  const [page, setPage] = useState('emailInput');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [repeat, setRepeat] = useState('');
-  const [error, setError] = useState(false);
+  const timer = 12;
+  const [isSubmit, setIsSubmit] = useState<boolean>(false);
+  const [focusInput, setFocusInput] = useState<string | null>(null);
+  const [code, setCode] = useState<string>('888888');
+  const [isModalVisible, setModalVisible] = useState({
+    modalConfirm: false,
+    modalImage: false,
+  });
 
-  const handleSubmitEmail = () => {
-    // navigation.navigate('Otp');
-    setPage('otp');
+  const handleSubmitEmail: SubmitHandler<ForgotPasswordProps> = data => {
+    setIsSubmit(true);
+    forgotPassword(data.email);
   };
-  const handleOnPressBack = () => {
-    navigation.goBack();
+  const onCodeComplete = (otp: string) => {
+    setIsSubmit(true);
+    confirmEmailOtpFP(watch('email'), otp);
+    setCode(otp);
   };
-  const handleOtpBack = () => {
-    setPage('emailInput');
+
+  const handleOnPressSubmit: SubmitHandler<
+    ForgotPasswordProps
+  > = async data => {
+    setIsSubmit(true);
+    console.log();
+    await onChangePassword(data.email, code, data.password);
   };
-  const handleOnPressSignIn = () => {
-    navigation.navigate('Login');
+  const handleFocusInput = (focus: string | null) => {
+    setFocusInput(focus);
   };
-  const handleOnPressButtonSignIn = () => {
-    navigation.navigate('SignInGuest');
+
+  useEffect(() => {
+    if (!isLoading && isSubmit) {
+      if (watch('page') === 'emailInput') {
+        if (!isError) {
+          setIsSubmit(false);
+          setValue('page', 'otp');
+        } else {
+          setError('email', {
+            type: 'value',
+            message: errorMsg,
+          });
+        }
+      } else if (watch('page') === 'otp') {
+        if (!isError && isOtpValid) {
+          setIsSubmit(false);
+          setValue('page', 'newPass');
+        }
+      } else if (watch('page') === 'newPass') {
+        if (!isError && loginResult !== null) {
+          storage.set('isLogin', true);
+          if (loginResult === 'preference') {
+            navigation.reset({
+              index: 0,
+              routes: [{name: 'Preference'}],
+            });
+          } else {
+            navigation.reset({
+              index: 0,
+              routes: [{name: 'MainTab'}],
+            });
+          }
+        } else if (isError) {
+          console.log({errorMsg});
+          setError('confirmPassword', {
+            type: 'value',
+            message: errorMsg,
+          });
+        }
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLoading]);
+
+  function handleBackButtonClick() {
+    if (watch('page') === 'newPass') {
+      openModal('modalConfirm');
+      return true;
+    } else if (watch('page') === 'otp') {
+      setValue('page', 'emailInput');
+      return false;
+    } else if (watch('page') === 'emailInput') {
+      navigation.goBack();
+      return false;
+    }
+  }
+
+  useEffect(() => {
+    BackHandler.addEventListener('hardwareBackPress', handleBackButtonClick);
+    return () => {
+      BackHandler.removeEventListener(
+        'hardwareBackPress',
+        handleBackButtonClick,
+      );
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const openModal = (type: string) => {
+    setModalVisible({
+      ...isModalVisible,
+      [type]: true,
+    });
+  };
+
+  const closeModal = () => {
+    setModalVisible({
+      modalConfirm: false,
+      modalImage: false,
+    });
+  };
+
+  const onPressConfirm = async () => {
+    navigation.pop();
+    navigation.replace('Login');
   };
 
   //  email
@@ -60,18 +225,34 @@ export const ForgotPassword: FC<ForgotPasswordProps> = (
         </View>
 
         <Gap height={16} />
-        <SsuInput.InputText
-          value={email}
-          onChangeText={(newText: any) => setEmail(newText)}
-          placeholder={'Enter your email'}
-          leftIcon={<EmailIcon stroke={color.Dark[50]} />}
+        <Controller
+          name="email"
+          control={control}
+          render={({field: {onChange, value}}) => (
+            <SsuInput.InputText
+              isError={errors?.email ? true : false}
+              errorMsg={errors?.email?.message ?? errorMsg}
+              value={value}
+              onChangeText={onChange}
+              placeholder={'Enter your email'}
+              leftIcon={<EmailIcon stroke={color.Dark[50]} />}
+              onFocus={() => {
+                handleFocusInput('email');
+              }}
+              onBlur={() => {
+                handleFocusInput(null);
+              }}
+              isFocus={focusInput === 'email'}
+            />
+          )}
         />
+
         <Gap height={24} />
         <Button
           label="Submit"
           textStyles={{fontSize: normalize(14)}}
           containerStyles={{width: '100%'}}
-          onPress={handleSubmitEmail}
+          onPress={handleSubmit(handleSubmitEmail)}
         />
         <Gap height={4} />
         <Button
@@ -80,22 +261,9 @@ export const ForgotPassword: FC<ForgotPasswordProps> = (
           borderColor="transparent"
           textStyles={{fontSize: normalize(14), color: color.Pink.linear}}
           containerStyles={{width: '100%'}}
-          onPress={handleOnPressBack}
+          onPress={handleBackButtonClick}
         />
-        <Gap height={30} />
-        <Text style={styles.forgotPassStyle}>
-          Already have an Account?{' '}
-          <Text
-            onPress={() => handleOnPressSignIn()}
-            style={{
-              fontFamily: font.InterRegular,
-              fontWeight: '700',
-              fontSize: normalize(12),
-              lineHeight: mvs(16),
-            }}>
-            Sign In
-          </Text>
-        </Text>
+        <Gap height={10} />
       </>
     );
   };
@@ -111,21 +279,21 @@ export const ForgotPassword: FC<ForgotPasswordProps> = (
             Enter the recovery code we just sent to
           </Text>
           <Gap height={8} />
-          <Text style={styles.descStyle}>{userCredentials}</Text>
+          <Text style={styles.descStyle}>{watch('email')}</Text>
         </View>
 
         <Gap height={16} />
         <SsuOTPInput
           hideIcon
-          // showMessage
-          // otpSuccess={true}
-          onCodeChanged={code => console.log(code)}
-          onCodeFilled={(result, code) => {
+          onCodeFilled={(result, codes) => {
             if (result) {
-              console.log(code);
+              onCodeComplete(codes);
             }
           }}
         />
+        {isError ? (
+          <RenderMessage otpSuccess={isOtpValid ? true : false} />
+        ) : null}
         {/* <Gap height={24} /> */}
         <SsuOTPTimer action={() => {}} timer={timer} />
         <Gap height={4} />
@@ -135,22 +303,9 @@ export const ForgotPassword: FC<ForgotPasswordProps> = (
           borderColor="transparent"
           textStyles={{fontSize: normalize(14), color: color.Pink.linear}}
           containerStyles={{width: '100%'}}
-          onPress={handleOtpBack}
+          onPress={handleBackButtonClick}
         />
-        <Gap height={30} />
-        <Text style={styles.forgotPassStyle}>
-          Already have an Account?{' '}
-          <Text
-            onPress={() => handleOnPressSignIn()}
-            style={{
-              fontFamily: font.InterRegular,
-              fontWeight: '700',
-              fontSize: normalize(12),
-              lineHeight: mvs(16),
-            }}>
-            Sign In
-          </Text>
-        </Text>
+        <Gap height={10} />
       </>
     );
   };
@@ -160,39 +315,61 @@ export const ForgotPassword: FC<ForgotPasswordProps> = (
     return (
       <>
         <View style={styles.otpTitleContainer}>
-          <Text style={styles.titleStyle}>Input New Password</Text>
-          <Gap height={8} />
-          <Text style={styles.descStyle}>
-            Enter the recovery code we just sent to
-          </Text>
-          <Gap height={8} />
-          <Text style={styles.descStyle}>{userCredentials}</Text>
+          <Text style={styles.titleStyle}>Set New Password</Text>
         </View>
 
         <Gap height={16} />
-        <SsuInput.InputText
-          value={password}
-          onChangeText={(newText: any) => setPassword(newText)}
-          placeholder={'Password'}
-          leftIcon={<LockIcon stroke={color.Dark[50]} />}
-          password
+        <Controller
+          name="password"
+          control={control}
+          render={({field: {onChange, value}}) => (
+            <SsuInput.InputText
+              value={value}
+              onChangeText={onChange}
+              placeholder={'Password'}
+              leftIcon={<LockIcon stroke={color.Dark[50]} />}
+              password
+              onFocus={() => {
+                handleFocusInput('password');
+              }}
+              onBlur={() => {
+                handleFocusInput(null);
+              }}
+              isError={errors?.password ? true : false}
+              errorMsg={errors?.password?.message}
+              isFocus={focusInput === 'password'}
+            />
+          )}
         />
         <Gap height={8} />
-        <SsuInput.InputText
-          value={repeat}
-          onChangeText={(newText: any) => setRepeat(newText)}
-          placeholder={'Repeat Password'}
-          isError={error}
-          errorMsg={'Incorrect username or password'}
-          leftIcon={<LockIcon stroke={color.Dark[50]} />}
-          password
+        <Controller
+          name="confirmPassword"
+          control={control}
+          render={({field: {onChange, value}}) => (
+            <SsuInput.InputText
+              value={value}
+              onChangeText={onChange}
+              placeholder={'Repeat'}
+              leftIcon={<LockIcon stroke={color.Dark[50]} />}
+              password
+              onFocus={() => {
+                handleFocusInput('confirmPassword');
+              }}
+              onBlur={() => {
+                handleFocusInput(null);
+              }}
+              isError={errors?.confirmPassword ? true : false}
+              errorMsg={errors?.email?.message}
+              isFocus={focusInput === 'confirmPassword'}
+            />
+          )}
         />
         <Gap height={20} />
         <Button
           label="Sign In"
           textStyles={{fontSize: normalize(14)}}
           containerStyles={{width: '100%'}}
-          onPress={handleOnPressButtonSignIn}
+          onPress={handleSubmit(handleOnPressSubmit)}
         />
       </>
     );
@@ -206,14 +383,22 @@ export const ForgotPassword: FC<ForgotPasswordProps> = (
       />
       <SsuSheet
         children={
-          page === 'otp'
+          watch('page') === 'otp'
             ? otp()
-            : page === 'newPass'
+            : watch('page') === 'newPass'
             ? newPass()
-            : page === 'emailInput'
+            : watch('page') === 'emailInput'
             ? emailInput()
             : emailInput()
         }
+      />
+      <ModalLoading visible={isLoading} />
+      <ModalConfirm
+        modalVisible={isModalVisible.modalConfirm}
+        title="Set New Password"
+        subtitle="Are you sure you want to leave your progress unsaved?"
+        onPressClose={closeModal}
+        onPressOk={onPressConfirm}
       />
     </View>
   );
