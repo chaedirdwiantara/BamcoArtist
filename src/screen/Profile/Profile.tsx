@@ -45,6 +45,8 @@ export const ProfileScreen: React.FC<ProfileProps> = (props: ProfileProps) => {
     }, []),
   );
 
+  const uuid = dataProfile?.data.uuid;
+
   const onPressGoTo = (
     screenName: 'Setting' | 'Following' | 'CreateNewPlaylist',
   ) => {
@@ -74,13 +76,14 @@ export const ProfileScreen: React.FC<ProfileProps> = (props: ProfileProps) => {
 
   return (
     <View style={styles.root}>
-      {isLogin ? (
+      {isLogin && uuid ? (
         <ProfileContent
           profile={profile}
           goToPlaylist={goToPlaylist}
           dataPlaylist={dataPlaylist}
           goToEditProfile={goToEditProfile}
           onPressGoTo={screenName => onPressGoTo(screenName)}
+          uuid={uuid}
         />
       ) : (
         <GuestContent />

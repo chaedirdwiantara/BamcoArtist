@@ -14,18 +14,19 @@ import {
   normalize,
   widthPercentage,
   heightPercentage,
+  widthResponsive,
 } from '../../../utils';
 import {font} from '../../../theme';
 import {TabFilter} from '../TabFilter';
 import Color from '../../../theme/Color';
 import {SettingIcon} from '../../../assets/icon';
 import {ProfileHeader} from './components/Header';
-import {EmptyState} from '../EmptyState/EmptyState';
-import {TopSongListData} from '../../../data/topSong';
 import {UserInfoCard} from '../UserInfoCard/UserInfoCard';
-import {CreateNewCard} from '../CreateNewCard/CreateNewCard';
 import {Playlist} from '../../../interface/playlist.interface';
-import ListPlaylist from '../../../screen/ListCard/ListPlaylist';
+import DataMusician from '../../../screen/MusicianProfile/DataMusician';
+import PostListPublic from '../../../screen/ListCard/PostListPublic';
+import {dropDownDataCategory, dropDownDataSort} from '../../../data/dropdown';
+import PostListExclusive from '../../../screen/ListCard/PostListExclusive';
 
 type OnScrollEventHandler = (
   event: NativeSyntheticEvent<NativeScrollEvent>,
@@ -39,6 +40,7 @@ interface ProfileContentProps {
   onPressGoTo: (
     screenName: 'Setting' | 'Following' | 'CreateNewPlaylist',
   ) => void;
+  uuid: string;
 }
 
 export const ProfileContent: React.FC<ProfileContentProps> = ({
@@ -47,13 +49,16 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
   goToPlaylist,
   onPressGoTo,
   dataPlaylist,
+  uuid,
 }) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [scrollEffect, setScrollEffect] = useState(false);
   const [filter] = useState([
-    {filterName: 'PLAYLIST'},
-    {filterName: 'TOP MUSICIAN'},
-    {filterName: 'BADGE'},
+    {filterName: 'PROFILE'},
+    {filterName: 'POST'},
+    {filterName: 'EXCLUSIVE'},
+    {filterName: 'MUSIC'},
+    {filterName: 'FANS'},
   ]);
   const filterData = (item: any, index: any) => {
     setSelectedIndex(index);
@@ -90,7 +95,6 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
           scrollEffect={scrollEffect}
         />
         <UserInfoCard
-          type="self"
           containerStyles={styles.infoCard}
           totalFollowing={profile.totalFollowing}
           onPress={() => onPressGoTo('Following')}
@@ -101,57 +105,37 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
             onPress={filterData}
             selectedIndex={selectedIndex}
           />
-          {filter[selectedIndex].filterName === 'PLAYLIST' ? (
-            TopSongListData.length > 0 ? (
-              <View>
-                <CreateNewCard
-                  num="00"
-                  text="Create New Playlist"
-                  onPress={() => onPressGoTo('CreateNewPlaylist')}
-                />
-                <ListPlaylist
-                  data={dataPlaylist}
-                  onPress={goToPlaylist}
-                  scrollable={false}
-                />
-              </View>
-            ) : (
-              <CreateNewCard
-                num="01"
-                text="Default Playlist"
-                onPress={() => onPressGoTo('CreateNewPlaylist')}
+          {filter[selectedIndex].filterName === 'PROFILE' ? (
+            <View
+              style={{
+                marginHorizontal: widthResponsive(-24),
+                width: '100%',
+              }}>
+              <DataMusician profile={profile} />
+            </View>
+          ) : filter[selectedIndex].filterName === 'POST' ? (
+            <View
+              style={{
+                width: '100%',
+              }}>
+              <PostListPublic
+                uuidMusician={uuid}
+                dataRightDropdown={dropDownDataCategory}
+                dataLeftDropdown={dropDownDataSort}
               />
-            )
-          ) : filter[selectedIndex].filterName === 'TOP MUSICIAN' ? (
-            // Dihold karena point belum fix
-
-            // MusicianListData.length > 0 ? (
-            //   <TopMusician
-            //     scrollable={false}
-            //     type={'profile'}
-            //     dataMusician={[]}
-            //   />
-            // ) :
-            <EmptyState
-              text="You don't have contribution to any musician"
-              containerStyle={{marginTop: heightPercentage(30)}}
-            />
-          ) : (
-            // Dihold karena badge belum fix
-
-            // MusicianListData.length > 0 ? (
-            //   <MenuText.LeftIconWithSubtitle
-            //     text="No Room for Speed"
-            //     subtitle="Be the first jam contributor on 100 artist"
-            //     onPress={() => null}
-            //     icon={<ProcessingIcon />}
-            //   />
-            // ) :
-            <EmptyState
-              text="You don't have any badge"
-              containerStyle={{marginTop: heightPercentage(30)}}
-            />
-          )}
+            </View>
+          ) : filter[selectedIndex].filterName === 'EXCLUSIVE' ? (
+            <View
+              style={{
+                width: '100%',
+              }}>
+              <PostListExclusive
+                uuidMusician={uuid}
+                dataRightDropdown={dropDownDataCategory}
+                dataLeftDropdown={dropDownDataSort}
+              />
+            </View>
+          ) : null}
         </View>
       </ScrollView>
     </View>
@@ -170,7 +154,7 @@ const styles = StyleSheet.create({
   containerContent: {
     flex: 1,
     marginTop: heightPercentage(70),
-    paddingHorizontal: widthPercentage(20),
+    paddingHorizontal: widthResponsive(24),
     marginBottom: heightPercentage(20),
     width: '100%',
   },
