@@ -20,7 +20,10 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParams} from '../../navigations';
 import {color} from '../../theme';
 import ExclusiveDailyContent from './ExclusiveDailyContent';
-import {DataDetailMusician} from '../../interface/musician.interface';
+import {
+  AlbumData,
+  DataDetailMusician,
+} from '../../interface/musician.interface';
 import PostListPublic from '../ListCard/PostListPublic';
 import {dropDownDataCategory, dropDownDataSort} from '../../data/dropdown';
 import PostListExclusive from '../ListCard/PostListExclusive';
@@ -32,11 +35,13 @@ type OnScrollEventHandler = (
 interface MusicianDetailProps {
   profile: DataDetailMusician;
   uuid: string;
+  dataAlbum: AlbumData[];
 }
 
 export const MusicianDetail: React.FC<MusicianDetailProps> = ({
   profile,
   uuid,
+  dataAlbum,
 }) => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
@@ -98,7 +103,7 @@ export const MusicianDetail: React.FC<MusicianDetailProps> = ({
               flatlistContainerStyle={{paddingHorizontal: widthResponsive(24)}}
             />
             {filter[selectedIndex].filterName === 'PROFILE' ? (
-              <DataMusician profile={profile} />
+              <DataMusician profile={profile} dataAlbum={dataAlbum} />
             ) : filter[selectedIndex].filterName === 'POST' ? (
               <View
                 style={{

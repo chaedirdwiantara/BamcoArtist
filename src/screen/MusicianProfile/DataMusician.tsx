@@ -4,17 +4,21 @@ import {Gap} from '../../components';
 import ProfileComponent from './ProfileComponent';
 import Photo from './Photo';
 import Album from './Album';
-import {DataDetailMusician} from '../../interface/musician.interface';
+import {
+  AlbumData,
+  DataDetailMusician,
+} from '../../interface/musician.interface';
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParams} from '../../navigations';
 
 interface DataMusicianProps {
   profile: DataDetailMusician;
+  dataAlbum: AlbumData[];
 }
 
 const DataMusician: FC<DataMusicianProps> = (props: DataMusicianProps) => {
-  const {profile} = props;
+  const {profile, dataAlbum} = props;
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
 
@@ -77,9 +81,20 @@ const DataMusician: FC<DataMusicianProps> = (props: DataMusicianProps) => {
         photoOnpress={handleOnPress}
       />
       <Gap height={24} />
-      <Album title={'Album'} data={profile.albums} errorText={noAlbumText} />
+
+      <Album
+        title={'Album'}
+        data={dataAlbum}
+        artistName={profile.fullname}
+        errorText={noAlbumText}
+      />
       <Gap height={24} />
-      <Album title={'Merch'} data={profile.merchs} errorText={noMerch} />
+      <Album
+        title={'Merch'}
+        data={profile.merchs}
+        artistName={profile.fullname}
+        errorText={noMerch}
+      />
     </View>
   );
 };

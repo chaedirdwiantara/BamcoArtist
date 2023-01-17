@@ -85,12 +85,13 @@ import {RegistrationType} from '../interface/profile.interface';
 // interface
 import {PostList} from '../interface/feed.interface';
 import {Playlist} from '../interface/playlist.interface';
+import {AlbumData} from '../interface/musician.interface';
 
 export type RootStackParams = {
   Account: undefined;
   AddToPlaylist: undefined;
   AddSong: undefined;
-  Album: undefined;
+  Album: AlbumData;
   Boarding: undefined;
   ChangeEmail: undefined;
   ChangePassword: undefined;

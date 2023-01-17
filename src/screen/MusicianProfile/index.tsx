@@ -7,6 +7,8 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParams} from '../../navigations';
 import {useMusicianHook} from '../../hooks/use-musician.hook';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {AlbumData} from '../../interface/musician.interface';
+import {ModalLoading} from '../../components/molecule/ModalLoading/ModalLoading';
 
 type PostDetailProps = NativeStackScreenProps<
   RootStackParams,
@@ -19,8 +21,14 @@ const MusicianProfile: FC<PostDetailProps> = ({route}: PostDetailProps) => {
 
   const uuid = route.params.id;
 
-  const {isLoading, isError, dataDetailMusician, getDetailMusician} =
-    useMusicianHook();
+  const {
+    isLoading,
+    isError,
+    dataDetailMusician,
+    dataAlbum,
+    getDetailMusician,
+    getAlbum,
+  } = useMusicianHook();
 
   //  ? Get Detail Musician
   useFocusEffect(
@@ -29,15 +37,23 @@ const MusicianProfile: FC<PostDetailProps> = ({route}: PostDetailProps) => {
     }, []),
   );
 
-  const onPressGoTo = (screenName: 'Setting' | 'CreateNewPlaylist') => {
-    navigation.navigate(screenName);
-  };
+  //  ? Get Album Musician
+  useFocusEffect(
+    useCallback(() => {
+      getAlbum({uuid: uuid});
+    }, []),
+  );
 
   return (
     <View style={styles.root}>
       {dataDetailMusician && (
-        <MusicianDetail profile={dataDetailMusician} uuid={uuid} />
+        <MusicianDetail
+          profile={dataDetailMusician}
+          uuid={uuid}
+          dataAlbum={dataAlbum}
+        />
       )}
+      <ModalLoading visible={isLoading} />
     </View>
   );
 };
