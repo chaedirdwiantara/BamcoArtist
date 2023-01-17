@@ -33,6 +33,7 @@ interface CommentSectionType {
   dataLvl1: CommentList[] | undefined;
   dataLvl2: CommentList2[] | undefined;
   dataLvl3: CommentList3[] | undefined;
+  toDetailOnPress: (id: string) => void;
 }
 
 const CommentSection: FC<CommentSectionType> = (props: CommentSectionType) => {
@@ -47,6 +48,7 @@ const CommentSection: FC<CommentSectionType> = (props: CommentSectionType) => {
     onUnlike,
     postCommentCount,
     postId,
+    toDetailOnPress,
   } = props;
   const [recorder, setRecorder] = useState<string[]>([]);
   const [selectedId, setSelectedId] = useState<string[]>();
@@ -138,6 +140,10 @@ const CommentSection: FC<CommentSectionType> = (props: CommentSectionType) => {
     onComment?.({id, userName, commentLvl, parentID});
   };
 
+  const handleToDetail = (id: string) => {
+    toDetailOnPress?.(id);
+  };
+
   const viewMoreOnPress = (id: string, value: number) => {
     onViewMore?.(id);
     onSetPage?.(value);
@@ -158,6 +164,7 @@ const CommentSection: FC<CommentSectionType> = (props: CommentSectionType) => {
     } = props;
     return (
       <CommentLvlThree
+        toDetailOnPress={() => handleToDetail(commentOwner.UUID)}
         imgUriLvl3={commentOwner.image}
         userNameLvl3={commentOwner.fullname}
         userIdLvl3={commentOwner.username}
@@ -221,6 +228,7 @@ const CommentSection: FC<CommentSectionType> = (props: CommentSectionType) => {
     } = props;
     return (
       <CommentLvlTwo
+        toDetailOnPress={() => handleToDetail(commentOwner.UUID)}
         imgUriLvl2={commentOwner.image}
         userNameLvl2={commentOwner.fullname}
         userIdLvl2={commentOwner.username}
@@ -329,6 +337,7 @@ const CommentSection: FC<CommentSectionType> = (props: CommentSectionType) => {
         keyExtractor={(_, index) => index.toString()}
         renderItem={({item, index}) => (
           <PostComment
+            toDetailOnPress={() => handleToDetail(item.commentOwner.UUID)}
             imgUri={item.commentOwner.image}
             userName={elipsisText(item.commentOwner.fullname, 21)}
             userId={`@${elipsisText(item.commentOwner.username, 10)}`}

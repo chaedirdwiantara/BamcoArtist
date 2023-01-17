@@ -27,6 +27,7 @@ interface ListProps extends TouchableOpacityProps {
   commentCount: number;
   containerStyles?: ViewStyle;
   children?: React.ReactNode;
+  toDetailOnPress?: () => void;
 }
 
 const PostComment: React.FC<ListProps> = (props: ListProps) => {
@@ -44,19 +45,20 @@ const PostComment: React.FC<ListProps> = (props: ListProps) => {
     commentCount,
     containerStyles,
     children,
+    toDetailOnPress,
   } = props;
   return (
     <View style={[styles.root, containerStyles]}>
-      <View>
+      <TouchableOpacity onPress={toDetailOnPress}>
         <Avatar imgUri={imgUri} size={widthResponsive(32)} />
-      </View>
+      </TouchableOpacity>
       <View
         style={{
           flex: 1,
           marginLeft: widthResponsive(6),
         }}>
         <View style={styles.topSection}>
-          <Text style={styles.userName}>
+          <Text style={styles.userName} onPress={toDetailOnPress}>
             {userName}
             <Text style={styles.regularText}> {userId}</Text>
           </Text>

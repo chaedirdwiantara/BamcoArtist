@@ -26,6 +26,7 @@ import MusicianProfile from '../screen/MusicianProfile';
 import {WebviewPage} from '../screen/Webview';
 import {MusicPlayer} from '../screen/Music';
 import CreatePost from '../screen/CreatePost';
+import {OtherUserProfile} from '../screen/OtherUserProfile/OtherUserProfile';
 
 // Setting
 import {SettingScreen} from '../screen/Setting/Setting';
@@ -104,6 +105,7 @@ export type RootStackParams = {
   Language: undefined;
   Login: undefined;
   MainTab: undefined;
+  OtherUserProfile: {id: string};
   Otp: {
     id: string;
     type: 'email' | 'phoneNumber';
@@ -303,6 +305,7 @@ export const RootStackScreen = () => (
     <RootStack.Screen name="ConcertDetail" component={ConcertDetail} />
     <RootStack.Screen name="CreatePost" component={CreatePost} />
     <RootStack.Screen name="PhotoGallery" component={PhotoGallery} />
+    <RootStack.Screen name="OtherUserProfile" component={OtherUserProfile} />
   </RootStack.Navigator>
 );
 
