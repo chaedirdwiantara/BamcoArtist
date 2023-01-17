@@ -447,6 +447,14 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
     setModalSuccessDonate(false);
   };
 
+  const handleToDetailMusician = (id: string) => {
+    navigation.navigate('MusicianProfile', {id});
+  };
+
+  const handleToDetailCommentator = (id: string) => {
+    navigation.navigate('OtherUserProfile', {id});
+  };
+
   return (
     <SafeAreaView style={styles.root}>
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -461,6 +469,7 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
         <View style={styles.bodyContainer}>
           {dataPostDetail ? (
             <DetailPost
+              toDetailOnPress={() => handleToDetailMusician(data.musician.uuid)}
               musicianName={musicianName}
               musicianId={`@${data.musician.username}`}
               imgUri={data.musician.imageProfileUrl}
@@ -561,6 +570,7 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
             onSetPage={handleSetPage}
             postCommentCount={dataPostDetail.commentsCount}
             postId={dataPostDetail.id}
+            toDetailOnPress={handleToDetailCommentator}
           />
         ) : null}
         <ImageModal

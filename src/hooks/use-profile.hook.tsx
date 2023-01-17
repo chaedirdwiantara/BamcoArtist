@@ -1,11 +1,13 @@
 import axios from 'axios';
 import {useState} from 'react';
 import {
+  getOtherUserProfile,
   getProfile,
   updateProfile,
   UpdateProfilePropsType,
 } from '../api/profile.api';
 import {applyReferral} from '../api/referral.api';
+import {PostPropsTypeA} from '../interface/feed.interface';
 import {ProfileResponseType} from '../interface/profile.interface';
 
 export const useProfileHook = () => {
@@ -17,6 +19,18 @@ export const useProfileHook = () => {
   const getProfileUser = async () => {
     try {
       const response = await getProfile();
+      console.log(response);
+      setDataProfile(response);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const getOtherProfileUser = async (props?: PostPropsTypeA) => {
+    try {
+      const response = await getOtherUserProfile(props);
       console.log(response);
       setDataProfile(response);
     } catch (error) {
@@ -80,5 +94,6 @@ export const useProfileHook = () => {
     updateProfileUser,
     applyReferralUser,
     updateProfilePreference,
+    getOtherProfileUser,
   };
 };

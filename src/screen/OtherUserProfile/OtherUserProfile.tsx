@@ -1,11 +1,14 @@
-import React, {useCallback, useEffect} from 'react';
+import React, {FC, useCallback, useEffect} from 'react';
 import {View, StyleSheet} from 'react-native';
 import {
   useFocusEffect,
   useIsFocused,
   useNavigation,
 } from '@react-navigation/native';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {
+  NativeStackNavigationProp,
+  NativeStackScreenProps,
+} from '@react-navigation/native-stack';
 
 import Color from '../../theme/Color';
 import {RootStackParams} from '../../navigations';
@@ -15,16 +18,18 @@ import {useProfileHook} from '../../hooks/use-profile.hook';
 import {GuestContent, ProfileContent} from '../../components';
 import {usePlaylistHook} from '../../hooks/use-playlist.hook';
 
-interface ProfileProps {
-  props: {};
-  route: any;
-}
+type OtherProfileProps = NativeStackScreenProps<
+  RootStackParams,
+  'OtherUserProfile'
+>;
 
-export const ProfileScreen: React.FC<ProfileProps> = (props: ProfileProps) => {
-  const {params} = props?.route;
+export const OtherUserProfile: FC<OtherProfileProps> = ({
+  route,
+}: OtherProfileProps) => {
+  const data = route.params;
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
-  const {dataProfile, getProfileUser} = useProfileHook();
+  const {dataProfile, getOtherProfileUser} = useProfileHook();
   const {dataPlaylist, getPlaylist} = usePlaylistHook();
   const isLogin = storage.getString('profile');
   const isFocused = useIsFocused();
@@ -41,49 +46,28 @@ export const ProfileScreen: React.FC<ProfileProps> = (props: ProfileProps) => {
   useFocusEffect(
     useCallback(() => {
       getPlaylist();
-      getProfileUser();
+      getOtherProfileUser({id: data.id});
     }, []),
   );
-
-  const uuid = dataProfile?.data.uuid;
-
-  const onPressGoTo = (
-    screenName: 'Setting' | 'Following' | 'CreateNewPlaylist',
-  ) => {
-    navigation.navigate(screenName);
-  };
-
-  const goToEditProfile = () => {
-    navigation.navigate('EditProfile', {...params, ...dataProfile});
-  };
-
-  const goToPlaylist = (id: number) => {
-    navigation.navigate('Playlist', {id});
-  };
 
   const profile = {
     fullname: dataProfile?.data.fullname,
     username: '@' + dataProfile?.data.username,
-    bio:
-      params?.bio ||
-      dataProfile?.data.about ||
-      "I'm here to support the musician",
-    backgroundUri:
-      params?.backgroundUri?.path || dataProfile?.data?.banner || null,
-    avatarUri: params?.avatarUri?.path || dataProfile?.data.imageProfileUrl,
+    bio: dataProfile?.data.about,
+    backgroundUri: dataProfile?.data?.banner,
+    avatarUri: dataProfile?.data.imageProfileUrl,
     totalFollowing: dataProfile?.data.following,
   };
 
   return (
     <View style={styles.root}>
-      {isLogin && uuid ? (
+      {isLogin ? (
         <ProfileContent
           profile={profile}
-          goToPlaylist={goToPlaylist}
+          goToPlaylist={() => {}}
           dataPlaylist={dataPlaylist}
-          goToEditProfile={goToEditProfile}
-          onPressGoTo={screenName => onPressGoTo(screenName)}
-          uuid={uuid}
+          goToEditProfile={() => {}}
+          onPressGoTo={() => {}}
         />
       ) : (
         <GuestContent />

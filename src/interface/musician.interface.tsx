@@ -1,5 +1,9 @@
 import {PaginationType} from './base.interface';
 
+export type paramsTypeUuid = {
+  uuid: string;
+};
+
 export type MusicianList = {
   point: number;
   uuid: string;
@@ -18,9 +22,6 @@ export type ListMusicianResponseType = {
   meta: PaginationType;
   status: number;
 };
-interface dataAlbum {
-  imgUri: string;
-}
 
 export type DataDetailMusician = {
   uuid: string;
@@ -48,7 +49,7 @@ export type DataDetailMusician = {
   updatedAt: string;
   isFollowed: boolean;
   banner: string;
-  photos: dataAlbum[];
+  photos: string[];
   albums: [];
   merchs: [];
 };
@@ -69,4 +70,36 @@ export type FollowMusicianResponseType = {
 
 export type FollowMusicianPropsType = {
   musicianID: string;
+};
+
+export type AlbumData = {
+  id: number;
+  title: string;
+  description: string;
+  imageUrl: string;
+  featuringArtist: string[];
+  genre: string;
+  subgenre: string;
+  likesCount: number;
+  shareCount: number;
+  mood: string;
+  copyrightProducer: string[];
+  copyrightVisual: string[];
+  copyrightFans: string[];
+  productionYear: string;
+  publishedDate: string;
+  isPublished: boolean;
+  language: string;
+  label: string[];
+  barcodeUpc: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type AlbumByIdResponseType = {
+  code: number;
+  data: AlbumData[];
+  message: string;
+  meta: PaginationType;
+  status: number;
 };

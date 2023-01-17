@@ -1,9 +1,12 @@
-import SsuAPI from './baseMusician';
+import SsuAPI from './base';
+import SsuAPISemeruPublic from './baseSemeruPublic';
 import {
+  AlbumByIdResponseType,
   DetailMusicianResponseType,
   FollowMusicianPropsType,
   FollowMusicianResponseType,
   ListMusicianResponseType,
+  paramsTypeUuid,
 } from '../interface/musician.interface';
 import {ParamsProps} from '../interface/base.interface';
 import {PostPropsTypeA} from '../interface/feed.interface';
@@ -26,6 +29,18 @@ export const detailMusician = async (
   const {data} = await SsuAPI().request<DetailMusicianResponseType>({
     url: `/musicians/${props?.id}`,
     method: 'GET',
+  });
+
+  return data;
+};
+
+export const getAlbumById = async (
+  props?: paramsTypeUuid,
+): Promise<AlbumByIdResponseType> => {
+  const {data} = await SsuAPISemeruPublic().request<AlbumByIdResponseType>({
+    url: `/albums`,
+    method: 'GET',
+    params: props,
   });
 
   return data;

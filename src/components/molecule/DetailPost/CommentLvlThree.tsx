@@ -26,6 +26,7 @@ interface ListProps extends TouchableOpacityProps {
   likeCountLvl3: number;
   commentCountLvl3: number;
   containerStylesLvl3?: ViewStyle;
+  toDetailOnPress?: () => void;
 }
 
 const CommentLvlThree: React.FC<ListProps> = (props: ListProps) => {
@@ -42,19 +43,20 @@ const CommentLvlThree: React.FC<ListProps> = (props: ListProps) => {
     likeCountLvl3,
     commentCountLvl3,
     containerStylesLvl3,
+    toDetailOnPress,
   } = props;
   return (
     <View style={[styles.root, containerStylesLvl3]}>
-      <View>
+      <TouchableOpacity onPress={toDetailOnPress}>
         <Avatar imgUri={imgUriLvl3} size={widthResponsive(32)} />
-      </View>
+      </TouchableOpacity>
       <View
         style={{
           flex: 1,
           marginLeft: widthResponsive(6),
         }}>
         <View style={styles.topSection}>
-          <Text style={styles.userName}>
+          <Text style={styles.userName} onPress={toDetailOnPress}>
             {elipsisText(userNameLvl3, 21)}
             <Text style={styles.regularText}>
               {' '}

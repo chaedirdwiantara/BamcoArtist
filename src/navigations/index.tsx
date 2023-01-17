@@ -14,6 +14,7 @@ import {HomeScreen} from '../screen/Home';
 import {LoginScreen} from '../screen/Login';
 import {OnboardScreen} from '../screen/Onboard';
 import {Otp} from '../screen/Otp';
+import PhotoGallery from '../screen/MusicianProfile/PhotoGallery';
 import {PreferenceScreen} from '../screen/Preference';
 import {ReferralScreen} from '../screen/Referral';
 import {SignInGuestScreen} from '../screen/SignInGuest';
@@ -25,6 +26,7 @@ import MusicianProfile from '../screen/MusicianProfile';
 import {WebviewPage} from '../screen/Webview';
 import {MusicPlayer} from '../screen/Music';
 import CreatePost from '../screen/CreatePost';
+import {OtherUserProfile} from '../screen/OtherUserProfile/OtherUserProfile';
 
 // Setting
 import {SettingScreen} from '../screen/Setting/Setting';
@@ -83,12 +85,13 @@ import {RegistrationType} from '../interface/profile.interface';
 // interface
 import {PostList} from '../interface/feed.interface';
 import {Playlist} from '../interface/playlist.interface';
+import {AlbumData} from '../interface/musician.interface';
 
 export type RootStackParams = {
   Account: undefined;
   AddToPlaylist: undefined;
   AddSong: undefined;
-  Album: undefined;
+  Album: AlbumData;
   Boarding: undefined;
   ChangeEmail: undefined;
   ChangePassword: undefined;
@@ -103,6 +106,7 @@ export type RootStackParams = {
   Language: undefined;
   Login: undefined;
   MainTab: undefined;
+  OtherUserProfile: {id: string};
   Otp: {
     id: string;
     type: 'email' | 'phoneNumber';
@@ -111,6 +115,7 @@ export type RootStackParams = {
     context?: string;
   };
   PhoneNumber: undefined;
+  PhotoGallery: {imageData: string[]; userName: string};
   Playlist: {
     id: number;
   };
@@ -300,6 +305,8 @@ export const RootStackScreen = () => (
     <RootStack.Screen name="MerchDetail" component={MerchDetail} />
     <RootStack.Screen name="ConcertDetail" component={ConcertDetail} />
     <RootStack.Screen name="CreatePost" component={CreatePost} />
+    <RootStack.Screen name="PhotoGallery" component={PhotoGallery} />
+    <RootStack.Screen name="OtherUserProfile" component={OtherUserProfile} />
   </RootStack.Navigator>
 );
 
