@@ -1,4 +1,4 @@
-import SsuAPI from './base';
+import SsuAPI from './baseMusician';
 import {PaginationType} from '../interface/base.interface';
 import {ListBannerResponseType} from '../interface/banner.interface';
 

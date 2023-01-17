@@ -12,7 +12,7 @@ export const listMusician = async (
   props?: ParamsProps,
 ): Promise<ListMusicianResponseType> => {
   const {data} = await SsuAPI().request<ListMusicianResponseType>({
-    url: '/musicians',
+    url: '/top-musician',
     method: 'GET',
     params: props,
   });
@@ -35,7 +35,7 @@ export const followMusician = async (
   props?: FollowMusicianPropsType,
 ): Promise<FollowMusicianResponseType> => {
   const {data} = await SsuAPI().request<FollowMusicianResponseType>({
-    url: '/musicians/follow',
+    url: '/follow',
     method: 'POST',
     data: props,
   });
@@ -47,7 +47,7 @@ export const unfollowMusician = async (
   props?: FollowMusicianPropsType,
 ): Promise<FollowMusicianResponseType> => {
   const {data} = await SsuAPI().request<FollowMusicianResponseType>({
-    url: '/musicians/unfollow',
+    url: '/unfollow',
     method: 'POST',
     data: props,
   });

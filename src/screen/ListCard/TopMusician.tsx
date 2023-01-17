@@ -7,13 +7,12 @@ import {
 } from '../../interface/musician.interface';
 import {heightResponsive} from '../../utils';
 import {ParamsProps} from '../../interface/base.interface';
-import {ListDataSearchMusician} from '../../interface/search.interface';
 import MusicianSection from '../../components/molecule/MusicianSection/MusicianSection';
 
 interface TopMusicianProps {
   type?: string;
   scrollable?: boolean;
-  dataMusician?: MusicianList[] | ListDataSearchMusician[] | null;
+  dataMusician?: MusicianList[];
   setFollowMusician: (
     props?: FollowMusicianPropsType,
     params?: ParamsProps,

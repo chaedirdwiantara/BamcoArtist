@@ -1,12 +1,13 @@
 import {useState} from 'react';
-import {detailSong, listSong} from '../api/song.api';
 import {PostPropsTypeA} from '../interface/feed.interface';
+import {detailSong, listSong, listTopSong} from '../api/song.api';
 import {DataDetailSong, SongList} from '../interface/song.interface';
 
 export const useSongHook = () => {
   const [isLoadingSong, setIsLoadingSong] = useState(false);
   const [isErrorSong, setIsErrorSong] = useState(false);
   const [dataSong, setDataSong] = useState<SongList[]>([]);
+  const [dataTopSong, setDataTopSong] = useState<SongList[]>([]);
   const [dataDetailSong, setDataDetailSong] = useState<DataDetailSong | null>(
     null,
   );
@@ -19,6 +20,19 @@ export const useSongHook = () => {
       console.log(error);
       setIsErrorSong(true);
       setDataSong([]);
+    } finally {
+      setIsLoadingSong(false);
+    }
+  };
+
+  const getListDataTopSong = async () => {
+    try {
+      const response = await listTopSong();
+      setDataTopSong(response.data);
+    } catch (error) {
+      console.log(error);
+      setIsErrorSong(true);
+      setDataTopSong([]);
     } finally {
       setIsLoadingSong(false);
     }
@@ -42,8 +56,10 @@ export const useSongHook = () => {
     isLoadingSong,
     isErrorSong,
     dataSong,
+    dataTopSong,
     dataDetailSong,
     getListDataSong,
+    getListDataTopSong,
     getDetailSong,
   };
 };
