@@ -5,6 +5,9 @@ import ProfileComponent from './ProfileComponent';
 import Photo from './Photo';
 import Album from './Album';
 import {DataDetailMusician} from '../../interface/musician.interface';
+import {useNavigation} from '@react-navigation/native';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {RootStackParams} from '../../navigations';
 
 interface DataMusicianProps {
   profile: DataDetailMusician;
@@ -12,10 +15,19 @@ interface DataMusicianProps {
 
 const DataMusician: FC<DataMusicianProps> = (props: DataMusicianProps) => {
   const {profile} = props;
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParams>>();
 
   const noDataText = 'No information given.';
   const noAlbumText = 'No Album Available.';
   const noMerch = 'No Merch Available';
+
+  const userName = profile?.fullname;
+  const imageData = profile?.photos;
+
+  const handleOnPress = () => {
+    navigation.navigate('PhotoGallery', {imageData, userName});
+  };
 
   return (
     <View style={{width: '100%'}}>
@@ -59,7 +71,11 @@ const DataMusician: FC<DataMusicianProps> = (props: DataMusicianProps) => {
       <Gap height={24} />
       <ProfileComponent title={'Website'} content={profile.website} />
       <Gap height={24} />
-      <Photo title={'Photos'} data={profile.photos} />
+      <Photo
+        title={'Photos'}
+        data={profile.photos}
+        photoOnpress={handleOnPress}
+      />
       <Gap height={24} />
       <Album title={'Album'} data={profile.albums} errorText={noAlbumText} />
       <Gap height={24} />

@@ -6,17 +6,15 @@ import {widthResponsive} from '../../utils';
 import {color, font} from '../../theme';
 import {ms} from 'react-native-size-matters';
 
-interface dataAlbum {
-  imgUri: string;
-}
-
 interface PhotoProps {
   title: string;
-  data: dataAlbum[];
+  data: string[];
+  photoOnpress: () => void;
 }
 
 const Photo: FC<PhotoProps> = (props: PhotoProps) => {
-  const {title, data} = props;
+  const {title, data, photoOnpress} = props;
+
   return (
     <View style={{marginHorizontal: widthResponsive(24), width: '100%'}}>
       <Title text={title} />
@@ -27,49 +25,30 @@ const Photo: FC<PhotoProps> = (props: PhotoProps) => {
             <>
               {data.length <= 4 && (
                 <>
-                  <TouchableOpacity
-                    style={styles.photo}
-                    onPress={() => {}}
-                    testID={`photo${i}`}>
-                    <SquareComp
-                      imgUri={item.imgUri}
-                      size={widthResponsive(76)}
-                    />
-                  </TouchableOpacity>
+                  <SquareComp imgUri={item} size={widthResponsive(76)} />
                   <Gap width={8} />
                 </>
               )}
               {data.length > 4 && i === 3 ? (
-                <View>
-                  <TouchableOpacity
+                <TouchableOpacity onPress={photoOnpress}>
+                  <View
                     style={{
                       backgroundColor: color.Neutral[10],
                       height: widthResponsive(76),
                       width: widthResponsive(76),
                       opacity: 0.2,
                     }}>
-                    <SquareComp
-                      imgUri={item.imgUri}
-                      size={widthResponsive(76)}
-                    />
-                  </TouchableOpacity>
-                  <TouchableOpacity style={styles.textNumberStyle}>
+                    <SquareComp imgUri={item} size={widthResponsive(76)} />
+                  </View>
+                  <View style={styles.textNumberStyle}>
                     <Text style={styles.textPhotos}>{`+${
                       data.length - 3
                     }`}</Text>
-                  </TouchableOpacity>
-                </View>
+                  </View>
+                </TouchableOpacity>
               ) : data.length > 4 && i < 3 ? (
                 <>
-                  <TouchableOpacity
-                    style={styles.photo}
-                    onPress={() => {}}
-                    testID={`photo${i}`}>
-                    <SquareComp
-                      imgUri={item.imgUri}
-                      size={widthResponsive(76)}
-                    />
-                  </TouchableOpacity>
+                  <SquareComp imgUri={item} size={widthResponsive(76)} />
                   <Gap width={8} />
                 </>
               ) : null}
