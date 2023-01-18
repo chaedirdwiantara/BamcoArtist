@@ -387,7 +387,16 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
           }}
           icon={<FriedEggIcon />}
         />
-      ) : null}
+      ) : (
+        <EmptyState
+          text={'No data available'}
+          containerStyle={{
+            justifyContent: 'flex-start',
+            paddingTop: heightPercentage(24),
+          }}
+          icon={<FriedEggIcon />}
+        />
+      )}
       <CommentInputModal
         toggleModal={() => setInputCommentModal(!inputCommentModal)}
         modalVisible={inputCommentModal}

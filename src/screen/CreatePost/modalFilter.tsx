@@ -12,6 +12,7 @@ import {color, font} from '../../theme';
 import {heightPercentage, heightResponsive, widthResponsive} from '../../utils';
 import {DataDropDownType} from '../../data/dropdown';
 import {ms, mvs} from 'react-native-size-matters';
+import {heightPercentageToDP} from 'react-native-responsive-screen';
 
 export const {width} = Dimensions.get('screen');
 
@@ -66,17 +67,20 @@ export default FilterModal;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    backgroundColor: color.Pink[100],
+    borderColor: color.Pink[100],
+    width: 150,
     alignItems: 'flex-start',
-    marginTop: heightResponsive(96),
+    position: 'absolute',
+    top: heightPercentageToDP('13%'),
     marginLeft: widthResponsive(70),
-    borderRadius: 4,
   },
   textContainer: {
     backgroundColor: color.Pink[100],
     justifyContent: 'center',
     paddingHorizontal: ms(13),
     paddingVertical: mvs(6),
+    borderColor: color.Pink[100],
   },
   textFilter: {
     fontSize: mvs(10),

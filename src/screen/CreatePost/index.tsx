@@ -217,6 +217,7 @@ const CreatePost = () => {
                 }}
                 textStyles={{}}
                 onPress={handlePostOnPress}
+                disabled
               />
             ) : (
               <ButtonGradient
@@ -305,7 +306,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   dropdownContainer: {
-    width: widthResponsive(95),
+    width: widthResponsive(100),
   },
   placeHolderStyle: {
     color: color.Neutral[10],

@@ -375,7 +375,15 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
             paddingTop: heightPercentage(24),
           }}
         />
-      ) : null}
+      ) : (
+        <EmptyState
+          text={'No data available'}
+          containerStyle={{
+            justifyContent: 'flex-start',
+            paddingTop: heightPercentage(24),
+          }}
+        />
+      )}
       <CommentInputModal
         toggleModal={() => setInputCommentModal(!inputCommentModal)}
         modalVisible={inputCommentModal}
