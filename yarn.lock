@@ -1022,6 +1022,13 @@
   optionalDependencies:
     node-notifier "^8.0.0"
 
+"@jest/schemas@^29.0.0":
+  version "29.0.0"
+  resolved "https://registry.yarnpkg.com/@jest/schemas/-/schemas-29.0.0.tgz#5f47f5994dd4ef067fb7b4188ceac45f77fe952a"
+  integrity sha512-3Ab5HgYIIAnS0HjqJHQYZS+zXc4tUmTmBH3z83ajI6afXp8X3ZtdLX+nXx+I7LNkJD7uN9LAVhgnjDgZa2z0kA==
+  dependencies:
+    "@sinclair/typebox" "^0.24.1"
+
 "@jest/source-map@^26.6.2":
   version "26.6.2"
   resolved "https://registry.yarnpkg.com/@jest/source-map/-/source-map-26.6.2.tgz#29af5e1e2e324cafccc936f218309f54ab69d535"
@@ -1466,6 +1473,11 @@
   resolved "https://registry.yarnpkg.com/@sideway/pinpoint/-/pinpoint-2.0.0.tgz#cff8ffadc372ad29fd3f78277aeb29e632cc70df"
   integrity sha512-RNiOoTPkptFtSVzQevY/yWtZwf/RxyVnPy/OcA9HBM3MlGDnBEYL5B41H0MTn0Uec8Hi+2qUtTfG2WWZBmMejQ==
 
+"@sinclair/typebox@^0.24.1":
+  version "0.24.51"
+  resolved "https://registry.yarnpkg.com/@sinclair/typebox/-/typebox-0.24.51.tgz#645f33fe4e02defe26f2f5c0410e1c094eac7f5f"
+  integrity sha512-1P1OROm/rdubP5aFDSZQILU0vrLCJ4fvHt6EoqHEM+2D/G5MK3bIaymUKLit8Js9gbns5UyJnkP/TZROLw4tUA==
+
 "@sinonjs/commons@^1.7.0":
   version "1.8.6"
   resolved "https://registry.yarnpkg.com/@sinonjs/commons/-/commons-1.8.6.tgz#80c516a4dc264c2a69115e7578d62581ff455ed9"
@@ -1479,6 +1491,13 @@
   integrity sha512-MZPUxrmFubI36XS1DI3qmI0YdN1gks62JtFZvxR67ljjSNCeK6U08Zx4msEWOXuofgqUt6zPHSi1H9fbjR/NRA==
   dependencies:
     "@sinonjs/commons" "^1.7.0"
+
+"@testing-library/react-native@^11.5.0":
+  version "11.5.0"
+  resolved "https://registry.yarnpkg.com/@testing-library/react-native/-/react-native-11.5.0.tgz#b043c5db7b15eca42a65e95d3f3ae196fab9493b"
+  integrity sha512-seV+qebsbX4E5CWk/wizU1+2wVLsPyqEzG7sTgrhJ81cgAawg7ay06fIZR9IS75pDeWn2KZVd4mGk1pjJ3i3Zw==
+  dependencies:
+    pretty-format "^29.0.0"
 
 "@tootallnate/once@1":
   version "1.1.2"
@@ -1591,6 +1610,21 @@
   version "15.7.5"
   resolved "https://registry.yarnpkg.com/@types/prop-types/-/prop-types-15.7.5.tgz#5f19d2b85a98e9558036f6a3cacc8819420f05cf"
   integrity sha512-JCB8C6SnDoQf0cNycqd/35A7MjcnK+ZTqE7judS6o7utxUCg6imJg3QK2qzHKszlTjcj2cn+NwMB2i96ubpj7w==
+
+"@types/react-native-video@^5.0.14":
+  version "5.0.14"
+  resolved "https://registry.yarnpkg.com/@types/react-native-video/-/react-native-video-5.0.14.tgz#275d08f836280ace088462b2cb267925a6a915f3"
+  integrity sha512-KdcyY4HY/Q1l6f5qQA337BNVN+GsdZy836j9CXbWHZ008VVNzSlnJypJQPsnUgI0EPBw/uG/lyJk6cg9Jj1syg==
+  dependencies:
+    "@types/react" "*"
+    "@types/react-native" "*"
+
+"@types/react-native@*":
+  version "0.71.0"
+  resolved "https://registry.yarnpkg.com/@types/react-native/-/react-native-0.71.0.tgz#a6f4d2d6c3730e86ceef0870d3cf221a54ec94c2"
+  integrity sha512-4MAoseGM8zv5PKQyc2SvKldvOmCJX4mNqj+mDqh0J9yJMzWQnGenk2vQCi+jxMXa3xWYIgx+ewaCSw0XiiGGSw==
+  dependencies:
+    "@types/react" "*"
 
 "@types/react-native@^0.70.6":
   version "0.70.8"
@@ -1931,6 +1965,11 @@ ansi-styles@^4.0.0, ansi-styles@^4.1.0:
   integrity sha512-zbB9rCJAT1rbjiVDb2hqKFHNYLxgtk8NURxZ3IZwD3F6NtxbXZQCnnSi1Lkx+IDohdPlFp222wVALIheZJQSEg==
   dependencies:
     color-convert "^2.0.1"
+
+ansi-styles@^5.0.0:
+  version "5.2.0"
+  resolved "https://registry.yarnpkg.com/ansi-styles/-/ansi-styles-5.2.0.tgz#07449690ad45777d1924ac2abb2fc8895dba836b"
+  integrity sha512-Cxwpt2SfTzTtXcfOlzGEee8O+c+MmUgGrNiBcXnuWxuFJHe6a5Hz7qwhwe5OgaSYI0IJvkLqWX1ASG+cJOkEiA==
 
 anymatch@^2.0.0:
   version "2.0.0"
@@ -6123,6 +6162,15 @@ pretty-format@^26.0.0, pretty-format@^26.5.2, pretty-format@^26.6.2:
     ansi-styles "^4.0.0"
     react-is "^17.0.1"
 
+pretty-format@^29.0.0:
+  version "29.3.1"
+  resolved "https://registry.yarnpkg.com/pretty-format/-/pretty-format-29.3.1.tgz#1841cac822b02b4da8971dacb03e8a871b4722da"
+  integrity sha512-FyLnmb1cYJV8biEIiRyzRFvs2lry7PPIvOqKVe1GCUEYg4YGmlx1qG9EJNMxArYm7piII4qb8UV1Pncq5dxmcg==
+  dependencies:
+    "@jest/schemas" "^29.0.0"
+    ansi-styles "^5.0.0"
+    react-is "^18.0.0"
+
 process-nextick-args@~2.0.0:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/process-nextick-args/-/process-nextick-args-2.0.1.tgz#7820d9b16120cc55ca9ae7792680ae7dba6d7fe2"
@@ -6223,7 +6271,7 @@ react-hook-form@^7.39.1:
   resolved "https://registry.yarnpkg.com/react-hook-form/-/react-hook-form-7.41.5.tgz#dcd0e7438c15044eadc99df6deb889da5858a03b"
   integrity sha512-DAKjSJ7X9f16oQrP3TW2/eD9N6HOgrmIahP4LOdFphEWVfGZ2LulFd6f6AQ/YS/0cx/5oc4j8a1PXxuaurWp/Q==
 
-"react-is@^16.12.0 || ^17.0.0 || ^18.0.0", react-is@^18.1.0:
+"react-is@^16.12.0 || ^17.0.0 || ^18.0.0", react-is@^18.0.0, react-is@^18.1.0:
   version "18.2.0"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-18.2.0.tgz#199431eeaaa2e09f86427efbb4f1473edb47609b"
   integrity sha512-xWGDIW6x921xtzPkhiULtthJHoJvBbF3q26fzloPCK0hsvxtPVelvftw3zjbHWSkR2km9Z+4uxbDDK/6Zw9B8w==
