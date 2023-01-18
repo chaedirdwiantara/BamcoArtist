@@ -71,8 +71,6 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
   const [modalSuccessDonate, setModalSuccessDonate] = useState<boolean>(false);
   const [trigger2ndModal, setTrigger2ndModal] = useState<boolean>(false);
 
-  console.log('uuidMusician', uuidMusician);
-
   const {
     feedIsLoading,
     feedIsError,

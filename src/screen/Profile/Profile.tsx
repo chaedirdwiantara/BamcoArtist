@@ -89,10 +89,6 @@ export const ProfileScreen: React.FC<ProfileProps> = (props: ProfileProps) => {
     navigation.navigate('Playlist', {id});
   };
 
-  console.log('dataAlbum', dataAlbum);
-  console.log('dataDetailMusician', dataDetailMusician);
-  console.log('uuid', uuid);
-
   const profile = {
     fullname: dataProfile?.data.fullname,
     username: '@' + dataProfile?.data.username,
