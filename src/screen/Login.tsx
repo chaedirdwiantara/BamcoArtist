@@ -145,9 +145,7 @@ export const LoginScreen: React.FC = () => {
   useEffect(() => {
     if (!isLoading && !isError) {
       if (
-        (watch('loginType') !== 'phoneNumber' &&
-          ssoRegistered === null &&
-          loginResult !== null) ||
+        (watch('loginType') === 'email' && loginResult !== null) ||
         (watch('loginType') === 'phoneNumber' &&
           ssoRegistered !== null &&
           loginResult !== null)
