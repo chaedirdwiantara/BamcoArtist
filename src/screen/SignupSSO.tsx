@@ -64,8 +64,14 @@ export const SignupSSOScreen: React.FC<RegisterProps> = ({
   navigation,
   route,
 }: RegisterProps) => {
-  const {isLoading, isError, authResult, errorMsg, onRegisterUser} =
-    useAuthHook();
+  const {
+    isLoading,
+    isError,
+    authResult,
+    errorMsg,
+    onRegisterUser,
+    setSsoRegistered,
+  } = useAuthHook();
   const [focusInput, setFocusInput] = useState<string | null>(null);
 
   const {
@@ -112,6 +118,11 @@ export const SignupSSOScreen: React.FC<RegisterProps> = ({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoading, isError, authResult]);
+
+  useEffect(() => {
+    setSsoRegistered(null);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleOnPressBack = () => {
     navigation.goBack();
