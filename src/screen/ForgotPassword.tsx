@@ -5,6 +5,8 @@ import {
   Text,
   View,
   BackHandler,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
 import React, {FC, useEffect, useState} from 'react';
 import {color, font} from '../theme';
@@ -376,31 +378,35 @@ export const ForgotPassword: FC = () => {
   };
 
   return (
-    <View style={styles.root}>
-      <Image
-        source={require('../assets/background/signin-guest.png')}
-        style={styles.image}
-      />
-      <SsuSheet
-        children={
-          watch('page') === 'otp'
-            ? otp()
-            : watch('page') === 'newPass'
-            ? newPass()
-            : watch('page') === 'emailInput'
-            ? emailInput()
-            : emailInput()
-        }
-      />
-      <ModalLoading visible={isLoading} />
-      <ModalConfirm
-        modalVisible={isModalVisible.modalConfirm}
-        title="Set New Password"
-        subtitle="Are you sure you want to leave your progress unsaved?"
-        onPressClose={closeModal}
-        onPressOk={onPressConfirm}
-      />
-    </View>
+    <KeyboardAvoidingView
+      style={{flex: 1}}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+      <View style={styles.root}>
+        <Image
+          source={require('../assets/background/signin-guest.png')}
+          style={styles.image}
+        />
+        <SsuSheet
+          children={
+            watch('page') === 'otp'
+              ? otp()
+              : watch('page') === 'newPass'
+              ? newPass()
+              : watch('page') === 'emailInput'
+              ? emailInput()
+              : emailInput()
+          }
+        />
+        <ModalLoading visible={isLoading} />
+        <ModalConfirm
+          modalVisible={isModalVisible.modalConfirm}
+          title="Set New Password"
+          subtitle="Are you sure you want to leave your progress unsaved?"
+          onPressClose={closeModal}
+          onPressOk={onPressConfirm}
+        />
+      </View>
+    </KeyboardAvoidingView>
   );
 };
 
