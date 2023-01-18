@@ -62,14 +62,6 @@ export const ProfileScreen: React.FC<ProfileProps> = (props: ProfileProps) => {
     useCallback(() => {
       if (uuid) {
         getDetailMusician({id: uuid});
-      }
-    }, [uuid]),
-  );
-
-  //  ? Get Album Musician
-  useFocusEffect(
-    useCallback(() => {
-      if (uuid) {
         getAlbum({uuid: uuid});
       }
     }, [uuid]),
