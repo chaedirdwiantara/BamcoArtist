@@ -6,7 +6,7 @@ import {
   Text,
   Animated,
 } from 'react-native';
-import React, {useEffect, useRef, useState} from 'react';
+import React, {FC, useEffect, useRef, useState} from 'react';
 import {color, font} from '../../theme';
 import {ModalDonate, ModalSuccessDonate, SsuStatusBar} from '../../components';
 import {heightResponsive, widthResponsive} from '../../utils';
@@ -18,10 +18,14 @@ import {Slider} from '@miblanchard/react-native-slider';
 import {mvs} from 'react-native-size-matters';
 import {songs, SongsProps} from '../../data/music';
 import {usePlayerHook} from '../../hooks/use-player.hook';
+import {RootStackParams} from '../../navigations';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
 
 export const {width} = Dimensions.get('screen');
 
-export const MusicPlayer = () => {
+type MusicProps = NativeStackScreenProps<RootStackParams, 'MusicPlayer'>;
+
+export const MusicPlayer: FC<MusicProps> = ({navigation}: MusicProps) => {
   const scrollX = useRef(new Animated.Value(0)).current;
   const [songIndex, setSongIndex] = useState<number>(0);
   const [modalDonate, setModalDonate] = useState<boolean>(false);
@@ -64,6 +68,10 @@ export const MusicPlayer = () => {
     setModalSuccessDonate(false);
   };
 
+  const artistOnPress = () => {
+    navigation.navigate('MusicianProfile', {id: musicData.musicianId});
+  };
+
   return (
     <View style={styles.container}>
       <SsuStatusBar type="black" />
@@ -92,6 +100,7 @@ export const MusicPlayer = () => {
           title={musicData.title}
           artist={musicData.artist}
           coinOnPress={coinOnPress}
+          artistOnPress={artistOnPress}
         />
       </View>
       {/* slider */}

@@ -27,12 +27,16 @@ export const ModalPlayMusic: React.FC<ModalPlayMusicProps> = ({
     currentProgress,
     duration,
     isPlay,
+    repeat,
+    playlist,
     setPlayerRef,
     hidePlayer,
     setDurationPlayer,
     setProgressPlayer,
     setPauseSong,
     setPlaySong,
+    seekPlayer,
+    setNextPrevTrack,
   } = usePlayerHook();
   const playRef = useRef<Video | null>(null);
 
@@ -111,22 +115,39 @@ export const ModalPlayMusic: React.FC<ModalPlayMusicProps> = ({
           ]}
         />
       </View>
-      <Video
-        ref={playRef}
-        source={{
-          uri: 'https://storage.googleapis.com/media-ssu/uploads/22222/encoded/190ecdcb42f4/master.m3u8',
-        }}
-        onLoad={e => {
-          setDurationPlayer(e.duration);
-        }}
-        onProgress={e => {
-          setProgressPlayer(e.currentTime);
-        }}
-        paused={!isPlay}
-        onEnd={() => {
-          setPauseSong();
-        }}
-      />
+      {musicData.musicUrl !== '' && (
+        <Video
+          ref={playRef}
+          source={{
+            uri: musicData.musicUrl,
+          }}
+          onLoad={e => {
+            seekPlayer(0);
+            setDurationPlayer(e.duration);
+          }}
+          onProgress={e => {
+            setProgressPlayer(e.currentTime);
+          }}
+          paused={!isPlay}
+          repeat={
+            musicData?.id < playlist[playlist?.length - 1]?.id ||
+            repeat !== 'off'
+          }
+          // playInBackground={true}
+          // ignoreSilentSwitch={'ignore'}
+          onEnd={() => {
+            if (
+              (playlist.length > 0 &&
+                musicData.id < playlist[playlist.length - 1].id) ||
+              repeat !== 'off'
+            ) {
+              if (repeat === 'all') {
+                setNextPrevTrack('next');
+              }
+            }
+          }}
+        />
+      )}
     </Portal>
   );
 };
