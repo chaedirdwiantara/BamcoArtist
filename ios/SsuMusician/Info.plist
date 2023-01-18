@@ -72,5 +72,17 @@
 		<string>Inter-SemiBold.ttf</string>
 		<string>Inter-Thin.ttf</string>
 	</array>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.234390427761-i2k4uvvnlcepmt8p3q9oouc60pr4j39t</string>
+				<string>fb687852656020966</string>
+			</array>
+		</dict>
+	</array>
 </dict>
 </plist>
