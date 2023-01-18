@@ -71,6 +71,8 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
   const [modalSuccessDonate, setModalSuccessDonate] = useState<boolean>(false);
   const [trigger2ndModal, setTrigger2ndModal] = useState<boolean>(false);
 
+  console.log('uuidMusician', uuidMusician);
+
   const {
     feedIsLoading,
     feedIsError,
@@ -375,7 +377,15 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
             paddingTop: heightPercentage(24),
           }}
         />
-      ) : null}
+      ) : (
+        <EmptyState
+          text={'No data available'}
+          containerStyle={{
+            justifyContent: 'flex-start',
+            paddingTop: heightPercentage(24),
+          }}
+        />
+      )}
       <CommentInputModal
         toggleModal={() => setInputCommentModal(!inputCommentModal)}
         modalVisible={inputCommentModal}

@@ -14,6 +14,7 @@ import {usePlayerHook} from '../../hooks/use-player.hook';
 import {useProfileHook} from '../../hooks/use-profile.hook';
 import {GuestContent, ProfileContent} from '../../components';
 import {usePlaylistHook} from '../../hooks/use-playlist.hook';
+import {useMusicianHook} from '../../hooks/use-musician.hook';
 
 interface ProfileProps {
   props: {};
@@ -29,6 +30,15 @@ export const ProfileScreen: React.FC<ProfileProps> = (props: ProfileProps) => {
   const isLogin = storage.getString('profile');
   const isFocused = useIsFocused();
   const {isPlay, showPlayer, hidePlayer} = usePlayerHook();
+
+  const {
+    isLoading,
+    isError,
+    dataDetailMusician,
+    dataAlbum,
+    getDetailMusician,
+    getAlbum,
+  } = useMusicianHook();
 
   useEffect(() => {
     if (isFocused && isPlay) {
@@ -47,6 +57,24 @@ export const ProfileScreen: React.FC<ProfileProps> = (props: ProfileProps) => {
 
   const uuid = dataProfile?.data.uuid;
 
+  //  ? Get Detail Musician
+  useFocusEffect(
+    useCallback(() => {
+      if (uuid) {
+        getDetailMusician({id: uuid});
+      }
+    }, [uuid]),
+  );
+
+  //  ? Get Album Musician
+  useFocusEffect(
+    useCallback(() => {
+      if (uuid) {
+        getAlbum({uuid: uuid});
+      }
+    }, [uuid]),
+  );
+
   const onPressGoTo = (
     screenName: 'Setting' | 'Following' | 'CreateNewPlaylist',
   ) => {
@@ -60,6 +88,10 @@ export const ProfileScreen: React.FC<ProfileProps> = (props: ProfileProps) => {
   const goToPlaylist = (id: number) => {
     navigation.navigate('Playlist', {id});
   };
+
+  console.log('dataAlbum', dataAlbum);
+  console.log('dataDetailMusician', dataDetailMusician);
+  console.log('uuid', uuid);
 
   const profile = {
     fullname: dataProfile?.data.fullname,
@@ -84,6 +116,9 @@ export const ProfileScreen: React.FC<ProfileProps> = (props: ProfileProps) => {
           goToEditProfile={goToEditProfile}
           onPressGoTo={screenName => onPressGoTo(screenName)}
           uuid={uuid}
+          dataAlbum={dataAlbum}
+          dataDetailMusician={dataDetailMusician}
+          ownProfile
         />
       ) : (
         <GuestContent />
