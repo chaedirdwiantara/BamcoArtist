@@ -115,6 +115,7 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
           iconPress={() => onPressGoTo('Setting')}
           scrollEffect={scrollEffect}
           noEdit={!ownProfile}
+          backIcon={!ownProfile}
         />
         <UserInfoCard
           type={ownProfile ? '' : 'self'}
