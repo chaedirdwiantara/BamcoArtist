@@ -1,4 +1,4 @@
-import SsuAPI from './base';
+import SsuAPI from './baseMusician';
 import {AddRemoveFcmResponseType} from '../interface/fcm.interface';
 
 export const addTokenFcm = async (

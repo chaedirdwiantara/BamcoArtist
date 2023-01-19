@@ -9,22 +9,29 @@ interface TitleAndDonateProps {
   artist: string;
   albumName?: string;
   coinOnPress: () => void;
+  artistOnPress: () => void;
 }
 
 const TitleAndDonate: FC<TitleAndDonateProps> = (
   props: TitleAndDonateProps,
 ) => {
-  const {title, artist, albumName, coinOnPress} = props;
+  const {title, artist, albumName, coinOnPress, artistOnPress} = props;
   return (
     <View style={styles.container}>
       <View>
         <Text style={styles.title} numberOfLines={1}>
           {title}
         </Text>
-        <Text style={styles.subTitle} numberOfLines={1}>
-          {artist}
-          {albumName && `, ${albumName}`}
-        </Text>
+        <View style={styles.subTitleContainer}>
+          <TouchableOpacity onPress={artistOnPress}>
+            <Text style={styles.subTitle} numberOfLines={1}>
+              {artist}
+            </Text>
+          </TouchableOpacity>
+          <Text style={styles.subTitle} numberOfLines={1}>
+            {albumName && `, ${albumName}`}
+          </Text>
+        </View>
       </View>
       <View style={styles.iconStyle}>
         <TouchableOpacity onPress={coinOnPress}>
@@ -53,6 +60,9 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     fontSize: mvs(15),
     color: color.Dark[50],
+  },
+  subTitleContainer: {
+    flexDirection: 'row',
   },
   iconStyle: {
     justifyContent: 'center',

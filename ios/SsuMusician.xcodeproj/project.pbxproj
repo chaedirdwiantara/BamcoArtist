@@ -16,7 +16,7 @@
 		2462763A84754F95AF0C3AF8 /* Inter-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F09F402CC72444A38FF0CF8E /* Inter-Light.ttf */; };
 		272114BE12624544A2E591E6 /* Inter-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 37648E08918747618FE5645D /* Inter-ExtraBold.ttf */; };
 		3E96E73221594A88B36D7E76 /* Inter-ExtraLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 88E8F0BFD83847D8B84E9716 /* Inter-ExtraLight.ttf */; };
-		4613C2AC296842FD00A01E6D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4613C2AB296842FD00A01E6D /* GoogleService-Info.plist */; };
+		46894671297813D800B278C0 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 46894670297813D800B278C0 /* GoogleService-Info.plist */; };
 		7699B88040F8A987B510C191 /* libPods-SsuMusician-SsuMusicianTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-SsuMusician-SsuMusicianTests.a */; };
 		79A065ECE0804D9BA17CEF18 /* Inter-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B987D2CF93DA4637A230ABA5 /* Inter-Black.ttf */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
@@ -51,7 +51,7 @@
 		3732AA36C46146FDA85A0BDA /* Inter-Thin.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-Thin.ttf"; path = "../src/assets/fonts/Inter-Thin.ttf"; sourceTree = "<group>"; };
 		37648E08918747618FE5645D /* Inter-ExtraBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-ExtraBold.ttf"; path = "../src/assets/fonts/Inter-ExtraBold.ttf"; sourceTree = "<group>"; };
 		3B4392A12AC88292D35C810B /* Pods-SsuMusician.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SsuMusician.debug.xcconfig"; path = "Target Support Files/Pods-SsuMusician/Pods-SsuMusician.debug.xcconfig"; sourceTree = "<group>"; };
-		4613C2AB296842FD00A01E6D /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../GoogleService-Info.plist"; sourceTree = "<group>"; };
+		46894670297813D800B278C0 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../GoogleService-Info.plist"; sourceTree = "<group>"; };
 		46914D7429683122003AE31D /* SsuMusician.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = SsuMusician.entitlements; path = SsuMusician/SsuMusician.entitlements; sourceTree = "<group>"; };
 		5709B34CF0A7D63546082F79 /* Pods-SsuMusician.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SsuMusician.release.xcconfig"; path = "Target Support Files/Pods-SsuMusician/Pods-SsuMusician.release.xcconfig"; sourceTree = "<group>"; };
 		5B7EB9410499542E8C5724F5 /* Pods-SsuMusician-SsuMusicianTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SsuMusician-SsuMusicianTests.debug.xcconfig"; path = "Target Support Files/Pods-SsuMusician-SsuMusicianTests/Pods-SsuMusician-SsuMusicianTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -138,7 +138,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				4613C2AB296842FD00A01E6D /* GoogleService-Info.plist */,
+				46894670297813D800B278C0 /* GoogleService-Info.plist */,
 				13B07FAE1A68108700A75B9A /* SsuMusician */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* SsuMusicianTests */,
@@ -288,7 +288,7 @@
 				79A065ECE0804D9BA17CEF18 /* Inter-Black.ttf in Resources */,
 				8B08F56D82FC464CBA91CAC6 /* Inter-Bold.ttf in Resources */,
 				272114BE12624544A2E591E6 /* Inter-ExtraBold.ttf in Resources */,
-				4613C2AC296842FD00A01E6D /* GoogleService-Info.plist in Resources */,
+				46894671297813D800B278C0 /* GoogleService-Info.plist in Resources */,
 				3E96E73221594A88B36D7E76 /* Inter-ExtraLight.ttf in Resources */,
 				2462763A84754F95AF0C3AF8 /* Inter-Light.ttf in Resources */,
 				16823C3E7BC7412289DAE749 /* Inter-Medium.ttf in Resources */,

@@ -5,21 +5,27 @@ import {heightResponsive, widthResponsive} from '../../utils';
 import {color, font} from '../../theme';
 import {ms} from 'react-native-size-matters';
 import SquareComp from './SquareComp';
-
-interface dataAlbum {
-  albumTitle: string;
-  artistName: string;
-  imgUri: string;
-}
+import {AlbumData} from '../../interface/musician.interface';
+import {useNavigation} from '@react-navigation/native';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {RootStackParams} from '../../navigations';
 
 interface AlbumProps {
   title: string;
-  data: dataAlbum[];
+  data: AlbumData[];
   errorText: string;
+  artistName: string;
 }
 
 const Album: FC<AlbumProps> = (props: AlbumProps) => {
-  const {title, data, errorText} = props;
+  const {title, data, errorText, artistName} = props;
+
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParams>>();
+
+  const handleToDetail = (dataAlbum: AlbumData) => {
+    navigation.navigate('Album', dataAlbum);
+  };
 
   return (
     <View style={{marginHorizontal: widthResponsive(24)}}>
@@ -30,16 +36,16 @@ const Album: FC<AlbumProps> = (props: AlbumProps) => {
           {data.map((item, i) => (
             <TouchableOpacity
               style={styles.container}
-              onPress={() => {}}
+              onPress={() => handleToDetail(item)}
               testID={`album${i}`}>
-              <SquareComp imgUri={item.imgUri} size={widthResponsive(56)} />
+              <SquareComp imgUri={item.imageUrl} size={widthResponsive(56)} />
               <View style={styles.textContainer}>
                 <Text style={styles.songTitle} numberOfLines={1}>
-                  {item.albumTitle}
+                  {item.title}
                 </Text>
                 <Gap height={4} />
                 <Text style={styles.songDesc} numberOfLines={1}>
-                  {item.artistName}
+                  {`by ${artistName}`}
                 </Text>
               </View>
               {/* <Dropdown.More

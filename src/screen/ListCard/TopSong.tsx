@@ -4,12 +4,11 @@ import {mvs} from 'react-native-size-matters';
 import {FlashList} from '@shopify/flash-list';
 import {SongList} from '../../interface/song.interface';
 import {elipsisText, heightResponsive} from '../../utils';
-import {ListDataSearchSongs} from '../../interface/search.interface';
 
 interface TopSongPropsScreen {
   type?: string;
   onPress: (param: any) => void;
-  dataSong?: SongList[] | ListDataSearchSongs[] | null;
+  dataSong?: SongList[];
   scrollable?: boolean;
   hideDropdownMore?: boolean;
   rightIcon?: boolean;

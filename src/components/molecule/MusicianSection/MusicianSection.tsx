@@ -15,7 +15,7 @@ import {
 import {color, font} from '../../../theme';
 import {RootStackParams} from '../../../navigations';
 import {CheckCircle2Icon} from '../../../assets/icon';
-import {storage} from '../../../hooks/use-storage.hook';
+import {profileStorage, storage} from '../../../hooks/use-storage.hook';
 import {heightPercentage, normalize, widthResponsive} from '../../../utils';
 
 interface MusicianProps {
@@ -47,10 +47,15 @@ const MusicianSection: React.FC<MusicianProps> = (props: MusicianProps) => {
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
   const isLogin = storage.getString('profile');
   const dataMore = [
-    // {label: dropdownText, value: '1'},
+    {label: dropdownText, value: '1'},
     {label: 'Send Donation', value: '2'},
     {label: 'Go To Musician', value: '3'},
   ];
+  const newDataMore =
+    musicianId === profileStorage()?.uuid
+      ? dataMore.filter(val => val.value !== '1')
+      : dataMore;
+
   const [toastVisible, setToastVisible] = useState(false);
   const [modalDonate, setModalDonate] = useState<boolean>(false);
   const [modalSuccessDonate, setModalSuccessDonate] = useState<boolean>(false);
@@ -82,7 +87,9 @@ const MusicianSection: React.FC<MusicianProps> = (props: MusicianProps) => {
         setModalGuestVisible(true);
       }
     } else if (dataResult.value === '3') {
-      navigation.navigate('MusicianProfile', {id: musicianId});
+      musicianId === profileStorage()?.uuid
+        ? navigation.navigate('Profile')
+        : navigation.navigate('MusicianProfile', {id: musicianId});
     } else {
       if (isLogin) {
         setModalDonate(true);
@@ -101,11 +108,14 @@ const MusicianSection: React.FC<MusicianProps> = (props: MusicianProps) => {
     setModalSuccessDonate(false);
   };
 
+  const self = musicianId === profileStorage()?.uuid;
+
   return (
     <>
       <ListCard.MusicianList
-        dataFilter={dataMore}
+        dataFilter={newDataMore}
         onPressMore={resultDataMore}
+        activeMore={!self}
         {...props}
       />
       <ModalDonate

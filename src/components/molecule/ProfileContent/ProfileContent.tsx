@@ -14,6 +14,7 @@ import {
   normalize,
   widthPercentage,
   heightPercentage,
+  widthResponsive,
 } from '../../../utils';
 import {font} from '../../../theme';
 import {TabFilter} from '../TabFilter';
@@ -26,6 +27,14 @@ import {UserInfoCard} from '../UserInfoCard/UserInfoCard';
 import {CreateNewCard} from '../CreateNewCard/CreateNewCard';
 import {Playlist} from '../../../interface/playlist.interface';
 import ListPlaylist from '../../../screen/ListCard/ListPlaylist';
+import {
+  AlbumData,
+  DataDetailMusician,
+} from '../../../interface/musician.interface';
+import DataMusician from '../../../screen/MusicianProfile/DataMusician';
+import PostListPublic from '../../../screen/ListCard/PostListPublic';
+import PostListExclusive from '../../../screen/ListCard/PostListExclusive';
+import {dropDownDataCategory, dropDownDataSort} from '../../../data/dropdown';
 
 type OnScrollEventHandler = (
   event: NativeSyntheticEvent<NativeScrollEvent>,
@@ -35,10 +44,14 @@ interface ProfileContentProps {
   profile: any;
   goToEditProfile: () => void;
   goToPlaylist: (id: number) => void;
-  dataPlaylist: Playlist[];
+  dataPlaylist?: Playlist[];
   onPressGoTo: (
     screenName: 'Setting' | 'Following' | 'CreateNewPlaylist',
   ) => void;
+  uuid?: string;
+  dataAlbum?: AlbumData[];
+  dataDetailMusician?: DataDetailMusician;
+  ownProfile?: boolean;
 }
 
 export const ProfileContent: React.FC<ProfileContentProps> = ({
@@ -47,6 +60,10 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
   goToPlaylist,
   onPressGoTo,
   dataPlaylist,
+  uuid,
+  dataAlbum,
+  dataDetailMusician,
+  ownProfile = false,
 }) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [scrollEffect, setScrollEffect] = useState(false);
@@ -55,6 +72,15 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
     {filterName: 'TOP MUSICIAN'},
     {filterName: 'BADGE'},
   ]);
+
+  const [filter2] = useState([
+    {filterName: 'PROFILE'},
+    {filterName: 'POST'},
+    {filterName: 'EXCLUSIVE'},
+    {filterName: 'MUSIC'},
+    {filterName: 'FANS'},
+  ]);
+
   const filterData = (item: any, index: any) => {
     setSelectedIndex(index);
   };
@@ -88,27 +114,23 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
           onPress={goToEditProfile}
           iconPress={() => onPressGoTo('Setting')}
           scrollEffect={scrollEffect}
+          noEdit={!ownProfile}
         />
         <UserInfoCard
-          type="self"
+          type={ownProfile ? '' : 'self'}
           containerStyles={styles.infoCard}
           totalFollowing={profile.totalFollowing}
           onPress={() => onPressGoTo('Following')}
         />
         <View style={styles.containerContent}>
           <TabFilter.Type1
-            filterData={filter}
+            filterData={ownProfile ? filter2 : filter}
             onPress={filterData}
             selectedIndex={selectedIndex}
           />
-          {filter[selectedIndex].filterName === 'PLAYLIST' ? (
+          {!ownProfile && filter[selectedIndex].filterName === 'PLAYLIST' ? (
             TopSongListData.length > 0 ? (
               <View>
-                <CreateNewCard
-                  num="00"
-                  text="Create New Playlist"
-                  onPress={() => onPressGoTo('CreateNewPlaylist')}
-                />
                 <ListPlaylist
                   data={dataPlaylist}
                   onPress={goToPlaylist}
@@ -122,7 +144,8 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
                 onPress={() => onPressGoTo('CreateNewPlaylist')}
               />
             )
-          ) : filter[selectedIndex].filterName === 'TOP MUSICIAN' ? (
+          ) : !ownProfile &&
+            filter[selectedIndex].filterName === 'TOP MUSICIAN' ? (
             // Dihold karena point belum fix
 
             // MusicianListData.length > 0 ? (
@@ -136,19 +159,47 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
               text="You don't have contribution to any musician"
               containerStyle={{marginTop: heightPercentage(30)}}
             />
-          ) : (
-            // Dihold karena badge belum fix
+          ) : // Dihold karena badge belum fix
 
-            // MusicianListData.length > 0 ? (
-            //   <MenuText.LeftIconWithSubtitle
-            //     text="No Room for Speed"
-            //     subtitle="Be the first jam contributor on 100 artist"
-            //     onPress={() => null}
-            //     icon={<ProcessingIcon />}
-            //   />
-            // ) :
+          // MusicianListData.length > 0 ? (
+          //   <MenuText.LeftIconWithSubtitle
+          //     text="No Room for Speed"
+          //     subtitle="Be the first jam contributor on 100 artist"
+          //     onPress={() => null}
+          //     icon={<ProcessingIcon />}
+          //   />
+          // ) :
+          null}
+          {ownProfile &&
+          dataDetailMusician &&
+          dataAlbum &&
+          filter2[selectedIndex].filterName === 'PROFILE' ? (
+            <DataMusician profile={dataDetailMusician} dataAlbum={dataAlbum} />
+          ) : filter2[selectedIndex].filterName === 'POST' ? (
+            <View
+              style={{
+                width: '100%',
+              }}>
+              <PostListPublic
+                uuidMusician={uuid}
+                dataRightDropdown={dropDownDataCategory}
+                dataLeftDropdown={dropDownDataSort}
+              />
+            </View>
+          ) : filter2[selectedIndex].filterName === 'EXCLUSIVE' ? (
+            <View
+              style={{
+                width: '100%',
+              }}>
+              <PostListExclusive
+                uuidMusician={uuid}
+                dataRightDropdown={dropDownDataCategory}
+                dataLeftDropdown={dropDownDataSort}
+              />
+            </View>
+          ) : (
             <EmptyState
-              text="You don't have any badge"
+              text="No data available"
               containerStyle={{marginTop: heightPercentage(30)}}
             />
           )}

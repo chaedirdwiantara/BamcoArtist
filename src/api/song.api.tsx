@@ -14,6 +14,15 @@ export const listSong = async (): Promise<ListSongResponseType> => {
   return data;
 };
 
+export const listTopSong = async (): Promise<ListSongResponseType> => {
+  const {data} = await SsuAPI().request<ListSongResponseType>({
+    url: '/songs/top',
+    method: 'GET',
+  });
+
+  return data;
+};
+
 export const detailSong = async (
   props?: PostPropsTypeA,
 ): Promise<DetailSongResponseType> => {

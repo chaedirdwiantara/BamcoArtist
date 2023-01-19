@@ -1,9 +1,13 @@
 import SsuAPI from './baseMusician';
+import SsuAPISemeruPublic from './baseSemeruPublic';
+import SsuPublicRinjani from './basePublic';
 import {
+  AlbumByIdResponseType,
   DetailMusicianResponseType,
   FollowMusicianPropsType,
   FollowMusicianResponseType,
   ListMusicianResponseType,
+  paramsTypeUuid,
 } from '../interface/musician.interface';
 import {ParamsProps} from '../interface/base.interface';
 import {PostPropsTypeA} from '../interface/feed.interface';
@@ -12,7 +16,7 @@ export const listMusician = async (
   props?: ParamsProps,
 ): Promise<ListMusicianResponseType> => {
   const {data} = await SsuAPI().request<ListMusicianResponseType>({
-    url: '/musicians',
+    url: '/top-musician',
     method: 'GET',
     params: props,
   });
@@ -23,9 +27,21 @@ export const listMusician = async (
 export const detailMusician = async (
   props?: PostPropsTypeA,
 ): Promise<DetailMusicianResponseType> => {
-  const {data} = await SsuAPI().request<DetailMusicianResponseType>({
+  const {data} = await SsuPublicRinjani().request<DetailMusicianResponseType>({
     url: `/musicians/${props?.id}`,
     method: 'GET',
+  });
+
+  return data;
+};
+
+export const getAlbumById = async (
+  props?: paramsTypeUuid,
+): Promise<AlbumByIdResponseType> => {
+  const {data} = await SsuAPISemeruPublic().request<AlbumByIdResponseType>({
+    url: `/albums`,
+    method: 'GET',
+    params: props,
   });
 
   return data;
@@ -35,7 +51,7 @@ export const followMusician = async (
   props?: FollowMusicianPropsType,
 ): Promise<FollowMusicianResponseType> => {
   const {data} = await SsuAPI().request<FollowMusicianResponseType>({
-    url: '/musicians/follow',
+    url: '/follow',
     method: 'POST',
     data: props,
   });
@@ -47,7 +63,7 @@ export const unfollowMusician = async (
   props?: FollowMusicianPropsType,
 ): Promise<FollowMusicianResponseType> => {
   const {data} = await SsuAPI().request<FollowMusicianResponseType>({
-    url: '/musicians/unfollow',
+    url: '/unfollow',
     method: 'POST',
     data: props,
   });

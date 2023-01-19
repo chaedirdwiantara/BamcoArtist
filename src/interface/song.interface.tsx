@@ -1,6 +1,7 @@
 import {PaginationType} from './base.interface';
 
 export type SongList = {
+  isAddedToThisPlaylist: boolean;
   played: boolean;
   id: number;
   title: string;
@@ -9,7 +10,18 @@ export type SongList = {
   imageUrl: string | null;
   songDuration: number;
   lyrics: string;
-  transcodedSongUrl: string;
+  transcodedSongUrl: TranscodedSongType[];
+  originalSongUrl: string;
+};
+
+export type TranscodedSongType = {
+  id: number;
+  songId: number;
+  encodedDashUrl: string;
+  encodedHlsUrl: string;
+  quality: number;
+  presetName: 'highest' | 'high' | 'med' | 'low';
+  encodeStatus: 'FINISHED' | 'ON_PROCESS';
 };
 
 export type ListSongResponseType = {

@@ -37,6 +37,7 @@ export interface ProfileHeaderProps {
   onPress?: () => void;
   iconPress: (params: string) => void;
   containerStyles?: ViewStyle;
+  noEdit?: boolean;
 }
 
 export const ProfileHeader: React.FC<ProfileHeaderProps> = (
@@ -53,6 +54,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = (
     iconPress,
     containerStyles,
     scrollEffect,
+    noEdit,
   } = props;
 
   const iconRight = () => {
@@ -89,13 +91,15 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = (
         {type === '' && (
           <View style={styles.containerFooter}>
             <Text style={styles.description}>{bio}</Text>
-            <ButtonGradient
-              label={'Edit Profile'}
-              gradientStyles={styles.btnContainer}
-              onPress={() => {
-                onPress && onPress();
-              }}
-            />
+            {noEdit ? null : (
+              <ButtonGradient
+                label={'Edit Profile'}
+                gradientStyles={styles.btnContainer}
+                onPress={() => {
+                  onPress && onPress();
+                }}
+              />
+            )}
           </View>
         )}
 
