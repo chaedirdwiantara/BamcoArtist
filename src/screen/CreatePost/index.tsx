@@ -1,4 +1,11 @@
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {
+  KeyboardAvoidingView,
+  Platform,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {color, font} from '../../theme';
 import {
@@ -114,146 +121,150 @@ const CreatePost = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <TopNavigation.Type1
-        title="Create Post"
-        maxLengthTitle={20}
-        itemStrokeColor={'white'}
-        leftIconAction={navigation.goBack}
-      />
-      <View style={styles.mainContainer}>
-        <View style={styles.topBody}>
-          <View style={styles.userCategory}>
-            <Avatar />
-            <Gap width={12} />
-            <ButtonGradientwithIcon
-              label={label ? label : 'Select Category'}
-              onPress={() =>
-                setModalVisible({
-                  modalFilter: true,
-                  modalImagePicker: false,
-                })
-              }
-              gradientStyles={{}}
-              textStyles={{
-                fontFamily: font.InterRegular,
-                fontWeight: '500',
-                fontSize: mvs(10),
-              }}
-            />
+    <KeyboardAvoidingView
+      style={{flex: 1}}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+      <View style={styles.container}>
+        <TopNavigation.Type1
+          title="Create Post"
+          maxLengthTitle={20}
+          itemStrokeColor={'white'}
+          leftIconAction={navigation.goBack}
+        />
+        <View style={styles.mainContainer}>
+          <View style={styles.topBody}>
+            <View style={styles.userCategory}>
+              <Avatar />
+              <Gap width={12} />
+              <ButtonGradientwithIcon
+                label={label ? label : 'Select Category'}
+                onPress={() =>
+                  setModalVisible({
+                    modalFilter: true,
+                    modalImagePicker: false,
+                  })
+                }
+                gradientStyles={{}}
+                textStyles={{
+                  fontFamily: font.InterRegular,
+                  fontWeight: '500',
+                  fontSize: mvs(10),
+                }}
+              />
+            </View>
+            <View style={{}}>
+              <SsuInput.InputText
+                value={inputText}
+                onChangeText={(newText: string) => setInputText(newText)}
+                placeholder={'Write Something...'}
+                containerStyles={{
+                  width: widthResponsive(290),
+                  backgroundColor: 'transparent',
+                  paddingLeft: 0,
+                }}
+                multiline={true}
+                maxLength={400}
+              />
+              <ImageList
+                imgData={uri}
+                disabled={false}
+                width={162}
+                height={79}
+                // onPress={toggleModalOnPress}
+              />
+            </View>
           </View>
-          <View style={{}}>
-            <SsuInput.InputText
-              value={inputText}
-              onChangeText={(newText: string) => setInputText(newText)}
-              placeholder={'Write Something...'}
-              containerStyles={{
-                width: widthResponsive(290),
-                backgroundColor: 'transparent',
-                paddingLeft: 0,
-              }}
-              multiline={true}
-              maxLength={400}
-            />
-            <ImageList
-              imgData={uri}
-              disabled={false}
-              width={162}
-              height={79}
-              // onPress={toggleModalOnPress}
-            />
-          </View>
-        </View>
-        <View style={styles.footerBody}>
-          <View style={styles.iconsAndCategory}>
-            <View style={styles.iconsContainer}>
-              {/* <TouchableOpacity>
+          <View style={styles.footerBody}>
+            <View style={styles.iconsAndCategory}>
+              <View style={styles.iconsContainer}>
+                {/* <TouchableOpacity>
                 <OpenCameraIcon />
               </TouchableOpacity>
               <Gap width={16} /> */}
-              <TouchableOpacity
-                onPress={() =>
-                  setModalVisible({
-                    modalFilter: false,
-                    modalImagePicker: true,
-                  })
-                }>
-                <ImportPhotoIcon />
-              </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() =>
+                    setModalVisible({
+                      modalFilter: false,
+                      modalImagePicker: true,
+                    })
+                  }>
+                  <ImportPhotoIcon />
+                </TouchableOpacity>
+              </View>
+              <View style={styles.dropdownContainer}>
+                <Dropdown.Menu
+                  data={dropDownSetAudience}
+                  placeHolder={'Set Audience'}
+                  selectedMenu={resultDataAudience}
+                  containerStyle={{
+                    width: widthResponsive(138),
+                    marginLeft: widthResponsive(-57),
+                  }}
+                  placeHolderStyles={styles.placeHolderStyle}
+                />
+              </View>
             </View>
-            <View style={styles.dropdownContainer}>
-              <Dropdown.Menu
-                data={dropDownSetAudience}
-                placeHolder={'Set Audience'}
-                selectedMenu={resultDataAudience}
-                containerStyle={{
-                  width: widthResponsive(138),
-                  marginLeft: widthResponsive(-57),
-                }}
-                placeHolderStyles={styles.placeHolderStyle}
-              />
+            <View style={styles.textCounter}>
+              <Text
+                style={[
+                  styles.footerText,
+                  {
+                    color:
+                      inputText.length === 400
+                        ? color.Error[400]
+                        : color.Neutral[10],
+                  },
+                ]}>
+                {inputText.length}/400
+              </Text>
+              {inputText.length === 0 ? (
+                <Button
+                  label={'Post'}
+                  containerStyles={{
+                    width: widthResponsive(100),
+                    aspectRatio: heightResponsive(279 / 77),
+                    backgroundColor: color.Dark[50],
+                  }}
+                  textStyles={{}}
+                  onPress={handlePostOnPress}
+                  disabled
+                />
+              ) : (
+                <ButtonGradient
+                  label={'Post'}
+                  gradientStyles={{
+                    width: widthResponsive(100),
+                    aspectRatio: heightResponsive(279 / 77),
+                  }}
+                  textStyles={{}}
+                  onPress={handlePostOnPress}
+                />
+              )}
             </View>
-          </View>
-          <View style={styles.textCounter}>
-            <Text
-              style={[
-                styles.footerText,
-                {
-                  color:
-                    inputText.length === 400
-                      ? color.Error[400]
-                      : color.Neutral[10],
-                },
-              ]}>
-              {inputText.length}/400
-            </Text>
-            {inputText.length === 0 ? (
-              <Button
-                label={'Post'}
-                containerStyles={{
-                  width: widthResponsive(100),
-                  aspectRatio: heightResponsive(279 / 77),
-                  backgroundColor: color.Dark[50],
-                }}
-                textStyles={{}}
-                onPress={handlePostOnPress}
-                disabled
-              />
-            ) : (
-              <ButtonGradient
-                label={'Post'}
-                gradientStyles={{
-                  width: widthResponsive(100),
-                  aspectRatio: heightResponsive(279 / 77),
-                }}
-                textStyles={{}}
-                onPress={handlePostOnPress}
-              />
-            )}
           </View>
         </View>
+        <FilterModal
+          toggleModal={() =>
+            setModalVisible({
+              modalFilter: !isModalVisible.modalFilter,
+              modalImagePicker: false,
+            })
+          }
+          modalVisible={isModalVisible.modalFilter}
+          dataFilter={dropdownCategoryMusician}
+          filterOnPress={setLabel}
+          sendCategory={setValueFilter}
+        />
+        <ModalImagePicker
+          title={'Upload media'}
+          modalVisible={isModalVisible.modalImagePicker}
+          sendUri={sendUri}
+          onDeleteImage={resetImage}
+          onPressClose={closeModal}
+        />
+        <ModalLoading visible={createPostLoading} />
       </View>
-      <FilterModal
-        toggleModal={() =>
-          setModalVisible({
-            modalFilter: !isModalVisible.modalFilter,
-            modalImagePicker: false,
-          })
-        }
-        modalVisible={isModalVisible.modalFilter}
-        dataFilter={dropdownCategoryMusician}
-        filterOnPress={setLabel}
-        sendCategory={setValueFilter}
-      />
-      <ModalImagePicker
-        title={'Upload media'}
-        modalVisible={isModalVisible.modalImagePicker}
-        sendUri={sendUri}
-        onDeleteImage={resetImage}
-        onPressClose={closeModal}
-      />
-      <ModalLoading visible={createPostLoading} />
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 
