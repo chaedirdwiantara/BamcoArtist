@@ -175,7 +175,12 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
           dataDetailMusician &&
           dataAlbum &&
           filter2[selectedIndex].filterName === 'PROFILE' ? (
-            <DataMusician profile={dataDetailMusician} dataAlbum={dataAlbum} />
+            <View style={{marginHorizontal: widthResponsive(-23)}}>
+              <DataMusician
+                profile={dataDetailMusician}
+                dataAlbum={dataAlbum}
+              />
+            </View>
           ) : filter2[selectedIndex].filterName === 'POST' ? (
             <View
               style={{

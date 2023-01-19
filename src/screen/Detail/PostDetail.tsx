@@ -456,7 +456,7 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   };
 
   return (
-    <SafeAreaView style={styles.root}>
+    <View style={styles.root}>
       <ScrollView showsVerticalScrollIndicator={false}>
         {/* Header Section */}
         <TopNavigation.Type1
@@ -633,7 +633,7 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
         />
         <ModalLoading visible={feedIsLoading} />
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 };
 
