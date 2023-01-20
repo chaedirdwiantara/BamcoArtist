@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import Modal from 'react-native-modal';
 import {mvs} from 'react-native-size-matters';
-import ImagePicker from 'react-native-image-crop-picker';
+import ImagePicker, {Image} from 'react-native-image-crop-picker';
 
 import {
   heightPercentage,
@@ -25,7 +25,7 @@ interface ModalImagePickerProps {
   title?: string;
   modalVisible: boolean;
   onPressClose: () => void;
-  sendUri: (params: any) => void;
+  sendUri: (params: Image) => void;
   onDeleteImage: () => void;
   hideMenuDelete?: boolean;
 }

@@ -2,11 +2,7 @@ import {StyleSheet, View} from 'react-native';
 import React, {FC} from 'react';
 import {Gap, SquareImage} from '../../components';
 import {heightPercentage, widthResponsive} from '../../utils';
-
-interface uriProps {
-  assets: string[];
-  path: string;
-}
+import {Image} from 'react-native-image-crop-picker';
 
 interface ImageListProps {
   disabled?: boolean;
@@ -15,7 +11,7 @@ interface ImageListProps {
   height: number;
   heightType2?: number;
   widthType2?: number;
-  imgData: uriProps[];
+  imgData: Image[];
 }
 
 const ImageList: FC<ImageListProps> = (props: ImageListProps) => {

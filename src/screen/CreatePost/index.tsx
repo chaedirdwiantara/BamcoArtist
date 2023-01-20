@@ -35,18 +35,13 @@ import ImageList from './showImage';
 import {useFeedHook} from '../../hooks/use-feed.hook';
 import {useUploadImageHook} from '../../hooks/use-uploadImage.hook';
 import {ModalLoading} from '../../components/molecule/ModalLoading/ModalLoading';
-
-interface uriProps {
-  assets: string[];
-  path: string;
-}
+import {Image} from 'react-native-image-crop-picker';
 
 const CreatePost = () => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
 
   const [inputText, setInputText] = useState<string>('');
-  // const [isModalVisible, setModalVisible] = useState<boolean>(false);
   const [isModalVisible, setModalVisible] = useState({
     modalFilter: false,
     modalImagePicker: false,
@@ -58,7 +53,7 @@ const CreatePost = () => {
 
   const [label, setLabel] = useState<string>();
   const [valueFilter, setValueFilter] = useState<string>();
-  const [uri, setUri] = useState<uriProps[]>([]);
+  const [uri, setUri] = useState<Image[]>([]);
   const [dataAudience, setDataAudience] = useState<string>('');
   const [dataResponseImg, setDataResponseImg] = useState<string[]>([]);
 
@@ -104,7 +99,7 @@ const CreatePost = () => {
     setDataAudience(dataAudience.label);
   };
 
-  const sendUri = (val: {assets: string[]; path: string}) => {
+  const sendUri = (val: Image) => {
     setUri([...uri, val]);
   };
 
