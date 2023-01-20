@@ -44,6 +44,7 @@ import {PostList} from '../../interface/feed.interface';
 import {dateFormat} from '../../utils/date-format';
 import {useProfileHook} from '../../hooks/use-profile.hook';
 import categoryNormalize from '../../utils/categoryNormalize';
+import {ModalLoading} from '../../components/molecule/ModalLoading/ModalLoading';
 
 const {height} = Dimensions.get('screen');
 
@@ -447,6 +448,7 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
         modalVisible={modalSuccessDonate && trigger2ndModal ? true : false}
         toggleModal={onPressSuccess}
       />
+      <ModalLoading visible={feedIsLoading} />
     </>
   );
 };
