@@ -9,6 +9,7 @@ export const useUploadImageHook = () => {
   const [isErrorImage, setIsErrorImage] = useState(false);
 
   const setUploadImage = async (image: Image) => {
+    setIsLoadingImage(true);
     try {
       const response = await uploadImage(image);
       setDataImage(response);
