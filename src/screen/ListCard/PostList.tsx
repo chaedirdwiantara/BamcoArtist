@@ -64,13 +64,15 @@ const PostListHome: FC<PostListProps> = (props: PostListProps) => {
     feedIsError,
     feedMessage,
     dataPostList,
+    dataTopPost,
     getListDataPost,
     setLikePost,
     setUnlikePost,
     setCommentToPost,
+    getListTopPost,
   } = useFeedHook();
 
-  const [dataCategory, setDataCategory] = useState<PostList[]>(dataPostList);
+  const [dataCategory, setDataCategory] = useState<PostList[]>(dataTopPost);
   const [inputCommentModal, setInputCommentModal] = useState<boolean>(false);
   const [musicianId, setMusicianId] = useState<string>('');
   const [userName, setUserName] = useState<string>('');
@@ -79,22 +81,22 @@ const PostListHome: FC<PostListProps> = (props: PostListProps) => {
 
   useFocusEffect(
     useCallback(() => {
-      getListDataPost();
+      getListTopPost();
     }, []),
   );
 
   const resultDataFilter = (dataResultFilter: any) => {
     const dates = new Date();
     dates.setDate(dates.getDate() - Number(dataResultFilter.value));
-    let dataFilter = [...dataPostList];
+    let dataFilter = [...dataTopPost];
     dataFilter = dataFilter.filter(x => new Date(x.createdAt) > dates);
     setDataCategory(dataFilter);
   };
 
   const resultDataCategory = (dataResultCategory: DataDropDownType) => {
     dataResultCategory.label === 'All'
-      ? getListDataPost()
-      : getListDataPost({category: dataResultCategory.value});
+      ? getListTopPost()
+      : getListTopPost({category: dataResultCategory.value});
   };
 
   const cardOnPress = (data: PostList) => {
@@ -188,9 +190,9 @@ const PostListHome: FC<PostListProps> = (props: PostListProps) => {
           />
         </View>
       </View>
-      {dataPostList !== null && dataPostList.length !== 0 ? (
+      {dataTopPost !== null && dataTopPost.length !== 0 ? (
         <FlatList
-          data={dataPostList}
+          data={dataTopPost}
           showsVerticalScrollIndicator={false}
           keyExtractor={(_, index) => index.toString()}
           contentContainerStyle={{
@@ -245,11 +247,11 @@ const PostListHome: FC<PostListProps> = (props: PostListProps) => {
             />
           )}
         />
-      ) : // dataPostList?.length === 0 &&
+      ) : // dataTopPost?.length === 0 &&
       //   feedMessage === 'you not follow anyone' ? (
       //   <ListToFollowMusician />
       // ) :
-      dataPostList?.length === 0 && feedMessage === 'musician not have post' ? (
+      dataTopPost?.length === 0 && feedMessage === 'musician not have post' ? (
         <EmptyState
           text={`Your following musician don't have any post, try to follow more musician`}
           containerStyle={{
