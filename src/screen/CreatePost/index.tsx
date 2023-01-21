@@ -56,6 +56,9 @@ const CreatePost = () => {
   const [uri, setUri] = useState<Image[]>([]);
   const [dataAudience, setDataAudience] = useState<string>('');
   const [dataResponseImg, setDataResponseImg] = useState<string[]>([]);
+  const [active, setActive] = useState<boolean>(false);
+
+  console.log(dataResponseImg, 'dataResponseImg');
 
   useEffect(() => {
     if (dataCreatePost !== null) {
@@ -71,36 +74,35 @@ const CreatePost = () => {
 
   useEffect(() => {
     uri.length !== 0 && dataResponseImg.length === uri.length
-      ? setCreatePost({
+      ? (setCreatePost({
           caption: inputText,
           category: valueFilter ? valueFilter : 'highlight',
           image: dataResponseImg,
           isPremium: dataAudience === 'Exclusive' ? true : false,
-        })
+        }),
+        setActive(false))
       : null;
   }, [dataResponseImg]);
 
   const handlePostOnPress = () => {
-    if (uri.length !== 0) {
-      for (let i = 0; i < uri.length; i++) {
-        return setUploadImage(uri[i]);
-      }
-    } else {
-      return setCreatePost({
-        caption: inputText,
-        category: valueFilter ? valueFilter : 'highlight',
-        isPremium: dataAudience === 'Exclusive' ? true : false,
-      });
-    }
+    setActive(true);
   };
+
+  useEffect(() => {
+    if (active == true && uri.length !== 0) {
+      for (let i = 0; i < uri.length; i++) {
+        setUploadImage(uri[i]);
+      }
+    }
+  }, [active, uri]);
 
   const resultDataAudience = (dataAudience: DataDropDownType) => {
     console.log(dataAudience, 'dataResultCategory');
     setDataAudience(dataAudience.label);
   };
 
-  const sendUri = (val: Image) => {
-    setUri([...uri, val]);
+  const sendUri = (val: Image[]) => {
+    setUri([...uri, ...val]);
   };
 
   const resetImage = () => {
@@ -221,7 +223,7 @@ const CreatePost = () => {
                     backgroundColor: color.Dark[50],
                   }}
                   textStyles={{}}
-                  onPress={handlePostOnPress}
+                  // onPress={handlePostOnPress}
                   disabled
                 />
               ) : (
@@ -253,9 +255,11 @@ const CreatePost = () => {
         <ModalImagePicker
           title={'Upload media'}
           modalVisible={isModalVisible.modalImagePicker}
-          sendUri={sendUri}
+          sendUri={() => {}}
+          sendUriMultiple={sendUri}
           onDeleteImage={resetImage}
           onPressClose={closeModal}
+          multiple
         />
         <ModalLoading visible={createPostLoading} />
       </View>
