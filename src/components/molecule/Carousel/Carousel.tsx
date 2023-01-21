@@ -160,7 +160,7 @@ const styles = StyleSheet.create({
   itemText: {
     fontSize: mvs(14),
     position: 'absolute',
-    bottom: heightPercentage(52),
+    bottom: heightPercentage(50),
     left: widthPercentage(10),
     color: Color.Neutral[10],
     fontFamily: Font.InterBold,
