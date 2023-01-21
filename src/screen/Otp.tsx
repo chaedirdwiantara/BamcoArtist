@@ -74,7 +74,7 @@ export const Otp: FC<OtpProps> = ({navigation, route}: OtpProps) => {
     if (route.params.type === 'email') {
       sendOtpEmail(route.params.id);
     } else if (route.params.type === 'phoneNumber') {
-      sendOtpSms(route.params.id);
+      sendOtpSms(route.params.id, route.params.context as string);
     }
   };
 
