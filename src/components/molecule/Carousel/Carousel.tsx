@@ -8,21 +8,15 @@ import {
   StyleSheet,
   View,
   ScrollView,
-  Platform,
   TouchableOpacity,
 } from 'react-native';
 
-import {
-  heightPercentage,
-  normalize,
-  width,
-  widthPercentage,
-} from '../../../utils';
 import {Indicator} from '../../atom';
 import Font from '../../../theme/Font';
 import Color from '../../../theme/Color';
-import {ms} from 'react-native-size-matters';
+import {ms, mvs} from 'react-native-size-matters';
 import {BannerList} from '../../../interface/banner.interface';
+import {width, widthPercentage, heightPercentage} from '../../../utils';
 
 type OnScrollEventHandler = (
   event: NativeSyntheticEvent<NativeScrollEvent>,
@@ -103,10 +97,14 @@ export const Carousel: FC<CarouselProps> = ({data, onPressBanner}) => {
                 ]}>
                 <Image source={{uri: item.imageUrl}} style={styles.itemImage} />
                 <Animated.Text
+                  numberOfLines={1}
+                  ellipsizeMode={'tail'}
                   style={[styles.itemText, {transform: [{translateX}]}]}>
                   {item.title}
                 </Animated.Text>
                 <Animated.Text
+                  numberOfLines={2}
+                  ellipsizeMode={'tail'}
                   style={[styles.itemSubtitle, {transform: [{translateX}]}]}>
                   {item.description}
                 </Animated.Text>
@@ -160,16 +158,16 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   itemText: {
-    fontSize: normalize(14),
+    fontSize: mvs(14),
     position: 'absolute',
-    bottom: Platform.OS === 'ios' ? heightPercentage(52) : heightPercentage(46),
+    bottom: heightPercentage(52),
     left: widthPercentage(10),
     color: Color.Neutral[10],
     fontFamily: Font.InterBold,
     width: width * 0.6,
   },
   itemSubtitle: {
-    fontSize: normalize(11.5),
+    fontSize: mvs(11.5),
     position: 'absolute',
     bottom: ms(12),
     left: ms(10),
