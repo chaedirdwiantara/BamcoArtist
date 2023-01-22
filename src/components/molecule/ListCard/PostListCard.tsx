@@ -9,7 +9,12 @@ import {
 } from 'react-native';
 import {ms, mvs} from 'react-native-size-matters';
 import {Avatar, Gap} from '../../atom';
-import {heightPercentage, normalize, widthResponsive} from '../../../utils';
+import {
+  heightPercentage,
+  heightResponsive,
+  normalize,
+  widthResponsive,
+} from '../../../utils';
 import {color, font} from '../../../theme';
 import {CommentIcon, LoveIcon, ShareIcon} from '../../../assets/icon';
 import CoinB from '../../../assets/icon/CoinB.icon';
@@ -150,9 +155,13 @@ const styles = StyleSheet.create({
     height: undefined,
     flexDirection: 'row',
     alignItems: 'flex-start',
+    paddingBottom: heightResponsive(5),
+    paddingHorizontal: widthResponsive(24),
+    borderBottomWidth: mvs(1),
+    borderBottomColor: color.Dark[300],
   },
   rankStyle: {
-    fontSize: normalize(10),
+    fontSize: mvs(10),
     fontWeight: '600',
     lineHeight: mvs(12),
     marginRight: ms(10),
@@ -173,27 +182,27 @@ const styles = StyleSheet.create({
   songTitle: {
     fontFamily: font.InterMedium,
     fontWeight: '500',
-    fontSize: normalize(13),
+    fontSize: mvs(13),
     lineHeight: mvs(15.73),
     color: color.Neutral[10],
   },
   songDesc: {
     fontFamily: font.InterMedium,
     fontWeight: '500',
-    fontSize: normalize(10),
+    fontSize: mvs(10),
     lineHeight: mvs(12.1),
     color: color.Dark[50],
   },
   bodyContainer: {
     width: '100%',
     flexDirection: 'row',
-    marginTop: heightPercentage(8),
-    marginBottom: heightPercentage(12),
+    marginTop: heightResponsive(8),
+    marginBottom: heightResponsive(10),
   },
   category: {
     backgroundColor: color.Pink[100],
     paddingHorizontal: widthResponsive(4),
-    height: heightPercentage(16),
+    height: heightResponsive(16),
     borderRadius: 2,
     alignItems: 'center',
     justifyContent: 'center',
@@ -201,13 +210,13 @@ const styles = StyleSheet.create({
   categoryText: {
     fontFamily: font.InterMedium,
     fontWeight: '500',
-    fontSize: normalize(8),
+    fontSize: mvs(8),
     color: color.Neutral[10],
   },
   regularText: {
     fontFamily: font.InterMedium,
     fontWeight: '500',
-    fontSize: normalize(10),
+    fontSize: mvs(10),
     lineHeight: mvs(12.1),
     color: color.Dark[100],
   },

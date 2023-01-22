@@ -249,13 +249,7 @@ const PostListHome: FC<PostListProps> = (props: PostListProps) => {
 
   return (
     <>
-      <View
-        style={{
-          width: '100%',
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          marginTop: heightPercentage(24),
-        }}>
+      <View style={styles.container}>
         <View
           style={{
             width: widthPercentage(70),
@@ -285,92 +279,105 @@ const PostListHome: FC<PostListProps> = (props: PostListProps) => {
         </View>
       </View>
       {dataPostList !== null && dataPostList.length !== 0 ? (
-        <FlatList
-          data={dataPostList}
-          showsVerticalScrollIndicator={false}
-          keyExtractor={(_, index) => index.toString()}
-          contentContainerStyle={{
-            paddingBottom:
-              Platform.OS === 'ios'
-                ? heightResponsive(25)
-                : heightResponsive(40),
-          }}
-          renderItem={({item, index}: any) => (
-            <ListCard.PostList
-              musicianName={item.musician.fullname}
-              musicianId={`@${item.musician.username}`}
-              imgUri={item.musician.imageProfileUrl}
-              postDate={dateFormat(item.createdAt)}
-              category={categoryNormalize(item.category)}
-              onPress={() => cardOnPress(item)}
-              likeOnPress={() => likeOnPress(item.id, item.isLiked)}
-              likePressed={
-                selectedId === undefined
-                  ? item.isLiked
-                  : selectedId.includes(item.id) && recorder.includes(item.id)
-                  ? true
-                  : !selectedId.includes(item.id) && recorder.includes(item.id)
-                  ? false
-                  : !selectedId.includes(item.id) && !recorder.includes(item.id)
-                  ? item.isLiked
-                  : item.isLiked
-              }
-              likeCount={
-                selectedId === undefined
-                  ? item.likesCount
-                  : selectedId.includes(item.id) &&
-                    recorder.includes(item.id) &&
-                    item.isLiked === true
-                  ? item.likesCount
-                  : selectedId.includes(item.id) &&
-                    recorder.includes(item.id) &&
-                    item.isLiked === false
-                  ? item.likesCount + 1
-                  : !selectedId.includes(item.id) &&
-                    recorder.includes(item.id) &&
-                    item.isLiked === true
-                  ? item.likesCount - 1
-                  : !selectedId.includes(item.id) &&
-                    recorder.includes(item.id) &&
-                    item.isLiked === false
-                  ? item.likesCount
-                  : item.likesCount
-              }
-              commentOnPress={() =>
-                commentOnPress(item.id, item.musician.username)
-              }
-              tokenOnPress={tokenOnPress}
-              shareOnPress={shareOnPress}
-              containerStyles={{marginTop: mvs(16)}}
-              commentCount={item.commentsCount}
-              children={
-                <View style={{width: '100%'}}>
-                  <Text style={styles.childrenPostTitle}>
-                    {elipsisText(item.caption, 600)}
-                  </Text>
-                  <Gap height={4} />
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                    }}>
-                    <SafeAreaView style={{flex: 1}}>
+        <View
+          style={{
+            flex: 1,
+            marginHorizontal: widthResponsive(-24),
+          }}>
+          <FlatList
+            data={dataPostList}
+            showsVerticalScrollIndicator={false}
+            keyExtractor={(_, index) => index.toString()}
+            contentContainerStyle={{
+              paddingBottom:
+                Platform.OS === 'ios'
+                  ? heightResponsive(25)
+                  : heightResponsive(40),
+            }}
+            renderItem={({item, index}: any) => (
+              <>
+                <ListCard.PostList
+                  musicianName={item.musician.fullname}
+                  musicianId={`@${item.musician.username}`}
+                  imgUri={item.musician.imageProfileUrl}
+                  postDate={dateFormat(item.createdAt)}
+                  category={categoryNormalize(item.category)}
+                  onPress={() => cardOnPress(item)}
+                  likeOnPress={() => likeOnPress(item.id, item.isLiked)}
+                  likePressed={
+                    selectedId === undefined
+                      ? item.isLiked
+                      : selectedId.includes(item.id) &&
+                        recorder.includes(item.id)
+                      ? true
+                      : !selectedId.includes(item.id) &&
+                        recorder.includes(item.id)
+                      ? false
+                      : !selectedId.includes(item.id) &&
+                        !recorder.includes(item.id)
+                      ? item.isLiked
+                      : item.isLiked
+                  }
+                  likeCount={
+                    selectedId === undefined
+                      ? item.likesCount
+                      : selectedId.includes(item.id) &&
+                        recorder.includes(item.id) &&
+                        item.isLiked === true
+                      ? item.likesCount
+                      : selectedId.includes(item.id) &&
+                        recorder.includes(item.id) &&
+                        item.isLiked === false
+                      ? item.likesCount + 1
+                      : !selectedId.includes(item.id) &&
+                        recorder.includes(item.id) &&
+                        item.isLiked === true
+                      ? item.likesCount - 1
+                      : !selectedId.includes(item.id) &&
+                        recorder.includes(item.id) &&
+                        item.isLiked === false
+                      ? item.likesCount
+                      : item.likesCount
+                  }
+                  commentOnPress={() =>
+                    commentOnPress(item.id, item.musician.username)
+                  }
+                  tokenOnPress={tokenOnPress}
+                  shareOnPress={shareOnPress}
+                  commentCount={item.commentsCount}
+                  children={
+                    <View style={{width: '100%'}}>
+                      <Text style={styles.childrenPostTitle}>
+                        {elipsisText(item.caption, 600)}
+                      </Text>
                       {item.image !== null ? (
-                        <ImageList
-                          imgData={item.image}
-                          width={143}
-                          height={69.5}
-                          heightType2={142}
-                          widthType2={289}
-                          onPress={() => {}}
-                        />
+                        <>
+                          <Gap height={4} />
+                          <View
+                            style={{
+                              flexDirection: 'row',
+                            }}>
+                            <View style={{height: '100%', width: '100%'}}>
+                              <ImageList
+                                imgData={item.image}
+                                width={143}
+                                height={69.5}
+                                heightType2={142}
+                                widthType2={289}
+                                onPress={() => {}}
+                              />
+                            </View>
+                          </View>
+                        </>
                       ) : null}
-                    </SafeAreaView>
-                  </View>
-                </View>
-              }
-            />
-          )}
-        />
+                    </View>
+                  }
+                />
+                <Gap height={16} />
+              </>
+            )}
+          />
+        </View>
       ) : // dataPostList?.length === 0 &&
       //   feedMessage === 'you not follow anyone' ? (
       //   <ListToFollowMusician />
@@ -444,13 +451,19 @@ const PostListHome: FC<PostListProps> = (props: PostListProps) => {
 export default PostListHome;
 
 const styles = StyleSheet.create({
+  container: {
+    width: '100%',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: heightResponsive(10),
+    marginBottom: heightResponsive(8),
+  },
   childrenPostTitle: {
     flexShrink: 1,
     maxWidth: widthResponsive(288),
     fontFamily: font.InterRegular,
     fontWeight: '400',
-    fontSize: normalize(13),
-    lineHeight: mvs(20),
+    fontSize: mvs(13),
     color: color.Neutral[10],
   },
   modalContainer: {
