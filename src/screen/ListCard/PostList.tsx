@@ -1,6 +1,7 @@
 import React, {FC, useCallback, useEffect, useState} from 'react';
 import {
   FlatList,
+  InteractionManager,
   Platform,
   SafeAreaView,
   StyleSheet,
@@ -14,6 +15,10 @@ import {
   Dropdown,
   Gap,
   ListCard,
+  ModalDonate,
+  ModalShare,
+  ModalSuccessDonate,
+  SsuToast,
 } from '../../components';
 import {
   DataDropDownType,
@@ -21,7 +26,7 @@ import {
   DropDownSortType,
 } from '../../data/dropdown';
 import {PostListType} from '../../data/postlist';
-import {color, font} from '../../theme';
+import {color, font, typography} from '../../theme';
 import {
   elipsisText,
   heightPercentage,
@@ -42,6 +47,7 @@ import {PostList} from '../../interface/feed.interface';
 import {useFeedHook} from '../../hooks/use-feed.hook';
 import {dateFormat} from '../../utils/date-format';
 import categoryNormalize from '../../utils/categoryNormalize';
+import {TickCircleIcon} from '../../assets/icon';
 
 interface PostListProps {
   dataRightDropdown: DataDropDownType[];
@@ -76,6 +82,13 @@ const PostListHome: FC<PostListProps> = (props: PostListProps) => {
   const [userName, setUserName] = useState<string>('');
   const [modalGuestVisible, setModalGuestVisible] = useState<boolean>(false);
   const [commentType, setCommentType] = useState<string>('');
+  const [recorder, setRecorder] = useState<string[]>([]);
+  const [selectedId, setSelectedId] = useState<string[]>();
+  const [modalShare, setModalShare] = useState<boolean>(false);
+  const [toastVisible, setToastVisible] = useState(false);
+  const [modalDonate, setModalDonate] = useState<boolean>(false);
+  const [modalSuccessDonate, setModalSuccessDonate] = useState<boolean>(false);
+  const [trigger2ndModal, setTrigger2ndModal] = useState<boolean>(false);
 
   useFocusEffect(
     useCallback(() => {
@@ -103,14 +116,80 @@ const PostListHome: FC<PostListProps> = (props: PostListProps) => {
       : setModalGuestVisible(true);
   };
 
-  const likeOnPress = (id: string, isliked: boolean) => {
-    if (isLogin === undefined) {
-      setModalGuestVisible(true);
-    } else {
-      if (isliked) {
-        return setUnlikePost({id});
-      } else {
-        return setLikePost({id});
+  const likeOnPress = (id: string, isLiked: boolean) => {
+    if (isLiked === true && selectedId === undefined) {
+      setUnlikePost({id});
+      setSelectedId([]);
+      if (!recorder.includes(id)) {
+        setRecorder([...recorder, id]);
+      }
+    }
+    if (!isLiked && selectedId === undefined) {
+      setLikePost({id});
+      setSelectedId([id]);
+      if (!recorder.includes(id)) {
+        setRecorder([...recorder, id]);
+      }
+    }
+    if (
+      isLiked === true &&
+      !selectedId?.includes(id) &&
+      !recorder.includes(id)
+    ) {
+      setUnlikePost({id});
+      if (!recorder.includes(id)) {
+        setRecorder([...recorder, id]);
+      }
+    }
+    if (
+      isLiked === false &&
+      !selectedId?.includes(id) &&
+      !recorder.includes(id)
+    ) {
+      setLikePost({id});
+      setSelectedId(selectedId ? [...selectedId, id] : [id]);
+      if (!recorder.includes(id)) {
+        setRecorder([...recorder, id]);
+      }
+    }
+    if (
+      isLiked === true &&
+      !selectedId?.includes(id) &&
+      recorder.includes(id)
+    ) {
+      setLikePost({id});
+      setSelectedId(selectedId ? [...selectedId, id] : [id]);
+      if (!recorder.includes(id)) {
+        setRecorder([...recorder, id]);
+      }
+    }
+    if (
+      isLiked === false &&
+      !selectedId?.includes(id) &&
+      recorder.includes(id)
+    ) {
+      setLikePost({id});
+      setSelectedId(selectedId ? [...selectedId, id] : [id]);
+      if (!recorder.includes(id)) {
+        setRecorder([...recorder, id]);
+      }
+    }
+    if (isLiked === true && selectedId?.includes(id) && recorder.includes(id)) {
+      setUnlikePost({id});
+      setSelectedId(selectedId.filter((x: string) => x !== id));
+      if (!recorder.includes(id)) {
+        setRecorder([...recorder, id]);
+      }
+    }
+    if (
+      isLiked === false &&
+      selectedId?.includes(id) &&
+      recorder.includes(id)
+    ) {
+      setUnlikePost({id});
+      setSelectedId(selectedId.filter((x: string) => x !== id));
+      if (!recorder.includes(id)) {
+        setRecorder([...recorder, id]);
       }
     }
   };
@@ -137,18 +216,35 @@ const PostListHome: FC<PostListProps> = (props: PostListProps) => {
     }
   };
 
-  const tokenOnPress = () => {
+  const shareOnPress = () => {
     if (isLogin) {
+      setModalShare(true);
     } else {
       setModalGuestVisible(true);
     }
   };
 
-  const shareOnPress = () => {
+  const tokenOnPress = () => {
     if (isLogin) {
+      setModalDonate(true);
     } else {
       setModalGuestVisible(true);
     }
+  };
+
+  const onPressDonate = () => {
+    setModalDonate(false);
+    setTrigger2ndModal(true);
+  };
+
+  const onPressSuccess = () => {
+    setModalSuccessDonate(false);
+  };
+
+  const onPressCloseModalDonate = () => {
+    setModalDonate(false);
+    setModalSuccessDonate(false);
+    setTrigger2ndModal(false);
   };
 
   return (
@@ -208,8 +304,38 @@ const PostListHome: FC<PostListProps> = (props: PostListProps) => {
               category={categoryNormalize(item.category)}
               onPress={() => cardOnPress(item)}
               likeOnPress={() => likeOnPress(item.id, item.isLiked)}
-              likeCount={item.likesCount}
-              likePressed={item.isLiked ? true : false}
+              likePressed={
+                selectedId === undefined
+                  ? item.isLiked
+                  : selectedId.includes(item.id) && recorder.includes(item.id)
+                  ? true
+                  : !selectedId.includes(item.id) && recorder.includes(item.id)
+                  ? false
+                  : !selectedId.includes(item.id) && !recorder.includes(item.id)
+                  ? item.isLiked
+                  : item.isLiked
+              }
+              likeCount={
+                selectedId === undefined
+                  ? item.likesCount
+                  : selectedId.includes(item.id) &&
+                    recorder.includes(item.id) &&
+                    item.isLiked === true
+                  ? item.likesCount
+                  : selectedId.includes(item.id) &&
+                    recorder.includes(item.id) &&
+                    item.isLiked === false
+                  ? item.likesCount + 1
+                  : !selectedId.includes(item.id) &&
+                    recorder.includes(item.id) &&
+                    item.isLiked === true
+                  ? item.likesCount - 1
+                  : !selectedId.includes(item.id) &&
+                    recorder.includes(item.id) &&
+                    item.isLiked === false
+                  ? item.likesCount
+                  : item.likesCount
+              }
               commentOnPress={() =>
                 commentOnPress(item.id, item.musician.username)
               }
@@ -270,6 +396,47 @@ const PostListHome: FC<PostListProps> = (props: PostListProps) => {
         modalVisible={modalGuestVisible}
         onPressClose={() => setModalGuestVisible(false)}
       />
+      <ModalShare
+        url={
+          'https://open.ssu.io/track/19AiJfAtRiccvSU1EWcttT?si=36b9a686dad44ae0'
+        }
+        modalVisible={modalShare}
+        onPressClose={() => setModalShare(false)}
+        titleModal={'Share Feed'}
+        hideMusic
+        onPressCopy={() =>
+          InteractionManager.runAfterInteractions(() => setToastVisible(true))
+        }
+      />
+      <SsuToast
+        modalVisible={toastVisible}
+        onBackPressed={() => setToastVisible(false)}
+        children={
+          <View style={[styles.modalContainer]}>
+            <TickCircleIcon
+              width={widthResponsive(21)}
+              height={heightPercentage(20)}
+              stroke={color.Neutral[10]}
+            />
+            <Gap width={widthResponsive(7)} />
+            <Text style={[typography.Button2, styles.textStyle]}>
+              Link have been copied to clipboard!
+            </Text>
+          </View>
+        }
+        modalStyle={{marginHorizontal: widthResponsive(24)}}
+      />
+      <ModalDonate
+        totalCoin={'1000'}
+        onPressDonate={onPressDonate}
+        modalVisible={modalDonate}
+        onPressClose={onPressCloseModalDonate}
+        onModalHide={() => setModalSuccessDonate(true)}
+      />
+      <ModalSuccessDonate
+        modalVisible={modalSuccessDonate && trigger2ndModal ? true : false}
+        toggleModal={onPressSuccess}
+      />
     </>
   );
 };
@@ -284,6 +451,21 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     fontSize: normalize(13),
     lineHeight: mvs(20),
+    color: color.Neutral[10],
+  },
+  modalContainer: {
+    width: '100%',
+    position: 'absolute',
+    bottom: heightPercentage(22),
+    height: heightPercentage(36),
+    backgroundColor: color.Success[400],
+    paddingHorizontal: widthResponsive(12),
+    borderRadius: 4,
+    flexDirection: 'row',
+    alignItems: 'center',
+    zIndex: 1,
+  },
+  textStyle: {
     color: color.Neutral[10],
   },
 });
