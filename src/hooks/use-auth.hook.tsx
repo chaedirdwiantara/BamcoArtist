@@ -357,12 +357,16 @@ export const useAuthHook = () => {
     }
   };
 
-  const sendOtpSms = async (phoneNumber: string) => {
+  const sendOtpSms = async (phoneNumber: string, context?: string) => {
     setIsError(false);
     setErrorMsg('');
     setIsLoading(true);
     try {
-      await resendOtpSms(phoneNumber);
+      const resp = await resendOtpSms(phoneNumber, context);
+      if (resp.code !== 200) {
+        setIsError(true);
+        setErrorMsg(resp.message);
+      }
     } catch (error) {
       setIsError(true);
       if (

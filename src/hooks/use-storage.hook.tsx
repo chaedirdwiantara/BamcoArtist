@@ -16,6 +16,7 @@ export type ProfileProps = {
   refreshToken: string;
   refreshTokenExpiresAt: string;
   lastLoginAt: string | null;
+  phoneNumber: string | null;
 };
 
 export const profileStorage = (): ProfileProps | null => {

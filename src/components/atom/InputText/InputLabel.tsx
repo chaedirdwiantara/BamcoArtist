@@ -33,6 +33,7 @@ interface InputLabelProps extends TextInputProps {
   containerStyles?: ViewStyle;
   containerInputStyles?: ViewStyle;
   showImage?: boolean;
+  isFocus?: boolean;
   onPressCamera?: () => void;
   onPressLibrary?: () => void;
 }
@@ -117,7 +118,9 @@ const InputLabel: React.FC<InputLabelProps> = (props: InputLabelProps) => {
           secureTextEntry={password ? secure : false}
           {...props}
         />
-        <View>{password ? passwordComp() : null}</View>
+        <View style={{position: 'absolute', right: 0}}>
+          {password ? passwordComp() : null}
+        </View>
         {showImage ? iconCameraComp() : null}
       </View>
       {isError ? (
@@ -147,6 +150,7 @@ const styles = StyleSheet.create({
     width: '100%',
     color: Color.Neutral[10],
     paddingVertical: heightPercentage(12),
+    paddingRight: mvs(40),
   },
   containerErrorMsg: {
     width: '100%',
