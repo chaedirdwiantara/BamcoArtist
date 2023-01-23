@@ -3,7 +3,6 @@ import {
   FlatList,
   InteractionManager,
   Platform,
-  SafeAreaView,
   StyleSheet,
   Text,
   View,
@@ -31,7 +30,6 @@ import {
   elipsisText,
   heightPercentage,
   heightResponsive,
-  normalize,
   widthPercentage,
   widthResponsive,
 } from '../../utils';
@@ -42,7 +40,6 @@ import {RootStackParams} from '../../navigations';
 import ImageList from './ImageList';
 import {storage} from '../../hooks/use-storage.hook';
 import {EmptyState} from '../../components/molecule/EmptyState/EmptyState';
-import ListToFollowMusician from './ListToFollowMusician';
 import {PostList} from '../../interface/feed.interface';
 import {useFeedHook} from '../../hooks/use-feed.hook';
 import {dateFormat} from '../../utils/date-format';
@@ -59,19 +56,15 @@ const PostListHome: FC<PostListProps> = (props: PostListProps) => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
   const isLogin = storage.getString('profile');
-  const {dataRightDropdown, dataLeftDropdown, data} = props;
+  const {dataRightDropdown, dataLeftDropdown} = props;
   // ignore warning
   useEffect(() => {
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
   }, []);
 
   const {
-    feedIsLoading,
-    feedIsError,
     feedMessage,
-    dataPostList,
     dataTopPost,
-    getListDataPost,
     setLikePost,
     setUnlikePost,
     setCommentToPost,
@@ -380,11 +373,8 @@ const PostListHome: FC<PostListProps> = (props: PostListProps) => {
             )}
           />
         </View>
-      ) : // dataTopPost?.length === 0 &&
-      //   feedMessage === 'you not follow anyone' ? (
-      //   <ListToFollowMusician />
-      // ) :
-      dataTopPost?.length === 0 && feedMessage === 'musician not have post' ? (
+      ) : dataTopPost?.length === 0 &&
+        feedMessage === 'musician not have post' ? (
         <EmptyState
           text={`Your following musician don't have any post, try to follow more musician`}
           containerStyle={{
