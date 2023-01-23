@@ -15,6 +15,7 @@ import {
   unlikePost,
   createPost,
   listPostExclusive,
+  listTopPost,
 } from '../api/feed.api';
 import {ParamsProps} from '../interface/base.interface';
 import {
@@ -35,6 +36,7 @@ export const useFeedHook = () => {
   const [feedIsLoading, setFeedIsLoading] = useState(false);
   const [dataPostList, setDataPostList] = useState<PostList[]>([]);
   const [dataPostDetail, setDataPostDetail] = useState<DetailPostData>();
+  const [dataTopPost, setDataTopPost] = useState<PostList[]>([]);
   const [feedIsError, setFeedIsError] = useState<boolean>(false);
   const [feedMessage, setFeedMessage] = useState<string>('');
 
@@ -45,6 +47,19 @@ export const useFeedHook = () => {
       const response = await listPost(props);
       setDataPostList(response.data);
       setFeedMessage(response.message);
+    } catch (error) {
+      setFeedIsError(true);
+    } finally {
+      setFeedIsLoading(false);
+    }
+  };
+
+  const getListTopPost = async (props?: ParamsProps) => {
+    setFeedIsLoading(true);
+    setFeedIsError(false);
+    try {
+      const response = await listTopPost(props);
+      setDataTopPost(response.data);
     } catch (error) {
       setFeedIsError(true);
     } finally {
@@ -285,6 +300,7 @@ export const useFeedHook = () => {
     dataCreatePost,
     createPostLoading,
     createPostError,
+    dataTopPost,
     setDataCmntToCmnt,
     getListDataPost,
     getListDataMyPost,
@@ -301,5 +317,6 @@ export const useFeedHook = () => {
     setLikeComment,
     setUnlikeComment,
     setCreatePost,
+    getListTopPost,
   };
 };

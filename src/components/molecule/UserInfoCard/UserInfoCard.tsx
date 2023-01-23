@@ -8,23 +8,17 @@ import {
 } from 'react-native';
 import {mvs} from 'react-native-size-matters';
 import {
-  infoProfileArtist,
-  InfoProfileType,
-  infoProfileUser,
-} from '../../../data/profile';
-import Color from '../../../theme/Color';
-import Font from '../../../theme/Font';
-import {
   heightPercentage,
-  normalize,
   width,
   widthPercentage,
   kFormatter,
-  kFormatter2,
-  toCurrency,
 } from '../../../utils';
+import Font from '../../../theme/Font';
+import Color from '../../../theme/Color';
+import {InfoProfileType, infoProfileUser} from '../../../data/profile';
 
 interface UserInfoCardProps {
+  profile?: any;
   type?: string;
   totalFollowing?: number;
   favSong?: number;
@@ -54,14 +48,32 @@ const Item: FC<Props> = ({point, title, onPress}) => {
 };
 
 const UserInfoCard: FC<UserInfoCardProps> = (props: UserInfoCardProps) => {
-  const {type = '', containerStyles, totalFollowing, onPress} = props;
+  const {type = '', profile, containerStyles, totalFollowing, onPress} = props;
+  const infoProfileArtist = [
+    {
+      point: profile.totalFans,
+      title: 'FANS',
+    },
+    {
+      point: profile.totalFollowers,
+      title: 'FOLLOWERS',
+    },
+    {
+      point: profile.totalRelease,
+      title: 'RELEASE',
+    },
+    {
+      point: profile.totalPlaylist,
+      title: 'PLAYLIST',
+    },
+    {
+      point: profile.rank,
+      title: 'RANK',
+    },
+  ];
+
   const listItem: InfoProfileType[] =
     type === 'self' ? infoProfileUser : infoProfileArtist;
-
-  const newStyles = type !== 'self' && {
-    backgroundColor: 'transparent',
-    marginHorizontal: widthPercentage(5),
-  };
 
   return (
     <View style={[styles.root, containerStyles]}>
@@ -71,19 +83,19 @@ const UserInfoCard: FC<UserInfoCardProps> = (props: UserInfoCardProps) => {
           isFollowing ? onPress() : null;
         };
 
-        return (
-          <View key={i} style={styles.containerItem}>
-            <Item
-              point={isFollowing ? totalFollowing : val.point}
-              title={val.title}
-              onPress={newOnPress}
-            />
-
-            {listItem.length !== i + 1 && (
-              <View style={[styles.separator, newStyles]} />
-            )}
-          </View>
-        );
+        if (val.title === 'LINE') {
+          return <View key={i} style={styles.separator} />;
+        } else {
+          return (
+            <View style={{width: type === 'self' ? '30%' : '20%'}}>
+              <Item
+                point={isFollowing ? totalFollowing : val.point}
+                title={val.title}
+                onPress={newOnPress}
+              />
+            </View>
+          );
+        }
       })}
     </View>
   );
@@ -102,16 +114,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     borderRadius: 12,
   },
-  containerItem: {
-    alignItems: 'center',
-    justifyContent: 'space-around',
-    flexDirection: 'row',
-  },
   separator: {
     width: mvs(1),
     height: heightPercentage(18),
     backgroundColor: '#D1D1D1',
-    marginHorizontal: widthPercentage(15),
   },
   itemStyle: {
     alignItems: 'center',
