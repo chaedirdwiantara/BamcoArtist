@@ -5,15 +5,22 @@ import {Gap, SquareImage, Title} from '../../components';
 import {color, font} from '../../theme';
 import {ms, mvs} from 'react-native-size-matters';
 import {ChevronDown2, ChevronUp} from '../../assets/icon';
+import {SSULogo} from '../../assets/logo';
+import {useNavigation} from '@react-navigation/native';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {RootStackParams} from '../../navigations';
 
 const dummy = {
   imgUri:
     'https://cdn.istyle.im/images/product/web/24/43/88/00/0/000000884324_01_800.jpg',
-  textBody: `In this article, we’ll look at how to format a number with K at the end if it’s 1000 or more and return the whole number otherwise.
+  textBody: `Get exclusive content from a musician, stay up to date on their daily life with their band, meet them at events.
     `,
 };
 
 const ExclusiveDailyContent = () => {
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParams>>();
+
   const [isShowComponent, setIsShowComponent] = useState<boolean>(true);
   return (
     <View style={styles.container}>
@@ -27,20 +34,24 @@ const ExclusiveDailyContent = () => {
       {isShowComponent ? (
         <View style={styles.mainStyle}>
           <View style={styles.topBody}>
-            <SquareImage imgUri={dummy.imgUri} size={widthResponsive(80)} />
+            <View style={styles.logoContainer}>
+              <SSULogo />
+            </View>
             <Gap width={8} />
-            <View>
+            <View style={{justifyContent: 'space-evenly'}}>
               <Text numberOfLines={2} style={styles.titleTopBody}>
-                Exclusive Daily Content (my uncut video)
+                Subscribe Exclusive Content
               </Text>
               <Text numberOfLines={6} style={styles.textTopBody}>
                 {dummy.textBody}
               </Text>
             </View>
           </View>
-          <View style={styles.bottomBody}>
+          <TouchableOpacity
+            style={styles.bottomBody}
+            onPress={() => navigation.navigate('ExclusiveContent')}>
             <Text style={styles.bottomBodyText}>Get Exclusive Content</Text>
-          </View>
+          </TouchableOpacity>
         </View>
       ) : (
         <View></View>
@@ -74,14 +85,14 @@ const styles = StyleSheet.create({
     borderColor: color.Dark[300],
   },
   titleTopBody: {
-    maxWidth: widthResponsive(223),
+    maxWidth: widthResponsive(200),
     fontFamily: font.InterRegular,
     fontWeight: '600',
     fontSize: mvs(12),
     color: color.Neutral[10],
   },
   textTopBody: {
-    maxWidth: widthResponsive(223),
+    maxWidth: widthResponsive(200),
     fontFamily: font.InterRegular,
     fontWeight: '400',
     fontSize: mvs(10),
@@ -96,5 +107,10 @@ const styles = StyleSheet.create({
     fontSize: mvs(12),
     fontWeight: '600',
     color: color.Pink[2],
+  },
+  logoContainer: {
+    paddingHorizontal: widthResponsive(8),
+    backgroundColor: color.Dark[600],
+    borderRadius: 4,
   },
 });

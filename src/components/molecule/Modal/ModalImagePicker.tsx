@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import Modal from 'react-native-modal';
 import {mvs} from 'react-native-size-matters';
-import ImagePicker from 'react-native-image-crop-picker';
+import ImagePicker, {Image} from 'react-native-image-crop-picker';
 
 import {
   heightPercentage,
@@ -25,18 +25,22 @@ interface ModalImagePickerProps {
   title?: string;
   modalVisible: boolean;
   onPressClose: () => void;
-  sendUri: (params: any) => void;
+  sendUri: (params: Image) => void;
+  sendUriMultiple: (params: Image[]) => void;
   onDeleteImage: () => void;
   hideMenuDelete?: boolean;
+  multiple?: boolean;
 }
 
 export const ModalImagePicker: React.FC<ModalImagePickerProps> = ({
   title = 'Edit Display Profile',
   modalVisible,
   sendUri,
+  sendUriMultiple,
   onPressClose,
   onDeleteImage,
   hideMenuDelete,
+  multiple,
 }) => {
   const onImageLibraryPress = () => {
     ImagePicker.openPicker({
@@ -46,6 +50,20 @@ export const ModalImagePicker: React.FC<ModalImagePickerProps> = ({
       cropping: true,
     }).then(image => {
       sendUri(image);
+      onPressClose();
+    });
+  };
+
+  const onSelectMultiple = () => {
+    ImagePicker.openPicker({
+      compressImageMaxWidth: 1024,
+      compressImageMaxHeight: 1024,
+      compressImageQuality: 0.9,
+      cropping: true,
+      multiple: true,
+      mediaType: 'photo',
+    }).then(image => {
+      sendUriMultiple(image);
       onPressClose();
     });
   };
@@ -75,7 +93,7 @@ export const ModalImagePicker: React.FC<ModalImagePickerProps> = ({
           </TouchableOpacity>
           <TouchableOpacity
             style={{marginVertical: 10}}
-            onPress={onImageLibraryPress}>
+            onPress={multiple ? onSelectMultiple : onImageLibraryPress}>
             <Text style={styles.textMenu}>Add Photo from Gallery</Text>
           </TouchableOpacity>
           {hideMenuDelete && (

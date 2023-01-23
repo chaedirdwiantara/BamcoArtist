@@ -1,6 +1,7 @@
 import {
   Dimensions,
   FlatList,
+  Platform,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -69,11 +70,11 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: color.Pink[100],
     borderColor: color.Pink[100],
-    width: 150,
+    width: widthResponsive(120),
     alignItems: 'flex-start',
     position: 'absolute',
-    top: heightPercentageToDP('13%'),
-    marginLeft: widthResponsive(70),
+    top: Platform.OS === 'ios' ? heightResponsive(112) : heightResponsive(97),
+    left: widthResponsive(70),
   },
   textContainer: {
     backgroundColor: color.Pink[100],
