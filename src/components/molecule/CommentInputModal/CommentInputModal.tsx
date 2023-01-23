@@ -69,7 +69,7 @@ const CommentInputModal: FC<ModalImageProps> = (props: ModalImageProps) => {
             <SsuInput.InputText
               value={commentValue}
               onChangeText={(newText: string) => onCommentChange?.(newText)}
-              placeholder={'Reply as <your name>...'}
+              placeholder={'Write your reply...'}
               containerStyles={{
                 width: widthResponsive(290),
                 backgroundColor: 'transparent',

@@ -456,16 +456,16 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   };
 
   return (
-    <SafeAreaView style={styles.root}>
+    <View style={styles.root}>
+      {/* Header Section */}
+      <TopNavigation.Type1
+        title={`${musicianName} Post`}
+        leftIconAction={() => navigation.goBack()}
+        maxLengthTitle={40}
+        itemStrokeColor={color.Neutral[10]}
+      />
+      {/* Post Detail Section */}
       <ScrollView showsVerticalScrollIndicator={false}>
-        {/* Header Section */}
-        <TopNavigation.Type1
-          title={`${musicianName} Post`}
-          leftIconAction={() => navigation.goBack()}
-          maxLengthTitle={40}
-          itemStrokeColor={color.Neutral[10]}
-        />
-        {/* Post Detail Section */}
         <View style={styles.bodyContainer}>
           {dataPostDetail ? (
             <DetailPost
@@ -633,7 +633,7 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
         />
         <ModalLoading visible={feedIsLoading} />
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 };
 

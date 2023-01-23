@@ -115,6 +115,7 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
           iconPress={() => onPressGoTo('Setting')}
           scrollEffect={scrollEffect}
           noEdit={!ownProfile}
+          backIcon={!ownProfile}
         />
         <UserInfoCard
           type={ownProfile ? '' : 'self'}
@@ -174,7 +175,12 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
           dataDetailMusician &&
           dataAlbum &&
           filter2[selectedIndex].filterName === 'PROFILE' ? (
-            <DataMusician profile={dataDetailMusician} dataAlbum={dataAlbum} />
+            <View style={{marginHorizontal: widthResponsive(-23)}}>
+              <DataMusician
+                profile={dataDetailMusician}
+                dataAlbum={dataAlbum}
+              />
+            </View>
           ) : filter2[selectedIndex].filterName === 'POST' ? (
             <View
               style={{

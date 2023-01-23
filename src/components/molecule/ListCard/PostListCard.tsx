@@ -9,7 +9,12 @@ import {
 } from 'react-native';
 import {ms, mvs} from 'react-native-size-matters';
 import {Avatar, Gap} from '../../atom';
-import {heightPercentage, normalize, widthResponsive} from '../../../utils';
+import {
+  heightPercentage,
+  heightResponsive,
+  normalize,
+  widthResponsive,
+} from '../../../utils';
 import {color, font} from '../../../theme';
 import {CommentIcon, LoveIcon, ShareIcon} from '../../../assets/icon';
 import CoinB from '../../../assets/icon/CoinB.icon';
@@ -58,7 +63,7 @@ const PostListCard: React.FC<ListProps> = (props: ListProps) => {
           style={{
             flex: 1,
             marginLeft: widthResponsive(6),
-            paddingBottom: heightPercentage(2),
+            paddingBottom: heightResponsive(2),
           }}>
           <View style={styles.topSection}>
             <Text style={styles.songTitle}>{musicianName}</Text>
@@ -69,7 +74,7 @@ const PostListCard: React.FC<ListProps> = (props: ListProps) => {
           <Gap height={4} />
           <View style={styles.bottomSection}>
             <Text style={styles.songDesc}>{musicianId}</Text>
-            <Text style={styles.regularText}>{postDate}</Text>
+            <Text style={styles.songDesc}>{postDate}</Text>
           </View>
           {/* BODY SECTION */}
           <View style={styles.bodyContainer}>{children}</View>
@@ -84,9 +89,6 @@ const PostListCard: React.FC<ListProps> = (props: ListProps) => {
                   <LoveIcon
                     fill={likePressed ? color.Pink[100] : 'none'}
                     stroke={likePressed ? 'none' : color.Dark[100]}
-                    width={17}
-                    height={17}
-                    style={{marginBottom: heightPercentage(4)}}
                   />
                   <Gap width={3} />
                   <Text style={styles.regularText}>{likeCount}</Text>
@@ -97,43 +99,23 @@ const PostListCard: React.FC<ListProps> = (props: ListProps) => {
                 <TouchableOpacity
                   onPress={commentOnPress}
                   style={styles.socialIcon}>
-                  <CommentIcon
-                    stroke={color.Dark[100]}
-                    width={16}
-                    height={14}
-                    style={{marginBottom: heightPercentage(4)}}
-                  />
+                  <CommentIcon stroke={color.Dark[100]} />
                   <Gap width={3} />
                   <Text style={styles.regularText}>{commentCount}</Text>
                 </TouchableOpacity>
               </View>
               {/* token section */}
-              <View style={styles.socialIcon}>
+              <View>
                 <TouchableOpacity onPress={tokenOnPress}>
-                  <CoinB
-                    stroke={color.Dark[100]}
-                    width={16}
-                    height={15}
-                    style={{marginBottom: heightPercentage(4)}}
-                  />
+                  <CoinB fill={color.Dark[100]} />
                 </TouchableOpacity>
               </View>
-            </View>
-            {/* share section */}
-            <View
-              style={{
-                flex: 1,
-                justifyContent: 'center',
-                alignItems: 'flex-end',
-              }}>
-              <TouchableOpacity onPress={shareOnPress}>
-                <ShareIcon
-                  stroke={color.Dark[100]}
-                  width={16}
-                  height={15}
-                  style={{marginBottom: heightPercentage(4)}}
-                />
-              </TouchableOpacity>
+              {/* share section */}
+              <View>
+                <TouchableOpacity onPress={shareOnPress}>
+                  <ShareIcon fill={color.Dark[100]} />
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
         </View>
@@ -150,9 +132,13 @@ const styles = StyleSheet.create({
     height: undefined,
     flexDirection: 'row',
     alignItems: 'flex-start',
+    paddingBottom: heightResponsive(5),
+    paddingHorizontal: widthResponsive(24),
+    borderBottomWidth: mvs(1),
+    borderBottomColor: color.Dark[300],
   },
   rankStyle: {
-    fontSize: normalize(10),
+    fontSize: mvs(10),
     fontWeight: '600',
     lineHeight: mvs(12),
     marginRight: ms(10),
@@ -173,27 +159,26 @@ const styles = StyleSheet.create({
   songTitle: {
     fontFamily: font.InterMedium,
     fontWeight: '500',
-    fontSize: normalize(13),
+    fontSize: mvs(13),
     lineHeight: mvs(15.73),
     color: color.Neutral[10],
   },
   songDesc: {
     fontFamily: font.InterMedium,
     fontWeight: '500',
-    fontSize: normalize(10),
-    lineHeight: mvs(12.1),
+    fontSize: mvs(10),
     color: color.Dark[50],
   },
   bodyContainer: {
     width: '100%',
     flexDirection: 'row',
-    marginTop: heightPercentage(8),
-    marginBottom: heightPercentage(12),
+    marginTop: heightResponsive(8),
+    marginBottom: heightResponsive(10),
   },
   category: {
     backgroundColor: color.Pink[100],
     paddingHorizontal: widthResponsive(4),
-    height: heightPercentage(16),
+    height: heightResponsive(16),
     borderRadius: 2,
     alignItems: 'center',
     justifyContent: 'center',
@@ -201,14 +186,13 @@ const styles = StyleSheet.create({
   categoryText: {
     fontFamily: font.InterMedium,
     fontWeight: '500',
-    fontSize: normalize(8),
+    fontSize: mvs(8),
     color: color.Neutral[10],
   },
   regularText: {
     fontFamily: font.InterMedium,
     fontWeight: '500',
-    fontSize: normalize(10),
-    lineHeight: mvs(12.1),
+    fontSize: mvs(12),
     color: color.Dark[100],
   },
   bottomContainer: {

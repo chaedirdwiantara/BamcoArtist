@@ -19,12 +19,16 @@ import {AvatarProfile} from '../..';
 import {ButtonGradient} from '../../../atom';
 import Typography from '../../../../theme/Typography';
 import {
+  ArrowLeftIcon,
   CameraIcon,
   GalleryEditIcon,
   SettingIcon,
 } from '../../../../assets/icon';
 import {color, font} from '../../../../theme';
 import initialname from '../../../../utils/initialname';
+import {useNavigation} from '@react-navigation/native';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {RootStackParams} from '../../../../navigations';
 
 export interface ProfileHeaderProps {
   avatarUri?: string;
@@ -38,6 +42,7 @@ export interface ProfileHeaderProps {
   iconPress: (params: string) => void;
   containerStyles?: ViewStyle;
   noEdit?: boolean;
+  backIcon?: boolean;
 }
 
 export const ProfileHeader: React.FC<ProfileHeaderProps> = (
@@ -55,7 +60,11 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = (
     containerStyles,
     scrollEffect,
     noEdit,
+    backIcon,
   } = props;
+
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParams>>();
 
   const iconRight = () => {
     return (
@@ -67,6 +76,16 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = (
         ) : (
           <GalleryEditIcon />
         )}
+      </TouchableOpacity>
+    );
+  };
+
+  const iconLeft = () => {
+    return (
+      <TouchableOpacity
+        onPress={() => navigation.goBack()}
+        style={styles.iconLeft}>
+        <ArrowLeftIcon style={styles.settingIcon} />
       </TouchableOpacity>
     );
   };
@@ -104,6 +123,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = (
         )}
 
         {iconRight()}
+        {backIcon ? iconLeft() : null}
       </ImageBackground>
     </View>
   );
@@ -160,6 +180,11 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: heightPercentage(20),
     right: widthPercentage(20),
+  },
+  iconLeft: {
+    position: 'absolute',
+    top: heightPercentage(20),
+    left: widthPercentage(20),
   },
   settingIcon: {
     marginTop: heightPercentage(25),

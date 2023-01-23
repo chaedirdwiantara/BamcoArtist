@@ -1,27 +1,26 @@
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import React, {FC} from 'react';
 import {Gap, SquareImage} from '../../components';
 import {heightPercentage, widthResponsive} from '../../utils';
-
-interface uriProps {
-  assets: string[];
-  path: string;
-}
+import {Image} from 'react-native-image-crop-picker';
+import {CloseIcon} from '../../assets/icon';
+import {color} from '../../theme';
+import {ms} from 'react-native-size-matters';
 
 interface ImageListProps {
   disabled?: boolean;
-  //   onPress: (uri: number) => void;
+  onPress: (uri: number) => void;
   width: number;
   height: number;
   heightType2?: number;
   widthType2?: number;
-  imgData: uriProps[];
+  imgData: Image[];
 }
 
 const ImageList: FC<ImageListProps> = (props: ImageListProps) => {
   const {
     disabled = true,
-    // onPress,
+    onPress,
     imgData,
     width = 162,
     height = 79,
@@ -32,7 +31,7 @@ const ImageList: FC<ImageListProps> = (props: ImageListProps) => {
   return (
     <View style={styles.container}>
       {imgData.length === 1 && (
-        <>
+        <View>
           <SquareImage
             imgUri={imgData && imgData[0].path}
             size={widthResponsive(widthType2)}
@@ -41,101 +40,158 @@ const ImageList: FC<ImageListProps> = (props: ImageListProps) => {
               marginRight: widthResponsive(3),
             }}
             disabled={disabled}
-            // onPress={() => onPress(0)}
           />
-        </>
+          <TouchableOpacity onPress={() => onPress(0)} style={styles.closeIcon}>
+            <CloseIcon stroke={color.Neutral[10]} />
+          </TouchableOpacity>
+        </View>
       )}
       {imgData.length === 2 && (
         <>
-          <SquareImage
-            imgUri={imgData && imgData[0].path}
-            size={widthResponsive(width, 375)}
-            height={heightPercentage(heightType2)}
-            containerStyle={{
-              marginRight: widthResponsive(3),
-            }}
-            disabled={disabled}
-            // onPress={() => onPress(0)}
-          />
-          <SquareImage
-            imgUri={imgData && imgData[1].path}
-            size={widthResponsive(width, 375)}
-            height={heightPercentage(heightType2)}
-            containerStyle={{
-              marginRight: widthResponsive(3),
-            }}
-            disabled={disabled}
-            // onPress={() => onPress(1)}
-          />
-        </>
-      )}
-      {imgData.length === 3 && (
-        <>
-          <SquareImage
-            imgUri={imgData && imgData[0].path}
-            size={widthResponsive(width, 375)}
-            height={heightPercentage(heightType2)}
-            containerStyle={{
-              marginRight: widthResponsive(3),
-            }}
-            disabled={disabled}
-            // onPress={() => onPress(0)}
-          />
+          <View>
+            <SquareImage
+              imgUri={imgData && imgData[0].path}
+              size={widthResponsive(width, 375)}
+              height={heightPercentage(heightType2)}
+              containerStyle={{
+                marginRight: widthResponsive(3),
+              }}
+              disabled={disabled}
+            />
+            <TouchableOpacity
+              onPress={() => onPress(0)}
+              style={styles.closeIcon}>
+              <CloseIcon stroke={color.Neutral[10]} />
+            </TouchableOpacity>
+          </View>
           <View>
             <SquareImage
               imgUri={imgData && imgData[1].path}
               size={widthResponsive(width, 375)}
-              height={heightPercentage(height)}
+              height={heightPercentage(heightType2)}
+              containerStyle={{
+                marginRight: widthResponsive(3),
+              }}
               disabled={disabled}
-              //   onPress={() => onPress(1)}
             />
-            <Gap height={3} />
+            <TouchableOpacity
+              onPress={() => onPress(1)}
+              style={styles.closeIcon}>
+              <CloseIcon stroke={color.Neutral[10]} />
+            </TouchableOpacity>
+          </View>
+        </>
+      )}
+      {imgData.length === 3 && (
+        <>
+          <View>
             <SquareImage
-              imgUri={imgData && imgData[2].path}
+              imgUri={imgData && imgData[0].path}
               size={widthResponsive(width, 375)}
-              height={heightPercentage(height)}
+              height={heightPercentage(heightType2)}
+              containerStyle={{
+                marginRight: widthResponsive(3),
+              }}
               disabled={disabled}
-              //   onPress={() => onPress(2)}
             />
+            <TouchableOpacity
+              onPress={() => onPress(0)}
+              style={styles.closeIcon}>
+              <CloseIcon stroke={color.Neutral[10]} />
+            </TouchableOpacity>
+          </View>
+          <View>
+            <View>
+              <SquareImage
+                imgUri={imgData && imgData[1].path}
+                size={widthResponsive(width, 375)}
+                height={heightPercentage(height)}
+                disabled={disabled}
+              />
+              <TouchableOpacity
+                onPress={() => onPress(1)}
+                style={styles.closeIcon}>
+                <CloseIcon stroke={color.Neutral[10]} />
+              </TouchableOpacity>
+            </View>
+            <Gap height={3} />
+            <View>
+              <SquareImage
+                imgUri={imgData && imgData[2].path}
+                size={widthResponsive(width, 375)}
+                height={heightPercentage(height)}
+                disabled={disabled}
+              />
+              <TouchableOpacity
+                onPress={() => onPress(2)}
+                style={styles.closeIcon}>
+                <CloseIcon stroke={color.Neutral[10]} />
+              </TouchableOpacity>
+            </View>
           </View>
         </>
       )}
       {imgData.length === 4 && (
         <>
           <View>
-            <SquareImage
-              imgUri={imgData && imgData[0].path}
-              size={widthResponsive(width, 375)}
-              height={heightPercentage(height)}
-              disabled={disabled}
-              //   onPress={() => onPress(0)}
-            />
+            <View>
+              <SquareImage
+                imgUri={imgData && imgData[0].path}
+                size={widthResponsive(width, 375)}
+                height={heightPercentage(height)}
+                disabled={disabled}
+              />
+              <TouchableOpacity
+                onPress={() => onPress(0)}
+                style={styles.closeIcon}>
+                <CloseIcon stroke={color.Neutral[10]} />
+              </TouchableOpacity>
+            </View>
+
             <Gap height={3} />
-            <SquareImage
-              imgUri={imgData && imgData[2].path}
-              size={widthResponsive(width, 375)}
-              height={heightPercentage(height)}
-              disabled={disabled}
-              //   onPress={() => onPress(2)}
-            />
+            <View>
+              <SquareImage
+                imgUri={imgData && imgData[2].path}
+                size={widthResponsive(width, 375)}
+                height={heightPercentage(height)}
+                disabled={disabled}
+              />
+              <TouchableOpacity
+                onPress={() => onPress(2)}
+                style={styles.closeIcon}>
+                <CloseIcon stroke={color.Neutral[10]} />
+              </TouchableOpacity>
+            </View>
           </View>
           <Gap width={3} />
           <View>
-            <SquareImage
-              imgUri={imgData && imgData[1].path}
-              size={widthResponsive(width, 375)}
-              height={heightPercentage(height)}
-              disabled={disabled}
-              //   onPress={() => onPress(1)}
-            />
+            <View>
+              <SquareImage
+                imgUri={imgData && imgData[1].path}
+                size={widthResponsive(width, 375)}
+                height={heightPercentage(height)}
+                disabled={disabled}
+              />
+              <TouchableOpacity
+                onPress={() => onPress(1)}
+                style={styles.closeIcon}>
+                <CloseIcon stroke={color.Neutral[10]} />
+              </TouchableOpacity>
+            </View>
             <Gap height={3} />
-            <SquareImage
-              imgUri={imgData && imgData[3].path}
-              size={widthResponsive(width, 375)}
-              height={heightPercentage(height)}
-              disabled={disabled}
-              //   onPress={() => onPress(3)}
-            />
+            <View>
+              <SquareImage
+                imgUri={imgData && imgData[3].path}
+                size={widthResponsive(width, 375)}
+                height={heightPercentage(height)}
+                disabled={disabled}
+              />
+              <TouchableOpacity
+                onPress={() => onPress(3)}
+                style={styles.closeIcon}>
+                <CloseIcon stroke={color.Neutral[10]} />
+              </TouchableOpacity>
+            </View>
           </View>
         </>
       )}
@@ -150,4 +206,5 @@ const styles = StyleSheet.create({
     width: '100%',
     flexDirection: 'row',
   },
+  closeIcon: {position: 'absolute', right: ms(12), top: ms(8)},
 });
