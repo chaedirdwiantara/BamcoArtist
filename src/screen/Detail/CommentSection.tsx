@@ -12,6 +12,7 @@ import {
 } from '../../interface/feed.interface';
 import {ms, mvs} from 'react-native-size-matters';
 import {filterParentID} from './function';
+import {DataDropDownType} from '../../data/dropdown';
 interface CommentSectionType {
   postCommentCount: number;
   postId: string;
@@ -34,6 +35,8 @@ interface CommentSectionType {
   dataLvl2: CommentList2[] | undefined;
   dataLvl3: CommentList3[] | undefined;
   toDetailOnPress: (id: string) => void;
+  selectedMenu: (value: DataDropDownType) => void;
+  selectedIdComment: (idComment: string) => void;
 }
 
 const CommentSection: FC<CommentSectionType> = (props: CommentSectionType) => {
@@ -49,6 +52,8 @@ const CommentSection: FC<CommentSectionType> = (props: CommentSectionType) => {
     postCommentCount,
     postId,
     toDetailOnPress,
+    selectedMenu,
+    selectedIdComment,
   } = props;
   const [recorder, setRecorder] = useState<string[]>([]);
   const [selectedId, setSelectedId] = useState<string[]>();
@@ -339,8 +344,8 @@ const CommentSection: FC<CommentSectionType> = (props: CommentSectionType) => {
           <PostComment
             toDetailOnPress={() => handleToDetail(item.commentOwner.UUID)}
             imgUri={item.commentOwner.image}
-            userName={elipsisText(item.commentOwner.fullname, 21)}
-            userId={`@${elipsisText(item.commentOwner.username, 10)}`}
+            fullName={elipsisText(item.commentOwner.fullname, 21)}
+            userName={`@${elipsisText(item.commentOwner.username, 10)}`}
             postDate={item.timeAgo}
             artistPostId={item.repliedTo}
             commentCaption={item.caption}
@@ -389,6 +394,9 @@ const CommentSection: FC<CommentSectionType> = (props: CommentSectionType) => {
               )
             }
             commentCount={item.commentsCount}
+            selectedMenu={selectedMenu}
+            idComment={item.id}
+            selectedIdComment={selectedIdComment}
             children={
               <>
                 {/* Comment Section Lvl 2 */}

@@ -334,7 +334,7 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
                       <Text style={styles.childrenPostTitle}>
                         {elipsisText(item.caption, 600)}
                       </Text>
-                      {item.image !== null ? (
+                      {item.images !== null ? (
                         <>
                           <Gap height={4} />
                           <View
@@ -343,7 +343,7 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
                             }}>
                             <View style={{height: '100%', width: '100%'}}>
                               <ImageList
-                                imgData={item.image}
+                                imgData={item.images}
                                 width={143}
                                 height={69.5}
                                 heightType2={142}
