@@ -5,8 +5,8 @@ import {widthPercentage} from '../../utils';
 import {SvgProps} from '../../interface/svg.interface';
 
 const ThreeDotsIcon = ({
-  width = widthPercentage(24),
-  height = widthPercentage(24),
+  width = widthPercentage(28),
+  height = widthPercentage(28),
   fill = 'none',
   style,
 }: SvgProps) => (

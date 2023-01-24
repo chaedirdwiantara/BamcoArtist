@@ -1,4 +1,5 @@
 import SsuAPI from './baseMusician';
+import SsuAPIPublic from './basePublic';
 import {
   CommentDetailResponseType,
   CommentResponseType,
@@ -23,6 +24,18 @@ export const listPost = async (
 ): Promise<ListPostResponseType> => {
   const {data} = await SsuAPI().request<ListPostResponseType>({
     url: '/post/public',
+    method: 'GET',
+    params: props,
+  });
+
+  return data;
+};
+
+export const listTopPost = async (
+  props?: ParamsProps,
+): Promise<ListPostResponseType> => {
+  const {data} = await SsuAPIPublic().request<ListPostResponseType>({
+    url: '/top-post',
     method: 'GET',
     params: props,
   });

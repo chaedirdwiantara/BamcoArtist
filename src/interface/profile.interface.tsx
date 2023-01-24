@@ -38,6 +38,8 @@ export type ProfileResponseType = {
     isValid: boolean;
     following: number | null;
     songAdded: number | null;
+    followers: number;
+    fans: number;
     createdAt: string;
     updatedAt: string;
   };

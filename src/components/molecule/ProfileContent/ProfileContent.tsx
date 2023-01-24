@@ -14,7 +14,6 @@ import {
   normalize,
   widthPercentage,
   heightPercentage,
-  widthResponsive,
 } from '../../../utils';
 import {font} from '../../../theme';
 import {TabFilter} from '../TabFilter';
@@ -118,6 +117,7 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
           backIcon={!ownProfile}
         />
         <UserInfoCard
+          profile={profile}
           type={ownProfile ? '' : 'self'}
           containerStyles={styles.infoCard}
           totalFollowing={profile.totalFollowing}

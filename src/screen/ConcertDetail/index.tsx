@@ -44,7 +44,10 @@ import {
 } from '../../utils';
 import TopMusician from '../ListCard/TopMusician';
 
-type MerchDetailProps = NativeStackScreenProps<RootStackParams, 'MerchDetail'>;
+type MerchDetailProps = NativeStackScreenProps<
+  RootStackParams,
+  'ConcertDetail'
+>;
 
 const renderPagination = (index: number, total: number) => {
   return (

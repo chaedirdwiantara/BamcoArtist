@@ -92,6 +92,11 @@ export const ProfileScreen: React.FC<ProfileProps> = (props: ProfileProps) => {
       params?.backgroundUri?.path || dataProfile?.data?.banner || null,
     avatarUri: params?.avatarUri?.path || dataProfile?.data.imageProfileUrl,
     totalFollowing: dataProfile?.data.following,
+    totalFollowers: dataProfile?.data.followers,
+    totalFans: dataProfile?.data.fans,
+    totalRelease: 0,
+    totalPlaylist: 0,
+    rank: 0,
   };
 
   return (

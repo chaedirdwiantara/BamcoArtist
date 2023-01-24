@@ -10,7 +10,15 @@ export const infoProfileUser: InfoProfileType[] = [
   },
   {
     point: 0,
+    title: 'LINE',
+  },
+  {
+    point: 0,
     title: 'LIKED SONGS',
+  },
+  {
+    point: 0,
+    title: 'LINE',
   },
   {
     point: 0,
