@@ -59,7 +59,7 @@ export const Carousel: FC<CarouselProps> = ({data, onPressBanner}) => {
         ref={flatListRef}
         data={dataWithPlaceholders}
         renderItem={({item, index}) => {
-          if (!item.imageUrl || !item.title) {
+          if (!item.imageUrls || !item.title) {
             return <View style={{width: EMPTY_ITEM_LENGTH}} />;
           }
 
@@ -95,7 +95,10 @@ export const Carousel: FC<CarouselProps> = ({data, onPressBanner}) => {
                   },
                   styles.itemContent,
                 ]}>
-                <Image source={{uri: item.imageUrl}} style={styles.itemImage} />
+                <Image
+                  source={{uri: item.imageUrls[3].image}}
+                  style={styles.itemImage}
+                />
                 <Animated.Text
                   numberOfLines={1}
                   ellipsizeMode={'tail'}
