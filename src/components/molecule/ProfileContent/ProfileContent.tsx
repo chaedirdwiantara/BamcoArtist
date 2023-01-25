@@ -14,6 +14,7 @@ import {
   normalize,
   widthPercentage,
   heightPercentage,
+  widthResponsive,
 } from '../../../utils';
 import {font} from '../../../theme';
 import {TabFilter} from '../TabFilter';

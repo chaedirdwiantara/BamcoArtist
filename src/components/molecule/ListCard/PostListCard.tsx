@@ -34,6 +34,7 @@ interface ListProps extends TouchableOpacityProps {
   commentCount: number;
   containerStyles?: ViewStyle;
   category: string;
+  toDetailOnPress: () => void;
 }
 
 const PostListCard: React.FC<ListProps> = (props: ListProps) => {
@@ -52,13 +53,14 @@ const PostListCard: React.FC<ListProps> = (props: ListProps) => {
     commentCount,
     containerStyles,
     category,
+    toDetailOnPress,
   } = props;
   return (
     <TouchableOpacity {...props}>
       <View style={[styles.topContainer, containerStyles]}>
-        <View>
+        <TouchableOpacity onPress={toDetailOnPress}>
           <Avatar imgUri={imgUri} size={widthResponsive(32)} />
-        </View>
+        </TouchableOpacity>
         <View
           style={{
             flex: 1,
@@ -66,7 +68,9 @@ const PostListCard: React.FC<ListProps> = (props: ListProps) => {
             paddingBottom: heightResponsive(2),
           }}>
           <View style={styles.topSection}>
-            <Text style={styles.songTitle}>{musicianName}</Text>
+            <Text style={styles.songTitle} onPress={toDetailOnPress}>
+              {musicianName}
+            </Text>
             <View style={[styles.category]}>
               <Text style={styles.categoryText}>{category}</Text>
             </View>

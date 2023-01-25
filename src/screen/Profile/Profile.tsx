@@ -5,10 +5,13 @@ import {
   useIsFocused,
   useNavigation,
 } from '@react-navigation/native';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {
+  NativeStackNavigationProp,
+  NativeStackScreenProps,
+} from '@react-navigation/native-stack';
 
 import Color from '../../theme/Color';
-import {RootStackParams} from '../../navigations';
+import {MainTabParams, RootStackParams} from '../../navigations';
 import {storage} from '../../hooks/use-storage.hook';
 import {usePlayerHook} from '../../hooks/use-player.hook';
 import {useProfileHook} from '../../hooks/use-profile.hook';
@@ -16,13 +19,10 @@ import {GuestContent, ProfileContent} from '../../components';
 import {usePlaylistHook} from '../../hooks/use-playlist.hook';
 import {useMusicianHook} from '../../hooks/use-musician.hook';
 
-interface ProfileProps {
-  props: {};
-  route: any;
-}
+type ProfileProps = NativeStackScreenProps<MainTabParams, 'Profile'>;
 
 export const ProfileScreen: React.FC<ProfileProps> = (props: ProfileProps) => {
-  const {params} = props?.route;
+  const params = props?.route.params;
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
   const {dataProfile, getProfileUser} = useProfileHook();
@@ -74,7 +74,7 @@ export const ProfileScreen: React.FC<ProfileProps> = (props: ProfileProps) => {
   };
 
   const goToEditProfile = () => {
-    navigation.navigate('EditProfile', {...params, ...dataProfile});
+    navigation.navigate('EditProfile', {...dataProfile});
   };
 
   const goToPlaylist = (id: number) => {
@@ -84,13 +84,9 @@ export const ProfileScreen: React.FC<ProfileProps> = (props: ProfileProps) => {
   const profile = {
     fullname: dataProfile?.data.fullname,
     username: '@' + dataProfile?.data.username,
-    bio:
-      params?.bio ||
-      dataProfile?.data.about ||
-      "I'm here to support the musician",
-    backgroundUri:
-      params?.backgroundUri?.path || dataProfile?.data?.banner || null,
-    avatarUri: params?.avatarUri?.path || dataProfile?.data.imageProfileUrl,
+    bio: dataProfile?.data.about || "I'm here to support the musician",
+    backgroundUri: dataProfile?.data?.banner || null,
+    avatarUri: dataProfile?.data.imageProfileUrl,
     totalFollowing: dataProfile?.data.following,
     totalFollowers: dataProfile?.data.followers,
     totalFans: dataProfile?.data.fans,

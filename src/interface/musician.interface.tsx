@@ -5,14 +5,13 @@ export type paramsTypeUuid = {
 };
 
 export type MusicianList = {
-  point: number;
-  uuid: string;
-  username: string;
-  fullname: string;
   email: string;
-  isFollowed: boolean;
-  imageProfileUrl: string | null;
   followers: number;
+  fullname: string;
+  imageProfileUrls: string | null;
+  isFollowed: boolean;
+  username: string;
+  uuid: string;
 };
 
 export type ListMusicianResponseType = {

@@ -242,6 +242,10 @@ const PostListHome: FC<PostListProps> = (props: PostListProps) => {
     setTrigger2ndModal(false);
   };
 
+  const handleToDetailMusician = (id: string) => {
+    navigation.navigate('MusicianProfile', {id});
+  };
+
   return (
     <>
       <View style={styles.container}>
@@ -289,9 +293,12 @@ const PostListHome: FC<PostListProps> = (props: PostListProps) => {
                   ? heightResponsive(25)
                   : heightResponsive(40),
             }}
-            renderItem={({item, index}: any) => (
+            renderItem={({item, index}) => (
               <>
                 <ListCard.PostList
+                  toDetailOnPress={() =>
+                    handleToDetailMusician(item.musician.uuid)
+                  }
                   musicianName={item.musician.fullname}
                   musicianId={`@${item.musician.username}`}
                   imgUri={item.musician.imageProfileUrl}
@@ -345,7 +352,7 @@ const PostListHome: FC<PostListProps> = (props: PostListProps) => {
                       <Text style={styles.childrenPostTitle}>
                         {elipsisText(item.caption, 600)}
                       </Text>
-                      {item.image !== null ? (
+                      {item.images !== null ? (
                         <>
                           <Gap height={4} />
                           <View
@@ -354,7 +361,7 @@ const PostListHome: FC<PostListProps> = (props: PostListProps) => {
                             }}>
                             <View style={{height: '100%', width: '100%'}}>
                               <ImageList
-                                imgData={item.image}
+                                imgData={item.images}
                                 width={143}
                                 height={69.5}
                                 heightType2={142}

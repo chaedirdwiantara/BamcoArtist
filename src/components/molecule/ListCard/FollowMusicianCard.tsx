@@ -15,7 +15,7 @@ import {normalize, widthResponsive} from '../../../utils';
 interface ListProps {
   musicianNum?: number;
   musicianName: string;
-  imgUri: string;
+  imgUri: string | null;
   followerCount: number;
   followOnPress: () => void;
   stateButton: boolean;

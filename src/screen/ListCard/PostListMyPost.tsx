@@ -36,7 +36,7 @@ import {
 } from '../../utils';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {RootStackParams} from '../../navigations';
+import {MainTabParams, RootStackParams} from '../../navigations';
 import ImageList from './ImageList';
 import {EmptyState} from '../../components/molecule/EmptyState/EmptyState';
 import {FriedEggIcon, TickCircleIcon} from '../../assets/icon';
@@ -58,6 +58,8 @@ interface PostListProps {
 const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
+  const navigateProfile =
+    useNavigation<NativeStackNavigationProp<MainTabParams>>();
   const {dataRightDropdown, dataLeftDropdown, uuidMusician} = props;
 
   const [inputCommentModal, setInputCommentModal] = useState<boolean>(false);
@@ -232,6 +234,10 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
     setTrigger2ndModal(false);
   };
 
+  const handleToDetailMusician = () => {
+    navigateProfile.navigate('Profile');
+  };
+
   return (
     <>
       <View style={styles.container}>
@@ -281,6 +287,7 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
             renderItem={({item}) => (
               <>
                 <ListCard.PostList
+                  toDetailOnPress={handleToDetailMusician}
                   musicianName={item.musician.fullname}
                   musicianId={`@${item.musician.username}`}
                   imgUri={item.musician.imageProfileUrl}

@@ -29,7 +29,7 @@ interface ListProps extends TouchableOpacityProps {
   commentCount: number;
   containerStyles?: ViewStyle;
   category: string;
-  toDetailOnPress?: () => void;
+  toDetailOnPress: () => void;
 }
 
 const DetailPost: React.FC<ListProps> = (props: ListProps) => {
