@@ -5,6 +5,7 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import Color from '../../theme/Color';
 import {RootStackParams} from '../../navigations';
 import {EditPlaylistContent} from '../../components';
+import {useBackHandler} from '../../utils/useBackHandler';
 
 type EditPlaylistProps = NativeStackScreenProps<
   RootStackParams,
@@ -18,6 +19,11 @@ export const EditPlaylist: React.FC<EditPlaylistProps> = ({
   const onPressGoBack = () => {
     navigation.goBack();
   };
+
+  useBackHandler(() => {
+    onPressGoBack();
+    return true;
+  });
 
   const goToPlaylist = (param: any) => {
     navigation.navigate('Playlist', {...param});

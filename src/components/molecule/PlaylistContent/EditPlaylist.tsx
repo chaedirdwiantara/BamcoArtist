@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import {View, StyleSheet, Text} from 'react-native';
+import {Image} from 'react-native-image-crop-picker';
 
 import {SsuInput} from '../../atom';
 import {color, font} from '../../../theme';
@@ -16,6 +17,7 @@ import {
 } from '../../../utils';
 import {Dropdown} from '../DropDown';
 import {dataVisibility} from '../../../data/playlist';
+import {uploadImage} from '../../../api/uploadImage.api';
 import {updatePlaylist} from '../../../api/playlist.api';
 import {Playlist} from '../../../interface/playlist.interface';
 
@@ -33,17 +35,20 @@ export const EditPlaylistContent: React.FC<EditPlaylistProps> = ({
   goToPlaylist,
   onPressGoBack,
 }) => {
+  const isPublic = playlist.isPublic ? 'Public' : 'Private';
   const [state, setState] = useState({
     playlistName: playlist.name || '',
     playlistDesc: playlist.description || '',
-    isPublic: playlist.isPublic || true,
+    isPublic: isPublic,
+    thumbnailUrl: playlist.thumbnailUrl || '',
   });
+
   const [isModalVisible, setModalVisible] = useState({
     modalConfirm: false,
     modalImage: false,
   });
   const [playlistUri, setPlaylistUri] = useState({
-    path: playlist.thumbnailUrl || undefined,
+    path: playlist.thumbnailUrl || '',
   });
   const [focusInput, setFocusInput] = useState<'name' | 'description' | null>(
     null,
@@ -56,15 +61,25 @@ export const EditPlaylistContent: React.FC<EditPlaylistProps> = ({
     });
   };
 
+  const setUploadImage = async (image: Image) => {
+    try {
+      const response = await uploadImage(image);
+      setState({...state, thumbnailUrl: response.data});
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const resetImage = () => {
-    setPlaylistUri({path: undefined});
+    setPlaylistUri({path: ''});
     setModalVisible({
       modalConfirm: false,
       modalImage: false,
     });
   };
 
-  const sendUri = (val: React.SetStateAction<{path: undefined}>) => {
+  const sendUri = (val: Image) => {
+    setUploadImage(val);
     setPlaylistUri(val);
   };
 
@@ -91,8 +106,8 @@ export const EditPlaylistContent: React.FC<EditPlaylistProps> = ({
       const payload = {
         name: state.playlistName,
         description: state.playlistDesc,
-        thumbnailUrl: '',
-        isPublic: true,
+        thumbnailUrl: state.thumbnailUrl,
+        isPublic: state.isPublic === 'Public',
       };
       const response = await updatePlaylist(playlist, payload);
       goToPlaylist(response.data.id);
@@ -183,10 +198,13 @@ export const EditPlaylistContent: React.FC<EditPlaylistProps> = ({
         </View>
 
         <Dropdown.Input
+          initialValue={isPublic}
           data={dataVisibility}
           placeHolder={'Visibility'}
           dropdownLabel={'Visibility'}
-          textTyped={(newText: string) => onChangeText('isPublic', newText)}
+          textTyped={(newText: {label: string; value: string}) =>
+            onChangeText('isPublic', newText.value)
+          }
           containerStyles={{marginTop: heightPercentage(15)}}
         />
       </View>
