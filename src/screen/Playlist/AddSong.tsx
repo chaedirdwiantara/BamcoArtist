@@ -1,29 +1,54 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, StyleSheet} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
 
 import Color from '../../theme/Color';
-import {RootStackParams} from '../../navigations';
 import {AddSongContent} from '../../components';
+import {RootStackParams} from '../../navigations';
 import {useSongHook} from '../../hooks/use-song.hook';
+import {useBackHandler} from '../../utils/useBackHandler';
+import {usePlaylistHook} from '../../hooks/use-playlist.hook';
+import {AddSongPropsType} from '../../interface/playlist.interface';
 
-export const AddSongScreen: React.FC = () => {
-  const navigation =
-    useNavigation<NativeStackNavigationProp<RootStackParams>>();
+type AddSongProps = NativeStackScreenProps<RootStackParams, 'AddSong'>;
+
+export const AddSongScreen: React.FC<AddSongProps> = ({
+  navigation,
+  route,
+}: AddSongProps) => {
+  const [search, setSearch] = useState<string>('');
+  const [trigger, setTrigger] = useState<boolean>(false);
   const {dataSong, getListDataSong} = useSongHook();
+  const {setAddSongToPlaylist} = usePlaylistHook();
 
   useEffect(() => {
-    getListDataSong();
-  }, []);
+    getListDataSong({playlistID: route.params.id, keyword: search});
+  }, [trigger, search]);
 
   const onPressGoBack = () => {
     navigation.goBack();
   };
 
+  useBackHandler(() => {
+    onPressGoBack();
+    return true;
+  });
+
+  const onPressAddSong = (props?: AddSongPropsType) => {
+    setAddSongToPlaylist(props);
+    setTrigger(!trigger);
+  };
+
   return (
     <View style={styles.root}>
-      <AddSongContent listSongs={dataSong} onPressGoBack={onPressGoBack} />
+      <AddSongContent
+        search={search}
+        setSearch={setSearch}
+        playlist={route.params}
+        listSongs={dataSong.filter(val => !val.isAddedToThisPlaylist)}
+        onPressGoBack={onPressGoBack}
+        setAddSongToPlaylist={onPressAddSong}
+      />
     </View>
   );
 };

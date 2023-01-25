@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {StyleSheet, View, Text} from 'react-native';
+import {StyleSheet, View, Text, ScrollView} from 'react-native';
 
 import {
   AddCircleIcon,
@@ -7,23 +7,34 @@ import {
   TickCircleIcon,
 } from '../../../assets/icon';
 import Color from '../../../theme/Color';
+import {
+  AddSongPropsType,
+  Playlist,
+} from '../../../interface/playlist.interface';
 import {TopNavigation} from '../TopNavigation';
 import {color, typography} from '../../../theme';
 import {Gap, SearchBar, SsuToast} from '../../atom';
 import TopSong from '../../../screen/ListCard/TopSong';
 import {SongList} from '../../../interface/song.interface';
-import {height, heightPercentage, widthPercentage} from '../../../utils';
+import {heightPercentage, widthPercentage} from '../../../utils';
 
 interface AddSongProps {
+  search: string;
+  setSearch: (text: string) => void;
+  playlist: Playlist;
   listSongs: SongList[];
   onPressGoBack: () => void;
+  setAddSongToPlaylist: (props?: AddSongPropsType) => void;
 }
 
 export const AddSongContent: React.FC<AddSongProps> = ({
+  search,
+  setSearch,
+  playlist,
   listSongs,
   onPressGoBack,
+  setAddSongToPlaylist,
 }) => {
-  const [search, setSearch] = useState('');
   const [toastVisible, setToastVisible] = useState(false);
 
   useEffect(() => {
@@ -33,7 +44,8 @@ export const AddSongContent: React.FC<AddSongProps> = ({
       }, 3000);
   }, [toastVisible]);
 
-  const onPressIcon = () => {
+  const onPressIcon = (songId: number) => {
+    setAddSongToPlaylist({playlistId: playlist.id, songId: songId});
     setToastVisible(true);
   };
 
@@ -54,19 +66,21 @@ export const AddSongContent: React.FC<AddSongProps> = ({
           paddingVertical: heightPercentage(20),
         }}
       />
-      <View
-        style={{
-          height: height,
-          paddingHorizontal: widthPercentage(20),
-        }}>
-        <TopSong
-          dataSong={listSongs}
-          onPress={() => null}
-          rightIcon={true}
-          rightIconComponent={<AddCircleIcon />}
-          onPressIcon={onPressIcon}
-        />
-      </View>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <View
+          style={{
+            paddingHorizontal: widthPercentage(20),
+          }}>
+          <TopSong
+            dataSong={listSongs}
+            onPress={() => null}
+            rightIcon={true}
+            rightIconComponent={<AddCircleIcon />}
+            onPressIcon={onPressIcon}
+            activeOpacity={1}
+          />
+        </View>
+      </ScrollView>
 
       <SsuToast
         modalVisible={toastVisible}
