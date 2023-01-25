@@ -1,8 +1,9 @@
 import React from 'react';
-import {View, Text, StyleSheet, Platform} from 'react-native';
+import {View, Text, StyleSheet, Platform, TouchableOpacity} from 'react-native';
 import {
   createNativeStackNavigator,
   NativeStackNavigationOptions,
+  NativeStackNavigationProp,
 } from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
@@ -92,6 +93,7 @@ import {AlbumData} from '../interface/musician.interface';
 import {imageUriProps} from '../screen/MusicianProfile/DataMusician';
 import {ChangePNScreen} from '../screen/Setting/PhoneNumber/ChangePN';
 import {OtpPNScreen} from '../screen/Setting/PhoneNumber/OTP';
+import {useNavigation} from '@react-navigation/native';
 
 export type RootStackParams = {
   Account: undefined;
@@ -178,7 +180,10 @@ export type MainTabParams = {
   Event: undefined;
   Feed: undefined;
   Home: undefined;
-  Profile: undefined;
+  Profile: {
+    showToast?: boolean;
+    deletePlaylist?: boolean;
+  };
   Search: undefined;
 };
 
@@ -188,70 +193,81 @@ const screenOption: NativeStackNavigationOptions = {
 };
 
 const MainTab = createBottomTabNavigator<MainTabParams>();
-const TabScreen = () => (
-  <MainTab.Navigator
-    screenOptions={{
-      tabBarActiveTintColor: Color.Pink[200],
-      tabBarInactiveTintColor: Color.Dark[300],
-      tabBarShowLabel: false,
-      headerShown: false,
-      tabBarStyle: {
-        paddingBottom: Platform.OS === 'ios' ? 20 : 0,
-        height: Platform.OS === 'ios' ? 84 : 64,
-        backgroundColor: '#0F1319',
-        borderTopColor: Color.Dark[800],
-      },
-    }}>
-    <MainTab.Screen
-      name="Home"
-      component={HomeScreen}
-      options={{
-        tabBarIcon: ({color}) => (
-          <View style={styles.root}>
-            <HomeIcon stroke={color} />
-            <Text style={[styles.label, {color}]}>{'Home'}</Text>
-          </View>
-        ),
-      }}
-    />
-    <MainTab.Screen
-      name="Feed"
-      component={FeedScreen}
-      options={{
-        tabBarIcon: ({color}) => (
-          <View style={styles.root}>
-            <FeedIcon stroke={color} />
-            <Text style={[styles.label, {color}]}>{'Feed'}</Text>
-          </View>
-        ),
-      }}
-    />
-    <MainTab.Screen
-      name="Event"
-      component={EventScreen}
-      options={{
-        tabBarIcon: ({color}) => (
-          <View style={styles.root}>
-            <CrownIcon stroke={color} />
-            <Text style={[styles.label, {color}]}>{'Event'}</Text>
-          </View>
-        ),
-      }}
-    />
-    <MainTab.Screen
-      name="Profile"
-      component={ProfileScreen}
-      options={{
-        tabBarIcon: ({color}) => (
-          <View style={styles.root}>
-            <UserProfileIcon stroke={color} />
-            <Text style={[styles.label, {color}]}>{'Profile'}</Text>
-          </View>
-        ),
-      }}
-    />
-  </MainTab.Navigator>
-);
+const TabScreen = () => {
+  const navigation = useNavigation<NativeStackNavigationProp<MainTabParams>>();
+  return (
+    <MainTab.Navigator
+      screenOptions={{
+        tabBarActiveTintColor: Color.Pink[200],
+        tabBarInactiveTintColor: Color.Dark[300],
+        tabBarShowLabel: false,
+        headerShown: false,
+        tabBarStyle: {
+          paddingBottom: Platform.OS === 'ios' ? 20 : 0,
+          height: Platform.OS === 'ios' ? 84 : 64,
+          backgroundColor: '#0F1319',
+          borderTopColor: Color.Dark[800],
+        },
+      }}>
+      <MainTab.Screen
+        name="Home"
+        component={HomeScreen}
+        options={{
+          tabBarIcon: ({color}) => (
+            <View style={styles.root}>
+              <HomeIcon stroke={color} />
+              <Text style={[styles.label, {color}]}>{'Home'}</Text>
+            </View>
+          ),
+        }}
+      />
+      <MainTab.Screen
+        name="Feed"
+        component={FeedScreen}
+        options={{
+          tabBarIcon: ({color}) => (
+            <View style={styles.root}>
+              <FeedIcon stroke={color} />
+              <Text style={[styles.label, {color}]}>{'Feed'}</Text>
+            </View>
+          ),
+        }}
+      />
+      <MainTab.Screen
+        name="Event"
+        component={EventScreen}
+        options={{
+          tabBarIcon: ({color}) => (
+            <View style={styles.root}>
+              <CrownIcon stroke={color} />
+              <Text style={[styles.label, {color}]}>{'Event'}</Text>
+            </View>
+          ),
+        }}
+      />
+      <MainTab.Screen
+        name="Profile"
+        component={ProfileScreen}
+        initialParams={{showToast: false, deletePlaylist: false}}
+        options={{
+          tabBarIcon: ({color}) => (
+            <TouchableOpacity
+              style={styles.root}
+              onPress={() =>
+                navigation.navigate('Profile', {
+                  showToast: false,
+                  deletePlaylist: false,
+                })
+              }>
+              <UserProfileIcon stroke={color} />
+              <Text style={[styles.label, {color}]}>{'Profile'}</Text>
+            </TouchableOpacity>
+          ),
+        }}
+      />
+    </MainTab.Navigator>
+  );
+};
 
 const RootStack = createNativeStackNavigator<RootStackParams>();
 export const RootStackScreen = () => (
