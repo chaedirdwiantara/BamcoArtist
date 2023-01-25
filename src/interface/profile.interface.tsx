@@ -20,29 +20,40 @@ export type ExpectationType = {
   name: string;
 };
 
+export type ListImageType = {
+  length: number;
+  image: string;
+  presetName: string;
+};
+
+export type ProfileResponseData = {
+  uuid: string;
+  username: string;
+  email: string;
+  fullname: string;
+  about: string | null;
+  banners: ListImageType[];
+  imageProfileUrls: ListImageType[];
+  phoneNumber: string | null;
+  registrationType: RegistrationType;
+  favoriteGenres: FavGenreType[];
+  moods: MoodsType[];
+  expectation: ExpectationType[];
+  isValid: boolean;
+  following: number | null;
+  songAdded: number | null;
+  createdAt: string;
+  updatedAt: string;
+  locationCountry: string;
+  gender: string;
+  followers: number;
+  fans: number;
+  bio: string | null;
+};
+
 export type ProfileResponseType = {
   code: number;
-  data: {
-    uuid: string;
-    username: string;
-    email: string;
-    fullname: string;
-    about: string | null;
-    banner: string | null;
-    imageProfileUrl: string | null;
-    phoneNumber: string | null;
-    registrationType: RegistrationType;
-    favoriteGenres: FavGenreType[];
-    moods: MoodsType[];
-    expectation: ExpectationType[];
-    isValid: boolean;
-    following: number | null;
-    songAdded: number | null;
-    followers: number;
-    fans: number;
-    createdAt: string;
-    updatedAt: string;
-  };
+  data: ProfileResponseData;
   message: string;
   status: number;
 };

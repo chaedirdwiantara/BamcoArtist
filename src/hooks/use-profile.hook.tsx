@@ -40,9 +40,16 @@ export const useProfileHook = () => {
     }
   };
 
-  const updateProfileUser = async (props?: UpdateProfilePropsType) => {
+  const updateProfileUser = async (
+    props?: UpdateProfilePropsType,
+    trigger?: boolean,
+  ) => {
     try {
       await updateProfile(props);
+      if (trigger) {
+        const response = await getProfile();
+        setDataProfile(response);
+      }
     } catch (error) {
       console.log(error);
     } finally {
