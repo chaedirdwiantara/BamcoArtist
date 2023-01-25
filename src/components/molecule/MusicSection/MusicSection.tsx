@@ -29,6 +29,7 @@ interface ListProps {
   rightIcon?: boolean;
   rightIconComponent?: React.ReactNode;
   onPressIcon?: (data: any) => void;
+  activeOpacity?: number;
 }
 
 interface DataMore {
