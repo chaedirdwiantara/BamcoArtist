@@ -14,6 +14,7 @@ import {
   normalize,
   widthPercentage,
   heightPercentage,
+  widthResponsive,
 } from '../../../utils';
 import {font} from '../../../theme';
 import {TabFilter} from '../TabFilter';
@@ -201,6 +202,21 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
                 uuidMusician={uuid}
                 dataRightDropdown={dropDownDataCategory}
                 dataLeftDropdown={dropDownDataSort}
+              />
+            </View>
+          ) : filter2[selectedIndex].filterName === 'MUSIC' ? (
+            <View>
+              {ownProfile && (
+                <CreateNewCard
+                  num="00"
+                  text="Create New Playlist"
+                  onPress={() => onPressGoTo('CreateNewPlaylist')}
+                />
+              )}
+              <ListPlaylist
+                data={dataPlaylist === null ? [] : dataPlaylist}
+                onPress={goToPlaylist}
+                scrollable={false}
               />
             </View>
           ) : (
