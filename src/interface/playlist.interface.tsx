@@ -9,6 +9,12 @@ export type Playlist = {
   isPublic: boolean;
   totalSong: number;
   ordering: number;
+  playlistOwner: {
+    UUID: string;
+    fullname: string;
+    image: string | null;
+    username: string;
+  };
 };
 
 export type PlaylistPropsTypeA = {
@@ -19,7 +25,7 @@ export type PlaylistPropsType = {
   name: string;
   description: string;
   thumbnailUrl: string;
-  isPublic: boolean;
+  isPublic: boolean | string;
 };
 
 export type AddSongPropsType = {
