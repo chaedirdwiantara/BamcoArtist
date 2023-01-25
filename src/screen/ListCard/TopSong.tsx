@@ -1,7 +1,7 @@
 import React, {FC} from 'react';
-import {MusicSection} from '../../components';
 import {mvs} from 'react-native-size-matters';
 import {FlashList} from '@shopify/flash-list';
+import {MusicSection} from '../../components';
 import {SongList} from '../../interface/song.interface';
 import {elipsisText, heightResponsive} from '../../utils';
 
@@ -13,7 +13,8 @@ interface TopSongPropsScreen {
   hideDropdownMore?: boolean;
   rightIcon?: boolean;
   rightIconComponent?: React.ReactNode;
-  onPressIcon?: (data: any) => void;
+  onPressIcon?: (data: number) => void;
+  activeOpacity?: number;
 }
 
 const TopSong: FC<TopSongPropsScreen> = (props: TopSongPropsScreen) => {
@@ -26,10 +27,11 @@ const TopSong: FC<TopSongPropsScreen> = (props: TopSongPropsScreen) => {
     rightIcon,
     rightIconComponent,
     onPressIcon,
+    activeOpacity,
   } = props;
 
   return (
-    <FlashList
+    <FlashList<SongList>
       data={dataSong}
       showsVerticalScrollIndicator={false}
       scrollEnabled={scrollable}
@@ -41,12 +43,15 @@ const TopSong: FC<TopSongPropsScreen> = (props: TopSongPropsScreen) => {
           musicTitle={elipsisText(item.title, 22)}
           singerName={item.musicianName}
           onPressCard={type === 'home' ? () => onPress(item) : undefined}
-          containerStyles={{marginTop: mvs(20)}}
-          played={type === 'home' ? item.played : false}
+          containerStyles={{
+            marginTop: mvs(20),
+            marginBottom: index + 1 === dataSong?.length ? mvs(20) : 0,
+          }}
           hideDropdownMore={hideDropdownMore}
           rightIcon={rightIcon}
           rightIconComponent={rightIconComponent}
-          onPressIcon={onPressIcon}
+          onPressIcon={() => onPressIcon && onPressIcon(item.id)}
+          activeOpacity={activeOpacity}
         />
       )}
       estimatedItemSize={heightResponsive(500)}
