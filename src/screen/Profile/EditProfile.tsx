@@ -1,57 +1,96 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {StyleSheet, View} from 'react-native';
+import {Image} from 'react-native-image-crop-picker';
+import {
+  NativeStackNavigationProp,
+  NativeStackScreenProps,
+} from '@react-navigation/native-stack';
 import {useNavigation} from '@react-navigation/native';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+
 import Color from '../../theme/Color';
-import {RootStackParams} from '../../navigations';
 import {EditProfile} from '../../components';
+import {uploadImage} from '../../api/uploadImage.api';
 import {useProfileHook} from '../../hooks/use-profile.hook';
-import {useUploadImageHook} from '../../hooks/use-uploadImage.hook';
+import {MainTabParams, RootStackParams} from '../../navigations';
 
-interface ProfileProps {
-  props: {};
-  route: any;
-}
+type EditProfileProps = NativeStackScreenProps<RootStackParams, 'EditProfile'>;
 
-export const EditProfileScreen: React.FC<ProfileProps> = (
-  props: ProfileProps,
-) => {
-  const {params} = props?.route;
+export const EditProfileScreen: React.FC<EditProfileProps> = ({
+  navigation,
+  route,
+}: EditProfileProps) => {
+  const navigation2 = useNavigation<NativeStackNavigationProp<MainTabParams>>();
+  const dataProfile = route.params;
+  const banners =
+    dataProfile !== undefined && dataProfile.banners?.length > 0
+      ? dataProfile.banners[2].image
+      : null;
 
+  const avatar =
+    dataProfile !== undefined && dataProfile.imageProfileUrls?.length > 0
+      ? dataProfile.imageProfileUrls[2].image
+      : null;
   const {updateProfileUser} = useProfileHook();
-  const {dataImage, setUploadImage} = useUploadImageHook();
-  const navigation =
-    useNavigation<NativeStackNavigationProp<RootStackParams>>();
+
+  const [avatarUri, setAvatarUri] = useState(avatar || '');
+  const [backgroundUri, setBackgroundUri] = useState(banners || '');
+  const [photos, setPhotos] = useState<string[]>([]);
 
   const goBack = () => {
     navigation.goBack();
   };
 
-  const onPressSave = (param: any) => {
+  const onPressSave = (param: {bio: string; about: string}) => {
     updateProfileUser({
-      about: param.bio,
+      bio: param.bio,
+      about: param.about,
+      imageProfileUrl: avatarUri,
+      banner: backgroundUri,
     });
-    navigation.navigate('Profile', {...param});
+    navigation2.navigate('Profile', {showToast: true});
+  };
+
+  const setResetImage = (type: string) => {
+    type === 'avatarUri' ? setAvatarUri('') : setBackgroundUri('');
+  };
+
+  const setUploadImage = async (image: Image, type: string) => {
+    try {
+      const response = await uploadImage(image);
+      if (type === 'avatarUri') {
+        setAvatarUri(response.data);
+      } else if (type === 'backgroundUri') {
+        setBackgroundUri(response.data);
+      } else {
+        setPhotos([response.data, photos]);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const profile = {
-    fullname: params?.data?.fullname || 'Kendal Jenner',
-    username: '@' + params?.data?.username || 'kendaljenner',
-    bio:
-      params?.bio || params?.data?.about || "I'm here to support the musician",
-    backgroundUri: params?.backgroundUri?.path || params?.data?.banner || null,
-    avatarUri: params?.avatarUri?.path || params?.data?.imageProfileUrl,
+    fullname: dataProfile?.fullname,
+    username: '@' + dataProfile?.username,
+    bio: dataProfile?.bio || "I'm here to support the musician",
+    about: dataProfile?.about,
+    avatarUri: avatarUri,
+    backgroundUri: backgroundUri,
   };
 
   return (
     <View style={styles.root}>
       <EditProfile
         profile={profile}
-        onPressGoBack={goBack}
         type={'edit'}
+        onPressGoBack={goBack}
         onPressSave={onPressSave}
-        dataImage={dataImage}
-        setUploadImage={(image: any) => setUploadImage(image)}
+        setUploadImage={(image: Image, type: string) =>
+          setUploadImage(image, type)
+        }
+        setResetImage={(type: string) => {
+          setResetImage(type);
+        }}
       />
     </View>
   );

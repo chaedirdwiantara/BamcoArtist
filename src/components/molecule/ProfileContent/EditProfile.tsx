@@ -1,24 +1,36 @@
 import React, {useState} from 'react';
-import {Text, View, StyleSheet, Platform} from 'react-native';
+import {
+  Text,
+  View,
+  StyleSheet,
+  Platform,
+  ScrollView,
+  TouchableOpacity,
+} from 'react-native';
+import {mvs} from 'react-native-size-matters';
+import {Image} from 'react-native-image-crop-picker';
 
 import {ModalConfirm} from '../..';
-import {SsuInput} from '../../atom';
+import {Gap, SsuInput} from '../../atom';
+
+import Font from '../../../theme/Font';
 import Color from '../../../theme/Color';
 import {TopNavigation} from '../TopNavigation';
+import {ModalSocMed} from '../Modal/ModalSocMed';
 import {ProfileHeader} from './components/Header';
-import Typography from '../../../theme/Typography';
 import {ModalImagePicker} from '../Modal/ModalImagePicker';
 import {ArrowLeftIcon, SaveIcon} from '../../../assets/icon';
-import {heightPercentage, normalize, widthPercentage} from '../../../utils';
-import {UploadImageResponseType} from '../../../interface/uploadImage.interface';
+import {heightPercentage, widthPercentage} from '../../../utils';
+import ProfileComponent from '../../../screen/MusicianProfile/ProfileComponent';
+import ImageList from '../../../screen/CreatePost/showImage';
 
 interface EditProfileProps {
   profile: any;
   type: string;
   onPressGoBack: () => void;
-  onPressSave: (params: any) => void;
-  dataImage: UploadImageResponseType | undefined;
-  setUploadImage: (image: any) => void;
+  onPressSave: (params: {bio: string; about: string}) => void;
+  setUploadImage: (image: Image, type: string) => void;
+  setResetImage: (type: string) => void;
 }
 
 export const EditProfile: React.FC<EditProfileProps> = ({
@@ -27,36 +39,50 @@ export const EditProfile: React.FC<EditProfileProps> = ({
   onPressGoBack,
   onPressSave,
   setUploadImage,
+  setResetImage,
 }) => {
   const [bio, setBio] = useState(profile.bio || '');
+  const [about, setAbout] = useState(profile.about || '');
   const [isModalVisible, setModalVisible] = useState({
     modalConfirm: false,
     modalImage: false,
+    modalSocMed: false,
   });
   const [uriType, setUriType] = useState('');
   const [uri, setUri] = useState({
     avatarUri: {path: null},
     backgroundUri: {path: null},
   });
-  const [focusInput, setFocusInput] = useState(false);
+  const [photos, setPhotos] = useState<Image[]>([]);
 
   const openModalConfirm = () => {
     setModalVisible({
       modalConfirm: true,
+      modalSocMed: false,
       modalImage: false,
     });
   };
 
   const openModalImage = (newType: string) => {
     setModalVisible({
-      modalConfirm: false,
       modalImage: true,
+      modalSocMed: false,
+      modalConfirm: false,
     });
     setUriType(newType);
   };
 
+  const openModalSocMed = () => {
+    setModalVisible({
+      modalSocMed: true,
+      modalConfirm: false,
+      modalImage: false,
+    });
+  };
+
   const resetImage = () => {
     setUri({...uri, [uriType]: null});
+    setResetImage(uriType);
     closeModal();
   };
 
@@ -64,12 +90,25 @@ export const EditProfile: React.FC<EditProfileProps> = ({
     setModalVisible({
       modalConfirm: false,
       modalImage: false,
+      modalSocMed: false,
     });
   };
 
-  const sendUri = (val: {assets: string[]; path: string}) => {
-    setUploadImage(val);
+  const sendUri = (val: Image) => {
+    setUploadImage(val, uriType);
     setUri({...uri, [uriType]: val});
+  };
+
+  const sendMultipleUri = (val: Image[]) => {
+    photos.length + val.length <= 4 ? setPhotos([...photos, ...val]) : null;
+    for (let i = 0; i < photos.length; i++) {
+      console.log('photos sendMultipleUri', photos);
+      setUploadImage(photos[i], 'photos');
+    }
+  };
+
+  const closeImage = (id: number) => {
+    setPhotos(photos.filter((x: Image) => x.path !== photos[id].path));
   };
 
   const avatarUri = uri?.avatarUri?.path || profile.avatarUri || null;
@@ -83,7 +122,9 @@ export const EditProfile: React.FC<EditProfileProps> = ({
       ? avatarUri !== null && avatarUri !== ''
       : backgroundUri !== null && backgroundUri !== '';
 
-  const newColor = bio.length === 110 ? Color.Error[400] : Color.Neutral[10];
+  const newColorBio = bio.length === 110 ? Color.Error[400] : Color.Neutral[10];
+  const newColorAbout =
+    about.length === 600 ? Color.Error[400] : Color.Neutral[10];
 
   return (
     <View style={styles.root}>
@@ -96,45 +137,109 @@ export const EditProfile: React.FC<EditProfileProps> = ({
         rightIconAction={openModalConfirm}
         containerStyles={{paddingHorizontal: widthPercentage(20)}}
       />
-      <ProfileHeader
-        type={type}
-        avatarUri={avatarUri}
-        backgroundUri={backgroundUri}
-        fullname={profile.fullname}
-        username={profile.username}
-        containerStyles={{height: heightPercentage(206)}}
-        iconPress={openModalImage}
-      />
-      <View style={styles.textAreaContainer}>
-        <Text style={[Typography.Overline, styles.label]}>Bio</Text>
-        <SsuInput.InputText
-          value={bio}
-          onChangeText={(newText: string) => setBio(newText)}
-          placeholder={'Type here...'}
-          containerStyles={styles.textArea}
-          maxLength={110}
-          multiline
-          numberOfLines={4}
-          fontColor={Color.Neutral[10]}
-          inputStyles={styles.inputBio}
-          onFocus={() => setFocusInput(true)}
-          onBlur={() => setFocusInput(false)}
-          isFocus={focusInput}
+      <ScrollView>
+        <ProfileHeader
+          type={type}
+          avatarUri={avatarUri}
+          backgroundUri={backgroundUri}
+          fullname={profile.fullname}
+          username={profile.username}
+          containerStyles={{height: heightPercentage(206)}}
+          iconPress={openModalImage}
         />
-        <Text
+
+        <View style={styles.textAreaContainer}>
+          <Text style={styles.title}>{'About'}</Text>
+          <SsuInput.InputLabel
+            label="Bio"
+            placeholder="Tell us about yourself"
+            value={bio}
+            multiline
+            maxLength={110}
+            onChangeText={(newText: string) => setBio(newText)}
+            containerStyles={{marginTop: heightPercentage(15)}}
+          />
+          <Text
+            style={[
+              styles.length,
+              {color: newColorBio},
+            ]}>{`${bio.length}/110`}</Text>
+        </View>
+
+        <View style={styles.textAreaContainer}>
+          <SsuInput.InputLabel
+            label="About"
+            placeholder="Tell us about yourself"
+            value={about}
+            multiline
+            maxLength={600}
+            onChangeText={(newText: string) => setAbout(newText)}
+            containerStyles={{marginTop: heightPercentage(15)}}
+          />
+          <Text
+            style={[
+              styles.length,
+              {color: newColorAbout},
+            ]}>{`${about.length}/600`}</Text>
+        </View>
+
+        <View style={styles.textAreaContainer}>
+          <Text style={styles.title}>{'Social Media'}</Text>
+          <TouchableOpacity onPress={openModalSocMed}>
+            <Text style={styles.addText}>{'+ Social Media Settings'}</Text>
+          </TouchableOpacity>
+          <ProfileComponent
+            title=""
+            gap={0}
+            socmedSection
+            socmed={[
+              'facebook',
+              'twitter',
+              'instagram',
+              'tiktok',
+              'snapchat',
+              'vk',
+              'weibo',
+            ]}
+            containerStyles={{paddingHorizontal: 0}}
+          />
+        </View>
+
+        <View
           style={[
-            styles.length,
-            {color: newColor},
-          ]}>{`${bio.length}/110`}</Text>
-      </View>
+            styles.textAreaContainer,
+            {marginBottom: heightPercentage(30)},
+          ]}>
+          <Text style={styles.title}>{'Photos'}</Text>
+          <TouchableOpacity onPress={() => openModalImage('photos')}>
+            <Text style={styles.addText}>{'+ Add Photos'}</Text>
+          </TouchableOpacity>
+          <Gap height={heightPercentage(20)} />
+          <ImageList
+            imgData={photos}
+            disabled={true}
+            width={162}
+            height={79}
+            onPress={closeImage}
+          />
+        </View>
+      </ScrollView>
 
       <ModalImagePicker
         title={titleModalPicker}
         modalVisible={isModalVisible.modalImage}
         sendUri={sendUri}
+        sendUriMultiple={sendMultipleUri}
         onDeleteImage={resetImage}
         onPressClose={closeModal}
-        hideMenuDelete={hideMenuDelete}
+        hideMenuDelete={hideMenuDelete && uriType !== 'photos'}
+        multiple={uriType === 'photos'}
+      />
+
+      <ModalSocMed
+        modalVisible={isModalVisible.modalSocMed}
+        onPressClose={closeModal}
+        titleModal={'Social Media'}
       />
 
       <ModalConfirm
@@ -142,7 +247,7 @@ export const EditProfile: React.FC<EditProfileProps> = ({
         title="Edit Profile"
         subtitle="Are you sure to finish edit profile?"
         onPressClose={closeModal}
-        onPressOk={() => onPressSave({...uri, bio})}
+        onPressOk={() => onPressSave({bio, about})}
       />
     </View>
   );
@@ -153,7 +258,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   label: {
-    fontSize: normalize(12),
+    fontSize: mvs(12),
     color: Color.Dark[50],
     marginBottom: heightPercentage(5),
     marginTop: heightPercentage(20),
@@ -162,7 +267,6 @@ const styles = StyleSheet.create({
   textAreaContainer: {
     width: '90%',
     alignSelf: 'center',
-    flex: 1,
   },
   textArea: {
     paddingHorizontal: 0,
@@ -173,7 +277,19 @@ const styles = StyleSheet.create({
     height: Platform.OS === 'ios' ? heightPercentage(60) : undefined,
   },
   length: {
-    fontSize: normalize(12),
+    fontSize: mvs(12),
     marginTop: heightPercentage(5),
+  },
+  title: {
+    fontSize: mvs(13),
+    color: Color.Success[500],
+    fontFamily: Font.InterSemiBold,
+    marginTop: heightPercentage(20),
+  },
+  addText: {
+    fontSize: mvs(12),
+    color: Color.Pink[2],
+    fontFamily: Font.InterRegular,
+    marginTop: heightPercentage(10),
   },
 });
