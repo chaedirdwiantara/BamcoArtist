@@ -16,3 +16,8 @@ export type ParamsProps = {
   perPage?: number;
   musician_uuid?: string;
 };
+
+export type imageTypes = {
+  image: string;
+  presetName: string;
+};

@@ -71,6 +71,10 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
   const [modalSuccessDonate, setModalSuccessDonate] = useState<boolean>(false);
   const [trigger2ndModal, setTrigger2ndModal] = useState<boolean>(false);
 
+  // * UPDATE HOOKS
+  const [selectedIdPost, setSelectedIdPost] = useState<string>();
+  const [selectedMenu, setSelectedMenu] = useState<DataDropDownType>();
+
   const {
     feedIsLoading,
     feedIsError,
@@ -236,6 +240,15 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
     navigation.navigate('MusicianProfile', {id});
   };
 
+  // ! UPDATE COMMENT AREA
+  useEffect(() => {
+    if (selectedIdPost !== undefined && selectedMenu !== undefined) {
+      console.log('selectedIdPost', selectedIdPost);
+      console.log('selectedMenu', selectedMenu);
+    }
+  }, [selectedIdPost, selectedMenu]);
+  // ! END OF UPDATE COMMENT AREA
+
   return (
     <>
       <View style={styles.container}>
@@ -336,6 +349,10 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
                   tokenOnPress={tokenOnPress}
                   shareOnPress={shareOnPress}
                   commentCount={item.commentsCount}
+                  myPost={item.musician.uuid === dataProfile?.data.uuid}
+                  selectedMenu={setSelectedMenu}
+                  idPost={item.id}
+                  selectedIdPost={setSelectedIdPost}
                   children={
                     <View style={{width: '100%'}}>
                       <Text style={styles.childrenPostTitle}>

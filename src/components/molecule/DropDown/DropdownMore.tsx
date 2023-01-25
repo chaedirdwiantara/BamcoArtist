@@ -1,11 +1,12 @@
 import React, {useState} from 'react';
-import {StyleSheet, Text, View, ViewStyle} from 'react-native';
+import {StyleSheet, TouchableOpacity, View, ViewStyle} from 'react-native';
 import {Dropdown} from 'react-native-element-dropdown';
-import {ms, mvs} from 'react-native-size-matters';
-import {HomeIcon, ThreeDotsIcon} from '../../../assets/icon';
+import {mvs} from 'react-native-size-matters';
+import {ThreeDotsIcon} from '../../../assets/icon';
 import {DataDropDownType} from '../../../data/dropdown';
 import {color, font} from '../../../theme';
 import {normalize, widthPercentage} from '../../../utils';
+import {Gap} from '../../atom';
 
 interface dataProps {
   label: string;
@@ -69,11 +70,36 @@ const DropdownMore: React.FC<DropdownMoreProps> = (
         showsVerticalScrollIndicator={false}
         autoScroll={false}
         activeColor={itemBg}
-        renderLeftIcon={() => (
-          <ThreeDotsIcon
-            fill={iconFill ? iconFill : color.Neutral[10]}
-            style={iconStyle ? iconStyle : {marginLeft: -5}}
-          />
+        renderRightIcon={() => (
+          <View
+            style={{
+              paddingHorizontal: 8,
+              paddingVertical: 3,
+            }}>
+            <View
+              style={{
+                width: 2.5,
+                height: 2.5,
+                borderRadius: 50,
+                backgroundColor: iconFill ? iconFill : color.Neutral[10],
+              }}></View>
+            <Gap height={2.5} />
+            <View
+              style={{
+                width: 2.5,
+                height: 2.5,
+                borderRadius: 50,
+                backgroundColor: iconFill ? iconFill : color.Neutral[10],
+              }}></View>
+            <Gap height={2.5} />
+            <View
+              style={{
+                width: 2.5,
+                height: 2.5,
+                borderRadius: 50,
+                backgroundColor: iconFill ? iconFill : color.Neutral[10],
+              }}></View>
+          </View>
         )}
       />
     </View>
@@ -83,9 +109,7 @@ const DropdownMore: React.FC<DropdownMoreProps> = (
 export default DropdownMore;
 
 const styles = StyleSheet.create({
-  container: {
-    width: widthPercentage(15),
-  },
+  container: {},
   // Dropdown first view
   dropdown: {
     // paddingHorizontal: 8,
@@ -94,7 +118,6 @@ const styles = StyleSheet.create({
   containerStyle: {
     borderWidth: 0,
     backgroundColor: itemBg,
-    // marginLeft: widthPercentage(-57),
   },
   // Item container in modal container
   itemContainer: {

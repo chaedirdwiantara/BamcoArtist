@@ -1,4 +1,4 @@
-import {PaginationType} from './base.interface';
+import {imageTypes, PaginationType} from './base.interface';
 
 export type paramsTypeUuid = {
   uuid: string;
@@ -8,7 +8,7 @@ export type MusicianList = {
   email: string;
   followers: number;
   fullname: string;
-  imageProfileUrls: string | null;
+  imageProfileUrls: imageTypes[];
   isFollowed: boolean;
   username: string;
   uuid: string;

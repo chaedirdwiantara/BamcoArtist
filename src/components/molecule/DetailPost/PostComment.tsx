@@ -79,16 +79,12 @@ const PostComment: React.FC<ListProps> = (props: ListProps) => {
               alignItems: 'center',
             }}>
             <Text style={styles.postDateStyle}>{postDate}</Text>
-            {/* <Gap width={4} /> */}
             <Dropdown.More
               data={dataUpdateComment}
               idComment={idComment}
               selectedIdComment={selectedIdComment}
               selectedMenu={selectedMenu}
               iconFill={color.Dark[50]}
-              iconStyle={{
-                marginLeft: 0,
-              }}
               containerStyle={{
                 width: widthResponsive(110),
                 marginLeft: widthResponsive(-97),

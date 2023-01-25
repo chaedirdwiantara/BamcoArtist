@@ -11,15 +11,17 @@ import {Avatar, Gap} from '../../atom';
 import {color, font} from '../../../theme';
 import {DefaultAvatar} from '../../../assets/icon';
 import {normalize, widthResponsive} from '../../../utils';
+import {imageTypes} from '../../../interface/base.interface';
 
 interface ListProps {
   musicianNum?: number;
   musicianName: string;
-  imgUri: string | null;
+  imgUri: imageTypes[];
   followerCount: number;
   followOnPress: () => void;
   stateButton: boolean;
   containerStyles?: ViewStyle;
+  toDetailOnPress: () => void;
 }
 
 const FollowMusicianCard: React.FC<ListProps> = (props: ListProps) => {
@@ -31,6 +33,7 @@ const FollowMusicianCard: React.FC<ListProps> = (props: ListProps) => {
     followOnPress,
     stateButton,
     containerStyles,
+    toDetailOnPress,
   } = props;
 
   const follow = stateButton ? 'Following' : 'Follow';
@@ -70,14 +73,21 @@ const FollowMusicianCard: React.FC<ListProps> = (props: ListProps) => {
           })}
         </Text>
       )}
-      {imgUri === null || imgUri === '' ? (
-        <DefaultAvatar.MusicianIcon />
+      {imgUri === null || imgUri.length === 0 ? (
+        <TouchableOpacity onPress={toDetailOnPress}>
+          <DefaultAvatar.MusicianIcon />
+        </TouchableOpacity>
       ) : (
-        <Avatar imgUri={imgUri} size={widthResponsive(44)} />
+        <TouchableOpacity onPress={toDetailOnPress}>
+          <Avatar imgUri={imgUri[0].image} size={widthResponsive(44)} />
+        </TouchableOpacity>
       )}
       <Gap width={8} />
       <View style={styles.textContainer}>
-        <Text style={styles.musicianName} numberOfLines={1}>
+        <Text
+          style={styles.musicianName}
+          numberOfLines={1}
+          onPress={toDetailOnPress}>
           {musicianName}
         </Text>
 
