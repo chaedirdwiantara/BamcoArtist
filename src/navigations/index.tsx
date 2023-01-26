@@ -99,6 +99,7 @@ import {
   OtpPhoneScreen,
 } from '../interface/setting.interface';
 import {OtpEmailScreen} from '../screen/Setting/Email/OTP';
+import {SplashScreen} from '../screen/SplashScreen';
 
 export type RootStackParams = {
   Account: undefined;
@@ -181,6 +182,7 @@ export type RootStackParams = {
   MerchDetail: MerchListType;
   ConcertDetail: MerchListType;
   CreatePost: undefined;
+  SplashScreen: undefined;
 };
 
 export type MainTabParams = {
@@ -281,13 +283,7 @@ const RootStack = createNativeStackNavigator<RootStackParams>();
 export const RootStackScreen = () => (
   <RootStack.Navigator
     screenOptions={screenOption}
-    initialRouteName={
-      storage.getBoolean('isLogin') || storage.getBoolean('isGuest')
-        ? 'MainTab'
-        : storage.getBoolean('skipOnboard')
-        ? 'SignInGuest'
-        : 'Boarding'
-    }>
+    initialRouteName={'SplashScreen'}>
     <RootStack.Screen name="Boarding" component={OnboardScreen} />
     <RootStack.Screen name="EditProfile" component={EditProfileScreen} />
     <RootStack.Screen name="AddToPlaylist" component={AddToPlaylistScreen} />
@@ -352,6 +348,7 @@ export const RootStackScreen = () => (
     <RootStack.Screen name="CreatePost" component={CreatePost} />
     <RootStack.Screen name="PhotoGallery" component={PhotoGallery} />
     <RootStack.Screen name="OtherUserProfile" component={OtherUserProfile} />
+    <RootStack.Screen name="SplashScreen" component={SplashScreen} />
   </RootStack.Navigator>
 );
 
