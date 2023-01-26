@@ -46,10 +46,18 @@ const ListToFollowMusician = () => {
               followerCount={item.followers}
               followOnPress={() =>
                 item.isFollowed
-                  ? setUnfollowMusician({musicianID: item.uuid})
-                  : setFollowMusician({musicianID: item.uuid})
+                  ? setUnfollowMusician(
+                      {musicianID: item.uuid},
+                      {filterBy: 'top'},
+                      true,
+                    )
+                  : setFollowMusician(
+                      {musicianID: item.uuid},
+                      {filterBy: 'top'},
+                      true,
+                    )
               }
-              stateButton={item.isFollowed ? true : false}
+              stateButton={item.isFollowed}
               containerStyles={{marginTop: mvs(20)}}
             />
           ) : null
