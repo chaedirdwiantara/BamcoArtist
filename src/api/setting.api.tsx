@@ -3,7 +3,7 @@ import {
   EmailPhoneProps,
   EmailPhoneVerifProps,
   EmailPhoneResponseType,
-  VerifPasswordPhone,
+  VerifPasswordSetting,
 } from '../interface/setting.interface';
 
 export const updateEmail = async (
@@ -54,8 +54,8 @@ export const setVerifCode = async (
   return data;
 };
 
-export const verifPasswordPhone = async (
-  props?: VerifPasswordPhone,
+export const verifPasswordSetting = async (
+  props?: VerifPasswordSetting,
 ): Promise<EmailPhoneResponseType> => {
   const {data} = await SsuAPI().request<EmailPhoneResponseType>({
     url: '/account/verif-password',
@@ -71,6 +71,18 @@ export const addPhoneNumber = async (
 ): Promise<EmailPhoneResponseType> => {
   const {data} = await SsuAPI().request<EmailPhoneResponseType>({
     url: '/account/add-phone',
+    method: 'POST',
+    data: props,
+  });
+
+  return data;
+};
+
+export const addEmail = async (
+  props?: EmailPhoneProps,
+): Promise<EmailPhoneResponseType> => {
+  const {data} = await SsuAPI().request<EmailPhoneResponseType>({
+    url: '/account/add-email',
     method: 'POST',
     data: props,
   });

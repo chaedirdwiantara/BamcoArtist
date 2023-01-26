@@ -56,7 +56,28 @@ const LeftIconWithSubtitle: React.FC<Props> = (props: Props) => {
   );
 };
 
-export const MenuText = {LeftIcon, RightIcon, LeftIconWithSubtitle};
+const RightIconDisable: React.FC<Props> = (props: Props) => {
+  const {
+    icon = <ArrowRightIcon fill={Color.Neutral[50]} />,
+    text,
+    onPress,
+    containerStyles,
+  } = props;
+
+  return (
+    <TouchableOpacity style={[styles.root2, containerStyles]} onPress={onPress}>
+      <Text style={[Typography.Button2, styles.textDisable]}>{text}</Text>
+      {icon}
+    </TouchableOpacity>
+  );
+};
+
+export const MenuText = {
+  LeftIcon,
+  RightIcon,
+  LeftIconWithSubtitle,
+  RightIconDisable,
+};
 
 const styles = StyleSheet.create({
   root: {
@@ -90,5 +111,8 @@ const styles = StyleSheet.create({
     paddingLeft: ms(10),
     color: Color.Dark[50],
     fontFamily: Font.InterMedium,
+  },
+  textDisable: {
+    color: Color.Neutral[50],
   },
 });

@@ -63,7 +63,7 @@ export const ChangePNContent: React.FC<ChangePNProps> = ({
   const [disabledButton, setDisabledButton] = useState<boolean>(true);
   const [isSubmit, setIsSubmit] = useState<boolean>(false);
   const {
-    verificationPasswordPhone,
+    verificationPasswordSetting,
     getVerificationCode,
     isError,
     isLoading,
@@ -121,7 +121,7 @@ export const ChangePNContent: React.FC<ChangePNProps> = ({
   const onPressSave = async () => {
     checkErrorCountry(countryNumber);
     if (type === 'Add') {
-      await verificationPasswordPhone({
+      await verificationPasswordSetting({
         phoneNumber: countryNumber + getValues('newPhoneNumber'),
         password: getValues('password'),
       });
