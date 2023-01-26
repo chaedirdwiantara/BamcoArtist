@@ -9,6 +9,7 @@ import {mvs} from 'react-native-size-matters';
 import {useSearchHook} from '../../../hooks/use-search.hook';
 import {ListDataSearchSongs} from '../../../interface/search.interface';
 import {widthResponsive} from '../../../utils';
+import {profileStorage} from '../../../hooks/use-storage.hook';
 
 const QuoteMusic = () => {
   const navigation =
@@ -22,7 +23,7 @@ const QuoteMusic = () => {
 
   useFocusEffect(
     useCallback(() => {
-      getSearchSongs({uuid: 'f90c7d34-5a56-45d5-833f-171c8766b4af'});
+      getSearchSongs({uuid: profileStorage()?.uuid});
     }, []),
   );
 
