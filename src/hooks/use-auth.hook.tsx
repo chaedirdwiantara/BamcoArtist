@@ -339,7 +339,8 @@ export const useAuthHook = () => {
     setErrorMsg('');
     setIsLoading(true);
     try {
-      await resendOtpEmail(email);
+      const resp = await resendOtpEmail(email);
+      console.log(resp);
     } catch (error) {
       setIsError(true);
       if (
@@ -363,6 +364,7 @@ export const useAuthHook = () => {
     setIsLoading(true);
     try {
       const resp = await resendOtpSms(phoneNumber, context);
+      console.log(resp);
       if (resp.code !== 200) {
         setIsError(true);
         setErrorMsg(resp.message);
