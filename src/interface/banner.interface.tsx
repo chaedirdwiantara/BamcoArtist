@@ -11,6 +11,10 @@ export type BannerList = {
   ordering?: number;
   createdAt?: string;
   updatedAt?: string;
+  imageUrls?: {
+    image: string;
+    presetName: string;
+  }[];
 };
 
 export type ListBannerResponseType = {

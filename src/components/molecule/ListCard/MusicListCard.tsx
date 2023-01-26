@@ -34,6 +34,7 @@ interface ListProps {
   type?: string;
   played?: boolean;
   hideDropdownMore?: boolean;
+  activeOpacity?: number;
 }
 
 const MusicListCard: React.FC<ListProps> = ({
@@ -50,6 +51,7 @@ const MusicListCard: React.FC<ListProps> = ({
   rightIconComponent,
   played,
   hideDropdownMore = false,
+  activeOpacity,
 }) => {
   // ? Dropdown Menu Example
   const dataMore = [
@@ -64,6 +66,7 @@ const MusicListCard: React.FC<ListProps> = ({
 
   return (
     <TouchableOpacity
+      activeOpacity={activeOpacity}
       style={[styles.container, containerStyles]}
       onPress={onPressCard}>
       {played && (

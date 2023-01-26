@@ -15,4 +15,7 @@ export type ParamsProps = {
   keyword?: string;
   perPage?: number;
   musician_uuid?: string;
+  uuid?: string;
+  playlistID?: number;
+  albumID?: number;
 };

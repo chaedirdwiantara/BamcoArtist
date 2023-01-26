@@ -1,4 +1,5 @@
 import {useState} from 'react';
+import {ParamsProps} from '../interface/base.interface';
 import {PostPropsTypeA} from '../interface/feed.interface';
 import {detailSong, listSong, listTopSong} from '../api/song.api';
 import {DataDetailSong, SongList} from '../interface/song.interface';
@@ -12,9 +13,9 @@ export const useSongHook = () => {
     null,
   );
 
-  const getListDataSong = async () => {
+  const getListDataSong = async (props?: ParamsProps) => {
     try {
-      const response = await listSong();
+      const response = await listSong(props);
       setDataSong(response.data);
     } catch (error) {
       console.log(error);
