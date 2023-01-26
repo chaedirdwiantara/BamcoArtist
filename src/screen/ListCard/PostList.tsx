@@ -45,6 +45,7 @@ import {useFeedHook} from '../../hooks/use-feed.hook';
 import {dateFormat} from '../../utils/date-format';
 import categoryNormalize from '../../utils/categoryNormalize';
 import {TickCircleIcon} from '../../assets/icon';
+import {profileStorage} from '../../hooks/use-storage.hook';
 
 interface PostListProps {
   dataRightDropdown: DataDropDownType[];
@@ -84,6 +85,10 @@ const PostListHome: FC<PostListProps> = (props: PostListProps) => {
   const [modalDonate, setModalDonate] = useState<boolean>(false);
   const [modalSuccessDonate, setModalSuccessDonate] = useState<boolean>(false);
   const [trigger2ndModal, setTrigger2ndModal] = useState<boolean>(false);
+
+  // * UPDATE HOOKS
+  const [selectedIdPost, setSelectedIdPost] = useState<string>();
+  const [selectedMenu, setSelectedMenu] = useState<DataDropDownType>();
 
   useFocusEffect(
     useCallback(() => {
@@ -242,6 +247,19 @@ const PostListHome: FC<PostListProps> = (props: PostListProps) => {
     setTrigger2ndModal(false);
   };
 
+  const handleToDetailMusician = (id: string) => {
+    navigation.navigate('MusicianProfile', {id});
+  };
+
+  // ! UPDATE COMMENT AREA
+  useEffect(() => {
+    if (selectedIdPost !== undefined && selectedMenu !== undefined) {
+      console.log('selectedIdPost', selectedIdPost);
+      console.log('selectedMenu', selectedMenu);
+    }
+  }, [selectedIdPost, selectedMenu]);
+  // ! END OF UPDATE COMMENT AREA
+
   return (
     <>
       <View style={styles.container}>
@@ -289,9 +307,12 @@ const PostListHome: FC<PostListProps> = (props: PostListProps) => {
                   ? heightResponsive(25)
                   : heightResponsive(40),
             }}
-            renderItem={({item, index}: any) => (
+            renderItem={({item, index}) => (
               <>
                 <ListCard.PostList
+                  toDetailOnPress={() =>
+                    handleToDetailMusician(item.musician.uuid)
+                  }
                   musicianName={item.musician.fullname}
                   musicianId={`@${item.musician.username}`}
                   imgUri={item.musician.imageProfileUrl}
@@ -340,12 +361,16 @@ const PostListHome: FC<PostListProps> = (props: PostListProps) => {
                   tokenOnPress={tokenOnPress}
                   shareOnPress={shareOnPress}
                   commentCount={item.commentsCount}
+                  myPost={item.musician.uuid === profileStorage()?.uuid}
+                  selectedMenu={setSelectedMenu}
+                  idPost={item.id}
+                  selectedIdPost={setSelectedIdPost}
                   children={
                     <View style={{width: '100%'}}>
                       <Text style={styles.childrenPostTitle}>
                         {elipsisText(item.caption, 600)}
                       </Text>
-                      {item.image !== null ? (
+                      {item.images !== null ? (
                         <>
                           <Gap height={4} />
                           <View
@@ -354,7 +379,7 @@ const PostListHome: FC<PostListProps> = (props: PostListProps) => {
                             }}>
                             <View style={{height: '100%', width: '100%'}}>
                               <ImageList
-                                imgData={item.image}
+                                imgData={item.images}
                                 width={143}
                                 height={69.5}
                                 heightType2={142}

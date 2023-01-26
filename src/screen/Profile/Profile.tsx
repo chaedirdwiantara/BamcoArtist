@@ -11,12 +11,12 @@ import {
 } from '@react-navigation/native-stack';
 
 import Color from '../../theme/Color';
+import {MainTabParams, RootStackParams} from '../../navigations';
 import {ProfileContent} from '../../components';
 import {usePlayerHook} from '../../hooks/use-player.hook';
 import {useProfileHook} from '../../hooks/use-profile.hook';
 import {usePlaylistHook} from '../../hooks/use-playlist.hook';
 import {useMusicianHook} from '../../hooks/use-musician.hook';
-import {MainTabParams, RootStackParams} from '../../navigations';
 
 type ProfileProps = NativeStackScreenProps<MainTabParams, 'Profile'>;
 

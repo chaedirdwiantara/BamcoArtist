@@ -29,7 +29,7 @@ interface ListProps extends TouchableOpacityProps {
   commentCount: number;
   containerStyles?: ViewStyle;
   category: string;
-  toDetailOnPress?: () => void;
+  toDetailOnPress: () => void;
 }
 
 const DetailPost: React.FC<ListProps> = (props: ListProps) => {
@@ -90,9 +90,6 @@ const DetailPost: React.FC<ListProps> = (props: ListProps) => {
               <LoveIcon
                 fill={likePressed ? color.Pink[100] : 'none'}
                 stroke={likePressed ? 'none' : color.Dark[100]}
-                width={17}
-                height={17}
-                style={{marginBottom: heightPercentage(4)}}
               />
               <Gap width={3} />
               <Text style={[styles.regularText, {fontSize: ms(11)}]}>
@@ -106,12 +103,7 @@ const DetailPost: React.FC<ListProps> = (props: ListProps) => {
             <TouchableOpacity
               onPress={commentOnPress}
               style={styles.socialIcon}>
-              <CommentIcon
-                stroke={color.Dark[100]}
-                width={16}
-                height={14}
-                style={{marginBottom: heightPercentage(4)}}
-              />
+              <CommentIcon stroke={color.Dark[100]} />
               <Gap width={3} />
               <Text style={[styles.regularText, {fontSize: ms(11)}]}>
                 {commentCount}
@@ -120,33 +112,19 @@ const DetailPost: React.FC<ListProps> = (props: ListProps) => {
           </View>
           <Gap width={15} />
           {/* token section */}
-          <View style={styles.socialIcon}>
-            <TouchableOpacity onPress={tokenOnPress}>
-              <CoinB
-                stroke={color.Dark[100]}
-                width={16}
-                height={15}
-                style={{marginBottom: heightPercentage(4)}}
-              />
+          <View>
+            <TouchableOpacity onPress={tokenOnPress} style={styles.socialIcon}>
+              <CoinB fill={color.Dark[100]} />
             </TouchableOpacity>
           </View>
           <Gap width={15} />
-        </View>
-        {/* share section */}
-        <View
-          style={{
-            flex: 1,
-            justifyContent: 'center',
-            alignItems: 'flex-end',
-          }}>
-          <TouchableOpacity onPress={shareOnPress}>
-            <ShareIcon
-              stroke={color.Dark[100]}
-              width={16}
-              height={15}
-              style={{marginBottom: heightPercentage(4)}}
-            />
-          </TouchableOpacity>
+
+          {/* share section */}
+          <View>
+            <TouchableOpacity onPress={shareOnPress}>
+              <ShareIcon fill={color.Dark[100]} />
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
     </>
@@ -225,13 +203,12 @@ const styles = StyleSheet.create({
   bottomContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    // borderBottomWidth: 1,
-    // borderBottomColor: color.Dark[500],
   },
   socialContainer: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
   },
   socialIcon: {
     flexDirection: 'row',

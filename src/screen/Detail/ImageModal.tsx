@@ -1,6 +1,7 @@
 import {
   Animated,
   Dimensions,
+  SafeAreaView,
   StyleSheet,
   TouchableOpacity,
   View,
@@ -11,6 +12,7 @@ import {color} from '../../theme';
 import FastImage from 'react-native-fast-image';
 import {heightPercentage, heightResponsive, widthResponsive} from '../../utils';
 import {CloseCircleIcon} from '../../assets/icon';
+import {imageTypes} from '../../interface/feed.interface';
 
 export const {width} = Dimensions.get('screen');
 
@@ -18,7 +20,7 @@ interface ModalImageProps {
   toggleModal: () => void;
   modalVisible: boolean;
   imageIdx: number;
-  dataImage?: string[];
+  dataImage?: imageTypes[][];
 }
 
 const ImageModal: FC<ModalImageProps> = (props: ModalImageProps) => {
@@ -43,7 +45,7 @@ const ImageModal: FC<ModalImageProps> = (props: ModalImageProps) => {
       backdropColor={color.Dark[800]}
       style={{marginHorizontal: 0}}
       onBackButtonPress={toggleModal}>
-      <View style={styles.container}>
+      <SafeAreaView style={styles.container}>
         <TouchableOpacity onPress={toggleModal} style={styles.closeButton}>
           <CloseCircleIcon />
         </TouchableOpacity>
@@ -64,13 +66,16 @@ const ImageModal: FC<ModalImageProps> = (props: ModalImageProps) => {
             renderItem={({item, index}) => (
               <Animated.View style={styles.mainImageWrapper}>
                 <View style={styles.imageWrapper}>
-                  <FastImage source={{uri: item}} style={[styles.imageStyle]} />
+                  <FastImage
+                    source={{uri: item[3].image}}
+                    style={[styles.imageStyle]}
+                  />
                 </View>
               </Animated.View>
             )}
           />
         </View>
-      </View>
+      </SafeAreaView>
     </Modal>
   );
 };

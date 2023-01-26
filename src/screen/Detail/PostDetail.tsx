@@ -22,7 +22,6 @@ import {
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParams} from '../../navigations';
-import {SafeAreaView} from 'react-native-safe-area-context';
 import {elipsisText, heightPercentage, widthResponsive} from '../../utils';
 import {ms, mvs} from 'react-native-size-matters';
 import CommentSection from './CommentSection';
@@ -35,13 +34,13 @@ import {
   CommentList,
   CommentList2,
   CommentList3,
-  DetailPostData,
 } from '../../interface/feed.interface';
 import {useProfileHook} from '../../hooks/use-profile.hook';
 import {TickCircleIcon} from '../../assets/icon';
 import {makeId} from './function';
 import {ModalLoading} from '../../components/molecule/ModalLoading/ModalLoading';
 import categoryNormalize from '../../utils/categoryNormalize';
+import {DataDropDownType} from '../../data/dropdown';
 
 type cmntToCmnt = {
   id: string;
@@ -116,6 +115,10 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   // * LIKE / UNLIKE HOOKS
   const [likeCommentId, setLikeCommentId] = useState<string>('');
   const [unlikeCommentId, setUnlikeCommentId] = useState<string>('');
+
+  // * UPDATE HOOKS
+  const [idComment, setIdComment] = useState<string>();
+  const [selectedMenu, setSelectedMenu] = useState<DataDropDownType>();
 
   // ! FIRST LOAD when open the screen
   // ? Get Profile
@@ -420,6 +423,15 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   }, [unlikeCommentId]);
   // ! End Of LIKE AREA
 
+  // ! UPDATE COMMENT AREA
+  useEffect(() => {
+    if (idComment !== undefined && selectedMenu !== undefined) {
+      console.log('IDComment', idComment);
+      console.log('selectedMenu', selectedMenu);
+    }
+  }, [idComment, selectedMenu]);
+  // ! END OF UPDATE COMMENT AREA
+
   // ? Credit onPress
   const tokenOnPress = () => {
     setModalDonate(true);
@@ -538,9 +550,9 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
                     style={{
                       flexDirection: 'row',
                     }}>
-                    {data.image !== null ? (
+                    {data.images !== null ? (
                       <ImageList
-                        imgData={data.image}
+                        imgData={data.images}
                         disabled={false}
                         width={162}
                         height={79}
@@ -571,13 +583,15 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
             postCommentCount={dataPostDetail.commentsCount}
             postId={dataPostDetail.id}
             toDetailOnPress={handleToDetailCommentator}
+            selectedMenu={setSelectedMenu}
+            selectedIdComment={setIdComment}
           />
         ) : null}
         <ImageModal
           toggleModal={() => setModalVisible(!isModalVisible)}
           modalVisible={isModalVisible}
           imageIdx={imgUrl}
-          dataImage={dataPostDetail?.image}
+          dataImage={dataPostDetail?.images}
         />
         <CommentInputModal
           toggleModal={() => setInputCommentModal(!inputCommentModal)}

@@ -36,7 +36,7 @@ import {
 } from '../../utils';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {RootStackParams} from '../../navigations';
+import {MainTabParams, RootStackParams} from '../../navigations';
 import ImageList from './ImageList';
 import {EmptyState} from '../../components/molecule/EmptyState/EmptyState';
 import {FriedEggIcon, TickCircleIcon} from '../../assets/icon';
@@ -58,6 +58,8 @@ interface PostListProps {
 const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
+  const navigateProfile =
+    useNavigation<NativeStackNavigationProp<MainTabParams>>();
   const {dataRightDropdown, dataLeftDropdown, uuidMusician} = props;
 
   const [inputCommentModal, setInputCommentModal] = useState<boolean>(false);
@@ -72,6 +74,10 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
   const [modalDonate, setModalDonate] = useState<boolean>(false);
   const [modalSuccessDonate, setModalSuccessDonate] = useState<boolean>(false);
   const [trigger2ndModal, setTrigger2ndModal] = useState<boolean>(false);
+
+  // * UPDATE HOOKS
+  const [selectedIdPost, setSelectedIdPost] = useState<string>();
+  const [selectedMenu, setSelectedMenu] = useState<DataDropDownType>();
 
   const {
     feedIsLoading,
@@ -232,6 +238,19 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
     setTrigger2ndModal(false);
   };
 
+  const handleToDetailMusician = () => {
+    navigateProfile.navigate('Profile');
+  };
+
+  // ! UPDATE COMMENT AREA
+  useEffect(() => {
+    if (selectedIdPost !== undefined && selectedMenu !== undefined) {
+      console.log('selectedIdPost', selectedIdPost);
+      console.log('selectedMenu', selectedMenu);
+    }
+  }, [selectedIdPost, selectedMenu]);
+  // ! END OF UPDATE COMMENT AREA
+
   return (
     <>
       <View style={styles.container}>
@@ -281,6 +300,7 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
             renderItem={({item}) => (
               <>
                 <ListCard.PostList
+                  toDetailOnPress={handleToDetailMusician}
                   musicianName={item.musician.fullname}
                   musicianId={`@${item.musician.username}`}
                   imgUri={item.musician.imageProfileUrl}
@@ -329,12 +349,16 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
                   tokenOnPress={tokenOnPress}
                   shareOnPress={shareOnPress}
                   commentCount={item.commentsCount}
+                  myPost={item.musician.uuid === dataProfile?.data.uuid}
+                  selectedMenu={setSelectedMenu}
+                  idPost={item.id}
+                  selectedIdPost={setSelectedIdPost}
                   children={
                     <View style={{width: '100%'}}>
                       <Text style={styles.childrenPostTitle}>
                         {elipsisText(item.caption, 600)}
                       </Text>
-                      {item.image !== null ? (
+                      {item.images !== null ? (
                         <>
                           <Gap height={4} />
                           <View
@@ -343,7 +367,7 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
                             }}>
                             <View style={{height: '100%', width: '100%'}}>
                               <ImageList
-                                imgData={item.image}
+                                imgData={item.images}
                                 width={143}
                                 height={69.5}
                                 heightType2={142}
