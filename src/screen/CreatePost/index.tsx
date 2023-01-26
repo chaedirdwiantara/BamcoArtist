@@ -24,7 +24,11 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParams} from '../../navigations';
 import {heightResponsive, widthResponsive} from '../../utils';
 import {ms, mvs} from 'react-native-size-matters';
-import {ImportPhotoIcon, OpenCameraIcon} from '../../assets/icon';
+import {
+  ImportMusicIcon,
+  ImportPhotoIcon,
+  OpenCameraIcon,
+} from '../../assets/icon';
 import {
   DataDropDownType,
   dropdownCategoryMusician,
@@ -200,6 +204,11 @@ const CreatePost = () => {
                     })
                   }>
                   <ImportPhotoIcon />
+                </TouchableOpacity>
+                <Gap width={16} />
+                <TouchableOpacity
+                  onPress={() => navigation.navigate('QuoteMusic')}>
+                  <ImportMusicIcon />
                 </TouchableOpacity>
               </View>
               <View style={styles.dropdownContainer}>

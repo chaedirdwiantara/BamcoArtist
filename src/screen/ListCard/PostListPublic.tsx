@@ -93,9 +93,10 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
   }, []);
 
   useEffect(() => {
-    dataProfile?.data.imageProfileUrl !== null &&
-    dataProfile?.data.imageProfileUrl !== undefined
-      ? setDataProfileImg(dataProfile?.data.imageProfileUrl)
+    dataProfile?.data.imageProfileUrls !== null &&
+    dataProfile?.data.imageProfileUrls !== undefined &&
+    dataProfile?.data.imageProfileUrls.length !== 0
+      ? setDataProfileImg(dataProfile?.data.imageProfileUrls[0].image)
       : '';
   }, [dataProfile]);
 
@@ -381,7 +382,6 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
                     </View>
                   }
                 />
-                <Gap height={16} />
               </>
             )}
           />
