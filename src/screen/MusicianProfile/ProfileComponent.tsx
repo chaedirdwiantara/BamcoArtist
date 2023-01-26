@@ -1,5 +1,12 @@
-import {FlatList, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React, {FC} from 'react';
+import {
+  FlatList,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  ViewStyle,
+} from 'react-native';
 import {Gap, Title} from '../../components';
 import {color, font} from '../../theme';
 import {widthResponsive} from '../../utils';
@@ -22,6 +29,7 @@ interface ProfileProps {
   socmed?: string[];
   memberSection?: boolean;
   members?: string[];
+  containerStyles?: ViewStyle;
 }
 
 const ProfileComponent: FC<ProfileProps> = (props: ProfileProps) => {
@@ -33,10 +41,11 @@ const ProfileComponent: FC<ProfileProps> = (props: ProfileProps) => {
     socmed,
     members,
     memberSection,
+    containerStyles,
   } = props;
 
   return (
-    <View style={{paddingHorizontal: widthResponsive(24)}}>
+    <View style={[{paddingHorizontal: widthResponsive(24)}, containerStyles]}>
       <Title text={title} />
       <Gap height={gap} />
       {content && <Text style={styles.captionStyle}>{content}</Text>}

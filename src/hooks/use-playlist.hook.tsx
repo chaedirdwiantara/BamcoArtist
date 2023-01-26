@@ -1,8 +1,17 @@
 import {useState} from 'react';
 import {SongList} from '../interface/song.interface';
 import {ParamsProps} from '../interface/base.interface';
-import {Playlist, PlaylistPropsTypeA} from '../interface/playlist.interface';
-import {detailPlaylist, getListPlaylist, listSongs} from '../api/playlist.api';
+import {
+  AddSongPropsType,
+  Playlist,
+  PlaylistPropsTypeA,
+} from '../interface/playlist.interface';
+import {
+  addSong,
+  detailPlaylist,
+  getListPlaylist,
+  listSongs,
+} from '../api/playlist.api';
 
 export const usePlaylistHook = () => {
   const [playlistLoading, setPlaylistLoading] = useState<boolean>(false);
@@ -11,11 +20,11 @@ export const usePlaylistHook = () => {
   const [dataDetailPlaylist, setDataDetailPlaylist] = useState<Playlist>();
   const [dataSongsPlaylist, setDataSongsPlaylist] = useState<SongList[]>();
 
-  const getPlaylist = async () => {
+  const getPlaylist = async (props?: ParamsProps) => {
     setPlaylistLoading(true);
     setPlaylistError(false);
     try {
-      const response = await getListPlaylist();
+      const response = await getListPlaylist(props);
       setDataPlaylist(response.data);
     } catch (error) {
       console.log(error);
@@ -55,6 +64,16 @@ export const usePlaylistHook = () => {
     }
   };
 
+  const setAddSongToPlaylist = async (props?: AddSongPropsType) => {
+    try {
+      await addSong(props);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setPlaylistLoading(false);
+    }
+  };
+
   return {
     playlistLoading,
     playlistError,
@@ -64,5 +83,6 @@ export const usePlaylistHook = () => {
     getPlaylist,
     getDetailPlaylist,
     getListSongsPlaylist,
+    setAddSongToPlaylist,
   };
 };

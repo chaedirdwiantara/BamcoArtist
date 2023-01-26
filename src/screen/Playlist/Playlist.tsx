@@ -1,12 +1,16 @@
 import React, {useCallback} from 'react';
 import {StyleSheet, View} from 'react-native';
-import {useFocusEffect} from '@react-navigation/native';
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
+import {
+  NativeStackNavigationProp,
+  NativeStackScreenProps,
+} from '@react-navigation/native-stack';
 
 import Color from '../../theme/Color';
-import {RootStackParams} from '../../navigations';
 import {PlaylistContent} from '../../components';
+import {useBackHandler} from '../../utils/useBackHandler';
 import {usePlaylistHook} from '../../hooks/use-playlist.hook';
+import {MainTabParams, RootStackParams} from '../../navigations';
 
 type PlaylistProps = NativeStackScreenProps<RootStackParams, 'Playlist'>;
 
@@ -14,6 +18,7 @@ export const PlaylistScreen: React.FC<PlaylistProps> = ({
   navigation,
   route,
 }: PlaylistProps) => {
+  const navigation2 = useNavigation<NativeStackNavigationProp<MainTabParams>>();
   const {
     dataDetailPlaylist,
     dataSongsPlaylist,
@@ -28,20 +33,29 @@ export const PlaylistScreen: React.FC<PlaylistProps> = ({
     }, []),
   );
 
+  const goBackProfile = (showToast: boolean) => {
+    navigation2.navigate('Profile', {deletePlaylist: showToast});
+  };
+
+  useBackHandler(() => {
+    goBackProfile(false);
+    return true;
+  });
+
   const onPressGoBack = () => {
     navigation.goBack();
   };
 
   const goToEditPlaylist = () => {
-    navigation.navigate('EditPlaylist', dataDetailPlaylist);
-  };
-
-  const goBackProfile = () => {
-    navigation.navigate('Profile');
+    if (dataDetailPlaylist !== undefined) {
+      navigation.navigate('EditPlaylist', dataDetailPlaylist);
+    }
   };
 
   const goToAddSong = () => {
-    navigation.navigate('AddSong');
+    if (dataDetailPlaylist !== undefined) {
+      navigation.navigate('AddSong', dataDetailPlaylist);
+    }
   };
 
   return (

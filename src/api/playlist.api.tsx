@@ -1,4 +1,4 @@
-import SsuAPI from './baseSemeru';
+import SsuAPI from './baseSemeruMusician';
 import {
   AddSongPropsType,
   PlaylistResponseTypeB,

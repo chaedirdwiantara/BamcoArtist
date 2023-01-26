@@ -14,6 +14,7 @@ export type UpdateProfilePropsType = {
   imageProfileUrl?: string;
   banner?: string;
   about?: string;
+  bio?: string;
 };
 
 export const getProfile = async (): Promise<ProfileResponseType> => {

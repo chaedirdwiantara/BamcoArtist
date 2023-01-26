@@ -36,7 +36,7 @@ import {Playlist} from '../../../interface/playlist.interface';
 
 interface Props {
   onPressGoBack: () => void;
-  goBackProfile: () => void;
+  goBackProfile: (showToast: boolean) => void;
   goToEditPlaylist: () => void;
   goToAddSong: () => void;
   dataDetail: Playlist;
@@ -62,7 +62,7 @@ export const PlaylistContent: React.FC<Props> = ({
   const onPressDelete = async () => {
     try {
       await deletePlaylist(dataDetail);
-      goBackProfile();
+      goBackProfile(true);
     } catch (error) {
       console.log(error);
     }
@@ -89,7 +89,7 @@ export const PlaylistContent: React.FC<Props> = ({
         }
         leftIcon={<ArrowLeftIcon />}
         itemStrokeColor={Color.Neutral[10]}
-        leftIconAction={goBackProfile}
+        leftIconAction={() => goBackProfile(false)}
         rightIconAction={() => null}
         containerStyles={{paddingHorizontal: widthPercentage(20)}}
       />
@@ -115,9 +115,7 @@ export const PlaylistContent: React.FC<Props> = ({
             totalSong={dataDetail?.totalSong}
             createdDate={dateFormat(dataDetail?.createdAt)}
             createdBy={dataDetail?.createdBy}
-            avatarUri={
-              'https://thisis-images.scdn.co/37i9dQZF1DZ06evO2YqUuI-large.jpg'
-            }
+            avatarUri={dataDetail?.playlistOwner?.image}
           />
 
           <TouchableOpacity

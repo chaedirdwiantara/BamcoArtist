@@ -3,12 +3,16 @@ import {
   DetailSongResponseType,
   ListSongResponseType,
 } from '../interface/song.interface';
+import {ParamsProps} from '../interface/base.interface';
 import {PostPropsTypeA} from '../interface/feed.interface';
 
-export const listSong = async (): Promise<ListSongResponseType> => {
+export const listSong = async (
+  props?: ParamsProps,
+): Promise<ListSongResponseType> => {
   const {data} = await SsuAPI().request<ListSongResponseType>({
     url: '/songs',
     method: 'GET',
+    params: props,
   });
 
   return data;
