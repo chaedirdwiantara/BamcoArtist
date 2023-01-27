@@ -32,7 +32,7 @@ export type ListSongResponseType = {
   status: number;
 };
 
-export type FeaturingArtist = {
+export type FeaturingArtists = {
   Uuid: string;
   ImageURL: string;
   ArtistsName: string;
@@ -44,7 +44,7 @@ export type DataAlbum = {
   Title: string;
   Description: string;
   ImageURL: string;
-  FeaturingArtist: FeaturingArtist[];
+  FeaturingArtist: FeaturingArtists[];
   PublishedDate: string;
   IsPublished: boolean;
   Genre: string;
@@ -100,37 +100,27 @@ export type RelatedSongs = {
 
 export type DataDetailSong = {
   id: number;
-  musicianId: string;
+  musicianUUID: string;
   musicianName: string;
-  albumId: number;
   title: string;
   description: string;
   songWriter: string[];
   imageUrl: string;
   publishedDate: string;
-  isPublished: boolean;
-  isFeaturing: boolean;
-  featuringArtist: FeaturingArtist[];
+  isPublish: boolean;
   likesCount: number;
   shareCount: number;
   listenerCount: number;
-  mood: string;
-  genre: string;
   version: string;
   lyrics: string;
   copyright: string;
-  originalSongUrl: string;
-  transcodedSongUrl: string;
-  drmFileUrl: string;
-  drmKey: string;
+  originalSongURL: string;
   language: string;
-  barcodeIsrc: string;
-  songDuration: number;
+  barcodeISRC: string;
   CreatedAt: string;
-  UpdatedAt: string;
-  DeletedAt: string;
-  Album: DataAlbum;
-  relatedSong: RelatedSongs[];
+  isAddedToThisPlaylist: boolean;
+  transcodedSongUrl: string;
+  featuringArtists: FeaturingArtists[];
 };
 
 export type DetailSongResponseType = {

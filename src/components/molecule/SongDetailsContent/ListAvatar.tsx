@@ -10,14 +10,14 @@ import {
 } from '../../../utils';
 import {mvs} from 'react-native-size-matters';
 import {DefaultAvatar} from '../../../assets/icon';
-import {FeaturingArtist} from '../../../interface/song.interface';
+import {FeaturingArtists} from '../../../interface/song.interface';
 
 interface ListAvatarProps {
   avatarUri?: string;
   title: string;
   text?: string;
   featuring?: boolean;
-  featuringData?: FeaturingArtist[];
+  featuringData?: FeaturingArtists[];
 }
 
 export const ListAvatar: React.FC<ListAvatarProps> = ({
@@ -25,7 +25,7 @@ export const ListAvatar: React.FC<ListAvatarProps> = ({
   text,
   featuring,
   featuringData,
-  avatarUri = 'https://wallpaperspeed.id/wp-content/uploads/2021/09/dragon-ball-z-wallpaper-goku-super-saiyan-god-source-moddroid.com_.webp',
+  avatarUri,
 }) => {
   return (
     <View>

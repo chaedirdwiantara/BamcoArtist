@@ -40,6 +40,7 @@ import {useFeedHook} from '../../hooks/use-feed.hook';
 import {useUploadImageHook} from '../../hooks/use-uploadImage.hook';
 import {ModalLoading} from '../../components/molecule/ModalLoading/ModalLoading';
 import {Image} from 'react-native-image-crop-picker';
+import MusicPreview from '../../components/molecule/MusicPreview/MusicPreview';
 
 const CreatePost = () => {
   const navigation =
@@ -184,6 +185,7 @@ const CreatePost = () => {
                 height={79}
                 onPress={closeImage}
               />
+              <MusicPreview />
             </View>
           </View>
           {/* //! END OF TOP AREA */}

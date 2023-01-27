@@ -9,11 +9,12 @@ function SongCover({
   height = widthResponsive(148),
   fill = 'none',
   style,
+  noRadius = false,
 }: SvgProps) {
   return (
     <View style={[{width, height}, style]}>
       <Svg width={'100%'} height={'100%'} fill={fill} viewBox={'0 0 148 148'}>
-        <Rect width={148} height={148} rx={8} fill="#222731" />
+        <Rect width={148} height={148} rx={noRadius ? 0 : 8} fill="#222731" />
         <Path
           d="M63.253 102.667c-6.987 0-12.667-5.68-12.667-12.667s5.68-12.666 12.667-12.666c6.986 0 12.666 5.68 12.666 12.666 0 6.987-5.68 12.667-12.666 12.667zm0-21.334c-4.774 0-8.667 3.894-8.667 8.667s3.893 8.667 8.667 8.667c4.773 0 8.666-3.894 8.666-8.667s-3.866-8.666-8.666-8.666z"
           fill="#8794AD"

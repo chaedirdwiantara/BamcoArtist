@@ -6,4 +6,5 @@ export interface SvgProps {
   stroke?: string;
   active?: boolean;
   style?: ViewStyle;
+  noRadius?: boolean;
 }
