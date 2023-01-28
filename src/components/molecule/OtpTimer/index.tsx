@@ -11,9 +11,9 @@ interface Props {
 }
 
 const SsuOTPTimer: FC<Props> = props => {
-  const [resend, setResend] = useState(false);
+  const [resend, setResend] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
-  const [timer, setTimer] = useState<any>(0);
+  const [timer, setTimer] = useState<any>(30);
 
   useEffect(() => {
     if (props.timer) {

@@ -16,7 +16,7 @@ const QuoteMusic = () => {
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
 
   const handleOnPress = (data: ListDataSearchSongs) => {
-    navigation.navigate('AddPreview', data);
+    navigation.navigate('CreatePost', data);
   };
 
   const {dataSearchSongs, getSearchSongs} = useSearchHook();

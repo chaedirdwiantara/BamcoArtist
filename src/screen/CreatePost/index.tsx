@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import {color, font} from '../../theme';
 import {
   Avatar,
@@ -20,7 +20,10 @@ import {
   TopNavigation,
 } from '../../components';
 import {useNavigation} from '@react-navigation/native';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {
+  NativeStackNavigationProp,
+  NativeStackScreenProps,
+} from '@react-navigation/native-stack';
 import {RootStackParams} from '../../navigations';
 import {heightResponsive, widthResponsive} from '../../utils';
 import {ms, mvs} from 'react-native-size-matters';
@@ -41,10 +44,19 @@ import {useUploadImageHook} from '../../hooks/use-uploadImage.hook';
 import {ModalLoading} from '../../components/molecule/ModalLoading/ModalLoading';
 import {Image} from 'react-native-image-crop-picker';
 import MusicPreview from '../../components/molecule/MusicPreview/MusicPreview';
+import {
+  ListDataSearchSongs,
+  ListDataSearchSongsNavigate,
+} from '../../interface/search.interface';
 
-const CreatePost = () => {
+type PostDetailProps = NativeStackScreenProps<RootStackParams, 'CreatePost'>;
+
+const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
+
+  const data = route.params;
+  console.log('DATA', data);
 
   const [inputText, setInputText] = useState<string>('');
   const [isModalVisible, setModalVisible] = useState({
@@ -59,6 +71,7 @@ const CreatePost = () => {
   const [valueFilter, setValueFilter] = useState<string>();
   const [dataAudience, setDataAudience] = useState<string>('');
   const [dataResponseImg, setDataResponseImg] = useState<string[]>([]);
+  const [musicData, setMusicData] = useState<ListDataSearchSongs>();
 
   // * Hooks for uploading
   const [uri, setUri] = useState<Image[]>([]);
@@ -77,12 +90,39 @@ const CreatePost = () => {
 
   //  * 3. trigger hook to hit upload image api
   useEffect(() => {
+    if (active == true && uri.length == 0 && musicData == undefined) {
+      setCreatePost({
+        caption: inputText,
+        category: valueFilter ? valueFilter : 'highlight',
+        isPremium: dataAudience === 'Exclusive' ? true : false,
+      });
+    }
+
     if (active == true && uri.length !== 0) {
       for (let i = 0; i < uri.length; i++) {
         setUploadImage(uri[i]);
       }
     }
-  }, [active, uri]);
+    if (active == true && uri.length == 0 && musicData !== undefined) {
+      setCreatePost({
+        caption: inputText,
+        category: valueFilter ? valueFilter : 'highlight',
+        isPremium: dataAudience === 'Exclusive' ? true : false,
+        quoteToPost:
+          musicData !== undefined && musicData?.transcodedSongUrl !== undefined
+            ? {
+                targetId: musicData.id?.toString(),
+                targetType: 'song',
+                title: musicData.title,
+                musician: musicData.musicianName,
+                coverImage: musicData.imageUrl,
+                encodeDashUrl: musicData.transcodedSongUrl[0].encodedDashUrl,
+                encodeHlsUrl: musicData.transcodedSongUrl[0].encodedHlsUrl,
+              }
+            : undefined,
+      });
+    }
+  }, [active, uri, musicData]);
 
   // * 4. set to hook state when response upload image has received
   useEffect(() => {
@@ -99,6 +139,20 @@ const CreatePost = () => {
           category: valueFilter ? valueFilter : 'highlight',
           image: dataResponseImg,
           isPremium: dataAudience === 'Exclusive' ? true : false,
+          quoteToPost:
+            musicData !== undefined &&
+            musicData?.transcodedSongUrl !== undefined
+              ? {
+                  targetId: musicData.id?.toString(),
+                  targetType: 'song',
+                  title: musicData.title,
+                  musician: musicData.musicianName,
+                  coverImage: musicData.imageUrl,
+                  encodeDashUrl: musicData.transcodedSongUrl[0].encodedDashUrl,
+                  encodeHlsUrl: musicData.transcodedSongUrl[0].encodedHlsUrl,
+                  startAt: '0:00',
+                }
+              : undefined,
         }),
         setActive(false))
       : null;
@@ -111,6 +165,15 @@ const CreatePost = () => {
     }
   }, [dataCreatePost]);
   // ! END OF UPLOAD PHOTO STEPS
+
+  // ! UPLOAD MUSIC STEPS
+  //  * 3. trigger hook to hit upload image api
+  useEffect(() => {
+    if (data !== undefined) {
+      setMusicData(data);
+    }
+  }, [data]);
+  // ! END OF UPLOAD MUSIC STEPS
 
   const resultDataAudience = (dataAudience: DataDropDownType) => {
     setDataAudience(dataAudience.label);
@@ -185,7 +248,7 @@ const CreatePost = () => {
                 height={79}
                 onPress={closeImage}
               />
-              <MusicPreview />
+              {musicData && <MusicPreview data={musicData} />}
             </View>
           </View>
           {/* //! END OF TOP AREA */}

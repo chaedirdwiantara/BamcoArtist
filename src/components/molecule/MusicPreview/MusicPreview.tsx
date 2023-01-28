@@ -1,20 +1,21 @@
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import React from 'react';
+import React, {FC} from 'react';
 import {color, font} from '../../../theme';
 import {Gap, SquareImage} from '../../atom';
-import {
-  CloseCircleIcon,
-  CloseIcon,
-  PauseIcon,
-  PlayIcon,
-} from '../../../assets/icon';
+import {CloseCircleIcon, PlayIcon} from '../../../assets/icon';
 import {ms, mvs} from 'react-native-size-matters';
+import {ListDataSearchSongsNavigate} from '../../../interface/search.interface';
 
-const MusicPreview = () => {
+interface MusicPreviewProps {
+  data: ListDataSearchSongsNavigate;
+}
+
+const MusicPreview: FC<MusicPreviewProps> = (props: MusicPreviewProps) => {
+  const {data} = props;
   return (
     <View style={styles.container}>
       <View>
-        <SquareImage size={95} />
+        <SquareImage size={95} imgUri={data.imageUrl} />
         <TouchableOpacity style={styles.iconOnPress}>
           <PlayIcon stroke={color.Neutral[10]} />
         </TouchableOpacity>
@@ -25,10 +26,10 @@ const MusicPreview = () => {
       <Gap width={7} />
       <View>
         <Text numberOfLines={2} style={styles.songTitle}>
-          The man who can't be moved
+          {data.title}
         </Text>
         <Text numberOfLines={1} style={styles.musicianName}>
-          Kadal Jenal
+          {data.musicianName}
         </Text>
       </View>
       <TouchableOpacity style={styles.closeIconButton}>
@@ -58,7 +59,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     fontSize: mvs(15),
     color: color.Neutral[10],
-    maxWidth: '75%',
+    maxWidth: '100%',
   },
   musicianName: {
     fontFamily: font.InterMedium,

@@ -26,7 +26,7 @@ const {width, height} = Dimensions.get('screen');
 type OtpProps = NativeStackScreenProps<RootStackParams, 'Otp'>;
 
 export const Otp: FC<OtpProps> = ({navigation, route}: OtpProps) => {
-  const timer = 12;
+  const timer = 30;
   const {
     isError,
     errorMsg,

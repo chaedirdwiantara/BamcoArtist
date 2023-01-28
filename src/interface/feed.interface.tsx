@@ -27,6 +27,17 @@ export type CreatePostProps = {
   category: string;
   image?: string[];
   isPremium: boolean;
+  quoteToPost?: {
+    targetId: string;
+    targetType: string;
+    title: string;
+    musician: string;
+    coverImage: string;
+    encodeDashUrl: string;
+    encodeHlsUrl: string;
+    startAt?: string;
+    endAt?: string;
+  };
 };
 
 export type DataComment = {id: string; created_at: string};

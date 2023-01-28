@@ -96,7 +96,16 @@ import {imageUriProps} from '../screen/MusicianProfile/DataMusician';
 import {ChangePNScreen} from '../screen/Setting/PhoneNumber/ChangePN';
 import {OtpPNScreen} from '../screen/Setting/PhoneNumber/OTP';
 import {useNavigation} from '@react-navigation/native';
-import {ListDataSearchSongs} from '../interface/search.interface';
+import {
+  ListDataSearchSongs,
+  ListDataSearchSongsNavigate,
+} from '../interface/search.interface';
+import {
+  OtpEmailScreen as OtpEmailProps,
+  OtpPhoneScreen,
+} from '../interface/setting.interface';
+import {OtpEmailScreen} from '../screen/Setting/Email/OTP';
+import {SplashScreen} from '../screen/SplashScreen';
 
 export type RootStackParams = {
   Account: undefined;
@@ -105,22 +114,25 @@ export type RootStackParams = {
   AddPreview: ListDataSearchSongs;
   Album: AlbumData;
   Boarding: undefined;
-  ChangeEmail: undefined;
+  ChangeEmail: {
+    type: 'Add' | 'Change';
+    oldEmail: string;
+  };
+  OtpEmail: OtpEmailProps;
   ChangePassword: undefined;
   ChangePhoneNumber: {
     type: 'Add' | 'Change';
     oldPhone: string;
   };
-  OtpPhoneNumber: {
-    countryNumber: string;
-    phoneNumber: string;
-    type: 'Add' | 'Change';
-  };
+  OtpPhoneNumber: OtpPhoneScreen;
   CreateNewPlaylist: undefined;
   DonationAndSubscription: undefined;
   EditProfile: ProfileResponseData;
   EditPlaylist: Playlist;
-  Email: undefined;
+  Email: {
+    info?: boolean;
+    message?: string;
+  };
   ExclusiveContent: undefined;
   Following: undefined;
   ForgotPassword: undefined;
@@ -177,7 +189,8 @@ export type RootStackParams = {
   MusicPlayer: undefined;
   MerchDetail: MerchListType;
   ConcertDetail: MerchListType;
-  CreatePost: undefined;
+  CreatePost: ListDataSearchSongs;
+  SplashScreen: undefined;
 };
 
 export type MainTabParams = {
@@ -278,13 +291,7 @@ const RootStack = createNativeStackNavigator<RootStackParams>();
 export const RootStackScreen = () => (
   <RootStack.Navigator
     screenOptions={screenOption}
-    initialRouteName={
-      storage.getBoolean('isLogin') || storage.getBoolean('isGuest')
-        ? 'MainTab'
-        : storage.getBoolean('skipOnboard')
-        ? 'SignInGuest'
-        : 'Boarding'
-    }>
+    initialRouteName={'SplashScreen'}>
     <RootStack.Screen name="Boarding" component={OnboardScreen} />
     <RootStack.Screen name="EditProfile" component={EditProfileScreen} />
     <RootStack.Screen name="AddToPlaylist" component={AddToPlaylistScreen} />
@@ -301,6 +308,7 @@ export const RootStackScreen = () => (
     <RootStack.Screen name="Account" component={AccountScreen} />
     <RootStack.Screen name="ChangeEmail" component={ChangeEmailScreen} />
     <RootStack.Screen name="Email" component={EmailScreen} />
+    <RootStack.Screen name="OtpEmail" component={OtpEmailScreen} />
     <RootStack.Screen name="PhoneNumber" component={PhoneNumberScreen} />
     <RootStack.Screen name="ChangePhoneNumber" component={ChangePNScreen} />
     <RootStack.Screen name="OtpPhoneNumber" component={OtpPNScreen} />
@@ -350,6 +358,7 @@ export const RootStackScreen = () => (
     <RootStack.Screen name="OtherUserProfile" component={OtherUserProfile} />
     <RootStack.Screen name="QuoteMusic" component={QuoteMusic} />
     <RootStack.Screen name="AddPreview" component={AddPreview} />
+    <RootStack.Screen name="SplashScreen" component={SplashScreen} />
   </RootStack.Navigator>
 );
 

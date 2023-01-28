@@ -128,9 +128,9 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
 
   // ? Set profile picture for profile img
   useEffect(() => {
-    dataProfile?.data.imageProfileUrl !== null &&
-    dataProfile?.data.imageProfileUrl !== undefined
-      ? setDataProfileImg(dataProfile?.data.imageProfileUrl)
+    dataProfile?.data.imageProfileUrls !== null &&
+    dataProfile?.data.imageProfileUrls !== undefined
+      ? setDataProfileImg(dataProfile?.data.imageProfileUrls[0].image)
       : '';
   }, [dataProfile]);
 
@@ -342,8 +342,8 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
           username: dataProfile?.data.username
             ? dataProfile?.data.username
             : '',
-          image: dataProfile?.data.imageProfileUrl
-            ? dataProfile?.data.imageProfileUrl
+          image: dataProfile?.data.imageProfileUrls
+            ? dataProfile?.data.imageProfileUrls[0].image
             : '',
         },
       },
