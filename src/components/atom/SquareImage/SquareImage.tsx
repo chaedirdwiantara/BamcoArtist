@@ -41,7 +41,7 @@ const SquareImage: React.FC<SquareImageProps> = (props: SquareImageProps) => {
   } else {
     return (
       <TouchableOpacity style={containerStyle} disabled={true} {...props}>
-        {imgUri ? (
+        {imgUri && imgUri !== null ? (
           <FastImage
             source={{uri: imgUri}}
             style={[

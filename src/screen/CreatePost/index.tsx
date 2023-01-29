@@ -248,7 +248,17 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
                 height={79}
                 onPress={closeImage}
               />
-              {musicData && <MusicPreview data={musicData} />}
+              {musicData && (
+                <MusicPreview
+                  targetId={musicData.id.toString()}
+                  title={musicData.title}
+                  musician={musicData.musicianName}
+                  coverImage={musicData.imageUrl}
+                  encodeDashUrl={musicData.transcodedSongUrl[0].encodedDashUrl}
+                  encodeHlsUrl={musicData.transcodedSongUrl[0].encodedHlsUrl}
+                  startAt={'0:00'}
+                />
+              )}
             </View>
           </View>
           {/* //! END OF TOP AREA */}
@@ -257,24 +267,26 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
           <View style={styles.footerBody}>
             <View style={styles.iconsAndCategory}>
               <View style={styles.iconsContainer}>
-                {/* <TouchableOpacity>
-                <OpenCameraIcon />
-              </TouchableOpacity>
-              <Gap width={16} /> */}
-                <TouchableOpacity
-                  onPress={() =>
-                    setModalVisible({
-                      modalFilter: false,
-                      modalImagePicker: true,
-                    })
-                  }>
-                  <ImportPhotoIcon />
-                </TouchableOpacity>
-                <Gap width={16} />
-                <TouchableOpacity
-                  onPress={() => navigation.navigate('QuoteMusic')}>
-                  <ImportMusicIcon />
-                </TouchableOpacity>
+                {!musicData && (
+                  <>
+                    <TouchableOpacity
+                      onPress={() =>
+                        setModalVisible({
+                          modalFilter: false,
+                          modalImagePicker: true,
+                        })
+                      }>
+                      <ImportPhotoIcon />
+                    </TouchableOpacity>
+                    <Gap width={16} />
+                  </>
+                )}
+                {uri.length == 0 && (
+                  <TouchableOpacity
+                    onPress={() => navigation.navigate('QuoteMusic')}>
+                    <ImportMusicIcon />
+                  </TouchableOpacity>
+                )}
               </View>
               <View style={styles.dropdownContainer}>
                 <Dropdown.Menu

@@ -304,7 +304,11 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
                   }
                   musicianName={item.musician.fullname}
                   musicianId={`@${item.musician.username}`}
-                  imgUri={item.musician.imageProfileUrl}
+                  imgUri={
+                    item.musician.imageProfileUrls.length !== 0
+                      ? item.musician.imageProfileUrls[0][0].image
+                      : ''
+                  }
                   postDate={dateFormat(item.createdAt)}
                   category={categoryNormalize(item.category)}
                   onPress={() => cardOnPress(item)}

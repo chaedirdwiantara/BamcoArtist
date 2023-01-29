@@ -47,6 +47,7 @@ import {dateFormat} from '../../utils/date-format';
 import {useProfileHook} from '../../hooks/use-profile.hook';
 import categoryNormalize from '../../utils/categoryNormalize';
 import {ModalLoading} from '../../components/molecule/ModalLoading/ModalLoading';
+import MusicPreview from '../../components/molecule/MusicPreview/MusicPreview';
 const {height} = Dimensions.get('screen');
 
 interface PostListProps {
@@ -97,9 +98,9 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
   }, []);
 
   useEffect(() => {
-    dataProfile?.data.imageProfileUrl !== null &&
-    dataProfile?.data.imageProfileUrl !== undefined
-      ? setDataProfileImg(dataProfile?.data.imageProfileUrl)
+    dataProfile?.data.imageProfileUrls.length !== 0 &&
+    dataProfile?.data.imageProfileUrls !== undefined
+      ? setDataProfileImg(dataProfile?.data.imageProfileUrls[0].image)
       : '';
   }, [dataProfile]);
 
@@ -239,7 +240,10 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
   };
 
   const handleToDetailMusician = () => {
-    navigateProfile.navigate('Profile');
+    navigateProfile.navigate('Profile', {
+      showToast: false,
+      deletePlaylist: false,
+    });
   };
 
   // ! UPDATE COMMENT AREA
@@ -303,7 +307,11 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
                   toDetailOnPress={handleToDetailMusician}
                   musicianName={item.musician.fullname}
                   musicianId={`@${item.musician.username}`}
-                  imgUri={item.musician.imageProfileUrl}
+                  imgUri={
+                    item.musician.imageProfileUrls.length !== 0
+                      ? item.musician.imageProfileUrls[0][0].image
+                      : ''
+                  }
                   postDate={dateFormat(item.createdAt)}
                   category={categoryNormalize(item.category)}
                   onPress={() => cardOnPress(item)}
@@ -373,6 +381,18 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
                                 heightType2={142}
                                 widthType2={289}
                                 onPress={() => {}}
+                              />
+                              <MusicPreview
+                                hideClose
+                                targetId={item.quoteToPost.targetId}
+                                targetType={item.quoteToPost.targetType}
+                                title={item.quoteToPost.title}
+                                musician={item.quoteToPost.musician}
+                                coverImage={item.quoteToPost.coverImage}
+                                encodeDashUrl={item.quoteToPost.encodeDashUrl}
+                                encodeHlsUrl={item.quoteToPost.encodeHlsUrl}
+                                startAt={item.quoteToPost.startAt}
+                                endAt={item.quoteToPost.endAt}
                               />
                             </View>
                           </View>

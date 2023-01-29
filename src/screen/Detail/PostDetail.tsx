@@ -128,7 +128,7 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
 
   // ? Set profile picture for profile img
   useEffect(() => {
-    dataProfile?.data.imageProfileUrls !== null &&
+    dataProfile?.data.imageProfileUrls.length !== 0 &&
     dataProfile?.data.imageProfileUrls !== undefined
       ? setDataProfileImg(dataProfile?.data.imageProfileUrls[0].image)
       : '';
@@ -484,7 +484,11 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
               toDetailOnPress={() => handleToDetailMusician(data.musician.uuid)}
               musicianName={musicianName}
               musicianId={`@${data.musician.username}`}
-              imgUri={data.musician.imageProfileUrl}
+              imgUri={
+                data.musician.imageProfileUrls.length !== 0
+                  ? data.musician.imageProfileUrls[0][0].image
+                  : ''
+              }
               postDate={dateFormat(data.updatedAt)}
               category={categoryNormalize(data.category)}
               likeOnPress={() =>

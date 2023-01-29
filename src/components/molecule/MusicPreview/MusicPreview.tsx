@@ -5,17 +5,38 @@ import {Gap, SquareImage} from '../../atom';
 import {CloseCircleIcon, PlayIcon} from '../../../assets/icon';
 import {ms, mvs} from 'react-native-size-matters';
 import {ListDataSearchSongsNavigate} from '../../../interface/search.interface';
+import {QuoteToPost} from '../../../interface/feed.interface';
 
 interface MusicPreviewProps {
-  data: ListDataSearchSongsNavigate;
+  targetId: string;
+  targetType?: string;
+  title: string;
+  musician: string;
+  coverImage: string;
+  encodeDashUrl: string;
+  encodeHlsUrl: string;
+  startAt?: string;
+  endAt?: string;
+  hideClose?: boolean;
 }
 
 const MusicPreview: FC<MusicPreviewProps> = (props: MusicPreviewProps) => {
-  const {data} = props;
+  const {
+    targetId,
+    targetType,
+    title,
+    musician,
+    coverImage,
+    encodeDashUrl,
+    encodeHlsUrl,
+    startAt,
+    endAt,
+    hideClose,
+  } = props;
   return (
     <View style={styles.container}>
       <View>
-        <SquareImage size={95} imgUri={data.imageUrl} />
+        <SquareImage size={95} imgUri={coverImage} />
         <TouchableOpacity style={styles.iconOnPress}>
           <PlayIcon stroke={color.Neutral[10]} />
         </TouchableOpacity>
@@ -26,15 +47,17 @@ const MusicPreview: FC<MusicPreviewProps> = (props: MusicPreviewProps) => {
       <Gap width={7} />
       <View>
         <Text numberOfLines={2} style={styles.songTitle}>
-          {data.title}
+          {title}
         </Text>
         <Text numberOfLines={1} style={styles.musicianName}>
-          {data.musicianName}
+          {musician}
         </Text>
       </View>
-      <TouchableOpacity style={styles.closeIconButton}>
-        <CloseCircleIcon width={20} height={20} />
-      </TouchableOpacity>
+      {hideClose ? null : (
+        <TouchableOpacity style={styles.closeIconButton}>
+          <CloseCircleIcon width={20} height={20} />
+        </TouchableOpacity>
+      )}
     </View>
   );
 };
