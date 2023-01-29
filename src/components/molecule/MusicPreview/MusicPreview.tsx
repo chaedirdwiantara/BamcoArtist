@@ -2,10 +2,8 @@ import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React, {FC} from 'react';
 import {color, font} from '../../../theme';
 import {Gap, SquareImage} from '../../atom';
-import {CloseCircleIcon, PlayIcon} from '../../../assets/icon';
+import {CloseCircleIcon, PauseIcon, PlayIcon} from '../../../assets/icon';
 import {ms, mvs} from 'react-native-size-matters';
-import {ListDataSearchSongsNavigate} from '../../../interface/search.interface';
-import {QuoteToPost} from '../../../interface/feed.interface';
 
 interface MusicPreviewProps {
   targetId: string;
@@ -18,6 +16,11 @@ interface MusicPreviewProps {
   startAt?: string;
   endAt?: string;
   hideClose?: boolean;
+  onPress: () => void;
+  closeOnPress: () => void;
+  isPlay: boolean;
+  playOrPause: () => void;
+  pauseModeOn: boolean;
 }
 
 const MusicPreview: FC<MusicPreviewProps> = (props: MusicPreviewProps) => {
@@ -32,17 +35,27 @@ const MusicPreview: FC<MusicPreviewProps> = (props: MusicPreviewProps) => {
     startAt,
     endAt,
     hideClose,
+    onPress,
+    closeOnPress,
+    playOrPause,
+    isPlay,
+    pauseModeOn,
   } = props;
   return (
     <View style={styles.container}>
       <View>
         <SquareImage size={95} imgUri={coverImage} />
-        <TouchableOpacity style={styles.iconOnPress}>
-          <PlayIcon stroke={color.Neutral[10]} />
-        </TouchableOpacity>
-        {/* <TouchableOpacity style={styles.iconOnPress}>
-          <PauseIcon stroke={color.Neutral[10]} />
-        </TouchableOpacity> */}
+        {isPlay ? (
+          <TouchableOpacity style={styles.iconOnPress} onPress={playOrPause}>
+            <PauseIcon stroke={color.Neutral[10]} />
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity
+            style={styles.iconOnPress}
+            onPress={pauseModeOn ? playOrPause : onPress}>
+            <PlayIcon stroke={color.Neutral[10]} />
+          </TouchableOpacity>
+        )}
       </View>
       <Gap width={7} />
       <View>
@@ -54,7 +67,7 @@ const MusicPreview: FC<MusicPreviewProps> = (props: MusicPreviewProps) => {
         </Text>
       </View>
       {hideClose ? null : (
-        <TouchableOpacity style={styles.closeIconButton}>
+        <TouchableOpacity style={styles.closeIconButton} onPress={closeOnPress}>
           <CloseCircleIcon width={20} height={20} />
         </TouchableOpacity>
       )}

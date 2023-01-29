@@ -48,6 +48,9 @@ import {
   ListDataSearchSongs,
   ListDataSearchSongsNavigate,
 } from '../../interface/search.interface';
+import {usePlayerHook} from '../../hooks/use-player.hook';
+import {SongList} from '../../interface/song.interface';
+import {profileStorage} from '../../hooks/use-storage.hook';
 
 type PostDetailProps = NativeStackScreenProps<RootStackParams, 'CreatePost'>;
 
@@ -56,7 +59,6 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
 
   const data = route.params;
-  console.log('DATA', data);
 
   const [inputText, setInputText] = useState<string>('');
   const [isModalVisible, setModalVisible] = useState({
@@ -66,12 +68,24 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
 
   const {dataCreatePost, createPostLoading, setCreatePost} = useFeedHook();
   const {isLoadingImage, dataImage, setUploadImage} = useUploadImageHook();
+  const {
+    isPlay,
+    visible: playerVisible,
+    showPlayer,
+    hidePlayer,
+    seekPlayer,
+    setMusicDataPlayer,
+    setPlaylistSong,
+    setPauseSong,
+    setPlaySong,
+  } = usePlayerHook();
 
   const [label, setLabel] = useState<string>();
   const [valueFilter, setValueFilter] = useState<string>();
   const [dataAudience, setDataAudience] = useState<string>('');
   const [dataResponseImg, setDataResponseImg] = useState<string[]>([]);
   const [musicData, setMusicData] = useState<ListDataSearchSongs>();
+  const [pauseModeOn, setPauseModeOn] = useState<boolean>(false);
 
   // * Hooks for uploading
   const [uri, setUri] = useState<Image[]>([]);
@@ -171,8 +185,42 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   useEffect(() => {
     if (data !== undefined) {
       setMusicData(data);
+      setPauseModeOn(false);
     }
   }, [data]);
+
+  const onPressPlaySong = () => {
+    // setPlaylistSong(musicData);
+    if (musicData !== undefined) {
+      setMusicDataPlayer({
+        id: musicData.transcodedSongUrl[0].songId,
+        title: musicData.title,
+        artist: musicData.musicianName,
+        albumImg: musicData.imageUrl,
+        musicUrl: musicData.transcodedSongUrl[0].encodedHlsUrl,
+        musicianId: musicData.id.toString(),
+      });
+    }
+    showPlayer();
+    seekPlayer(0);
+    setPauseModeOn(true);
+  };
+
+  const handlePausePlay = () => {
+    if (isPlay) {
+      setPauseSong();
+    } else {
+      setPlaySong();
+    }
+  };
+
+  const handleClosedPlayer = () => {
+    setPauseModeOn(false);
+    setMusicData(undefined);
+    if (isPlay) {
+      setPauseSong();
+    }
+  };
   // ! END OF UPLOAD MUSIC STEPS
 
   const resultDataAudience = (dataAudience: DataDropDownType) => {
@@ -257,6 +305,11 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
                   encodeDashUrl={musicData.transcodedSongUrl[0].encodedDashUrl}
                   encodeHlsUrl={musicData.transcodedSongUrl[0].encodedHlsUrl}
                   startAt={'0:00'}
+                  onPress={onPressPlaySong}
+                  closeOnPress={handleClosedPlayer}
+                  isPlay={isPlay}
+                  playOrPause={handlePausePlay}
+                  pauseModeOn={pauseModeOn}
                 />
               )}
             </View>
