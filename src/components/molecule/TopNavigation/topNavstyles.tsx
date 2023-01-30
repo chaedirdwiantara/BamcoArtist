@@ -4,7 +4,7 @@ import {color, font} from '../../../theme';
 import {heightResponsive} from '../../../utils/dimensionFormat';
 
 const {StatusBarManager} = NativeModules;
-const barHeight = Platform.OS === 'ios' ? 20 : StatusBarManager.HEIGHT;
+const barHeight = StatusBarManager.HEIGHT;
 
 const topNavstyles = StyleSheet.create({
   headerContainer: {
@@ -12,7 +12,10 @@ const topNavstyles = StyleSheet.create({
     justifyContent: 'space-between',
     borderBottomWidth: mvs(1),
     borderBottomColor: color.Dark[300],
-    paddingTop: heightResponsive(20 + barHeight),
+    paddingTop:
+      Platform.OS === 'ios'
+        ? heightResponsive(barHeight)
+        : heightResponsive(barHeight + 15),
     paddingBottom: heightResponsive(20),
   },
   leftContainer: {

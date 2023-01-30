@@ -427,36 +427,38 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
                                 widthType2={289}
                                 onPress={() => {}}
                               />
-                              <MusicListPreview
-                                hideClose
-                                targetId={item.quoteToPost.targetId}
-                                targetType={item.quoteToPost.targetType}
-                                title={item.quoteToPost.title}
-                                musician={item.quoteToPost.musician}
-                                coverImage={
-                                  item.quoteToPost.coverImage[1]?.image !==
-                                  undefined
-                                    ? item.quoteToPost.coverImage[1].image
-                                    : ''
-                                }
-                                encodeDashUrl={item.quoteToPost.encodeDashUrl}
-                                encodeHlsUrl={item.quoteToPost.encodeHlsUrl}
-                                startAt={item.quoteToPost.startAt}
-                                endAt={item.quoteToPost.endAt}
-                                postList={item}
-                                onPress={onPressPlaySong}
-                                isPlay={isPlay}
-                                playOrPause={handlePausePlay}
-                                pauseModeOn={pauseModeOn}
-                                currentProgress={currentProgress}
-                                duration={duration}
-                                seekPlayer={seekPlayer}
-                                playNow={
-                                  musicData.id ===
-                                  parseInt(item.quoteToPost.targetId)
-                                }
-                                isIdNowPlaying={item.id === idNowPlaying}
-                              />
+                              {item.images.length === 0 && (
+                                <MusicListPreview
+                                  hideClose
+                                  targetId={item.quoteToPost.targetId}
+                                  targetType={item.quoteToPost.targetType}
+                                  title={item.quoteToPost.title}
+                                  musician={item.quoteToPost.musician}
+                                  coverImage={
+                                    item.quoteToPost.coverImage[1]?.image !==
+                                    undefined
+                                      ? item.quoteToPost.coverImage[1].image
+                                      : ''
+                                  }
+                                  encodeDashUrl={item.quoteToPost.encodeDashUrl}
+                                  encodeHlsUrl={item.quoteToPost.encodeHlsUrl}
+                                  startAt={item.quoteToPost.startAt}
+                                  endAt={item.quoteToPost.endAt}
+                                  postList={item}
+                                  onPress={onPressPlaySong}
+                                  isPlay={isPlay}
+                                  playOrPause={handlePausePlay}
+                                  pauseModeOn={pauseModeOn}
+                                  currentProgress={currentProgress}
+                                  duration={duration}
+                                  seekPlayer={seekPlayer}
+                                  playNow={
+                                    musicData.id ===
+                                    parseInt(item.quoteToPost.targetId)
+                                  }
+                                  isIdNowPlaying={item.id === idNowPlaying}
+                                />
+                              )}
                             </View>
                           </View>
                         </>

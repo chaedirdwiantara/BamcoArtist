@@ -34,6 +34,7 @@ import {
   CommentList,
   CommentList2,
   CommentList3,
+  PostList,
 } from '../../interface/feed.interface';
 import {useProfileHook} from '../../hooks/use-profile.hook';
 import {TickCircleIcon} from '../../assets/icon';
@@ -41,6 +42,9 @@ import {makeId} from './function';
 import {ModalLoading} from '../../components/molecule/ModalLoading/ModalLoading';
 import categoryNormalize from '../../utils/categoryNormalize';
 import {DataDropDownType} from '../../data/dropdown';
+import MusicListPreview from '../../components/molecule/MusicPreview/MusicListPreview';
+import {usePlayerHook} from '../../hooks/use-player.hook';
+import {dummySongImg} from '../../data/image';
 
 type cmntToCmnt = {
   id: string;
@@ -71,6 +75,18 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
     setLikeComment,
     setUnlikeComment,
   } = useFeedHook();
+
+  const {
+    currentProgress,
+    duration,
+    isPlay,
+    musicData,
+    seekPlayer,
+    setMusicDataPlayer,
+    setPlaySong,
+    setPauseSong,
+    hidePlayer,
+  } = usePlayerHook();
 
   const {dataProfile, getProfileUser} = useProfileHook();
 
@@ -119,6 +135,10 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   // * UPDATE HOOKS
   const [idComment, setIdComment] = useState<string>();
   const [selectedMenu, setSelectedMenu] = useState<DataDropDownType>();
+
+  //* MUSIC HOOKS
+  const [pauseModeOn, setPauseModeOn] = useState<boolean>(false);
+  const [idNowPlaying, setIdNowPlaing] = useState<string>();
 
   // ! FIRST LOAD when open the screen
   // ? Get Profile
@@ -432,6 +452,35 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   }, [idComment, selectedMenu]);
   // ! END OF UPDATE COMMENT AREA
 
+  // ! MUSIC AREA
+  const onPressPlaySong = (val: PostList) => {
+    setMusicDataPlayer({
+      id: parseInt(val.quoteToPost.targetId),
+      title: val.quoteToPost.title,
+      artist: val.quoteToPost.musician,
+      albumImg:
+        val.quoteToPost.coverImage[1]?.image !== undefined
+          ? val.quoteToPost.coverImage[1].image
+          : dummySongImg,
+      musicUrl: val.quoteToPost.encodeHlsUrl,
+      musicianId: val.musician.uuid,
+    });
+    setPlaySong();
+    seekPlayer(0);
+    setPauseModeOn(true);
+    setIdNowPlaing(val.id);
+    hidePlayer();
+  };
+
+  const handlePausePlay = () => {
+    if (isPlay) {
+      setPauseSong();
+    } else {
+      setPlaySong();
+    }
+  };
+  // ! END OF MUSIC AREA
+
   // ? Credit onPress
   const tokenOnPress = () => {
     setModalDonate(true);
@@ -550,10 +599,7 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
                     )
                   ) : null}
                   <Gap height={4} />
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                    }}>
+                  <View>
                     {data.images !== null ? (
                       <ImageList
                         imgData={data.images}
@@ -563,6 +609,38 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
                         onPress={toggleModalOnPress}
                       />
                     ) : null}
+                    {data.images.length === 0 && (
+                      <MusicListPreview
+                        hideClose
+                        targetId={dataPostDetail.quoteToPost.targetId}
+                        targetType={dataPostDetail.quoteToPost.targetType}
+                        title={dataPostDetail.quoteToPost.title}
+                        musician={dataPostDetail.quoteToPost.musician}
+                        coverImage={
+                          dataPostDetail.quoteToPost.coverImage[1]?.image !==
+                          undefined
+                            ? dataPostDetail.quoteToPost.coverImage[1].image
+                            : ''
+                        }
+                        encodeDashUrl={dataPostDetail.quoteToPost.encodeDashUrl}
+                        encodeHlsUrl={dataPostDetail.quoteToPost.encodeHlsUrl}
+                        startAt={dataPostDetail.quoteToPost.startAt}
+                        endAt={dataPostDetail.quoteToPost.endAt}
+                        postList={dataPostDetail}
+                        onPress={onPressPlaySong}
+                        isPlay={isPlay}
+                        playOrPause={handlePausePlay}
+                        pauseModeOn={pauseModeOn}
+                        currentProgress={currentProgress}
+                        duration={duration}
+                        seekPlayer={seekPlayer}
+                        playNow={
+                          musicData.id ===
+                          parseInt(dataPostDetail.quoteToPost.targetId)
+                        }
+                        isIdNowPlaying={dataPostDetail.id === idNowPlaying}
+                      />
+                    )}
                   </View>
                 </View>
               }
