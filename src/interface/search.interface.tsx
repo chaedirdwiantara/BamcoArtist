@@ -65,12 +65,19 @@ export type ListDataSearchSongsNavigate = {
 
 export type ListDataSearchSongs = {
   id: number;
+  musicianUUID: string;
   musicianName: string;
   title: string;
   description: string;
   songWriter: string[];
   imageUrl: string;
   publishedDate: string;
+  likesCount: 0;
+  shareCount: 0;
+  listenerCount: 0;
+  lyrics: string;
+  originalSongURL: string;
+  isAddedToThisPlaylist: boolean;
   copyright: string;
   language: string;
   CreatedAt: string;

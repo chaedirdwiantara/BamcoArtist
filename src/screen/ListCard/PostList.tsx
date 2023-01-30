@@ -46,6 +46,9 @@ import {dateFormat} from '../../utils/date-format';
 import categoryNormalize from '../../utils/categoryNormalize';
 import {TickCircleIcon} from '../../assets/icon';
 import {profileStorage} from '../../hooks/use-storage.hook';
+import {usePlayerHook} from '../../hooks/use-player.hook';
+import MusicListPreview from '../../components/molecule/MusicPreview/MusicListPreview';
+import {dummySongImg} from '../../data/image';
 
 interface PostListProps {
   dataRightDropdown: DataDropDownType[];
@@ -90,11 +93,27 @@ const PostListHome: FC<PostListProps> = (props: PostListProps) => {
   const [selectedIdPost, setSelectedIdPost] = useState<string>();
   const [selectedMenu, setSelectedMenu] = useState<DataDropDownType>();
 
+  //* MUSIC HOOKS
+  const [pauseModeOn, setPauseModeOn] = useState<boolean>(false);
+  const [idNowPlaying, setIdNowPlaing] = useState<string>();
+
   useFocusEffect(
     useCallback(() => {
       getListTopPost();
     }, []),
   );
+
+  const {
+    currentProgress,
+    duration,
+    isPlay,
+    musicData,
+    seekPlayer,
+    setMusicDataPlayer,
+    setPlaySong,
+    setPauseSong,
+    hidePlayer,
+  } = usePlayerHook();
 
   const resultDataFilter = (dataResultFilter: any) => {
     const dates = new Date();
@@ -260,6 +279,35 @@ const PostListHome: FC<PostListProps> = (props: PostListProps) => {
   }, [selectedIdPost, selectedMenu]);
   // ! END OF UPDATE COMMENT AREA
 
+  // ! MUSIC AREA
+  const onPressPlaySong = (val: PostList) => {
+    setMusicDataPlayer({
+      id: parseInt(val.quoteToPost.targetId),
+      title: val.quoteToPost.title,
+      artist: val.quoteToPost.musician,
+      albumImg:
+        val.quoteToPost.coverImage[1]?.image !== undefined
+          ? val.quoteToPost.coverImage[1].image
+          : dummySongImg,
+      musicUrl: val.quoteToPost.encodeHlsUrl,
+      musicianId: val.musician.uuid,
+    });
+    setPlaySong();
+    seekPlayer(0);
+    setPauseModeOn(true);
+    setIdNowPlaing(val.id);
+    hidePlayer();
+  };
+
+  const handlePausePlay = () => {
+    if (isPlay) {
+      setPauseSong();
+    } else {
+      setPlaySong();
+    }
+  };
+  // ! END OF MUSIC AREA
+
   return (
     <>
       <View style={styles.container}>
@@ -389,6 +437,36 @@ const PostListHome: FC<PostListProps> = (props: PostListProps) => {
                                 heightType2={142}
                                 widthType2={289}
                                 onPress={() => {}}
+                              />
+                              <MusicListPreview
+                                hideClose
+                                targetId={item.quoteToPost.targetId}
+                                targetType={item.quoteToPost.targetType}
+                                title={item.quoteToPost.title}
+                                musician={item.quoteToPost.musician}
+                                coverImage={
+                                  item.quoteToPost.coverImage[1]?.image !==
+                                  undefined
+                                    ? item.quoteToPost.coverImage[1].image
+                                    : ''
+                                }
+                                encodeDashUrl={item.quoteToPost.encodeDashUrl}
+                                encodeHlsUrl={item.quoteToPost.encodeHlsUrl}
+                                startAt={item.quoteToPost.startAt}
+                                endAt={item.quoteToPost.endAt}
+                                postList={item}
+                                onPress={onPressPlaySong}
+                                isPlay={isPlay}
+                                playOrPause={handlePausePlay}
+                                pauseModeOn={pauseModeOn}
+                                currentProgress={currentProgress}
+                                duration={duration}
+                                seekPlayer={seekPlayer}
+                                playNow={
+                                  musicData.id ===
+                                  parseInt(item.quoteToPost.targetId)
+                                }
+                                isIdNowPlaying={item.id === idNowPlaying}
                               />
                             </View>
                           </View>

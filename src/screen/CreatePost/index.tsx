@@ -46,6 +46,7 @@ import {Image} from 'react-native-image-crop-picker';
 import MusicPreview from '../../components/molecule/MusicPreview/MusicPreview';
 import {ListDataSearchSongs} from '../../interface/search.interface';
 import {usePlayerHook} from '../../hooks/use-player.hook';
+import {dummySongImg} from '../../data/image';
 
 type PostDetailProps = NativeStackScreenProps<RootStackParams, 'CreatePost'>;
 
@@ -122,7 +123,9 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
                 targetType: 'song',
                 title: musicData.title,
                 musician: musicData.musicianName,
-                coverImage: musicData.imageUrl,
+                coverImage: musicData.imageUrl
+                  ? musicData.imageUrl
+                  : dummySongImg,
                 encodeDashUrl: musicData.transcodedSongUrl[0].encodedDashUrl,
                 encodeHlsUrl: musicData.transcodedSongUrl[0].encodedHlsUrl,
               }
@@ -190,7 +193,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
         artist: musicData.musicianName,
         albumImg: musicData.imageUrl,
         musicUrl: musicData.transcodedSongUrl[0].encodedHlsUrl,
-        musicianId: musicData.id.toString(),
+        musicianId: musicData.musicianUUID,
       });
     }
   }, [musicData]);
@@ -296,7 +299,9 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
                   targetId={musicData.id.toString()}
                   title={musicData.title}
                   musician={musicData.musicianName}
-                  coverImage={musicData.imageUrl}
+                  coverImage={
+                    musicData.imageUrl ? musicData.imageUrl : dummySongImg
+                  }
                   encodeDashUrl={musicData.transcodedSongUrl[0].encodedDashUrl}
                   encodeHlsUrl={musicData.transcodedSongUrl[0].encodedHlsUrl}
                   startAt={'0:00'}

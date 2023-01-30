@@ -64,7 +64,7 @@ export type QuoteToPost = {
   targetType: string;
   title: string;
   musician: string;
-  coverImage: string;
+  coverImage: imageTypes[];
   encodeDashUrl: string;
   encodeHlsUrl: string;
   startAt: string;
