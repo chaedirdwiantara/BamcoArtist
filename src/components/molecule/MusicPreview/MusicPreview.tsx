@@ -49,11 +49,12 @@ const MusicPreview: FC<MusicPreviewProps> = (props: MusicPreviewProps) => {
     duration,
     seekPlayer,
   } = props;
+
   return (
     <View style={styles.container}>
       <View>
         <SquareImage size={95} imgUri={coverImage} />
-        {isPlay ? (
+        {isPlay && Math.floor(currentProgress) !== Math.floor(duration) ? (
           <TouchableOpacity style={styles.iconOnPress} onPress={playOrPause}>
             <PauseIcon stroke={color.Neutral[10]} />
           </TouchableOpacity>

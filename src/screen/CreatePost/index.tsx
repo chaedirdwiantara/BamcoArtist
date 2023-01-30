@@ -65,8 +65,6 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   const {isLoadingImage, dataImage, setUploadImage} = useUploadImageHook();
   const {
     isPlay,
-    showPlayer,
-    hidePlayer,
     seekPlayer,
     setMusicDataPlayer,
     setPauseSong,
@@ -198,17 +196,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   }, [musicData]);
 
   const onPressPlaySong = () => {
-    // if (musicData !== undefined) {
-    //   setMusicDataPlayer({
-    //     id: musicData.transcodedSongUrl[0].songId,
-    //     title: musicData.title,
-    //     artist: musicData.musicianName,
-    //     albumImg: musicData.imageUrl,
-    //     musicUrl: musicData.transcodedSongUrl[0].encodedHlsUrl,
-    //     musicianId: musicData.id.toString(),
-    //   });
-    // }
-    showPlayer();
+    setPlaySong();
     seekPlayer(0);
     setPauseModeOn(true);
   };
