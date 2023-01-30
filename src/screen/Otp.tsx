@@ -1,13 +1,5 @@
 import React, {FC, useEffect} from 'react';
-import {
-  Dimensions,
-  Image,
-  KeyboardAvoidingView,
-  Platform,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import {Dimensions, Image, StyleSheet, Text, View} from 'react-native';
 import {mvs} from 'react-native-size-matters';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import SsuSheet from '../components/atom/SsuSheet';
@@ -20,6 +12,7 @@ import {ModalLoading} from '../components/molecule/ModalLoading/ModalLoading';
 import RenderMessage from '../components/molecule/OtpInput/RenderMessage';
 import {SSULogo} from '../assets/logo';
 import {storage} from '../hooks/use-storage.hook';
+import {KeyboardShift} from '../components/molecule/KeyboardShift';
 
 const {width, height} = Dimensions.get('screen');
 
@@ -134,9 +127,7 @@ export const Otp: FC<OtpProps> = ({navigation, route}: OtpProps) => {
   };
 
   return (
-    <KeyboardAvoidingView
-      style={{flex: 1}}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+    <KeyboardShift>
       <View style={styles.root}>
         <Image
           source={require('../assets/background/signin-guest.png')}
@@ -145,7 +136,7 @@ export const Otp: FC<OtpProps> = ({navigation, route}: OtpProps) => {
         <SsuSheet children={children()} topChild={topChild()} />
         <ModalLoading visible={isLoading} />
       </View>
-    </KeyboardAvoidingView>
+    </KeyboardShift>
   );
 };
 

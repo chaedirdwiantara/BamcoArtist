@@ -5,8 +5,6 @@ import {
   Text,
   View,
   BackHandler,
-  KeyboardAvoidingView,
-  Platform,
 } from 'react-native';
 import React, {FC, useEffect, useState} from 'react';
 import {color, font} from '../theme';
@@ -32,6 +30,7 @@ import {Controller, SubmitHandler, useForm} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
 import RenderMessage from '../components/molecule/OtpInput/RenderMessage';
 import {storage} from '../hooks/use-storage.hook';
+import {KeyboardShift} from '../components/molecule/KeyboardShift';
 
 const {width, height} = Dimensions.get('screen');
 type PageProps = 'emailInput' | 'otp' | 'newPass';
@@ -378,9 +377,7 @@ export const ForgotPassword: FC = () => {
   };
 
   return (
-    <KeyboardAvoidingView
-      style={{flex: 1}}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+    <KeyboardShift>
       <View style={styles.root}>
         <Image
           source={require('../assets/background/signin-guest.png')}
@@ -406,7 +403,7 @@ export const ForgotPassword: FC = () => {
           onPressOk={onPressConfirm}
         />
       </View>
-    </KeyboardAvoidingView>
+    </KeyboardShift>
   );
 };
 
