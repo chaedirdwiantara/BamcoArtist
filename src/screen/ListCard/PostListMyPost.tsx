@@ -382,7 +382,7 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
                                 widthType2={289}
                                 onPress={() => {}}
                               />
-                              <MusicPreview
+                              {/* <MusicPreview
                                 hideClose
                                 targetId={item.quoteToPost.targetId}
                                 targetType={item.quoteToPost.targetType}
@@ -393,7 +393,7 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
                                 encodeHlsUrl={item.quoteToPost.encodeHlsUrl}
                                 startAt={item.quoteToPost.startAt}
                                 endAt={item.quoteToPost.endAt}
-                              />
+                              /> */}
                             </View>
                           </View>
                         </>

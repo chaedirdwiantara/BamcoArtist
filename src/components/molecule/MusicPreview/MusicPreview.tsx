@@ -4,6 +4,8 @@ import {color, font} from '../../../theme';
 import {Gap, SquareImage} from '../../atom';
 import {CloseCircleIcon, PauseIcon, PlayIcon} from '../../../assets/icon';
 import {ms, mvs} from 'react-native-size-matters';
+import {heightResponsive, widthResponsive} from '../../../utils';
+import {Slider} from '@miblanchard/react-native-slider';
 
 interface MusicPreviewProps {
   targetId: string;
@@ -21,6 +23,9 @@ interface MusicPreviewProps {
   isPlay: boolean;
   playOrPause: () => void;
   pauseModeOn: boolean;
+  currentProgress: number;
+  duration: number;
+  seekPlayer: (second: number) => void;
 }
 
 const MusicPreview: FC<MusicPreviewProps> = (props: MusicPreviewProps) => {
@@ -40,6 +45,9 @@ const MusicPreview: FC<MusicPreviewProps> = (props: MusicPreviewProps) => {
     playOrPause,
     isPlay,
     pauseModeOn,
+    currentProgress,
+    duration,
+    seekPlayer,
   } = props;
   return (
     <View style={styles.container}>
@@ -58,13 +66,51 @@ const MusicPreview: FC<MusicPreviewProps> = (props: MusicPreviewProps) => {
         )}
       </View>
       <Gap width={7} />
-      <View>
-        <Text numberOfLines={2} style={styles.songTitle}>
-          {title}
-        </Text>
-        <Text numberOfLines={1} style={styles.musicianName}>
-          {musician}
-        </Text>
+      <View
+        style={{
+          flex: 1,
+          justifyContent: 'space-between',
+        }}>
+        <View>
+          <Text numberOfLines={2} style={styles.songTitle}>
+            {title}
+          </Text>
+          <Gap height={6} />
+          <Text numberOfLines={1} style={styles.musicianName}>
+            {musician}
+          </Text>
+        </View>
+        <View style={styles.sliderStyle}>
+          <Slider
+            value={pauseModeOn ? currentProgress : 0}
+            minimumValue={0}
+            maximumValue={duration}
+            minimumTrackTintColor={color.Success[400]}
+            maximumTrackTintColor={color.Dark[400]}
+            thumbTintColor={color.Success[400]}
+            onSlidingComplete={e => {
+              const seekDuration = e as number[];
+              seekPlayer(seekDuration[0]);
+            }}
+            thumbStyle={{width: 8, height: 8}}
+            containerStyle={{
+              marginBottom: heightResponsive(-12),
+              marginTop: heightResponsive(-25),
+            }}
+          />
+          <View style={styles.progresTextContainer}>
+            <Text style={styles.progresText}>
+              {pauseModeOn
+                ? new Date((currentProgress + 1) * 1000)
+                    .toISOString()
+                    .slice(14, 19)
+                : '0:00'}
+            </Text>
+            <Text style={styles.progresText}>
+              {new Date(duration * 1000).toISOString().slice(14, 19)}
+            </Text>
+          </View>
+        </View>
       </View>
       {hideClose ? null : (
         <TouchableOpacity style={styles.closeIconButton} onPress={closeOnPress}>
@@ -108,5 +154,19 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: ms(7),
     top: ms(7),
+  },
+  sliderStyle: {
+    width: '100%',
+  },
+  progresTextContainer: {
+    width: '100%',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  progresText: {
+    fontFamily: font.InterRegular,
+    fontWeight: '600',
+    fontSize: mvs(10),
+    color: color.Neutral[10],
   },
 });

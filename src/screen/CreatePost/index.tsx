@@ -44,13 +44,8 @@ import {useUploadImageHook} from '../../hooks/use-uploadImage.hook';
 import {ModalLoading} from '../../components/molecule/ModalLoading/ModalLoading';
 import {Image} from 'react-native-image-crop-picker';
 import MusicPreview from '../../components/molecule/MusicPreview/MusicPreview';
-import {
-  ListDataSearchSongs,
-  ListDataSearchSongsNavigate,
-} from '../../interface/search.interface';
+import {ListDataSearchSongs} from '../../interface/search.interface';
 import {usePlayerHook} from '../../hooks/use-player.hook';
-import {SongList} from '../../interface/song.interface';
-import {profileStorage} from '../../hooks/use-storage.hook';
 
 type PostDetailProps = NativeStackScreenProps<RootStackParams, 'CreatePost'>;
 
@@ -70,14 +65,14 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   const {isLoadingImage, dataImage, setUploadImage} = useUploadImageHook();
   const {
     isPlay,
-    visible: playerVisible,
     showPlayer,
     hidePlayer,
     seekPlayer,
     setMusicDataPlayer,
-    setPlaylistSong,
     setPauseSong,
     setPlaySong,
+    duration,
+    currentProgress,
   } = usePlayerHook();
 
   const [label, setLabel] = useState<string>();
@@ -189,8 +184,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
     }
   }, [data]);
 
-  const onPressPlaySong = () => {
-    // setPlaylistSong(musicData);
+  useEffect(() => {
     if (musicData !== undefined) {
       setMusicDataPlayer({
         id: musicData.transcodedSongUrl[0].songId,
@@ -201,6 +195,19 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
         musicianId: musicData.id.toString(),
       });
     }
+  }, [musicData]);
+
+  const onPressPlaySong = () => {
+    // if (musicData !== undefined) {
+    //   setMusicDataPlayer({
+    //     id: musicData.transcodedSongUrl[0].songId,
+    //     title: musicData.title,
+    //     artist: musicData.musicianName,
+    //     albumImg: musicData.imageUrl,
+    //     musicUrl: musicData.transcodedSongUrl[0].encodedHlsUrl,
+    //     musicianId: musicData.id.toString(),
+    //   });
+    // }
     showPlayer();
     seekPlayer(0);
     setPauseModeOn(true);
@@ -296,7 +303,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
                 height={79}
                 onPress={closeImage}
               />
-              {musicData && (
+              {musicData !== undefined && (
                 <MusicPreview
                   targetId={musicData.id.toString()}
                   title={musicData.title}
@@ -310,6 +317,9 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
                   isPlay={isPlay}
                   playOrPause={handlePausePlay}
                   pauseModeOn={pauseModeOn}
+                  currentProgress={currentProgress}
+                  duration={duration}
+                  seekPlayer={seekPlayer}
                 />
               )}
             </View>
