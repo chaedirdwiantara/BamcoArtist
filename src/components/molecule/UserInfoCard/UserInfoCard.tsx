@@ -87,7 +87,7 @@ const UserInfoCard: FC<UserInfoCardProps> = (props: UserInfoCardProps) => {
           return <View key={i} style={styles.separator} />;
         } else {
           return (
-            <View style={{width: type === 'self' ? '30%' : '20%'}}>
+            <View key={i} style={{width: type === 'self' ? '30%' : '20%'}}>
               <Item
                 point={isFollowing ? totalFollowing : val.point}
                 title={val.title}

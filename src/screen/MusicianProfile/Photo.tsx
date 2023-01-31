@@ -6,14 +6,21 @@ import {widthResponsive} from '../../utils';
 import {color, font} from '../../theme';
 import {ms} from 'react-native-size-matters';
 
+interface ImagesProps {
+  image: string;
+  presetName: string;
+}
 interface PhotoProps {
   title: string;
-  data: string[];
+  data: {
+    images: ImagesProps[];
+  }[];
   photoOnpress: () => void;
+  showWarning?: boolean;
 }
 
 const Photo: FC<PhotoProps> = (props: PhotoProps) => {
-  const {title, data, photoOnpress} = props;
+  const {title, data, photoOnpress, showWarning = true} = props;
 
   return (
     <View style={{marginHorizontal: widthResponsive(24), width: '100%'}}>
@@ -22,10 +29,13 @@ const Photo: FC<PhotoProps> = (props: PhotoProps) => {
       {data ? (
         <View style={{flexDirection: 'row', width: '100%'}}>
           {data.map((item, i) => (
-            <>
+            <View key={i}>
               {data.length <= 4 && (
                 <>
-                  <SquareComp imgUri={item} size={widthResponsive(76)} />
+                  <SquareComp
+                    imgUri={item.images[2]?.image}
+                    size={widthResponsive(76)}
+                  />
                   <Gap width={8} />
                 </>
               )}
@@ -38,7 +48,10 @@ const Photo: FC<PhotoProps> = (props: PhotoProps) => {
                       width: widthResponsive(76),
                       opacity: 0.2,
                     }}>
-                    <SquareComp imgUri={item} size={widthResponsive(76)} />
+                    <SquareComp
+                      imgUri={item.images[2]?.image}
+                      size={widthResponsive(76)}
+                    />
                   </View>
                   <View style={styles.textNumberStyle}>
                     <Text style={styles.textPhotos}>{`+${
@@ -48,15 +61,20 @@ const Photo: FC<PhotoProps> = (props: PhotoProps) => {
                 </TouchableOpacity>
               ) : data.length > 4 && i < 3 ? (
                 <>
-                  <SquareComp imgUri={item} size={widthResponsive(76)} />
+                  <SquareComp
+                    imgUri={item.images[2].image}
+                    size={widthResponsive(76)}
+                  />
                   <Gap width={8} />
                 </>
               ) : null}
-            </>
+            </View>
           ))}
         </View>
       ) : (
-        <Text style={styles.captionStyle}>No Photos available</Text>
+        showWarning && (
+          <Text style={styles.captionStyle}>No Photos available</Text>
+        )
       )}
     </View>
   );
