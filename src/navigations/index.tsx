@@ -43,6 +43,7 @@ import {DonationAndSubscription} from '../screen/Setting/DonationAndSubscription
 import {SendReportScreen} from '../screen/Setting/SendReport';
 import {PushNotificationScreen} from '../screen/Setting/PushNotification';
 import {PreferenceSettingScreen} from '../screen/Setting/Preference';
+import {ExclusiveContentSetting} from '../screen/Setting/ExclusiveContent';
 
 // Profile
 import {ProfileScreen} from '../screen/Profile/Profile';
@@ -82,6 +83,7 @@ import {MerchListType} from '../data/merchList';
 import {ConcertDetail} from '../screen/ConcertDetail';
 import {SignupSSOScreen} from '../screen/SignupSSO';
 import {
+  ListPhotosType,
   ProfileResponseData,
   RegistrationType,
 } from '../interface/profile.interface';
@@ -90,7 +92,6 @@ import {
 import {PostList} from '../interface/feed.interface';
 import {Playlist} from '../interface/playlist.interface';
 import {AlbumData} from '../interface/musician.interface';
-import {imageUriProps} from '../screen/MusicianProfile/DataMusician';
 import {ChangePNScreen} from '../screen/Setting/PhoneNumber/ChangePN';
 import {OtpPNScreen} from '../screen/Setting/PhoneNumber/OTP';
 import {useNavigation} from '@react-navigation/native';
@@ -118,6 +119,7 @@ export type RootStackParams = {
   EditPlaylist: Playlist;
   Email: undefined;
   ExclusiveContent: undefined;
+  ExclusiveContentSetting: undefined;
   Following: undefined;
   ForgotPassword: undefined;
   Language: undefined;
@@ -135,7 +137,7 @@ export type RootStackParams = {
     info?: boolean;
     message?: string;
   };
-  PhotoGallery: {imageData: string[]; userName: string};
+  PhotoGallery: {imageData: ListPhotosType[]; userName: string};
   Playlist: {
     id: number;
   };
@@ -144,7 +146,9 @@ export type RootStackParams = {
   PushNotification: undefined;
   Referral: undefined;
   ReferralCode: undefined;
-  SendReport: undefined;
+  SendReport: {
+    title: string;
+  };
   Setting: undefined;
   Signup: undefined;
   SignupSSO: {
@@ -317,6 +321,10 @@ export const RootStackScreen = () => (
     <RootStack.Screen
       name="DonationAndSubscription"
       component={DonationAndSubscription}
+    />
+    <RootStack.Screen
+      name="ExclusiveContentSetting"
+      component={ExclusiveContentSetting}
     />
     <RootStack.Screen name="SendReport" component={SendReportScreen} />
     <RootStack.Screen name="Setting" component={SettingScreen} />
