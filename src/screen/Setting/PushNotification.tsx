@@ -1,17 +1,15 @@
-import React, {useState} from 'react';
-import {StyleSheet, View} from 'react-native';
+import React from 'react';
+import {Linking, StyleSheet, Text, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
-import Color from '../../theme/Color';
-import {RootStackParams} from '../../navigations';
+import {color, typography} from '../../theme';
 import {ArrowLeftIcon} from '../../assets/icon';
-import {Dropdown, TopNavigation} from '../../components';
-import {dataLanguage} from '../../data/Settings/language';
-import {heightPercentage, widthPercentage} from '../../utils';
+import {RootStackParams} from '../../navigations';
+import {Button, Gap, TopNavigation} from '../../components';
+import {heightPercentage, width, widthPercentage} from '../../utils';
 
 export const PushNotificationScreen: React.FC = () => {
-  const [, setLanguage] = useState('');
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
 
@@ -19,21 +17,29 @@ export const PushNotificationScreen: React.FC = () => {
     navigation.goBack();
   };
 
+  const openPhoneSettings = () => Linking.openSettings();
+
   return (
     <View style={styles.root}>
       <TopNavigation.Type1
         title="Push Notification"
         leftIcon={<ArrowLeftIcon />}
-        itemStrokeColor={Color.Neutral[10]}
+        itemStrokeColor={color.Neutral[10]}
         leftIconAction={onPressGoBack}
         containerStyles={{marginBottom: heightPercentage(15)}}
       />
-      <Dropdown.Input
-        data={dataLanguage}
-        placeHolder={'Search Language'}
-        dropdownLabel={'Language'}
-        textTyped={(newText: string) => setLanguage(newText)}
-        containerStyles={{marginTop: heightPercentage(15)}}
+      <Text style={[typography.Subtitle1, {color: color.Neutral[10]}]}>
+        Turn On Push Notification
+      </Text>
+      <Gap height={heightPercentage(10)} />
+      <Text style={[typography.Subtitle2, {color: color.Neutral[10]}]}>
+        You haven't activated push notifications on your cellphone. Activate now
+        to settings and get the latest info!
+      </Text>
+      <Button
+        label="Turn Off"
+        onPress={openPhoneSettings}
+        containerStyles={styles.button}
       />
     </View>
   );
@@ -42,7 +48,14 @@ export const PushNotificationScreen: React.FC = () => {
 const styles = StyleSheet.create({
   root: {
     flex: 1,
-    backgroundColor: Color.Dark[800],
-    paddingHorizontal: widthPercentage(12),
+    backgroundColor: color.Dark[800],
+    paddingHorizontal: widthPercentage(15),
+  },
+  button: {
+    width: width * 0.9,
+    aspectRatio: widthPercentage(327 / 36),
+    marginTop: heightPercentage(25),
+    backgroundColor: color.Pink[200],
+    alignSelf: 'center',
   },
 });
