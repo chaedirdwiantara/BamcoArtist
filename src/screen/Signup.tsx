@@ -3,7 +3,6 @@ import {
   View,
   Text,
   StyleSheet,
-  KeyboardAvoidingView,
   Platform,
   ScrollView,
   TouchableOpacity,
@@ -26,6 +25,7 @@ import {AppleLogo, FacebookLogo, GoogleLogo} from '../assets/logo';
 import {ms, mvs} from 'react-native-size-matters';
 import {ModalLoading} from '../components/molecule/ModalLoading/ModalLoading';
 import {storage} from '../hooks/use-storage.hook';
+import {KeyboardShift} from '../components/molecule/KeyboardShift';
 
 interface RegisterInput {
   fullname: string;
@@ -240,10 +240,7 @@ export const SignupScreen: React.FC = () => {
   return (
     <View style={styles.root}>
       <SsuStatusBar type="black" />
-      <KeyboardAvoidingView
-        style={{flex: 1}}
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        keyboardVerticalOffset={heightResponsive(10)}>
+      <KeyboardShift>
         <ScrollView
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.scrollView}>
@@ -459,7 +456,7 @@ export const SignupScreen: React.FC = () => {
             </Text>
           </View>
         </ScrollView>
-      </KeyboardAvoidingView>
+      </KeyboardShift>
       <ModalLoading visible={isLoading} />
       <SsuToast
         modalVisible={ssoError}

@@ -1,12 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-} from 'react-native';
+import {View, Text, StyleSheet, ScrollView} from 'react-native';
 import {useForm, SubmitHandler, Controller} from 'react-hook-form';
 import {Button, Gap, SsuInput} from '../components/atom';
 import {yupResolver} from '@hookform/resolvers/yup';
@@ -22,6 +15,7 @@ import {heightResponsive, widthResponsive} from '../utils';
 import {ms, mvs} from 'react-native-size-matters';
 import {ModalLoading} from '../components/molecule/ModalLoading/ModalLoading';
 import {storage} from '../hooks/use-storage.hook';
+import {KeyboardShift} from '../components/molecule/KeyboardShift';
 
 interface RegisterInput {
   fullname: string;
@@ -142,10 +136,7 @@ export const SignupSSOScreen: React.FC<RegisterProps> = ({
   return (
     <View style={styles.root}>
       <SsuStatusBar type="black" />
-      <KeyboardAvoidingView
-        style={{flex: 1}}
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        keyboardVerticalOffset={heightResponsive(10)}>
+      <KeyboardShift>
         <ScrollView
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.scrollView}>
@@ -261,7 +252,7 @@ export const SignupSSOScreen: React.FC<RegisterProps> = ({
             />
           </View>
         </ScrollView>
-      </KeyboardAvoidingView>
+      </KeyboardShift>
       <ModalLoading visible={isLoading} />
     </View>
   );
