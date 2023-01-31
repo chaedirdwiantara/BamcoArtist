@@ -1,16 +1,19 @@
-import {StyleSheet, TouchableOpacity} from 'react-native';
 import React from 'react';
-import {CheckBoxProps} from '../../../interface/checkbox.interface';
+import {TouchableOpacity} from 'react-native';
 import {CheckBoxIcon} from '../../../assets/icon';
+import {CheckBoxProps} from '../../../interface/checkbox.interface';
 
-const CheckBox: React.FC<CheckBoxProps> = ({handleOnPress, active}) => {
+const CheckBox: React.FC<CheckBoxProps> = ({
+  handleOnPress,
+  active,
+  containerStyles,
+  checkBoxStyles,
+}) => {
   return (
-    <TouchableOpacity onPress={handleOnPress}>
-      <CheckBoxIcon active={active} />
+    <TouchableOpacity onPress={handleOnPress} style={containerStyles}>
+      <CheckBoxIcon active={active} style={checkBoxStyles} />
     </TouchableOpacity>
   );
 };
 
 export default CheckBox;
-
-const styles = StyleSheet.create({});
