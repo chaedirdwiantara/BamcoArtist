@@ -28,6 +28,8 @@ import {WebviewPage} from '../screen/Webview';
 import {MusicPlayer} from '../screen/Music';
 import CreatePost from '../screen/CreatePost';
 import {OtherUserProfile} from '../screen/OtherUserProfile/OtherUserProfile';
+import QuoteMusic from '../screen/CreatePost/MusicPost/QuoteMusic';
+import AddPreview from '../screen/CreatePost/MusicPost/AddPreview';
 
 // Setting
 import {SettingScreen} from '../screen/Setting/Setting';
@@ -95,6 +97,10 @@ import {ChangePNScreen} from '../screen/Setting/PhoneNumber/ChangePN';
 import {OtpPNScreen} from '../screen/Setting/PhoneNumber/OTP';
 import {useNavigation} from '@react-navigation/native';
 import {
+  ListDataSearchSongs,
+  ListDataSearchSongsNavigate,
+} from '../interface/search.interface';
+import {
   OtpEmailScreen as OtpEmailProps,
   OtpPhoneScreen,
 } from '../interface/setting.interface';
@@ -105,6 +111,7 @@ export type RootStackParams = {
   Account: undefined;
   AddToPlaylist: undefined;
   AddSong: Playlist;
+  AddPreview: ListDataSearchSongs;
   Album: AlbumData;
   Boarding: undefined;
   ChangeEmail: {
@@ -132,6 +139,7 @@ export type RootStackParams = {
   Language: undefined;
   Login: undefined;
   MainTab: undefined;
+  QuoteMusic: undefined;
   OtherUserProfile: {id: string};
   Otp: {
     id: string;
@@ -181,7 +189,7 @@ export type RootStackParams = {
   MusicPlayer: undefined;
   MerchDetail: MerchListType;
   ConcertDetail: MerchListType;
-  CreatePost: undefined;
+  CreatePost: ListDataSearchSongs;
   SplashScreen: undefined;
 };
 
@@ -348,6 +356,8 @@ export const RootStackScreen = () => (
     <RootStack.Screen name="CreatePost" component={CreatePost} />
     <RootStack.Screen name="PhotoGallery" component={PhotoGallery} />
     <RootStack.Screen name="OtherUserProfile" component={OtherUserProfile} />
+    <RootStack.Screen name="QuoteMusic" component={QuoteMusic} />
+    <RootStack.Screen name="AddPreview" component={AddPreview} />
     <RootStack.Screen name="SplashScreen" component={SplashScreen} />
   </RootStack.Navigator>
 );

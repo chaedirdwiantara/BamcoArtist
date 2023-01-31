@@ -27,24 +27,48 @@ export type CreatePostProps = {
   category: string;
   image?: string[];
   isPremium: boolean;
+  quoteToPost?: {
+    targetId: string;
+    targetType: string;
+    title: string;
+    musician: string;
+    coverImage: string;
+    encodeDashUrl: string;
+    encodeHlsUrl: string;
+    startAt?: string;
+    endAt?: string;
+  };
 };
 
 export type DataComment = {id: string; created_at: string};
 
 // => PostList Area
+
+export type imageTypes = {
+  image: string;
+  presetName: string;
+};
+
 export type MusicianData = {
   uuid: string;
   username: string;
   fullname: string;
   email: string;
   isFollowed: boolean;
-  imageProfileUrl: string;
+  imageProfileUrls: imageTypes[][];
   followers: number;
 };
 
-export type imageTypes = {
-  image: string;
-  presetName: string;
+export type QuoteToPost = {
+  targetId: string;
+  targetType: string;
+  title: string;
+  musician: string;
+  coverImage: imageTypes[];
+  encodeDashUrl: string;
+  encodeHlsUrl: string;
+  startAt: string;
+  endAt: string;
 };
 
 export type PostList = {
@@ -59,6 +83,7 @@ export type PostList = {
   isPremium: boolean;
   musician: MusicianData;
   isLiked: boolean;
+  quoteToPost: QuoteToPost;
 };
 
 export type ListPostResponseType = {
@@ -81,6 +106,8 @@ export type DetailPostData = {
   comments: CommentList[];
   musician: MusicianData;
   isLiked: boolean;
+  quoteToPost: QuoteToPost;
+  isPremium: boolean;
 };
 
 export type DetailPostResponseType = {

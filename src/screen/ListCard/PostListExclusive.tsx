@@ -45,6 +45,9 @@ import {dateFormat} from '../../utils/date-format';
 import {useProfileHook} from '../../hooks/use-profile.hook';
 import categoryNormalize from '../../utils/categoryNormalize';
 import {ModalLoading} from '../../components/molecule/ModalLoading/ModalLoading';
+import {usePlayerHook} from '../../hooks/use-player.hook';
+import MusicListPreview from '../../components/molecule/MusicPreview/MusicListPreview';
+import {dummySongImg} from '../../data/image';
 
 const {height} = Dimensions.get('screen');
 
@@ -76,6 +79,10 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
   const [selectedIdPost, setSelectedIdPost] = useState<string>();
   const [selectedMenu, setSelectedMenu] = useState<DataDropDownType>();
 
+  //* MUSIC HOOKS
+  const [pauseModeOn, setPauseModeOn] = useState<boolean>(false);
+  const [idNowPlaying, setIdNowPlaing] = useState<string>();
+
   const {
     feedIsLoading,
     feedIsError,
@@ -87,6 +94,18 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
     setCommentToPost,
   } = useFeedHook();
 
+  const {
+    currentProgress,
+    duration,
+    isPlay,
+    musicData,
+    seekPlayer,
+    setMusicDataPlayer,
+    setPlaySong,
+    setPauseSong,
+    hidePlayer,
+  } = usePlayerHook();
+
   const {dataProfile, getProfileUser} = useProfileHook();
 
   useEffect(() => {
@@ -94,9 +113,9 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
   }, []);
 
   useEffect(() => {
-    dataProfile?.data.imageProfileUrl !== null &&
-    dataProfile?.data.imageProfileUrl !== undefined
-      ? setDataProfileImg(dataProfile?.data.imageProfileUrl)
+    dataProfile?.data.imageProfileUrls.length !== 0 &&
+    dataProfile?.data.imageProfileUrls !== undefined
+      ? setDataProfileImg(dataProfile?.data.imageProfileUrls[0].image)
       : '';
   }, [dataProfile]);
 
@@ -250,6 +269,35 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
   }, [selectedIdPost, selectedMenu]);
   // ! END OF UPDATE COMMENT AREA
 
+  // ! MUSIC AREA
+  const onPressPlaySong = (val: PostList) => {
+    setMusicDataPlayer({
+      id: parseInt(val.quoteToPost.targetId),
+      title: val.quoteToPost.title,
+      artist: val.quoteToPost.musician,
+      albumImg:
+        val.quoteToPost.coverImage[1]?.image !== undefined
+          ? val.quoteToPost.coverImage[1].image
+          : dummySongImg,
+      musicUrl: val.quoteToPost.encodeHlsUrl,
+      musicianId: val.musician.uuid,
+    });
+    setPlaySong();
+    seekPlayer(0);
+    setPauseModeOn(true);
+    setIdNowPlaing(val.id);
+    hidePlayer();
+  };
+
+  const handlePausePlay = () => {
+    if (isPlay) {
+      setPauseSong();
+    } else {
+      setPlaySong();
+    }
+  };
+  // ! END OF MUSIC AREA
+
   return (
     <>
       <View style={styles.container}>
@@ -304,7 +352,11 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
                   }
                   musicianName={item.musician.fullname}
                   musicianId={`@${item.musician.username}`}
-                  imgUri={item.musician.imageProfileUrl}
+                  imgUri={
+                    item.musician.imageProfileUrls.length !== 0
+                      ? item.musician.imageProfileUrls[0][0].image
+                      : ''
+                  }
                   postDate={dateFormat(item.createdAt)}
                   category={categoryNormalize(item.category)}
                   onPress={() => cardOnPress(item)}
@@ -375,6 +427,39 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
                                 widthType2={289}
                                 onPress={() => {}}
                               />
+                              {item.images.length === 0 &&
+                              item.quoteToPost.encodeHlsUrl ? (
+                                <MusicListPreview
+                                  hideClose
+                                  targetId={item.quoteToPost.targetId}
+                                  targetType={item.quoteToPost.targetType}
+                                  title={item.quoteToPost.title}
+                                  musician={item.quoteToPost.musician}
+                                  coverImage={
+                                    item.quoteToPost.coverImage[1]?.image !==
+                                    undefined
+                                      ? item.quoteToPost.coverImage[1].image
+                                      : ''
+                                  }
+                                  encodeDashUrl={item.quoteToPost.encodeDashUrl}
+                                  encodeHlsUrl={item.quoteToPost.encodeHlsUrl}
+                                  startAt={item.quoteToPost.startAt}
+                                  endAt={item.quoteToPost.endAt}
+                                  postList={item}
+                                  onPress={onPressPlaySong}
+                                  isPlay={isPlay}
+                                  playOrPause={handlePausePlay}
+                                  pauseModeOn={pauseModeOn}
+                                  currentProgress={currentProgress}
+                                  duration={duration}
+                                  seekPlayer={seekPlayer}
+                                  playNow={
+                                    musicData.id ===
+                                    parseInt(item.quoteToPost.targetId)
+                                  }
+                                  isIdNowPlaying={item.id === idNowPlaying}
+                                />
+                              ) : null}
                             </View>
                           </View>
                         </>

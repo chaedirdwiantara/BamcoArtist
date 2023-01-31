@@ -31,7 +31,7 @@ export const detailSong = async (
   props?: PostPropsTypeA,
 ): Promise<DetailSongResponseType> => {
   const {data} = await SsuAPI().request<DetailSongResponseType>({
-    url: `/songs/${props?.id}`,
+    url: `/songs/detail/${props?.id}`,
     method: 'GET',
   });
 

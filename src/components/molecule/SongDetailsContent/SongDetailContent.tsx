@@ -106,7 +106,7 @@ export const SongDetailsContent: React.FC<Props> = ({
         <View style={{paddingHorizontal: widthPercentage(10)}}>
           <View style={{alignSelf: 'center'}}>
             {dataDetail.imageUrl ? (
-              <PhotoPlaylist uri={dataDetail.Album.ImageURL} />
+              <PhotoPlaylist uri={dataDetail.imageUrl} />
             ) : (
               <View style={styles.undefinedImg}>
                 <DefaultImage.PlaylistCover width={148} height={148} />
@@ -120,7 +120,7 @@ export const SongDetailsContent: React.FC<Props> = ({
               <Text
                 style={
                   styles.albumName
-                }>{`${dataDetail.Album.Title} · ${dataDetail.Album.ProductionYear}`}</Text>
+                }>{`${dataDetail.title} · ${dataDetail.publishedDate}`}</Text>
             </View>
           </View>
           <ListenersAndDonate
@@ -141,24 +141,26 @@ export const SongDetailsContent: React.FC<Props> = ({
               avatarUri={dataDetail.imageUrl}
             />
 
-            <ListAvatar
-              title="Featuring"
-              featuring
-              featuringData={dataDetail.Album.FeaturingArtist}
-            />
+            {dataDetail.featuringArtists ? (
+              <ListAvatar
+                title="Featuring"
+                featuring
+                featuringData={dataDetail.featuringArtists}
+              />
+            ) : null}
 
             <Text style={[typography.Subtitle1, styles.titleContent]}>
               Song Description
             </Text>
             <Text style={styles.description}>{dataDetail.description}</Text>
 
-            <ListAlbum
+            {/* <ListAlbum
               title={'Album'}
               albumName={dataDetail.Album.Title}
               onPress={goToAlbum}
               createdOn={dataDetail.Album.ProductionYear}
               imgUri={dataDetail.Album.ImageURL}
-            />
+            /> */}
           </View>
         </View>
       </ScrollView>

@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import {color, font} from '../../theme';
 import {
   Avatar,
@@ -20,11 +20,18 @@ import {
   TopNavigation,
 } from '../../components';
 import {useNavigation} from '@react-navigation/native';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {
+  NativeStackNavigationProp,
+  NativeStackScreenProps,
+} from '@react-navigation/native-stack';
 import {RootStackParams} from '../../navigations';
 import {heightResponsive, widthResponsive} from '../../utils';
 import {ms, mvs} from 'react-native-size-matters';
-import {ImportPhotoIcon, OpenCameraIcon} from '../../assets/icon';
+import {
+  ImportMusicIcon,
+  ImportPhotoIcon,
+  OpenCameraIcon,
+} from '../../assets/icon';
 import {
   DataDropDownType,
   dropdownCategoryMusician,
@@ -36,10 +43,18 @@ import {useFeedHook} from '../../hooks/use-feed.hook';
 import {useUploadImageHook} from '../../hooks/use-uploadImage.hook';
 import {ModalLoading} from '../../components/molecule/ModalLoading/ModalLoading';
 import {Image} from 'react-native-image-crop-picker';
+import MusicPreview from '../../components/molecule/MusicPreview/MusicPreview';
+import {ListDataSearchSongs} from '../../interface/search.interface';
+import {usePlayerHook} from '../../hooks/use-player.hook';
+import {dummySongImg} from '../../data/image';
 
-const CreatePost = () => {
+type PostDetailProps = NativeStackScreenProps<RootStackParams, 'CreatePost'>;
+
+const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
+
+  const data = route.params;
 
   const [inputText, setInputText] = useState<string>('');
   const [isModalVisible, setModalVisible] = useState({
@@ -49,11 +64,22 @@ const CreatePost = () => {
 
   const {dataCreatePost, createPostLoading, setCreatePost} = useFeedHook();
   const {isLoadingImage, dataImage, setUploadImage} = useUploadImageHook();
+  const {
+    isPlay,
+    seekPlayer,
+    setMusicDataPlayer,
+    setPauseSong,
+    setPlaySong,
+    duration,
+    currentProgress,
+  } = usePlayerHook();
 
   const [label, setLabel] = useState<string>();
   const [valueFilter, setValueFilter] = useState<string>();
   const [dataAudience, setDataAudience] = useState<string>('');
   const [dataResponseImg, setDataResponseImg] = useState<string[]>([]);
+  const [musicData, setMusicData] = useState<ListDataSearchSongs>();
+  const [pauseModeOn, setPauseModeOn] = useState<boolean>(false);
 
   // * Hooks for uploading
   const [uri, setUri] = useState<Image[]>([]);
@@ -72,12 +98,41 @@ const CreatePost = () => {
 
   //  * 3. trigger hook to hit upload image api
   useEffect(() => {
+    if (active == true && uri.length == 0 && musicData == undefined) {
+      setCreatePost({
+        caption: inputText,
+        category: valueFilter ? valueFilter : 'highlight',
+        isPremium: dataAudience === 'Exclusive' ? true : false,
+      });
+    }
+
     if (active == true && uri.length !== 0) {
       for (let i = 0; i < uri.length; i++) {
         setUploadImage(uri[i]);
       }
     }
-  }, [active, uri]);
+    if (active == true && uri.length == 0 && musicData !== undefined) {
+      setCreatePost({
+        caption: inputText,
+        category: valueFilter ? valueFilter : 'highlight',
+        isPremium: dataAudience === 'Exclusive' ? true : false,
+        quoteToPost:
+          musicData !== undefined && musicData?.transcodedSongUrl !== undefined
+            ? {
+                targetId: musicData.id?.toString(),
+                targetType: 'song',
+                title: musicData.title,
+                musician: musicData.musicianName,
+                coverImage: musicData.imageUrl
+                  ? musicData.imageUrl
+                  : dummySongImg,
+                encodeDashUrl: musicData.transcodedSongUrl[0].encodedDashUrl,
+                encodeHlsUrl: musicData.transcodedSongUrl[0].encodedHlsUrl,
+              }
+            : undefined,
+      });
+    }
+  }, [active, uri, musicData]);
 
   // * 4. set to hook state when response upload image has received
   useEffect(() => {
@@ -94,6 +149,20 @@ const CreatePost = () => {
           category: valueFilter ? valueFilter : 'highlight',
           image: dataResponseImg,
           isPremium: dataAudience === 'Exclusive' ? true : false,
+          quoteToPost:
+            musicData !== undefined &&
+            musicData?.transcodedSongUrl !== undefined
+              ? {
+                  targetId: musicData.id?.toString(),
+                  targetType: 'song',
+                  title: musicData.title,
+                  musician: musicData.musicianName,
+                  coverImage: musicData.imageUrl,
+                  encodeDashUrl: musicData.transcodedSongUrl[0].encodedDashUrl,
+                  encodeHlsUrl: musicData.transcodedSongUrl[0].encodedHlsUrl,
+                  startAt: '0:00',
+                }
+              : undefined,
         }),
         setActive(false))
       : null;
@@ -106,6 +175,51 @@ const CreatePost = () => {
     }
   }, [dataCreatePost]);
   // ! END OF UPLOAD PHOTO STEPS
+
+  // ! UPLOAD MUSIC STEPS
+  //  * 3. trigger hook to hit upload image api
+  useEffect(() => {
+    if (data !== undefined) {
+      setMusicData(data);
+      setPauseModeOn(false);
+    }
+  }, [data]);
+
+  useEffect(() => {
+    if (musicData !== undefined) {
+      setMusicDataPlayer({
+        id: musicData.transcodedSongUrl[0].songId,
+        title: musicData.title,
+        artist: musicData.musicianName,
+        albumImg: musicData.imageUrl,
+        musicUrl: musicData.transcodedSongUrl[0].encodedHlsUrl,
+        musicianId: musicData.musicianUUID,
+      });
+    }
+  }, [musicData]);
+
+  const onPressPlaySong = () => {
+    setPlaySong();
+    seekPlayer(0);
+    setPauseModeOn(true);
+  };
+
+  const handlePausePlay = () => {
+    if (isPlay) {
+      setPauseSong();
+    } else {
+      setPlaySong();
+    }
+  };
+
+  const handleClosedPlayer = () => {
+    setPauseModeOn(false);
+    setMusicData(undefined);
+    if (isPlay) {
+      setPauseSong();
+    }
+  };
+  // ! END OF UPLOAD MUSIC STEPS
 
   const resultDataAudience = (dataAudience: DataDropDownType) => {
     setDataAudience(dataAudience.label);
@@ -180,6 +294,27 @@ const CreatePost = () => {
                 height={79}
                 onPress={closeImage}
               />
+              {musicData !== undefined && (
+                <MusicPreview
+                  targetId={musicData.id.toString()}
+                  title={musicData.title}
+                  musician={musicData.musicianName}
+                  coverImage={
+                    musicData.imageUrl ? musicData.imageUrl : dummySongImg
+                  }
+                  encodeDashUrl={musicData.transcodedSongUrl[0].encodedDashUrl}
+                  encodeHlsUrl={musicData.transcodedSongUrl[0].encodedHlsUrl}
+                  startAt={'0:00'}
+                  onPress={onPressPlaySong}
+                  closeOnPress={handleClosedPlayer}
+                  isPlay={isPlay}
+                  playOrPause={handlePausePlay}
+                  pauseModeOn={pauseModeOn}
+                  currentProgress={currentProgress}
+                  duration={duration}
+                  seekPlayer={seekPlayer}
+                />
+              )}
             </View>
           </View>
           {/* //! END OF TOP AREA */}
@@ -188,19 +323,26 @@ const CreatePost = () => {
           <View style={styles.footerBody}>
             <View style={styles.iconsAndCategory}>
               <View style={styles.iconsContainer}>
-                {/* <TouchableOpacity>
-                <OpenCameraIcon />
-              </TouchableOpacity>
-              <Gap width={16} /> */}
-                <TouchableOpacity
-                  onPress={() =>
-                    setModalVisible({
-                      modalFilter: false,
-                      modalImagePicker: true,
-                    })
-                  }>
-                  <ImportPhotoIcon />
-                </TouchableOpacity>
+                {!musicData && (
+                  <>
+                    <TouchableOpacity
+                      onPress={() =>
+                        setModalVisible({
+                          modalFilter: false,
+                          modalImagePicker: true,
+                        })
+                      }>
+                      <ImportPhotoIcon />
+                    </TouchableOpacity>
+                    <Gap width={16} />
+                  </>
+                )}
+                {uri.length == 0 && (
+                  <TouchableOpacity
+                    onPress={() => navigation.navigate('QuoteMusic')}>
+                    <ImportMusicIcon />
+                  </TouchableOpacity>
+                )}
               </View>
               <View style={styles.dropdownContainer}>
                 <Dropdown.Menu
