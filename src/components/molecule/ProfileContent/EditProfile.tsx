@@ -21,8 +21,6 @@ import {ProfileHeader} from './components/Header';
 import {ModalImagePicker} from '../Modal/ModalImagePicker';
 import {ArrowLeftIcon, SaveIcon} from '../../../assets/icon';
 import {heightPercentage, widthPercentage} from '../../../utils';
-import ProfileComponent from '../../../screen/MusicianProfile/ProfileComponent';
-import ImageList from '../../../screen/CreatePost/showImage';
 
 interface EditProfileProps {
   profile: any;
@@ -31,6 +29,7 @@ interface EditProfileProps {
   onPressSave: (params: {bio: string; about: string}) => void;
   setUploadImage: (image: Image, type: string) => void;
   setResetImage: (type: string) => void;
+  goToGallery: () => void;
 }
 
 export const EditProfile: React.FC<EditProfileProps> = ({
@@ -100,11 +99,7 @@ export const EditProfile: React.FC<EditProfileProps> = ({
   };
 
   const sendMultipleUri = (val: Image[]) => {
-    photos.length + val.length <= 4 ? setPhotos([...photos, ...val]) : null;
-    for (let i = 0; i < photos.length; i++) {
-      console.log('photos sendMultipleUri', photos);
-      setUploadImage(photos[i], 'photos');
-    }
+    val.length <= 4 ? setPhotos([...photos, ...val]) : null;
   };
 
   const closeImage = (id: number) => {
@@ -181,47 +176,6 @@ export const EditProfile: React.FC<EditProfileProps> = ({
               styles.length,
               {color: newColorAbout},
             ]}>{`${about.length}/600`}</Text>
-        </View>
-
-        <View style={styles.textAreaContainer}>
-          <Text style={styles.title}>{'Social Media'}</Text>
-          <TouchableOpacity onPress={openModalSocMed}>
-            <Text style={styles.addText}>{'+ Social Media Settings'}</Text>
-          </TouchableOpacity>
-          <ProfileComponent
-            title=""
-            gap={0}
-            socmedSection
-            socmed={[
-              'facebook',
-              'twitter',
-              'instagram',
-              'tiktok',
-              'snapchat',
-              'vk',
-              'weibo',
-            ]}
-            containerStyles={{paddingHorizontal: 0}}
-          />
-        </View>
-
-        <View
-          style={[
-            styles.textAreaContainer,
-            {marginBottom: heightPercentage(30)},
-          ]}>
-          <Text style={styles.title}>{'Photos'}</Text>
-          <TouchableOpacity onPress={() => openModalImage('photos')}>
-            <Text style={styles.addText}>{'+ Add Photos'}</Text>
-          </TouchableOpacity>
-          <Gap height={heightPercentage(20)} />
-          <ImageList
-            imgData={photos}
-            disabled={true}
-            width={162}
-            height={79}
-            onPress={closeImage}
-          />
         </View>
       </ScrollView>
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Modal from 'react-native-modal';
 import {mvs} from 'react-native-size-matters';
 import {Text, View, StyleSheet, TouchableWithoutFeedback} from 'react-native';
@@ -9,10 +9,11 @@ import {
   width,
   widthPercentage,
 } from '../../../utils';
-import {Button} from '../../atom';
+import {Button, SsuInput} from '../../atom';
 import Font from '../../../theme/Font';
-import Color from '../../../theme/Color';
 import SsuSheet from '../../atom/SsuSheet';
+import {color} from '../../../theme';
+import {Fb2Icon} from '../../../assets/icon';
 
 interface ModalSocMedProps {
   titleModal: string;
@@ -25,17 +26,44 @@ export const ModalSocMed: React.FC<ModalSocMedProps> = ({
   modalVisible,
   onPressClose,
 }) => {
+  const [focusInput, setFocusInput] = useState(false);
+
+  const ListSocMed = () => {
+    return (
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+        }}>
+        <Fb2Icon style={{marginRight: 20}} />
+        <SsuInput.InputText
+          placeholder={'Add Username'}
+          fontColor={color.Neutral[10]}
+          borderColor={color.Pink.linear}
+          onFocus={() => {
+            setFocusInput(true);
+          }}
+          onBlur={() => {
+            setFocusInput(false);
+          }}
+          containerStyles={styles.containerContent}
+          isFocus={focusInput}
+        />
+      </View>
+    );
+  };
+
   const children = () => {
     return (
       <>
         <Text style={styles.titleStyle}>{titleModal}</Text>
         <View style={styles.separator} />
-
+        <ListSocMed />
         <Button
           type="border"
           label="Cancel"
           containerStyles={styles.btnCancel}
-          textStyles={{color: Color.Pink.linear}}
+          textStyles={{color: color.Pink.linear}}
           onPress={onPressClose}
         />
       </>
@@ -43,7 +71,7 @@ export const ModalSocMed: React.FC<ModalSocMedProps> = ({
   };
 
   return (
-    <Modal isVisible={modalVisible} style={{margin: 0}}>
+    <Modal avoidKeyboard isVisible={modalVisible} style={{margin: 0}}>
       <TouchableWithoutFeedback onPress={onPressClose}>
         <View style={styles.modalOverlay} />
       </TouchableWithoutFeedback>
@@ -58,7 +86,7 @@ const styles = StyleSheet.create({
     fontSize: normalize(18),
     lineHeight: mvs(28),
     textAlign: 'center',
-    color: Color.Neutral[10],
+    color: color.Neutral[10],
   },
   separator: {
     backgroundColor: '#2B3240',
@@ -77,5 +105,8 @@ const styles = StyleSheet.create({
     width: widthPercentage(327),
     aspectRatio: heightPercentage(327 / 40),
     marginTop: heightPercentage(10),
+  },
+  containerContent: {
+    width: '90%',
   },
 });
