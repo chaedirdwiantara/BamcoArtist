@@ -29,13 +29,13 @@ export const ProfileScreen: React.FC<ProfileProps> = ({
   const {dataProfile, getProfileUser} = useProfileHook();
   const {dataPlaylist, getPlaylist} = usePlaylistHook();
   const isFocused = useIsFocused();
-  const {isPlay, showPlayer, hidePlayer} = usePlayerHook();
+  const {isPlaying, showPlayer, hidePlayer} = usePlayerHook();
 
   const {dataDetailMusician, dataAlbum, getDetailMusician, getAlbum} =
     useMusicianHook();
 
   useEffect(() => {
-    if (isFocused && isPlay) {
+    if (isFocused && isPlaying) {
       showPlayer();
     } else if (!isFocused) {
       hidePlayer();

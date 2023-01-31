@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import {
   NextIcon,
@@ -12,44 +12,58 @@ import {
 import {heightResponsive, widthResponsive} from '../../utils';
 import {color} from '../../theme';
 import {usePlayerHook} from '../../hooks/use-player.hook';
+import {RepeatMode} from 'react-native-track-player';
 
 const MusicControl = () => {
   const {
-    isPlay,
+    isPlaying,
     isShuffle,
     repeat,
     setPlaySong,
     setPauseSong,
     setNextPrevTrack,
     setShufflePlayer,
+    getRepeatPlayer,
     setRepeatPlayer,
   } = usePlayerHook();
+  const [repeatMode, setRepeatMode] = useState<RepeatMode>(repeat.Off);
+
+  useEffect(() => {
+    getRepeat();
+  }, [setRepeatPlayer]);
+
+  const getRepeat = () => {
+    getRepeatPlayer().then(res => {
+      setRepeatMode(res);
+    });
+  };
 
   const shuffleOnpress = () => {
     setShufflePlayer(!isShuffle);
   };
 
   const repeatOnPress = () => {
-    switch (repeat) {
-      case 'off':
-        setRepeatPlayer('all');
+    switch (repeatMode) {
+      case repeat.Off:
+        setRepeatPlayer(repeat.Queue, getRepeat);
         break;
 
-      case 'all':
-        setRepeatPlayer('one');
+      case repeat.Queue:
+        setRepeatPlayer(repeat.Track, getRepeat);
         break;
 
-      case 'one':
-        setRepeatPlayer('off');
+      case repeat.Track:
+        setRepeatPlayer(repeat.Off, getRepeat);
         break;
 
       default:
+        console.log('none');
         break;
     }
   };
 
   const handlePlayPaused = () => {
-    if (isPlay) {
+    if (isPlaying) {
       setPauseSong();
     } else {
       setPlaySong();
@@ -79,7 +93,7 @@ const MusicControl = () => {
       <TouchableOpacity
         onPress={handlePlayPaused}
         style={[styles.touchableStyle, {width: widthResponsive(50)}]}>
-        {isPlay ? <PauseIcon2 /> : <PlayIcon2 />}
+        {isPlaying ? <PauseIcon2 /> : <PlayIcon2 />}
       </TouchableOpacity>
 
       <TouchableOpacity onPress={handleNextTrack} style={styles.touchableStyle}>
@@ -89,9 +103,9 @@ const MusicControl = () => {
       <TouchableOpacity
         onPress={repeatOnPress}
         style={[styles.touchableStyle, {alignItems: 'flex-end'}]}>
-        {repeat === 'off' ? (
+        {repeatMode === repeat.Off ? (
           <RepeatIcon fill={undefined} />
-        ) : repeat === 'all' ? (
+        ) : repeatMode === repeat.Queue ? (
           <RepeatIcon fill={color.Success[400]} />
         ) : (
           <RepeatOneIcon fill={color.Success[400]} />

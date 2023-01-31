@@ -6,7 +6,7 @@ import {
   Text,
   Animated,
 } from 'react-native';
-import React, {FC, useEffect, useRef, useState} from 'react';
+import React, {FC, useRef, useState} from 'react';
 import {color, font} from '../../theme';
 import {ModalDonate, ModalSuccessDonate, SsuStatusBar} from '../../components';
 import {heightResponsive, widthResponsive} from '../../utils';
@@ -27,18 +27,19 @@ type MusicProps = NativeStackScreenProps<RootStackParams, 'MusicPlayer'>;
 
 export const MusicPlayer: FC<MusicProps> = ({navigation}: MusicProps) => {
   const scrollX = useRef(new Animated.Value(0)).current;
-  const [songIndex, setSongIndex] = useState<number>(0);
+  const {playerProgress, currentTrack, seekPlayer} = usePlayerHook();
   const [modalDonate, setModalDonate] = useState<boolean>(false);
   const [modalSuccessDonate, setModalSuccessDonate] = useState<boolean>(false);
   const [trigger2ndModal, setTrigger2ndModal] = useState<boolean>(false);
-  const {musicData, duration, currentProgress, seekPlayer} = usePlayerHook();
+  // const [songIndex, setSongIndex] = useState<number>(0);
 
-  useEffect(() => {
-    scrollX.addListener(({value}) => {
-      const index = Math.round(value / width);
-      setSongIndex(index);
-    });
-  }, []);
+  // TODO: will gonna use it when swipe on the song is applied
+  // useEffect(() => {
+  //   scrollX.addListener(({value}) => {
+  //     const index = Math.round(value / width);
+  //     setSongIndex(index);
+  //   });
+  // }, []);
 
   const RenderSongs = (item: SongsProps, index: number) => {
     return (
@@ -69,14 +70,17 @@ export const MusicPlayer: FC<MusicProps> = ({navigation}: MusicProps) => {
   };
 
   const artistOnPress = () => {
-    navigation.navigate('MusicianProfile', {id: musicData.musicianId});
+    navigation.navigate('MusicianProfile', {id: currentTrack?.musicianId});
   };
 
   return (
     <View style={styles.container}>
       <SsuStatusBar type="black" />
       <View style={styles.topNavStyle}>
-        <TopNav />
+        <TopNav
+          songId={currentTrack?.id}
+          musicianId={currentTrack?.musicianId}
+        />
       </View>
       <View style={styles.mainContainer}>
         {/* image */}
@@ -97,8 +101,8 @@ export const MusicPlayer: FC<MusicProps> = ({navigation}: MusicProps) => {
       {/* Title  */}
       <View style={styles.titleStyle}>
         <TitleAndDonate
-          title={musicData.title}
-          artist={musicData.artist}
+          title={currentTrack?.title ?? ''}
+          artist={currentTrack?.artist ?? ''}
           coinOnPress={coinOnPress}
           artistOnPress={artistOnPress}
         />
@@ -106,9 +110,9 @@ export const MusicPlayer: FC<MusicProps> = ({navigation}: MusicProps) => {
       {/* slider */}
       <View style={styles.sliderStyle}>
         <Slider
-          value={currentProgress}
+          value={playerProgress.position}
           minimumValue={0}
-          maximumValue={duration}
+          maximumValue={playerProgress.duration}
           minimumTrackTintColor={color.Success[400]}
           maximumTrackTintColor={color.Dark[400]}
           thumbTintColor={color.Success[400]}
@@ -124,10 +128,14 @@ export const MusicPlayer: FC<MusicProps> = ({navigation}: MusicProps) => {
         />
         <View style={styles.progresTextContainer}>
           <Text style={styles.progresText}>
-            {new Date((currentProgress + 1) * 1000).toISOString().slice(14, 19)}
+            {new Date((playerProgress.position + 1) * 1000)
+              .toISOString()
+              .slice(14, 19)}
           </Text>
           <Text style={styles.progresText}>
-            {new Date(duration * 1000).toISOString().slice(14, 19)}
+            {new Date(playerProgress.duration * 1000)
+              .toISOString()
+              .slice(14, 19)}
           </Text>
         </View>
       </View>

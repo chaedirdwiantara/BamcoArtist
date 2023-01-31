@@ -1,14 +1,16 @@
 import React, {FC} from 'react';
+import {MusicSection} from '../../components';
 import {mvs} from 'react-native-size-matters';
 import {FlashList} from '@shopify/flash-list';
-import {MusicSection} from '../../components';
 import {SongList} from '../../interface/song.interface';
 import {elipsisText, heightResponsive} from '../../utils';
+import {ListDataSearchSongs} from '../../interface/search.interface';
+import {usePlayerHook} from '../../hooks/use-player.hook';
 
 interface TopSongPropsScreen {
   type?: string;
   onPress: (param: any) => void;
-  dataSong?: SongList[];
+  dataSong?: SongList[] | ListDataSearchSongs[] | null;
   scrollable?: boolean;
   hideDropdownMore?: boolean;
   rightIcon?: boolean;
@@ -29,9 +31,10 @@ const TopSong: FC<TopSongPropsScreen> = (props: TopSongPropsScreen) => {
     onPressIcon,
     activeOpacity,
   } = props;
+  const {currentTrack, isPlaying} = usePlayerHook();
 
   return (
-    <FlashList<SongList>
+    <FlashList<SongList | ListDataSearchSongs>
       data={dataSong}
       showsVerticalScrollIndicator={false}
       scrollEnabled={scrollable}
@@ -47,6 +50,9 @@ const TopSong: FC<TopSongPropsScreen> = (props: TopSongPropsScreen) => {
             marginTop: mvs(20),
             marginBottom: index + 1 === dataSong?.length ? mvs(20) : 0,
           }}
+          played={
+            type === 'home' ? isPlaying && item.id === currentTrack?.id : false
+          }
           hideDropdownMore={hideDropdownMore}
           rightIcon={rightIcon}
           rightIconComponent={rightIconComponent}
@@ -55,6 +61,7 @@ const TopSong: FC<TopSongPropsScreen> = (props: TopSongPropsScreen) => {
         />
       )}
       estimatedItemSize={heightResponsive(500)}
+      extraData={[currentTrack, isPlaying]}
     />
   );
 };

@@ -1,38 +1,83 @@
-import React from 'react';
-import Video from 'react-native-video';
+import TrackPlayer, {
+  Track,
+  TrackType,
+  usePlaybackState,
+  State,
+  useProgress,
+  Event,
+  useTrackPlayerEvents,
+  RepeatMode,
+} from 'react-native-track-player';
 import {SongList} from '../interface/song.interface';
 import {usePlayerStore} from '../store/player.store';
 
 export const usePlayerHook = () => {
   const playerStore = usePlayerStore();
+  const playerState = usePlaybackState();
+  const isPlaying = playerState === State.Playing;
+  const isPaused = playerState === State.Paused;
+  const isConnecting = playerState === State.Connecting;
+  const isBuffering = playerState === State.Buffering;
+  const playerProgress = useProgress();
 
-  const setPlayerRef = (ref: React.MutableRefObject<Video | null>) => {
-    playerStore.setPlayerRef(ref);
+  useTrackPlayerEvents([Event.PlaybackTrackChanged], async event => {
+    if (event.type === Event.PlaybackTrackChanged && event.nextTrack != null) {
+      const track = await TrackPlayer.getTrack(event.nextTrack);
+      playerStore.setCurrentTrack(track);
+    }
+  });
+
+  const addSong = async (val: SongList) => {
+    const track: Track = {
+      url: val.transcodedSongUrl[1].encodedHlsUrl,
+      title: val.title,
+      artist: val.musicianName,
+      type: TrackType.HLS,
+      artwork: val.imageUrl ? val.imageUrl : undefined,
+      id: val.id,
+      musicianId: val.musicianId,
+    };
+    await TrackPlayer.add(track);
   };
 
-  const setMusicDataPlayer = ({
-    id,
-    title,
-    artist,
-    albumImg,
-    musicUrl,
-    musicianId,
+  const addPlaylist = async ({
+    dataSong,
+    playSongId,
+    isPlay = false,
   }: {
-    id: number;
-    title: string;
-    artist: string;
-    albumImg: string | null;
-    musicUrl: string;
-    musicianId: string;
+    dataSong: SongList[];
+    playSongId?: number;
+    isPlay?: boolean;
   }) => {
-    playerStore.setMusicData({
-      id,
-      title,
-      artist,
-      albumImg,
-      musicUrl,
-      musicianId,
-    });
+    try {
+      await TrackPlayer.reset();
+      const track: Track[] = dataSong
+        .filter(ar => ar.id !== 14)
+        .map(item => {
+          return {
+            url: item.transcodedSongUrl[1].encodedHlsUrl,
+            title: item.title,
+            artist: item.musicianName,
+            type: TrackType.HLS,
+            artwork: item.imageUrl ? item.imageUrl : undefined,
+            id: item.id,
+            musicianId: item.musicianId,
+          };
+        });
+      if (playSongId) {
+        let indexPlaySong = track.findIndex(ar => ar.id === playSongId);
+        if (indexPlaySong > -1) {
+          let newTrack = track.splice(indexPlaySong);
+          newTrack = newTrack.concat(track.splice(0, indexPlaySong));
+          await TrackPlayer.add(newTrack);
+          if (isPlay) {
+            setPlaySong();
+          }
+        }
+      }
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const showPlayer = () => {
@@ -44,125 +89,112 @@ export const usePlayerHook = () => {
     playerStore.setShow(false);
   };
 
-  const setDurationPlayer = (duration: number) => {
-    playerStore.setDuration(duration);
-  };
-
-  const setProgressPlayer = (progress: number) => {
-    playerStore.setCurrentProgress(progress);
-  };
-
   const setPlaySong = () => {
-    playerStore.setPlay(true);
+    TrackPlayer.play();
   };
 
   const setPauseSong = () => {
-    playerStore.setPlay(false);
+    TrackPlayer.pause();
   };
 
   const seekPlayer = (second: number) => {
-    playerStore.playerRef?.current?.seek(second);
+    TrackPlayer.seekTo(second);
+  };
+
+  const resetPlayer = async () => {
+    await TrackPlayer.reset();
   };
 
   const setPlaylistSong = (props: SongList[]) => {
     playerStore.setPlaylist(props);
   };
 
-  const getShuffleTrack = (): number => {
-    let randomIndex = Math.abs(
-      Math.floor(Math.random() * playerStore.playlist.length - 1),
-    );
-    let idShuffle = playerStore.playlist[randomIndex].id;
-    if (idShuffle === playerStore.musicData.id) {
-      if (
-        idShuffle < playerStore.playlist[playerStore.playlist.length - 1].id
-      ) {
-        idShuffle = idShuffle + 1;
-        return idShuffle;
+  const setNextPrevTrack = async (type: 'next' | 'prev') => {
+    try {
+      const track = await TrackPlayer.getCurrentTrack();
+      const queue = await TrackPlayer.getQueue();
+      let isShuffle = playerStore.isShuffle;
+      if (isShuffle) {
+        let nextTrack = track;
+        while (nextTrack === track) {
+          nextTrack = Math.floor(Math.random() * (queue.length - 1));
+        }
+        console.log('nextTrack', nextTrack);
+        if (nextTrack) {
+          await TrackPlayer.skip(nextTrack);
+        }
       } else {
-        idShuffle = playerStore.playlist[0].id;
-        return idShuffle;
+        if (type === 'next') {
+          if (track === queue.length - 1) {
+            await TrackPlayer.skip(0);
+          } else {
+            await TrackPlayer.skipToNext();
+          }
+        } else if (type === 'prev') {
+          if (track === 0) {
+            await TrackPlayer.skip(queue.length - 1);
+          } else {
+            await TrackPlayer.skipToPrevious();
+          }
+        }
       }
-    } else {
-      return idShuffle;
+    } catch (err) {
+      console.log(err);
     }
-  };
-
-  const setNextPrevTrack = (type: 'next' | 'prev') => {
-    let newSong: SongList | null = null;
-    if (type === 'next') {
-      if (playerStore.isShuffle) {
-        // newSong = playerStore.playlist.filter(
-        //   ar => ar.id === getShuffleTrack(),
-        // )[0];
-        // TODO: need to be fixed for getting the logic on shuffle
-        newSong = playerStore.playlist.filter(
-          ar => ar.id > playerStore.musicData.id,
-        )[0];
-      } else if (
-        playerStore.musicData.id <
-        playerStore.playlist[playerStore.playlist.length - 1].id
-      ) {
-        newSong = playerStore.playlist.filter(
-          ar => ar.id > playerStore.musicData.id,
-        )[0];
-      } else {
-        newSong = playerStore.playlist[0];
-      }
-    } else {
-      if (playerStore.isShuffle) {
-        newSong = playerStore.playlist.filter(
-          ar => ar.id === getShuffleTrack(),
-        )[0];
-      } else if (playerStore.musicData.id > playerStore.playlist[0].id) {
-        newSong = playerStore.playlist.filter(
-          ar => ar.id === playerStore.musicData.id - 1,
-        )[0];
-      } else {
-        newSong = playerStore.playlist[playerStore.playlist.length - 1];
-      }
-    }
-
-    setMusicDataPlayer({
-      id: newSong.id,
-      title: newSong.title,
-      artist: newSong.musicianName,
-      albumImg: newSong.imageUrl,
-      musicUrl: newSong.transcodedSongUrl[1].encodedHlsUrl,
-      musicianId: newSong.musicianId,
-    });
   };
 
   const setShufflePlayer = (props: boolean) => {
     playerStore.setShuffle(props);
   };
 
-  const setRepeatPlayer = (props: 'off' | 'one' | 'all') => {
-    playerStore.setRepeat(props);
+  const getRepeatPlayer = async (): Promise<RepeatMode> => {
+    let _repeat = RepeatMode.Off;
+    try {
+      const res = await TrackPlayer.getRepeatMode();
+      _repeat = res;
+    } catch (err) {
+      console.log(err);
+    } finally {
+      return _repeat;
+    }
+  };
+
+  const setRepeatPlayer = (props: RepeatMode, callback?: () => void) => {
+    try {
+      TrackPlayer.setRepeatMode(props);
+    } catch (err) {
+      console.log(err);
+    } finally {
+      if (callback) {
+        callback();
+      }
+    }
   };
 
   return {
     playerRef: playerStore.playerRef,
-    musicData: playerStore.musicData,
     visible: playerStore.show,
-    duration: playerStore.duration,
-    currentProgress: playerStore.currentProgress,
-    isPlay: playerStore.play,
     playlist: playerStore.playlist,
     isShuffle: playerStore.isShuffle,
-    repeat: playerStore.repeat,
-    setPlayerRef,
-    setMusicDataPlayer,
+    repeat: RepeatMode,
+    isPlaying,
+    isPaused,
+    isConnecting,
+    isBuffering,
+    playerProgress,
+    currentTrack: playerStore.currentTrack,
+    addSong,
+    addPlaylist,
     showPlayer,
     hidePlayer,
-    setDurationPlayer,
-    setProgressPlayer,
     setPlaySong,
     setPauseSong,
     seekPlayer,
+    resetPlayer,
     setPlaylistSong,
     setNextPrevTrack,
     setShufflePlayer,
+    getRepeatPlayer,
     setRepeatPlayer,
   };
 };

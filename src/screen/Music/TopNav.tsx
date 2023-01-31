@@ -11,7 +11,7 @@ import {NativeModules, Platform} from 'react-native';
 const {StatusBarManager} = NativeModules;
 const barHeight = Platform.OS === 'ios' ? 20 : StatusBarManager.HEIGHT;
 
-const TopNav = () => {
+const TopNav = ({songId, musicianId}: {songId: number; musicianId: string}) => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
   return (
@@ -25,7 +25,7 @@ const TopNav = () => {
       }
       leftIconAction={navigation.goBack}
       rightIcon={<AudioMusic />}
-      rightIconAction={() => navigation.navigate('SongDetails')}
+      rightIconAction={() => navigation.navigate('SongDetails', {id: songId})}
       itemStrokeColor={'white'}
       containerStyles={{
         borderBottomWidth: 0,
