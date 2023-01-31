@@ -1,18 +1,17 @@
-import {PaginationType} from './base.interface';
+import {imageTypes, PaginationType} from './base.interface';
 
 export type paramsTypeUuid = {
   uuid: string;
 };
 
 export type MusicianList = {
-  point: number;
-  uuid: string;
-  username: string;
-  fullname: string;
   email: string;
-  isFollowed: boolean;
-  imageProfileUrl: string | null;
   followers: number;
+  fullname: string;
+  imageProfileUrls: imageTypes[];
+  isFollowed: boolean;
+  username: string;
+  uuid: string;
 };
 
 export type ListMusicianResponseType = {

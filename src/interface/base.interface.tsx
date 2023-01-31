@@ -20,3 +20,8 @@ export type ParamsProps = {
   albumID?: number;
   id?: string;
 };
+
+export type imageTypes = {
+  image: string;
+  presetName: string;
+};

@@ -45,6 +45,10 @@ import {useFeedHook} from '../../hooks/use-feed.hook';
 import {dateFormat} from '../../utils/date-format';
 import categoryNormalize from '../../utils/categoryNormalize';
 import {TickCircleIcon} from '../../assets/icon';
+import {profileStorage} from '../../hooks/use-storage.hook';
+import {usePlayerHook} from '../../hooks/use-player.hook';
+import MusicListPreview from '../../components/molecule/MusicPreview/MusicListPreview';
+import {dummySongImg} from '../../data/image';
 
 interface PostListProps {
   dataRightDropdown: DataDropDownType[];
@@ -85,11 +89,31 @@ const PostListHome: FC<PostListProps> = (props: PostListProps) => {
   const [modalSuccessDonate, setModalSuccessDonate] = useState<boolean>(false);
   const [trigger2ndModal, setTrigger2ndModal] = useState<boolean>(false);
 
+  // * UPDATE HOOKS
+  const [selectedIdPost, setSelectedIdPost] = useState<string>();
+  const [selectedMenu, setSelectedMenu] = useState<DataDropDownType>();
+
+  //* MUSIC HOOKS
+  const [pauseModeOn, setPauseModeOn] = useState<boolean>(false);
+  const [idNowPlaying, setIdNowPlaing] = useState<string>();
+
   useFocusEffect(
     useCallback(() => {
       getListTopPost();
     }, []),
   );
+
+  const {
+    currentProgress,
+    duration,
+    isPlay,
+    musicData,
+    seekPlayer,
+    setMusicDataPlayer,
+    setPlaySong,
+    setPauseSong,
+    hidePlayer,
+  } = usePlayerHook();
 
   const resultDataFilter = (dataResultFilter: any) => {
     const dates = new Date();
@@ -242,6 +266,48 @@ const PostListHome: FC<PostListProps> = (props: PostListProps) => {
     setTrigger2ndModal(false);
   };
 
+  const handleToDetailMusician = (id: string) => {
+    navigation.navigate('MusicianProfile', {id});
+  };
+
+  // ! UPDATE COMMENT AREA
+  useEffect(() => {
+    if (selectedIdPost !== undefined && selectedMenu !== undefined) {
+      console.log('selectedIdPost', selectedIdPost);
+      console.log('selectedMenu', selectedMenu);
+    }
+  }, [selectedIdPost, selectedMenu]);
+  // ! END OF UPDATE COMMENT AREA
+
+  // ! MUSIC AREA
+  const onPressPlaySong = (val: PostList) => {
+    setMusicDataPlayer({
+      id: parseInt(val.quoteToPost.targetId),
+      title: val.quoteToPost.title,
+      artist: val.quoteToPost.musician,
+      albumImg:
+        val.quoteToPost.coverImage[1]?.image !== undefined
+          ? val.quoteToPost.coverImage[1].image
+          : dummySongImg,
+      musicUrl: val.quoteToPost.encodeHlsUrl,
+      musicianId: val.musician.uuid,
+    });
+    setPlaySong();
+    seekPlayer(0);
+    setPauseModeOn(true);
+    setIdNowPlaing(val.id);
+    hidePlayer();
+  };
+
+  const handlePausePlay = () => {
+    if (isPlay) {
+      setPauseSong();
+    } else {
+      setPlaySong();
+    }
+  };
+  // ! END OF MUSIC AREA
+
   return (
     <>
       <View style={styles.container}>
@@ -289,12 +355,19 @@ const PostListHome: FC<PostListProps> = (props: PostListProps) => {
                   ? heightResponsive(25)
                   : heightResponsive(40),
             }}
-            renderItem={({item, index}: any) => (
+            renderItem={({item, index}) => (
               <>
                 <ListCard.PostList
+                  toDetailOnPress={() =>
+                    handleToDetailMusician(item.musician.uuid)
+                  }
                   musicianName={item.musician.fullname}
                   musicianId={`@${item.musician.username}`}
-                  imgUri={item.musician.imageProfileUrl}
+                  imgUri={
+                    item.musician.imageProfileUrls.length !== 0
+                      ? item.musician.imageProfileUrls[0][0].image
+                      : ''
+                  }
                   postDate={dateFormat(item.createdAt)}
                   category={categoryNormalize(item.category)}
                   onPress={() => cardOnPress(item)}
@@ -340,12 +413,16 @@ const PostListHome: FC<PostListProps> = (props: PostListProps) => {
                   tokenOnPress={tokenOnPress}
                   shareOnPress={shareOnPress}
                   commentCount={item.commentsCount}
+                  myPost={item.musician.uuid === profileStorage()?.uuid}
+                  selectedMenu={setSelectedMenu}
+                  idPost={item.id}
+                  selectedIdPost={setSelectedIdPost}
                   children={
                     <View style={{width: '100%'}}>
                       <Text style={styles.childrenPostTitle}>
                         {elipsisText(item.caption, 600)}
                       </Text>
-                      {item.image !== null ? (
+                      {item.images !== null ? (
                         <>
                           <Gap height={4} />
                           <View
@@ -354,13 +431,46 @@ const PostListHome: FC<PostListProps> = (props: PostListProps) => {
                             }}>
                             <View style={{height: '100%', width: '100%'}}>
                               <ImageList
-                                imgData={item.image}
+                                imgData={item.images}
                                 width={143}
                                 height={69.5}
                                 heightType2={142}
                                 widthType2={289}
                                 onPress={() => {}}
                               />
+                              {item.images.length === 0 &&
+                              item.quoteToPost.encodeHlsUrl ? (
+                                <MusicListPreview
+                                  hideClose
+                                  targetId={item.quoteToPost.targetId}
+                                  targetType={item.quoteToPost.targetType}
+                                  title={item.quoteToPost.title}
+                                  musician={item.quoteToPost.musician}
+                                  coverImage={
+                                    item.quoteToPost.coverImage[1]?.image !==
+                                    undefined
+                                      ? item.quoteToPost.coverImage[1].image
+                                      : ''
+                                  }
+                                  encodeDashUrl={item.quoteToPost.encodeDashUrl}
+                                  encodeHlsUrl={item.quoteToPost.encodeHlsUrl}
+                                  startAt={item.quoteToPost.startAt}
+                                  endAt={item.quoteToPost.endAt}
+                                  postList={item}
+                                  onPress={onPressPlaySong}
+                                  isPlay={isPlay}
+                                  playOrPause={handlePausePlay}
+                                  pauseModeOn={pauseModeOn}
+                                  currentProgress={currentProgress}
+                                  duration={duration}
+                                  seekPlayer={seekPlayer}
+                                  playNow={
+                                    musicData.id ===
+                                    parseInt(item.quoteToPost.targetId)
+                                  }
+                                  isIdNowPlaying={item.id === idNowPlaying}
+                                />
+                              ) : null}
                             </View>
                           </View>
                         </>

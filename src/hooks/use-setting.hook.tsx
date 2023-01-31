@@ -1,6 +1,7 @@
 import axios from 'axios';
 import {useState} from 'react';
 import {
+  addEmail,
   addPhoneNumber,
   exclusiveContent,
   getShipping,
@@ -9,7 +10,7 @@ import {
   updateEmail,
   updatePassword,
   updatePhoneNumber,
-  verifPasswordPhone,
+  verifPasswordSetting,
 } from '../api/setting.api';
 import {
   ChangePasswordProps,
@@ -17,7 +18,7 @@ import {
   DataShippingProps,
   EmailPhoneProps,
   EmailPhoneVerifProps,
-  VerifPasswordPhone,
+  VerifPasswordSetting,
 } from '../interface/setting.interface';
 import {ParamsProps} from '../interface/base.interface';
 
@@ -31,19 +32,6 @@ export const useSettingHook = () => {
     useState<DataShippingProps | null>(null);
   const [dataExclusiveContent, setDataExclusiveContent] =
     useState<DataExclusiveResponse | null>(null);
-
-  const changeEmail = async (props?: EmailPhoneProps) => {
-    setIsLoading(true);
-    setIsError(false);
-    try {
-      await updateEmail(props);
-    } catch (error) {
-      console.log(error);
-      setIsError(true);
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   const getVerificationCode = async (props?: EmailPhoneVerifProps) => {
     setIsLoading(true);
@@ -85,12 +73,12 @@ export const useSettingHook = () => {
     }
   };
 
-  const verificationPasswordPhone = async (props?: VerifPasswordPhone) => {
+  const verificationPasswordSetting = async (props?: VerifPasswordSetting) => {
     setIsLoading(true);
     setIsError(false);
     setErrorMsg('');
     try {
-      const resp = await verifPasswordPhone(props);
+      const resp = await verifPasswordSetting(props);
       if (resp.code !== 200) {
         setIsError(true);
         setErrorMsg(resp.message as string);
@@ -150,6 +138,68 @@ export const useSettingHook = () => {
     setSuccessMsg('');
     try {
       const resp = await updatePhoneNumber(props);
+      console.log({resp});
+      if (resp.code !== 200) {
+        setIsError(true);
+        setErrorMsg(resp.message as string);
+      } else {
+        setSuccessMsg(resp.data as string);
+      }
+    } catch (error) {
+      console.log(error);
+      setIsError(true);
+      if (
+        axios.isAxiosError(error) &&
+        error.response?.status &&
+        error.response?.status >= 400
+      ) {
+        setErrorMsg(error.response?.data?.message);
+      } else if (error instanceof Error) {
+        setErrorMsg(error.message);
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const addNewEmail = async (props?: EmailPhoneProps) => {
+    setIsLoading(true);
+    setIsError(false);
+    setErrorMsg('');
+    setSuccessMsg('');
+    try {
+      const resp = await addEmail(props);
+      console.log({resp});
+      if (resp.code !== 200) {
+        setIsError(true);
+        setErrorMsg(resp.message as string);
+      } else {
+        setSuccessMsg(resp.message as string);
+      }
+    } catch (error) {
+      console.log(error);
+      setIsError(true);
+      if (
+        axios.isAxiosError(error) &&
+        error.response?.status &&
+        error.response?.status >= 400
+      ) {
+        setErrorMsg(error.response?.data?.message);
+      } else if (error instanceof Error) {
+        setErrorMsg(error.message);
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const changeEmail = async (props?: EmailPhoneProps) => {
+    setIsLoading(true);
+    setIsError(false);
+    setErrorMsg('');
+    setSuccessMsg('');
+    try {
+      const resp = await updateEmail(props);
       console.log({resp});
       if (resp.code !== 200) {
         setIsError(true);
@@ -247,11 +297,12 @@ export const useSettingHook = () => {
     changePhoneNumber,
     getVerificationCode,
     setVerificationCode,
-    verificationPasswordPhone,
+    verificationPasswordSetting,
     setIsError,
     changePassword,
     addNewPhoneNumber,
     getShippingInfo,
     getExclusiveContent,
+    addNewEmail,
   };
 };

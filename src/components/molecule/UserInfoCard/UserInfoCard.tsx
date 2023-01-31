@@ -51,23 +51,23 @@ const UserInfoCard: FC<UserInfoCardProps> = (props: UserInfoCardProps) => {
   const {type = '', profile, containerStyles, totalFollowing, onPress} = props;
   const infoProfileArtist = [
     {
-      point: profile.totalFans,
+      point: profile?.totalFans ? profile.totalFans : 0,
       title: 'FANS',
     },
     {
-      point: profile.totalFollowers,
+      point: profile?.totalFollowers ? profile.totalFollowers : 0,
       title: 'FOLLOWERS',
     },
     {
-      point: profile.totalRelease,
+      point: profile?.totalRelease ? profile.totalRelease : 0,
       title: 'RELEASE',
     },
     {
-      point: profile.totalPlaylist,
+      point: profile?.totalPlaylist ? profile.totalPlaylist : 0,
       title: 'PLAYLIST',
     },
     {
-      point: profile.rank,
+      point: profile?.rank ? profile.rank : 0,
       title: 'RANK',
     },
   ];

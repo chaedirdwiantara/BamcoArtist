@@ -2,6 +2,7 @@ import {StyleSheet, View} from 'react-native';
 import React, {FC} from 'react';
 import {Gap, SquareImage} from '../../components';
 import {heightPercentage, widthResponsive} from '../../utils';
+import {imageTypes} from '../../interface/feed.interface';
 
 interface ImageListProps {
   disabled?: boolean;
@@ -10,7 +11,7 @@ interface ImageListProps {
   height: number;
   heightType2?: number;
   widthType2?: number;
-  imgData: string[];
+  imgData: imageTypes[][];
 }
 
 const ImageList: FC<ImageListProps> = (props: ImageListProps) => {
@@ -29,7 +30,7 @@ const ImageList: FC<ImageListProps> = (props: ImageListProps) => {
       {imgData.length === 1 && (
         <>
           <SquareImage
-            imgUri={imgData && imgData[0]}
+            imgUri={imgData && imgData[0][2].image}
             size={widthResponsive(widthType2)}
             height={heightPercentage(heightType2)}
             containerStyle={{
@@ -43,7 +44,7 @@ const ImageList: FC<ImageListProps> = (props: ImageListProps) => {
       {imgData.length === 2 && (
         <>
           <SquareImage
-            imgUri={imgData && imgData[0]}
+            imgUri={imgData && imgData[0][1].image}
             size={widthResponsive(width, 375)}
             height={heightPercentage(heightType2)}
             containerStyle={{
@@ -53,7 +54,7 @@ const ImageList: FC<ImageListProps> = (props: ImageListProps) => {
             onPress={() => onPress(0)}
           />
           <SquareImage
-            imgUri={imgData && imgData[1]}
+            imgUri={imgData && imgData[1][1].image}
             size={widthResponsive(width, 375)}
             height={heightPercentage(heightType2)}
             containerStyle={{
@@ -67,7 +68,7 @@ const ImageList: FC<ImageListProps> = (props: ImageListProps) => {
       {imgData.length === 3 && (
         <>
           <SquareImage
-            imgUri={imgData && imgData[0]}
+            imgUri={imgData && imgData[0][1].image}
             size={widthResponsive(width, 375)}
             height={heightPercentage(heightType2)}
             containerStyle={{
@@ -78,7 +79,7 @@ const ImageList: FC<ImageListProps> = (props: ImageListProps) => {
           />
           <View>
             <SquareImage
-              imgUri={imgData && imgData[1]}
+              imgUri={imgData && imgData[1][1].image}
               size={widthResponsive(width, 375)}
               height={heightPercentage(height)}
               disabled={disabled}
@@ -86,7 +87,7 @@ const ImageList: FC<ImageListProps> = (props: ImageListProps) => {
             />
             <Gap height={3} />
             <SquareImage
-              imgUri={imgData && imgData[2]}
+              imgUri={imgData && imgData[2][1].image}
               size={widthResponsive(width, 375)}
               height={heightPercentage(height)}
               disabled={disabled}
@@ -99,7 +100,7 @@ const ImageList: FC<ImageListProps> = (props: ImageListProps) => {
         <>
           <View>
             <SquareImage
-              imgUri={imgData && imgData[0]}
+              imgUri={imgData && imgData[0][1].image}
               size={widthResponsive(width, 375)}
               height={heightPercentage(height)}
               disabled={disabled}
@@ -107,7 +108,7 @@ const ImageList: FC<ImageListProps> = (props: ImageListProps) => {
             />
             <Gap height={3} />
             <SquareImage
-              imgUri={imgData && imgData[2]}
+              imgUri={imgData && imgData[2][1].image}
               size={widthResponsive(width, 375)}
               height={heightPercentage(height)}
               disabled={disabled}
@@ -117,7 +118,7 @@ const ImageList: FC<ImageListProps> = (props: ImageListProps) => {
           <Gap width={3} />
           <View>
             <SquareImage
-              imgUri={imgData && imgData[1]}
+              imgUri={imgData && imgData[1][1].image}
               size={widthResponsive(width, 375)}
               height={heightPercentage(height)}
               disabled={disabled}
@@ -125,7 +126,7 @@ const ImageList: FC<ImageListProps> = (props: ImageListProps) => {
             />
             <Gap height={3} />
             <SquareImage
-              imgUri={imgData && imgData[3]}
+              imgUri={imgData && imgData[3][1].image}
               size={widthResponsive(width, 375)}
               height={heightPercentage(height)}
               disabled={disabled}

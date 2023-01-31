@@ -46,6 +46,7 @@ import HeartIcon from './Heart.icon';
 import HomeIcon from './Home.icon';
 import InstagramIcon from './Instagram.icon';
 import ImportPhotoIcon from './ImportPhoto.icon';
+import ImportMusicIcon from './importMusic.icon';
 import KeyIcon from './Key.icon';
 import LockIcon from './Lock.icon.';
 import LogOutIcon from './Logout.icon';
@@ -135,6 +136,7 @@ export {
   HeartIcon,
   HomeIcon,
   InstagramIcon,
+  ImportMusicIcon,
   ImportPhotoIcon,
   KeyIcon,
   LockIcon,

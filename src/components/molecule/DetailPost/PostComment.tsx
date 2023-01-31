@@ -1,4 +1,5 @@
 import {
+  Platform,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -8,15 +9,18 @@ import {
 } from 'react-native';
 import React from 'react';
 import {Avatar, Gap} from '../../atom';
-import {heightPercentage, normalize, widthResponsive} from '../../../utils';
+import {heightPercentage, widthResponsive} from '../../../utils';
 import {color, font} from '../../../theme';
 import {CommentIcon, LoveIcon} from '../../../assets/icon';
 import {ms, mvs} from 'react-native-size-matters';
+import {Dropdown} from '../DropDown';
+import {dataUpdateComment} from '../../../data/dropdown';
+import {DataDropDownType} from '../../../data/dropdown';
 
 interface ListProps extends TouchableOpacityProps {
   imgUri: string;
+  fullName: string;
   userName: string;
-  userId: string;
   postDate: string;
   artistPostId: string;
   commentCaption: string;
@@ -28,13 +32,16 @@ interface ListProps extends TouchableOpacityProps {
   containerStyles?: ViewStyle;
   children?: React.ReactNode;
   toDetailOnPress?: () => void;
+  selectedMenu: (value: DataDropDownType) => void;
+  idComment: string;
+  selectedIdComment: (idComment: string) => void;
 }
 
 const PostComment: React.FC<ListProps> = (props: ListProps) => {
   const {
     imgUri,
+    fullName,
     userName,
-    userId,
     postDate,
     artistPostId,
     commentCaption,
@@ -46,6 +53,9 @@ const PostComment: React.FC<ListProps> = (props: ListProps) => {
     containerStyles,
     children,
     toDetailOnPress,
+    selectedMenu,
+    idComment,
+    selectedIdComment,
   } = props;
   return (
     <View style={[styles.root, containerStyles]}>
@@ -58,11 +68,30 @@ const PostComment: React.FC<ListProps> = (props: ListProps) => {
           marginLeft: widthResponsive(6),
         }}>
         <View style={styles.topSection}>
-          <Text style={styles.userName} onPress={toDetailOnPress}>
-            {userName}
-            <Text style={styles.regularText}> {userId}</Text>
+          <Text style={styles.fullname} onPress={toDetailOnPress}>
+            {fullName}
+            <Text style={styles.regularText}> {userName}</Text>
           </Text>
-          <Text style={styles.postDateStyle}>{postDate}</Text>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}>
+            <Text style={styles.postDateStyle}>{postDate}</Text>
+            <Dropdown.More
+              data={dataUpdateComment}
+              idComment={idComment}
+              selectedIdComment={selectedIdComment}
+              selectedMenu={selectedMenu}
+              iconFill={color.Dark[50]}
+              containerStyle={{
+                width: widthResponsive(110),
+                marginLeft: widthResponsive(-97),
+                marginTop: Platform.OS === 'android' ? ms(-35) : ms(-10),
+              }}
+            />
+          </View>
         </View>
         <Gap height={2} />
         <View style={styles.bottomSection}>
@@ -87,9 +116,6 @@ const PostComment: React.FC<ListProps> = (props: ListProps) => {
                 <LoveIcon
                   fill={likePressed ? color.Pink[100] : 'none'}
                   stroke={likePressed ? 'none' : color.Dark[100]}
-                  width={17}
-                  height={17}
-                  style={{marginBottom: heightPercentage(4)}}
                 />
                 <Gap width={3} />
                 <Text style={styles.regularText}>{likeCount}</Text>
@@ -101,12 +127,7 @@ const PostComment: React.FC<ListProps> = (props: ListProps) => {
               <TouchableOpacity
                 onPress={commentOnPress}
                 style={styles.socialIcon}>
-                <CommentIcon
-                  stroke={color.Dark[100]}
-                  width={16}
-                  height={14}
-                  style={{marginBottom: heightPercentage(4)}}
-                />
+                <CommentIcon stroke={color.Dark[100]} />
                 <Gap width={3} />
                 <Text style={styles.regularText}>{commentCount}</Text>
               </TouchableOpacity>
@@ -132,14 +153,16 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    marginTop: ms(-7),
   },
   bottomSection: {
     width: '100%',
     flexDirection: 'row',
     alignItems: 'flex-end',
     justifyContent: 'space-between',
+    marginTop: ms(-8),
   },
-  userName: {
+  fullname: {
     fontFamily: font.InterMedium,
     fontWeight: '500',
     fontSize: ms(12),

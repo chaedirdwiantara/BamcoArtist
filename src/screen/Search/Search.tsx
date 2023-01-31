@@ -23,6 +23,8 @@ import ListResultFans from './LstResultFans';
 import ListResultSong from './ListResultSong';
 import ListResultAlbum from './ListResultAlbum';
 import ListResultPlaylists from './ListResultPlaylist';
+import ListResultMerch from './ListResultMerch';
+import ListResultEvent from './ListResultEvent';
 
 export const SearchScreen: React.FC = () => {
   const navigation =
@@ -77,12 +79,6 @@ export const SearchScreen: React.FC = () => {
     if (item === 'Playlist') {
       getSearchPlaylists({keyword: state});
     }
-    if (item === 'Merch') {
-      // getSearchMerchs({keyword:state})
-    }
-    if (item === 'Event') {
-      //getSearchEvents({keyword:state})
-    }
   };
 
   const goToSongDetails = () => {
@@ -136,6 +132,8 @@ export const SearchScreen: React.FC = () => {
                   dataSearchPlaylists={dataSearchPlaylists}
                 />
               )}
+              {typeSearch === 'Merch' && <ListResultMerch keyword={state} />}
+              {typeSearch === 'Event' && <ListResultEvent keyword={state} />}
             </>
           ) : null}
         </View>

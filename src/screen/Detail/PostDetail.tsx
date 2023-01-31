@@ -22,7 +22,6 @@ import {
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParams} from '../../navigations';
-import {SafeAreaView} from 'react-native-safe-area-context';
 import {elipsisText, heightPercentage, widthResponsive} from '../../utils';
 import {ms, mvs} from 'react-native-size-matters';
 import CommentSection from './CommentSection';
@@ -35,13 +34,17 @@ import {
   CommentList,
   CommentList2,
   CommentList3,
-  DetailPostData,
+  PostList,
 } from '../../interface/feed.interface';
 import {useProfileHook} from '../../hooks/use-profile.hook';
 import {TickCircleIcon} from '../../assets/icon';
 import {makeId} from './function';
 import {ModalLoading} from '../../components/molecule/ModalLoading/ModalLoading';
 import categoryNormalize from '../../utils/categoryNormalize';
+import {DataDropDownType} from '../../data/dropdown';
+import MusicListPreview from '../../components/molecule/MusicPreview/MusicListPreview';
+import {usePlayerHook} from '../../hooks/use-player.hook';
+import {dummySongImg} from '../../data/image';
 
 type cmntToCmnt = {
   id: string;
@@ -72,6 +75,18 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
     setLikeComment,
     setUnlikeComment,
   } = useFeedHook();
+
+  const {
+    currentProgress,
+    duration,
+    isPlay,
+    musicData,
+    seekPlayer,
+    setMusicDataPlayer,
+    setPlaySong,
+    setPauseSong,
+    hidePlayer,
+  } = usePlayerHook();
 
   const {dataProfile, getProfileUser} = useProfileHook();
 
@@ -117,6 +132,14 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   const [likeCommentId, setLikeCommentId] = useState<string>('');
   const [unlikeCommentId, setUnlikeCommentId] = useState<string>('');
 
+  // * UPDATE HOOKS
+  const [idComment, setIdComment] = useState<string>();
+  const [selectedMenu, setSelectedMenu] = useState<DataDropDownType>();
+
+  //* MUSIC HOOKS
+  const [pauseModeOn, setPauseModeOn] = useState<boolean>(false);
+  const [idNowPlaying, setIdNowPlaing] = useState<string>();
+
   // ! FIRST LOAD when open the screen
   // ? Get Profile
   useEffect(() => {
@@ -125,9 +148,9 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
 
   // ? Set profile picture for profile img
   useEffect(() => {
-    dataProfile?.data.imageProfileUrl !== null &&
-    dataProfile?.data.imageProfileUrl !== undefined
-      ? setDataProfileImg(dataProfile?.data.imageProfileUrl)
+    dataProfile?.data.imageProfileUrls.length !== 0 &&
+    dataProfile?.data.imageProfileUrls !== undefined
+      ? setDataProfileImg(dataProfile?.data.imageProfileUrls[0].image)
       : '';
   }, [dataProfile]);
 
@@ -339,8 +362,8 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
           username: dataProfile?.data.username
             ? dataProfile?.data.username
             : '',
-          image: dataProfile?.data.imageProfileUrl
-            ? dataProfile?.data.imageProfileUrl
+          image: dataProfile?.data.imageProfileUrls
+            ? dataProfile?.data.imageProfileUrls[0].image
             : '',
         },
       },
@@ -420,6 +443,44 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   }, [unlikeCommentId]);
   // ! End Of LIKE AREA
 
+  // ! UPDATE COMMENT AREA
+  useEffect(() => {
+    if (idComment !== undefined && selectedMenu !== undefined) {
+      console.log('IDComment', idComment);
+      console.log('selectedMenu', selectedMenu);
+    }
+  }, [idComment, selectedMenu]);
+  // ! END OF UPDATE COMMENT AREA
+
+  // ! MUSIC AREA
+  const onPressPlaySong = (val: PostList) => {
+    setMusicDataPlayer({
+      id: parseInt(val.quoteToPost.targetId),
+      title: val.quoteToPost.title,
+      artist: val.quoteToPost.musician,
+      albumImg:
+        val.quoteToPost.coverImage[1]?.image !== undefined
+          ? val.quoteToPost.coverImage[1].image
+          : dummySongImg,
+      musicUrl: val.quoteToPost.encodeHlsUrl,
+      musicianId: val.musician.uuid,
+    });
+    setPlaySong();
+    seekPlayer(0);
+    setPauseModeOn(true);
+    setIdNowPlaing(val.id);
+    hidePlayer();
+  };
+
+  const handlePausePlay = () => {
+    if (isPlay) {
+      setPauseSong();
+    } else {
+      setPlaySong();
+    }
+  };
+  // ! END OF MUSIC AREA
+
   // ? Credit onPress
   const tokenOnPress = () => {
     setModalDonate(true);
@@ -472,7 +533,11 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
               toDetailOnPress={() => handleToDetailMusician(data.musician.uuid)}
               musicianName={musicianName}
               musicianId={`@${data.musician.username}`}
-              imgUri={data.musician.imageProfileUrl}
+              imgUri={
+                data.musician.imageProfileUrls.length !== 0
+                  ? data.musician.imageProfileUrls[0][0].image
+                  : ''
+              }
               postDate={dateFormat(data.updatedAt)}
               category={categoryNormalize(data.category)}
               likeOnPress={() =>
@@ -534,17 +599,47 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
                     )
                   ) : null}
                   <Gap height={4} />
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                    }}>
-                    {data.image !== null ? (
+                  <View>
+                    {data.images !== null ? (
                       <ImageList
-                        imgData={data.image}
+                        imgData={data.images}
                         disabled={false}
                         width={162}
                         height={79}
                         onPress={toggleModalOnPress}
+                      />
+                    ) : null}
+                    {data.images.length === 0 &&
+                    data.quoteToPost.encodeHlsUrl ? (
+                      <MusicListPreview
+                        hideClose
+                        targetId={dataPostDetail.quoteToPost.targetId}
+                        targetType={dataPostDetail.quoteToPost.targetType}
+                        title={dataPostDetail.quoteToPost.title}
+                        musician={dataPostDetail.quoteToPost.musician}
+                        coverImage={
+                          dataPostDetail.quoteToPost.coverImage[1]?.image !==
+                          undefined
+                            ? dataPostDetail.quoteToPost.coverImage[1].image
+                            : ''
+                        }
+                        encodeDashUrl={dataPostDetail.quoteToPost.encodeDashUrl}
+                        encodeHlsUrl={dataPostDetail.quoteToPost.encodeHlsUrl}
+                        startAt={dataPostDetail.quoteToPost.startAt}
+                        endAt={dataPostDetail.quoteToPost.endAt}
+                        postList={dataPostDetail}
+                        onPress={onPressPlaySong}
+                        isPlay={isPlay}
+                        playOrPause={handlePausePlay}
+                        pauseModeOn={pauseModeOn}
+                        currentProgress={currentProgress}
+                        duration={duration}
+                        seekPlayer={seekPlayer}
+                        playNow={
+                          musicData.id ===
+                          parseInt(dataPostDetail.quoteToPost.targetId)
+                        }
+                        isIdNowPlaying={dataPostDetail.id === idNowPlaying}
                       />
                     ) : null}
                   </View>
@@ -571,13 +666,15 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
             postCommentCount={dataPostDetail.commentsCount}
             postId={dataPostDetail.id}
             toDetailOnPress={handleToDetailCommentator}
+            selectedMenu={setSelectedMenu}
+            selectedIdComment={setIdComment}
           />
         ) : null}
         <ImageModal
           toggleModal={() => setModalVisible(!isModalVisible)}
           modalVisible={isModalVisible}
           imageIdx={imgUrl}
-          dataImage={dataPostDetail?.image}
+          dataImage={dataPostDetail?.images}
         />
         <CommentInputModal
           toggleModal={() => setInputCommentModal(!inputCommentModal)}

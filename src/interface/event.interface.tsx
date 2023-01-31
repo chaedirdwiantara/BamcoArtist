@@ -107,3 +107,92 @@ export interface MerchOrganizerStore {
   phone: string;
   state: string;
 }
+
+export interface SearchEventInput {
+  type?: TypeEvent;
+  clause?: string;
+  dateFrom?: string;
+  dateTo?: string;
+  priceTo?: number;
+  headCnt?: number;
+  duration?: string;
+  pageNo?: number;
+  pageSize?: number;
+  countryCode?: string;
+  query?: string;
+}
+
+export type TypeEvent = 'event' | 'merch';
+
+export interface SearchItem {
+  category: string;
+  charge: string;
+  content: string;
+  contentCn: string;
+  contentEn: string;
+  countryCode: string;
+  createdAt: string;
+  currencyCode: string;
+  earlyBirdMinEndTime: Date | null;
+  esprops: {
+    category: string[];
+    district: string[];
+    duration: number | string[];
+    headCnts: number | null[];
+    location: number[];
+    organizer: string[];
+    periods: {gte: Date; lte?: Date}[];
+    speakIn: string[];
+  };
+  favCnt: number;
+  hitCnt: number;
+  id: string;
+  isEarlyBird: false;
+  isPrivate: false;
+  keyword: string;
+  kind: string;
+  maxOriginalPrice: number;
+  maxPrice: number;
+  minOriginalPrice: number;
+  minPrice: number;
+  name: string;
+  oid: string;
+  organizer: MerchOrganizer;
+  organizerId: string;
+  originalPrice: number;
+  pic: string;
+  price: number;
+  props: any;
+  rateCnt: number;
+  ratePercentage: number;
+  score: null;
+  state: string;
+  tagword: string;
+  title: string;
+  titleCn: string;
+  titleEn: string;
+  type: string;
+  updatedAt: Date;
+  valid: string;
+}
+
+export interface SearchResponse {
+  data: SearchItem[];
+  extra: {
+    clause: string;
+    countryCode: string;
+    id: string;
+    isAdminOnly: boolean;
+    label: string;
+    labelEn: string;
+    labelCn: string;
+    limit: number;
+    mode: string;
+    name: string;
+    sortSeq: number;
+    state: string;
+    type: string;
+  };
+  total: number;
+  type: TypeEvent;
+}

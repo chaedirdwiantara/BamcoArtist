@@ -1,4 +1,5 @@
 import {useState} from 'react';
+import {searchEvent} from '../api/event.api';
 import {
   albumSearch,
   fansSearch,
@@ -32,12 +33,6 @@ export const useSearchHook = () => {
   >(null);
   const [dataSearchPlaylists, setDataSearchPlaylists] = useState<
     ListDataSearchPlaylist[] | null
-  >(null);
-  const [dataSearchMerchs, setDataSearchMerchs] = useState<
-    ListDataSearchMusician[] | null
-  >(null);
-  const [dataSearchEvents, setDataSearchEvents] = useState<
-    ListDataSearchMusician[] | null
   >(null);
 
   const getSearchFans = async (props?: SearchProps) => {
@@ -105,28 +100,30 @@ export const useSearchHook = () => {
   };
 
   const getSearchMerchs = async (props?: SearchProps) => {
-    setSearchLoading(true);
     try {
-      const response = await musicianSearch(props);
-      setDataSearchMerchs(response.data);
+      const response = await searchEvent({
+        type: 'merch',
+        query: props?.keyword,
+      });
+      return {
+        data: response?.data,
+      };
     } catch (error) {
       console.log(error);
-      setDataSearchMerchs(null);
-    } finally {
-      setSearchLoading(false);
     }
   };
 
   const getSearchEvents = async (props?: SearchProps) => {
-    setSearchLoading(true);
     try {
-      const response = await musicianSearch(props);
-      setDataSearchEvents(response.data);
+      const response = await searchEvent({
+        type: 'event',
+        query: props?.keyword,
+      });
+      return {
+        data: response?.data,
+      };
     } catch (error) {
       console.log(error);
-      setDataSearchEvents(null);
-    } finally {
-      setSearchLoading(false);
     }
   };
 
@@ -142,5 +139,7 @@ export const useSearchHook = () => {
     getSearchAlbums,
     getSearchSongs,
     getSearchPlaylists,
+    getSearchEvents,
+    getSearchMerchs,
   };
 };

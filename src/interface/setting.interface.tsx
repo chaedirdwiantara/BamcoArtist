@@ -9,8 +9,9 @@ export type EmailPhoneVerifProps = {
   phoneNumber?: string;
 };
 
-export type VerifPasswordPhone = {
-  phoneNumber: string;
+export type VerifPasswordSetting = {
+  email?: string;
+  phoneNumber?: string;
   password: string;
 };
 
@@ -92,4 +93,9 @@ export type ExclusiveResponseType = {
   data: DataExclusiveResponse;
   message: string;
   status: number;
+};
+
+export type OtpEmailScreen = {
+  email: string;
+  type: PhoneSettingTypeProps;
 };

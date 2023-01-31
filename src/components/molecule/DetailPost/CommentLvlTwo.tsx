@@ -97,9 +97,6 @@ const CommentLvlTwo: React.FC<ListProps> = (props: ListProps) => {
                 <LoveIcon
                   fill={likePressedLvl2 ? color.Pink[100] : 'none'}
                   stroke={likePressedLvl2 ? 'none' : color.Dark[100]}
-                  width={17}
-                  height={17}
-                  style={{marginBottom: heightPercentage(4)}}
                 />
                 <Gap width={3} />
                 <Text style={styles.regularText}>{likeCountLvl2}</Text>
@@ -111,12 +108,7 @@ const CommentLvlTwo: React.FC<ListProps> = (props: ListProps) => {
               <TouchableOpacity
                 onPress={commentOnPressLvl2}
                 style={styles.socialIcon}>
-                <CommentIcon
-                  stroke={color.Dark[100]}
-                  width={16}
-                  height={14}
-                  style={{marginBottom: heightPercentage(4)}}
-                />
+                <CommentIcon stroke={color.Dark[100]} />
                 <Gap width={3} />
                 <Text style={styles.regularText}>{commentCountLvl2}</Text>
               </TouchableOpacity>

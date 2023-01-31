@@ -4,32 +4,32 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 
 import Color from '../../../theme/Color';
 import {RootStackParams} from '../../../navigations';
-import {ChangeEmailContent} from '../../../components/molecule/SettingContent/ChangeEmailContent';
-import {OtpEmailScreen} from '../../../interface/setting.interface';
+import {OtpEmail} from '../../../components/molecule/SettingContent/OtpEmail';
 
-type ChangeEmailProps = NativeStackScreenProps<RootStackParams, 'ChangeEmail'>;
+type OtpEmailProps = NativeStackScreenProps<RootStackParams, 'OtpEmail'>;
 
-export const ChangeEmailScreen: React.FC<ChangeEmailProps> = ({
+export const OtpEmailScreen: React.FC<OtpEmailProps> = ({
   navigation,
   route,
-}: ChangeEmailProps) => {
-  const {type, oldEmail} = route.params;
+}: OtpEmailProps) => {
+  const {email, type} = route.params;
 
   const onPressGoBack = () => {
     navigation.goBack();
   };
 
-  const onSuccess = (data: OtpEmailScreen) => {
-    navigation.replace('OtpEmail', {
-      email: data.email,
-      type: data.type,
+  const onSuccess = (msg: string) => {
+    navigation.pop(1);
+    navigation.replace('Email', {
+      info: true,
+      message: msg,
     });
   };
 
   return (
     <View style={styles.root}>
-      <ChangeEmailContent
-        oldEmail={oldEmail}
+      <OtpEmail
+        email={email}
         onPressGoBack={onPressGoBack}
         type={type}
         onSuccess={onSuccess}

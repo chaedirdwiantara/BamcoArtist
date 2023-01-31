@@ -1,5 +1,8 @@
 import {ParamsProps} from '../interface/base.interface';
-import {MerchListResponse} from '../interface/event.interface';
+import {
+  MerchListResponse,
+  SearchEventInput,
+} from '../interface/event.interface';
 import BookYayAPI from './baseBookYay';
 
 export const listMerch = async (
@@ -21,6 +24,18 @@ export const listConcert = async (
     url: '/home/topics/pure?countryCode=HK&type=event',
     method: 'GET',
     params: props,
+  });
+
+  return data;
+};
+
+export const searchEvent = async (
+  props?: SearchEventInput,
+): Promise<MerchListResponse> => {
+  const {data} = await BookYayAPI().request<MerchListResponse>({
+    url: '/home/search',
+    method: 'POST',
+    data: props,
   });
 
   return data;

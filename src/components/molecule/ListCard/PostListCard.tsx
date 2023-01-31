@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+  Platform,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -18,6 +19,8 @@ import {
 import {color, font} from '../../../theme';
 import {CommentIcon, LoveIcon, ShareIcon} from '../../../assets/icon';
 import CoinB from '../../../assets/icon/CoinB.icon';
+import {Dropdown} from '../DropDown';
+import {DataDropDownType, dataUpdatePost} from '../../../data/dropdown';
 
 interface ListProps extends TouchableOpacityProps {
   imgUri: string;
@@ -34,6 +37,11 @@ interface ListProps extends TouchableOpacityProps {
   commentCount: number;
   containerStyles?: ViewStyle;
   category: string;
+  toDetailOnPress: () => void;
+  myPost: boolean;
+  selectedMenu: (value: DataDropDownType) => void;
+  idPost: string;
+  selectedIdPost: (idPost: string) => void;
 }
 
 const PostListCard: React.FC<ListProps> = (props: ListProps) => {
@@ -52,13 +60,18 @@ const PostListCard: React.FC<ListProps> = (props: ListProps) => {
     commentCount,
     containerStyles,
     category,
+    toDetailOnPress,
+    myPost,
+    selectedMenu,
+    idPost,
+    selectedIdPost,
   } = props;
   return (
     <TouchableOpacity {...props}>
       <View style={[styles.topContainer, containerStyles]}>
-        <View>
+        <TouchableOpacity onPress={toDetailOnPress}>
           <Avatar imgUri={imgUri} size={widthResponsive(32)} />
-        </View>
+        </TouchableOpacity>
         <View
           style={{
             flex: 1,
@@ -66,7 +79,9 @@ const PostListCard: React.FC<ListProps> = (props: ListProps) => {
             paddingBottom: heightResponsive(2),
           }}>
           <View style={styles.topSection}>
-            <Text style={styles.songTitle}>{musicianName}</Text>
+            <Text style={styles.songTitle} onPress={toDetailOnPress}>
+              {musicianName}
+            </Text>
             <View style={[styles.category]}>
               <Text style={styles.categoryText}>{category}</Text>
             </View>
@@ -79,7 +94,14 @@ const PostListCard: React.FC<ListProps> = (props: ListProps) => {
           {/* BODY SECTION */}
           <View style={styles.bodyContainer}>{children}</View>
           {/* BOTTOM SECTION */}
-          <View style={styles.bottomContainer}>
+          <View
+            style={[
+              styles.bottomContainer,
+              {
+                marginTop: !myPost ? 0 : ms(-7),
+                marginBottom: !myPost ? 0 : ms(-7),
+              },
+            ]}>
             <View style={styles.socialContainer}>
               {/* like section */}
               <View>
@@ -106,15 +128,36 @@ const PostListCard: React.FC<ListProps> = (props: ListProps) => {
               </View>
               {/* token section */}
               <View>
-                <TouchableOpacity onPress={tokenOnPress}>
-                  <CoinB fill={color.Dark[100]} />
-                </TouchableOpacity>
+                {!myPost ? (
+                  <TouchableOpacity onPress={tokenOnPress}>
+                    <CoinB fill={color.Dark[100]} />
+                  </TouchableOpacity>
+                ) : (
+                  <TouchableOpacity onPress={shareOnPress}>
+                    <ShareIcon fill={color.Dark[100]} />
+                  </TouchableOpacity>
+                )}
               </View>
               {/* share section */}
               <View>
-                <TouchableOpacity onPress={shareOnPress}>
-                  <ShareIcon fill={color.Dark[100]} />
-                </TouchableOpacity>
+                {!myPost ? (
+                  <TouchableOpacity onPress={shareOnPress}>
+                    <ShareIcon fill={color.Dark[100]} />
+                  </TouchableOpacity>
+                ) : (
+                  <Dropdown.More
+                    data={dataUpdatePost}
+                    idComment={idPost}
+                    selectedIdComment={selectedIdPost}
+                    selectedMenu={selectedMenu}
+                    iconFill={color.Dark[100]}
+                    containerStyle={{
+                      width: widthResponsive(110),
+                      marginLeft: widthResponsive(-97),
+                      marginTop: Platform.OS === 'android' ? ms(-35) : ms(-10),
+                    }}
+                  />
+                )}
               </View>
             </View>
           </View>

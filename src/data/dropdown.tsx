@@ -112,3 +112,13 @@ export const dropDownSetAudience: DataDropDownType[] = [
   {label: 'Public', value: '1'},
   {label: 'Exclusive', value: '2'},
 ];
+
+export const dataUpdateComment: DataDropDownType[] = [
+  {label: 'Edit Reply', value: '1'},
+  {label: 'Delete Reply', value: '2'},
+];
+
+export const dataUpdatePost: DataDropDownType[] = [
+  {label: 'Edit Post', value: '1'},
+  {label: 'Delete Post', value: '2'},
+];

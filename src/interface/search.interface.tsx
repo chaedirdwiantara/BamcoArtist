@@ -1,6 +1,7 @@
 export type SearchProps = {
-  keyword: string;
+  keyword?: string;
   filterBy?: string;
+  uuid?: string;
 };
 export type ListDataSearchFans = {
   uuid: string;
@@ -35,18 +36,65 @@ export type ListSearchMusicianResponseType = {
   status: number;
 };
 
+export type ListDataSearchSongsNavigate = {
+  id?: number;
+  musicianName?: string;
+  title?: string;
+  description?: string;
+  songWriter?: string[];
+  imageUrl?: string;
+  publishedDate?: string;
+  copyright?: string;
+  language?: string;
+  CreatedAt?: string;
+  UpdatedAt?: string;
+  transcodedSongUrl: [
+    {
+      trackId: string;
+      songId: number;
+      sessionId: string;
+      encodedDashUrl: string;
+      encodedHlsUrl: string;
+      quality: number;
+      bitrate: string;
+      presetName: string;
+      encodeStatus: string;
+    },
+  ];
+};
+
 export type ListDataSearchSongs = {
   id: number;
+  musicianUUID: string;
   musicianName: string;
   title: string;
   description: string;
   songWriter: string[];
   imageUrl: string;
   publishedDate: string;
+  likesCount: 0;
+  shareCount: 0;
+  listenerCount: 0;
+  lyrics: string;
+  originalSongURL: string;
+  isAddedToThisPlaylist: boolean;
   copyright: string;
   language: string;
   CreatedAt: string;
   UpdatedAt: string;
+  transcodedSongUrl: [
+    {
+      trackId: string;
+      songId: number;
+      sessionId: string;
+      encodedDashUrl: string;
+      encodedHlsUrl: string;
+      quality: number;
+      bitrate: string;
+      presetName: string;
+      encodeStatus: string;
+    },
+  ];
 };
 
 export type ListSearchSongsResponseType = {
