@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
@@ -6,11 +6,16 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import Color from '../../theme/Color';
 import {AccountContent} from '../../components';
 import {RootStackParams} from '../../navigations';
-import {profileStorage} from '../../hooks/use-storage.hook';
+import {useProfileHook} from '../../hooks/use-profile.hook';
 
 export const AccountScreen: React.FC = () => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
+  const {dataProfile, getProfileUser} = useProfileHook();
+
+  useEffect(() => {
+    getProfileUser();
+  }, []);
 
   const onPressGoBack = () => {
     navigation.goBack();
@@ -18,10 +23,9 @@ export const AccountScreen: React.FC = () => {
 
   return (
     <View style={styles.root}>
-      <AccountContent
-        profile={profileStorage()}
-        onPressGoBack={onPressGoBack}
-      />
+      {dataProfile && (
+        <AccountContent profile={dataProfile} onPressGoBack={onPressGoBack} />
+      )}
     </View>
   );
 };
