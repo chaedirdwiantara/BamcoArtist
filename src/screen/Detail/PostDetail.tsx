@@ -609,7 +609,8 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
                         onPress={toggleModalOnPress}
                       />
                     ) : null}
-                    {data.images.length === 0 && (
+                    {data.images.length === 0 &&
+                    data.quoteToPost.encodeHlsUrl ? (
                       <MusicListPreview
                         hideClose
                         targetId={dataPostDetail.quoteToPost.targetId}
@@ -640,7 +641,7 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
                         }
                         isIdNowPlaying={dataPostDetail.id === idNowPlaying}
                       />
-                    )}
+                    ) : null}
                   </View>
                 </View>
               }
