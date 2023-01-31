@@ -35,6 +35,7 @@ import ExportMusicIcon from './ExportMusic.icon';
 import EyeCloseIcon from './EyeClose.icon';
 import EyeOpenIcon from './EyeOpen.icon';
 import FbIcon from './Fb.icon';
+import Fb2Icon from './Fb2.icon';
 import FeedIcon from './Feed.icon';
 import FriedEggIcon from './FriedEgg.icon';
 import FullNameIcon from './FullName.icon';
@@ -124,6 +125,7 @@ export {
   EyeCloseIcon,
   EyeOpenIcon,
   FbIcon,
+  Fb2Icon,
   FeedIcon,
   FriedEggIcon,
   FullNameIcon,
