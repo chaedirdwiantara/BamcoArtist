@@ -1,14 +1,19 @@
 import axios from 'axios';
 import {useState} from 'react';
 import {
+  addPhotos,
   getOtherUserProfile,
   getProfile,
+  removePhotos,
   updateProfile,
   UpdateProfilePropsType,
 } from '../api/profile.api';
 import {applyReferral} from '../api/referral.api';
 import {PostPropsTypeA} from '../interface/feed.interface';
-import {ProfileResponseType} from '../interface/profile.interface';
+import {
+  CollectPhotosProps,
+  ProfileResponseType,
+} from '../interface/profile.interface';
 
 export const useProfileHook = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -92,6 +97,26 @@ export const useProfileHook = () => {
     }
   };
 
+  const addCollectPhotos = async (props?: CollectPhotosProps) => {
+    try {
+      await addPhotos(props);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const removeCollectPhotos = async (props?: CollectPhotosProps) => {
+    try {
+      await removePhotos(props);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return {
     isLoading,
     errorMsg,
@@ -102,5 +127,7 @@ export const useProfileHook = () => {
     applyReferralUser,
     updateProfilePreference,
     getOtherProfileUser,
+    addCollectPhotos,
+    removeCollectPhotos,
   };
 };
