@@ -9,6 +9,7 @@ import Color from '../../theme/Color';
 import {RootStackParams} from '../../navigations';
 import {SongDetailsContent} from '../../components';
 import {useSongHook} from '../../hooks/use-song.hook';
+import {SongAlbum} from '../../interface/song.interface';
 
 type SongDetailProps = NativeStackScreenProps<RootStackParams, 'SongDetails'>;
 
@@ -34,8 +35,8 @@ export const SongDetailsScreen: React.FC<SongDetailProps> = ({
     navigation.goBack();
   };
 
-  const goToAlbum = () => {
-    navigation.navigate('Album');
+  const goToAlbum = (data: SongAlbum) => {
+    navigation.navigate('Album', data);
   };
 
   const goToShowCredit = () => {
