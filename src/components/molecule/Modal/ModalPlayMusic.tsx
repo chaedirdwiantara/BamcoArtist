@@ -1,7 +1,6 @@
-import React, {useEffect, useRef} from 'react';
+import React, {useEffect} from 'react';
 import {View, StyleSheet, TouchableOpacity, Platform} from 'react-native';
 import {Portal} from '@gorhom/portal';
-import Video from 'react-native-video';
 
 import {
   elipsisText,
@@ -13,6 +12,7 @@ import {ListCard} from '../ListCard';
 import {CloseIcon, PauseIcon, PlayIcon} from '../../../assets/icon';
 import {color} from '../../../theme';
 import {usePlayerHook} from '../../../hooks/use-player.hook';
+import {SetupService} from '../../../service/musicPlayer';
 
 interface ModalPlayMusicProps {
   onPressModal: () => void;
@@ -22,37 +22,31 @@ export const ModalPlayMusic: React.FC<ModalPlayMusicProps> = ({
   onPressModal,
 }) => {
   const {
-    musicData,
-    visible: playerShow,
-    currentProgress,
-    duration,
-    isPlay,
-    repeat,
-    playlist,
-    setPlayerRef,
+    isPlaying,
+    playerProgress,
+    currentTrack,
+    visible,
     hidePlayer,
-    setDurationPlayer,
-    setProgressPlayer,
+    resetPlayer,
     setPauseSong,
     setPlaySong,
-    seekPlayer,
-    setNextPrevTrack,
   } = usePlayerHook();
-  const playRef = useRef<Video | null>(null);
 
   useEffect(() => {
-    if (playRef) {
-      setPlayerRef(playRef);
+    async function run() {
+      await SetupService();
     }
-  }, [playRef]);
 
-  const handleClose = () => {
+    run();
+  }, []);
+
+  const handleClose = async () => {
     hidePlayer();
-    setPauseSong();
+    resetPlayer();
   };
 
   const handlePlayPaused = () => {
-    if (isPlay) {
+    if (isPlaying) {
       setPauseSong();
     } else {
       setPlaySong();
@@ -67,7 +61,7 @@ export const ModalPlayMusic: React.FC<ModalPlayMusicProps> = ({
           alignItems: 'center',
         }}>
         <TouchableOpacity onPress={handlePlayPaused}>
-          {isPlay ? (
+          {isPlaying ? (
             <PauseIcon fill={'#FFFFFF'} stroke={'#FFFFFF'} />
           ) : (
             <PlayIcon fill={'#FFFFFF'} stroke={'#FFFFFF'} />
@@ -89,65 +83,40 @@ export const ModalPlayMusic: React.FC<ModalPlayMusicProps> = ({
 
   return (
     <Portal>
-      <View style={[styles.root, {display: playerShow ? 'flex' : 'none'}]}>
+      <View style={[styles.root, {display: visible ? 'flex' : 'none'}]}>
         <ListCard.MusicList
           rightIcon={true}
           rightIconComponent={<RightIcon />}
           onPressIcon={() => null}
-          imgUri={musicData.albumImg}
-          musicTitle={elipsisText(musicData.title, 22)}
-          singerName={musicData.artist}
+          imgUri={(currentTrack?.artwork as string) ?? null}
+          musicTitle={elipsisText(currentTrack?.title ?? '', 22)}
+          singerName={currentTrack?.artist ?? ''}
           onPressCard={onPressModal}
         />
       </View>
       <View
-        style={[styles.containerLine, {display: playerShow ? 'flex' : 'none'}]}>
+        style={[styles.containerLine, {display: visible ? 'flex' : 'none'}]}>
         <View
           style={[
             styles.greenLine,
-            {width: `${(currentProgress / duration) * 100}%`},
+            {
+              width: `${
+                (playerProgress.position / playerProgress.duration) * 100
+              }%`,
+            },
           ]}
         />
         <View
           style={[
             styles.grayLine,
-            {width: `${100 - (currentProgress / duration) * 100}%`},
+            {
+              width: `${
+                100 - (playerProgress.position / playerProgress.duration) * 100
+              }%`,
+            },
           ]}
         />
       </View>
-      {musicData.musicUrl !== '' && (
-        <Video
-          ref={playRef}
-          source={{
-            uri: musicData.musicUrl,
-          }}
-          onLoad={e => {
-            seekPlayer(0);
-            setDurationPlayer(e.duration);
-          }}
-          onProgress={e => {
-            setProgressPlayer(e.currentTime);
-          }}
-          paused={!isPlay}
-          repeat={
-            musicData?.id < playlist[playlist?.length - 1]?.id ||
-            repeat !== 'off'
-          }
-          // playInBackground={true}
-          // ignoreSilentSwitch={'ignore'}
-          onEnd={() => {
-            if (
-              (playlist.length > 0 &&
-                musicData.id < playlist[playlist.length - 1].id) ||
-              repeat !== 'off'
-            ) {
-              if (repeat === 'all') {
-                setNextPrevTrack('next');
-              }
-            }
-          }}
-        />
-      )}
     </Portal>
   );
 };

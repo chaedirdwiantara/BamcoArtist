@@ -16,10 +16,10 @@ export const EventScreen: React.FC = () => {
   const [filter] = useState([{filterName: 'Concert'}, {filterName: 'Merch'}]);
   const isLogin = storage.getString('profile');
   const isFocused = useIsFocused();
-  const {isPlay, showPlayer, hidePlayer} = usePlayerHook();
+  const {isPlaying, showPlayer, hidePlayer} = usePlayerHook();
 
   useEffect(() => {
-    if (isFocused && isPlay) {
+    if (isFocused && isPlaying) {
       showPlayer();
     } else if (!isFocused) {
       hidePlayer();
