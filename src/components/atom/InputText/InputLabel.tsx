@@ -36,6 +36,9 @@ interface InputLabelProps extends TextInputProps {
   isFocus?: boolean;
   onPressCamera?: () => void;
   onPressLibrary?: () => void;
+  isPhone?: boolean;
+  leftIcon?: React.ReactNode;
+  leftIconStyle?: ViewStyle;
 }
 
 const InputLabel: React.FC<InputLabelProps> = (props: InputLabelProps) => {
@@ -51,6 +54,9 @@ const InputLabel: React.FC<InputLabelProps> = (props: InputLabelProps) => {
     showImage,
     onPressCamera,
     onPressLibrary,
+    isPhone,
+    leftIcon,
+    leftIconStyle,
   } = props;
 
   const [state, setState] = useState<boolean>(false);
@@ -102,6 +108,8 @@ const InputLabel: React.FC<InputLabelProps> = (props: InputLabelProps) => {
     );
   };
 
+  const stylesPhone = isPhone && Platform.OS === 'ios' ? mvs(20) : undefined;
+
   return (
     <View style={containerStyles}>
       {label && (
@@ -110,8 +118,23 @@ const InputLabel: React.FC<InputLabelProps> = (props: InputLabelProps) => {
         </Text>
       )}
       <View style={[styles.root, {borderBottomColor}, containerInputStyles]}>
+        {leftIcon && (
+          <View
+            style={[
+              {
+                position: 'absolute',
+                left: 0,
+                zIndex: 1,
+                alignItems: 'center',
+                marginRight: 20,
+              },
+              leftIconStyle,
+            ]}>
+            {leftIcon}
+          </View>
+        )}
         <TextInput
-          style={[typography.Body2, styles.input, inputStyles]}
+          style={[styles.input, inputStyles, {lineHeight: stylesPhone}]}
           placeholderTextColor={Color.Dark[300]}
           onFocus={handleFocus}
           onBlur={handleBlur}
@@ -151,6 +174,7 @@ const styles = StyleSheet.create({
     color: Color.Neutral[10],
     paddingVertical: heightPercentage(12),
     paddingRight: mvs(40),
+    // lineHeight: Platform.OS === 'ios' ? mvs(20) : undefined,
   },
   containerErrorMsg: {
     width: '100%',
