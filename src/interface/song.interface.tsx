@@ -1,4 +1,4 @@
-import {PaginationType} from './base.interface';
+import {imageTypes, PaginationType} from './base.interface';
 
 export type SongList = {
   isAddedToThisPlaylist: boolean;
@@ -98,6 +98,43 @@ export type RelatedSongs = {
   Album: DataAlbum;
 };
 
+export type Featuring = {
+  uuid: string;
+  fullname: string;
+  imageProfile: imageTypes[];
+};
+
+export type SongAlbum = {
+  id: number;
+  musicianId: string;
+  title: string;
+  description: string;
+  imageUrl: imageTypes[];
+  featuringArtist: Featuring[];
+  genre: string;
+  subgenre: string;
+  likesCount: number;
+  shareCount: number;
+  copyrightProducer: string[];
+  copyrightVisual: string[];
+  copyrightFans: string[];
+  productionYear: string;
+  publishedDate: string;
+  label: string[];
+};
+
+export type TranscodedSongUrl = {
+  trackId: string;
+  songId: number;
+  sessionId: string;
+  encodedDashUrl: string;
+  encodedHlsUrl: string;
+  quality: number;
+  bitrate: string;
+  presetName: string;
+  encodeStatus: string;
+};
+
 export type DataDetailSong = {
   id: number;
   musicianUUID: string;
@@ -105,7 +142,7 @@ export type DataDetailSong = {
   title: string;
   description: string;
   songWriter: string[];
-  imageUrl: string;
+  imageUrl: imageTypes[];
   publishedDate: string;
   isPublish: boolean;
   likesCount: number;
@@ -119,8 +156,9 @@ export type DataDetailSong = {
   barcodeISRC: string;
   CreatedAt: string;
   isAddedToThisPlaylist: boolean;
-  transcodedSongUrl: string;
+  transcodedSongUrl: TranscodedSongUrl[];
   featuringArtists: FeaturingArtists[];
+  album: SongAlbum;
 };
 
 export type DetailSongResponseType = {
