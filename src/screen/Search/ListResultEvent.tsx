@@ -1,10 +1,9 @@
 import React, {FC, useEffect} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
-import {heightPercentage, heightResponsive, widthResponsive} from '../../utils';
+import {heightPercentage, heightResponsive} from '../../utils';
 import {FlashList} from '@shopify/flash-list';
 import MerchListCard from '../../components/molecule/ListCard/MerchListCard';
 import {EmptyState} from '../../components';
-import {TicketIcon} from '../../assets/icon';
 import Color from '../../theme/Color';
 import {useQuery} from 'react-query';
 import {useSearchHook} from '../../hooks/use-search.hook';
@@ -39,15 +38,7 @@ const ListResultEvent: FC<Props> = ({keyword}: Props) => {
           keyExtractor={item => item?.id.toString()}
           ListEmptyComponent={
             <EmptyState
-              icon={
-                <TicketIcon
-                  fill={Color.Dark[500]}
-                  width={widthResponsive(150)}
-                  height={heightResponsive(150)}
-                  style={styles.iconEmpty}
-                />
-              }
-              text="No Event Available"
+              text="Event not found"
               containerStyle={styles.containerEmpty}
             />
           }

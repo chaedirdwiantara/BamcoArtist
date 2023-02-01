@@ -111,7 +111,7 @@ export type ListDataSearchAlbums = {
   id: number;
   title: string;
   description: string;
-  imageUrl: string;
+  imageUrl: imageTypes[];
   featuringArtist: string[];
   genre: string;
   copyrightProducer: string[];
@@ -151,3 +151,7 @@ export type ListSearchPlaylistsResponseType = {
   meta: [];
   status: number;
 };
+
+export interface KeywordProps {
+  keyword: string;
+}
