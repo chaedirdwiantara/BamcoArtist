@@ -1,3 +1,5 @@
+import {imageTypes} from './base.interface';
+
 export type SearchProps = {
   keyword?: string;
   filterBy?: string;
@@ -70,7 +72,7 @@ export type ListDataSearchSongs = {
   title: string;
   description: string;
   songWriter: string[];
-  imageUrl: string;
+  imageUrl: imageTypes[];
   publishedDate: string;
   likesCount: 0;
   shareCount: 0;

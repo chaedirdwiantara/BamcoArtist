@@ -10,6 +10,7 @@ import {useSearchHook} from '../../../hooks/use-search.hook';
 import {ListDataSearchSongs} from '../../../interface/search.interface';
 import {widthResponsive} from '../../../utils';
 import {profileStorage} from '../../../hooks/use-storage.hook';
+import {dummySongImg} from '../../../data/image';
 
 const QuoteMusic = () => {
   const navigation =
@@ -40,7 +41,11 @@ const QuoteMusic = () => {
           data={dataSearchSongs}
           renderItem={({item, index}) => (
             <ListCard.MusicList
-              imgUri={item.imageUrl}
+              imgUri={
+                item.imageUrl.length !== 0
+                  ? item.imageUrl[0].image
+                  : dummySongImg
+              }
               musicNum={(index + 1).toLocaleString('en-US', {
                 minimumIntegerDigits: 2,
                 useGrouping: false,
