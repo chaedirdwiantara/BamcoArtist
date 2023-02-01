@@ -107,13 +107,14 @@ import {
 } from '../interface/setting.interface';
 import {OtpEmailScreen} from '../screen/Setting/Email/OTP';
 import {SplashScreen} from '../screen/SplashScreen';
+import {SongAlbum} from '../interface/song.interface';
 
 export type RootStackParams = {
   Account: undefined;
   AddToPlaylist: undefined;
   AddSong: Playlist;
   AddPreview: ListDataSearchSongs;
-  Album: AlbumData;
+  Album: AlbumData | SongAlbum;
   Boarding: undefined;
   ChangeEmail: {
     type: 'Add' | 'Change';

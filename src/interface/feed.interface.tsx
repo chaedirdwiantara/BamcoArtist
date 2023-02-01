@@ -55,7 +55,7 @@ export type MusicianData = {
   fullname: string;
   email: string;
   isFollowed: boolean;
-  imageProfileUrls: imageTypes[][];
+  imageProfileUrls: imageTypes[];
   followers: number;
 };
 

@@ -28,7 +28,6 @@ interface MusicPreviewProps {
   duration: number;
   seekPlayer: (second: number) => void;
   postList: PostList;
-  playNow: boolean;
   isIdNowPlaying: boolean;
 }
 
@@ -53,7 +52,6 @@ const MusicListPreview: FC<MusicPreviewProps> = (props: MusicPreviewProps) => {
     duration,
     seekPlayer,
     postList,
-    playNow,
     isIdNowPlaying,
   } = props;
 
@@ -62,7 +60,6 @@ const MusicListPreview: FC<MusicPreviewProps> = (props: MusicPreviewProps) => {
       <View>
         <SquareImage size={95} imgUri={coverImage} />
         {isPlay &&
-        playNow &&
         isIdNowPlaying &&
         Math.floor(currentProgress) !== Math.floor(duration) ? (
           <TouchableOpacity style={styles.iconOnPress} onPress={playOrPause}>
@@ -72,7 +69,7 @@ const MusicListPreview: FC<MusicPreviewProps> = (props: MusicPreviewProps) => {
           <TouchableOpacity
             style={styles.iconOnPress}
             onPress={
-              pauseModeOn && playNow && isIdNowPlaying
+              pauseModeOn && isIdNowPlaying
                 ? playOrPause
                 : () => onPress(postList)
             }>
@@ -97,9 +94,7 @@ const MusicListPreview: FC<MusicPreviewProps> = (props: MusicPreviewProps) => {
         </View>
         <View style={styles.sliderStyle}>
           <Slider
-            value={
-              pauseModeOn && playNow && isIdNowPlaying ? currentProgress : 0
-            }
+            value={pauseModeOn && isIdNowPlaying ? currentProgress : 0}
             minimumValue={0}
             maximumValue={duration}
             minimumTrackTintColor={color.Success[400]}
@@ -117,14 +112,14 @@ const MusicListPreview: FC<MusicPreviewProps> = (props: MusicPreviewProps) => {
           />
           <View style={styles.progresTextContainer}>
             <Text style={styles.progresText}>
-              {pauseModeOn && playNow && isIdNowPlaying
+              {pauseModeOn && isIdNowPlaying
                 ? new Date((currentProgress + 1) * 1000)
                     .toISOString()
                     .slice(14, 19)
                 : startAt}
             </Text>
             <Text style={styles.progresText}>
-              {pauseModeOn && playNow && isIdNowPlaying
+              {pauseModeOn && isIdNowPlaying
                 ? new Date(duration * 1000).toISOString().slice(14, 19)
                 : endAt}
             </Text>
