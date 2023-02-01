@@ -192,7 +192,7 @@ export const HomeScreen: React.FC = () => {
       <SsuStatusBar type="black" />
       <TopNavigation.Type5
         name={profileStorage()?.fullname ?? ''}
-        profileUri={dataProfile?.data?.imageProfileUrls[1].image || ''}
+        profileUri={dataProfile?.data?.imageProfileUrls[1]?.image || ''}
         leftIconAction={() => console.log('Left Icon Pressed')}
         rightIcon={rightIconComp()}
         rightIconAction={onPressNotif}
