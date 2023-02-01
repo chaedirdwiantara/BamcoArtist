@@ -28,11 +28,17 @@ const Type5: React.FC<Props> = (props: Props) => {
   /** => icon left */
   const iconLeft = () => {
     return (
-      <TouchableOpacity
-        style={topNavstyles.iconLeftContainer}
-        onPress={props.leftIconAction}>
-        <Avatar imgUri={props.profileUri} size={34} />
-      </TouchableOpacity>
+      <>
+        {props.profileUri ? (
+          <TouchableOpacity
+            style={topNavstyles.iconLeftContainer}
+            onPress={props.leftIconAction}>
+            <Avatar imgUri={props.profileUri} size={34} />
+          </TouchableOpacity>
+        ) : (
+          <DefaultAvatar.ProfileIcon />
+        )}
+      </>
     );
   };
   /** => icon right */

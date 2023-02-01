@@ -18,6 +18,7 @@ export type ParamsProps = {
   uuid?: string;
   playlistID?: number;
   albumID?: number;
+  id?: string;
 };
 
 export type imageTypes = {

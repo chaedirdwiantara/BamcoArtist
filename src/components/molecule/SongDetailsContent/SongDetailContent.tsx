@@ -31,12 +31,13 @@ import {
   TickCircleIcon,
 } from '../../../assets/icon';
 import {ListenersAndDonate} from '../ListenersAndDonate/ListenersAndDonate';
-import {DataDetailSong} from '../../../interface/song.interface';
+import {DataDetailSong, SongAlbum} from '../../../interface/song.interface';
 import {mvs} from 'react-native-size-matters';
+import {dateLongMonth} from '../../../utils/date-format';
 
 interface Props {
   onPressGoBack: () => void;
-  goToAlbum: () => void;
+  goToAlbum: (dataAlbum: SongAlbum) => void;
   goToShowCredit: () => void;
   dataDetail: DataDetailSong;
 }
@@ -106,7 +107,14 @@ export const SongDetailsContent: React.FC<Props> = ({
         <View style={{paddingHorizontal: widthPercentage(10)}}>
           <View style={{alignSelf: 'center'}}>
             {dataDetail.imageUrl ? (
-              <PhotoPlaylist uri={dataDetail.imageUrl} />
+              <PhotoPlaylist
+                uri={
+                  dataDetail.album.imageUrl !== null &&
+                  dataDetail.album.imageUrl.length !== 0
+                    ? dataDetail.album.imageUrl[0].image
+                    : ''
+                }
+              />
             ) : (
               <View style={styles.undefinedImg}>
                 <DefaultImage.PlaylistCover width={148} height={148} />
@@ -117,10 +125,9 @@ export const SongDetailsContent: React.FC<Props> = ({
             <View>
               <Text style={styles.titleSong}>{dataDetail.title}</Text>
               <Text style={styles.artist}>{`${dataDetail.musicianName}`}</Text>
-              <Text
-                style={
-                  styles.albumName
-                }>{`${dataDetail.title} · ${dataDetail.publishedDate}`}</Text>
+              <Text style={styles.albumName}>{`${
+                dataDetail.title
+              } · ${dateLongMonth(dataDetail.publishedDate)}`}</Text>
             </View>
           </View>
           <ListenersAndDonate
@@ -138,9 +145,12 @@ export const SongDetailsContent: React.FC<Props> = ({
             <ListAvatar
               title="Musician"
               text={dataDetail.musicianName}
-              avatarUri={dataDetail.imageUrl}
+              avatarUri={
+                dataDetail.imageUrl !== null && dataDetail.imageUrl.length !== 0
+                  ? dataDetail.imageUrl[0].image
+                  : ''
+              }
             />
-
             {dataDetail.featuringArtists ? (
               <ListAvatar
                 title="Featuring"
@@ -154,13 +164,18 @@ export const SongDetailsContent: React.FC<Props> = ({
             </Text>
             <Text style={styles.description}>{dataDetail.description}</Text>
 
-            {/* <ListAlbum
+            <ListAlbum
               title={'Album'}
-              albumName={dataDetail.Album.Title}
-              onPress={goToAlbum}
-              createdOn={dataDetail.Album.ProductionYear}
-              imgUri={dataDetail.Album.ImageURL}
-            /> */}
+              albumName={dataDetail.album.title}
+              onPress={() => goToAlbum(dataDetail.album)}
+              createdOn={dateLongMonth(dataDetail.album.publishedDate)}
+              imgUri={
+                dataDetail.album.imageUrl !== null &&
+                dataDetail.album.imageUrl.length !== 0
+                  ? dataDetail.album.imageUrl[0].image
+                  : ''
+              }
+            />
           </View>
         </View>
       </ScrollView>

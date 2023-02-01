@@ -1,19 +1,32 @@
 import React from 'react';
-import {StyleSheet, TouchableOpacity, ImageBackground} from 'react-native';
+import {
+  StyleSheet,
+  TouchableOpacity,
+  ImageBackground,
+  ViewStyle,
+} from 'react-native';
 import {color} from '../../../theme';
 import {GalleryAddIcon} from '../../../assets/icon';
 import {heightResponsive, widthResponsive} from '../../../utils';
 
 interface Props {
-  uri?: string | undefined;
+  uri: string | undefined;
   showIcon?: boolean;
   onPress?: () => void;
+  containerStyles?: ViewStyle;
+  iconStyles?: ViewStyle;
 }
 
-export const PhotoPlaylist: React.FC<Props> = ({uri, showIcon, onPress}) => {
+export const PhotoPlaylist: React.FC<Props> = ({
+  uri,
+  showIcon,
+  onPress,
+  containerStyles,
+  iconStyles,
+}) => {
   return (
     <TouchableOpacity
-      style={styles.root}
+      style={[styles.root, containerStyles]}
       onPress={onPress}
       activeOpacity={showIcon ? 0 : 1}>
       <ImageBackground
@@ -21,7 +34,7 @@ export const PhotoPlaylist: React.FC<Props> = ({uri, showIcon, onPress}) => {
         resizeMode="cover"
         imageStyle={{borderRadius: 8}}
         style={styles.image}>
-        {showIcon && <GalleryAddIcon />}
+        {showIcon && <GalleryAddIcon style={iconStyles} />}
       </ImageBackground>
     </TouchableOpacity>
   );

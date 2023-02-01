@@ -179,7 +179,7 @@ export const ChangePNContent: React.FC<ChangePNProps> = ({
         render={({field: {onChange, value}}) => (
           <Dropdown.Country
             type="label"
-            labelText={`${type === 'Change' && 'New '}Phone Number`}
+            labelText={`${type === 'Change' ? 'New ' : ''}Phone Number`}
             value={value}
             onChangeText={onChange}
             countryData={countryData}

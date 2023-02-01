@@ -1,41 +1,30 @@
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React, {FC} from 'react';
-import {Gap, Title} from '../../components';
-import SquareComp from './SquareComp';
-import {widthResponsive} from '../../utils';
-import {color, font} from '../../theme';
+import {Image} from 'react-native-image-crop-picker';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+
+import {Gap} from '../../../components';
+import {color, font} from '../../../theme';
 import {ms} from 'react-native-size-matters';
+import {widthResponsive} from '../../../utils';
+import SquareComp from '../../../screen/MusicianProfile/SquareComp';
 
-interface ImagesProps {
-  image: string;
-  presetName: string;
-}
 interface PhotoProps {
-  title: string;
-  data: {
-    images: ImagesProps[];
-  }[];
+  data: Image[];
   photoOnpress: () => void;
-  showWarning?: boolean;
 }
 
-const Photo: FC<PhotoProps> = (props: PhotoProps) => {
-  const {title, data, photoOnpress, showWarning = true} = props;
+const ListPhotos: FC<PhotoProps> = (props: PhotoProps) => {
+  const {data, photoOnpress} = props;
 
   return (
     <View style={{marginHorizontal: widthResponsive(24), width: '100%'}}>
-      <Title text={title} />
-      <Gap height={12} />
       {data ? (
         <View style={{flexDirection: 'row', width: '100%'}}>
           {data.map((item, i) => (
             <View key={i}>
               {data.length <= 4 && (
                 <>
-                  <SquareComp
-                    imgUri={item.images[2]?.image}
-                    size={widthResponsive(76)}
-                  />
+                  <SquareComp imgUri={item.path} size={widthResponsive(76)} />
                   <Gap width={8} />
                 </>
               )}
@@ -48,10 +37,7 @@ const Photo: FC<PhotoProps> = (props: PhotoProps) => {
                       width: widthResponsive(76),
                       opacity: 0.2,
                     }}>
-                    <SquareComp
-                      imgUri={item.images[2]?.image}
-                      size={widthResponsive(76)}
-                    />
+                    <SquareComp imgUri={item.path} size={widthResponsive(76)} />
                   </View>
                   <View style={styles.textNumberStyle}>
                     <Text style={styles.textPhotos}>{`+${
@@ -61,26 +47,19 @@ const Photo: FC<PhotoProps> = (props: PhotoProps) => {
                 </TouchableOpacity>
               ) : data.length > 4 && i < 3 ? (
                 <>
-                  <SquareComp
-                    imgUri={item.images[2].image}
-                    size={widthResponsive(76)}
-                  />
+                  <SquareComp imgUri={item.path} size={widthResponsive(76)} />
                   <Gap width={8} />
                 </>
               ) : null}
             </View>
           ))}
         </View>
-      ) : (
-        showWarning && (
-          <Text style={styles.captionStyle}>No Photos available</Text>
-        )
-      )}
+      ) : null}
     </View>
   );
 };
 
-export default Photo;
+export default ListPhotos;
 
 const styles = StyleSheet.create({
   photo: {

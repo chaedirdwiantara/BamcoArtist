@@ -16,6 +16,7 @@ interface InputDropdownProps {
   dropdownLabel: string;
   textTyped: (data: any) => void;
   containerStyles?: ViewStyle;
+  initialValue?: string;
 }
 
 const borderColor = color.Dark[500];
@@ -25,9 +26,16 @@ const fontColorMain = color.Neutral[10];
 const InputDropdown: React.FC<InputDropdownProps> = (
   props: InputDropdownProps,
 ) => {
-  const {data, placeHolder, dropdownLabel, textTyped, containerStyles} = props;
-
-  const [value, setValue] = useState(null);
+  const {
+    initialValue,
+    data,
+    placeHolder,
+    dropdownLabel,
+    textTyped,
+    containerStyles,
+  } = props;
+  const initValue = {label: initialValue, value: initialValue};
+  const [value, setValue] = useState(initValue || null);
   const [isFocus, setIsFocus] = useState(false);
 
   const renderLabel = () => {

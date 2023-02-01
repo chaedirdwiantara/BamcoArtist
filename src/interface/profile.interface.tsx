@@ -21,9 +21,23 @@ export type ExpectationType = {
 };
 
 export type ListImageType = {
-  length: number;
   image: string;
   presetName: string;
+};
+
+export type CollectPhotosProps = {
+  photos: string[];
+};
+
+export type ListPhotosType = {
+  images: ListImageType[];
+};
+
+export type CollectPhotosResponseType = {
+  code: number;
+  data: string;
+  message: string;
+  status: number;
 };
 
 export type ProfileResponseData = {
@@ -33,6 +47,7 @@ export type ProfileResponseData = {
   fullname: string;
   about: string | null;
   banners: ListImageType[];
+  photos: ListPhotosType[];
   imageProfileUrls: ListImageType[];
   phoneNumber: string | null;
   registrationType: RegistrationType;

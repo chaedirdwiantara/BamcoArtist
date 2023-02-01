@@ -22,6 +22,15 @@ export type ListMusicianResponseType = {
   status: number;
 };
 
+export type ListImageType = {
+  image: string;
+  presetName: string;
+};
+
+export type ListPhotosType = {
+  images: ListImageType[];
+};
+
 export type DataDetailMusician = {
   uuid: string;
   username: string;

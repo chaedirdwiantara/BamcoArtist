@@ -1,22 +1,25 @@
-import {StyleSheet, Text, View, ViewStyle} from 'react-native';
 import React, {FC} from 'react';
-import {color, font} from '../../../theme';
+import {StyleSheet, Text, View, ViewStyle} from 'react-native';
 import Modal from 'react-native-modal';
-import {CheckGradientIcon} from '../../../assets/icon';
-import {mvs} from 'react-native-size-matters';
-import {heightResponsive, widthResponsive} from '../../../utils';
+
 import {Button} from '../../atom';
+import {color, typography} from '../../../theme';
+import {CheckGradientIcon} from '../../../assets/icon';
+import {heightResponsive, widthResponsive} from '../../../utils';
 
 interface ModalSuccessProps {
   toggleModal: () => void;
   modalVisible: boolean;
   containerStyle?: ViewStyle;
+  title?: string;
+  subtitle?: string;
+  buttonText?: string;
 }
 
 export const ModalSuccessDonate: FC<ModalSuccessProps> = (
   props: ModalSuccessProps,
 ) => {
-  const {toggleModal, modalVisible} = props;
+  const {toggleModal, modalVisible, title, subtitle, buttonText} = props;
   return (
     <Modal
       isVisible={modalVisible}
@@ -25,11 +28,16 @@ export const ModalSuccessDonate: FC<ModalSuccessProps> = (
       style={styles.modalStyle}>
       <View style={styles.container}>
         <CheckGradientIcon style={styles.iconStyle} />
-        <Text style={styles.textStyles}>
-          Congratulations! Your Donation have been Sent!
+        <Text style={[typography.Subtitle1, styles.textStyles]}>
+          {title ? title : 'Congratulations! Your Donation have been Sent!'}
         </Text>
+        {subtitle && (
+          <Text style={[typography.Button2, styles.textStyles]}>
+            {subtitle}
+          </Text>
+        )}
         <Button
-          label="Dismiss"
+          label={buttonText ? buttonText : 'Dismiss'}
           containerStyles={styles.btnDonate}
           onPress={toggleModal}
         />
@@ -55,9 +63,6 @@ const styles = StyleSheet.create({
     marginBottom: heightResponsive(20),
   },
   textStyles: {
-    fontFamily: font.InterMedium,
-    fontSize: mvs(15),
-    fontWeight: '500',
     color: color.Neutral[10],
     marginBottom: heightResponsive(20),
     textAlign: 'center',

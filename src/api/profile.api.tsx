@@ -1,5 +1,7 @@
 import {PostPropsTypeA} from '../interface/feed.interface';
 import {
+  CollectPhotosProps,
+  CollectPhotosResponseType,
   ProfileResponseType,
   UpdateProfileResponseType,
 } from '../interface/profile.interface';
@@ -15,6 +17,17 @@ export type UpdateProfilePropsType = {
   banner?: string;
   about?: string;
   bio?: string;
+  labels?: string;
+  originCountry?: string;
+  originCity?: string;
+  locationCountry?: string;
+  locationCity?: string;
+  members?: string[];
+  Website?: string;
+  yearsActiveFrom?: string;
+  yearsActiveTo?: string;
+  language?: string;
+  socialMedia?: {name: string; value: string}[];
 };
 
 export const getProfile = async (): Promise<ProfileResponseType> => {
@@ -42,6 +55,30 @@ export const updateProfile = async (
 ): Promise<UpdateProfileResponseType> => {
   const {data} = await SsuAPI().request<UpdateProfileResponseType>({
     url: '/profile/update',
+    method: 'PATCH',
+    data: props,
+  });
+
+  return data;
+};
+
+export const addPhotos = async (
+  props?: CollectPhotosProps,
+): Promise<CollectPhotosResponseType> => {
+  const {data} = await SsuAPI().request<CollectPhotosResponseType>({
+    url: '/profile/collect-photos',
+    method: 'PATCH',
+    data: props,
+  });
+
+  return data;
+};
+
+export const removePhotos = async (
+  props?: CollectPhotosProps,
+): Promise<CollectPhotosResponseType> => {
+  const {data} = await SsuAPI().request<CollectPhotosResponseType>({
+    url: '/profile/collect-photos/delete',
     method: 'PATCH',
     data: props,
   });
