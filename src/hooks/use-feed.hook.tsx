@@ -60,6 +60,7 @@ export const useFeedHook = () => {
     try {
       const response = await listTopPost(props);
       setDataTopPost(response.data);
+      setFeedMessage(response.message);
     } catch (error) {
       setFeedIsError(true);
     } finally {

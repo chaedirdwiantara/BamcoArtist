@@ -8,6 +8,8 @@ import TrackPlayer, {
   useTrackPlayerEvents,
   RepeatMode,
 } from 'react-native-track-player';
+import {dummySongImg} from '../data/image';
+import {PostList} from '../interface/feed.interface';
 import {SongList} from '../interface/song.interface';
 import {usePlayerStore} from '../store/player.store';
 
@@ -33,7 +35,7 @@ export const usePlayerHook = () => {
       title: val.title,
       artist: val.musicianName,
       type: TrackType.HLS,
-      artwork: val.imageUrl ? val.imageUrl : undefined,
+      artwork: val.imageUrl.length !== 0 ? val.imageUrl[0].image : undefined,
       id: val.id,
       musicianId: val.musicianId,
     };
@@ -59,13 +61,59 @@ export const usePlayerHook = () => {
             title: item.title,
             artist: item.musicianName,
             type: TrackType.HLS,
-            artwork: item.imageUrl ? item.imageUrl : undefined,
+            artwork:
+              item.imageUrl.length !== 0
+                ? item.imageUrl[1].image
+                : dummySongImg,
             id: item.id,
             musicianId: item.musicianId,
           };
         });
       if (playSongId) {
         let indexPlaySong = track.findIndex(ar => ar.id === playSongId);
+        if (indexPlaySong > -1) {
+          let newTrack = track.splice(indexPlaySong);
+          newTrack = newTrack.concat(track.splice(0, indexPlaySong));
+          await TrackPlayer.add(newTrack);
+          if (isPlay) {
+            setPlaySong();
+          }
+        }
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const addPlaylistFeed = async ({
+    dataSong,
+    playSongId,
+    isPlay = false,
+  }: {
+    dataSong: PostList[];
+    playSongId?: number;
+    isPlay?: boolean;
+  }) => {
+    try {
+      await TrackPlayer.reset();
+      const track: Track[] = dataSong
+        .filter(ar => Number(ar.quoteToPost.targetId) !== 14)
+        .map(item => {
+          return {
+            url: item.quoteToPost.encodeHlsUrl,
+            title: item.quoteToPost.title,
+            artist: item.quoteToPost.musician,
+            type: TrackType.HLS,
+            artwork:
+              item.quoteToPost.coverImage.length !== 0
+                ? item.quoteToPost.coverImage[1].image
+                : dummySongImg,
+            id: Number(item.quoteToPost.targetId),
+            musicianId: item.musician.uuid,
+          };
+        });
+      if (playSongId) {
+        let indexPlaySong = track.findIndex(ar => Number(ar.id) === playSongId);
         if (indexPlaySong > -1) {
           let newTrack = track.splice(indexPlaySong);
           newTrack = newTrack.concat(track.splice(0, indexPlaySong));
@@ -185,6 +233,7 @@ export const usePlayerHook = () => {
     currentTrack: playerStore.currentTrack,
     addSong,
     addPlaylist,
+    addPlaylistFeed,
     showPlayer,
     hidePlayer,
     setPlaySong,

@@ -65,13 +65,12 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   const {dataCreatePost, createPostLoading, setCreatePost} = useFeedHook();
   const {isLoadingImage, dataImage, setUploadImage} = useUploadImageHook();
   const {
-    isPlay,
+    isPlaying,
     seekPlayer,
-    setMusicDataPlayer,
     setPauseSong,
     setPlaySong,
-    duration,
-    currentProgress,
+    playerProgress,
+    addPlaylist,
   } = usePlayerHook();
 
   const [label, setLabel] = useState<string>();
@@ -123,9 +122,10 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
                 targetType: 'song',
                 title: musicData.title,
                 musician: musicData.musicianName,
-                coverImage: musicData.imageUrl
-                  ? musicData.imageUrl
-                  : dummySongImg,
+                coverImage:
+                  musicData.imageUrl.length !== 0
+                    ? musicData.imageUrl[1].image
+                    : dummySongImg,
                 encodeDashUrl: musicData.transcodedSongUrl[0].encodedDashUrl,
                 encodeHlsUrl: musicData.transcodedSongUrl[0].encodedHlsUrl,
               }
@@ -149,20 +149,6 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
           category: valueFilter ? valueFilter : 'highlight',
           image: dataResponseImg,
           isPremium: dataAudience === 'Exclusive' ? true : false,
-          quoteToPost:
-            musicData !== undefined &&
-            musicData?.transcodedSongUrl !== undefined
-              ? {
-                  targetId: musicData.id?.toString(),
-                  targetType: 'song',
-                  title: musicData.title,
-                  musician: musicData.musicianName,
-                  coverImage: musicData.imageUrl,
-                  encodeDashUrl: musicData.transcodedSongUrl[0].encodedDashUrl,
-                  encodeHlsUrl: musicData.transcodedSongUrl[0].encodedHlsUrl,
-                  startAt: '0:00',
-                }
-              : undefined,
         }),
         setActive(false))
       : null;
@@ -185,27 +171,20 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
     }
   }, [data]);
 
-  useEffect(() => {
-    if (musicData !== undefined) {
-      setMusicDataPlayer({
-        id: musicData.transcodedSongUrl[0].songId,
-        title: musicData.title,
-        artist: musicData.musicianName,
-        albumImg: musicData.imageUrl,
-        musicUrl: musicData.transcodedSongUrl[0].encodedHlsUrl,
-        musicianId: musicData.musicianUUID,
-      });
-    }
-  }, [musicData]);
-
   const onPressPlaySong = () => {
+    const dataMusic = [data];
+    addPlaylist({
+      //@ts-ignore
+      dataSong: dataMusic,
+      playSongId: data.id,
+      isPlay: true,
+    });
     setPlaySong();
-    seekPlayer(0);
     setPauseModeOn(true);
   };
 
   const handlePausePlay = () => {
-    if (isPlay) {
+    if (isPlaying) {
       setPauseSong();
     } else {
       setPlaySong();
@@ -215,7 +194,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   const handleClosedPlayer = () => {
     setPauseModeOn(false);
     setMusicData(undefined);
-    if (isPlay) {
+    if (isPlaying) {
       setPauseSong();
     }
   };
@@ -300,18 +279,20 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
                   title={musicData.title}
                   musician={musicData.musicianName}
                   coverImage={
-                    musicData.imageUrl ? musicData.imageUrl : dummySongImg
+                    musicData.imageUrl.length !== 0
+                      ? musicData.imageUrl[0].image
+                      : dummySongImg
                   }
                   encodeDashUrl={musicData.transcodedSongUrl[0].encodedDashUrl}
                   encodeHlsUrl={musicData.transcodedSongUrl[0].encodedHlsUrl}
                   startAt={'0:00'}
                   onPress={onPressPlaySong}
                   closeOnPress={handleClosedPlayer}
-                  isPlay={isPlay}
+                  isPlay={isPlaying}
                   playOrPause={handlePausePlay}
                   pauseModeOn={pauseModeOn}
-                  currentProgress={currentProgress}
-                  duration={duration}
+                  currentProgress={playerProgress.position}
+                  duration={playerProgress.duration}
                   seekPlayer={seekPlayer}
                 />
               )}

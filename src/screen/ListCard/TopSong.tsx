@@ -41,7 +41,7 @@ const TopSong: FC<TopSongPropsScreen> = (props: TopSongPropsScreen) => {
       keyExtractor={item => item.id.toString()}
       renderItem={({item, index}) => (
         <MusicSection
-          imgUri={item.imageUrl !== null ? item.imageUrl : ''}
+          imgUri={item.imageUrl?.length !== 0 ? item.imageUrl[0].image : ''}
           musicNum={index + 1}
           musicTitle={elipsisText(item.title, 22)}
           singerName={item.musicianName}

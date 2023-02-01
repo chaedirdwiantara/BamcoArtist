@@ -1,4 +1,4 @@
-import {PaginationType} from './base.interface';
+import {imageTypes, PaginationType} from './base.interface';
 
 export type SongList = {
   isAddedToThisPlaylist: boolean;
@@ -7,7 +7,7 @@ export type SongList = {
   title: string;
   musicianId: string;
   musicianName: string;
-  imageUrl: string | null;
+  imageUrl: imageTypes[];
   songDuration: number;
   lyrics: string;
   transcodedSongUrl: TranscodedSongType[];
