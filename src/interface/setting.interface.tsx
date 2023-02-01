@@ -99,3 +99,16 @@ export type OtpEmailScreen = {
   email: string;
   type: PhoneSettingTypeProps;
 };
+
+export type SendReportProps = {
+  email: string;
+  message: string;
+  imageUrl: string[];
+};
+
+export type SendReportResponseType = {
+  code: number;
+  data: string | null;
+  message: string;
+  status: number;
+};

@@ -8,12 +8,15 @@ import {
   TextInputProps,
   TouchableOpacity,
   Platform,
+  ImageBackground,
 } from 'react-native';
 import {ms, mvs} from 'react-native-size-matters';
+import {Image} from 'react-native-image-crop-picker';
 
 import Gap from '../Gap/Gap';
 import {
   CameraIcon,
+  CloseCircleIcon,
   ErrorIcon,
   EyeCloseIcon,
   EyeOpenIcon,
@@ -39,6 +42,8 @@ interface InputLabelProps extends TextInputProps {
   isPhone?: boolean;
   leftIcon?: React.ReactNode;
   leftIconStyle?: ViewStyle;
+  listImage?: Image[];
+  onPressDeleteImage?: (id: number) => void;
 }
 
 const InputLabel: React.FC<InputLabelProps> = (props: InputLabelProps) => {
@@ -57,6 +62,8 @@ const InputLabel: React.FC<InputLabelProps> = (props: InputLabelProps) => {
     isPhone,
     leftIcon,
     leftIconStyle,
+    listImage,
+    onPressDeleteImage,
   } = props;
 
   const [state, setState] = useState<boolean>(false);
@@ -88,22 +95,40 @@ const InputLabel: React.FC<InputLabelProps> = (props: InputLabelProps) => {
 
   const iconCameraComp = () => {
     return (
-      <View style={styles.iconCamera}>
-        <TouchableOpacity onPress={onPressCamera}>
-          <CameraIcon
-            width={widthPercentage(20)}
-            height={widthPercentage(20)}
-            stroke={Color.Dark[100]}
-          />
-        </TouchableOpacity>
-        <Gap width={widthPercentage(10)} />
-        <TouchableOpacity onPress={onPressLibrary}>
-          <GalleryAddIcon
-            width={widthPercentage(20)}
-            height={widthPercentage(20)}
-            stroke={Color.Dark[100]}
-          />
-        </TouchableOpacity>
+      <View style={[styles.iconCamera, {borderBottomColor}]}>
+        <View style={{flexDirection: 'row'}}>
+          {listImage?.map((val, i) => (
+            <View key={i} style={styles.rootImage}>
+              <ImageBackground
+                source={{uri: val.path}}
+                resizeMode="cover"
+                imageStyle={{borderRadius: 8}}
+                style={styles.image}>
+                <TouchableOpacity
+                  onPress={() => onPressDeleteImage && onPressDeleteImage(i)}>
+                  <CloseCircleIcon style={styles.closeIcon} />
+                </TouchableOpacity>
+              </ImageBackground>
+            </View>
+          ))}
+        </View>
+        <View style={{flexDirection: 'row'}}>
+          <TouchableOpacity onPress={onPressCamera}>
+            <CameraIcon
+              width={widthPercentage(20)}
+              height={widthPercentage(20)}
+              stroke={Color.Dark[100]}
+            />
+          </TouchableOpacity>
+          <Gap width={widthPercentage(10)} />
+          <TouchableOpacity onPress={onPressLibrary}>
+            <GalleryAddIcon
+              width={widthPercentage(20)}
+              height={widthPercentage(20)}
+              stroke={Color.Dark[100]}
+            />
+          </TouchableOpacity>
+        </View>
       </View>
     );
   };
@@ -126,7 +151,7 @@ const InputLabel: React.FC<InputLabelProps> = (props: InputLabelProps) => {
                 left: 0,
                 zIndex: 1,
                 alignItems: 'center',
-                marginRight: 20,
+                marginRight: mvs(20),
               },
               leftIconStyle,
             ]}>
@@ -144,8 +169,8 @@ const InputLabel: React.FC<InputLabelProps> = (props: InputLabelProps) => {
         <View style={{position: 'absolute', right: 0}}>
           {password ? passwordComp() : null}
         </View>
-        {showImage ? iconCameraComp() : null}
       </View>
+      {showImage ? iconCameraComp() : null}
       {isError ? (
         <View style={styles.containerErrorMsg}>
           <ErrorIcon fill={color} />
@@ -198,12 +223,30 @@ const styles = StyleSheet.create({
     maxWidth: '90%',
   },
   iconCamera: {
-    flexDirection: 'row',
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
     paddingLeft: widthPercentage(10),
     paddingBottom: heightPercentage(10),
+    borderBottomWidth: mvs(1),
+  },
+  rootImage: {
+    width: '22%',
+    aspectRatio: 1 / 1,
+    borderColor: Color.Neutral[10],
+    borderWidth: mvs(1),
+    borderRadius: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: mvs(20),
+    marginRight: widthPercentage(10),
+  },
+  image: {
+    width: '100%',
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  closeIcon: {
+    width: widthPercentage(28),
+    height: widthPercentage(28),
   },
 });
 

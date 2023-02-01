@@ -1,4 +1,5 @@
 import SsuAPI from './baseMusician';
+import SsuAPIGeneral from './baseRinjaniNew';
 import {
   EmailPhoneProps,
   EmailPhoneVerifProps,
@@ -10,6 +11,8 @@ import {
   ChangePasswordProps,
   ChangePasswordResponseType,
   VerifPasswordSetting,
+  SendReportProps,
+  SendReportResponseType,
 } from '../interface/setting.interface';
 import {ParamsProps} from '../interface/base.interface';
 
@@ -160,6 +163,18 @@ export const updateExclusiveContent = async (
   const {data} = await SsuAPI().request<ExclusiveResponseType>({
     url: `/subscriptions/${params?.id}`,
     method: 'PATCH',
+    data: props,
+  });
+
+  return data;
+};
+
+export const sendReport = async (
+  props?: SendReportProps,
+): Promise<SendReportResponseType> => {
+  const {data} = await SsuAPIGeneral().request<SendReportResponseType>({
+    url: '/feedback',
+    method: 'POST',
     data: props,
   });
 

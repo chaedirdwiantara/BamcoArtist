@@ -1,12 +1,16 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, StyleSheet} from 'react-native';
-import ImagePicker from 'react-native-image-crop-picker';
+import ImagePicker, {Image} from 'react-native-image-crop-picker';
 
 import {Button, SsuInput} from '../../atom';
 import {color} from '../../../theme';
 import {TopNavigation} from '../TopNavigation';
 import {ArrowLeftIcon} from '../../../assets/icon';
+import {ModalLoading} from '../ModalLoading/ModalLoading';
+import {useUploadImageHook} from '../../../hooks/use-uploadImage.hook';
 import {heightPercentage, width, widthPercentage} from '../../../utils';
+import {sendReport} from '../../../api/setting.api';
+import {ModalSuccessDonate} from '../Modal/ModalSuccessDonate';
 
 interface SendReportProps {
   title: string;
@@ -19,9 +23,26 @@ export const SendReportContent: React.FC<SendReportProps> = ({
 }) => {
   const [state, setState] = useState({
     email: '',
-    description: '',
+    message: '',
   });
-  const [listImage, setListImage] = useState<any>([]);
+  const [listImage, setListImage] = useState<Image[]>([]);
+  const [dataResponseImg, setDataResponseImg] = useState<string[]>([]);
+  const {isLoadingImage, dataImage, setUploadImage} = useUploadImageHook();
+  const [showModalSuccess, setShowModalSuccess] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (listImage.length > 0) {
+      for (let i = 0; i < listImage.length; i++) {
+        setUploadImage(listImage[i]);
+      }
+    }
+  }, [listImage]);
+
+  useEffect(() => {
+    dataImage?.data !== undefined && !dataResponseImg.includes(dataImage.data)
+      ? setDataResponseImg([...dataResponseImg, dataImage?.data])
+      : null;
+  }, [dataImage]);
 
   const onChangeText = (key: string, value: string) => {
     setState({
@@ -30,7 +51,17 @@ export const SendReportContent: React.FC<SendReportProps> = ({
     });
   };
 
-  const onPressSave = () => {};
+  const onPressSend = async () => {
+    try {
+      const payload = {
+        ...state,
+        imageUrl: dataResponseImg,
+      };
+
+      await sendReport(payload);
+      setShowModalSuccess(true);
+    } catch (error) {}
+  };
 
   const onCameraPress = () => {
     ImagePicker.openCamera({
@@ -38,8 +69,11 @@ export const SendReportContent: React.FC<SendReportProps> = ({
       compressImageMaxHeight: 1024,
       compressImageQuality: 0.9,
       cropping: true,
+      multiple: true,
+      maxFiles: 4,
     }).then(image => {
-      setListImage([...listImage, image]);
+      listImage.length + image.length <= 4 &&
+        setListImage([...listImage, ...image]);
     });
   };
 
@@ -49,9 +83,16 @@ export const SendReportContent: React.FC<SendReportProps> = ({
       compressImageMaxHeight: 1024,
       compressImageQuality: 0.9,
       cropping: true,
+      multiple: true,
+      maxFiles: 4,
     }).then(image => {
-      setListImage([...listImage, image]);
+      listImage.length + image.length <= 4 &&
+        setListImage([...listImage, ...image]);
     });
+  };
+
+  const removeImage = (id: number) => {
+    setListImage(listImage.filter((x: Image) => x.path !== listImage[id].path));
   };
 
   return (
@@ -73,8 +114,8 @@ export const SendReportContent: React.FC<SendReportProps> = ({
       />
 
       <SsuInput.InputLabel
-        value={state.description}
-        onChangeText={(newText: string) => onChangeText('description', newText)}
+        value={state.message}
+        onChangeText={(newText: string) => onChangeText('message', newText)}
         placeholder={'How can we improve your experience using this app?\n\n'}
         containerStyles={styles.textArea}
         multiline
@@ -83,11 +124,24 @@ export const SendReportContent: React.FC<SendReportProps> = ({
         showImage={true}
         onPressCamera={onCameraPress}
         onPressLibrary={onImageLibraryPress}
+        containerInputStyles={{borderBottomWidth: 0}}
+        listImage={listImage}
+        onPressDeleteImage={removeImage}
+      />
+
+      <ModalLoading visible={isLoadingImage} />
+
+      <ModalSuccessDonate
+        title="Thank You!"
+        subtitle="We’ve received your feedback. Thank you for helping us make sunny Side Up better."
+        buttonText="Back to Settings"
+        modalVisible={showModalSuccess}
+        toggleModal={onPressGoBack}
       />
 
       <Button
         label="Send"
-        onPress={onPressSave}
+        onPress={onPressSend}
         containerStyles={styles.button}
       />
     </View>
