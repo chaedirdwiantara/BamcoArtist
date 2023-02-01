@@ -1,86 +1,209 @@
-import React, {useState} from 'react';
-import {StyleSheet, View} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {StyleSheet, Text, View} from 'react-native';
+import * as yup from 'yup';
+import {Controller, useForm} from 'react-hook-form';
+import {yupResolver} from '@hookform/resolvers/yup';
 
-import Color from '../../../theme/Color';
-import {Button, SsuInput} from '../../atom';
+import {Button, Gap, SsuInput, SsuToast} from '../../atom';
 import {TopNavigation} from '../TopNavigation';
-import {ArrowLeftIcon} from '../../../assets/icon';
-import {heightPercentage, width, widthPercentage} from '../../../utils';
+import {ArrowLeftIcon, ErrorIcon, TickCircleIcon} from '../../../assets/icon';
+import {
+  heightPercentage,
+  normalize,
+  widthPercentage,
+  widthResponsive,
+} from '../../../utils';
+import {useSettingHook} from '../../../hooks/use-setting.hook';
+import {ms, mvs} from 'react-native-size-matters';
+import {color, font, typography} from '../../../theme';
 
 interface ChangePasswordProps {
   onPressGoBack: () => void;
 }
 
+const validation = yup.object({
+  password: yup
+    .string()
+    .required('This field is required')
+    .matches(/^.{8,40}$/, 'Password should be between 8 to 40 characters'),
+  newPassword: yup
+    .string()
+    .required('This field is required')
+    .matches(/^.{8,40}$/, 'Password should be between 8 to 40 characters'),
+  repeatPassword: yup
+    .string()
+    .required('This field is required')
+    .oneOf([yup.ref('newPassword'), null], "Password didn't match"),
+});
+
+interface InputProps {
+  password: string;
+  newPassword: string;
+  repeatPassword: string;
+}
+
 export const ChangePasswordContent: React.FC<ChangePasswordProps> = ({
   onPressGoBack,
 }) => {
-  const [state, setState] = useState({
-    oldPassword: '',
-    newPassword: '',
-    confirmNewPassword: '',
+  const [disabledButton, setDisabledButton] = useState<boolean>(true);
+  const [toastVisible, setToastVisible] = useState<boolean>(false);
+  const [isSubmit, setIsSubmit] = useState<boolean>(false);
+  const {changePassword, isError, isLoading, errorMsg, setIsError} =
+    useSettingHook();
+
+  const {
+    control,
+    handleSubmit,
+    formState: {errors, isValid, isValidating},
+    getValues,
+  } = useForm<InputProps>({
+    resolver: yupResolver(validation),
+    mode: 'onChange',
+    defaultValues: {
+      password: '',
+      newPassword: '',
+      repeatPassword: '',
+    },
   });
 
-  const [error, setError] = useState({
-    oldPassword: false,
-    newPassword: false,
-    confirmNewPassword: false,
-  });
+  useEffect(() => {
+    toastVisible &&
+      setTimeout(() => {
+        setToastVisible(false);
+      }, 3000);
+  }, [toastVisible]);
 
-  const onChangeText = (key: string, value: string) => {
-    setState({
-      ...state,
-      [key]: value,
+  useEffect(() => {
+    if (isValid) {
+      setDisabledButton(false);
+    } else {
+      setDisabledButton(true);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isValidating]);
+
+  const onPressSave = async () => {
+    await changePassword({
+      password: getValues('password'),
+      newPassword: getValues('newPassword'),
+      repeatPassword: getValues('repeatPassword'),
     });
+
+    setIsSubmit(true);
   };
 
-  const onPressSave = () => {};
+  useEffect(() => {
+    if (isSubmit) {
+      if (!isError && !isLoading) {
+        setToastVisible(true);
+      }
+      setIsSubmit(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isSubmit]);
 
   return (
     <View style={styles.root}>
       <TopNavigation.Type1
         title="Change Password"
         leftIcon={<ArrowLeftIcon />}
-        itemStrokeColor={Color.Neutral[10]}
+        itemStrokeColor={color.Neutral[10]}
         leftIconAction={onPressGoBack}
         containerStyles={{marginBottom: heightPercentage(15)}}
       />
 
-      <SsuInput.InputLabel
-        label="Input Old Password"
-        password
-        placeholder="Input Old Password"
-        value={state.oldPassword}
-        isError={error.oldPassword}
-        onChangeText={(newText: string) => onChangeText('oldPassword', newText)}
-        containerStyles={{marginTop: heightPercentage(15), width: '90%'}}
+      <Controller
+        name="password"
+        control={control}
+        render={({field: {onChange, value}}) => (
+          <SsuInput.InputLabel
+            label="Input Old Password"
+            password
+            value={value}
+            onChangeText={text => {
+              onChange(text);
+              setIsError(false);
+            }}
+            placeholder={'Input Old Password'}
+            isError={errors?.password ? true : false}
+            errorMsg={errors?.password?.message}
+            containerStyles={{marginTop: heightPercentage(15)}}
+          />
+        )}
       />
 
-      <SsuInput.InputLabel
-        label="New Password"
-        password
-        placeholder="Input New Password"
-        value={state.newPassword}
-        isError={error.newPassword}
-        onChangeText={(newText: string) => onChangeText('newPassword', newText)}
-        containerStyles={{marginTop: heightPercentage(15), width: '90%'}}
+      {isError ? (
+        <View style={styles.containerErrorMsg}>
+          <ErrorIcon fill={color.Error[400]} />
+          <Gap width={ms(4)} />
+          <Text style={styles.errorMsg}>{errorMsg}</Text>
+        </View>
+      ) : null}
+
+      <Controller
+        name="newPassword"
+        control={control}
+        render={({field: {onChange, value}}) => (
+          <SsuInput.InputLabel
+            label="New Password"
+            password
+            value={value}
+            onChangeText={text => {
+              onChange(text);
+              setIsError(false);
+            }}
+            placeholder={'New Password'}
+            isError={errors?.newPassword ? true : false}
+            errorMsg={errors?.newPassword?.message}
+            containerStyles={{marginTop: heightPercentage(15)}}
+          />
+        )}
       />
 
-      <SsuInput.InputLabel
-        label="Repeat Password"
-        password
-        placeholder="Repeat New Password"
-        value={state.confirmNewPassword}
-        isError={error.confirmNewPassword}
-        onChangeText={(newText: string) =>
-          onChangeText('confirmNewPassword', newText)
-        }
-        containerStyles={{marginTop: heightPercentage(15), width: '90%'}}
+      <Controller
+        name="repeatPassword"
+        control={control}
+        render={({field: {onChange, value}}) => (
+          <SsuInput.InputLabel
+            label="Repeat Password"
+            password
+            value={value}
+            onChangeText={text => {
+              onChange(text);
+              setIsError(false);
+            }}
+            placeholder={'Repeat Password'}
+            isError={errors?.repeatPassword ? true : false}
+            errorMsg={errors?.repeatPassword?.message}
+            containerStyles={{marginTop: heightPercentage(15)}}
+          />
+        )}
       />
 
       <Button
         label="Change Password"
-        onPress={onPressSave}
-        containerStyles={styles.button}
+        onPress={handleSubmit(onPressSave)}
+        containerStyles={disabledButton ? styles.buttonDisabled : styles.button}
+        disabled={disabledButton}
+      />
+
+      <SsuToast
+        modalVisible={toastVisible}
+        onBackPressed={() => setToastVisible(false)}
+        children={
+          <View style={[styles.modalContainer]}>
+            <TickCircleIcon
+              width={widthResponsive(21)}
+              height={heightPercentage(20)}
+              stroke={color.Neutral[10]}
+            />
+            <Gap width={widthResponsive(7)} />
+            <Text style={[typography.Button2, styles.textStyle]}>
+              Your Password have been updated!
+            </Text>
+          </View>
+        }
+        modalStyle={{marginHorizontal: widthResponsive(24)}}
       />
     </View>
   );
@@ -89,14 +212,49 @@ export const ChangePasswordContent: React.FC<ChangePasswordProps> = ({
 const styles = StyleSheet.create({
   root: {
     flex: 1,
-    backgroundColor: Color.Dark[800],
-    paddingHorizontal: widthPercentage(12),
+    backgroundColor: color.Dark[800],
+    paddingHorizontal: widthPercentage(15),
+  },
+  containerErrorMsg: {
+    width: '100%',
+    flexDirection: 'row',
+    paddingTop: mvs(4),
+    alignItems: 'center',
+  },
+  errorMsg: {
+    color: color.Error[400],
+    fontFamily: font.InterRegular,
+    fontSize: normalize(10),
+    lineHeight: mvs(12),
+    maxWidth: '90%',
   },
   button: {
-    width: width * 0.9,
+    width: '100%',
     aspectRatio: widthPercentage(327 / 36),
     marginTop: heightPercentage(25),
     alignSelf: 'center',
-    backgroundColor: Color.Pink[200],
+    backgroundColor: color.Pink[200],
+  },
+  buttonDisabled: {
+    width: '100%',
+    aspectRatio: widthPercentage(327 / 36),
+    marginTop: heightPercentage(25),
+    alignSelf: 'center',
+    backgroundColor: color.Dark[50],
+  },
+  modalContainer: {
+    width: '100%',
+    position: 'absolute',
+    bottom: heightPercentage(22),
+    height: heightPercentage(36),
+    backgroundColor: color.Success[400],
+    paddingHorizontal: widthResponsive(12),
+    borderRadius: 4,
+    flexDirection: 'row',
+    alignItems: 'center',
+    zIndex: 1,
+  },
+  textStyle: {
+    color: color.Neutral[10],
   },
 });

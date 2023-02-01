@@ -69,6 +69,13 @@ export const EditProfileScreen: React.FC<EditProfileProps> = ({
     }
   };
 
+  const userName = dataProfile?.fullname;
+  const imageData = dataProfile?.photos;
+
+  const goToGallery = () => {
+    navigation.navigate('PhotoGallery', {imageData, userName});
+  };
+
   const profile = {
     fullname: dataProfile?.fullname,
     username: '@' + dataProfile?.username,
@@ -91,6 +98,7 @@ export const EditProfileScreen: React.FC<EditProfileProps> = ({
         setResetImage={(type: string) => {
           setResetImage(type);
         }}
+        goToGallery={goToGallery}
       />
     </View>
   );

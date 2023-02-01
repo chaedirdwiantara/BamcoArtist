@@ -241,6 +241,8 @@ const DropdownSelectCountry: FC<SelectCountryProps> = (
           isError={false}
           errorMsg={errorMsg}
           isFocus={isFocus}
+          isPhone
+          {...props}
         />
 
         <Modal

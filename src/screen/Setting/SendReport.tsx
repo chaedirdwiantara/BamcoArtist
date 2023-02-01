@@ -1,24 +1,19 @@
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
 
 import Color from '../../theme/Color';
-import {RootStackParams} from '../../navigations';
 import {widthPercentage} from '../../utils';
+import {RootStackParams} from '../../navigations';
 import {SendReportContent} from '../../components';
 
-interface SendReportProps {
-  props: {};
-  route: any;
-}
+type SendReportProps = NativeStackScreenProps<RootStackParams, 'SendReport'>;
 
-export const SendReportScreen: React.FC<SendReportProps> = (
-  props: SendReportProps,
-) => {
-  const {title} = props.route?.params;
-  const navigation =
-    useNavigation<NativeStackNavigationProp<RootStackParams>>();
+export const SendReportScreen: React.FC<SendReportProps> = ({
+  navigation,
+  route,
+}: SendReportProps) => {
+  const {title} = route.params;
 
   const onPressGoBack = () => {
     navigation.goBack();

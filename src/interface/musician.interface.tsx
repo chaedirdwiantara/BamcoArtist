@@ -22,11 +22,22 @@ export type ListMusicianResponseType = {
   status: number;
 };
 
+export type ListImageType = {
+  image: string;
+  presetName: string;
+};
+
+export type ListPhotosType = {
+  images: ListImageType[];
+};
+
 export type DataDetailMusician = {
   uuid: string;
   username: string;
   fullname: string;
-  imageProfileUrl: string;
+  banners: ListImageType[];
+  photos: ListPhotosType[];
+  imageProfileUrls: ListImageType[];
   email: string;
   registrationType: string;
   phoneNumber: number;
@@ -47,8 +58,6 @@ export type DataDetailMusician = {
   createdAt: string;
   updatedAt: string;
   isFollowed: boolean;
-  banner: string;
-  photos: string[];
   albums: [];
   merchs: [];
 };

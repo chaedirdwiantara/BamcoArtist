@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
@@ -6,6 +6,7 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import Color from '../../theme/Color';
 import {RootStackParams} from '../../navigations';
 import {ShippingInformationContent} from '../../components';
+import {useSettingHook} from '../../hooks/use-setting.hook';
 
 export const ShippingInformationScreen: React.FC = () => {
   const navigation =
@@ -15,9 +16,20 @@ export const ShippingInformationScreen: React.FC = () => {
     navigation.goBack();
   };
 
+  const {fetchData, dataShippingInfo, getShippingInfo} = useSettingHook();
+
+  useEffect(() => {
+    getShippingInfo();
+  }, []);
+
   return (
     <View style={styles.root}>
-      <ShippingInformationContent onPressGoBack={onPressGoBack} />
+      {!fetchData && (
+        <ShippingInformationContent
+          dataShipping={dataShippingInfo}
+          onPressGoBack={onPressGoBack}
+        />
+      )}
     </View>
   );
 };

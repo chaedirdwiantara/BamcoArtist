@@ -30,7 +30,85 @@ export type EmailPhoneResponseType = {
   status: number;
 };
 
+export type ChangePasswordProps = {
+  password: string;
+  newPassword: string;
+  repeatPassword: string;
+};
+
+export type ChangePasswordResponseType = {
+  code: number;
+  data: string | null;
+  message: string;
+  status: number;
+};
+
+export type DataShippingProps = {
+  email: string;
+  phoneNumber: string;
+  fullname: string;
+  province: string;
+  country: string;
+  postalCode: number;
+  city: string;
+  address: string;
+};
+
+export type ShippingResponseType = {
+  code: number;
+  data: DataShippingProps;
+  message: string;
+  status: number;
+};
+
+export type DataExclusiveProps = {
+  title: string;
+  coverImage: string;
+  description: string;
+  pricingPlans: {
+    duration: number;
+    durationUnit: string;
+    price: number;
+  }[];
+};
+
+export type DataExclusiveResponse = {
+  ID: string;
+  title: string;
+  coverImage: string;
+  description: string;
+  packageType: string;
+  pricingPlans: {
+    ID: string;
+    duration: number;
+    durationUnit: string;
+    price: number;
+  }[];
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type ExclusiveResponseType = {
+  code: number;
+  data: DataExclusiveResponse;
+  message: string;
+  status: number;
+};
+
 export type OtpEmailScreen = {
   email: string;
   type: PhoneSettingTypeProps;
+};
+
+export type SendReportProps = {
+  email: string;
+  message: string;
+  imageUrl: string[];
+};
+
+export type SendReportResponseType = {
+  code: number;
+  data: string | null;
+  message: string;
+  status: number;
 };
