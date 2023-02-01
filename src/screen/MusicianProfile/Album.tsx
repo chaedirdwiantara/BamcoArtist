@@ -9,6 +9,7 @@ import {AlbumData} from '../../interface/musician.interface';
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParams} from '../../navigations';
+import {dummySongImg} from '../../data/image';
 
 interface AlbumProps {
   title: string;
@@ -38,7 +39,14 @@ const Album: FC<AlbumProps> = (props: AlbumProps) => {
               style={styles.container}
               onPress={() => handleToDetail(item)}
               testID={`album${i}`}>
-              <SquareComp imgUri={item.imageUrl} size={widthResponsive(56)} />
+              <SquareComp
+                imgUri={
+                  item.imageUrl.length !== 0
+                    ? item.imageUrl[0].image
+                    : dummySongImg
+                }
+                size={widthResponsive(56)}
+              />
               <View style={styles.textContainer}>
                 <Text style={styles.songTitle} numberOfLines={1}>
                   {item.title}

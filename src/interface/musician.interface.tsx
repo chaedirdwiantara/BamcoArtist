@@ -26,7 +26,7 @@ export type DataDetailMusician = {
   uuid: string;
   username: string;
   fullname: string;
-  imageProfileUrl: string;
+  imageProfileUrls: imageTypes[];
   email: string;
   registrationType: string;
   phoneNumber: number;
@@ -47,8 +47,8 @@ export type DataDetailMusician = {
   createdAt: string;
   updatedAt: string;
   isFollowed: boolean;
-  banner: string;
-  photos: string[];
+  banners: imageTypes[];
+  photos: imageTypes[];
   albums: [];
   merchs: [];
 };
@@ -75,7 +75,7 @@ export type AlbumData = {
   id: number;
   title: string;
   description: string;
-  imageUrl: string;
+  imageUrl: imageTypes[];
   featuringArtist: string[];
   genre: string;
   subgenre: string;
