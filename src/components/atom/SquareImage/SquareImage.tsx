@@ -55,7 +55,7 @@ const SquareImage: React.FC<SquareImageProps> = (props: SquareImageProps) => {
             testID={`Image ${id}`}
           />
         ) : (
-          <DefaultImage.SongCover width={size} />
+          <DefaultImage.SongCover width={size} height={size} />
         )}
       </TouchableOpacity>
     );
