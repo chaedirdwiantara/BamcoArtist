@@ -31,13 +31,16 @@ export type ListPhotosType = {
   images: ListImageType[];
 };
 
+export type photos = {
+  createdAt: string;
+  images: imageTypes[];
+};
+
 export type DataDetailMusician = {
   uuid: string;
   username: string;
   fullname: string;
-  banners: ListImageType[];
-  photos: ListPhotosType[];
-  imageProfileUrls: ListImageType[];
+  imageProfileUrls: imageTypes[];
   email: string;
   registrationType: string;
   phoneNumber: number;
@@ -58,6 +61,8 @@ export type DataDetailMusician = {
   createdAt: string;
   updatedAt: string;
   isFollowed: boolean;
+  banners: imageTypes[];
+  photos: photos[];
   albums: [];
   merchs: [];
 };
@@ -84,7 +89,7 @@ export type AlbumData = {
   id: number;
   title: string;
   description: string;
-  imageUrl: string;
+  imageUrl: imageTypes[];
   featuringArtist: string[];
   genre: string;
   subgenre: string;
