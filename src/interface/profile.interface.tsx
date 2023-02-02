@@ -73,6 +73,39 @@ export type ProfileResponseType = {
   status: number;
 };
 
+export type ProfileFansResponseData = {
+  uuid: string;
+  username: string;
+  email: string;
+  fullname: string;
+  about: string | null;
+  banners: ListImageType[];
+  photos: ListPhotosType[];
+  images: ListImageType[];
+  phoneNumber: string | null;
+  registrationType: RegistrationType;
+  favoriteGenres: FavGenreType[];
+  moods: MoodsType[];
+  expectation: ExpectationType[];
+  isValid: boolean;
+  following: number | null;
+  songAdded: number | null;
+  createdAt: string;
+  updatedAt: string;
+  locationCountry: string;
+  gender: string;
+  followers: number;
+  fans: number;
+  bio: string | null;
+};
+
+export type ProfileFansResponseType = {
+  code: number;
+  data: ProfileFansResponseData;
+  message: string;
+  status: number;
+};
+
 export type UpdateProfileResponseType = {
   code: number;
   data: {

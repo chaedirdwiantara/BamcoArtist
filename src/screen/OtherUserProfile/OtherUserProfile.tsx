@@ -17,6 +17,7 @@ import {usePlayerHook} from '../../hooks/use-player.hook';
 import {useProfileHook} from '../../hooks/use-profile.hook';
 import {GuestContent, ProfileContent} from '../../components';
 import {usePlaylistHook} from '../../hooks/use-playlist.hook';
+import {ModalLoading} from '../../components/molecule/ModalLoading/ModalLoading';
 
 type OtherProfileProps = NativeStackScreenProps<
   RootStackParams,
@@ -29,7 +30,7 @@ export const OtherUserProfile: FC<OtherProfileProps> = ({
   const data = route.params;
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
-  const {dataProfile, getOtherProfileUser} = useProfileHook();
+  const {dataFansProfile, isLoading, getOtherProfileUser} = useProfileHook();
   const {dataPlaylist, getPlaylist} = usePlaylistHook();
   const isLogin = storage.getString('profile');
   const isFocused = useIsFocused();
@@ -51,12 +52,18 @@ export const OtherUserProfile: FC<OtherProfileProps> = ({
   );
 
   const profile = {
-    fullname: dataProfile?.data.fullname,
-    username: '@' + dataProfile?.data.username,
-    bio: dataProfile?.data.about,
-    backgroundUri: dataProfile?.data?.banner,
-    avatarUri: dataProfile?.data.imageProfileUrl,
-    totalFollowing: dataProfile?.data.following,
+    fullname: dataFansProfile?.data.fullname,
+    username: '@' + dataFansProfile?.data.username,
+    bio: dataFansProfile?.data.about,
+    backgroundUri:
+      dataFansProfile?.data?.banners.length !== 0
+        ? dataFansProfile?.data?.banners[3].image
+        : '',
+    avatarUri:
+      dataFansProfile?.data.images.length !== 0
+        ? dataFansProfile?.data.images[1].image
+        : '',
+    totalFollowing: dataFansProfile?.data.following,
   };
 
   return (
@@ -69,6 +76,8 @@ export const OtherUserProfile: FC<OtherProfileProps> = ({
           goToEditProfile={() => {}}
           onPressGoTo={() => {}}
         />
+      ) : isLogin && isLoading ? (
+        <ModalLoading visible={isLoading} />
       ) : (
         <GuestContent />
       )}

@@ -2,6 +2,7 @@ import {PostPropsTypeA} from '../interface/feed.interface';
 import {
   CollectPhotosProps,
   CollectPhotosResponseType,
+  ProfileFansResponseType,
   ProfileResponseType,
   UpdateProfileResponseType,
 } from '../interface/profile.interface';
@@ -41,8 +42,8 @@ export const getProfile = async (): Promise<ProfileResponseType> => {
 
 export const getOtherUserProfile = async (
   props?: PostPropsTypeA,
-): Promise<ProfileResponseType> => {
-  const {data} = await SsuAPIPublicRinjani().request<ProfileResponseType>({
+): Promise<ProfileFansResponseType> => {
+  const {data} = await SsuAPIPublicRinjani().request<ProfileFansResponseType>({
     url: `/fans/${props?.id}`,
     method: 'GET',
   });

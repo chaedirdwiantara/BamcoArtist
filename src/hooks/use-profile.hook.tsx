@@ -12,6 +12,7 @@ import {applyReferral} from '../api/referral.api';
 import {PostPropsTypeA} from '../interface/feed.interface';
 import {
   CollectPhotosProps,
+  ProfileFansResponseType,
   ProfileResponseType,
 } from '../interface/profile.interface';
 
@@ -20,8 +21,14 @@ export const useProfileHook = () => {
   const [errorMsg, setErrorMsg] = useState('');
   const [isValidReferral, setIsValidReferral] = useState<boolean | null>(null);
   const [dataProfile, setDataProfile] = useState<ProfileResponseType>();
+  const [dataUserCheck, setDataUserCheck] = useState<'Musician' | 'Fans' | ''>(
+    '',
+  );
+  const [dataFansProfile, setDataFansProfile] =
+    useState<ProfileFansResponseType>();
 
   const getProfileUser = async () => {
+    setIsLoading(true);
     try {
       const response = await getProfile();
       console.log(response);
@@ -34,11 +41,26 @@ export const useProfileHook = () => {
   };
 
   const getOtherProfileUser = async (props?: PostPropsTypeA) => {
+    setIsLoading(true);
     try {
       const response = await getOtherUserProfile(props);
-      console.log(response);
-      setDataProfile(response);
+      setDataFansProfile(response);
     } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const getCheckUser = async (props?: PostPropsTypeA) => {
+    setIsLoading(true);
+    try {
+      const response = await getOtherUserProfile(props);
+      response.data === null
+        ? setDataUserCheck('Musician')
+        : setDataUserCheck('Fans');
+    } catch (error) {
+      setDataUserCheck('');
       console.log(error);
     } finally {
       setIsLoading(false);
@@ -122,6 +144,9 @@ export const useProfileHook = () => {
     errorMsg,
     isValidReferral,
     dataProfile,
+    dataFansProfile,
+    dataUserCheck,
+    setDataUserCheck,
     getProfileUser,
     updateProfileUser,
     applyReferralUser,
@@ -129,5 +154,6 @@ export const useProfileHook = () => {
     getOtherProfileUser,
     addCollectPhotos,
     removeCollectPhotos,
+    getCheckUser,
   };
 };

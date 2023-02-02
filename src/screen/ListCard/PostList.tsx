@@ -358,7 +358,7 @@ const PostListHome: FC<PostListProps> = (props: PostListProps) => {
                   musicianId={`@${item.musician.username}`}
                   imgUri={
                     item.musician.imageProfileUrls.length !== 0
-                      ? item.musician.imageProfileUrls[0].image
+                      ? item.musician.imageProfileUrls[0]?.image
                       : ''
                   }
                   postDate={dateFormat(item.createdAt)}
