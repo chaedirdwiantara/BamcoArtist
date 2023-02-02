@@ -90,6 +90,10 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
     uri.length + val.length <= 4 ? setUri([...uri, ...val]) : null;
   };
 
+  const sendSingleUri = (val: Image) => {
+    uri.length + 1 <= 4 ? setUri([...uri, val]) : null;
+  };
+
   //  * 2. trigger hook state to active when Post Button pressed
   const handlePostOnPress = () => {
     setActive(true);
@@ -395,7 +399,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
         <ModalImagePicker
           title={'Upload media'}
           modalVisible={isModalVisible.modalImagePicker}
-          sendUri={() => {}}
+          sendUri={sendSingleUri}
           sendUriMultiple={sendUri}
           onDeleteImage={resetImage}
           onPressClose={closeModal}
