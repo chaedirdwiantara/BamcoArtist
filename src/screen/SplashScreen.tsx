@@ -36,10 +36,20 @@ export const SplashScreen: React.FC<SplashScrennProps> = ({
   };
 
   useEffect(() => {
+    //TODO: wiring after endpoint ready
+    // setTimeout(() => {
+    //   setModalVisible(true);
+    // }, 2000);
+
     setTimeout(() => {
-      setModalVisible(true);
+      navigation.replace(
+        storage.getBoolean('isLogin') || storage.getBoolean('isGuest')
+          ? 'MainTab'
+          : storage.getBoolean('skipOnboard')
+          ? 'SignInGuest'
+          : 'Boarding',
+      );
     }, 2000);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
