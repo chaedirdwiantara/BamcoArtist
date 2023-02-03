@@ -10,8 +10,8 @@ import {ms, mvs} from 'react-native-size-matters';
 
 import {SquareImage} from '../../atom';
 import {color, font} from '../../../theme';
+import {normalize, widthResponsive} from '../../../utils';
 import {DefaultImage, LockIcon, PublicIcon} from '../../../assets/icon';
-import {heightPercentage, normalize, widthResponsive} from '../../../utils';
 
 interface ListProps {
   imgUri: string | null;
@@ -60,7 +60,7 @@ const PlaylistCard: React.FC<ListProps> = ({
             {musicTitle}
           </Text>
         </View>
-        <View style={{height: '50%', paddingTop: heightPercentage(5)}}>
+        <View style={{height: '50%'}}>
           <Text style={styles.songDesc} numberOfLines={1}>
             {singerName}
           </Text>
@@ -103,7 +103,6 @@ const styles = StyleSheet.create({
   songDesc: {
     fontFamily: font.InterMedium,
     fontSize: normalize(12),
-    lineHeight: mvs(12),
     color: color.Dark[50],
   },
 });

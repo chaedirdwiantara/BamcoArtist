@@ -8,14 +8,14 @@ import {
 } from '../../../utils';
 import {Avatar, Gap} from '../../atom';
 import {color, font} from '../../../theme';
-import {PauseIcon, PlayIcon} from '../../../assets/icon';
+import {DefaultAvatar, PauseIcon, PlayIcon} from '../../../assets/icon';
 
 interface SongTitlePlayProps {
   title: string;
   totalSong: number;
   createdDate: string;
   createdBy: string;
-  avatarUri?: string;
+  avatarUri?: string | null;
 }
 
 export const SongTitlePlay: React.FC<SongTitlePlayProps> = ({
@@ -23,7 +23,7 @@ export const SongTitlePlay: React.FC<SongTitlePlayProps> = ({
   totalSong,
   createdDate,
   createdBy,
-  avatarUri = 'https://wallpaperspeed.id/wp-content/uploads/2021/09/dragon-ball-z-wallpaper-goku-super-saiyan-god-source-moddroid.com_.webp',
+  avatarUri = '',
 }) => {
   const [played, setPlayed] = useState(false);
 
@@ -50,7 +50,14 @@ export const SongTitlePlay: React.FC<SongTitlePlayProps> = ({
       <View style={styles.containerCreatedBy}>
         <Text style={styles.by}>by</Text>
         <Gap width={widthPercentage(5)} />
-        <Avatar size={widthPercentage(16)} imgUri={avatarUri} />
+        {avatarUri ? (
+          <Avatar size={widthPercentage(16)} imgUri={avatarUri} />
+        ) : (
+          <DefaultAvatar.ProfileIcon
+            width={widthPercentage(18)}
+            height={widthPercentage(18)}
+          />
+        )}
         <Gap width={widthPercentage(5)} />
         <Text style={styles.createdBy}>{createdBy}</Text>
       </View>

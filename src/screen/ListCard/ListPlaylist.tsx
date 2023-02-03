@@ -25,7 +25,7 @@ const ListPlaylist: FC<ListPlaylistScreen> = (props: ListPlaylistScreen) => {
           imgUri={item.thumbnailUrl !== null ? item.thumbnailUrl : ''}
           musicNum={index + 1}
           musicTitle={elipsisText(item.name, 22)}
-          singerName={'by ' + item.createdBy}
+          singerName={'by ' + item.playlistOwner.fullname}
           onPressCard={() => onPress(item.id)}
           containerStyles={{marginTop: mvs(20)}}
           isPublic={item.isPublic}
