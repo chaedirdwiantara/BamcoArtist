@@ -88,7 +88,7 @@ export interface dataRecommendedArtistType {
   uuid: string;
   fullname: string;
   followers: number;
-  imageProfileUrl: string;
+  imageProfileUrls: string;
   isFollowed: boolean;
 }
 
@@ -98,7 +98,7 @@ export const dataRecommendedArtist: dataRecommendedArtistType[] = [
     fullname: 'Sagittarius',
     followers: 10,
     isFollowed: true,
-    imageProfileUrl:
+    imageProfileUrls:
       'https://wallpaperspeed.id/wp-content/uploads/2021/09/dragon-ball-z-wallpaper-goku-super-saiyan-god-source-moddroid.com_.webp',
   },
   {
@@ -106,7 +106,7 @@ export const dataRecommendedArtist: dataRecommendedArtistType[] = [
     fullname: 'Scorpio',
     followers: 2,
     isFollowed: true,
-    imageProfileUrl:
+    imageProfileUrls:
       'https://wallpaperspeed.id/wp-content/uploads/2021/09/dragon-ball-z-wallpaper-goku-super-saiyan-god-source-moddroid.com_.webp',
   },
   {
@@ -114,7 +114,7 @@ export const dataRecommendedArtist: dataRecommendedArtistType[] = [
     fullname: 'Gemini',
     followers: 3,
     isFollowed: true,
-    imageProfileUrl:
+    imageProfileUrls:
       'https://wallpaperspeed.id/wp-content/uploads/2021/09/dragon-ball-z-wallpaper-goku-super-saiyan-god-source-moddroid.com_.webp',
   },
   {
@@ -122,7 +122,7 @@ export const dataRecommendedArtist: dataRecommendedArtistType[] = [
     fullname: 'Cancer',
     followers: 4,
     isFollowed: true,
-    imageProfileUrl:
+    imageProfileUrls:
       'https://wallpaperspeed.id/wp-content/uploads/2021/09/dragon-ball-z-wallpaper-goku-super-saiyan-god-source-moddroid.com_.webp',
   },
   {
@@ -130,7 +130,7 @@ export const dataRecommendedArtist: dataRecommendedArtistType[] = [
     fullname: 'Taurus',
     followers: 5,
     isFollowed: true,
-    imageProfileUrl:
+    imageProfileUrls:
       'https://wallpaperspeed.id/wp-content/uploads/2021/09/dragon-ball-z-wallpaper-goku-super-saiyan-god-source-moddroid.com_.webp',
   },
 ];
