@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {StyleSheet, View} from 'react-native';
+import {InteractionManager, StyleSheet, View} from 'react-native';
 import {Image} from 'react-native-image-crop-picker';
 import {
   NativeStackNavigationProp,
@@ -12,6 +12,7 @@ import {EditProfile} from '../../components';
 import {uploadImage} from '../../api/uploadImage.api';
 import {useProfileHook} from '../../hooks/use-profile.hook';
 import {MainTabParams, RootStackParams} from '../../navigations';
+import {ModalLoading} from '../../components/molecule/ModalLoading/ModalLoading';
 
 type EditProfileProps = NativeStackScreenProps<RootStackParams, 'EditProfile'>;
 
@@ -30,11 +31,12 @@ export const EditProfileScreen: React.FC<EditProfileProps> = ({
     dataProfile !== undefined && dataProfile.imageProfileUrls?.length > 0
       ? dataProfile.imageProfileUrls[2].image
       : null;
-  const {updateProfileUser} = useProfileHook();
+  const {isLoading, updateProfileUser} = useProfileHook();
 
   const [avatarUri, setAvatarUri] = useState(avatar || '');
   const [backgroundUri, setBackgroundUri] = useState(banners || '');
   const [photos, setPhotos] = useState<string[]>([]);
+  const [loadingUpload, setLoadingUpload] = useState<boolean>(false);
 
   const goBack = () => {
     navigation.goBack();
@@ -55,6 +57,7 @@ export const EditProfileScreen: React.FC<EditProfileProps> = ({
   };
 
   const setUploadImage = async (image: Image, type: string) => {
+    InteractionManager.runAfterInteractions(() => setLoadingUpload(true));
     try {
       const response = await uploadImage(image);
       if (type === 'avatarUri') {
@@ -66,6 +69,8 @@ export const EditProfileScreen: React.FC<EditProfileProps> = ({
       }
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoadingUpload(false);
     }
   };
 
@@ -100,6 +105,7 @@ export const EditProfileScreen: React.FC<EditProfileProps> = ({
         }}
         goToGallery={goToGallery}
       />
+      <ModalLoading visible={isLoading || loadingUpload} />
     </View>
   );
 };

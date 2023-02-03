@@ -21,9 +21,6 @@ import {uploadImage} from '../../../api/uploadImage.api';
 import {updatePlaylist} from '../../../api/playlist.api';
 import {Playlist} from '../../../interface/playlist.interface';
 
-// note: title menggunakan text area dan dan description sebaliknya
-// itu karena, menyesuaikan UI di figma dengan component yang sudah dibuat (border)
-
 interface EditPlaylistProps {
   playlist: Playlist;
   goToPlaylist: (params: any) => void;
@@ -213,6 +210,7 @@ export const EditPlaylistContent: React.FC<EditPlaylistProps> = ({
         title="Edit Playlist Cover"
         modalVisible={isModalVisible.modalImage}
         sendUri={sendUri}
+        sendUriMultiple={() => null}
         onDeleteImage={resetImage}
         onPressClose={closeModal}
         hideMenuDelete={hideMenuDelete}
