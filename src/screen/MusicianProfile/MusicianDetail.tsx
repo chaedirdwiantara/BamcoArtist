@@ -36,12 +36,18 @@ interface MusicianDetailProps {
   profile: DataDetailMusician;
   uuid: string;
   dataAlbum: AlbumData[];
+  followOnPress: () => void;
+  unfollowOnPress: () => void;
+  donateOnPress: () => void;
 }
 
 export const MusicianDetail: React.FC<MusicianDetailProps> = ({
   profile,
   uuid,
   dataAlbum,
+  followOnPress,
+  unfollowOnPress,
+  donateOnPress,
 }) => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
@@ -110,6 +116,9 @@ export const MusicianDetail: React.FC<MusicianDetailProps> = ({
           username={profile.username}
           bio={profile.bio}
           isFollowed={profile.isFollowed}
+          followOnPress={followOnPress}
+          unfollowOnPress={unfollowOnPress}
+          donateOnPress={donateOnPress}
         />
         <View style={styles.infoCard}>
           <UserInfoCard onPress={() => {}} profile={musicianProfile} />
