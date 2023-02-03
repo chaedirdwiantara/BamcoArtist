@@ -12,7 +12,7 @@ export const ModalLoading = (props: ModalLoadingProps) => {
   const {visible} = props;
 
   return (
-    <Modal isVisible={visible} style={styles.root}>
+    <Modal statusBarTranslucent isVisible={visible} style={styles.root}>
       <Lottie
         source={require('../../../assets/animation/ssu-loading.json')}
         autoPlay
@@ -35,5 +35,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,0.3)',
     justifyContent: 'center',
     alignItems: 'center',
+    margin: 0,
   },
 });
