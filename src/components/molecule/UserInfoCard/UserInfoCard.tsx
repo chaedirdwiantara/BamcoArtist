@@ -16,6 +16,7 @@ import {
 import Font from '../../../theme/Font';
 import Color from '../../../theme/Color';
 import {InfoProfileType, infoProfileUser} from '../../../data/profile';
+import {ProfileFansResponseData} from '../../../interface/profile.interface';
 
 interface UserInfoCardProps {
   profile?: any;
@@ -30,6 +31,7 @@ interface UserInfoCardProps {
   rank?: number;
   containerStyles?: ViewStyle;
   onPress: () => void;
+  selfProfile?: ProfileFansResponseData;
 }
 
 type Props = {
@@ -48,7 +50,14 @@ const Item: FC<Props> = ({point, title, onPress}) => {
 };
 
 const UserInfoCard: FC<UserInfoCardProps> = (props: UserInfoCardProps) => {
-  const {type = '', profile, containerStyles, totalFollowing, onPress} = props;
+  const {
+    type = '',
+    profile,
+    containerStyles,
+    totalFollowing,
+    onPress,
+    selfProfile,
+  } = props;
   const infoProfileArtist = [
     {
       point: profile?.totalFans ? profile.totalFans : 0,
@@ -69,6 +78,24 @@ const UserInfoCard: FC<UserInfoCardProps> = (props: UserInfoCardProps) => {
     {
       point: profile?.rank ? profile.rank : 0,
       title: 'RANK',
+    },
+  ];
+
+  const infoProfileUser = [
+    {
+      point: selfProfile?.following ? selfProfile.following : 0,
+      title: 'FOLLOWING',
+    },
+    {
+      point: selfProfile?.totalLiked ? selfProfile.totalLiked : 0,
+      title: 'LIKED SONGS',
+    },
+    {
+      point:
+        selfProfile?.point !== undefined && selfProfile?.point.daily
+          ? selfProfile.point.daily
+          : 0,
+      title: 'POINTS',
     },
   ];
 

@@ -97,6 +97,11 @@ export type ProfileFansResponseData = {
   followers: number;
   fans: number;
   bio: string | null;
+  totalLiked: number;
+  point: {
+    daily: number;
+    lasUpdated: string;
+  };
 };
 
 export type ProfileFansResponseType = {

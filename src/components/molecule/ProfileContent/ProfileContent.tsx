@@ -35,6 +35,7 @@ import DataMusician from '../../../screen/MusicianProfile/DataMusician';
 import PostListPublic from '../../../screen/ListCard/PostListPublic';
 import PostListExclusive from '../../../screen/ListCard/PostListExclusive';
 import {dropDownDataCategory, dropDownDataSort} from '../../../data/dropdown';
+import {ProfileFansResponseType} from '../../../interface/profile.interface';
 
 type OnScrollEventHandler = (
   event: NativeSyntheticEvent<NativeScrollEvent>,
@@ -51,6 +52,7 @@ interface ProfileContentProps {
   uuid?: string;
   dataAlbum?: AlbumData[];
   dataDetailMusician?: DataDetailMusician;
+  selfProfile?: ProfileFansResponseType;
   ownProfile?: boolean;
 }
 
@@ -63,6 +65,7 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
   uuid,
   dataAlbum,
   dataDetailMusician,
+  selfProfile,
   ownProfile = false,
 }) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -123,6 +126,7 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
           containerStyles={styles.infoCard}
           totalFollowing={profile.totalFollowing}
           onPress={() => onPressGoTo('Following')}
+          selfProfile={selfProfile?.data}
         />
         <View style={styles.containerContent}>
           <TabFilter.Type1

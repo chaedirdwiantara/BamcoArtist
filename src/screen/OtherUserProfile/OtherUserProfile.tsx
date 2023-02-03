@@ -71,6 +71,7 @@ export const OtherUserProfile: FC<OtherProfileProps> = ({
       {isLogin ? (
         <ProfileContent
           profile={profile}
+          selfProfile={dataFansProfile}
           goToPlaylist={() => {}}
           dataPlaylist={dataPlaylist}
           goToEditProfile={() => {}}

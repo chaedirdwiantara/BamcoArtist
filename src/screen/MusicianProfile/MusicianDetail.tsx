@@ -65,6 +65,23 @@ export const MusicianDetail: React.FC<MusicianDetailProps> = ({
     setScrollEffect(scrolled);
   };
 
+  const musicianProfile = {
+    fullname: profile.fullname,
+    username: '@' + profile.username,
+    bio: profile.bio || '',
+    backgroundUri:
+      profile?.banners.length !== 0 ? profile.banners[3]?.image : '',
+    avatarUri:
+      profile?.imageProfileUrls.length !== 0
+        ? profile?.imageProfileUrls[1]?.image
+        : '',
+    totalFollowers: profile.followers,
+    totalFans: profile.fans,
+    totalRelease: 0,
+    totalPlaylist: 0,
+    rank: 0,
+  };
+
   return (
     <View style={styles.container}>
       <SsuStatusBar type={'black'} />
@@ -95,7 +112,7 @@ export const MusicianDetail: React.FC<MusicianDetailProps> = ({
           isFollowed={profile.isFollowed}
         />
         <View style={styles.infoCard}>
-          <UserInfoCard onPress={() => {}} />
+          <UserInfoCard onPress={() => {}} profile={musicianProfile} />
           <ExclusiveDailyContent />
           <Gap height={10} />
           <View style={styles.containerContent}>
