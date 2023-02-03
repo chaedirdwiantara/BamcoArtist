@@ -63,7 +63,7 @@ const PhotoGallery: FC<PhotoGalleyProps> = ({route}: PhotoGalleyProps) => {
                 marginVertical: ms(1.5),
               }}>
               <FastImage
-                source={{uri: item}}
+                source={{uri: item.images[1].image}}
                 style={{
                   width: '100%',
                   height: '100%',
@@ -77,7 +77,7 @@ const PhotoGallery: FC<PhotoGalleyProps> = ({route}: PhotoGalleyProps) => {
         toggleModal={() => setModalVisible(!isModalVisible)}
         modalVisible={isModalVisible}
         imageIdx={imgUrl}
-        dataImage={imageData}
+        dataImageGallery={imageData}
       />
     </View>
   );

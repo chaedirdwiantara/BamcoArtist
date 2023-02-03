@@ -63,6 +63,10 @@ const MusicianSection: React.FC<MusicianProps> = (props: MusicianProps) => {
   const [modalGuestVisible, setModalGuestVisible] = useState(false);
   const [trigger2ndModal, setTrigger2ndModal] = useState<boolean>(false);
 
+  const goToMusician = () => {
+    navigation.navigate('MusicianProfile', {id: musicianId});
+  };
+
   useEffect(() => {
     toastVisible &&
       setTimeout(() => {
@@ -117,6 +121,7 @@ const MusicianSection: React.FC<MusicianProps> = (props: MusicianProps) => {
         dataFilter={newDataMore}
         onPressMore={resultDataMore}
         activeMore={!self}
+        onPressImage={goToMusician}
         {...props}
       />
       <ModalDonate

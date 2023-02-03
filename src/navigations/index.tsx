@@ -93,7 +93,7 @@ import {
 // interface
 import {PostList} from '../interface/feed.interface';
 import {Playlist} from '../interface/playlist.interface';
-import {AlbumData} from '../interface/musician.interface';
+import {AlbumData, photos} from '../interface/musician.interface';
 import {ChangePNScreen} from '../screen/Setting/PhoneNumber/ChangePN';
 import {OtpPNScreen} from '../screen/Setting/PhoneNumber/OTP';
 import {useNavigation} from '@react-navigation/native';
@@ -155,7 +155,7 @@ export type RootStackParams = {
     info?: boolean;
     message?: string;
   };
-  PhotoGallery: {imageData: ListPhotosType[]; userName: string};
+  PhotoGallery: {imageData: photos[]; userName: string};
   Playlist: {
     id: number;
   };

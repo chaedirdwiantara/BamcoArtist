@@ -1,23 +1,14 @@
-import React, {useEffect, useState} from 'react';
-import {View, StyleSheet, FlatList} from 'react-native';
-import {
-  Gap,
-  ListCard,
-  SearchBar,
-  TabFilter,
-  TopNavigation,
-} from '../../components';
+import React, {useState} from 'react';
+import {View, StyleSheet} from 'react-native';
+import {Gap, SearchBar, TabFilter, TopNavigation} from '../../components';
 import Color from '../../theme/Color';
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParams} from '../../navigations';
 import {color} from '../../theme';
 import {widthResponsive} from '../../utils';
-import {SearchListData, SearchListType} from '../../data/search';
-import {mvs} from 'react-native-size-matters';
-import MusicianSection from '../../components/molecule/MusicianSection/MusicianSection';
+import {SearchListType} from '../../data/search';
 import {ModalPlayMusic} from '../../components/molecule/Modal/ModalPlayMusic';
-import {useSearchHook} from '../../hooks/use-search.hook';
 import ListResultMusician from './ListResultMusician';
 import ListResultFans from './LstResultFans';
 import ListResultSong from './ListResultSong';
@@ -31,7 +22,6 @@ export const SearchScreen: React.FC = () => {
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
 
   const [state, setState] = useState<string>('');
-  const [dataShow, setDataShow] = useState<SearchListType[]>([]);
   const [forTrigger, setForTrigger] = useState<boolean>(false);
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [modalVisible, setModalVisible] = useState(false);
@@ -47,46 +37,13 @@ export const SearchScreen: React.FC = () => {
     'Event',
   ];
 
-  const {
-    searchLoading,
-    dataSearchFans,
-    dataSearchMusicians,
-    dataSearchSongs,
-    dataSearchAlbums,
-    dataSearchPlaylists,
-    getSearchAlbums,
-    getSearchPlaylists,
-    getSearchFans,
-    getSearchMusicians,
-    getSearchSongs,
-  } = useSearchHook();
-
   const filterData = (item: string, index: number) => {
     setSelectedIndex(index);
     setTypeSearch(item);
-    if (item === 'Song') {
-      getSearchSongs({keyword: state});
-    }
-    if (item === 'Musician') {
-      getSearchMusicians({keyword: state});
-    }
-    if (item === 'Fans') {
-      getSearchFans({keyword: state});
-    }
-    if (item === 'Album') {
-      getSearchAlbums({keyword: state});
-    }
-    if (item === 'Playlist') {
-      getSearchPlaylists({keyword: state});
-    }
   };
 
   const goToSongDetails = () => {
     navigation.navigate('MusicPlayer');
-  };
-
-  const resultDataMore = (dataResult: any) => {
-    console.log(dataResult, 'resultDataMenu');
   };
 
   return (
@@ -115,38 +72,21 @@ export const SearchScreen: React.FC = () => {
                 onPress={filterData}
                 selectedIndex={selectedIndex}
               />
-              {dataSearchMusicians && typeSearch === 'Musician' && (
-                <ListResultMusician dataSearchMusicians={dataSearchMusicians} />
+              {typeSearch === 'Musician' && (
+                <ListResultMusician keyword={state} />
               )}
-              {dataSearchFans && typeSearch === 'Fans' && (
-                <ListResultFans dataSearchFans={dataSearchFans} />
-              )}
-              {dataSearchSongs && typeSearch === 'Song' && (
-                <ListResultSong dataSearchSongs={dataSearchSongs} />
-              )}
-              {dataSearchAlbums && typeSearch === 'Album' && (
-                <ListResultAlbum dataSearchAlbums={dataSearchAlbums} />
-              )}
-              {dataSearchPlaylists && typeSearch === 'Playlist' && (
-                <ListResultPlaylists
-                  dataSearchPlaylists={dataSearchPlaylists}
-                />
+              {typeSearch === 'Fans' && <ListResultFans keyword={state} />}
+              {typeSearch === 'Song' && <ListResultSong keyword={state} />}
+              {typeSearch === 'Album' && <ListResultAlbum keyword={state} />}
+              {typeSearch === 'Playlist' && (
+                <ListResultPlaylists keyword={state} />
               )}
               {typeSearch === 'Merch' && <ListResultMerch keyword={state} />}
               {typeSearch === 'Event' && <ListResultEvent keyword={state} />}
             </>
           ) : null}
         </View>
-        {modalVisible && (
-          <ModalPlayMusic
-            imgUri={
-              'https://cdns-images.dzcdn.net/images/cover/7f7aae26b50cb046c872238b6a2a10c2/264x264.jpg'
-            }
-            musicTitle={'Thunder'}
-            singerName={'Imagine Dragons, The Wekeend'}
-            onPressModal={goToSongDetails}
-          />
-        )}
+        {modalVisible && <ModalPlayMusic onPressModal={goToSongDetails} />}
       </View>
     </>
   );

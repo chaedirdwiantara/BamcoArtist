@@ -81,8 +81,14 @@ export const MusicianDetail: React.FC<MusicianDetailProps> = ({
         scrollEventThrottle={16}
         onScroll={handleScroll}>
         <ProfileHeader
-          avatarUri={profile.imageProfileUrls[0].image}
-          backgroundUri={profile.banners[2].image}
+          avatarUri={
+            profile.imageProfileUrls.length !== 0
+              ? profile.imageProfileUrls[1].image
+              : ''
+          }
+          backgroundUri={
+            profile.banners.length !== 0 ? profile.banners[1].image : ''
+          }
           fullname={profile.fullname}
           username={profile.username}
           bio={profile.bio}
