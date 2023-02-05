@@ -105,8 +105,8 @@ export const SettingContent: React.FC<SettingProps> = ({
     });
   };
 
-  const onPressSignout = () => {
-    onLogout();
+  const onPressSignout = async () => {
+    await onLogout();
     FCMService.getTokenFCM({
       onGetToken: token => {
         removeFcmToken(token);
