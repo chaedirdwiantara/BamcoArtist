@@ -114,7 +114,7 @@ export const PlaylistContent: React.FC<Props> = ({
             title={dataDetail?.name}
             totalSong={dataDetail?.totalSong}
             createdDate={dateFormat(dataDetail?.createdAt)}
-            createdBy={dataDetail?.createdBy}
+            createdBy={dataDetail?.playlistOwner?.fullname}
             avatarUri={dataDetail?.playlistOwner?.image}
           />
 

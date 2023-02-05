@@ -21,7 +21,7 @@ interface TopMusicianProps {
     props?: FollowMusicianPropsType,
     params?: ParamsProps,
   ) => void;
-  emptyState?: Element;
+  emptyState?: React.ComponentType;
 }
 
 const TopMusician: FC<TopMusicianProps> = ({
@@ -53,7 +53,7 @@ const TopMusician: FC<TopMusicianProps> = ({
             useGrouping: false,
           })}
           musicianName={item.fullname}
-          imgUri={item.imageProfileUrl || ''}
+          imgUri={item.imageProfileUrls[1]?.image || ''}
           containerStyles={{marginTop: mvs(20)}}
           point={type === 'profile' ? item.point || 0 : null}
           isFollowed={item.isFollowed}

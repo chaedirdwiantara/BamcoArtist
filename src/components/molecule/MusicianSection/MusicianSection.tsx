@@ -13,8 +13,8 @@ import {
   SsuToast,
 } from '../..';
 import {color, font} from '../../../theme';
-import {RootStackParams} from '../../../navigations';
 import {CheckCircle2Icon} from '../../../assets/icon';
+import {MainTabParams, RootStackParams} from '../../../navigations';
 import {profileStorage, storage} from '../../../hooks/use-storage.hook';
 import {heightPercentage, normalize, widthResponsive} from '../../../utils';
 
@@ -45,6 +45,7 @@ const MusicianSection: React.FC<MusicianProps> = (props: MusicianProps) => {
 
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
+  const navigation2 = useNavigation<NativeStackNavigationProp<MainTabParams>>();
   const isLogin = storage.getString('profile');
   const dataMore = [
     {label: dropdownText, value: '1'},
@@ -92,7 +93,7 @@ const MusicianSection: React.FC<MusicianProps> = (props: MusicianProps) => {
       }
     } else if (dataResult.value === '3') {
       musicianId === profileStorage()?.uuid
-        ? navigation.navigate('Profile')
+        ? navigation2.navigate('Profile', {})
         : navigation.navigate('MusicianProfile', {id: musicianId});
     } else {
       if (isLogin) {

@@ -17,6 +17,7 @@ import {usePlayerHook} from '../../hooks/use-player.hook';
 import {useProfileHook} from '../../hooks/use-profile.hook';
 import {usePlaylistHook} from '../../hooks/use-playlist.hook';
 import {useMusicianHook} from '../../hooks/use-musician.hook';
+import {ModalLoading} from '../../components/molecule/ModalLoading/ModalLoading';
 
 type ProfileProps = NativeStackScreenProps<MainTabParams, 'Profile'>;
 
@@ -26,8 +27,8 @@ export const ProfileScreen: React.FC<ProfileProps> = ({
   // const {showToast, deletePlaylist} = route.params;
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
-  const {dataProfile, getProfileUser} = useProfileHook();
-  const {dataPlaylist, getPlaylist} = usePlaylistHook();
+  const {isLoading, dataProfile, getProfileUser} = useProfileHook();
+  const {playlistLoading, dataPlaylist, getPlaylist} = usePlaylistHook();
   const isFocused = useIsFocused();
   const {isPlaying, showPlayer, hidePlayer} = usePlayerHook();
 
@@ -110,6 +111,8 @@ export const ProfileScreen: React.FC<ProfileProps> = ({
         dataDetailMusician={dataDetailMusician}
         ownProfile
       />
+
+      <ModalLoading visible={isLoading || playlistLoading} />
     </View>
   );
 };
