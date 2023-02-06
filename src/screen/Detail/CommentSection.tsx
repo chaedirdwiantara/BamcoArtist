@@ -37,6 +37,8 @@ interface CommentSectionType {
   toDetailOnPress: (id: string) => void;
   selectedMenu: (value: DataDropDownType) => void;
   selectedIdComment: (idComment: string) => void;
+  selectedLvlComment: (lvl: number) => void;
+  profileUUID: string;
 }
 
 const CommentSection: FC<CommentSectionType> = (props: CommentSectionType) => {
@@ -54,6 +56,8 @@ const CommentSection: FC<CommentSectionType> = (props: CommentSectionType) => {
     toDetailOnPress,
     selectedMenu,
     selectedIdComment,
+    selectedLvlComment,
+    profileUUID,
   } = props;
   const [recorder, setRecorder] = useState<string[]>([]);
   const [selectedId, setSelectedId] = useState<string[]>();
@@ -152,6 +156,11 @@ const CommentSection: FC<CommentSectionType> = (props: CommentSectionType) => {
   const viewMoreOnPress = (id: string, value: number) => {
     onViewMore?.(id);
     onSetPage?.(value);
+  };
+
+  const selectedLvl1 = (value: DataDropDownType) => {
+    selectedMenu(value);
+    selectedLvlComment?.(1);
   };
 
   const CommentChildrenLvl3 = (props: CommentList3) => {
@@ -394,9 +403,10 @@ const CommentSection: FC<CommentSectionType> = (props: CommentSectionType) => {
               )
             }
             commentCount={item.commentsCount}
-            selectedMenu={selectedMenu}
+            selectedMenu={selectedLvl1}
             idComment={item.id}
             selectedIdComment={selectedIdComment}
+            showEdit={profileUUID === item.commentOwner.UUID}
             children={
               <>
                 {/* Comment Section Lvl 2 */}
