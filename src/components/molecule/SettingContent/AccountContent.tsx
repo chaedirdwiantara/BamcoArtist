@@ -85,7 +85,9 @@ export const AccountContent: React.FC<AccountProps> = ({
   profile,
   onPressGoBack,
 }) => {
-  const [userGenres, setUserGenres] = useState<(string | number | undefined)[]>([]);
+  const [userGenres, setUserGenres] = useState<(string | number | undefined)[]>(
+    [],
+  );
   const [valueGenres, setValueGenres] = useState<(number | undefined)[]>([]);
   const [members, setMembers] = useState<string[]>(
     profile?.data.members || [''],

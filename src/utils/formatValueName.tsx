@@ -1,4 +1,4 @@
-import {dataProps} from '../components/molecule/DropDown/DropdownMulti';
+import {PreferenceList} from '../interface/setting.interface';
 
 const formatValueName = (data: string[]) => {
   return data.map((item, index) => {
@@ -9,7 +9,7 @@ const formatValueName = (data: string[]) => {
   });
 };
 
-const formatValueName2 = (data: dataProps[]) => {
+const formatValueName2 = (data: PreferenceList[]) => {
   return data.map(item => {
     return {
       label: item.name,

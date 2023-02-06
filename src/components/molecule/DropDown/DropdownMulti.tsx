@@ -7,10 +7,8 @@ import {heightPercentage, normalize, widthPercentage} from '../../../utils';
 import {CheckBox} from '../../atom';
 
 export interface dataProps {
-  name?: string;
-  id?: number;
-  label?: string;
-  value?: string;
+  label: string;
+  value: number;
 }
 
 interface InputDropdownProps {
@@ -19,7 +17,7 @@ interface InputDropdownProps {
   dropdownLabel: string;
   textTyped: (data: any) => void;
   containerStyles?: ViewStyle;
-  initialValue?: (number | undefined)[] | null;
+  initialValue?: (string | number | undefined)[] | null;
   setValues: (val: number[]) => void;
 }
 
@@ -92,6 +90,7 @@ const MultiDropdown: React.FC<InputDropdownProps> = (
         style={[styles.dropdown]}
         containerStyle={styles.containerStyle}
         placeholderStyle={styles.placeholderStyle}
+        inputSearchStyle={styles.placeholderStyle}
         iconStyle={styles.iconStyle}
         data={data}
         maxHeight={mvs(300)}

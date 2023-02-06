@@ -13,7 +13,7 @@ import {
   widthPercentage,
   widthResponsive,
 } from '../../../utils';
-import formatValueName from '../../../utils/formatValueName';
+import {formatValueName2} from '../../../utils/formatValueName';
 import {Button, Gap, SsuToast} from '../../atom';
 import {Dropdown} from '../DropDown';
 import {dataProps} from '../DropDown/DropdownMulti';
@@ -51,8 +51,8 @@ const PreferenceContent = (props: PreferenceContent) => {
 
   useEffect(() => {
     if (profile) {
-      const md = getValue(formatValueName(profile.data?.moods));
-      const gr = getValue(formatValueName(profile.data?.favoriteGenres));
+      const md = getValue(formatValueName2(profile.data?.moods));
+      const gr = getValue(formatValueName2(profile.data?.favoriteGenres));
       setUserMoods(md);
       setUserGenres(gr);
     }
@@ -98,7 +98,7 @@ const PreferenceContent = (props: PreferenceContent) => {
         containerStyles={{marginBottom: heightPercentage(15)}}
       />
       <Dropdown.Multi
-        data={formatValueName(genres) ?? []}
+        data={formatValueName2(genres) ?? []}
         placeHolder={'Select Genre'}
         dropdownLabel={'Genre'}
         textTyped={(_newText: string) => null}
@@ -108,7 +108,7 @@ const PreferenceContent = (props: PreferenceContent) => {
       />
       <Gap height={10} />
       <Dropdown.Multi
-        data={formatValueName(moods) ?? []}
+        data={formatValueName2(moods) ?? []}
         placeHolder={'Select Mood'}
         dropdownLabel={'Mood'}
         textTyped={(_newText: string) => null}
