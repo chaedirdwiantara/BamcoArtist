@@ -7,6 +7,7 @@ import Color from '../../theme/Color';
 import {AccountContent} from '../../components';
 import {RootStackParams} from '../../navigations';
 import {useProfileHook} from '../../hooks/use-profile.hook';
+import {ModalLoading} from '../../components/molecule/ModalLoading/ModalLoading';
 
 export const AccountScreen: React.FC = () => {
   const navigation =
@@ -26,6 +27,7 @@ export const AccountScreen: React.FC = () => {
       {dataProfile && (
         <AccountContent profile={dataProfile} onPressGoBack={onPressGoBack} />
       )}
+      <ModalLoading visible={!dataProfile} />
     </View>
   );
 };
