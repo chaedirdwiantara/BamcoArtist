@@ -9,6 +9,7 @@ import SsuAPI from './baseMusician';
 import SsuAPIPublicRinjani from './basePublic';
 
 export type UpdateProfilePropsType = {
+  username?: string;
   fullname?: string;
   favoriteGeneres?: number[];
   moods?: number[];
