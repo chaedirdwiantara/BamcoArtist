@@ -1,8 +1,10 @@
 import React, {useState} from 'react';
-import {StyleSheet, Text, View, ViewStyle} from 'react-native';
-import {Dropdown} from 'react-native-element-dropdown';
+import {Platform, StyleSheet, Text, View, ViewStyle} from 'react-native';
 import {ms, mvs} from 'react-native-size-matters';
+import {Dropdown} from 'react-native-element-dropdown';
+import {Gap} from '../../atom';
 import {color, font} from '../../../theme';
+import {ErrorIcon} from '../../../assets/icon';
 import {heightPercentage, normalize} from '../../../utils';
 
 interface dataProps {
@@ -17,6 +19,8 @@ interface InputDropdownProps {
   textTyped: (data: any) => void;
   containerStyles?: ViewStyle;
   initialValue?: string;
+  isError?: boolean;
+  errorMsg?: string;
 }
 
 const borderColor = color.Dark[500];
@@ -33,8 +37,11 @@ const InputDropdown: React.FC<InputDropdownProps> = (
     dropdownLabel,
     textTyped,
     containerStyles,
+    isError,
+    errorMsg,
   } = props;
   const initValue = {label: initialValue, value: initialValue};
+
   const [value, setValue] = useState(initValue || null);
   const [isFocus, setIsFocus] = useState(false);
 
@@ -71,6 +78,13 @@ const InputDropdown: React.FC<InputDropdownProps> = (
         itemTextStyle={styles.itemTextStyle}
         selectedTextStyle={styles.selectedTextStyle}
       />
+      {isError ? (
+        <View style={styles.containerErrorMsg}>
+          <ErrorIcon fill={color.Error[400]} />
+          <Gap width={ms(4)} />
+          <Text style={styles.errorMsg}>{errorMsg}</Text>
+        </View>
+      ) : null}
     </View>
   );
 };
@@ -104,19 +118,32 @@ const styles = StyleSheet.create({
     fontSize: normalize(10),
   },
   placeholderStyle: {
-    fontSize: normalize(13),
+    fontSize: Platform.OS === 'ios' ? mvs(12) : mvs(13),
     color: color.Dark[300],
   },
   selectedTextStyle: {
-    fontSize: normalize(13),
+    fontSize: Platform.OS === 'ios' ? mvs(12) : mvs(13),
     color: fontColorMain,
   },
   itemTextStyle: {
-    fontSize: normalize(13),
+    fontSize: Platform.OS === 'ios' ? mvs(12) : mvs(13),
     color: fontColorMain,
   },
   iconStyle: {
     width: ms(20),
     height: ms(20),
+  },
+  containerErrorMsg: {
+    width: '100%',
+    flexDirection: 'row',
+    paddingTop: mvs(4),
+    alignItems: 'center',
+  },
+  errorMsg: {
+    color: color.Error[400],
+    fontFamily: font.InterRegular,
+    fontSize: normalize(10),
+    lineHeight: mvs(12),
+    maxWidth: '90%',
   },
 });
