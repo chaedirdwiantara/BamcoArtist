@@ -55,6 +55,8 @@ export const SettingContent: React.FC<SettingProps> = ({
       handleWebview(val, `https://sunnysideup.io/marketplace/${path}`);
     } else if (val === 'Exclusive Content') {
       onPressGoTo('ExclusiveContentSetting');
+    } else if (val === 'Preference') {
+      onPressGoTo('PreferenceSetting');
     } else {
       onPressGoTo(val.replace(/\s/g, ''));
     }

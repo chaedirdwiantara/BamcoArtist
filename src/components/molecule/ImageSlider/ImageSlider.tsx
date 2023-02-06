@@ -1,35 +1,38 @@
-import React, {useState, useRef} from 'react';
-import {
-  Text,
-  View,
-  Image,
-  StyleSheet,
-  ScrollView,
-  NativeScrollEvent,
-  NativeSyntheticEvent,
-} from 'react-native';
+import React, {useState, useRef, useEffect} from 'react';
+import {Text, View, StyleSheet, ScrollView} from 'react-native';
+import {mvs} from 'react-native-size-matters';
 
+import {
+  heightPercentage,
+  heightResponsive,
+  width,
+  widthPercentage,
+} from '../../../utils';
 import Color from '../../../theme/Color';
 import {FooterContent} from './FooterContent';
-import {SelectBox} from '../../../components';
+import {
+  FollowMusicianPropsType,
+  MusicianList,
+} from '../../../interface/musician.interface';
 import Typography from '../../../theme/Typography';
-import {DataOnboardType} from '../../../data/onboard';
-import {heightPercentage, width} from '../../../utils';
-import {DataFavouritesType} from '../../../data/preference';
+import {ListCard, SelectBox} from '../../../components';
 import {UpdateProfilePropsType} from '../../../api/profile.api';
-import {MusicianList} from '../../../interface/musician.interface';
-import {profileStorage} from '../../../hooks/use-storage.hook';
+import {ListAllPreference} from '../../../interface/setting.interface';
+import {ModalLoading} from '../ModalLoading/ModalLoading';
 
-type OnScrollEventHandler = (
-  event: NativeSyntheticEvent<NativeScrollEvent>,
-) => void;
+// type OnScrollEventHandler = (
+//   event: NativeSyntheticEvent<NativeScrollEvent>,
+// ) => void;
 
 interface ImageSliderProps {
   type?: string;
-  data: DataOnboardType[] | DataFavouritesType[];
+  data: ListAllPreference;
   onPress: () => void;
   onUpdatePreference?: (props?: UpdateProfilePropsType) => void;
+  setFollowMusician: (props?: FollowMusicianPropsType) => void;
+  setUnfollowMusician: (props?: FollowMusicianPropsType) => void;
   dataList?: MusicianList[];
+  isLoading: boolean;
 }
 
 export const ImageSlider: React.FC<ImageSliderProps> = ({
@@ -37,6 +40,10 @@ export const ImageSlider: React.FC<ImageSliderProps> = ({
   data,
   onPress,
   onUpdatePreference,
+  setFollowMusician,
+  setUnfollowMusician,
+  dataList,
+  isLoading,
 }) => {
   const scrollViewRef = useRef<ScrollView>(null);
   const [selectedGenres, setSelectedGenres] = useState<number[]>([]);
@@ -45,21 +52,59 @@ export const ImageSlider: React.FC<ImageSliderProps> = ({
     [],
   );
   const [activeIndexSlide, setActiveIndexSlide] = useState<number>(0);
+  const [listMusician, setListMusician] = useState(dataList);
+
+  const dataArray = [
+    {
+      title: 'Select Your Favorite Genres',
+      list: data.genre,
+    },
+    {
+      title: "What's Fit Your Moods",
+      list: data.mood,
+    },
+    {
+      title: "I'm here to",
+      list: data.expectation,
+    },
+    {
+      title: 'Who to Follow',
+      list: [],
+    },
+  ];
+
+  useEffect(() => {
+    if (dataList !== undefined) {
+      setListMusician(dataList);
+    }
+  }, [dataList]);
+
+  const followOnPress = (index: string, isFollowed: boolean) => {
+    if (listMusician !== undefined) {
+      const newList = listMusician.map(val => ({
+        ...val,
+        isFollowed: val.uuid === index ? !val.isFollowed : val.isFollowed,
+      }));
+
+      setListMusician(newList);
+    }
+
+    isFollowed
+      ? setUnfollowMusician({musicianID: index})
+      : setFollowMusician({musicianID: index});
+  };
 
   const handleNextSlide = () => {
     if (activeIndexSlide === 0 && onUpdatePreference) {
       onUpdatePreference({
-        fullname: profileStorage()?.fullname,
         favoriteGeneres: selectedGenres,
       });
     } else if (activeIndexSlide === 1 && onUpdatePreference) {
       onUpdatePreference({
-        fullname: profileStorage()?.fullname,
         moods: selectedMoods,
       });
     } else if (activeIndexSlide === 2 && onUpdatePreference) {
       onUpdatePreference({
-        fullname: profileStorage()?.fullname,
         expectations: selectedExpectations,
       });
     }
@@ -72,14 +117,17 @@ export const ImageSlider: React.FC<ImageSliderProps> = ({
     });
   };
 
-  const handleScroll: OnScrollEventHandler = event => {
-    let offsetX = event.nativeEvent.contentOffset.x;
-    const page = Math.ceil(offsetX / width);
-    page < 3 ? setActiveIndexSlide(Math.ceil(offsetX / width)) : onPress;
-  };
+  // const handleScroll: OnScrollEventHandler = event => {
+  //   let offsetX = event.nativeEvent.contentOffset.x;
+  //   const page = Math.ceil(offsetX / width);
+  //   const totalPage = type === 'Preference' ? 4 : 3;
+  //   page < totalPage
+  //     ? setActiveIndexSlide(Math.ceil(offsetX / width))
+  //     : onPress;
+  // };
 
   const onPressNext =
-    activeIndexSlide === data.length - 1 ? onPress : handleNextSlide;
+    activeIndexSlide === dataArray.length - 1 ? onPress : handleNextSlide;
 
   const heightContent =
     type === 'Preference'
@@ -102,33 +150,63 @@ export const ImageSlider: React.FC<ImageSliderProps> = ({
         snapToAlignment={'center'}
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={[styles.containerScrollView, heightContent]}
-        onScroll={handleScroll}>
-        {data.map((item, index) => {
-          if ('uri' in item) {
+        scrollEnabled={false}
+        // onScroll={handleScroll}
+      >
+        {dataArray.map((item, index) => {
+          // TODO: render list of the favourites
+          const selected =
+            index === 0
+              ? selectedGenres
+              : index === 1
+              ? selectedMoods
+              : selectedExpectations;
+
+          const setSelected =
+            index === 0
+              ? setSelectedGenres
+              : index === 1
+              ? setSelectedMoods
+              : setSelectedExpectations;
+
+          if (index === 3) {
             return (
-              <Image
-                key={index}
-                source={item.uri}
-                style={styles.image}
-                resizeMode={'cover'}
-              />
+              <View key={index} style={{paddingVertical: mvs(30)}}>
+                <Text style={[Typography.Heading4, styles.title]}>
+                  {item.title}
+                </Text>
+                <View style={{height: '65%'}}>
+                  <ScrollView>
+                    {listMusician &&
+                      listMusician?.map((musician, i) => (
+                        <View
+                          key={i}
+                          style={{
+                            width,
+                            paddingHorizontal: widthPercentage(15),
+                            paddingBottom:
+                              i === listMusician.length - 1
+                                ? heightResponsive(20)
+                                : 0,
+                          }}>
+                          <ListCard.FollowMusician
+                            musicianName={musician.fullname}
+                            imgUri={musician.imageProfileUrls}
+                            containerStyles={{marginTop: mvs(20)}}
+                            followerCount={musician.followers}
+                            followOnPress={() =>
+                              followOnPress(musician.uuid, musician.isFollowed)
+                            }
+                            stateButton={musician.isFollowed}
+                            toDetailOnPress={() => null}
+                          />
+                        </View>
+                      ))}
+                  </ScrollView>
+                </View>
+              </View>
             );
-          } else if ('favorites' in item) {
-            // TODO: render list of the favourites
-            const selected =
-              index === 0
-                ? selectedGenres
-                : index === 1
-                ? selectedMoods
-                : selectedExpectations;
-
-            const setSelected =
-              index === 0
-                ? setSelectedGenres
-                : index === 1
-                ? setSelectedMoods
-                : setSelectedExpectations;
-
+          } else {
             return (
               <View key={index}>
                 <Text style={[Typography.Heading4, styles.title]}>
@@ -137,7 +215,7 @@ export const ImageSlider: React.FC<ImageSliderProps> = ({
                 <SelectBox
                   selected={selected}
                   setSelected={setSelected}
-                  favorites={item.favorites}
+                  data={item.list}
                 />
               </View>
             );
@@ -147,10 +225,11 @@ export const ImageSlider: React.FC<ImageSliderProps> = ({
       <FooterContent
         type={type}
         activeIndexSlide={activeIndexSlide}
-        data={data}
+        data={dataArray}
         onPressGoTo={onPress}
         onPressNext={onPressNext}
       />
+      <ModalLoading visible={isLoading} />
     </View>
   );
 };
@@ -166,6 +245,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     height: '100%',
+    // marginBottom: heightPercentage(20)
   },
   image: {
     width,
