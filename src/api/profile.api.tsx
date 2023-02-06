@@ -2,11 +2,15 @@ import {PostPropsTypeA} from '../interface/feed.interface';
 import {
   CollectPhotosProps,
   CollectPhotosResponseType,
+  CountLikedResponseType,
+  ProfileFansResponseType,
   ProfileResponseType,
   UpdateProfileResponseType,
 } from '../interface/profile.interface';
 import SsuAPI from './baseMusician';
 import SsuAPIPublicRinjani from './basePublic';
+import BaseSemeruPublic from './baseSemeruPublic';
+import {ParamsProps} from '../interface/base.interface';
 
 export type UpdateProfilePropsType = {
   fullname?: string;
@@ -41,8 +45,8 @@ export const getProfile = async (): Promise<ProfileResponseType> => {
 
 export const getOtherUserProfile = async (
   props?: PostPropsTypeA,
-): Promise<ProfileResponseType> => {
-  const {data} = await SsuAPIPublicRinjani().request<ProfileResponseType>({
+): Promise<ProfileFansResponseType> => {
+  const {data} = await SsuAPIPublicRinjani().request<ProfileFansResponseType>({
     url: `/fans/${props?.id}`,
     method: 'GET',
   });
@@ -81,6 +85,17 @@ export const removePhotos = async (
     url: '/profile/collect-photos/delete',
     method: 'PATCH',
     data: props,
+  });
+
+  return data;
+};
+
+export const countLikedSong = async (
+  props?: ParamsProps,
+): Promise<CountLikedResponseType> => {
+  const {data} = await BaseSemeruPublic().request<CountLikedResponseType>({
+    url: `/fans/${props?.uuid}`,
+    method: 'GET',
   });
 
   return data;

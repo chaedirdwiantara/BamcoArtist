@@ -26,6 +26,9 @@ export interface ProfileHeaderProps {
   iconPress?: (params: string) => void;
   isFollowed?: boolean;
   containerStyles?: ViewStyle;
+  followOnPress?: () => void;
+  unfollowOnPress?: () => void;
+  donateOnPress?: () => void;
 }
 
 export const ProfileHeader: React.FC<ProfileHeaderProps> = (
@@ -42,10 +45,25 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = (
     iconPress,
     isFollowed,
     containerStyles,
+    followOnPress,
+    unfollowOnPress,
+    donateOnPress,
   } = props;
 
   const viewMoreOnPress = (params: string) => {
     onPress?.(params);
+  };
+
+  const followOnPressed = () => {
+    followOnPress?.();
+  };
+
+  const unFollowOnPressed = () => {
+    unfollowOnPress?.();
+  };
+
+  const donate = () => {
+    donateOnPress?.();
   };
 
   return (
@@ -76,12 +94,13 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = (
                   <ButtonGradient
                     label={'Unfollow'}
                     gradientStyles={styles.btnContainer}
-                    onPress={() => {}}
+                    onPress={unFollowOnPressed}
                   />
                   <Gap width={11} />
                   <Button
                     label={'Donate'}
                     containerStyles={styles.btnContainer2}
+                    onPress={donate}
                   />
                 </>
               ) : (
@@ -89,12 +108,13 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = (
                   <ButtonGradient
                     label={'Follow'}
                     gradientStyles={styles.btnContainer}
-                    onPress={() => {}}
+                    onPress={followOnPressed}
                   />
                   <Gap width={11} />
                   <Button
                     label={'Donate'}
                     containerStyles={styles.btnContainer2}
+                    onPress={donate}
                   />
                 </>
               )}

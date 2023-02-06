@@ -86,7 +86,14 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
     addPlaylistFeed,
   } = usePlayerHook();
 
-  const {dataProfile, getProfileUser} = useProfileHook();
+  const {
+    dataUserCheck,
+    setDataUserCheck,
+    isLoading,
+    getCheckUser,
+    dataProfile,
+    getProfileUser,
+  } = useProfileHook();
 
   const data = route.params;
   const musicianName = data.musician.fullname;
@@ -103,6 +110,7 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   const [modalDonate, setModalDonate] = useState<boolean>(false);
   const [modalSuccessDonate, setModalSuccessDonate] = useState<boolean>(false);
   const [trigger2ndModal, setTrigger2ndModal] = useState<boolean>(false);
+  const [idUserTonavigate, setIdUserTonavigate] = useState<string>();
 
   // * VIEW MORE HOOKS
   const [viewMore, setViewMore] = useState<string>('');
@@ -361,7 +369,7 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
             ? dataProfile?.data.username
             : '',
           image: dataProfile?.data.imageProfileUrls
-            ? dataProfile?.data.imageProfileUrls[0].image
+            ? dataProfile?.data.imageProfileUrls[0]?.image
             : '',
         },
       },
@@ -500,13 +508,34 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
     setModalSuccessDonate(false);
   };
 
+  // ! Navigate to Fans / Musician Area
   const handleToDetailMusician = (id: string) => {
     navigation.navigate('MusicianProfile', {id});
   };
-
   const handleToDetailCommentator = (id: string) => {
-    navigation.navigate('OtherUserProfile', {id});
+    getCheckUser({id});
+    setIdUserTonavigate(id);
   };
+
+  useEffect(() => {
+    if (idUserTonavigate && dataUserCheck !== '') {
+      if (dataUserCheck === 'Musician') {
+        return (
+          handleToDetailMusician(idUserTonavigate),
+          setDataUserCheck(''),
+          setIdUserTonavigate(undefined)
+        );
+      }
+      if (dataUserCheck === 'Fans') {
+        return (
+          navigation.navigate('OtherUserProfile', {id: idUserTonavigate}),
+          setDataUserCheck(''),
+          setIdUserTonavigate(undefined)
+        );
+      }
+    }
+  }, [dataUserCheck, idUserTonavigate]);
+  // ! End of Navigate to Fans / Musician Area
 
   return (
     <View style={styles.root}>
@@ -527,7 +556,7 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
               musicianId={`@${data.musician.username}`}
               imgUri={
                 data.musician.imageProfileUrls.length !== 0
-                  ? data.musician.imageProfileUrls[0].image
+                  ? data.musician.imageProfileUrls[0]?.image
                   : ''
               }
               postDate={dateFormat(data.updatedAt)}

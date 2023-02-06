@@ -36,12 +36,18 @@ interface MusicianDetailProps {
   profile: DataDetailMusician;
   uuid: string;
   dataAlbum: AlbumData[];
+  followOnPress: () => void;
+  unfollowOnPress: () => void;
+  donateOnPress: () => void;
 }
 
 export const MusicianDetail: React.FC<MusicianDetailProps> = ({
   profile,
   uuid,
   dataAlbum,
+  followOnPress,
+  unfollowOnPress,
+  donateOnPress,
 }) => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
@@ -63,6 +69,23 @@ export const MusicianDetail: React.FC<MusicianDetailProps> = ({
     let offsetY = event.nativeEvent.contentOffset.y;
     const scrolled = offsetY > 10;
     setScrollEffect(scrolled);
+  };
+
+  const musicianProfile = {
+    fullname: profile.fullname,
+    username: '@' + profile.username,
+    bio: profile.bio || '',
+    backgroundUri:
+      profile?.banners.length !== 0 ? profile.banners[3]?.image : '',
+    avatarUri:
+      profile?.imageProfileUrls.length !== 0
+        ? profile?.imageProfileUrls[1]?.image
+        : '',
+    totalFollowers: profile.followers,
+    totalFans: profile.fans,
+    totalRelease: 0,
+    totalPlaylist: 0,
+    rank: 0,
   };
 
   return (
@@ -93,9 +116,12 @@ export const MusicianDetail: React.FC<MusicianDetailProps> = ({
           username={profile.username}
           bio={profile.bio}
           isFollowed={profile.isFollowed}
+          followOnPress={followOnPress}
+          unfollowOnPress={unfollowOnPress}
+          donateOnPress={donateOnPress}
         />
         <View style={styles.infoCard}>
-          <UserInfoCard onPress={() => {}} />
+          <UserInfoCard onPress={() => {}} profile={musicianProfile} />
           <ExclusiveDailyContent />
           <Gap height={10} />
           <View style={styles.containerContent}>
