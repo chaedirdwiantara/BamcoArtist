@@ -122,7 +122,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = (
           </View>
         )}
 
-        {iconRight()}
+        {noEdit ? null : iconRight()}
         {backIcon ? iconLeft() : null}
       </ImageBackground>
     </View>

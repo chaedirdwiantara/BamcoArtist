@@ -22,7 +22,7 @@ import {useAuthHook} from '../../../hooks/use-auth.hook';
 import {ModalConfirm} from '../Modal/ModalConfirm';
 
 interface OtpPNProps {
-  countryNumber: string;
+  countryNumber: string | null;
   phoneNumber: string;
   onPressGoBack: () => void;
   type: PhoneSettingTypeProps;
