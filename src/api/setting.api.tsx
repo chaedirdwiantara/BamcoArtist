@@ -14,7 +14,7 @@ import {
   SendReportProps,
   SendReportResponseType,
   PreferenceProps,
-  PreferenceReaponseType,
+  PreferenceResponseType,
 } from '../interface/setting.interface';
 import {ParamsProps} from '../interface/base.interface';
 
@@ -185,8 +185,8 @@ export const sendReport = async (
 
 export const getListMood = async (
   props?: PreferenceProps,
-): Promise<PreferenceReaponseType> => {
-  const {data} = await SsuAPI().request<PreferenceReaponseType>({
+): Promise<PreferenceResponseType> => {
+  const {data} = await SsuAPI().request<PreferenceResponseType>({
     url: '/moods',
     method: 'GET',
     params: props,
@@ -197,8 +197,8 @@ export const getListMood = async (
 
 export const getListGenre = async (
   props?: PreferenceProps,
-): Promise<PreferenceReaponseType> => {
-  const {data} = await SsuAPI().request<PreferenceReaponseType>({
+): Promise<PreferenceResponseType> => {
+  const {data} = await SsuAPI().request<PreferenceResponseType>({
     url: '/favorite-genres',
     method: 'GET',
     params: props,
@@ -209,8 +209,8 @@ export const getListGenre = async (
 
 export const getListExpectations = async (
   props?: PreferenceProps,
-): Promise<PreferenceReaponseType> => {
-  const {data} = await SsuAPI().request<PreferenceReaponseType>({
+): Promise<PreferenceResponseType> => {
+  const {data} = await SsuAPI().request<PreferenceResponseType>({
     url: '/expectations',
     method: 'GET',
     params: props,
