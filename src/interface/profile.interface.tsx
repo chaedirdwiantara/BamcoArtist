@@ -132,3 +132,15 @@ export type ApplyReferralResponseType = {
   message: string;
   status: number;
 };
+
+export type DataCountLiked = {
+  uuid: string;
+  countLikedSong: number;
+};
+
+export type CountLikedResponseType = {
+  code: number;
+  data: DataCountLiked;
+  message: string;
+  status: number;
+};

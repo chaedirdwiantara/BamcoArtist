@@ -2,6 +2,7 @@ import axios from 'axios';
 import {useState} from 'react';
 import {
   addPhotos,
+  countLikedSong,
   getOtherUserProfile,
   getProfile,
   removePhotos,
@@ -9,9 +10,11 @@ import {
   UpdateProfilePropsType,
 } from '../api/profile.api';
 import {applyReferral} from '../api/referral.api';
+import {ParamsProps} from '../interface/base.interface';
 import {PostPropsTypeA} from '../interface/feed.interface';
 import {
   CollectPhotosProps,
+  DataCountLiked,
   ProfileFansResponseType,
   ProfileResponseType,
 } from '../interface/profile.interface';
@@ -26,6 +29,7 @@ export const useProfileHook = () => {
   );
   const [dataFansProfile, setDataFansProfile] =
     useState<ProfileFansResponseType>();
+  const [dataCountLiked, setCountLiked] = useState<DataCountLiked>();
 
   const getProfileUser = async () => {
     setIsLoading(true);
@@ -139,6 +143,18 @@ export const useProfileHook = () => {
     }
   };
 
+  const getUserCountLikedSong = async (props?: ParamsProps) => {
+    setIsLoading(true);
+    try {
+      const response = await countLikedSong(props);
+      setCountLiked(response.data);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return {
     isLoading,
     errorMsg,
@@ -146,6 +162,7 @@ export const useProfileHook = () => {
     dataProfile,
     dataFansProfile,
     dataUserCheck,
+    dataCountLiked,
     setDataUserCheck,
     getProfileUser,
     updateProfileUser,
@@ -155,5 +172,6 @@ export const useProfileHook = () => {
     addCollectPhotos,
     removeCollectPhotos,
     getCheckUser,
+    getUserCountLikedSong,
   };
 };

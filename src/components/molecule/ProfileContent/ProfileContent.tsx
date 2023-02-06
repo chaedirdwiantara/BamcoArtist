@@ -54,6 +54,7 @@ interface ProfileContentProps {
   dataDetailMusician?: DataDetailMusician;
   selfProfile?: ProfileFansResponseType;
   ownProfile?: boolean;
+  totalCountlikedSong?: number;
 }
 
 export const ProfileContent: React.FC<ProfileContentProps> = ({
@@ -66,6 +67,7 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
   dataAlbum,
   dataDetailMusician,
   selfProfile,
+  totalCountlikedSong,
   ownProfile = false,
 }) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -127,6 +129,7 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
           totalFollowing={profile.totalFollowing}
           onPress={() => onPressGoTo('Following')}
           selfProfile={selfProfile?.data}
+          totalCountlikedSong={totalCountlikedSong}
         />
         <View style={styles.containerContent}>
           <TabFilter.Type1
