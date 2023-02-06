@@ -118,5 +118,6 @@ export const useMusicianHook = () => {
     setUnfollowMusician,
     getDetailMusician,
     getAlbum,
+    setDataFollow,
   };
 };

@@ -59,6 +59,10 @@ export type DataDetailMusician = {
   yearsActiveTo: string;
   socialMedia: [];
   followers: number;
+  fans: number;
+  totalRelease: number;
+  totalPlaylist: number;
+  rank: number;
   createdAt: string;
   updatedAt: string;
   isFollowed: boolean;
