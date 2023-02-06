@@ -73,7 +73,7 @@ const MultiDropdown: React.FC<InputDropdownProps> = (
     });
 
     return array.map(item => {
-      return item.label;
+      return ' ' + item.label;
     });
   };
 
@@ -87,6 +87,8 @@ const MultiDropdown: React.FC<InputDropdownProps> = (
     <View style={[styles.container, containerStyles]}>
       {renderLabel()}
       <MultiSelect
+        search
+        searchPlaceholder="Search..."
         style={[styles.dropdown]}
         containerStyle={styles.containerStyle}
         placeholderStyle={styles.placeholderStyle}
