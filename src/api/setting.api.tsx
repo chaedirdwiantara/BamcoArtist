@@ -13,6 +13,8 @@ import {
   VerifPasswordSetting,
   SendReportProps,
   SendReportResponseType,
+  PreferenceProps,
+  PreferenceReaponseType,
 } from '../interface/setting.interface';
 import {ParamsProps} from '../interface/base.interface';
 
@@ -176,6 +178,42 @@ export const sendReport = async (
     url: '/feedback',
     method: 'POST',
     data: props,
+  });
+
+  return data;
+};
+
+export const getListMood = async (
+  props?: PreferenceProps,
+): Promise<PreferenceReaponseType> => {
+  const {data} = await SsuAPI().request<PreferenceReaponseType>({
+    url: '/moods',
+    method: 'GET',
+    params: props,
+  });
+
+  return data;
+};
+
+export const getListGenre = async (
+  props?: PreferenceProps,
+): Promise<PreferenceReaponseType> => {
+  const {data} = await SsuAPI().request<PreferenceReaponseType>({
+    url: '/favorite-genres',
+    method: 'GET',
+    params: props,
+  });
+
+  return data;
+};
+
+export const getListExpectations = async (
+  props?: PreferenceProps,
+): Promise<PreferenceReaponseType> => {
+  const {data} = await SsuAPI().request<PreferenceReaponseType>({
+    url: '/expectations',
+    method: 'GET',
+    params: props,
   });
 
   return data;

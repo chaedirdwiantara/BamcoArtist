@@ -101,7 +101,7 @@ export const useProfileHook = () => {
         setIsError(true);
         setErrorMsg(resp.message as string);
       } else {
-        setSuccessMsg(resp.data as unknown as string);
+        setSuccessMsg(resp.message as string);
       }
     } catch (error) {
       console.log(error);
@@ -178,10 +178,10 @@ export const useProfileHook = () => {
   };
 
   return {
-    successMsg,
     isLoading,
     isError,
     errorMsg,
+    successMsg,
     isValidReferral,
     dataProfile,
     dataFansProfile,

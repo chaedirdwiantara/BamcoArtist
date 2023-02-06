@@ -2,16 +2,14 @@ import React from 'react';
 import {View, StyleSheet} from 'react-native';
 
 import Color from '../../../theme/Color';
-import {DataOnboardType} from '../../../data/onboard';
-import {DataFavouritesType} from '../../../data/preference';
 import {Button, ButtonGradient, Indicator} from '../../../components';
 import {heightPercentage, width, widthPercentage} from '../../../utils';
-import DescriptionBoarding from '../../atom/DescriptionBoarding/DescriptionBoarding';
+import {PreferenceList} from '../../../interface/setting.interface';
 
 interface FooterContentProps {
   type?: string;
   activeIndexSlide: number;
-  data: DataOnboardType[] | DataFavouritesType[];
+  data: {title: string; list: PreferenceList[]}[];
   onPressGoTo?: () => void;
   onPressNext: () => void;
 }
@@ -30,17 +28,6 @@ export const FooterContent: React.FC<FooterContentProps> = ({
 
   return (
     <View style={styles.containerFooterContent}>
-      {data.map((item, index) => {
-        if (index === activeIndexSlide && 'uri' in item) {
-          return (
-            <DescriptionBoarding
-              key={index}
-              title={item.title}
-              subtitle={item.subtitle}
-            />
-          );
-        }
-      })}
       <Indicator
         activeIndex={activeIndexSlide}
         totalIndex={data.length}
@@ -57,7 +44,7 @@ export const FooterContent: React.FC<FooterContentProps> = ({
             onPress={onPressGoTo}
           />
           <ButtonGradient
-            label={activeIndexSlide === 2 ? 'Finish' : 'Next'}
+            label={activeIndexSlide === 3 ? 'Finish' : 'Next'}
             onPress={onPressNext}
             gradientStyles={styles.btnContainer}
           />

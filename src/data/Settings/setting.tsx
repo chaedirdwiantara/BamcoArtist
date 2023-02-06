@@ -5,6 +5,7 @@ export const menuSetting: string[] = [
   'Change Password',
   'Exclusive Content',
   'Shipping Information',
+  'Preference',
   'Language',
   'Push Notification',
   'Send Report',
