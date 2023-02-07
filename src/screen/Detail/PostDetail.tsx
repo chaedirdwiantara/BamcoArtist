@@ -465,6 +465,51 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
           setUpdateComment(true);
         }
       }
+      // * delete/edit comment lvl2
+      if (selectedLvlComment === 2 && commentLvl2) {
+        if (selectedMenu.label === 'Delete Reply') {
+          setCommentLvl2(
+            commentLvl2.filter((x: CommentList2) => !idComment.includes(x.id)),
+          );
+          setCommentDelete({id: idComment});
+        }
+        if (selectedMenu.label === 'Edit Reply') {
+          let commentNow = commentLvl2.filter((x: CommentList2) =>
+            idComment.includes(x.id),
+          )[0];
+          setCmntToCmnt({
+            id: commentNow.id,
+            userName: commentNow.commentOwner.username,
+            commentLvl: selectedLvlComment,
+            parentID: commentNow.parentID,
+          });
+          setCommentCaption(commentNow.caption);
+          setUpdateComment(true);
+        }
+      }
+      // * delete/edit comment lvl3
+      if (selectedLvlComment === 3 && commentLvl3) {
+        if (selectedMenu.label === 'Delete Reply') {
+          setCommentLvl3(
+            commentLvl3.filter((x: CommentList3) => !idComment.includes(x.id)),
+          );
+          setCommentDelete({id: idComment});
+        }
+        if (selectedMenu.label === 'Edit Reply') {
+          let commentNow = commentLvl3.filter((x: CommentList3) =>
+            idComment.includes(x.id),
+          )[0];
+          setCmntToCmnt({
+            id: commentNow.id,
+            userName: commentNow.commentOwner.username,
+            commentLvl: selectedLvlComment,
+            parentID: commentNow.parentID,
+          });
+          setCommentCaption(commentNow.caption);
+          setUpdateComment(true);
+        }
+      }
+      // ? the call of update api will be handled on handleReplyOnPress
     }
   }, [idComment, selectedMenu, selectedLvlComment]);
 
@@ -506,6 +551,23 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
       theComment?.splice(theIndex, 1, commentUpdate[0]);
       setCommentLvl1(theComment);
     }
+    if (cmntToCmnt?.commentLvl === 2 && commentLvl2) {
+      let theComment = commentLvl2;
+      let theIndex = theComment?.findIndex((x: CommentList2) =>
+        cmntToCmnt.id.includes(x.id),
+      );
+      theComment?.splice(theIndex, 1, commentUpdate[0]);
+      setCommentLvl2(theComment);
+    }
+    if (cmntToCmnt?.commentLvl === 1 && commentLvl3) {
+      let theComment = commentLvl3;
+      let theIndex = theComment?.findIndex((x: CommentList3) =>
+        cmntToCmnt.id.includes(x.id),
+      );
+      theComment?.splice(theIndex, 1, commentUpdate[0]);
+      setCommentLvl3(theComment);
+    }
+
     setUpdateComment(false);
   };
   // ! END OF UPDATE COMMENT AREA
