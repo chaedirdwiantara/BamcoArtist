@@ -158,9 +158,19 @@ const CommentSection: FC<CommentSectionType> = (props: CommentSectionType) => {
     onSetPage?.(value);
   };
 
-  const selectedLvl1 = (value: DataDropDownType) => {
+  const handleSelectedLvl1 = (value: DataDropDownType) => {
     selectedMenu(value);
     selectedLvlComment?.(1);
+  };
+
+  const handleSelectedLvl2 = (value: DataDropDownType) => {
+    selectedMenu(value);
+    selectedLvlComment?.(2);
+  };
+
+  const handleSelectedLvl3 = (value: DataDropDownType) => {
+    selectedMenu(value);
+    selectedLvlComment?.(3);
   };
 
   const CommentChildrenLvl3 = (props: CommentList3) => {
@@ -222,6 +232,10 @@ const CommentSection: FC<CommentSectionType> = (props: CommentSectionType) => {
             : likesCount
         }
         commentCountLvl3={commentsCount}
+        selectedMenu={handleSelectedLvl3}
+        idComment={id}
+        selectedIdComment={selectedIdComment}
+        showEdit={profileUUID === commentOwner.UUID}
       />
     );
   };
@@ -286,6 +300,10 @@ const CommentSection: FC<CommentSectionType> = (props: CommentSectionType) => {
             : likesCount
         }
         commentCountLvl2={commentsCount}
+        selectedMenu={handleSelectedLvl2}
+        idComment={id}
+        selectedIdComment={selectedIdComment}
+        showEdit={profileUUID === commentOwner.UUID}
         childrenLvl2={
           <>
             {/* Comment Section Lvl 3 */}
@@ -403,7 +421,7 @@ const CommentSection: FC<CommentSectionType> = (props: CommentSectionType) => {
               )
             }
             commentCount={item.commentsCount}
-            selectedMenu={selectedLvl1}
+            selectedMenu={handleSelectedLvl1}
             idComment={item.id}
             selectedIdComment={selectedIdComment}
             showEdit={profileUUID === item.commentOwner.UUID}

@@ -1,4 +1,5 @@
 import {
+  Platform,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -12,6 +13,8 @@ import {elipsisText, heightPercentage, widthResponsive} from '../../../utils';
 import {color, font} from '../../../theme';
 import {CommentIcon, LoveIcon} from '../../../assets/icon';
 import {ms} from 'react-native-size-matters';
+import {DataDropDownType, dataUpdateComment} from '../../../data/dropdown';
+import {Dropdown} from '../DropDown';
 
 interface ListProps extends TouchableOpacityProps {
   imgUriLvl3: string;
@@ -27,6 +30,10 @@ interface ListProps extends TouchableOpacityProps {
   commentCountLvl3: number;
   containerStylesLvl3?: ViewStyle;
   toDetailOnPress?: () => void;
+  selectedMenu: (value: DataDropDownType) => void;
+  idComment: string;
+  selectedIdComment: (idComment: string) => void;
+  showEdit: boolean;
 }
 
 const CommentLvlThree: React.FC<ListProps> = (props: ListProps) => {
@@ -44,6 +51,10 @@ const CommentLvlThree: React.FC<ListProps> = (props: ListProps) => {
     commentCountLvl3,
     containerStylesLvl3,
     toDetailOnPress,
+    selectedMenu,
+    idComment,
+    selectedIdComment,
+    showEdit,
   } = props;
   return (
     <View style={[styles.root, containerStylesLvl3]}>
@@ -55,7 +66,7 @@ const CommentLvlThree: React.FC<ListProps> = (props: ListProps) => {
           flex: 1,
           marginLeft: widthResponsive(6),
         }}>
-        <View style={styles.topSection}>
+        <View style={[styles.topSection, {marginTop: showEdit ? ms(-7) : 0}]}>
           <Text style={styles.userName} onPress={toDetailOnPress}>
             {elipsisText(userNameLvl3, 21)}
             <Text style={styles.regularText}>
@@ -63,10 +74,33 @@ const CommentLvlThree: React.FC<ListProps> = (props: ListProps) => {
               {elipsisText(userIdLvl3, 10)}
             </Text>
           </Text>
-          <Text style={styles.postDateStyle}>{postDateLvl3}</Text>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              marginRight: showEdit ? ms(-7) : 0,
+            }}>
+            <Text style={styles.postDateStyle}>{postDateLvl3}</Text>
+            {showEdit ? (
+              <Dropdown.More
+                data={dataUpdateComment}
+                idComment={idComment}
+                selectedIdComment={selectedIdComment}
+                selectedMenu={selectedMenu}
+                iconFill={color.Dark[50]}
+                containerStyle={{
+                  width: widthResponsive(110),
+                  marginLeft: widthResponsive(-97),
+                  marginTop: Platform.OS === 'android' ? ms(-35) : ms(-10),
+                }}
+              />
+            ) : null}
+          </View>
         </View>
         <Gap height={2} />
-        <View style={styles.bottomSection}>
+        <View
+          style={[styles.bottomSection, {marginTop: showEdit ? ms(-8) : 0}]}>
           <Text style={styles.reply}>
             {'replied to '}{' '}
             <Text style={[styles.reply, {color: color.Pink[100]}]}>
