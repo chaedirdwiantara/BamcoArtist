@@ -1,3 +1,5 @@
+import {nameValue} from './base.interface';
+
 export type RegistrationType =
   | 'email'
   | 'facebook'
@@ -71,6 +73,7 @@ export type ProfileResponseData = {
   yearsActiveFrom: string;
   yearsActiveTo: string;
   members: string[];
+  socialMedia: null | nameValue[];
 };
 
 export type ProfileResponseType = {

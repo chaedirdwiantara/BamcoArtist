@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Text,
   View,
@@ -21,6 +21,9 @@ import {ProfileHeader} from './components/Header';
 import {ModalImagePicker} from '../Modal/ModalImagePicker';
 import {ArrowLeftIcon, SaveIcon} from '../../../assets/icon';
 import {heightPercentage, widthPercentage} from '../../../utils';
+import ProfileComponent from '../../../screen/MusicianProfile/ProfileComponent';
+import ImageList from '../../../screen/CreatePost/showImage';
+import {useProfileHook} from '../../../hooks/use-profile.hook';
 
 interface EditProfileProps {
   profile: any;
@@ -40,6 +43,7 @@ export const EditProfile: React.FC<EditProfileProps> = ({
   setUploadImage,
   setResetImage,
 }) => {
+  const {dataProfile, getProfileUser} = useProfileHook();
   const [bio, setBio] = useState(profile.bio || '');
   const [about, setAbout] = useState(profile.about || '');
   const [isModalVisible, setModalVisible] = useState({
@@ -91,6 +95,7 @@ export const EditProfile: React.FC<EditProfileProps> = ({
       modalImage: false,
       modalSocMed: false,
     });
+    getProfileUser();
   };
 
   const sendUri = (val: Image) => {
@@ -99,7 +104,11 @@ export const EditProfile: React.FC<EditProfileProps> = ({
   };
 
   const sendMultipleUri = (val: Image[]) => {
-    val.length <= 4 ? setPhotos([...photos, ...val]) : null;
+    photos.length + val.length <= 4 ? setPhotos([...photos, ...val]) : null;
+    for (let i = 0; i < photos.length; i++) {
+      console.log('photos sendMultipleUri', photos);
+      setUploadImage(photos[i], 'photos');
+    }
   };
 
   const closeImage = (id: number) => {
@@ -120,6 +129,10 @@ export const EditProfile: React.FC<EditProfileProps> = ({
   const newColorBio = bio.length === 110 ? Color.Error[400] : Color.Neutral[10];
   const newColorAbout =
     about.length === 600 ? Color.Error[400] : Color.Neutral[10];
+
+  useEffect(() => {
+    getProfileUser();
+  }, []);
 
   return (
     <View style={styles.root}>
@@ -176,6 +189,39 @@ export const EditProfile: React.FC<EditProfileProps> = ({
               styles.length,
               {color: newColorAbout},
             ]}>{`${about.length}/600`}</Text>
+        </View>
+
+        <View style={styles.textAreaContainer}>
+          <Text style={styles.title}>{'Social Media'}</Text>
+          <TouchableOpacity onPress={openModalSocMed}>
+            <Text style={styles.addText}>{'+ Social Media Settings'}</Text>
+          </TouchableOpacity>
+          <ProfileComponent
+            title=""
+            gap={0}
+            socmedSection
+            socmed={dataProfile?.data.socialMedia ?? []}
+            containerStyles={{paddingHorizontal: 0}}
+          />
+        </View>
+
+        <View
+          style={[
+            styles.textAreaContainer,
+            {marginBottom: heightPercentage(30)},
+          ]}>
+          <Text style={styles.title}>{'Photos'}</Text>
+          <TouchableOpacity onPress={() => openModalImage('photos')}>
+            <Text style={styles.addText}>{'+ Add Photos'}</Text>
+          </TouchableOpacity>
+          <Gap height={heightPercentage(20)} />
+          <ImageList
+            imgData={photos}
+            disabled={true}
+            width={162}
+            height={79}
+            onPress={closeImage}
+          />
         </View>
       </ScrollView>
 

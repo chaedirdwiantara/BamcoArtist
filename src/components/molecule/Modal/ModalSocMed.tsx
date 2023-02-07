@@ -1,7 +1,13 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Modal from 'react-native-modal';
 import {mvs} from 'react-native-size-matters';
-import {Text, View, StyleSheet, TouchableWithoutFeedback} from 'react-native';
+import {
+  Text,
+  View,
+  StyleSheet,
+  TouchableWithoutFeedback,
+  TouchableOpacity,
+} from 'react-native';
 
 import {
   heightPercentage,
@@ -13,7 +19,21 @@ import {Button, SsuInput} from '../../atom';
 import Font from '../../../theme/Font';
 import SsuSheet from '../../atom/SsuSheet';
 import {color} from '../../../theme';
-import {Fb2Icon} from '../../../assets/icon';
+import {
+  CheckIcon,
+  CloseIcon,
+  Fb2Icon,
+  InstagramIcon,
+  SnapchatIcon,
+  TiktokIcon,
+  TwitterIcon,
+  VkIcon,
+  WeiboIcon,
+} from '../../../assets/icon';
+import {useProfileHook} from '../../../hooks/use-profile.hook';
+import {nameValue} from '../../../interface/base.interface';
+import {Social} from '../../../data/profile';
+import {ModalLoading} from '../ModalLoading/ModalLoading';
 
 interface ModalSocMedProps {
   titleModal: string;
@@ -26,29 +46,123 @@ export const ModalSocMed: React.FC<ModalSocMedProps> = ({
   modalVisible,
   onPressClose,
 }) => {
-  const [focusInput, setFocusInput] = useState(false);
+  const {isLoading, updateProfileUser, getProfileUser, dataProfile} =
+    useProfileHook();
+  const [focusInput, setFocusInput] = useState<string>('');
+  const [listSocmed, setListSocmed] = useState<nameValue[]>([]);
+  const [submit, setSubmit] = useState<boolean>(false);
 
-  const ListSocMed = () => {
+  const onPressSave = (name: string, value: string) => {
+    const newArray = {name: name, value: value};
+    setListSocmed([...listSocmed, newArray]);
+    setSubmit(true);
+  };
+
+  const onPressUnset = (item: string) => {
+    if (listSocmed) {
+      const newArray = listSocmed?.filter(val => {
+        return val.Name !== item && val.name !== item;
+      });
+      setListSocmed(newArray);
+      setSubmit(true);
+    }
+  };
+
+  useEffect(() => {
+    if (submit) {
+      updateProfileUser({
+        socialMedia: listSocmed as any,
+      });
+      setFocusInput('');
+      setSubmit(false);
+    }
+  }, [submit]);
+
+  useEffect(() => {
+    if (dataProfile?.data.socialMedia) {
+      setListSocmed(dataProfile.data.socialMedia);
+    }
+  }, [dataProfile]);
+
+  useEffect(() => {
+    getProfileUser();
+  }, []);
+
+  const ListSocMed = ({item}: {item: string}) => {
+    const defaultValue =
+      (listSocmed.find(i => i.Name === item)?.Value as string) ??
+      (listSocmed.find(i => i.name === item)?.value as string);
+    const [newValue, setNewValue] = useState(defaultValue);
+    const isFocus = focusInput === item;
+    const icon =
+      item === 'facebook' ? (
+        <Fb2Icon width={18} height={18} />
+      ) : item === 'twitter' ? (
+        <TwitterIcon width={18} height={18} />
+      ) : item === 'instagram' ? (
+        <InstagramIcon width={18} height={18} />
+      ) : item === 'tiktok' ? (
+        <TiktokIcon width={18} height={18} />
+      ) : item === 'snapchat' ? (
+        <SnapchatIcon width={18} height={18} />
+      ) : item === 'vk' ? (
+        <VkIcon width={18} height={18} />
+      ) : item === 'weibo' ? (
+        <WeiboIcon width={18} height={18} />
+      ) : null;
+
     return (
       <View
         style={{
           flexDirection: 'row',
           alignItems: 'center',
+          marginBottom: 8,
+          borderBottomColor: color.Pink.linear,
+          borderBottomWidth: isFocus ? 1 : 0,
         }}>
-        <Fb2Icon style={{marginRight: 20}} />
+        <View
+          style={{
+            borderRadius: 100,
+            backgroundColor: color.Dark[400],
+            padding: 6,
+          }}>
+          {icon}
+        </View>
         <SsuInput.InputText
-          placeholder={'Add Username'}
+          placeholder={'Add Link'}
           fontColor={color.Neutral[10]}
-          borderColor={color.Pink.linear}
-          onFocus={() => {
-            setFocusInput(true);
-          }}
-          onBlur={() => {
-            setFocusInput(false);
-          }}
+          disabled={!isFocus}
           containerStyles={styles.containerContent}
-          isFocus={focusInput}
+          isFocus={isFocus}
+          autoFocus={isFocus}
+          value={newValue}
+          defaultValue={defaultValue}
+          onChangeText={val => setNewValue(val)}
         />
+        {isFocus ? (
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-around',
+              width: '25%',
+            }}>
+            <TouchableOpacity onPress={() => onPressSave(item, newValue)}>
+              <CheckIcon width={30} height={30} />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => setFocusInput('')}>
+              <CloseIcon stroke="#FFF" />
+            </TouchableOpacity>
+          </View>
+        ) : (
+          <Button
+            label={newValue ? 'Unset' : 'Set'}
+            onPress={() =>
+              newValue ? onPressUnset(item) : setFocusInput(item)
+            }
+            containerStyles={styles.button}
+          />
+        )}
       </View>
     );
   };
@@ -58,7 +172,10 @@ export const ModalSocMed: React.FC<ModalSocMedProps> = ({
       <>
         <Text style={styles.titleStyle}>{titleModal}</Text>
         <View style={styles.separator} />
-        <ListSocMed />
+        {Social.map(item => {
+          return <ListSocMed item={item} />;
+        })}
+
         <Button
           type="border"
           label="Cancel"
@@ -66,6 +183,8 @@ export const ModalSocMed: React.FC<ModalSocMedProps> = ({
           textStyles={{color: color.Pink.linear}}
           onPress={onPressClose}
         />
+
+        <ModalLoading visible={isLoading} />
       </>
     );
   };
@@ -107,6 +226,14 @@ const styles = StyleSheet.create({
     marginTop: heightPercentage(10),
   },
   containerContent: {
-    width: '90%',
+    width: '78%',
+    backgroundColor: 'transparent',
+    borderColor: 'transparent',
+  },
+  button: {
+    width: '25%',
+    aspectRatio: heightPercentage(120 / 40),
+    alignSelf: 'center',
+    backgroundColor: color.Pink[200],
   },
 });

@@ -25,3 +25,10 @@ export type imageTypes = {
   image: string;
   presetName: string;
 };
+
+export type nameValue = {
+  name: string;
+  value: number | string;
+  Name?: string;
+  Value?: number | string;
+};
