@@ -6,14 +6,10 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   Platform,
+  InteractionManager,
 } from 'react-native';
+import {mvs} from 'react-native-size-matters';
 
-import {
-  heightPercentage,
-  normalize,
-  width,
-  widthPercentage,
-} from '../../../utils';
 import {Dropdown} from '../DropDown';
 import {color, font} from '../../../theme';
 import {PhotoPlaylist} from './PhotoPlaylist';
@@ -24,9 +20,11 @@ import {Image} from 'react-native-image-crop-picker';
 import {dataVisibility} from '../../../data/playlist';
 import {uploadImage} from '../../../api/uploadImage.api';
 import {createPlaylist} from '../../../api/playlist.api';
+import {ModalLoading} from '../ModalLoading/ModalLoading';
 import {ModalImagePicker} from '../Modal/ModalImagePicker';
 import {Button, ButtonGradient, SsuInput} from '../../atom';
 import checkEmptyProperties from '../../../utils/checkEmptyProperties';
+import {heightPercentage, width, widthPercentage} from '../../../utils';
 
 interface Props {
   goToPlaylist: (id: number) => void;
@@ -51,9 +49,7 @@ export const CreateNewPlaylistContent: React.FC<Props> = ({
   const [playlistUri, setPlaylistUri] = useState({
     path: '',
   });
-  const [focusInput, setFocusInput] = useState<'name' | 'description' | null>(
-    null,
-  );
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const onChangeText = (key: string, value: string) => {
     setState({
@@ -69,21 +65,20 @@ export const CreateNewPlaylistContent: React.FC<Props> = ({
   };
 
   const setUploadImage = async (image: Image) => {
+    InteractionManager.runAfterInteractions(() => setIsLoading(true));
     try {
       const response = await uploadImage(image);
       setState({...state, thumbnailUrl: response.data});
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const sendUri = (val: Image) => {
     setUploadImage(val);
     setPlaylistUri(val);
-  };
-
-  const handleFocusInput = (focus: 'name' | 'description' | null) => {
-    setFocusInput(focus);
   };
 
   const openModal = (type: string) => {
@@ -101,6 +96,7 @@ export const CreateNewPlaylistContent: React.FC<Props> = ({
   };
 
   const onPressConfirm = async () => {
+    InteractionManager.runAfterInteractions(() => setIsLoading(true));
     try {
       const payload = {
         name: state.playlistName,
@@ -113,6 +109,8 @@ export const CreateNewPlaylistContent: React.FC<Props> = ({
       closeModal();
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -134,7 +132,7 @@ export const CreateNewPlaylistContent: React.FC<Props> = ({
   return (
     <KeyboardAvoidingView
       style={{flex: 1}}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
       <View style={styles.root}>
         <TopNavigation.Type1
           title="New Playlist"
@@ -154,23 +152,16 @@ export const CreateNewPlaylistContent: React.FC<Props> = ({
           />
 
           <View>
-            <SsuInput.TextArea
+            <SsuInput.InputLabel
+              label=""
               value={state.playlistName}
-              onChangeText={(newText: string) =>
-                onChangeText('playlistName', newText)
-              }
+              onChangeText={(newText: string) => {
+                onChangeText('playlistName', newText);
+              }}
               placeholder={'Playlist Name'}
               containerStyles={styles.textInput}
-              numberOfLines={1}
               maxLength={100}
-              multiline={false}
-              onFocus={() => {
-                handleFocusInput('name');
-              }}
-              onBlur={() => {
-                handleFocusInput(null);
-              }}
-              isFocus={focusInput === 'name'}
+              numberOfLines={1}
             />
             <Text
               style={[
@@ -180,24 +171,21 @@ export const CreateNewPlaylistContent: React.FC<Props> = ({
           </View>
 
           <View>
-            <SsuInput.TextArea
+            <SsuInput.InputLabel
+              label=""
               value={state.playlistDesc}
-              onChangeText={(newText: string) =>
-                onChangeText('playlistDesc', newText)
-              }
+              onChangeText={(newText: string) => {
+                onChangeText('playlistDesc', newText);
+              }}
               placeholder={'Playlist Description'}
-              containerStyles={styles.textArea}
-              multiline
-              numberOfLines={5}
-              maxLength={600}
               inputStyles={styles.inputDesc}
-              onFocus={() => {
-                handleFocusInput('description');
+              maxLength={600}
+              numberOfLines={5}
+              multiline
+              containerStyles={{
+                marginTop: heightPercentage(15),
+                marginBottom: heightPercentage(4),
               }}
-              onBlur={() => {
-                handleFocusInput(null);
-              }}
-              isFocus={focusInput === 'description'}
             />
             <Text
               style={[
@@ -213,7 +201,10 @@ export const CreateNewPlaylistContent: React.FC<Props> = ({
             textTyped={(newText: {label: string; value: string}) =>
               onChangeText('isPublic', newText.value)
             }
-            containerStyles={{marginTop: heightPercentage(15)}}
+            containerStyles={{
+              marginTop: heightPercentage(15),
+              width: width * 0.9,
+            }}
           />
 
           <View style={styles.footer}>
@@ -238,18 +229,22 @@ export const CreateNewPlaylistContent: React.FC<Props> = ({
           title="Edit Playlist Cover"
           modalVisible={isModalVisible.modalImage}
           sendUri={sendUri}
-          sendUriMultiple={() => {}}
+          sendUriMultiple={() => null}
           onDeleteImage={resetImage}
           onPressClose={closeModal}
           hideMenuDelete={hideMenuDelete}
         />
+
         <ModalConfirm
           modalVisible={isModalVisible.modalConfirm}
           title="Save"
           subtitle="Are you sure you want to save your new playlist?"
           onPressClose={closeModal}
           onPressOk={onPressConfirm}
+          disabled={isLoading}
         />
+
+        <ModalLoading visible={isLoading} />
       </View>
     </KeyboardAvoidingView>
   );
@@ -272,11 +267,6 @@ const styles = StyleSheet.create({
     marginTop: heightPercentage(10),
     marginBottom: heightPercentage(4),
   },
-  textArea: {
-    paddingHorizontal: 0,
-    marginBottom: heightPercentage(4),
-    marginTop: heightPercentage(15),
-  },
   footer: {
     width: widthPercentage(327),
     flexDirection: 'row',
@@ -288,11 +278,13 @@ const styles = StyleSheet.create({
     aspectRatio: heightPercentage(150 / 36),
   },
   inputDesc: {
+    width: width * 0.9,
+    aspectRatio: 3 / 1,
     textAlignVertical: 'top',
-    paddingHorizontal: widthPercentage(10),
+    marginBottom: heightPercentage(4),
   },
   length: {
     fontFamily: font.InterRegular,
-    fontSize: normalize(12),
+    fontSize: mvs(11),
   },
 });
