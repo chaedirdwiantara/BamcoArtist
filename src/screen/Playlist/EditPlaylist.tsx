@@ -32,7 +32,8 @@ export const EditPlaylist: React.FC<EditPlaylistProps> = ({
   return (
     <View style={styles.root}>
       <EditPlaylistContent
-        playlist={route.params}
+        playlist={route.params.data}
+        listSongs={route.params.listSongs}
         onPressGoBack={onPressGoBack}
         goToPlaylist={goToPlaylist}
       />

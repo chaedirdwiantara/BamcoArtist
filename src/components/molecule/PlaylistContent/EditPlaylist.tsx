@@ -1,28 +1,36 @@
 import React, {useState} from 'react';
-import {View, StyleSheet, Text} from 'react-native';
+import {
+  View,
+  StyleSheet,
+  Text,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  InteractionManager,
+} from 'react-native';
+import {mvs} from 'react-native-size-matters';
 import {Image} from 'react-native-image-crop-picker';
 
 import {SsuInput} from '../../atom';
+import {Dropdown} from '../DropDown';
 import {color, font} from '../../../theme';
 import {PhotoPlaylist} from './PhotoPlaylist';
 import {TopNavigation} from '../TopNavigation';
 import {ModalConfirm} from '../Modal/ModalConfirm';
-import {ModalImagePicker} from '../Modal/ModalImagePicker';
-import {ArrowLeftIcon, SaveIcon} from '../../../assets/icon';
-import {
-  heightPercentage,
-  normalize,
-  width,
-  widthPercentage,
-} from '../../../utils';
-import {Dropdown} from '../DropDown';
 import {dataVisibility} from '../../../data/playlist';
+import TopSong from '../../../screen/ListCard/TopSong';
 import {uploadImage} from '../../../api/uploadImage.api';
 import {updatePlaylist} from '../../../api/playlist.api';
+import {ModalLoading} from '../ModalLoading/ModalLoading';
+import {ModalImagePicker} from '../Modal/ModalImagePicker';
+import {SongList} from '../../../interface/song.interface';
+import {ArrowLeftIcon, SaveIcon} from '../../../assets/icon';
 import {Playlist} from '../../../interface/playlist.interface';
+import {heightPercentage, width, widthPercentage} from '../../../utils';
 
 interface EditPlaylistProps {
   playlist: Playlist;
+  listSongs: SongList[];
   goToPlaylist: (params: any) => void;
   onPressGoBack: () => void;
 }
@@ -47,9 +55,7 @@ export const EditPlaylistContent: React.FC<EditPlaylistProps> = ({
   const [playlistUri, setPlaylistUri] = useState({
     path: playlist.thumbnailUrl || '',
   });
-  const [focusInput, setFocusInput] = useState<'name' | 'description' | null>(
-    null,
-  );
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const onChangeText = (key: string, value: string) => {
     setState({
@@ -59,11 +65,14 @@ export const EditPlaylistContent: React.FC<EditPlaylistProps> = ({
   };
 
   const setUploadImage = async (image: Image) => {
+    InteractionManager.runAfterInteractions(() => setIsLoading(true));
     try {
       const response = await uploadImage(image);
       setState({...state, thumbnailUrl: response.data});
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -94,11 +103,8 @@ export const EditPlaylistContent: React.FC<EditPlaylistProps> = ({
     });
   };
 
-  const handleFocusInput = (focus: 'name' | 'description' | null) => {
-    setFocusInput(focus);
-  };
-
   const onPressConfirm = async () => {
+    InteractionManager.runAfterInteractions(() => setIsLoading(true));
     try {
       const payload = {
         name: state.playlistName,
@@ -111,6 +117,8 @@ export const EditPlaylistContent: React.FC<EditPlaylistProps> = ({
       closeModal();
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -123,107 +131,114 @@ export const EditPlaylistContent: React.FC<EditPlaylistProps> = ({
     state.playlistDesc.length === 600 ? color.Error[400] : color.Neutral[10];
 
   return (
-    <View style={styles.root}>
-      <TopNavigation.Type4
-        title="Edit Playlist"
-        rightIcon={<SaveIcon />}
-        leftIcon={<ArrowLeftIcon />}
-        itemStrokeColor={color.Neutral[10]}
-        leftIconAction={onPressGoBack}
-        rightIconAction={() => openModal('modalConfirm')}
-        containerStyles={{paddingHorizontal: widthPercentage(20)}}
-      />
-
-      <View style={styles.containerContent}>
-        <PhotoPlaylist
-          uri={playlistUri?.path}
-          showIcon
-          onPress={() => openModal('modalImage')}
+    <KeyboardAvoidingView
+      style={{flex: 1}}
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+      <View style={styles.root}>
+        <TopNavigation.Type4
+          title="Edit Playlist"
+          rightIcon={<SaveIcon />}
+          leftIcon={<ArrowLeftIcon />}
+          itemStrokeColor={color.Neutral[10]}
+          leftIconAction={onPressGoBack}
+          rightIconAction={() => openModal('modalConfirm')}
+          containerStyles={{paddingHorizontal: widthPercentage(20)}}
         />
 
-        <View>
-          <SsuInput.TextArea
-            value={state.playlistName}
-            onChangeText={(newText: string) =>
-              onChangeText('playlistName', newText)
-            }
-            placeholder={'Playlist Name'}
-            containerStyles={styles.textInput}
-            numberOfLines={1}
-            maxLength={100}
-            multiline={false}
-            onFocus={() => {
-              handleFocusInput('name');
-            }}
-            onBlur={() => {
-              handleFocusInput(null);
-            }}
-            isFocus={focusInput === 'name'}
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{alignItems: 'center'}}>
+          <PhotoPlaylist
+            uri={playlistUri?.path}
+            showIcon
+            onPress={() => openModal('modalImage')}
           />
-          <Text
-            style={[
-              styles.length,
-              {color: maxColorTitle},
-            ]}>{`${state.playlistName.length}/100`}</Text>
-        </View>
 
-        <View>
-          <SsuInput.TextArea
-            value={state.playlistDesc}
-            onChangeText={(newText: string) =>
-              onChangeText('playlistDesc', newText)
+          <View>
+            <SsuInput.InputLabel
+              label=""
+              value={state.playlistName}
+              onChangeText={(newText: string) => {
+                onChangeText('playlistName', newText);
+              }}
+              placeholder={'Playlist Name'}
+              containerStyles={styles.textInput}
+              maxLength={100}
+              numberOfLines={1}
+            />
+            <Text
+              style={[
+                styles.length,
+                {color: maxColorTitle},
+              ]}>{`${state.playlistName.length}/100`}</Text>
+          </View>
+
+          <View>
+            <SsuInput.InputLabel
+              label=""
+              value={state.playlistDesc}
+              onChangeText={(newText: string) => {
+                onChangeText('playlistDesc', newText);
+              }}
+              placeholder={'Playlist Description'}
+              inputStyles={styles.inputDesc}
+              maxLength={600}
+              numberOfLines={5}
+              multiline
+              containerStyles={{
+                marginTop: heightPercentage(15),
+                marginBottom: heightPercentage(4),
+              }}
+            />
+            <Text
+              style={[
+                styles.length,
+                {color: maxColorDesc},
+              ]}>{`${state.playlistDesc.length}/600`}</Text>
+          </View>
+
+          <Dropdown.Input
+            data={dataVisibility}
+            initialValue={state.isPublic}
+            placeHolder={'Visibility'}
+            dropdownLabel={'Visibility'}
+            textTyped={(newText: {label: string; value: string}) =>
+              onChangeText('isPublic', newText.value)
             }
-            placeholder={'Playlist Description'}
-            containerStyles={styles.textArea}
-            multiline
-            numberOfLines={5}
-            maxLength={600}
-            inputStyles={styles.inputDesc}
-            onFocus={() => {
-              handleFocusInput('description');
+            containerStyles={{
+              marginTop: heightPercentage(15),
+              width: width * 0.9,
             }}
-            onBlur={() => {
-              handleFocusInput(null);
-            }}
-            isFocus={focusInput === 'description'}
           />
-          <Text
-            style={[
-              styles.length,
-              {color: maxColorDesc},
-            ]}>{`${state.playlistDesc.length}/600`}</Text>
-        </View>
 
-        <Dropdown.Input
-          initialValue={isPublic}
-          data={dataVisibility}
-          placeHolder={'Visibility'}
-          dropdownLabel={'Visibility'}
-          textTyped={(newText: {label: string; value: string}) =>
-            onChangeText('isPublic', newText.value)
-          }
-          containerStyles={{marginTop: heightPercentage(15)}}
+          {/* <TopSong
+            dataSong={listSongs}
+            hideDropdownMore={true}
+            onPress={() => null}
+          /> */}
+        </ScrollView>
+
+        <ModalImagePicker
+          title="Edit Playlist Cover"
+          modalVisible={isModalVisible.modalImage}
+          sendUri={sendUri}
+          sendUriMultiple={() => null}
+          onDeleteImage={resetImage}
+          onPressClose={closeModal}
+          hideMenuDelete={hideMenuDelete}
         />
+
+        <ModalConfirm
+          modalVisible={isModalVisible.modalConfirm}
+          title="Save"
+          subtitle="Are you sure you want to update your playlist?"
+          onPressClose={closeModal}
+          onPressOk={onPressConfirm}
+        />
+
+        <ModalLoading visible={isLoading} />
       </View>
-
-      <ModalImagePicker
-        title="Edit Playlist Cover"
-        modalVisible={isModalVisible.modalImage}
-        sendUri={sendUri}
-        sendUriMultiple={() => null}
-        onDeleteImage={resetImage}
-        onPressClose={closeModal}
-        hideMenuDelete={hideMenuDelete}
-      />
-
-      <ModalConfirm
-        modalVisible={isModalVisible.modalConfirm}
-        title="Save"
-        subtitle="Are you sure you want to update your playlist?"
-        onPressClose={closeModal}
-        onPressOk={onPressConfirm}
-      />
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 
@@ -241,7 +256,9 @@ const styles = StyleSheet.create({
     marginTop: heightPercentage(15),
   },
   textInput: {
+    width: width * 0.9,
     marginTop: heightPercentage(10),
+    marginBottom: heightPercentage(4),
   },
   textArea: {
     paddingHorizontal: 0,
@@ -259,11 +276,13 @@ const styles = StyleSheet.create({
     aspectRatio: heightPercentage(150 / 36),
   },
   inputDesc: {
+    width: width * 0.9,
+    aspectRatio: 3 / 1,
     textAlignVertical: 'top',
-    paddingHorizontal: widthPercentage(10),
+    marginBottom: heightPercentage(4),
   },
   length: {
     fontFamily: font.InterRegular,
-    fontSize: normalize(12),
+    fontSize: mvs(11),
   },
 });
