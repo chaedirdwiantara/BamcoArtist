@@ -118,7 +118,7 @@ export type PreferenceList = {
   name: string;
 };
 
-export type PreferenceReaponseType = {
+export type PreferenceResponseType = {
   code: number;
   data: PreferenceList[];
 };

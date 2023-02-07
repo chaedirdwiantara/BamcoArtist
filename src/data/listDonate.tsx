@@ -5,19 +5,19 @@ export interface ListDonateType {
 
 export const listDonate: ListDonateType[] = [
   {
-    text: 'One Time Donation',
+    text: 'One Time',
     selected: false,
   },
   {
-    text: 'Recurring Donation Weekly',
+    text: 'Weekly',
     selected: false,
   },
   {
-    text: 'Recurring Donation Monthly',
+    text: 'Monthly',
     selected: false,
   },
   {
-    text: 'Recurling Donation Yearly',
+    text: 'Yearly',
     selected: false,
   },
 ];

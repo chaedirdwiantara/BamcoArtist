@@ -13,6 +13,7 @@ import BaseSemeruPublic from './baseSemeruPublic';
 import {ParamsProps} from '../interface/base.interface';
 
 export type UpdateProfilePropsType = {
+  username?: string;
   fullname?: string;
   favoriteGeneres?: number[];
   moods?: number[];

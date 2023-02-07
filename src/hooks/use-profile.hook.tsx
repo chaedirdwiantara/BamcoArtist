@@ -20,8 +20,9 @@ import {
 } from '../interface/profile.interface';
 
 export const useProfileHook = () => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [errorMsg, setErrorMsg] = useState('');
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isError, setIsError] = useState<boolean>(false);
+  const [errorMsg, setErrorMsg] = useState<string>('');
   const [successMsg, setSuccessMsg] = useState<string>('');
   const [isValidReferral, setIsValidReferral] = useState<boolean | null>(null);
   const [dataProfile, setDataProfile] = useState<ProfileResponseType>();
@@ -92,13 +93,19 @@ export const useProfileHook = () => {
 
   const updateProfilePreference = async (props?: UpdateProfilePropsType) => {
     setIsLoading(true);
+    setIsError(false);
     setErrorMsg('');
-    setSuccessMsg('');
     try {
       const resp = await updateProfile(props);
-      console.log({props});
-      setSuccessMsg(resp.message);
+      if (resp.code !== 200) {
+        setIsError(true);
+        setErrorMsg(resp.message as string);
+      } else {
+        setSuccessMsg(resp.message as string);
+      }
     } catch (error) {
+      console.log(error);
+      setIsError(true);
       if (
         axios.isAxiosError(error) &&
         error.response?.status &&
@@ -172,6 +179,7 @@ export const useProfileHook = () => {
 
   return {
     isLoading,
+    isError,
     errorMsg,
     successMsg,
     isValidReferral,
@@ -179,6 +187,7 @@ export const useProfileHook = () => {
     dataFansProfile,
     dataUserCheck,
     dataCountLiked,
+    setIsError,
     setDataUserCheck,
     getProfileUser,
     updateProfileUser,

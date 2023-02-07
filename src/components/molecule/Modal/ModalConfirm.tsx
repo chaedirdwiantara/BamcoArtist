@@ -1,14 +1,10 @@
 import React from 'react';
 import {Text, View, StyleSheet, TouchableOpacity} from 'react-native';
 import Modal from 'react-native-modal';
-import {
-  heightPercentage,
-  normalize,
-  width,
-  widthPercentage,
-} from '../../../utils';
+import {mvs} from 'react-native-size-matters';
 import Font from '../../../theme/Font';
 import Color from '../../../theme/Color';
+import {heightPercentage, width, widthPercentage} from '../../../utils';
 
 interface ModalConfirmProps {
   title?: string;
@@ -16,12 +12,14 @@ interface ModalConfirmProps {
   modalVisible: boolean;
   onPressClose?: () => void;
   onPressOk?: () => void;
+  disabled?: boolean;
 }
 
 export const ModalConfirm: React.FC<ModalConfirmProps> = (
   props: ModalConfirmProps,
 ) => {
-  const {title, subtitle, modalVisible, onPressClose, onPressOk} = props;
+  const {title, subtitle, modalVisible, onPressClose, onPressOk, disabled} =
+    props;
   return (
     <Modal
       isVisible={modalVisible}
@@ -40,7 +38,7 @@ export const ModalConfirm: React.FC<ModalConfirmProps> = (
             <TouchableOpacity onPress={onPressClose}>
               <Text style={styles.option}>{'No'}</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={onPressOk}>
+            <TouchableOpacity disabled={disabled} onPress={onPressOk}>
               <Text style={styles.option}>{'Yes'}</Text>
             </TouchableOpacity>
           </View>
@@ -64,12 +62,12 @@ const styles = StyleSheet.create({
     paddingVertical: heightPercentage(15),
   },
   title: {
-    fontSize: normalize(16),
+    fontSize: mvs(16),
     color: Color.Neutral[10],
     fontFamily: Font.InterSemiBold,
   },
   subtitle: {
-    fontSize: normalize(15),
+    fontSize: mvs(15),
     color: Color.Neutral[10],
     fontFamily: Font.InterRegular,
     marginTop: heightPercentage(5),
@@ -80,7 +78,7 @@ const styles = StyleSheet.create({
     marginTop: heightPercentage(25),
   },
   option: {
-    fontSize: normalize(14),
+    fontSize: mvs(14),
     paddingHorizontal: widthPercentage(12),
     color: Color.Neutral[10],
     fontFamily: Font.InterRegular,

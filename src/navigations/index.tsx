@@ -73,8 +73,6 @@ import {TopupCoinScreen} from '../screen/TopupCoin';
 // Merch
 import {MerchDetail} from '../screen/MerchDetail';
 
-import {storage} from '../hooks/use-storage.hook';
-
 // Icon
 import {CrownIcon, FeedIcon, HomeIcon, UserProfileIcon} from '../assets/icon';
 
@@ -85,7 +83,6 @@ import {MerchListType} from '../data/merchList';
 import {ConcertDetail} from '../screen/ConcertDetail';
 import {SignupSSOScreen} from '../screen/SignupSSO';
 import {
-  ListPhotosType,
   ProfileResponseData,
   RegistrationType,
 } from '../interface/profile.interface';
@@ -97,17 +94,14 @@ import {AlbumData, photos} from '../interface/musician.interface';
 import {ChangePNScreen} from '../screen/Setting/PhoneNumber/ChangePN';
 import {OtpPNScreen} from '../screen/Setting/PhoneNumber/OTP';
 import {useNavigation} from '@react-navigation/native';
-import {
-  ListDataSearchSongs,
-  ListDataSearchSongsNavigate,
-} from '../interface/search.interface';
+import {ListDataSearchSongs} from '../interface/search.interface';
 import {
   OtpEmailScreen as OtpEmailProps,
   OtpPhoneScreen,
 } from '../interface/setting.interface';
 import {OtpEmailScreen} from '../screen/Setting/Email/OTP';
 import {SplashScreen} from '../screen/SplashScreen';
-import {SongAlbum} from '../interface/song.interface';
+import {SongAlbum, SongList} from '../interface/song.interface';
 
 export type RootStackParams = {
   Account: undefined;
@@ -130,7 +124,10 @@ export type RootStackParams = {
   CreateNewPlaylist: undefined;
   DonationAndSubscription: undefined;
   EditProfile: ProfileResponseData;
-  EditPlaylist: Playlist;
+  EditPlaylist: {
+    data: Playlist;
+    listSongs: SongList[];
+  };
   Email: {
     info?: boolean;
     message?: string;

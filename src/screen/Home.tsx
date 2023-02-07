@@ -78,12 +78,12 @@ export const HomeScreen: React.FC = () => {
 
   useEffect(() => {
     getListDataBanner();
-    getProfileUser();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useFocusEffect(
     useCallback(() => {
+      getProfileUser();
       getListDataMusician();
       getListDataTopSong();
     }, []),

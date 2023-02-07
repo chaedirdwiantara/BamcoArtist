@@ -8,7 +8,7 @@ import {CheckBox} from '../../atom';
 
 export interface dataProps {
   label: string;
-  value?: number;
+  value: number;
 }
 
 interface InputDropdownProps {
@@ -17,7 +17,7 @@ interface InputDropdownProps {
   dropdownLabel: string;
   textTyped: (data: any) => void;
   containerStyles?: ViewStyle;
-  initialValue?: (number | undefined)[] | null;
+  initialValue?: (string | number | undefined)[] | null;
   setValues: (val: number[]) => void;
 }
 
@@ -71,7 +71,7 @@ const MultiDropdown: React.FC<InputDropdownProps> = (
     });
 
     return array.map(item => {
-      return item.label;
+      return ' ' + item.label;
     });
   };
 
@@ -85,9 +85,12 @@ const MultiDropdown: React.FC<InputDropdownProps> = (
     <View style={[styles.container, containerStyles]}>
       {renderLabel()}
       <MultiSelect
+        search
+        searchPlaceholder="Search..."
         style={[styles.dropdown]}
         containerStyle={styles.containerStyle}
         placeholderStyle={styles.placeholderStyle}
+        inputSearchStyle={styles.placeholderStyle}
         iconStyle={styles.iconStyle}
         data={data}
         maxHeight={mvs(300)}
