@@ -559,7 +559,7 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
       theComment?.splice(theIndex, 1, commentUpdate[0]);
       setCommentLvl2(theComment);
     }
-    if (cmntToCmnt?.commentLvl === 1 && commentLvl3) {
+    if (cmntToCmnt?.commentLvl === 3 && commentLvl3) {
       let theComment = commentLvl3;
       let theIndex = theComment?.findIndex((x: CommentList3) =>
         cmntToCmnt.id.includes(x.id),

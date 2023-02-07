@@ -335,7 +335,7 @@ const CommentSection: FC<CommentSectionType> = (props: CommentSectionType) => {
                 />
               </>
             ) : null}
-            {commentsCount > 1 &&
+            {commentsCount > 0 &&
               (dataLvl3 === undefined ? (
                 <TouchableOpacity>
                   <Text
@@ -455,7 +455,7 @@ const CommentSection: FC<CommentSectionType> = (props: CommentSectionType) => {
                     />
                   </>
                 ) : null}
-                {item.commentsCount > 1 &&
+                {item.commentsCount > 0 &&
                   (dataLvl2 === undefined ? (
                     <TouchableOpacity
                       onPress={() => viewMoreOnPress(item.id, 2)}>
