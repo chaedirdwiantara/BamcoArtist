@@ -48,3 +48,13 @@ export const infoProfileArtist: InfoProfileType[] = [
     title: 'RANK',
   },
 ];
+
+export const Social: string[] = [
+  'facebook',
+  'twitter',
+  'instagram',
+  'tiktok',
+  'snapchat',
+  'vk',
+  'weibo',
+];

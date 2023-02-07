@@ -20,13 +20,17 @@ import {
   VkIcon,
   WeiboIcon,
 } from '../../assets/icon';
+import {useNavigation} from '@react-navigation/native';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {MainTabParams, RootStackParams} from '../../navigations';
+import {nameValue} from '../../interface/base.interface';
 
 interface ProfileProps {
   title: string;
   content?: string;
   gap?: number;
   socmedSection?: boolean;
-  socmed?: string[];
+  socmed?: nameValue[];
   memberSection?: boolean;
   members?: string[];
   containerStyles?: ViewStyle;
@@ -43,6 +47,16 @@ const ProfileComponent: FC<ProfileProps> = (props: ProfileProps) => {
     memberSection,
     containerStyles,
   } = props;
+
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParams>>();
+
+  const handleWebview = (ttl: string, url: string) => {
+    navigation.navigate('Webview', {
+      title: ttl,
+      url: url,
+    });
+  };
 
   return (
     <View style={[{paddingHorizontal: widthResponsive(24)}, containerStyles]}>
@@ -76,33 +90,61 @@ const ProfileComponent: FC<ProfileProps> = (props: ProfileProps) => {
               data={socmed}
               showsHorizontalScrollIndicator={false}
               contentContainerStyle={{}}
-              renderItem={({item, index}) =>
-                item === 'facebook' ? (
-                  <TouchableOpacity style={styles.touchStyle}>
+              renderItem={({item}) =>
+                item.Name === 'facebook' ? (
+                  <TouchableOpacity
+                    style={styles.touchStyle}
+                    onPress={() =>
+                      handleWebview(item.Name as string, item.Value as string)
+                    }>
                     <FbIcon />
                   </TouchableOpacity>
-                ) : item === 'twitter' ? (
-                  <TouchableOpacity style={styles.touchStyle}>
+                ) : item.Name === 'twitter' ? (
+                  <TouchableOpacity
+                    style={styles.touchStyle}
+                    onPress={() =>
+                      handleWebview(item.Name as string, item.Value as string)
+                    }>
                     <TwitterIcon />
                   </TouchableOpacity>
-                ) : item === 'instagram' ? (
-                  <TouchableOpacity style={styles.touchStyle}>
+                ) : item.Name === 'instagram' ? (
+                  <TouchableOpacity
+                    style={styles.touchStyle}
+                    onPress={() =>
+                      handleWebview(item.Name as string, item.Value as string)
+                    }>
                     <InstagramIcon />
                   </TouchableOpacity>
-                ) : item === 'tiktok' ? (
-                  <TouchableOpacity style={styles.touchStyle}>
+                ) : item.Name === 'tiktok' ? (
+                  <TouchableOpacity
+                    style={styles.touchStyle}
+                    onPress={() =>
+                      handleWebview(item.Name as string, item.Value as string)
+                    }>
                     <TiktokIcon />
                   </TouchableOpacity>
-                ) : item === 'snapchat' ? (
-                  <TouchableOpacity style={styles.touchStyle}>
+                ) : item.Name === 'snapchat' ? (
+                  <TouchableOpacity
+                    style={styles.touchStyle}
+                    onPress={() =>
+                      handleWebview(item.Name as string, item.Value as string)
+                    }>
                     <SnapchatIcon />
                   </TouchableOpacity>
-                ) : item === 'vk' ? (
-                  <TouchableOpacity style={styles.touchStyle}>
+                ) : item.Name === 'vk' ? (
+                  <TouchableOpacity
+                    style={styles.touchStyle}
+                    onPress={() =>
+                      handleWebview(item.Name as string, item.Value as string)
+                    }>
                     <VkIcon style={{marginTop: ms(-3)}} />
                   </TouchableOpacity>
-                ) : item === 'weibo' ? (
-                  <TouchableOpacity style={styles.touchStyle}>
+                ) : item.Name === 'weibo' ? (
+                  <TouchableOpacity
+                    style={styles.touchStyle}
+                    onPress={() =>
+                      handleWebview(item.Name as string, item.Value as string)
+                    }>
                     <WeiboIcon />
                   </TouchableOpacity>
                 ) : null
