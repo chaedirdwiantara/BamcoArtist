@@ -37,6 +37,8 @@ interface CommentSectionType {
   toDetailOnPress: (id: string) => void;
   selectedMenu: (value: DataDropDownType) => void;
   selectedIdComment: (idComment: string) => void;
+  selectedLvlComment: (lvl: number) => void;
+  profileUUID: string;
 }
 
 const CommentSection: FC<CommentSectionType> = (props: CommentSectionType) => {
@@ -54,6 +56,8 @@ const CommentSection: FC<CommentSectionType> = (props: CommentSectionType) => {
     toDetailOnPress,
     selectedMenu,
     selectedIdComment,
+    selectedLvlComment,
+    profileUUID,
   } = props;
   const [recorder, setRecorder] = useState<string[]>([]);
   const [selectedId, setSelectedId] = useState<string[]>();
@@ -154,6 +158,21 @@ const CommentSection: FC<CommentSectionType> = (props: CommentSectionType) => {
     onSetPage?.(value);
   };
 
+  const handleSelectedLvl1 = (value: DataDropDownType) => {
+    selectedMenu(value);
+    selectedLvlComment?.(1);
+  };
+
+  const handleSelectedLvl2 = (value: DataDropDownType) => {
+    selectedMenu(value);
+    selectedLvlComment?.(2);
+  };
+
+  const handleSelectedLvl3 = (value: DataDropDownType) => {
+    selectedMenu(value);
+    selectedLvlComment?.(3);
+  };
+
   const CommentChildrenLvl3 = (props: CommentList3) => {
     const {
       id,
@@ -213,6 +232,10 @@ const CommentSection: FC<CommentSectionType> = (props: CommentSectionType) => {
             : likesCount
         }
         commentCountLvl3={commentsCount}
+        selectedMenu={handleSelectedLvl3}
+        idComment={id}
+        selectedIdComment={selectedIdComment}
+        showEdit={profileUUID === commentOwner.UUID}
       />
     );
   };
@@ -277,6 +300,10 @@ const CommentSection: FC<CommentSectionType> = (props: CommentSectionType) => {
             : likesCount
         }
         commentCountLvl2={commentsCount}
+        selectedMenu={handleSelectedLvl2}
+        idComment={id}
+        selectedIdComment={selectedIdComment}
+        showEdit={profileUUID === commentOwner.UUID}
         childrenLvl2={
           <>
             {/* Comment Section Lvl 3 */}
@@ -308,7 +335,7 @@ const CommentSection: FC<CommentSectionType> = (props: CommentSectionType) => {
                 />
               </>
             ) : null}
-            {commentsCount > 1 &&
+            {commentsCount > 0 &&
               (dataLvl3 === undefined ? (
                 <TouchableOpacity>
                   <Text
@@ -394,9 +421,10 @@ const CommentSection: FC<CommentSectionType> = (props: CommentSectionType) => {
               )
             }
             commentCount={item.commentsCount}
-            selectedMenu={selectedMenu}
+            selectedMenu={handleSelectedLvl1}
             idComment={item.id}
             selectedIdComment={selectedIdComment}
+            showEdit={profileUUID === item.commentOwner.UUID}
             children={
               <>
                 {/* Comment Section Lvl 2 */}
@@ -427,7 +455,7 @@ const CommentSection: FC<CommentSectionType> = (props: CommentSectionType) => {
                     />
                   </>
                 ) : null}
-                {item.commentsCount > 1 &&
+                {item.commentsCount > 0 &&
                   (dataLvl2 === undefined ? (
                     <TouchableOpacity
                       onPress={() => viewMoreOnPress(item.id, 2)}>

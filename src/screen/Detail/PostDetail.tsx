@@ -74,6 +74,8 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
     setLoadMore,
     setLikeComment,
     setUnlikeComment,
+    setCommentDelete,
+    setCommentUpdate,
   } = useFeedHook();
 
   const {
@@ -141,6 +143,8 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   // * UPDATE HOOKS
   const [idComment, setIdComment] = useState<string>();
   const [selectedMenu, setSelectedMenu] = useState<DataDropDownType>();
+  const [selectedLvlComment, setSelectedLvlComment] = useState<number>();
+  const [updateComment, setUpdateComment] = useState<boolean>(false);
 
   //* MUSIC HOOKS
   const [pauseModeOn, setPauseModeOn] = useState<boolean>(false);
@@ -327,20 +331,31 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
 
   // * 1ST Handler to decide whether hit api comment to Post or comment to Comment
   const handleReplyOnPress = () => {
-    commentCaption.length > 0 && cmntToCmnt !== undefined
-      ? (setCommentToComment({
+    if (commentCaption.length > 0 && cmntToCmnt !== undefined) {
+      if (updateComment) {
+        setCommentUpdate({
           id: cmntToCmnt.id,
           content: {content: commentCaption},
         }),
-        setCommentCaption(''))
-      : commentCaption.length > 0 && cmntToCmnt === undefined
-      ? (setCommentToPost({
-          postId: musicianId,
-          content: commentCaption,
+          setCommentCaption('');
+      } else
+        setCommentToComment({
+          id: cmntToCmnt.id,
+          content: {content: commentCaption},
         }),
-        setCommentCaption(''))
-      : null;
-    handleStaticComment();
+          setCommentCaption('');
+    } else if (commentCaption.length > 0 && cmntToCmnt === undefined) {
+      setCommentToPost({
+        postId: musicianId,
+        content: commentCaption,
+      }),
+        setCommentCaption('');
+    } else null;
+    if (updateComment) {
+      handleUpdateStaticComment();
+    } else {
+      handleStaticComment();
+    }
     setInputCommentModal(false);
   };
 
@@ -374,6 +389,7 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
         },
       },
     ];
+
     if (cmntToCmntLvl0?.commentLvl === 0 && commentLvl1 !== undefined) {
       return (
         setCommentLvl1([...commentLvl1, ...comment]),
@@ -409,7 +425,152 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
       return setCommentLvl3(comment), setStaticId([...staticId, comment[0].id]);
     }
   };
+
+  // * reset all state when modal comment is closed
+  const onModalCommentHide = () => {
+    setCmntToCmnt(undefined);
+    setIdComment(undefined);
+    setSelectedMenu(undefined);
+    setSelectedLvlComment(undefined);
+    setCommentCaption('');
+  };
   // ! End Of COMMENT AREA
+
+  // ! UPDATE COMMENT AREA
+  useEffect(() => {
+    if (
+      idComment !== undefined &&
+      selectedMenu !== undefined &&
+      selectedLvlComment !== undefined
+    ) {
+      // * delete/edit comment lvl1
+      if (selectedLvlComment === 1 && commentLvl1) {
+        if (selectedMenu.label === 'Delete Reply') {
+          setCommentLvl1(
+            commentLvl1.filter((x: CommentList) => !idComment.includes(x.id)),
+          );
+          setCommentDelete({id: idComment});
+        }
+        if (selectedMenu.label === 'Edit Reply') {
+          let commentNow = commentLvl1.filter((x: CommentList) =>
+            idComment.includes(x.id),
+          )[0];
+          setCmntToCmnt({
+            id: commentNow.id,
+            userName: commentNow.commentOwner.username,
+            commentLvl: selectedLvlComment,
+            parentID: commentNow.parentID,
+          });
+          setCommentCaption(commentNow.caption);
+          setUpdateComment(true);
+        }
+      }
+      // * delete/edit comment lvl2
+      if (selectedLvlComment === 2 && commentLvl2) {
+        if (selectedMenu.label === 'Delete Reply') {
+          setCommentLvl2(
+            commentLvl2.filter((x: CommentList2) => !idComment.includes(x.id)),
+          );
+          setCommentDelete({id: idComment});
+        }
+        if (selectedMenu.label === 'Edit Reply') {
+          let commentNow = commentLvl2.filter((x: CommentList2) =>
+            idComment.includes(x.id),
+          )[0];
+          setCmntToCmnt({
+            id: commentNow.id,
+            userName: commentNow.commentOwner.username,
+            commentLvl: selectedLvlComment,
+            parentID: commentNow.parentID,
+          });
+          setCommentCaption(commentNow.caption);
+          setUpdateComment(true);
+        }
+      }
+      // * delete/edit comment lvl3
+      if (selectedLvlComment === 3 && commentLvl3) {
+        if (selectedMenu.label === 'Delete Reply') {
+          setCommentLvl3(
+            commentLvl3.filter((x: CommentList3) => !idComment.includes(x.id)),
+          );
+          setCommentDelete({id: idComment});
+        }
+        if (selectedMenu.label === 'Edit Reply') {
+          let commentNow = commentLvl3.filter((x: CommentList3) =>
+            idComment.includes(x.id),
+          )[0];
+          setCmntToCmnt({
+            id: commentNow.id,
+            userName: commentNow.commentOwner.username,
+            commentLvl: selectedLvlComment,
+            parentID: commentNow.parentID,
+          });
+          setCommentCaption(commentNow.caption);
+          setUpdateComment(true);
+        }
+      }
+      // ? the call of update api will be handled on handleReplyOnPress
+    }
+  }, [idComment, selectedMenu, selectedLvlComment]);
+
+  const handleUpdateStaticComment = () => {
+    setDelStaticComment(-1);
+    let commentUpdate = [
+      {
+        id: cmntToCmnt?.id ? cmntToCmnt?.id.toString() : '',
+        caption: commentCaption,
+        likesCount: 0,
+        repliedTo: cmntToCmnt?.userName ? cmntToCmnt?.userName : '',
+        parentID: cmntToCmnt?.parentID ? cmntToCmnt?.parentID : '',
+        commentsCount: 0,
+        commentLevel: cmntToCmnt?.commentLvl,
+        createdAt: '',
+        comments: [],
+        isLiked: false,
+        timeAgo: 'just now',
+        commentOwner: {
+          UUID: dataProfile?.data.uuid ? dataProfile?.data.uuid : '',
+          fullname: dataProfile?.data.fullname
+            ? dataProfile?.data.fullname
+            : '',
+          username: dataProfile?.data.username
+            ? dataProfile?.data.username
+            : '',
+          image: dataProfile?.data.imageProfileUrls
+            ? dataProfile?.data.imageProfileUrls[0]?.image
+            : '',
+        },
+      },
+    ];
+
+    if (cmntToCmnt?.commentLvl === 1 && commentLvl1) {
+      let theComment = commentLvl1;
+      let theIndex = theComment?.findIndex((x: CommentList) =>
+        cmntToCmnt.id.includes(x.id),
+      );
+      theComment?.splice(theIndex, 1, commentUpdate[0]);
+      setCommentLvl1(theComment);
+    }
+    if (cmntToCmnt?.commentLvl === 2 && commentLvl2) {
+      let theComment = commentLvl2;
+      let theIndex = theComment?.findIndex((x: CommentList2) =>
+        cmntToCmnt.id.includes(x.id),
+      );
+      theComment?.splice(theIndex, 1, commentUpdate[0]);
+      setCommentLvl2(theComment);
+    }
+    if (cmntToCmnt?.commentLvl === 3 && commentLvl3) {
+      let theComment = commentLvl3;
+      let theIndex = theComment?.findIndex((x: CommentList3) =>
+        cmntToCmnt.id.includes(x.id),
+      );
+      theComment?.splice(theIndex, 1, commentUpdate[0]);
+      setCommentLvl3(theComment);
+    }
+
+    setUpdateComment(false);
+  };
+  // ! END OF UPDATE COMMENT AREA
 
   // ! LIKE AREA
   // * Handle Like / Unlike on Post
@@ -448,15 +609,6 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
     unlikeCommentId !== '' && setUnlikeComment({id: unlikeCommentId});
   }, [unlikeCommentId]);
   // ! End Of LIKE AREA
-
-  // ! UPDATE COMMENT AREA
-  useEffect(() => {
-    if (idComment !== undefined && selectedMenu !== undefined) {
-      console.log('IDComment', idComment);
-      console.log('selectedMenu', selectedMenu);
-    }
-  }, [idComment, selectedMenu]);
-  // ! END OF UPDATE COMMENT AREA
 
   // ! MUSIC AREA
   const onPressPlaySong = (val: PostList) => {
@@ -685,6 +837,8 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
             toDetailOnPress={handleToDetailCommentator}
             selectedMenu={setSelectedMenu}
             selectedIdComment={setIdComment}
+            selectedLvlComment={setSelectedLvlComment}
+            profileUUID={dataProfile?.data.uuid ? dataProfile.data.uuid : ''}
           />
         ) : null}
         <ImageModal
@@ -693,6 +847,7 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
           imageIdx={imgUrl}
           dataImage={dataPostDetail?.images}
         />
+        {/* // ! Modal Comment */}
         <CommentInputModal
           toggleModal={() => setInputCommentModal(!inputCommentModal)}
           modalVisible={inputCommentModal}
@@ -700,7 +855,7 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
           commentValue={commentCaption}
           onCommentChange={setCommentCaption}
           handleOnPress={handleReplyOnPress}
-          onModalHide={() => setCmntToCmnt(undefined)}
+          onModalHide={onModalCommentHide}
           userAvatarUri={dataProfileImg}
         />
         <ModalShare
@@ -740,7 +895,6 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
           onPressClose={() => setModalDonate(false)}
           onModalHide={() => setModalSuccessDonate(true)}
         />
-
         <ModalSuccessDonate
           modalVisible={modalSuccessDonate && trigger2ndModal}
           toggleModal={onPressSuccess}

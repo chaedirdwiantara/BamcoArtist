@@ -35,6 +35,7 @@ interface ListProps extends TouchableOpacityProps {
   selectedMenu: (value: DataDropDownType) => void;
   idComment: string;
   selectedIdComment: (idComment: string) => void;
+  showEdit: boolean;
 }
 
 const PostComment: React.FC<ListProps> = (props: ListProps) => {
@@ -56,6 +57,7 @@ const PostComment: React.FC<ListProps> = (props: ListProps) => {
     selectedMenu,
     idComment,
     selectedIdComment,
+    showEdit,
   } = props;
   return (
     <View style={[styles.root, containerStyles]}>
@@ -67,7 +69,7 @@ const PostComment: React.FC<ListProps> = (props: ListProps) => {
           flex: 1,
           marginLeft: widthResponsive(6),
         }}>
-        <View style={styles.topSection}>
+        <View style={[styles.topSection, {marginTop: showEdit ? ms(-7) : 0}]}>
           <Text style={styles.fullname} onPress={toDetailOnPress}>
             {fullName}
             <Text style={styles.regularText}> {userName}</Text>
@@ -77,24 +79,28 @@ const PostComment: React.FC<ListProps> = (props: ListProps) => {
               flexDirection: 'row',
               justifyContent: 'space-between',
               alignItems: 'center',
+              marginRight: showEdit ? ms(-7) : 0,
             }}>
             <Text style={styles.postDateStyle}>{postDate}</Text>
-            <Dropdown.More
-              data={dataUpdateComment}
-              idComment={idComment}
-              selectedIdComment={selectedIdComment}
-              selectedMenu={selectedMenu}
-              iconFill={color.Dark[50]}
-              containerStyle={{
-                width: widthResponsive(110),
-                marginLeft: widthResponsive(-97),
-                marginTop: Platform.OS === 'android' ? ms(-35) : ms(-10),
-              }}
-            />
+            {showEdit ? (
+              <Dropdown.More
+                data={dataUpdateComment}
+                idComment={idComment}
+                selectedIdComment={selectedIdComment}
+                selectedMenu={selectedMenu}
+                iconFill={color.Dark[50]}
+                containerStyle={{
+                  width: widthResponsive(110),
+                  marginLeft: widthResponsive(-97),
+                  marginTop: Platform.OS === 'android' ? ms(-35) : ms(-10),
+                }}
+              />
+            ) : null}
           </View>
         </View>
         <Gap height={2} />
-        <View style={styles.bottomSection}>
+        <View
+          style={[styles.bottomSection, {marginTop: showEdit ? ms(-8) : 0}]}>
           <Text style={styles.reply}>
             {'replied to '}{' '}
             <Text style={[styles.reply, {color: color.Pink[100]}]}>
@@ -153,14 +159,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginTop: ms(-7),
   },
   bottomSection: {
     width: '100%',
     flexDirection: 'row',
     alignItems: 'flex-end',
     justifyContent: 'space-between',
-    marginTop: ms(-8),
   },
   fullname: {
     fontFamily: font.InterMedium,
