@@ -46,3 +46,10 @@ export type PlaylistResponseTypeB = {
   message: string;
   status: number;
 };
+
+export type PlaylistResponseTypeC = {
+  code: number;
+  data: string | null;
+  message: string;
+  status: number;
+};
