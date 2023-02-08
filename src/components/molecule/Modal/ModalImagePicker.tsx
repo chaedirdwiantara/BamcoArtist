@@ -10,16 +10,11 @@ import Modal from 'react-native-modal';
 import {mvs} from 'react-native-size-matters';
 import ImagePicker, {Image} from 'react-native-image-crop-picker';
 
-import {
-  heightPercentage,
-  normalize,
-  width,
-  widthPercentage,
-} from '../../../utils';
 import {Button} from '../../atom';
 import Font from '../../../theme/Font';
 import Color from '../../../theme/Color';
 import SsuSheet from '../../atom/SsuSheet';
+import {heightPercentage, normalize, width} from '../../../utils';
 
 interface ModalImagePickerProps {
   title?: string;
@@ -82,22 +77,20 @@ export const ModalImagePicker: React.FC<ModalImagePickerProps> = ({
 
   const children = () => {
     return (
-      <>
+      <View>
         <Text style={styles.titleStyle}>{title}</Text>
         <View style={styles.separator} />
-        <View>
-          <TouchableOpacity>
-            <Text style={styles.textMenu} onPress={onCameraPress}>
-              Take Photo
-            </Text>
+        <View style={styles.containerMenu}>
+          <TouchableOpacity style={{width: '100%'}} onPress={onCameraPress}>
+            <Text style={styles.textMenu}>Take Photo</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={{marginVertical: 10}}
+            style={{width: '100%', marginVertical: 10}}
             onPress={multiple ? onSelectMultiple : onImageLibraryPress}>
             <Text style={styles.textMenu}>Add Photo from Gallery</Text>
           </TouchableOpacity>
           {hideMenuDelete && (
-            <TouchableOpacity onPress={onDeleteImage}>
+            <TouchableOpacity style={{width: '100%'}} onPress={onDeleteImage}>
               <Text style={styles.textMenu}>Delete Photo</Text>
             </TouchableOpacity>
           )}
@@ -109,7 +102,7 @@ export const ModalImagePicker: React.FC<ModalImagePickerProps> = ({
           textStyles={{color: Color.Pink.linear}}
           onPress={onPressClose}
         />
-      </>
+      </View>
     );
   };
 
@@ -145,14 +138,19 @@ const styles = StyleSheet.create({
     right: 0,
   },
   btnContainer: {
-    width: widthPercentage(327),
+    width: width * 0.85,
     aspectRatio: heightPercentage(327 / 40),
     marginTop: heightPercentage(20),
+    alignSelf: 'center',
   },
   textMenu: {
     color: Color.Neutral[10],
-    textAlign: 'center',
     fontFamily: Font.InterRegular,
     fontSize: normalize(14),
+  },
+  containerMenu: {
+    alignItems: 'flex-start',
+    width: width * 0.85,
+    alignSelf: 'center',
   },
 });
