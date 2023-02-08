@@ -4,6 +4,9 @@ import {
   addEmail,
   addPhoneNumber,
   exclusiveContent,
+  getListExpectations,
+  getListGenre,
+  getListMood,
   getShipping,
   getVerifCode,
   setVerifCode,
@@ -18,6 +21,8 @@ import {
   DataShippingProps,
   EmailPhoneProps,
   EmailPhoneVerifProps,
+  ListAllPreference,
+  PreferenceList,
   VerifPasswordSetting,
 } from '../interface/setting.interface';
 import {storage} from './use-storage.hook';
@@ -33,6 +38,14 @@ export const useSettingHook = () => {
     useState<DataShippingProps | null>(null);
   const [dataExclusiveContent, setDataExclusiveContent] =
     useState<DataExclusiveResponse | null>(null);
+  const [listMood, setListMood] = useState<PreferenceList[]>([]);
+  const [listGenre, setListGenre] = useState<PreferenceList[]>([]);
+  const [listExpectation, setListExpectation] = useState<PreferenceList[]>([]);
+  const [listPreference, setListPreference] = useState<ListAllPreference>({
+    mood: [],
+    genre: [],
+    expectation: [],
+  });
 
   const getVerificationCode = async (props?: EmailPhoneVerifProps) => {
     setIsLoading(true);
@@ -286,6 +299,39 @@ export const useSettingHook = () => {
     }
   };
 
+  const getListPreference = async () => {
+    setIsError(false);
+    setIsLoading(true);
+    try {
+      const genre = await getListGenre();
+      const mood = await getListMood();
+      const expectation = await getListExpectations();
+
+      setListMood(mood.data);
+      setListGenre(genre.data);
+      setListExpectation(expectation.data);
+
+      setListPreference({
+        mood: mood.data,
+        genre: genre.data,
+        expectation: expectation.data,
+      });
+    } catch (error) {
+      console.log({error});
+      setListMood([]);
+      setListGenre([]);
+      setListExpectation([]);
+      setListPreference({
+        mood: [],
+        genre: [],
+        expectation: [],
+      });
+      setIsError(true);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return {
     isLoading,
     isError,
@@ -294,6 +340,10 @@ export const useSettingHook = () => {
     dataShippingInfo,
     fetchData,
     dataExclusiveContent,
+    listGenre,
+    listMood,
+    listExpectation,
+    listPreference,
     changeEmail,
     changePhoneNumber,
     getVerificationCode,
@@ -305,5 +355,6 @@ export const useSettingHook = () => {
     getShippingInfo,
     getExclusiveContent,
     addNewEmail,
+    getListPreference,
   };
 };

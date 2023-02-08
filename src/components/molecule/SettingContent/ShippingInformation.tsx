@@ -187,6 +187,17 @@ export const ShippingInformationContent: React.FC<ShippingInformationProps> = ({
           </View>
 
           <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+            <Dropdown.Input
+              data={dataCity}
+              placeHolder={'Select City'}
+              dropdownLabel={'City'}
+              initialValue={state.city}
+              textTyped={(newText: {label: string; value: string}) =>
+                onChangeText('city', newText.value)
+              }
+              containerStyles={{marginTop: heightPercentage(15), width: '45%'}}
+            />
+
             <SsuInput.InputLabel
               label="Postal Code"
               placeholder="Add Postal Code"
@@ -196,17 +207,6 @@ export const ShippingInformationContent: React.FC<ShippingInformationProps> = ({
                 onChangeText('postalCode', newText)
               }
               inputStyles={{minHeight: mvs(55)}}
-              containerStyles={{marginTop: heightPercentage(15), width: '45%'}}
-            />
-
-            <Dropdown.Input
-              data={dataCity}
-              placeHolder={'Select City'}
-              dropdownLabel={'City'}
-              initialValue={state.city}
-              textTyped={(newText: {label: string; value: string}) =>
-                onChangeText('city', newText.value)
-              }
               containerStyles={{marginTop: heightPercentage(15), width: '45%'}}
             />
           </View>

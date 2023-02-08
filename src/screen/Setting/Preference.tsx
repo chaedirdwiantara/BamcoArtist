@@ -1,19 +1,26 @@
-import React, {useState} from 'react';
+import React, {useEffect} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
 import Color from '../../theme/Color';
 import {RootStackParams} from '../../navigations';
-import {ArrowLeftIcon} from '../../assets/icon';
-import {Dropdown, TopNavigation} from '../../components';
-import {dataLanguage} from '../../data/Settings/language';
-import {heightPercentage, widthPercentage} from '../../utils';
+import {widthPercentage} from '../../utils';
+import PreferenceContent from '../../components/molecule/SettingContent/PreferenceContent';
+import {ModalLoading} from '../../components/molecule/ModalLoading/ModalLoading';
+import {useSettingHook} from '../../hooks/use-setting.hook';
+import {useProfileHook} from '../../hooks/use-profile.hook';
 
 export const PreferenceSettingScreen: React.FC = () => {
-  const [, setLanguage] = useState('');
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
+  const {getListPreference, listGenre, listMood, isLoading} = useSettingHook();
+  const {dataProfile, getProfileUser} = useProfileHook();
+
+  useEffect(() => {
+    getProfileUser();
+    getListPreference();
+  }, []);
 
   const onPressGoBack = () => {
     navigation.goBack();
@@ -21,20 +28,13 @@ export const PreferenceSettingScreen: React.FC = () => {
 
   return (
     <View style={styles.root}>
-      <TopNavigation.Type1
-        title="Preference"
-        leftIcon={<ArrowLeftIcon />}
-        itemStrokeColor={Color.Neutral[10]}
-        leftIconAction={onPressGoBack}
-        containerStyles={{marginBottom: heightPercentage(15)}}
+      <PreferenceContent
+        onPressGoBack={onPressGoBack}
+        moods={listMood}
+        genres={listGenre}
+        profile={dataProfile}
       />
-      <Dropdown.Input
-        data={dataLanguage}
-        placeHolder={'Search Language'}
-        dropdownLabel={'Language'}
-        textTyped={(newText: string) => setLanguage(newText)}
-        containerStyles={{marginTop: heightPercentage(15)}}
-      />
+      <ModalLoading visible={isLoading || !dataProfile} />
     </View>
   );
 };

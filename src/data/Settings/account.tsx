@@ -1,3 +1,5 @@
+import {listYears} from '../../utils/listYears';
+
 export interface PropsType {
   label: string;
   value: string;
@@ -24,32 +26,45 @@ export const dataPostalCode: PropsType[] = [
 ];
 
 export const dataCity: PropsType[] = [
-  {label: 'Jakarta Pusat', value: 'Jakarta Pusat'},
-  {label: 'Denpasar', value: 'Denpasar'},
-  {label: 'Bandung', value: 'Bandung'},
-  {label: 'Serang', value: 'Serang'},
-  {label: 'Malang', value: 'Malang'},
-  {label: 'Pekalongan', value: 'Pekalongan'},
-  {label: 'Surabaya', value: 'Surabaya'},
+  {label: 'Jakarta Pusat', value: 'jakarta_pusat'},
+  {label: 'Denpasar', value: 'denpasar'},
+  {label: 'Bandung', value: 'bandung'},
+  {label: 'Serang', value: 'serang'},
+  {label: 'Malang', value: 'malang'},
+  {label: 'Pekalongan', value: 'pekalongan'},
+  {label: 'Surabaya', value: 'surabaya'},
 ];
 
 export const dataGender: PropsType[] = [
-  {label: 'Male', value: 'Male'},
-  {label: 'Female', value: 'Female'},
-  {label: 'Non-binary', value: 'Non-binary'},
-  {label: 'Trans', value: 'Trans'},
+  {label: 'Male', value: 'male'},
+  {label: 'Female', value: 'female'},
+  {label: 'Non-binary', value: 'non_binary'},
+  {label: 'Trans', value: 'trans'},
   {
     label: 'My gender identity is not listed',
-    value: 'My gender identity is not listed',
+    value: 'my_gender_identity_is_not_listed',
   },
 ];
 
 export const dataLocation: PropsType[] = [
-  {label: 'Afganistan', value: 'Afganistan'},
-  {label: 'Argentina', value: 'Argentina'},
-  {label: 'Brazil', value: 'Brazil'},
-  {label: 'China', value: 'China'},
-  {label: 'Denmark', value: 'Denmark'},
-  {label: 'Indonesia', value: 'Indonesia'},
-  {label: 'Singapore', value: 'Singapore'},
+  {label: 'Afganistan', value: 'afganistan'},
+  {label: 'Argentina', value: 'argentina'},
+  {label: 'Brazil', value: 'brazil'},
+  {label: 'China', value: 'china'},
+  {label: 'Denmark', value: 'denmark'},
+  {label: 'Indonesia', value: 'indonesia'},
+  {label: 'Singapore', value: 'singapore'},
+];
+
+export const dataYearsFrom: PropsType[] = listYears.map(val => ({
+  label: val.toString(),
+  value: val.toString(),
+}));
+
+export const dataYearsTo: PropsType[] = [
+  {
+    label: 'Present',
+    value: 'present',
+  },
+  ...dataYearsFrom.slice(1, dataYearsFrom.length),
 ];

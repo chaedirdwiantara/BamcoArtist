@@ -210,7 +210,7 @@ const TextArea: React.FC<TextAreaProps> = props => {
         {
           borderBottomWidth: state === true ? 1 : 0,
           borderBottomColor: color.Pink[200],
-          backgroundColor: backgroundColor ? backgroundColor : color.Dark[900],
+          backgroundColor: backgroundColor ? backgroundColor : color.Dark[800],
         },
         containerStyles,
         isFocus

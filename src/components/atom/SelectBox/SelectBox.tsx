@@ -3,16 +3,18 @@ import {View, StyleSheet, ViewStyle} from 'react-native';
 import {Button} from '../../atom';
 import Color from '../../../theme/Color';
 import {heightPercentage, width, widthPercentage} from '../../../utils';
+import {PreferenceList} from '../../../interface/setting.interface';
 
 interface SelectBoxProps {
   selected: number[];
   setSelected: (value: number[]) => void;
-  favorites: string[];
+  data: PreferenceList[];
   containerStyle?: ViewStyle;
 }
 
 export const SelectBox: React.FC<SelectBoxProps> = (props: SelectBoxProps) => {
-  const {selected, setSelected, favorites, containerStyle} = props;
+  const {selected, setSelected, data, containerStyle} = props;
+
   const onPressBox = (val: number, checkVal: boolean) => {
     let newArr = [...selected];
     const oldIndexValue = newArr.indexOf(val);
@@ -30,14 +32,14 @@ export const SelectBox: React.FC<SelectBoxProps> = (props: SelectBoxProps) => {
 
   return (
     <View style={[styles.root, containerStyle]}>
-      {favorites.map((val, i) => {
-        const checkVal = selected?.some(res => res === i + 1);
+      {data.map(val => {
+        const checkVal = selected?.some(res => res === val.id);
         const activeBtn = checkVal ? Color.Pink.linear : Color.Dark[400];
 
         return (
           <Button
-            key={i}
-            label={val}
+            key={val.id}
+            label={val.name}
             containerStyles={{
               backgroundColor: activeBtn,
               width: undefined,
@@ -47,7 +49,7 @@ export const SelectBox: React.FC<SelectBoxProps> = (props: SelectBoxProps) => {
               marginVertical: heightPercentage(2),
               marginHorizontal: widthPercentage(2),
             }}
-            onPress={() => onPressBox(i + 1, checkVal)}
+            onPress={() => onPressBox(val.id, checkVal)}
           />
         );
       })}

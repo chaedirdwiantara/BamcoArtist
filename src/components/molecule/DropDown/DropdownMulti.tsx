@@ -1,15 +1,14 @@
-import React, {useState} from 'react';
-import {Platform, StyleSheet, Text, View, ViewStyle} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {StyleSheet, Text, View, ViewStyle} from 'react-native';
+import {MultiSelect} from 'react-native-element-dropdown';
 import {ms, mvs} from 'react-native-size-matters';
-import {Dropdown} from 'react-native-element-dropdown';
-import {Gap} from '../../atom';
 import {color, font} from '../../../theme';
-import {ErrorIcon} from '../../../assets/icon';
-import {heightPercentage, normalize} from '../../../utils';
+import {heightPercentage, normalize, widthPercentage} from '../../../utils';
+import {CheckBox} from '../../atom';
 
-interface dataProps {
+export interface dataProps {
   label: string;
-  value?: string;
+  value: number;
 }
 
 interface InputDropdownProps {
@@ -18,16 +17,15 @@ interface InputDropdownProps {
   dropdownLabel: string;
   textTyped: (data: any) => void;
   containerStyles?: ViewStyle;
-  initialValue?: string;
-  isError?: boolean;
-  errorMsg?: string;
+  initialValue?: (string | number | undefined)[] | null;
+  setValues: (val: number[]) => void;
 }
 
 const borderColor = color.Dark[500];
 const itemBg = color.Dark[900];
 const fontColorMain = color.Neutral[10];
 
-const InputDropdown: React.FC<InputDropdownProps> = (
+const MultiDropdown: React.FC<InputDropdownProps> = (
   props: InputDropdownProps,
 ) => {
   const {
@@ -37,59 +35,88 @@ const InputDropdown: React.FC<InputDropdownProps> = (
     dropdownLabel,
     textTyped,
     containerStyles,
-    isError,
-    errorMsg,
+    setValues,
   } = props;
-  const initValue = {label: initialValue, value: initialValue};
 
-  const [value, setValue] = useState(initValue || null);
-  const [isFocus, setIsFocus] = useState(false);
+  const [value, setValue] = useState(initialValue ?? []);
+
+  const isSelected = (item: any) => {
+    return value.find(val => item.value === val) ? true : false;
+  };
 
   const renderLabel = () => {
     return <Text style={[styles.label]}>{dropdownLabel}</Text>;
   };
 
+  const renderItem = (item: any) => {
+    return (
+      <View style={styles.item}>
+        <Text style={styles.selectedTextStyle}>{item.label}</Text>
+        <CheckBox handleOnPress={() => null} active={isSelected(item)} />
+      </View>
+    );
+  };
+
+  const renderSelectedItem = () => {
+    return <></>;
+  };
+
+  const mappingValue = () => {
+    const array: dataProps[] = [];
+    value.map(val => {
+      const find = data.find(item => item.value === val);
+      if (find) {
+        array.push(find);
+      }
+    });
+
+    return array.map(item => {
+      return ' ' + item.label;
+    });
+  };
+
+  useEffect(() => {
+    if (initialValue) {
+      setValue(initialValue);
+    }
+  }, [initialValue]);
+
   return (
     <View style={[styles.container, containerStyles]}>
       {renderLabel()}
-      <Dropdown
+      <MultiSelect
+        search
+        searchPlaceholder="Search..."
         style={[styles.dropdown]}
         containerStyle={styles.containerStyle}
         placeholderStyle={styles.placeholderStyle}
+        inputSearchStyle={styles.placeholderStyle}
         iconStyle={styles.iconStyle}
         data={data}
         maxHeight={mvs(300)}
         labelField="label"
         valueField="value"
-        placeholder={!isFocus ? placeHolder : '...'}
+        placeholder={value.length > 0 ? mappingValue().toString() : placeHolder}
         value={value}
-        onFocus={() => setIsFocus(true)}
-        onBlur={() => setIsFocus(false)}
         onChange={item => {
-          setValue(item.value);
+          setValue(item);
           textTyped(item);
-          setIsFocus(false);
+          setValues(item);
         }}
         fontFamily={font.InterRegular}
         showsVerticalScrollIndicator={false}
-        autoScroll={false}
         activeColor={color.Dark[500]}
         itemContainerStyle={[styles.itemContainer]}
         itemTextStyle={styles.itemTextStyle}
         selectedTextStyle={styles.selectedTextStyle}
+        renderSelectedItem={renderSelectedItem}
+        renderItem={renderItem}
       />
-      {isError ? (
-        <View style={styles.containerErrorMsg}>
-          <ErrorIcon fill={color.Error[400]} />
-          <Gap width={ms(4)} />
-          <Text style={styles.errorMsg}>{errorMsg}</Text>
-        </View>
-      ) : null}
     </View>
   );
 };
 
-export default InputDropdown;
+export default MultiDropdown;
 
 const styles = StyleSheet.create({
   container: {
@@ -118,32 +145,26 @@ const styles = StyleSheet.create({
     fontSize: normalize(10),
   },
   placeholderStyle: {
-    fontSize: Platform.OS === 'ios' ? mvs(12) : mvs(13),
-    color: color.Dark[300],
+    fontSize: normalize(13),
+    color: color.Neutral[10],
   },
   selectedTextStyle: {
-    fontSize: Platform.OS === 'ios' ? mvs(12) : mvs(13),
+    fontSize: normalize(13),
     color: fontColorMain,
   },
   itemTextStyle: {
-    fontSize: Platform.OS === 'ios' ? mvs(12) : mvs(13),
+    fontSize: normalize(13),
     color: fontColorMain,
   },
   iconStyle: {
     width: ms(20),
     height: ms(20),
   },
-  containerErrorMsg: {
-    width: '100%',
-    flexDirection: 'row',
-    paddingTop: mvs(4),
+  item: {
+    justifyContent: 'space-between',
     alignItems: 'center',
-  },
-  errorMsg: {
-    color: color.Error[400],
-    fontFamily: font.InterRegular,
-    fontSize: normalize(10),
-    lineHeight: mvs(12),
-    maxWidth: '90%',
+    flexDirection: 'row',
+    paddingHorizontal: widthPercentage(15),
+    paddingVertical: heightPercentage(18),
   },
 });
