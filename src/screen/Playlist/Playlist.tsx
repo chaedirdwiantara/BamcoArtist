@@ -8,7 +8,6 @@ import {
 
 import Color from '../../theme/Color';
 import {PlaylistContent} from '../../components';
-import {SongList} from '../../interface/song.interface';
 import {useBackHandler} from '../../utils/useBackHandler';
 import {usePlaylistHook} from '../../hooks/use-playlist.hook';
 import {MainTabParams, RootStackParams} from '../../navigations';
@@ -47,12 +46,9 @@ export const PlaylistScreen: React.FC<PlaylistProps> = ({
     navigation.goBack();
   };
 
-  const goToEditPlaylist = (listSongs: SongList[]) => {
+  const goToEditPlaylist = () => {
     if (dataDetailPlaylist !== undefined) {
-      navigation.navigate('EditPlaylist', {
-        data: dataDetailPlaylist,
-        listSongs: listSongs,
-      });
+      navigation.navigate('EditPlaylist', dataDetailPlaylist);
     }
   };
 
