@@ -23,6 +23,7 @@ export type LoadMoreProps = {
 };
 
 export type CreatePostProps = {
+  id?: string;
   caption: string;
   category: string;
   image?: string[];
@@ -252,6 +253,13 @@ export type CreatePostResponseData = {
 export type CreatePostResponseType = {
   code: number;
   data: CreatePostResponseData;
+  message: string;
+  status: number;
+};
+
+export type DeletePostResponseType = {
+  code: number;
+  data: string;
   message: string;
   status: number;
 };

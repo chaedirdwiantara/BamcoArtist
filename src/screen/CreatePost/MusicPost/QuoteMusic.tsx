@@ -16,10 +16,6 @@ const QuoteMusic = () => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
 
-  const handleOnPress = (data: ListDataSearchSongs) => {
-    navigation.navigate('CreatePost', data);
-  };
-
   const {dataSearchSongs, getSearchSongs} = useSearchHook();
 
   useFocusEffect(
@@ -27,6 +23,10 @@ const QuoteMusic = () => {
       getSearchSongs({uuid: profileStorage()?.uuid});
     }, []),
   );
+
+  const handleOnPress = (data: ListDataSearchSongs) => {
+    navigation.navigate('CreatePost', data);
+  };
 
   return (
     <View style={styles.container}>

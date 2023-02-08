@@ -16,6 +16,8 @@ import {
   createPost,
   listPostExclusive,
   listTopPost,
+  updatePost,
+  deletePost,
 } from '../api/feed.api';
 import {ParamsProps} from '../interface/base.interface';
 import {
@@ -279,6 +281,42 @@ export const useFeedHook = () => {
     }
   };
 
+  // UPDATE POST AREA
+  const [dataUpdatePost, setDataUpdatePost] =
+    useState<CreatePostResponseData | null>(null);
+  const setUpdatePost = async (props?: CreatePostProps) => {
+    setCreatePostLoading(true);
+    try {
+      const response = await updatePost(props);
+      setDataUpdatePost(response.data);
+    } catch (error) {
+      console.log(error);
+      setDataUpdatePost(null);
+      setCreatePostError(true);
+    } finally {
+      setCreatePostLoading(false);
+    }
+  };
+
+  // DELETE POST AREA
+  const [deletePostLoading, setDeletePostLoading] = useState<boolean>(false);
+  const [dataDeletePost, setDataDeletePost] = useState<string>();
+  const [deletePostError, setDeletePostError] = useState<boolean>();
+  const setDeletePost = async (props?: PostPropsTypeA) => {
+    setDeletePostLoading(true);
+    try {
+      const response = await deletePost(props);
+      setDataDeletePost(response.data);
+      getListDataMyPost();
+    } catch (error) {
+      console.log(error);
+      setDataDeletePost(undefined);
+      setDeletePostError(true);
+    } finally {
+      setDeletePostLoading(false);
+    }
+  };
+
   return {
     feedIsLoading,
     likePostLoading,
@@ -302,6 +340,11 @@ export const useFeedHook = () => {
     createPostLoading,
     createPostError,
     dataTopPost,
+    dataUpdatePost,
+    deletePostLoading,
+    dataDeletePost,
+    deletePostError,
+    setDeletePost,
     setDataCmntToCmnt,
     getListDataPost,
     getListDataMyPost,
@@ -319,5 +362,6 @@ export const useFeedHook = () => {
     setUnlikeComment,
     setCreatePost,
     getListTopPost,
+    setUpdatePost,
   };
 };

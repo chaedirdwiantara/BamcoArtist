@@ -95,6 +95,7 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
     setLikePost,
     setUnlikePost,
     setCommentToPost,
+    setDeletePost,
   } = useFeedHook();
 
   const {
@@ -263,14 +264,21 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
     });
   };
 
-  // ! UPDATE COMMENT AREA
+  // ! UPDATE POST AREA
   useEffect(() => {
     if (selectedIdPost !== undefined && selectedMenu !== undefined) {
-      console.log('selectedIdPost', selectedIdPost);
-      console.log('selectedMenu', selectedMenu);
+      if (selectedMenu.label === 'Delete Post') {
+        setDeletePost({id: selectedIdPost});
+      }
+      if (selectedMenu.label === 'Edit Post') {
+        let dataSelected = dataPostList.filter(
+          data => data.id === selectedIdPost,
+        );
+        //navigation.navigate('UpdatePost', dataSelected[0]);
+      }
     }
   }, [selectedIdPost, selectedMenu]);
-  // ! END OF UPDATE COMMENT AREA
+  // ! END OF UPDATE POST AREA
 
   // ! MUSIC AREA
   const onPressPlaySong = (val: PostList) => {

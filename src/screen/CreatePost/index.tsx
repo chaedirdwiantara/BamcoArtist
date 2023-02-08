@@ -180,7 +180,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
     addPlaylist({
       //@ts-ignore
       dataSong: dataMusic,
-      playSongId: data.id,
+      playSongId: data?.id,
       isPlay: true,
     });
     setPlaySong();
