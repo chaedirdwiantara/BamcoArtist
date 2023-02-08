@@ -5,11 +5,13 @@ import Color from '../../../theme/Color';
 import {Button, ButtonGradient, Indicator} from '../../../components';
 import {heightPercentage, width, widthPercentage} from '../../../utils';
 import {PreferenceList} from '../../../interface/setting.interface';
+import DescriptionBoarding from '../../atom/DescriptionBoarding/DescriptionBoarding';
+import {DataOnboardType} from '../../../data/onboard';
 
 interface FooterContentProps {
   type?: string;
   activeIndexSlide: number;
-  data: {title: string; list: PreferenceList[]}[];
+  data: {title: string; list: PreferenceList[]}[] | DataOnboardType[];
   onPressGoTo?: () => void;
   onPressNext: () => void;
 }
@@ -28,6 +30,18 @@ export const FooterContent: React.FC<FooterContentProps> = ({
 
   return (
     <View style={styles.containerFooterContent}>
+      {type !== 'Preference' &&
+        data.map((item, index) => {
+          if (index === activeIndexSlide && 'uri' in item) {
+            return (
+              <DescriptionBoarding
+                key={index}
+                title={item.title}
+                subtitle={item.subtitle}
+              />
+            );
+          }
+        })}
       <Indicator
         activeIndex={activeIndexSlide}
         totalIndex={data.length}

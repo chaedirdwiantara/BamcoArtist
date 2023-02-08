@@ -6,6 +6,7 @@ import {
   CommentUpdateResponseType,
   CreatePostProps,
   CreatePostResponseType,
+  DeletePostResponseType,
   DetailPostResponseType,
   LikePostResponseType,
   ListCommentResponseType,
@@ -129,7 +130,7 @@ export const loadMore = async (
   props?: LoadMoreProps,
 ): Promise<ListCommentResponseType> => {
   const {data} = await SsuAPI().request<ListCommentResponseType>({
-    url: `/comments/${props?.id}/list`,
+    url: `/comment/list/${props?.id}`,
     method: 'GET',
     params: props?.params,
   });
@@ -202,6 +203,29 @@ export const createPost = async (
     url: `/post/create`,
     method: 'POST',
     data: props,
+  });
+
+  return data;
+};
+
+export const updatePost = async (
+  props?: CreatePostProps,
+): Promise<CreatePostResponseType> => {
+  const {data} = await SsuAPI().request<CreatePostResponseType>({
+    url: `/post/update/${props?.id}`,
+    method: 'POST',
+    data: props,
+  });
+
+  return data;
+};
+
+export const deletePost = async (
+  props?: PostPropsTypeA,
+): Promise<DeletePostResponseType> => {
+  const {data} = await SsuAPI().request<DeletePostResponseType>({
+    url: `/post/delete/${props?.id}`,
+    method: 'DELETE',
   });
 
   return data;

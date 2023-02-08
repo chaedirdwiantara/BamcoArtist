@@ -5,10 +5,14 @@ import {
   playlistSearch,
   songSearch,
 } from '../api/search.api';
-import {SearchProps} from '../interface/search.interface';
+import {ListDataSearchSongs, SearchProps} from '../interface/search.interface';
 import {searchEvent} from '../api/event.api';
+import {useState} from 'react';
 
 export const useSearchHook = () => {
+  const [dataSearchSongs, setDataSearchSongs] = useState<ListDataSearchSongs[]>(
+    [],
+  );
   const getSearchFans = async (props?: SearchProps) => {
     try {
       const response = await fansSearch(props);
@@ -34,7 +38,7 @@ export const useSearchHook = () => {
   const getSearchSongs = async (props?: SearchProps) => {
     try {
       const response = await songSearch(props);
-      console.log(response.data);
+      setDataSearchSongs(response.data);
       return {
         data: response?.data,
       };
@@ -94,6 +98,7 @@ export const useSearchHook = () => {
   };
 
   return {
+    dataSearchSongs,
     getSearchFans,
     getSearchMusicians,
     getSearchAlbums,
