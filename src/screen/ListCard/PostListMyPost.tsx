@@ -50,6 +50,7 @@ import {ModalLoading} from '../../components/molecule/ModalLoading/ModalLoading'
 import {usePlayerHook} from '../../hooks/use-player.hook';
 import MusicListPreview from '../../components/molecule/MusicPreview/MusicListPreview';
 import {dummySongImg} from '../../data/image';
+import {ListDataSearchSongs} from '../../interface/search.interface';
 const {height} = Dimensions.get('screen');
 
 interface PostListProps {
@@ -274,7 +275,11 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
         let dataSelected = dataPostList.filter(
           data => data.id === selectedIdPost,
         );
-        //navigation.navigate('UpdatePost', dataSelected[0]);
+        //TODO: fix var to navigation
+        // const dataNavigation: ListDataSearchSongs = {
+
+        // }
+        navigation.navigate('CreatePost');
       }
     }
   }, [selectedIdPost, selectedMenu]);

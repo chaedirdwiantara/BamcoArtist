@@ -47,6 +47,7 @@ import MusicPreview from '../../components/molecule/MusicPreview/MusicPreview';
 import {ListDataSearchSongs} from '../../interface/search.interface';
 import {usePlayerHook} from '../../hooks/use-player.hook';
 import {dummySongImg} from '../../data/image';
+import {SongList, TranscodedSongType} from '../../interface/song.interface';
 
 type PostDetailProps = NativeStackScreenProps<RootStackParams, 'CreatePost'>;
 
@@ -54,7 +55,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
 
-  const data = route.params;
+  const dataNavigation = route.params;
 
   const [inputText, setInputText] = useState<string>('');
   const [isModalVisible, setModalVisible] = useState({
@@ -169,18 +170,58 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   // ! UPLOAD MUSIC STEPS
   //  * 3. trigger hook to hit upload image api
   useEffect(() => {
-    if (data !== undefined) {
-      setMusicData(data);
+    if (dataNavigation !== undefined) {
+      setMusicData(dataNavigation);
       setPauseModeOn(false);
     }
-  }, [data]);
+  }, [dataNavigation]);
 
   const onPressPlaySong = () => {
-    const dataMusic = [data];
+    const dataMusic = [dataNavigation];
+    const transcode: TranscodedSongType = {
+      id: dataMusic[0]?.transcodedSongUrl
+        ? dataMusic[0].transcodedSongUrl[1].songId
+        : 1,
+      songId: dataMusic[0]?.transcodedSongUrl
+        ? dataMusic[0].transcodedSongUrl[1].songId
+        : 1,
+      encodedDashUrl: dataMusic[0]?.transcodedSongUrl
+        ? dataMusic[0].transcodedSongUrl[1].encodedDashUrl
+        : '',
+      encodedHlsUrl: dataMusic[0]?.transcodedSongUrl
+        ? dataMusic[0].transcodedSongUrl[1].encodedHlsUrl
+        : '',
+      quality: dataMusic[0]?.transcodedSongUrl
+        ? dataMusic[0].transcodedSongUrl[1].quality
+        : 1,
+      presetName: dataMusic[0]?.transcodedSongUrl
+        ? dataMusic[0].transcodedSongUrl[1].presetName
+        : 'low',
+      encodeStatus: dataMusic[0]?.transcodedSongUrl
+        ? dataMusic[0].transcodedSongUrl[1].encodeStatus
+        : 'ON_PROCESS',
+    };
+
+    const addMusic: SongList = {
+      isAddedToThisPlaylist: true,
+      played: true,
+      id: dataMusic[0] ? dataMusic[0].id : 1,
+      title: dataMusic[0] ? dataMusic[0].title : '',
+      musicianId: dataMusic[0] ? dataMusic[0].musicianUUID : '',
+      musicianName: dataMusic[0] ? dataMusic[0].musicianName : '',
+      imageUrl: dataMusic[0] ? dataMusic[0].imageUrl : undefined,
+      songDuration:
+        dataMusic[0] && dataMusic[0].songDuration !== null
+          ? dataMusic[0].songDuration
+          : 60,
+      lyrics: dataMusic[0] ? dataMusic[0].lyrics : '',
+      transcodedSongUrl: [transcode, transcode],
+      originalSongUrl: dataMusic[0] ? dataMusic[0].originalSongUrl : '',
+    };
+
     addPlaylist({
-      //@ts-ignore
-      dataSong: dataMusic,
-      playSongId: data?.id,
+      dataSong: [addMusic],
+      playSongId: dataNavigation?.id,
       isPlay: true,
     });
     setPlaySong();
@@ -277,7 +318,8 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
                 height={79}
                 onPress={closeImage}
               />
-              {musicData !== undefined && (
+              {musicData !== undefined &&
+              musicData.transcodedSongUrl !== undefined ? (
                 <MusicPreview
                   targetId={musicData.id.toString()}
                   title={musicData.title}
@@ -299,7 +341,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
                   duration={playerProgress.duration}
                   seekPlayer={seekPlayer}
                 />
-              )}
+              ) : null}
             </View>
           </View>
           {/* //! END OF TOP AREA */}

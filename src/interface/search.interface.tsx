@@ -65,6 +65,18 @@ export type ListDataSearchSongsNavigate = {
   ];
 };
 
+export type Transcode = {
+  trackId: string;
+  songId: number;
+  sessionId: string;
+  encodedDashUrl: string;
+  encodedHlsUrl: string;
+  quality: number;
+  bitrate: string;
+  presetName: 'highest' | 'high' | 'med' | 'low';
+  encodeStatus: 'FINISHED' | 'ON_PROCESS';
+};
+
 export type ListDataSearchSongs = {
   id: number;
   musicianUUID: string;
@@ -78,25 +90,14 @@ export type ListDataSearchSongs = {
   shareCount: 0;
   listenerCount: 0;
   lyrics: string;
-  originalSongURL: string;
+  originalSongUrl: string;
   isAddedToThisPlaylist: boolean;
   copyright: string;
   language: string;
   CreatedAt: string;
   UpdatedAt: string;
-  transcodedSongUrl: [
-    {
-      trackId: string;
-      songId: number;
-      sessionId: string;
-      encodedDashUrl: string;
-      encodedHlsUrl: string;
-      quality: number;
-      bitrate: string;
-      presetName: string;
-      encodeStatus: string;
-    },
-  ];
+  songDuration: number;
+  transcodedSongUrl?: Transcode[];
 };
 
 export type ListSearchSongsResponseType = {
