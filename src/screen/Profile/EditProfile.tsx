@@ -31,7 +31,7 @@ export const EditProfileScreen: React.FC<EditProfileProps> = ({
     dataProfile !== undefined && dataProfile.imageProfileUrls?.length > 0
       ? dataProfile.imageProfileUrls[2].image
       : null;
-  const {isLoading, updateProfileUser} = useProfileHook();
+  const {isLoading, updateProfileUser, addCollectPhotos} = useProfileHook();
 
   const [avatarUri, setAvatarUri] = useState(avatar || '');
   const [backgroundUri, setBackgroundUri] = useState(banners || '');
@@ -43,6 +43,7 @@ export const EditProfileScreen: React.FC<EditProfileProps> = ({
   };
 
   const onPressSave = (param: {bio: string; about: string}) => {
+    addCollectPhotos({photos});
     updateProfileUser({
       bio: param.bio,
       about: param.about,
@@ -65,7 +66,7 @@ export const EditProfileScreen: React.FC<EditProfileProps> = ({
       } else if (type === 'backgroundUri') {
         setBackgroundUri(response.data);
       } else {
-        setPhotos([response.data, photos]);
+        setPhotos([...photos, response.data]);
       }
     } catch (error) {
       console.log(error);
