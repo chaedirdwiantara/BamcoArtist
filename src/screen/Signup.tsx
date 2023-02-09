@@ -43,6 +43,8 @@ const registerValidation = yup.object({
   fullname: yup
     .string()
     .required('This field is required')
+    .strict(true)
+    .trim('Full name cannot include leading and trailing spaces')
     .matches(/^.{3,50}$/, 'Fullname allowed 3 to 50 character'),
   email: yup.string().when('registrationType', {
     is: (val: RegistrationType) => val === 'email',
