@@ -136,7 +136,7 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
 
   const cardOnPress = (data: PostList) => {
     navigation.navigate('PostDetail', data);
-    setPauseSong();
+    // setPauseSong();
   };
 
   const likeOnPress = (id: string, isLiked: boolean) => {

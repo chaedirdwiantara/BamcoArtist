@@ -25,7 +25,7 @@ const QuoteMusic = () => {
   );
 
   const handleOnPress = (data: ListDataSearchSongs) => {
-    navigation.navigate('CreatePost', data);
+    navigation.navigate('CreatePost', {songData: data});
   };
 
   return (

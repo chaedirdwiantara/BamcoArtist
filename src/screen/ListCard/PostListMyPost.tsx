@@ -139,7 +139,7 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
 
   const cardOnPress = (data: PostList) => {
     navigation.navigate('PostDetail', data);
-    setPauseSong();
+    // setPauseSong();
   };
 
   const likeOnPress = (id: string, isLiked: boolean) => {
@@ -270,16 +270,14 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
     if (selectedIdPost !== undefined && selectedMenu !== undefined) {
       if (selectedMenu.label === 'Delete Post') {
         setDeletePost({id: selectedIdPost});
+        setSelectedMenu(undefined);
       }
       if (selectedMenu.label === 'Edit Post') {
         let dataSelected = dataPostList.filter(
           data => data.id === selectedIdPost,
         );
-        //TODO: fix var to navigation
-        // const dataNavigation: ListDataSearchSongs = {
-
-        // }
-        navigation.navigate('CreatePost');
+        navigation.navigate('CreatePost', {postData: dataSelected[0]});
+        setSelectedMenu(undefined);
       }
     }
   }, [selectedIdPost, selectedMenu]);

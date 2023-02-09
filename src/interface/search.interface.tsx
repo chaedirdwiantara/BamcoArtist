@@ -1,4 +1,5 @@
 import {imageTypes} from './base.interface';
+import {PostList} from './feed.interface';
 
 export type SearchProps = {
   keyword?: string;
@@ -98,6 +99,7 @@ export type ListDataSearchSongs = {
   UpdatedAt: string;
   songDuration: number;
   transcodedSongUrl?: Transcode[];
+  postData?: PostList;
 };
 
 export type ListSearchSongsResponseType = {

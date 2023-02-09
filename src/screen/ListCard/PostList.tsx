@@ -131,7 +131,7 @@ const PostListHome: FC<PostListProps> = (props: PostListProps) => {
     isLogin
       ? navigation.navigate('PostDetail', data)
       : setModalGuestVisible(true);
-    setPauseSong();
+    // setPauseSong();
   };
 
   const likeOnPress = (id: string, isLiked: boolean) => {

@@ -48,6 +48,7 @@ import {ListDataSearchSongs} from '../../interface/search.interface';
 import {usePlayerHook} from '../../hooks/use-player.hook';
 import {dummySongImg} from '../../data/image';
 import {SongList, TranscodedSongType} from '../../interface/song.interface';
+import {useProfileHook} from '../../hooks/use-profile.hook';
 
 type PostDetailProps = NativeStackScreenProps<RootStackParams, 'CreatePost'>;
 
@@ -55,7 +56,8 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
 
-  const dataNavigation = route.params;
+  const dataSongNavigation = route.params?.songData;
+  const dataUpdatePostProps = route.params?.postData;
 
   const [inputText, setInputText] = useState<string>('');
   const [isModalVisible, setModalVisible] = useState({
@@ -63,7 +65,13 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
     modalImagePicker: false,
   });
 
-  const {dataCreatePost, createPostLoading, setCreatePost} = useFeedHook();
+  const {
+    dataCreatePost,
+    createPostLoading,
+    dataUpdatePost,
+    setCreatePost,
+    setUpdatePost,
+  } = useFeedHook();
   const {isLoadingImage, dataImage, setUploadImage} = useUploadImageHook();
   const {
     isPlaying,
@@ -73,7 +81,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
     playerProgress,
     addPlaylist,
   } = usePlayerHook();
-
+  const {dataProfile, getProfileUser} = useProfileHook();
   const [label, setLabel] = useState<string>();
   const [valueFilter, setValueFilter] = useState<string>();
   const [dataAudience, setDataAudience] = useState<string>('');
@@ -84,6 +92,37 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   // * Hooks for uploading
   const [uri, setUri] = useState<Image[]>([]);
   const [active, setActive] = useState<boolean>(false);
+
+  useEffect(() => {
+    getProfileUser();
+  }, []);
+
+  // ! EDIT POST AREA
+  useEffect(() => {
+    if (dataUpdatePostProps !== undefined) {
+      setLabel(dataUpdatePostProps.category);
+      setValueFilter(dataUpdatePostProps.category);
+      setInputText(dataUpdatePostProps.caption);
+      setDataAudience(dataUpdatePostProps.isPremium ? 'Exclusive' : 'Public');
+      if (dataUpdatePostProps.images.length !== 0) {
+        let dataForSet = [];
+        for (let i = 0; i < dataUpdatePostProps.images.length; i++) {
+          dataForSet.push({
+            path: dataUpdatePostProps.images[i][1]?.image,
+            sourceURL: dataUpdatePostProps.images[i][1]?.image,
+            mime: 'image/jpeg',
+          });
+        }
+        //@ts-ignore
+        setUri(dataForSet);
+      }
+    }
+  }, [dataUpdatePostProps]);
+
+  useEffect(() => {
+    dataUpdatePost !== null && navigation.goBack();
+  }, [dataUpdatePost]);
+  // ! END OF EDIT POST AREA
 
   // ! UPLOAD PHOTO STEPS
   // * 1. set to hook state picked images
@@ -102,8 +141,28 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
 
   //  * 3. trigger hook to hit upload image api
   useEffect(() => {
-    if (active == true && uri.length == 0 && musicData == undefined) {
+    if (
+      active == true &&
+      uri.length == 0 &&
+      musicData == undefined &&
+      dataUpdatePostProps === undefined
+    ) {
       setCreatePost({
+        caption: inputText,
+        category: valueFilter ? valueFilter : 'highlight',
+        isPremium: dataAudience === 'Exclusive' ? true : false,
+      });
+    }
+
+    // ? for UPDATE POST text only
+    if (
+      active == true &&
+      uri.length == 0 &&
+      musicData == undefined &&
+      dataUpdatePostProps !== undefined
+    ) {
+      setUpdatePost({
+        id: dataUpdatePostProps.id,
         caption: inputText,
         category: valueFilter ? valueFilter : 'highlight',
         isPremium: dataAudience === 'Exclusive' ? true : false,
@@ -115,6 +174,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
         setUploadImage(uri[i]);
       }
     }
+
     if (active == true && uri.length == 0 && musicData !== undefined) {
       setCreatePost({
         caption: inputText,
@@ -170,14 +230,14 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   // ! UPLOAD MUSIC STEPS
   //  * 3. trigger hook to hit upload image api
   useEffect(() => {
-    if (dataNavigation !== undefined) {
-      setMusicData(dataNavigation);
+    if (dataSongNavigation !== undefined) {
+      setMusicData(dataSongNavigation);
       setPauseModeOn(false);
     }
-  }, [dataNavigation]);
+  }, [dataSongNavigation]);
 
   const onPressPlaySong = () => {
-    const dataMusic = [dataNavigation];
+    const dataMusic = [dataSongNavigation];
     const transcode: TranscodedSongType = {
       id: dataMusic[0]?.transcodedSongUrl
         ? dataMusic[0].transcodedSongUrl[1].songId
@@ -221,7 +281,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
 
     addPlaylist({
       dataSong: [addMusic],
-      playSongId: dataNavigation?.id,
+      playSongId: dataSongNavigation?.id,
       isPlay: true,
     });
     setPlaySong();
@@ -280,7 +340,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
           {/* //! TOP AREA */}
           <View style={styles.topBody}>
             <View style={styles.userCategory}>
-              <Avatar />
+              <Avatar imgUri={dataProfile?.data.imageProfileUrls[0].image} />
               <Gap width={12} />
               <ButtonGradientwithIcon
                 label={label ? label : 'Select Category'}
