@@ -108,8 +108,8 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
         let dataForSet = [];
         for (let i = 0; i < dataUpdatePostProps.images.length; i++) {
           dataForSet.push({
-            path: dataUpdatePostProps.images[i][1]?.image,
-            sourceURL: dataUpdatePostProps.images[i][1]?.image,
+            path: dataUpdatePostProps.images[i][3]?.image,
+            sourceURL: dataUpdatePostProps.images[i][3]?.image,
             mime: 'image/jpeg',
           });
         }
@@ -206,10 +206,30 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
       : null;
   }, [dataImage]);
 
-  //  * 5. hook to hit create post api when all data uploaded has beed received
+  // * 5. hook to hit create post api when all data uploaded has beed received
   useEffect(() => {
-    active && uri.length !== 0 && dataResponseImg.length === uri.length
+    active &&
+    uri.length !== 0 &&
+    dataResponseImg.length === uri.length &&
+    dataUpdatePostProps === undefined
       ? (setCreatePost({
+          caption: inputText,
+          category: valueFilter ? valueFilter : 'highlight',
+          image: dataResponseImg,
+          isPremium: dataAudience === 'Exclusive' ? true : false,
+        }),
+        setActive(false))
+      : null;
+  }, [dataResponseImg, uri, active]);
+
+  // ? update api for UPDATE POST only
+  useEffect(() => {
+    active &&
+    uri.length !== 0 &&
+    dataResponseImg.length === uri.length &&
+    dataUpdatePostProps !== undefined
+      ? (setUpdatePost({
+          id: dataUpdatePostProps.id,
           caption: inputText,
           category: valueFilter ? valueFilter : 'highlight',
           image: dataResponseImg,
