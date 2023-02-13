@@ -73,6 +73,9 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
   const [modalDonate, setModalDonate] = useState<boolean>(false);
   const [modalSuccessDonate, setModalSuccessDonate] = useState<boolean>(false);
   const [trigger2ndModal, setTrigger2ndModal] = useState<boolean>(false);
+  const [page, setPage] = useState<number>(1);
+  const [perPage, setPerPage] = useState<number>(15);
+  const [dataMain, setDataMain] = useState<PostList[]>([]);
 
   // * UPDATE HOOKS
   const [selectedIdPost, setSelectedIdPost] = useState<string>();
@@ -120,23 +123,45 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
   useFocusEffect(
     useCallback(() => {
       uuidMusician !== ''
-        ? getListDataPost({musician_uuid: uuidMusician})
-        : getListDataPost();
+        ? getListDataPost({
+            page: page,
+            perPage: perPage,
+            musician_uuid: uuidMusician,
+          })
+        : getListDataPost({page: page, perPage: perPage});
     }, [uuidMusician]),
   );
 
+  //* set response data list post to main data
+  useEffect(() => {
+    dataPostList.length !== 0 && setDataMain([...dataMain, ...dataPostList]);
+  }, [dataPostList]);
+
   const resultDataFilter = (dataResultFilter: DataDropDownType) => {
-    getListDataPost({sortBy: dataResultFilter.label.toLowerCase()});
+    getListDataPost({
+      page: page,
+      perPage: perPage,
+      sortBy: dataResultFilter.label.toLowerCase(),
+    });
   };
   const resultDataCategory = (dataResultCategory: DataDropDownType) => {
     dataResultCategory.label === 'All'
-      ? getListDataPost()
-      : getListDataPost({category: dataResultCategory.value});
+      ? getListDataPost({page: page, perPage: perPage})
+      : getListDataPost({
+          page: page,
+          perPage: perPage,
+          category: dataResultCategory.value,
+        });
+  };
+
+  //* Handle when end of Scroll
+  const handleEndScroll = () => {
+    getListDataPost({page: page + 1, perPage: perPage});
+    setPage(page + 1);
   };
 
   const cardOnPress = (data: PostList) => {
     navigation.navigate('PostDetail', data);
-    // setPauseSong();
   };
 
   const likeOnPress = (id: string, isLiked: boolean) => {
@@ -322,10 +347,10 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
           />
         </View>
       </View>
-      {dataPostList !== null && dataPostList.length !== 0 ? (
+      {dataMain !== null && dataMain.length !== 0 ? (
         <View style={{flex: 1, marginHorizontal: widthResponsive(-24)}}>
           <FlatList
-            data={dataPostList}
+            data={dataMain}
             showsVerticalScrollIndicator={false}
             keyExtractor={(_, index) => index.toString()}
             contentContainerStyle={{
@@ -337,6 +362,7 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
                   ? heightResponsive(220)
                   : heightResponsive(160),
             }}
+            onEndReached={handleEndScroll}
             renderItem={({item}) => (
               <>
                 <ListCard.PostList
@@ -461,11 +487,9 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
             )}
           />
         </View>
-      ) : dataPostList?.length === 0 &&
-        feedMessage === 'you not follow anyone' ? (
+      ) : dataMain?.length === 0 && feedMessage === 'you not follow anyone' ? (
         <ListToFollowMusician />
-      ) : dataPostList?.length === 0 &&
-        feedMessage === 'musician not have post' ? (
+      ) : dataMain?.length === 0 && feedMessage === 'musician not have post' ? (
         <EmptyState
           text={`Your following musician don't have any post, try to follow more musician`}
           containerStyle={{
