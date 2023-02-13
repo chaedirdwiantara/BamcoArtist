@@ -44,7 +44,7 @@ import {useUploadImageHook} from '../../hooks/use-uploadImage.hook';
 import {ModalLoading} from '../../components/molecule/ModalLoading/ModalLoading';
 import {Image} from 'react-native-image-crop-picker';
 import MusicPreview from '../../components/molecule/MusicPreview/MusicPreview';
-import {ListDataSearchSongs} from '../../interface/search.interface';
+import {ListDataSearchSongs, Transcode} from '../../interface/search.interface';
 import {usePlayerHook} from '../../hooks/use-player.hook';
 import {dummySongImg} from '../../data/image';
 import {SongList, TranscodedSongType} from '../../interface/song.interface';
@@ -88,6 +88,8 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   const [dataResponseImg, setDataResponseImg] = useState<string[]>([]);
   const [musicData, setMusicData] = useState<ListDataSearchSongs>();
   const [pauseModeOn, setPauseModeOn] = useState<boolean>(false);
+  const [updateOn, setUpdateOn] = useState<boolean>(false);
+  const [userId, setUserId] = useState<string>('');
 
   // * Hooks for uploading
   const [uri, setUri] = useState<Image[]>([]);
@@ -99,7 +101,9 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
 
   // ! EDIT POST AREA
   useEffect(() => {
-    if (dataUpdatePostProps !== undefined) {
+    if (dataUpdatePostProps !== undefined && updateOn == false) {
+      setUserId(dataUpdatePostProps.id);
+      setUpdateOn(true);
       setLabel(dataUpdatePostProps.category);
       setValueFilter(dataUpdatePostProps.category);
       setInputText(dataUpdatePostProps.caption);
@@ -116,11 +120,41 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
         //@ts-ignore
         setUri(dataForSet);
       }
+      if (dataUpdatePostProps.quoteToPost.encodeHlsUrl !== null) {
+        let transcode: Transcode = {
+          trackId: dataUpdatePostProps.quoteToPost.targetId,
+          songId: Number(dataUpdatePostProps.quoteToPost.targetId),
+          sessionId: dataUpdatePostProps.quoteToPost.targetId,
+          encodedDashUrl: dataUpdatePostProps.quoteToPost.encodeDashUrl,
+          encodedHlsUrl: dataUpdatePostProps.quoteToPost.encodeHlsUrl,
+          quality: 1,
+          bitrate: '320k',
+          presetName: 'high',
+          encodeStatus: 'FINISHED',
+        };
+        let dataMusicProps: ListDataSearchSongs = {
+          id: Number(dataUpdatePostProps.quoteToPost.targetId),
+          musicianUUID: dataUpdatePostProps.musician.uuid,
+          musicianName: dataUpdatePostProps.musician.fullname,
+          title: dataUpdatePostProps.quoteToPost.title,
+          imageUrl: dataUpdatePostProps.quoteToPost.coverImage,
+          lyrics:
+            dataUpdatePostProps.quoteToPost.lyrics !== undefined
+              ? dataUpdatePostProps.quoteToPost.lyrics
+              : '',
+          originalSongUrl: dataUpdatePostProps.quoteToPost.originalSongUrl
+            ? dataUpdatePostProps.quoteToPost.originalSongUrl
+            : '',
+          songDuration: 60,
+          transcodedSongUrl: [transcode, transcode],
+        };
+        setMusicData(dataMusicProps);
+      }
     }
-  }, [dataUpdatePostProps]);
+  }, [dataUpdatePostProps, updateOn]);
 
   useEffect(() => {
-    dataUpdatePost !== null && navigation.goBack();
+    dataUpdatePost !== null && navigation.goBack(), setUpdateOn(false);
   }, [dataUpdatePost]);
   // ! END OF EDIT POST AREA
 
@@ -175,8 +209,43 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
       }
     }
 
-    if (active == true && uri.length == 0 && musicData !== undefined) {
+    if (
+      active == true &&
+      uri.length == 0 &&
+      musicData !== undefined &&
+      updateOn === false
+    ) {
       setCreatePost({
+        caption: inputText,
+        category: valueFilter ? valueFilter : 'highlight',
+        isPremium: dataAudience === 'Exclusive' ? true : false,
+        quoteToPost:
+          musicData !== undefined && musicData?.transcodedSongUrl !== undefined
+            ? {
+                targetId: musicData.id?.toString(),
+                targetType: 'song',
+                title: musicData.title,
+                musician: musicData.musicianName,
+                coverImage:
+                  musicData.imageUrl.length !== 0
+                    ? musicData.imageUrl[1].image
+                    : dummySongImg,
+                encodeDashUrl: musicData.transcodedSongUrl[0].encodedDashUrl,
+                encodeHlsUrl: musicData.transcodedSongUrl[0].encodedHlsUrl,
+              }
+            : undefined,
+      });
+    }
+
+    // ? for EDIT UPLOAD MUSIC only
+    if (
+      active == true &&
+      uri.length == 0 &&
+      musicData !== undefined &&
+      updateOn === true
+    ) {
+      setUpdatePost({
+        id: userId,
         caption: inputText,
         category: valueFilter ? valueFilter : 'highlight',
         isPremium: dataAudience === 'Exclusive' ? true : false,

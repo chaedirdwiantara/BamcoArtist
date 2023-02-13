@@ -70,6 +70,8 @@ export type QuoteToPost = {
   encodeHlsUrl: string;
   startAt: string;
   endAt: string;
+  lyrics: string;
+  originalSongUrl: string;
 };
 
 export type PostList = {

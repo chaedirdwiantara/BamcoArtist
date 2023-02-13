@@ -83,23 +83,22 @@ export type ListDataSearchSongs = {
   musicianUUID: string;
   musicianName: string;
   title: string;
-  description: string;
-  songWriter: string[];
+  description?: string;
+  songWriter?: string[];
   imageUrl: imageTypes[];
-  publishedDate: string;
-  likesCount: 0;
-  shareCount: 0;
-  listenerCount: 0;
+  publishedDate?: string;
+  likesCount?: 0;
+  shareCount?: 0;
+  listenerCount?: 0;
   lyrics: string;
   originalSongUrl: string;
-  isAddedToThisPlaylist: boolean;
-  copyright: string;
-  language: string;
-  CreatedAt: string;
-  UpdatedAt: string;
+  isAddedToThisPlaylist?: boolean;
+  copyright?: string;
+  language?: string;
+  CreatedAt?: string;
+  UpdatedAt?: string;
   songDuration: number;
-  transcodedSongUrl?: Transcode[];
-  postData?: PostList;
+  transcodedSongUrl: Transcode[];
 };
 
 export type ListSearchSongsResponseType = {
