@@ -365,7 +365,7 @@ const PostListHome: FC<PostListProps> = (props: PostListProps) => {
                   ? heightResponsive(25)
                   : heightResponsive(40),
             }}
-            onTouchEnd={handleEndScroll}
+            // onTouchEnd={handleEndScroll}
             renderItem={({item, index}) => (
               <>
                 <ListCard.PostList
