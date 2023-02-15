@@ -213,6 +213,10 @@ export const ForgotPassword: FC = () => {
     navigation.replace('Login');
   };
 
+  const handleOnPressSignUp = () => {
+    navigation.replace('Signup');
+  };
+
   //  email
   const emailInput = () => {
     return (
@@ -264,6 +268,20 @@ export const ForgotPassword: FC = () => {
           containerStyles={{width: '100%'}}
           onPress={handleBackButtonClick}
         />
+        <Gap height={18} />
+        <Text style={styles.forgotPassStyle}>
+          Dont Have an Account?{' '}
+          <Text
+            onPress={() => handleOnPressSignUp()}
+            style={{
+              fontFamily: font.InterRegular,
+              fontWeight: '700',
+              fontSize: mvs(12),
+              lineHeight: mvs(16),
+            }}>
+            Sign Up
+          </Text>
+        </Text>
         <Gap height={10} />
       </>
     );
