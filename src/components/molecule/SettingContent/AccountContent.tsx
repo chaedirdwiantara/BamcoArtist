@@ -22,11 +22,9 @@ import {
 } from '../../../utils';
 import {Dropdown} from '../DropDown';
 import {
-  dataCity,
-  dataLocation,
-  dataYearsFrom,
-  dataYearsTo,
-} from '../../../data/Settings/account';
+  formatValueName,
+  formatValueName2,
+} from '../../../utils/formatValueName';
 import Color from '../../../theme/Color';
 import {TopNavigation} from '../TopNavigation';
 import Typography from '../../../theme/Typography';
@@ -34,17 +32,21 @@ import {dataProps} from '../DropDown/DropdownMulti';
 import {dataFavourites} from '../../../data/following';
 import {color, font, typography} from '../../../theme';
 import {Button, Gap, SsuInput, SsuToast} from '../../atom';
-import {
-  formatValueName,
-  formatValueName2,
-} from '../../../utils/formatValueName';
+import {DataDropDownType} from '../../../data/dropdown';
 import {useProfileHook} from '../../../hooks/use-profile.hook';
+import {dataYearsFrom, dataYearsTo} from '../../../data/Settings/account';
 import {ProfileResponseType} from '../../../interface/profile.interface';
 import {ArrowLeftIcon, ErrorIcon, TickCircleIcon} from '../../../assets/icon';
 
 interface AccountProps {
   profile: ProfileResponseType;
   onPressGoBack: () => void;
+  dataAllCountry: DataDropDownType[];
+  dataCitiesOfOrigin: DataDropDownType[];
+  dataCitiesOfCountry: DataDropDownType[];
+  setSelectedOrigin: (value: string) => void;
+  setSelectedCountry: (value: string) => void;
+  setInputType: (value: string) => void;
 }
 
 interface InputProps {
@@ -84,6 +86,12 @@ const validation = yup.object({
 export const AccountContent: React.FC<AccountProps> = ({
   profile,
   onPressGoBack,
+  dataAllCountry,
+  dataCitiesOfOrigin,
+  dataCitiesOfCountry,
+  setSelectedOrigin,
+  setSelectedCountry,
+  setInputType,
 }) => {
   const [userGenres, setUserGenres] = useState<(string | number | undefined)[]>(
     [],
@@ -314,13 +322,16 @@ export const AccountContent: React.FC<AccountProps> = ({
               control={control}
               render={({field: {onChange, value}}) => (
                 <Dropdown.Input
+                  type="location"
                   initialValue={value}
-                  data={dataLocation}
+                  data={dataAllCountry}
                   placeHolder={'Select Country'}
                   dropdownLabel={'Origin'}
-                  textTyped={(newText: {label: string; value: string}) =>
-                    onChange(newText.value)
-                  }
+                  textTyped={(newText: {label: string; value: string}) => {
+                    onChange(newText.value);
+                    setSelectedOrigin(newText.value);
+                    setInputType('origin');
+                  }}
                   containerStyles={{
                     marginTop: heightPercentage(15),
                     width: '49%',
@@ -337,8 +348,9 @@ export const AccountContent: React.FC<AccountProps> = ({
               render={({field: {onChange, value}}) => (
                 <Dropdown.Input
                   initialValue={value}
-                  data={dataCity}
+                  data={dataCitiesOfOrigin}
                   placeHolder={'Select City'}
+                  showSearch={true}
                   dropdownLabel={''}
                   textTyped={(newText: {label: string; value: string}) =>
                     onChange(newText.value)
@@ -389,13 +401,16 @@ export const AccountContent: React.FC<AccountProps> = ({
               control={control}
               render={({field: {onChange, value}}) => (
                 <Dropdown.Input
+                  type="location"
                   initialValue={value}
-                  data={dataLocation}
+                  data={dataAllCountry}
                   placeHolder={'Select Country'}
                   dropdownLabel={'Location'}
-                  textTyped={(newText: {label: string; value: string}) =>
-                    onChange(newText.value)
-                  }
+                  textTyped={(newText: {label: string; value: string}) => {
+                    onChange(newText.value);
+                    setSelectedCountry(newText.value);
+                    setInputType('location');
+                  }}
                   containerStyles={{
                     marginTop: heightPercentage(15),
                     width: '49%',
@@ -412,7 +427,8 @@ export const AccountContent: React.FC<AccountProps> = ({
               render={({field: {onChange, value}}) => (
                 <Dropdown.Input
                   initialValue={value}
-                  data={dataCity}
+                  data={dataCitiesOfCountry}
+                  showSearch={true}
                   placeHolder={'Select City'}
                   dropdownLabel={''}
                   textTyped={(newText: {label: string; value: string}) =>

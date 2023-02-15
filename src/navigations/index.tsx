@@ -84,6 +84,7 @@ import {ConcertDetail} from '../screen/ConcertDetail';
 import {SignupSSOScreen} from '../screen/SignupSSO';
 import {
   ProfileResponseData,
+  ProfileResponseType,
   RegistrationType,
 } from '../interface/profile.interface';
 
@@ -96,15 +97,18 @@ import {OtpPNScreen} from '../screen/Setting/PhoneNumber/OTP';
 import {useNavigation} from '@react-navigation/native';
 import {ListDataSearchSongs} from '../interface/search.interface';
 import {
+  DataShippingProps,
   OtpEmailScreen as OtpEmailProps,
   OtpPhoneScreen,
 } from '../interface/setting.interface';
 import {OtpEmailScreen} from '../screen/Setting/Email/OTP';
 import {SplashScreen} from '../screen/SplashScreen';
-import {SongAlbum, SongList} from '../interface/song.interface';
+import {SongAlbum} from '../interface/song.interface';
 
 export type RootStackParams = {
-  Account: undefined;
+  Account: {
+    data: ProfileResponseType;
+  };
   AddToPlaylist: undefined;
   AddSong: Playlist;
   AddPreview: ListDataSearchSongs;
@@ -124,10 +128,7 @@ export type RootStackParams = {
   CreateNewPlaylist: undefined;
   DonationAndSubscription: undefined;
   EditProfile: ProfileResponseData;
-  EditPlaylist: {
-    data: Playlist;
-    listSongs: SongList[];
-  };
+  EditPlaylist: Playlist;
   Email: {
     info?: boolean;
     message?: string;
@@ -172,7 +173,9 @@ export type RootStackParams = {
     ssoId: string;
   };
   SignInGuest: undefined;
-  ShippingInformation: undefined;
+  ShippingInformation: {
+    data: DataShippingProps | null;
+  };
   ShowCredit: undefined;
   SongDetails: {
     id: number;

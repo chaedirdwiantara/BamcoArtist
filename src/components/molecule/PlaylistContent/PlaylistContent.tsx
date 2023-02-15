@@ -37,7 +37,7 @@ import {Playlist} from '../../../interface/playlist.interface';
 interface Props {
   onPressGoBack: () => void;
   goBackProfile: (showToast: boolean) => void;
-  goToEditPlaylist: (listSongs: SongList[]) => void;
+  goToEditPlaylist: () => void;
   goToAddSong: () => void;
   dataDetail: Playlist;
   listSongs: SongList[] | undefined;
@@ -72,7 +72,7 @@ export const PlaylistContent: React.FC<Props> = ({
     if (dataResult?.value === 'DeletePlaylist') {
       setModalVisible(true);
     } else if (dataResult?.value === 'EditPlaylist') {
-      if (listSongs !== undefined) goToEditPlaylist(listSongs);
+      goToEditPlaylist();
     }
   };
 

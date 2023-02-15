@@ -1,35 +1,63 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
 
 import Color from '../../theme/Color';
 import {RootStackParams} from '../../navigations';
 import {ShippingInformationContent} from '../../components';
-import {useSettingHook} from '../../hooks/use-setting.hook';
+import {useLocationHook} from '../../hooks/use-location.hook';
 
-export const ShippingInformationScreen: React.FC = () => {
-  const navigation =
-    useNavigation<NativeStackNavigationProp<RootStackParams>>();
-
+type ShippingInformationProps = NativeStackScreenProps<
+  RootStackParams,
+  'ShippingInformation'
+>;
+export const ShippingInformationScreen: React.FC<ShippingInformationProps> = ({
+  navigation,
+  route,
+}: ShippingInformationProps) => {
+  const {data} = route.params;
   const onPressGoBack = () => {
     navigation.goBack();
   };
 
-  const {fetchData, dataShippingInfo, getShippingInfo} = useSettingHook();
+  const {
+    dataAllCountry,
+    dataStateInCountry,
+    dataCitiesInState,
+    getDataAllCountry,
+    getStateInCountry,
+    getCitiesInState,
+  } = useLocationHook();
+  const [selectedCountry, setSelectedCountry] = useState<string>(
+    data?.country || '',
+  );
+  const [selectedState, setSelectedState] = useState<string>(
+    data?.province || '',
+  );
 
   useEffect(() => {
-    getShippingInfo();
+    getDataAllCountry();
   }, []);
+
+  useEffect(() => {
+    getStateInCountry({country: selectedCountry});
+  }, [selectedCountry]);
+
+  useEffect(() => {
+    getCitiesInState({country: selectedCountry, state: selectedState});
+  }, [selectedCountry, selectedState]);
 
   return (
     <View style={styles.root}>
-      {!fetchData && (
-        <ShippingInformationContent
-          dataShipping={dataShippingInfo}
-          onPressGoBack={onPressGoBack}
-        />
-      )}
+      <ShippingInformationContent
+        dataAllCountry={dataAllCountry !== undefined ? dataAllCountry : []}
+        dataState={dataStateInCountry !== undefined ? dataStateInCountry : []}
+        dataCities={dataCitiesInState !== undefined ? dataCitiesInState : []}
+        dataShipping={data}
+        onPressGoBack={onPressGoBack}
+        setSelectedCountry={setSelectedCountry}
+        setSelectedState={setSelectedState}
+      />
     </View>
   );
 };

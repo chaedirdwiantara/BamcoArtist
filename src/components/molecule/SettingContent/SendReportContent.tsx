@@ -57,7 +57,6 @@ export const SendReportContent: React.FC<SendReportProps> = ({
         ...state,
         imageUrl: dataResponseImg,
       };
-
       await sendReport(payload);
       setShowModalSuccess(true);
     } catch (error) {}
@@ -110,7 +109,7 @@ export const SendReportContent: React.FC<SendReportProps> = ({
         onChangeText={(newText: string) => onChangeText('email', newText)}
         placeholder={'Enter your email'}
         containerStyles={styles.textInput}
-        inputStyles={styles.inputDesc}
+        inputStyles={{paddingHorizontal: widthPercentage(10)}}
       />
 
       <SsuInput.InputLabel
@@ -158,8 +157,11 @@ const styles = StyleSheet.create({
   },
   textArea: {
     paddingHorizontal: 0,
+    marginTop: heightPercentage(10),
   },
   inputDesc: {
+    width: width * 0.9,
+    aspectRatio: 2 / 1,
     textAlignVertical: 'top',
     paddingHorizontal: widthPercentage(10),
   },

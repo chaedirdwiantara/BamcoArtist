@@ -44,6 +44,7 @@ import GalleryEditIcon from './GalleryEdit.icon';
 import GiftIcon from './Gift.icon';
 import HeartIcon from './Heart.icon';
 import HomeIcon from './Home.icon';
+import InfoCircleIcon from './InfoCircle.icon';
 import InstagramIcon from './Instagram.icon';
 import ImportPhotoIcon from './ImportPhoto.icon';
 import ImportMusicIcon from './importMusic.icon';
@@ -52,6 +53,8 @@ import LockIcon from './Lock.icon.';
 import LogOutIcon from './Logout.icon';
 import LoveIcon from './Love.icon';
 import MedalIcon from './Medal.icon';
+import MenuIcon from './Menu.icon';
+import MinusCircleIcon from './MinusCircle.icon';
 import MusicPlaylistIcon from './MusicPlaylist.icon';
 import MusicSquareIcon from './MusicSquare.icon';
 import MusicSquareAddIcon from './MusicSquareAdd.icon';
@@ -135,6 +138,7 @@ export {
   GiftIcon,
   HeartIcon,
   HomeIcon,
+  InfoCircleIcon,
   InstagramIcon,
   ImportMusicIcon,
   ImportPhotoIcon,
@@ -143,6 +147,8 @@ export {
   LogOutIcon,
   LoveIcon,
   MedalIcon,
+  MenuIcon,
+  MinusCircleIcon,
   MusicPlaylistIcon,
   MusicSquareIcon,
   MusicSquareAddIcon,

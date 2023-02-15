@@ -7,7 +7,7 @@ import {
   ScrollView,
   Text,
 } from 'react-native';
-import {mvs} from 'react-native-size-matters';
+import {ms} from 'react-native-size-matters';
 
 import {
   heightPercentage,
@@ -21,27 +21,32 @@ import {
   TickCircleIcon,
 } from '../../../assets/icon';
 import {Dropdown} from '../DropDown';
-import {
-  dataCity,
-  dataLocation,
-  dataState,
-} from '../../../data/Settings/account';
 import Color from '../../../theme/Color';
 import {typography} from '../../../theme';
 import {TopNavigation} from '../TopNavigation';
-import {countryData} from '../../../data/dropdown';
 import {updateShipping} from '../../../api/setting.api';
 import {Button, Gap, SsuInput, SsuToast} from '../../atom';
+import {DataDropDownType, countryData} from '../../../data/dropdown';
 import {DataShippingProps} from '../../../interface/setting.interface';
 
 interface ShippingInformationProps {
   dataShipping: DataShippingProps | null;
   onPressGoBack: () => void;
+  dataAllCountry: DataDropDownType[];
+  dataState: DataDropDownType[];
+  dataCities: DataDropDownType[];
+  setSelectedCountry: (value: string) => void;
+  setSelectedState: (value: string) => void;
 }
 
 export const ShippingInformationContent: React.FC<ShippingInformationProps> = ({
   dataShipping,
   onPressGoBack,
+  dataAllCountry,
+  dataState,
+  dataCities,
+  setSelectedCountry,
+  setSelectedState,
 }) => {
   const [state, setState] = useState({
     email: dataShipping?.email || '',
@@ -164,37 +169,60 @@ export const ShippingInformationContent: React.FC<ShippingInformationProps> = ({
 
           <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
             <Dropdown.Input
-              data={dataState}
-              initialValue={state.province}
-              placeHolder={'Select State/Province'}
-              dropdownLabel={'State/Province'}
-              textTyped={(newText: {label: string; value: string}) =>
-                onChangeText('province', newText.value)
-              }
+              type="location"
+              data={dataAllCountry}
+              placeHolder={'Select Country'}
+              initialValue={state.country}
+              dropdownLabel={'Country'}
+              textTyped={(newText: {label: string; value: string}) => {
+                setSelectedCountry(newText.value);
+                setState({
+                  ...state,
+                  country: newText.value,
+                  province: '',
+                  city: '',
+                  postalCode: '',
+                  address: '',
+                });
+              }}
               containerStyles={{marginTop: heightPercentage(15), width: '45%'}}
             />
 
             <Dropdown.Input
-              data={dataLocation}
-              placeHolder={'Select Country'}
-              initialValue={state.country}
-              dropdownLabel={'Country'}
-              textTyped={(newText: {label: string; value: string}) =>
-                onChangeText('country', newText.value)
-              }
+              data={dataState}
+              initialValue={state.province}
+              showSearch={true}
+              placeHolder={'Select State/Province'}
+              dropdownLabel={'State/Province'}
+              textTyped={(newText: {label: string; value: string}) => {
+                setSelectedState(newText.value);
+                setState({
+                  ...state,
+                  province: newText.value,
+                  city: '',
+                  postalCode: '',
+                  address: '',
+                });
+              }}
               containerStyles={{marginTop: heightPercentage(15), width: '45%'}}
             />
           </View>
 
           <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
             <Dropdown.Input
-              data={dataCity}
+              data={dataCities}
               placeHolder={'Select City'}
               dropdownLabel={'City'}
+              showSearch={true}
               initialValue={state.city}
-              textTyped={(newText: {label: string; value: string}) =>
-                onChangeText('city', newText.value)
-              }
+              textTyped={(newText: {label: string; value: string}) => {
+                setState({
+                  ...state,
+                  city: newText.value,
+                  postalCode: '',
+                  address: '',
+                });
+              }}
               containerStyles={{marginTop: heightPercentage(15), width: '45%'}}
             />
 
@@ -206,7 +234,7 @@ export const ShippingInformationContent: React.FC<ShippingInformationProps> = ({
               onChangeText={(newText: string) =>
                 onChangeText('postalCode', newText)
               }
-              inputStyles={{minHeight: mvs(55)}}
+              inputStyles={{minHeight: ms(56)}}
               containerStyles={{marginTop: heightPercentage(15), width: '45%'}}
             />
           </View>

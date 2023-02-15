@@ -72,7 +72,7 @@ export const addPhotos = async (
 ): Promise<CollectPhotosResponseType> => {
   const {data} = await SsuAPI().request<CollectPhotosResponseType>({
     url: '/profile/collect-photos',
-    method: 'PATCH',
+    method: 'POST',
     data: props,
   });
 
@@ -84,7 +84,7 @@ export const removePhotos = async (
 ): Promise<CollectPhotosResponseType> => {
   const {data} = await SsuAPI().request<CollectPhotosResponseType>({
     url: '/profile/collect-photos/delete',
-    method: 'PATCH',
+    method: 'POST',
     data: props,
   });
 

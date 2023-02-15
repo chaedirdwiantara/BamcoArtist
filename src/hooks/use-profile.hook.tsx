@@ -37,7 +37,6 @@ export const useProfileHook = () => {
     setIsLoading(true);
     try {
       const response = await getProfile();
-      console.log(response);
       setDataProfile(response);
     } catch (error) {
       console.log(error);

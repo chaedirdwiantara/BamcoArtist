@@ -5,7 +5,7 @@ import {Dropdown} from 'react-native-element-dropdown';
 import {Gap} from '../../atom';
 import {color, font} from '../../../theme';
 import {ErrorIcon} from '../../../assets/icon';
-import {heightPercentage, normalize} from '../../../utils';
+import {heightPercentage, normalize, widthPercentage} from '../../../utils';
 
 interface dataProps {
   label: string;
@@ -21,6 +21,8 @@ interface InputDropdownProps {
   initialValue?: string;
   isError?: boolean;
   errorMsg?: string;
+  type?: string;
+  showSearch?: boolean;
 }
 
 const borderColor = color.Dark[500];
@@ -39,6 +41,8 @@ const InputDropdown: React.FC<InputDropdownProps> = (
     containerStyles,
     isError,
     errorMsg,
+    type = '',
+    showSearch,
   } = props;
   const initValue = {label: initialValue, value: initialValue};
 
@@ -77,6 +81,9 @@ const InputDropdown: React.FC<InputDropdownProps> = (
         itemContainerStyle={[styles.itemContainer]}
         itemTextStyle={styles.itemTextStyle}
         selectedTextStyle={styles.selectedTextStyle}
+        search={showSearch || type === 'location'}
+        searchPlaceholder="Search..."
+        inputSearchStyle={styles.selectedTextStyle}
       />
       {isError ? (
         <View style={styles.containerErrorMsg}>
@@ -145,5 +152,11 @@ const styles = StyleSheet.create({
     fontSize: normalize(10),
     lineHeight: mvs(12),
     maxWidth: '90%',
+  },
+  item: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    paddingHorizontal: widthPercentage(15),
+    paddingVertical: heightPercentage(20),
   },
 });

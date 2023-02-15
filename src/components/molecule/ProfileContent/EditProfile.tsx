@@ -13,6 +13,7 @@ import {Image} from 'react-native-image-crop-picker';
 import {ModalConfirm} from '../..';
 import {Gap, SsuInput} from '../../atom';
 
+import ListPhotos from './ListPhotos';
 import Font from '../../../theme/Font';
 import Color from '../../../theme/Color';
 import {TopNavigation} from '../TopNavigation';
@@ -22,8 +23,8 @@ import {ModalImagePicker} from '../Modal/ModalImagePicker';
 import {ArrowLeftIcon, SaveIcon} from '../../../assets/icon';
 import {heightPercentage, widthPercentage} from '../../../utils';
 import ProfileComponent from '../../../screen/MusicianProfile/ProfileComponent';
-import ImageList from '../../../screen/CreatePost/showImage';
 import {useProfileHook} from '../../../hooks/use-profile.hook';
+import {ModalLoading} from '../ModalLoading/ModalLoading';
 
 interface EditProfileProps {
   profile: any;
@@ -104,10 +105,9 @@ export const EditProfile: React.FC<EditProfileProps> = ({
   };
 
   const sendMultipleUri = (val: Image[]) => {
-    photos.length + val.length <= 4 ? setPhotos([...photos, ...val]) : null;
-    for (let i = 0; i < photos.length; i++) {
-      console.log('photos sendMultipleUri', photos);
-      setUploadImage(photos[i], 'photos');
+    setPhotos([...photos, ...val]);
+    for (let i = 0; i < val.length; i++) {
+      setUploadImage(val[i], 'photos');
     }
   };
 
@@ -205,7 +205,7 @@ export const EditProfile: React.FC<EditProfileProps> = ({
           />
         </View>
 
-        <View
+        {/* <View
           style={[
             styles.textAreaContainer,
             {marginBottom: heightPercentage(30)},
@@ -215,14 +215,8 @@ export const EditProfile: React.FC<EditProfileProps> = ({
             <Text style={styles.addText}>{'+ Add Photos'}</Text>
           </TouchableOpacity>
           <Gap height={heightPercentage(20)} />
-          <ImageList
-            imgData={photos}
-            disabled={true}
-            width={162}
-            height={79}
-            onPress={closeImage}
-          />
-        </View>
+          <ListPhotos data={photos} photoOnpress={() => null} />
+        </View> */}
       </ScrollView>
 
       <ModalImagePicker
@@ -249,6 +243,8 @@ export const EditProfile: React.FC<EditProfileProps> = ({
         onPressClose={closeModal}
         onPressOk={() => onPressSave({bio, about})}
       />
+
+      {/* <ModalLoading visible={isLoading || loadingUpload} /> */}
     </View>
   );
 };
