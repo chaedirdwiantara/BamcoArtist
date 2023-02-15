@@ -44,7 +44,6 @@ import categoryNormalize from '../../utils/categoryNormalize';
 import {DataDropDownType} from '../../data/dropdown';
 import MusicListPreview from '../../components/molecule/MusicPreview/MusicListPreview';
 import {usePlayerHook} from '../../hooks/use-player.hook';
-import {dummySongImg} from '../../data/image';
 
 type cmntToCmnt = {
   id: string;
@@ -63,9 +62,10 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
 
   const {
     dataPostDetail,
-    dataCmntToCmnt,
     dataLoadMore,
     feedIsLoading,
+    dataComment,
+    setDataComment,
     setLikePost,
     setUnlikePost,
     setCommentToPost,
@@ -145,6 +145,7 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   const [selectedMenu, setSelectedMenu] = useState<DataDropDownType>();
   const [selectedLvlComment, setSelectedLvlComment] = useState<number>();
   const [updateComment, setUpdateComment] = useState<boolean>(false);
+  const [temporaryIds, setTemporaryIds] = useState<string>();
 
   //* MUSIC HOOKS
   const [pauseModeOn, setPauseModeOn] = useState<boolean>(false);
@@ -244,7 +245,7 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
         setValue(0),
         setViewMore(''))
       : null;
-  }, [dataCmntToCmnt, viewMore, activePage, dataParent, callLoadMoreApi]);
+  }, [viewMore, activePage, dataParent, callLoadMoreApi]);
 
   // * 5TH call when data load received from api
   useEffect(() => {
@@ -389,7 +390,7 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
         },
       },
     ];
-
+    setTemporaryIds(comment[0].id);
     if (cmntToCmntLvl0?.commentLvl === 0 && commentLvl1 !== undefined) {
       return (
         setCommentLvl1([...commentLvl1, ...comment]),
@@ -425,6 +426,42 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
       return setCommentLvl3(comment), setStaticId([...staticId, comment[0].id]);
     }
   };
+
+  // * update dummy to real data
+  useEffect(() => {
+    if (dataComment !== null && temporaryIds) {
+      if (dataComment.commentLevel === 1 && commentLvl1) {
+        let theComment = commentLvl1;
+        let theIndex = theComment?.findIndex((x: CommentList) =>
+          temporaryIds.includes(x.id),
+        );
+        theComment?.splice(theIndex, 1, dataComment);
+        setCommentLvl1(theComment);
+        setDataComment(null);
+        setTemporaryIds(undefined);
+      }
+      if (dataComment.commentLevel === 2 && commentLvl2) {
+        let theComment = commentLvl2;
+        let theIndex = theComment?.findIndex((x: CommentList2) =>
+          temporaryIds.includes(x.id),
+        );
+        theComment?.splice(theIndex, 1, dataComment);
+        setCommentLvl2(theComment);
+        setDataComment(null);
+        setTemporaryIds(undefined);
+      }
+      if (dataComment.commentLevel === 3 && commentLvl3) {
+        let theComment = commentLvl3;
+        let theIndex = theComment?.findIndex((x: CommentList3) =>
+          temporaryIds.includes(x.id),
+        );
+        theComment?.splice(theIndex, 1, dataComment);
+        setCommentLvl3(theComment);
+        setDataComment(null);
+        setTemporaryIds(undefined);
+      }
+    }
+  }, [dataComment]);
 
   // * reset all state when modal comment is closed
   const onModalCommentHide = () => {
@@ -542,7 +579,7 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
         },
       },
     ];
-
+    // TODO: setTemporaryIds(comment[0].id); // COMMENTED cz response from be still not valid
     if (cmntToCmnt?.commentLvl === 1 && commentLvl1) {
       let theComment = commentLvl1;
       let theIndex = theComment?.findIndex((x: CommentList) =>

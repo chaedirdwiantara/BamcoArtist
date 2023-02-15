@@ -13,6 +13,7 @@ import {
 import {ms, mvs} from 'react-native-size-matters';
 import {filterParentID} from './function';
 import {DataDropDownType} from '../../data/dropdown';
+import {dummyProfile} from '../../data/image';
 interface CommentSectionType {
   postCommentCount: number;
   postId: string;
@@ -369,10 +370,26 @@ const CommentSection: FC<CommentSectionType> = (props: CommentSectionType) => {
         keyExtractor={(_, index) => index.toString()}
         renderItem={({item, index}) => (
           <PostComment
-            toDetailOnPress={() => handleToDetail(item.commentOwner.UUID)}
-            imgUri={item.commentOwner.image}
-            fullName={elipsisText(item.commentOwner.fullname, 21)}
-            userName={`@${elipsisText(item.commentOwner.username, 10)}`}
+            toDetailOnPress={
+              item.commentOwner !== null
+                ? () => handleToDetail(item.commentOwner.UUID)
+                : () => {
+                    console.log('something error happened');
+                  }
+            }
+            imgUri={
+              item.commentOwner !== null
+                ? item.commentOwner.image
+                : dummyProfile
+            }
+            fullName={elipsisText(
+              item.commentOwner !== null ? item.commentOwner.fullname : '',
+              21,
+            )}
+            userName={`@${elipsisText(
+              item.commentOwner !== null ? item.commentOwner.username : '',
+              10,
+            )}`}
             postDate={item.timeAgo}
             artistPostId={item.repliedTo}
             commentCaption={item.caption}
