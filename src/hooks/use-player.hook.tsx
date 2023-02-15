@@ -35,7 +35,10 @@ export const usePlayerHook = () => {
       title: val.title,
       artist: val.musicianName,
       type: TrackType.HLS,
-      artwork: val.imageUrl.length !== 0 ? val.imageUrl[0].image : undefined,
+      artwork:
+        val.imageUrl && val.imageUrl.length !== 0
+          ? val.imageUrl[0].image
+          : dummySongImg,
       id: val.id,
       musicianId: val.musicianId,
     };
@@ -62,7 +65,7 @@ export const usePlayerHook = () => {
             artist: item.musicianName,
             type: TrackType.HLS,
             artwork:
-              item.imageUrl.length !== 0
+              item.imageUrl && item.imageUrl.length !== 0
                 ? item.imageUrl[1].image
                 : dummySongImg,
             id: item.id,

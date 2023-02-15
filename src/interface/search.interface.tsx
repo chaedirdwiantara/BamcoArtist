@@ -1,4 +1,5 @@
 import {imageTypes} from './base.interface';
+import {PostList} from './feed.interface';
 
 export type SearchProps = {
   keyword?: string;
@@ -65,38 +66,39 @@ export type ListDataSearchSongsNavigate = {
   ];
 };
 
+export type Transcode = {
+  trackId: string;
+  songId: number;
+  sessionId: string;
+  encodedDashUrl: string;
+  encodedHlsUrl: string;
+  quality: number;
+  bitrate: string;
+  presetName: 'highest' | 'high' | 'med' | 'low';
+  encodeStatus: 'FINISHED' | 'ON_PROCESS';
+};
+
 export type ListDataSearchSongs = {
   id: number;
   musicianUUID: string;
   musicianName: string;
   title: string;
-  description: string;
-  songWriter: string[];
+  description?: string;
+  songWriter?: string[];
   imageUrl: imageTypes[];
-  publishedDate: string;
-  likesCount: 0;
-  shareCount: 0;
-  listenerCount: 0;
+  publishedDate?: string;
+  likesCount?: 0;
+  shareCount?: 0;
+  listenerCount?: 0;
   lyrics: string;
-  originalSongURL: string;
-  isAddedToThisPlaylist: boolean;
-  copyright: string;
-  language: string;
-  CreatedAt: string;
-  UpdatedAt: string;
-  transcodedSongUrl: [
-    {
-      trackId: string;
-      songId: number;
-      sessionId: string;
-      encodedDashUrl: string;
-      encodedHlsUrl: string;
-      quality: number;
-      bitrate: string;
-      presetName: string;
-      encodeStatus: string;
-    },
-  ];
+  originalSongUrl: string;
+  isAddedToThisPlaylist?: boolean;
+  copyright?: string;
+  language?: string;
+  CreatedAt?: string;
+  UpdatedAt?: string;
+  songDuration: number;
+  transcodedSongUrl: Transcode[];
 };
 
 export type ListSearchSongsResponseType = {

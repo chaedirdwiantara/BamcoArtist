@@ -32,7 +32,7 @@ export const SelectBox: React.FC<SelectBoxProps> = (props: SelectBoxProps) => {
 
   return (
     <View style={[styles.root, containerStyle]}>
-      {data.map(val => {
+      {data?.map(val => {
         const checkVal = selected?.some(res => res === val.id);
         const activeBtn = checkVal ? Color.Pink.linear : Color.Dark[400];
 

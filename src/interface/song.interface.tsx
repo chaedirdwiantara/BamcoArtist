@@ -7,7 +7,7 @@ export type SongList = {
   title: string;
   musicianId: string;
   musicianName: string;
-  imageUrl: imageTypes[];
+  imageUrl?: imageTypes[];
   songDuration: number;
   lyrics: string;
   transcodedSongUrl: TranscodedSongType[];

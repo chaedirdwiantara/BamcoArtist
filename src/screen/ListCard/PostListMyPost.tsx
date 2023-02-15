@@ -50,6 +50,7 @@ import {ModalLoading} from '../../components/molecule/ModalLoading/ModalLoading'
 import {usePlayerHook} from '../../hooks/use-player.hook';
 import MusicListPreview from '../../components/molecule/MusicPreview/MusicListPreview';
 import {dummySongImg} from '../../data/image';
+import {ListDataSearchSongs} from '../../interface/search.interface';
 const {height} = Dimensions.get('screen');
 
 interface PostListProps {
@@ -77,6 +78,9 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
   const [modalDonate, setModalDonate] = useState<boolean>(false);
   const [modalSuccessDonate, setModalSuccessDonate] = useState<boolean>(false);
   const [trigger2ndModal, setTrigger2ndModal] = useState<boolean>(false);
+  const [page, setPage] = useState<number>(1);
+  const [perPage, setPerPage] = useState<number>(15);
+  const [dataMain, setDataMain] = useState<PostList[]>([]);
 
   // * UPDATE HOOKS
   const [selectedIdPost, setSelectedIdPost] = useState<string>();
@@ -123,22 +127,40 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
 
   useFocusEffect(
     useCallback(() => {
-      getListDataMyPost();
+      getListDataMyPost({page: page, perPage: perPage});
     }, []),
   );
 
+  //* set response data list post to main data
+  useEffect(() => {
+    dataPostList.length !== 0 && setDataMain([...dataMain, ...dataPostList]);
+  }, [dataPostList]);
+
   const resultDataFilter = (dataResultFilter: DataDropDownType) => {
-    getListDataMyPost({sortBy: dataResultFilter.label.toLowerCase()});
+    getListDataMyPost({
+      page: page,
+      perPage: perPage,
+      sortBy: dataResultFilter.label.toLowerCase(),
+    });
   };
   const resultDataCategory = (dataResultCategory: DataDropDownType) => {
     dataResultCategory.label === 'All'
-      ? getListDataMyPost()
-      : getListDataMyPost({category: dataResultCategory.value});
+      ? getListDataMyPost({page: page, perPage: perPage})
+      : getListDataMyPost({
+          page: page,
+          perPage: perPage,
+          category: dataResultCategory.value,
+        });
+  };
+
+  //* Handle when end of Scroll
+  const handleEndScroll = () => {
+    getListDataMyPost({page: page + 1, perPage: perPage});
+    setPage(page + 1);
   };
 
   const cardOnPress = (data: PostList) => {
     navigation.navigate('PostDetail', data);
-    setPauseSong();
   };
 
   const likeOnPress = (id: string, isLiked: boolean) => {
@@ -266,18 +288,22 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
 
   // ! UPDATE POST AREA
   useEffect(() => {
-    if (selectedIdPost !== undefined && selectedMenu !== undefined) {
+    if (
+      selectedIdPost !== undefined &&
+      selectedMenu !== undefined &&
+      dataMain
+    ) {
       if (selectedMenu.label === 'Delete Post') {
         setDeletePost({id: selectedIdPost});
+        setSelectedMenu(undefined);
       }
       if (selectedMenu.label === 'Edit Post') {
-        let dataSelected = dataPostList.filter(
-          data => data.id === selectedIdPost,
-        );
-        //navigation.navigate('UpdatePost', dataSelected[0]);
+        let dataSelected = dataMain.filter(data => data.id === selectedIdPost);
+        navigation.navigate('CreatePost', {postData: dataSelected[0]});
+        setSelectedMenu(undefined);
       }
     }
-  }, [selectedIdPost, selectedMenu]);
+  }, [selectedIdPost, selectedMenu, dataMain]);
   // ! END OF UPDATE POST AREA
 
   // ! MUSIC AREA
@@ -334,14 +360,14 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
           />
         </View>
       </View>
-      {dataPostList !== null && dataPostList.length !== 0 ? (
+      {dataMain && dataMain.length !== 0 ? (
         <View
           style={{
             flex: 1,
             marginHorizontal: widthResponsive(-24),
           }}>
           <FlatList
-            data={dataPostList}
+            data={dataMain}
             showsVerticalScrollIndicator={false}
             keyExtractor={(_, index) => index.toString()}
             contentContainerStyle={{
@@ -349,6 +375,7 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
               paddingBottom:
                 height >= 800 ? heightResponsive(220) : heightResponsive(160),
             }}
+            onEndReached={handleEndScroll}
             renderItem={({item}) => (
               <>
                 <ListCard.PostList
@@ -471,10 +498,9 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
             )}
           />
         </View>
-      ) : dataPostList?.length === 0 &&
-        feedMessage === 'you not follow anyone' ? (
+      ) : dataMain?.length === 0 && feedMessage === 'you not follow anyone' ? (
         <ListToFollowMusician />
-      ) : dataPostList?.length === 0 &&
+      ) : dataMain?.length === 0 &&
         feedMessage === `You don't have any post` ? (
         <EmptyState
           text={feedMessage}
@@ -484,7 +510,7 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
           }}
           icon={<FriedEggIcon />}
         />
-      ) : dataPostList?.length === 0 &&
+      ) : dataMain?.length === 0 &&
         feedMessage ===
           'Your subscribed musician has not yet posted any exclusive content.' ? (
         <EmptyState
