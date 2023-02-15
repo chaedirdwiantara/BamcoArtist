@@ -41,7 +41,25 @@ export type CreatePostProps = {
   };
 };
 
-export type DataComment = {id: string; created_at: string};
+export type DataComment = {
+  id: string;
+  caption: string;
+  likesCount: number;
+  commentsCount: number;
+  commentLevel: number;
+  created_at: string;
+  comments: [];
+  isLiked: boolean;
+  timeAgo: string;
+  commentOwner: {
+    UUID: string;
+    fullname: string;
+    username: string;
+    image: string;
+  };
+  repliedTo: string;
+  parentID: string;
+};
 
 // => PostList Area
 
@@ -237,7 +255,7 @@ export type commentUpdateData = {
 
 export type CommentUpdateResponseType = {
   code: number;
-  data: commentUpdateData;
+  data: DataComment;
   message: string;
   status: number;
 };
