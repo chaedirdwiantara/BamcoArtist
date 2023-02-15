@@ -1,0 +1,46 @@
+{
+  "Onboarding": {
+    "Step1": {
+      "Title": "Become a Part of Your Favourite Musician's Story",
+      "Description": "We're excited to welcome you to our community of musicians and fans"
+    },
+    "Step2": {
+      "Title": "Grow With Your Favourite Musicians",
+      "Description": "Our tools enable you to personally support the growth and success of your favourite musicians"
+    },
+    "Step3": {
+      "Title": "Get Rewarded and Recognised",
+      "Description": "We're all about enabling musicians and fans growing together. So flex your clout as the No.1 superfan"
+    }
+  },
+  "Login": {
+    "Title": "Begin Today",
+    "Description": "Sign In or Register to Explore All Our Features",
+    "Footer": "Become a Part of Your Favourite Musician's Story",
+    "ExploreGuest": "Explore as Guest"
+  },
+  "SignUp": {
+    "Title": "Sign Up",
+    "Email": "Email",
+    "Phone": "Phone Number",
+    "FullName": "Full Name",
+    "Password": "Password",
+    "PasswordRepeat": "Repeat Password",
+    "TnC": {
+      "Phrase1": "I Agree with the Sunny Side Up ",
+      "Phrase2": "Terms of Use",
+      "Phrase3": " & ",
+      "Phrase4": "Privacy Policy"
+    },
+    "Footer": "Already Have an Account? "
+  },
+  "Btn": {
+    "Next": "Next",
+    "Skip": "Skip",
+    "Finish": "Finish",
+    "SignIn": "Sign In",
+    "SignUp": "Sign Up",
+    "Submit": "Submit",
+    "Back": "Back"
+  }
+}

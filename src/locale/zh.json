@@ -1,0 +1,46 @@
+{
+  "Onboarding": {
+    "Step1": {
+      "Title": "讓樂迷與喜愛的音樂人一起成長",
+      "Description": "歡迎來到我們的音樂平台！ 我們很高興您能加入我們音樂人和樂迷的社區。"
+    },
+    "Step2": {
+      "Title": "讓樂迷與喜愛的音樂人一起成長",
+      "Description": "我們的平台旨在通過提供工具和資源來幫助音樂人分享和推廣他們的音樂，支持音樂人的成長，邁向成功。"
+    },
+    "Step3": {
+      "Title": "讓樂迷與喜愛的音樂人一起成長",
+      "Description": "我們致力於支持樂迷和音樂人共同成長，期待看到您在我們的平台上茁壯成長。"
+    }
+  },
+  "Login": {
+    "Title": "即日開始",
+    "Description": "登入或註冊以探索完整功能並支持音樂人",
+    "Footer": "讓樂迷與喜愛的音樂人一起成長",
+    "ExploreGuest": "以訪客身份瀏覽"
+  },
+  "SignUp": {
+    "Title": "註冊",
+    "Email": "電子郵箱",
+    "Phone": "電話號碼",
+    "FullName": "全名",
+    "Password": "密碼",
+    "PasswordRepeat": "重複輸入密碼",
+    "TnC": {
+      "Phrase1": "我同意 SunnySideUp ",
+      "Phrase2": "條款",
+      "Phrase3": "和",
+      "Phrase4": "隱私政策"
+    },
+    "Footer": "已有帳號？"
+  },
+  "Btn": {
+    "Next": "下一步",
+    "Skip": "略過",
+    "Finish": "完成",
+    "SignIn": "登入",
+    "SignUp": "註冊",
+    "Submit": "提交",
+    "Back": "返回"
+  }
+}
