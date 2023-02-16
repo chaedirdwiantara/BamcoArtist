@@ -554,7 +554,7 @@
 				DEVELOPMENT_TEAM = 2385WX7747;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = SsuMusician/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "Sunny Side Up Musician";
+				INFOPLIST_KEY_CFBundleDisplayName = Artist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.music";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -584,7 +584,7 @@
 				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 2385WX7747;
 				INFOPLIST_FILE = SsuMusician/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "Sunny Side Up Musician";
+				INFOPLIST_KEY_CFBundleDisplayName = Artist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.music";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
