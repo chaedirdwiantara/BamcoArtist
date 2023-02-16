@@ -1,8 +1,11 @@
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import AnimatedLottieView from 'lottie-react-native';
 import React, {useEffect, useState} from 'react';
 import {View, StyleSheet} from 'react-native';
-import {mvs} from 'react-native-size-matters';
-import {SSULogo} from '../assets/logo';
+import {
+  heightPercentageToDP,
+  widthPercentageToDP,
+} from 'react-native-responsive-screen';
 import {ModalUpdate} from '../components/molecule/Modal/ModalUpdate';
 import {storage} from '../hooks/use-storage.hook';
 import {RootStackParams} from '../navigations';
@@ -54,7 +57,18 @@ export const SplashScreen: React.FC<SplashScrennProps> = ({
 
   return (
     <View style={styles.root}>
-      <SSULogo width={mvs(120)} height={mvs(120)} />
+      <AnimatedLottieView
+        source={require('../assets/animation/ssu-logo-loop.json')}
+        autoPlay
+        loop
+        style={{
+          padding: 0,
+          margin: 0,
+          width: widthPercentageToDP(40),
+          height: heightPercentageToDP(40),
+          aspectRatio: 1 / 1,
+        }}
+      />
       <ModalUpdate
         modalVisible={modalVisible}
         onPressOk={onUpdate}

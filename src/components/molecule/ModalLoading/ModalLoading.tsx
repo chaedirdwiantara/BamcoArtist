@@ -14,7 +14,7 @@ export const ModalLoading = (props: ModalLoadingProps) => {
   return (
     <Modal statusBarTranslucent isVisible={visible} style={styles.root}>
       <Lottie
-        source={require('../../../assets/animation/ssu-loading.json')}
+        source={require('../../../assets/animation/ssu-logo-loop.json')}
         autoPlay
         loop
         style={{
