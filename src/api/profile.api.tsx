@@ -101,3 +101,15 @@ export const countLikedSong = async (
 
   return data;
 };
+
+export const deleteProfile = async (
+  props?: ParamsProps,
+): Promise<CollectPhotosResponseType> => {
+  const {data} = await SsuAPI().request<CollectPhotosResponseType>({
+    url: '/profile',
+    method: 'DELETE',
+    data: props,
+  });
+
+  return data;
+};

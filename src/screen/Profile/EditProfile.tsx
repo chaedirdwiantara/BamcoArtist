@@ -33,7 +33,8 @@ export const EditProfileScreen: React.FC<EditProfileProps> = ({
     dataProfile !== undefined && dataProfile.imageProfileUrls?.length > 0
       ? dataProfile.imageProfileUrls[2].image
       : null;
-  const {isLoading, updateProfileUser, addCollectPhotos} = useProfileHook();
+  const {isLoading, updateProfileUser, addCollectPhotos, deleteValueProfile} =
+    useProfileHook();
 
   const [avatarUri, setAvatarUri] = useState(avatar || '');
   const [backgroundUri, setBackgroundUri] = useState(banners || '');
@@ -44,11 +45,16 @@ export const EditProfileScreen: React.FC<EditProfileProps> = ({
     navigation.goBack();
   };
 
-  const onPressSave = (param: {bio: string; about: string}) => {
+  const onPressSave = (param: {
+    bio: string;
+    about: string;
+    website: string;
+  }) => {
     addCollectPhotos({photos});
     updateProfileUser({
       bio: param.bio,
       about: param.about,
+      Website: param.website,
       imageProfileUrl: avatarUri,
       banner: backgroundUri,
     });
@@ -89,6 +95,7 @@ export const EditProfileScreen: React.FC<EditProfileProps> = ({
     username: '@' + dataProfile?.username,
     bio: dataProfile?.bio || t('Profile.Label.Description'),
     about: dataProfile?.about,
+    website: dataProfile?.website,
     avatarUri: avatarUri,
     backgroundUri: backgroundUri,
   };
@@ -107,6 +114,7 @@ export const EditProfileScreen: React.FC<EditProfileProps> = ({
           setResetImage(type);
         }}
         goToGallery={goToGallery}
+        deleteValueProfile={deleteValueProfile}
       />
       <ModalLoading visible={isLoading || loadingUpload} />
     </View>

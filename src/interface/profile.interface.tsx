@@ -71,6 +71,7 @@ export type ProfileResponseData = {
   locationCountry: string;
   locationCity: string;
   yearsActiveFrom: string;
+  website: string;
   yearsActiveTo: string;
   members: string[];
   socialMedia: null | nameValue[];

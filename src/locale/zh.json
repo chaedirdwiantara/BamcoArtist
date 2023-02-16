@@ -237,7 +237,9 @@
       "Add": "由相簿添加",
       "Delete": "刪除照片",
       "Social": "Social Media Settings",
-      "About": "Tell us about yourself"
+      "About": "Tell us about yourself",
+      "Website": "Add your website address",
+      "Photos": "Add Photos"
     }
   },
   "Musician": {

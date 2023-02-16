@@ -237,7 +237,9 @@
       "Add": "Add Photo From Gallery",
       "Delete": "Delete Photo",
       "Social": "Social Media Settings",
-      "About": "Tell us about yourself"
+      "About": "Tell us about yourself",
+      "Website": "Add your website address",
+      "Photos": "Add Photos"
     }
   },
   "Musician": {

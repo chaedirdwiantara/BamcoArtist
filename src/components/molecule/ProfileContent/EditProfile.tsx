@@ -26,15 +26,17 @@ import ProfileComponent from '../../../screen/MusicianProfile/ProfileComponent';
 import {useProfileHook} from '../../../hooks/use-profile.hook';
 import {ModalLoading} from '../ModalLoading/ModalLoading';
 import {useTranslation} from 'react-i18next';
+import {ParamsProps} from '../../../interface/base.interface';
 
 interface EditProfileProps {
   profile: any;
   type: string;
   onPressGoBack: () => void;
-  onPressSave: (params: {bio: string; about: string}) => void;
+  onPressSave: (params: {bio: string; about: string; website: string}) => void;
   setUploadImage: (image: Image, type: string) => void;
   setResetImage: (type: string) => void;
   goToGallery: () => void;
+  deleteValueProfile: (props?: ParamsProps) => void;
 }
 
 export const EditProfile: React.FC<EditProfileProps> = ({
@@ -44,11 +46,13 @@ export const EditProfile: React.FC<EditProfileProps> = ({
   onPressSave,
   setUploadImage,
   setResetImage,
+  deleteValueProfile,
 }) => {
   const {t} = useTranslation();
   const {dataProfile, getProfileUser} = useProfileHook();
   const [bio, setBio] = useState(profile.bio || '');
   const [about, setAbout] = useState(profile.about || '');
+  const [website, setWebsite] = useState(profile.website || '');
   const [isModalVisible, setModalVisible] = useState({
     modalConfirm: false,
     modalImage: false,
@@ -56,8 +60,8 @@ export const EditProfile: React.FC<EditProfileProps> = ({
   });
   const [uriType, setUriType] = useState('');
   const [uri, setUri] = useState({
-    avatarUri: {path: null},
-    backgroundUri: {path: null},
+    avatarUri: {path: profile.avatarUri || null},
+    backgroundUri: {path: profile.backgroundUri || null},
   });
   const [photos, setPhotos] = useState<Image[]>([]);
 
@@ -89,6 +93,12 @@ export const EditProfile: React.FC<EditProfileProps> = ({
   const resetImage = () => {
     setUri({...uri, [uriType]: null});
     setResetImage(uriType);
+
+    // call api delete image
+    const valueName = uriType === 'avatarUri' ? 'imageProfileUrl' : 'banner';
+    deleteValueProfile({
+      context: valueName,
+    });
     closeModal();
   };
 
@@ -117,18 +127,14 @@ export const EditProfile: React.FC<EditProfileProps> = ({
     setPhotos(photos.filter((x: Image) => x.path !== photos[id].path));
   };
 
-  const avatarUri = uri?.avatarUri?.path || profile.avatarUri || null;
-  const backgroundUri =
-    uri?.backgroundUri?.path || profile.backgroundUri || null;
-
   const titleModalPicker =
     uriType === 'avatarUri'
       ? t('Profile.Edit.ProfilePicture')
       : t('Profile.Edit.HeaderPicture');
   const hideMenuDelete =
     uriType === 'avatarUri'
-      ? avatarUri !== null && avatarUri !== ''
-      : backgroundUri !== null && backgroundUri !== '';
+      ? uri.avatarUri !== null && uri.avatarUri?.path !== null
+      : uri.backgroundUri !== null && uri.backgroundUri?.path !== null;
 
   const newColorBio = bio.length === 110 ? Color.Error[400] : Color.Neutral[10];
   const newColorAbout =
@@ -152,8 +158,8 @@ export const EditProfile: React.FC<EditProfileProps> = ({
       <ScrollView>
         <ProfileHeader
           type={type}
-          avatarUri={avatarUri}
-          backgroundUri={backgroundUri}
+          avatarUri={uri.avatarUri?.path}
+          backgroundUri={uri.backgroundUri?.path}
           fullname={profile.fullname}
           username={profile.username}
           containerStyles={{height: heightPercentage(206)}}
@@ -196,6 +202,21 @@ export const EditProfile: React.FC<EditProfileProps> = ({
         </View>
 
         <View style={styles.textAreaContainer}>
+          <SsuInput.InputLabel
+            label={t('Musician.Label.Website')}
+            placeholder={t('Profile.Edit.Website')}
+            value={website}
+            onChangeText={(newText: string) => setWebsite(newText)}
+            containerStyles={{marginTop: heightPercentage(15)}}
+          />
+          <Text
+            style={[
+              styles.length,
+              {color: newColorAbout},
+            ]}>{`${about.length}/600`}</Text>
+        </View>
+
+        <View style={styles.textAreaContainer}>
           <Text style={styles.title}>{t('Musician.Label.Social')}</Text>
           <TouchableOpacity onPress={openModalSocMed}>
             <Text style={styles.addText}>{`+ ${t(
@@ -211,18 +232,20 @@ export const EditProfile: React.FC<EditProfileProps> = ({
           />
         </View>
 
-        {/* <View
+        <View
           style={[
             styles.textAreaContainer,
             {marginBottom: heightPercentage(30)},
           ]}>
-          <Text style={styles.title}>{'Photos'}</Text>
+          <Text style={styles.title}>{t('Musician.Label.Photos')}</Text>
           <TouchableOpacity onPress={() => openModalImage('photos')}>
-            <Text style={styles.addText}>{'+ Add Photos'}</Text>
+            <Text style={styles.addText}>{`+ ${t(
+              'Profile.Edit.Photos',
+            )}`}</Text>
           </TouchableOpacity>
           <Gap height={heightPercentage(20)} />
           <ListPhotos data={photos} photoOnpress={() => null} />
-        </View> */}
+        </View>
       </ScrollView>
 
       <ModalImagePicker
@@ -247,7 +270,7 @@ export const EditProfile: React.FC<EditProfileProps> = ({
         title={t('Modal.EditProfile.Title') || ''}
         subtitle={t('Modal.EditProfile.Subtitle') || ''}
         onPressClose={closeModal}
-        onPressOk={() => onPressSave({bio, about})}
+        onPressOk={() => onPressSave({bio, about, website})}
       />
 
       {/* <ModalLoading visible={isLoading || loadingUpload} /> */}
