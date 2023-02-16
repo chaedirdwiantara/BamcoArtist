@@ -1,10 +1,6 @@
 import axios, {AxiosError, AxiosInstance, AxiosRequestConfig} from 'axios';
 import {storage} from '../hooks/use-storage.hook';
 
-type SsuAPIParams = {
-  cookie?: string;
-};
-
 let API: AxiosInstance;
 
 const setupAPIClient = () => {
@@ -30,14 +26,8 @@ const setupAPIClient = () => {
   );
 };
 
-export const initialize = (
-  params?: SsuAPIParams,
-  anonymous?: boolean,
-): AxiosInstance => {
-  // always create new axios instance when cookie changed
-  if (params?.cookie || !API || anonymous) {
-    setupAPIClient();
-  }
+export const initialize = (): AxiosInstance => {
+  setupAPIClient();
 
   // TODO: add token on interceptor
   const JSONProfile = storage.getString('profile');
