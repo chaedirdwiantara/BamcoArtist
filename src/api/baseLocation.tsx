@@ -5,6 +5,7 @@ const setupAPIClient = () => {
   API = axios.create({
     baseURL: 'https://countriesnow.space/api/v0.1/countries',
     headers: {
+      Accept: 'application/json',
       'Content-Type': 'application/x-www-form-urlencoded',
     },
   });
