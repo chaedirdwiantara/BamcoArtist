@@ -19,7 +19,7 @@ import {profileStorage, storage} from '../../../hooks/use-storage.hook';
 import {heightPercentage, normalize, widthResponsive} from '../../../utils';
 
 interface MusicianProps {
-  musicianId: string;
+  userId: string;
   musicianNum: string;
   musicianName: string;
   imgUri: string;
@@ -30,6 +30,7 @@ interface MusicianProps {
   followersCount?: number;
   followOnPress?: () => void;
   activeMore?: boolean;
+  type?: string;
 }
 
 interface DataMore {
@@ -38,7 +39,7 @@ interface DataMore {
 }
 
 const MusicianSection: React.FC<MusicianProps> = (props: MusicianProps) => {
-  const {isFollowed, followOnPress, musicianId} = props;
+  const {isFollowed, followOnPress, userId, type} = props;
   const follow = isFollowed ? 'Unfollow' : 'Follow';
   const [textFollow, setTextFollow] = useState(follow);
   const [dropdownText, setDropdownText] = useState(follow);
@@ -53,7 +54,7 @@ const MusicianSection: React.FC<MusicianProps> = (props: MusicianProps) => {
     {label: 'Go To Musician', value: '3'},
   ];
   const newDataMore =
-    musicianId === profileStorage()?.uuid
+    userId === profileStorage()?.uuid
       ? dataMore.filter(val => val.value !== '1')
       : dataMore;
 
@@ -63,8 +64,12 @@ const MusicianSection: React.FC<MusicianProps> = (props: MusicianProps) => {
   const [modalGuestVisible, setModalGuestVisible] = useState(false);
   const [trigger2ndModal, setTrigger2ndModal] = useState<boolean>(false);
 
-  const goToMusician = () => {
-    navigation.navigate('MusicianProfile', {id: musicianId});
+  const handleNavigate = () => {
+    if (type === 'fans') {
+      navigation.navigate('OtherUserProfile', {id: userId});
+    } else {
+      navigation.navigate('MusicianProfile', {id: userId});
+    }
   };
 
   useEffect(() => {
@@ -92,9 +97,9 @@ const MusicianSection: React.FC<MusicianProps> = (props: MusicianProps) => {
         setModalGuestVisible(true);
       }
     } else if (dataResult.value === '3') {
-      musicianId === profileStorage()?.uuid
+      userId === profileStorage()?.uuid
         ? navigation2.navigate('Profile', {})
-        : navigation.navigate('MusicianProfile', {id: musicianId});
+        : navigation.navigate('MusicianProfile', {id: userId});
     } else {
       if (isLogin) {
         setModalDonate(true);
@@ -113,7 +118,7 @@ const MusicianSection: React.FC<MusicianProps> = (props: MusicianProps) => {
     setModalSuccessDonate(false);
   };
 
-  const self = musicianId === profileStorage()?.uuid;
+  const self = userId === profileStorage()?.uuid;
 
   return (
     <>
@@ -121,7 +126,7 @@ const MusicianSection: React.FC<MusicianProps> = (props: MusicianProps) => {
         dataFilter={newDataMore}
         onPressMore={resultDataMore}
         activeMore={!self}
-        onPressImage={goToMusician}
+        onPressImage={handleNavigate}
         {...props}
       />
       <ModalDonate

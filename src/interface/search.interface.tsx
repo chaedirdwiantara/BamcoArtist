@@ -11,7 +11,7 @@ export type ListDataSearchFans = {
   username: string;
   fullname: string;
   email: string;
-  imageProfileUrl: string;
+  imageProfileUrls: imageTypes[];
 };
 
 export type ListSearchFansResponseType = {
@@ -27,7 +27,7 @@ export type ListDataSearchMusician = {
   username: string;
   fullname: string;
   email: string;
-  imageProfileUrl: string;
+  imageProfileUrls: imageTypes[];
   followers: number;
 };
 

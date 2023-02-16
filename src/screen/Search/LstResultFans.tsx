@@ -39,10 +39,15 @@ const ListResultFans: FC<KeywordProps> = ({keyword}: KeywordProps) => {
                 useGrouping: false,
               })}
               musicianName={item.fullname}
-              imgUri={item.imageProfileUrl}
+              imgUri={
+                item.imageProfileUrls.length > 0
+                  ? item.imageProfileUrls[0].image
+                  : ''
+              }
               containerStyles={{marginTop: mvs(20)}}
-              musicianId={item.uuid}
+              userId={item.uuid}
               activeMore={false}
+              type="fans"
             />
           )}
           ListEmptyComponent={
