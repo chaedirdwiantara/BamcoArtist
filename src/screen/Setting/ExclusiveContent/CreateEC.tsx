@@ -75,7 +75,7 @@ export const CreateEC: React.FC<CreateProps> = ({data, onPress}) => {
 
   const onPressSave = () => {
     let pricingPlans: {
-      duration: number;
+      durationInDays: number;
       durationUnit: string;
       price: number;
     }[] = [];
@@ -84,7 +84,7 @@ export const CreateEC: React.FC<CreateProps> = ({data, onPress}) => {
     durationUnit.map(item => {
       if (price[item] !== '') {
         pricingPlans.push({
-          duration: 1,
+          durationInDays: item === 'weekly' ? 7 : item === 'monthly' ? 30 : 365,
           durationUnit: item,
           price: Number(price[item]),
         });
