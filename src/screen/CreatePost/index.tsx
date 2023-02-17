@@ -429,7 +429,13 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
           {/* //! TOP AREA */}
           <View style={styles.topBody}>
             <View style={styles.userCategory}>
-              <Avatar imgUri={dataProfile?.data.imageProfileUrls[0].image} />
+              <Avatar
+                imgUri={
+                  dataProfile && dataProfile?.data.imageProfileUrls.length > 0
+                    ? dataProfile?.data.imageProfileUrls[0].image
+                    : ''
+                }
+              />
               <Gap width={12} />
               <ButtonGradientwithIcon
                 label={label ? label : 'Select Category'}
