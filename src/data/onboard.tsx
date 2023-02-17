@@ -1,4 +1,5 @@
 import {ImageSourcePropType} from 'react-native';
+import i18n from '../locale';
 
 export interface DataOnboardType {
   title: string;
@@ -9,20 +10,17 @@ export interface DataOnboardType {
 export const dataOnboard: DataOnboardType[] = [
   {
     uri: require('../assets/background/onboard-1.png'),
-    title: "Let's the fans grow with their musician",
-    subtitle:
-      "Welcome to the our music player! We're excited to have you join our community of musicians and fans.",
+    title: i18n.t('Onboarding.Step1.Title'),
+    subtitle: i18n.t('Onboarding.Step1.Description') || '',
   },
   {
     uri: require('../assets/background/onboard-2.png'),
-    title: "Let's the fans grow with their musician",
-    subtitle:
-      'Our platform is designed to support the growth and success of musicians by providing tools and resources to help them share and promote their music.',
+    title: i18n.t('Onboarding.Step2.Title'),
+    subtitle: i18n.t('Onboarding.Step2.Description') || '',
   },
   {
     uri: require('../assets/background/onboard-3.png'),
-    title: "Let's the fans grow with their musician",
-    subtitle:
-      "We're committed to supporting fans and musician growth together, and we look forward to seeing you thrive on our platform.",
+    title: i18n.t('Onboarding.Step3.Title'),
+    subtitle: i18n.t('Onboarding.Step3.Description') || '',
   },
 ];

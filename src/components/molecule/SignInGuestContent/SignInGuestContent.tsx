@@ -6,12 +6,14 @@ import Color from '../../../theme/Color';
 import {height, normalize, width} from '../../../utils';
 import Typography from '../../../theme/Typography';
 import {Button, ButtonGradient, LoginDescription} from '../../';
+import {useTranslation} from 'react-i18next';
 
 interface GuestProps {
   onPress: (screenName: 'Login' | 'Signup' | 'MainTab') => void;
 }
 
 export const SignInGuestContent: React.FC<GuestProps> = ({onPress}) => {
+  const {t} = useTranslation();
   return (
     <View style={styles.root}>
       <View style={styles.containerImage}>
@@ -24,16 +26,16 @@ export const SignInGuestContent: React.FC<GuestProps> = ({onPress}) => {
       </View>
       <View style={styles.containerBottom}>
         <Text style={[Typography.Heading4, styles.title]}>
-          {"Let's the fans grow with their musician"}
+          {t('Login.Footer')}
         </Text>
         <ButtonGradient
-          label="Sign In"
+          label={t('Btn.SignIn')}
           textStyles={{fontSize: normalize(14)}}
           onPress={() => onPress('Login')}
         />
         <Button
           type="border"
-          label="Sign Up"
+          label={t('Btn.SignUp')}
           textStyles={{fontSize: normalize(14)}}
           containerStyles={{marginVertical: mvs(6)}}
           onPress={() => onPress('Signup')}

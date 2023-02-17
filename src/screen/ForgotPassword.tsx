@@ -31,6 +31,7 @@ import {yupResolver} from '@hookform/resolvers/yup';
 import RenderMessage from '../components/molecule/OtpInput/RenderMessage';
 import {storage} from '../hooks/use-storage.hook';
 import {KeyboardShift} from '../components/molecule/KeyboardShift';
+import {useTranslation} from 'react-i18next';
 
 const {width, height} = Dimensions.get('screen');
 type PageProps = 'emailInput' | 'otp' | 'newPass';
@@ -66,6 +67,7 @@ const validationSchema = yup.object({
 });
 
 export const ForgotPassword: FC = () => {
+  const {t} = useTranslation();
   const {
     isError,
     errorMsg,
@@ -222,11 +224,9 @@ export const ForgotPassword: FC = () => {
     return (
       <>
         <View style={styles.otpTitleContainer}>
-          <Text style={styles.titleStyle}>Update your password</Text>
+          <Text style={styles.titleStyle}>{t('ForgotPassword.Title')}</Text>
           <Gap height={8} />
-          <Text style={styles.descStyle}>
-            Input your email address to recover your password
-          </Text>
+          <Text style={styles.descStyle}>{t('ForgotPassword.Subtitle')}</Text>
         </View>
 
         <Gap height={16} />
@@ -239,7 +239,7 @@ export const ForgotPassword: FC = () => {
               errorMsg={errors?.email?.message ?? errorMsg}
               value={value}
               onChangeText={onChange}
-              placeholder={'Enter your email'}
+              placeholder={t('ForgotPassword.Placeholder.Email') || ''}
               leftIcon={<EmailIcon stroke={color.Dark[50]} />}
               onFocus={() => {
                 handleFocusInput('email');
@@ -254,7 +254,7 @@ export const ForgotPassword: FC = () => {
 
         <Gap height={24} />
         <Button
-          label="Submit"
+          label={t('Btn.Submit')}
           textStyles={{fontSize: normalize(14)}}
           containerStyles={{width: '100%'}}
           onPress={handleSubmit(handleSubmitEmail)}
@@ -262,7 +262,7 @@ export const ForgotPassword: FC = () => {
         <Gap height={4} />
         <Button
           type="border"
-          label="Back"
+          label={t('Btn.Back')}
           borderColor="transparent"
           textStyles={{fontSize: normalize(14), color: color.Pink.linear}}
           containerStyles={{width: '100%'}}
@@ -270,7 +270,7 @@ export const ForgotPassword: FC = () => {
         />
         <Gap height={18} />
         <Text style={styles.forgotPassStyle}>
-          Dont Have an Account?{' '}
+          {t('Login.DontHaveAccount')}{' '}
           <Text
             onPress={() => handleOnPressSignUp()}
             style={{
@@ -279,7 +279,7 @@ export const ForgotPassword: FC = () => {
               fontSize: mvs(12),
               lineHeight: mvs(16),
             }}>
-            Sign Up
+            {t('Btn.SignUp')}
           </Text>
         </Text>
         <Gap height={10} />
@@ -292,10 +292,10 @@ export const ForgotPassword: FC = () => {
     return (
       <>
         <View style={styles.otpTitleContainer}>
-          <Text style={styles.titleStyle}>Input Otp</Text>
+          <Text style={styles.titleStyle}>{t('ForgotPassword.Otp.Title')}</Text>
           <Gap height={8} />
           <Text style={styles.descStyle}>
-            Enter the recovery code we just sent to
+            {t('ForgotPassword.Otp.Subtitle')}
           </Text>
           <Gap height={8} />
           <Text style={styles.descStyle}>{watch('email')}</Text>
@@ -318,7 +318,7 @@ export const ForgotPassword: FC = () => {
         <Gap height={4} />
         <Button
           type="border"
-          label="Back"
+          label={t('Btn.Back')}
           borderColor="transparent"
           textStyles={{fontSize: normalize(14), color: color.Pink.linear}}
           containerStyles={{width: '100%'}}
@@ -334,7 +334,9 @@ export const ForgotPassword: FC = () => {
     return (
       <>
         <View style={styles.otpTitleContainer}>
-          <Text style={styles.titleStyle}>Set New Password</Text>
+          <Text style={styles.titleStyle}>
+            {t('ForgotPassword.Modal.Title')}
+          </Text>
         </View>
 
         <Gap height={16} />
@@ -345,7 +347,7 @@ export const ForgotPassword: FC = () => {
             <SsuInput.InputText
               value={value}
               onChangeText={onChange}
-              placeholder={'Password'}
+              placeholder={t('SignUp.Password') || ''}
               leftIcon={<LockIcon stroke={color.Dark[50]} />}
               password
               onFocus={() => {
@@ -368,7 +370,7 @@ export const ForgotPassword: FC = () => {
             <SsuInput.InputText
               value={value}
               onChangeText={onChange}
-              placeholder={'Repeat'}
+              placeholder={t('SignUp.PasswordRepeat') || ''}
               leftIcon={<LockIcon stroke={color.Dark[50]} />}
               password
               onFocus={() => {
@@ -385,7 +387,7 @@ export const ForgotPassword: FC = () => {
         />
         <Gap height={20} />
         <Button
-          label="Sign In"
+          label={t('Btn.SignIn')}
           textStyles={{fontSize: normalize(14)}}
           containerStyles={{width: '100%'}}
           onPress={handleSubmit(handleOnPressSubmit)}
@@ -415,8 +417,8 @@ export const ForgotPassword: FC = () => {
         <ModalLoading visible={isLoading} />
         <ModalConfirm
           modalVisible={isModalVisible.modalConfirm}
-          title="Set New Password"
-          subtitle="Are you sure you want to leave your progress unsaved?"
+          title={t('ForgotPassword.Modal.Title') || ''}
+          subtitle={t('ForgotPassword.Modal.Subtitle') || ''}
           onPressClose={closeModal}
           onPressOk={onPressConfirm}
         />

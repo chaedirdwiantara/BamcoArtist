@@ -15,6 +15,8 @@ import {Button, ButtonGradient, SsuInput} from '../../atom';
 import {CheckCircleIcon, GiftIcon} from '../../../assets/icon';
 import ReferralImage from '../../../assets/image/Referral.image';
 import {heightPercentage, widthPercentage} from '../../../utils';
+import {useTranslation} from 'react-i18next';
+import i18n from '../../../locale';
 
 const {width} = Dimensions.get('window');
 
@@ -31,13 +33,12 @@ interface ActivatedProps {
   refCode?: string;
 }
 
-const title1 = 'Do you have a referral code?';
-const title2 = 'Referral Activated';
-const description1 = 'Enter your code to jumpstart your Sunny Side Up Journey!';
-const description2 =
-  'Congratulations! Now you will get 5% credit every transaction!';
-const friendReferral = "Your Friend's Referral Code";
-const refCannotBeChanged = 'Referral code can not be changed';
+const title1 = i18n.t('Setting.Referral.OnBoard.Title');
+const title2 = i18n.t('Setting.Referral.OnBoard.Actived');
+const description1 = i18n.t('Setting.Referral.OnBoard.Subtitle');
+const description2 = i18n.t('Setting.Referral.OnBoard.Success');
+const friendReferral = i18n.t('Setting.Referral.UseRefer.Text2');
+const refCannotBeChanged = i18n.t('Setting.Referral.UseRefer.Text3');
 
 const ReferralActivated: React.FC<ActivatedProps> = ({refCode}) => {
   return (
@@ -66,6 +67,7 @@ export const ReferralContent: React.FC<ReferralContentProps> = ({
   errorMsg,
   isValidRef,
 }) => {
+  const {t} = useTranslation();
   const [refCode, setRefCode] = useState<string>('');
   const [type, setType] = useState<string>('input');
   const [focusInput, setFocusInput] = useState<string | null>(null);
@@ -101,7 +103,7 @@ export const ReferralContent: React.FC<ReferralContentProps> = ({
             <SsuInput.InputText
               value={refCode}
               isError={isError}
-              placeholder={'Referral Code'}
+              placeholder={t('Setting.Referral.Title') || ''}
               errorMsg={errorMsg}
               leftIcon={<GiftIcon />}
               fontColor={Color.Neutral[10]}
@@ -124,13 +126,13 @@ export const ReferralContent: React.FC<ReferralContentProps> = ({
           <View style={styles.footer}>
             <Button
               type="border"
-              label="Maybe Later"
+              label={t('Btn.MaybeLater')}
               containerStyles={styles.btnContainer}
               textStyles={{color: Color.Pink.linear}}
               onPress={onSkip}
             />
             <Button
-              label="Submit"
+              label={t('Btn.Submit')}
               disabled={emptyString}
               containerStyles={{
                 width: widthPercentage(155),
@@ -146,7 +148,7 @@ export const ReferralContent: React.FC<ReferralContentProps> = ({
           </View>
         ) : (
           <ButtonGradient
-            label="Go To Home"
+            label={t('Btn.GoToHome')}
             onPress={() => {
               onSkip && onSkip();
             }}
