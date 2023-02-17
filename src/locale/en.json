@@ -167,6 +167,7 @@
     "Title": "Feed",
     "Public": "Public",
     "Exclusive": "Exclusive",
+    "MyPost": "My Post",
     "Sort": {
       "Title": "Sort by",
       "Latest": "Latest",
@@ -491,6 +492,15 @@
     },
     "Placeholder": {
       "Write": "Write your reply"
+    },
+    "Create": {
+      "Title": "Create Post",
+      "Category": "Select Category",
+      "Write": "Write Something",
+      "Audience": "Set Audience",
+      "Quote": "Quote Music",
+      "Media": "Upload Media",
+      "Preview": "Add Preview"
     }
   },
   "Notification": {

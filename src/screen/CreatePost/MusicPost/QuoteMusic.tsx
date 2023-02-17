@@ -11,8 +11,10 @@ import {ListDataSearchSongs} from '../../../interface/search.interface';
 import {widthResponsive} from '../../../utils';
 import {profileStorage} from '../../../hooks/use-storage.hook';
 import {dummySongImg} from '../../../data/image';
+import {useTranslation} from 'react-i18next';
 
 const QuoteMusic = () => {
+  const {t} = useTranslation();
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
 
@@ -31,7 +33,7 @@ const QuoteMusic = () => {
   return (
     <View style={styles.container}>
       <TopNavigation.Type1
-        title="Quote Music"
+        title={t('Post.Create.Quote')}
         maxLengthTitle={20}
         itemStrokeColor={'white'}
         leftIconAction={navigation.goBack}

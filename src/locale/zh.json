@@ -166,6 +166,7 @@
     "Title": "動態",
     "Public": "公開",
     "Exclusive": "專屬內容",
+    "MyPost": "My Post",
     "Sort": {
       "Title": "排序方式",
       "Latest": "最新的",
@@ -491,6 +492,15 @@
     },
     "Placeholder": {
       "Write": "Write your reply"
+    },
+    "Create": {
+      "Title": "Create Post",
+      "Category": "Select Category",
+      "Write": "Write Something",
+      "Audience": "Set Audience",
+      "Quote": "Quote Music",
+      "Media": "Upload Media",
+      "Preview": "Add Preview"
     }
   },
   "Notification": {

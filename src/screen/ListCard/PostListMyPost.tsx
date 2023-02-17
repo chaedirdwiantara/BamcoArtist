@@ -49,6 +49,7 @@ import categoryNormalize from '../../utils/categoryNormalize';
 import {ModalLoading} from '../../components/molecule/ModalLoading/ModalLoading';
 import {usePlayerHook} from '../../hooks/use-player.hook';
 import MusicListPreview from '../../components/molecule/MusicPreview/MusicListPreview';
+import {useTranslation} from 'react-i18next';
 const {height} = Dimensions.get('screen');
 
 interface PostListProps {
@@ -58,6 +59,7 @@ interface PostListProps {
 }
 
 const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
+  const {t} = useTranslation();
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
   const navigateProfile =
@@ -344,7 +346,7 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
           }}>
           <Dropdown.Menu
             data={dataLeftDropdown}
-            placeHolder={'Filter by'}
+            placeHolder={t('Feed.Sort.Title')}
             selectedMenu={resultDataFilter}
             containerStyle={{
               width: widthPercentage(138),
@@ -357,7 +359,7 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
           }}>
           <Dropdown.Menu
             data={dataRightDropdown}
-            placeHolder={'Category'}
+            placeHolder={t('Home.Tab.TopPost.Category.Title')}
             selectedMenu={resultDataCategory}
             containerStyle={{
               width: widthPercentage(138),

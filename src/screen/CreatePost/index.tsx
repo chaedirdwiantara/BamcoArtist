@@ -49,10 +49,12 @@ import {usePlayerHook} from '../../hooks/use-player.hook';
 import {dummySongImg} from '../../data/image';
 import {SongList, TranscodedSongType} from '../../interface/song.interface';
 import {useProfileHook} from '../../hooks/use-profile.hook';
+import {useTranslation} from 'react-i18next';
 
 type PostDetailProps = NativeStackScreenProps<RootStackParams, 'CreatePost'>;
 
 const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
+  const {t} = useTranslation();
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
 
@@ -107,7 +109,11 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
       setLabel(dataUpdatePostProps.category);
       setValueFilter(dataUpdatePostProps.category);
       setInputText(dataUpdatePostProps.caption);
-      setDataAudience(dataUpdatePostProps.isPremium ? 'Exclusive' : 'Public');
+      setDataAudience(
+        (dataUpdatePostProps.isPremium
+          ? t('Feed.Exclusive')
+          : t('Feed.Public')) || '',
+      );
       if (dataUpdatePostProps.images.length !== 0) {
         let dataForSet = [];
         for (let i = 0; i < dataUpdatePostProps.images.length; i++) {
@@ -184,7 +190,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
       setCreatePost({
         caption: inputText,
         category: valueFilter ? valueFilter : 'highlight',
-        isPremium: dataAudience === 'Exclusive' ? true : false,
+        isPremium: dataAudience === t('Feed.Exclusive') ? true : false,
       });
     }
 
@@ -199,7 +205,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
         id: dataUpdatePostProps.id,
         caption: inputText,
         category: valueFilter ? valueFilter : 'highlight',
-        isPremium: dataAudience === 'Exclusive' ? true : false,
+        isPremium: dataAudience === t('Feed.Exclusive') ? true : false,
       });
     }
 
@@ -218,7 +224,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
       setCreatePost({
         caption: inputText,
         category: valueFilter ? valueFilter : 'highlight',
-        isPremium: dataAudience === 'Exclusive' ? true : false,
+        isPremium: dataAudience === t('Feed.Exclusive') ? true : false,
         quoteToPost:
           musicData !== undefined && musicData?.transcodedSongUrl !== undefined
             ? {
@@ -248,7 +254,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
         id: userId,
         caption: inputText,
         category: valueFilter ? valueFilter : 'highlight',
-        isPremium: dataAudience === 'Exclusive' ? true : false,
+        isPremium: dataAudience === t('Feed.Exclusive') ? true : false,
         quoteToPost:
           musicData !== undefined && musicData?.transcodedSongUrl !== undefined
             ? {
@@ -285,7 +291,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
           caption: inputText,
           category: valueFilter ? valueFilter : 'highlight',
           image: dataResponseImg,
-          isPremium: dataAudience === 'Exclusive' ? true : false,
+          isPremium: dataAudience === t('Feed.Exclusive') ? true : false,
         }),
         setActive(false))
       : null;
@@ -302,7 +308,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
           caption: inputText,
           category: valueFilter ? valueFilter : 'highlight',
           image: dataResponseImg,
-          isPremium: dataAudience === 'Exclusive' ? true : false,
+          isPremium: dataAudience === t('Feed.Exclusive') ? true : false,
         }),
         setActive(false))
       : null;
@@ -420,7 +426,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
       <View style={styles.container}>
         <TopNavigation.Type1
-          title="Create Post"
+          title={t('Post.Create.Title')}
           maxLengthTitle={20}
           itemStrokeColor={'white'}
           leftIconAction={navigation.goBack}
@@ -438,7 +444,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
               />
               <Gap width={12} />
               <ButtonGradientwithIcon
-                label={label ? label : 'Select Category'}
+                label={label ? label : t('Post.Create.Category')}
                 onPress={() =>
                   setModalVisible({
                     modalFilter: true,
@@ -457,7 +463,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
               <SsuInput.InputText
                 value={inputText}
                 onChangeText={(newText: string) => setInputText(newText)}
-                placeholder={'Write Something...'}
+                placeholder={`${t('Post.Create.Write')}...`}
                 containerStyles={{
                   width: widthResponsive(290),
                   backgroundColor: 'transparent',
@@ -529,7 +535,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
               <View style={styles.dropdownContainer}>
                 <Dropdown.Menu
                   data={dropDownSetAudience}
-                  placeHolder={'Set Audience'}
+                  placeHolder={t('Post.Create.Audience')}
                   selectedMenu={resultDataAudience}
                   containerStyle={{
                     width: widthResponsive(138),
@@ -554,7 +560,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
               </Text>
               {inputText.length === 0 ? (
                 <Button
-                  label={'Post'}
+                  label={t('Post.Title')}
                   containerStyles={{
                     width: widthResponsive(100),
                     aspectRatio: heightResponsive(279 / 77),
@@ -566,7 +572,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
                 />
               ) : (
                 <ButtonGradient
-                  label={'Post'}
+                  label={t('Post.Title')}
                   gradientStyles={{
                     width: widthResponsive(100),
                     aspectRatio: heightResponsive(279 / 77),
@@ -594,7 +600,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
           sendCategory={setValueFilter}
         />
         <ModalImagePicker
-          title={'Upload media'}
+          title={t('Post.Create.Media') || ''}
           modalVisible={isModalVisible.modalImagePicker}
           sendUri={sendSingleUri}
           sendUriMultiple={sendUri}
