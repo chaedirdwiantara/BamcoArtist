@@ -15,9 +15,7 @@ import SsuAPI from './baseMusician';
 export const registerUser = async (
   registerProps: RegisterPropsType,
 ): Promise<RegisterResponseType> => {
-  const {data} = await SsuAPI({
-    cookie: registerProps.toString(),
-  }).request<RegisterResponseType>({
+  const {data} = await SsuAPI().request<RegisterResponseType>({
     url: '/register',
     method: 'POST',
     data: registerProps,

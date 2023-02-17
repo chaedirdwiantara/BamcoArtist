@@ -1,9 +1,5 @@
 import axios, {AxiosError, AxiosInstance} from 'axios';
 
-type SsuAPIParams = {
-  cookie?: string;
-};
-
 let API: AxiosInstance;
 
 const setupAPIClient = () => {
@@ -25,14 +21,9 @@ const setupAPIClient = () => {
   );
 };
 
-export const initialize = (
-  params?: SsuAPIParams,
-  anonymous?: boolean,
-): AxiosInstance => {
+export const initialize = (): AxiosInstance => {
   // always create new axios instance when cookie changed
-  if (params?.cookie || !API || anonymous) {
-    setupAPIClient();
-  }
+  setupAPIClient();
 
   return API;
 };
