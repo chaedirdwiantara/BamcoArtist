@@ -6,6 +6,7 @@ import topNavstyles from './topNavstyles';
 import {font} from '../../../theme';
 import {ChipMoney} from '../../atom/ChipMoney/ChipMoney';
 import {DefaultAvatar} from '../../../assets/icon';
+import {useTranslation} from 'react-i18next';
 
 /** === INTERFACE === */
 type Props = {
@@ -25,6 +26,7 @@ type Props = {
 
 /** == COMPONENT === */
 const Type5: React.FC<Props> = (props: Props) => {
+  const {t} = useTranslation();
   /** => icon left */
   const iconLeft = () => {
     return (
@@ -74,7 +76,10 @@ const Type5: React.FC<Props> = (props: Props) => {
             ]}>
             {props.guest
               ? 'Guest'
-              : elipsisText(`Hi, ${props.name}`, props.maxLengthTitle ?? 20)}
+              : elipsisText(
+                  t('Home.Topbar.Hi', {name: props.name}),
+                  props.maxLengthTitle ?? 20,
+                )}
           </Text>
         </View>
         <View style={topNavstyles.rightContainer}>

@@ -46,12 +46,14 @@ import {FirebaseMessagingTypes} from '@react-native-firebase/messaging';
 import {dropDownDataCategory, dropDownDataFilter} from '../data/dropdown';
 import {ModalPlayMusic} from '../components/molecule/Modal/ModalPlayMusic';
 import {heightPercentage, widthPercentage, widthResponsive} from '../utils';
+import {useTranslation} from 'react-i18next';
 
 type OnScrollEventHandler = (
   event: NativeSyntheticEvent<NativeScrollEvent>,
 ) => void;
 
 export const HomeScreen: React.FC = () => {
+  const {t} = useTranslation();
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
   const {dataBanner, getListDataBanner} = useBannerHook();
@@ -133,9 +135,9 @@ export const HomeScreen: React.FC = () => {
 
   const [selectedIndex, setSelectedIndex] = useState(-0);
   const [filter] = useState([
-    {filterName: 'TOP MUSICIAN'},
-    {filterName: 'TOP SONG'},
-    {filterName: 'TOP POST'},
+    {filterName: t('Home.Tab.TopMusician.Title')},
+    {filterName: t('Home.Tab.TopSong.Title')},
+    {filterName: t('Home.Tab.TopPost.Title')},
   ]);
   const filterData = (item: any, index: any) => {
     setSelectedIndex(index);
@@ -232,7 +234,8 @@ export const HomeScreen: React.FC = () => {
             onPress={filterData}
             selectedIndex={selectedIndex}
           />
-          {filter[selectedIndex].filterName === 'TOP MUSICIAN' ? (
+          {filter[selectedIndex].filterName ===
+          t('Home.Tab.TopMusician.Title') ? (
             <TopMusician
               dataMusician={dataMusician}
               setFollowMusician={(
@@ -244,7 +247,8 @@ export const HomeScreen: React.FC = () => {
                 params?: ParamsProps,
               ) => setUnfollowMusician(props, params)}
             />
-          ) : filter[selectedIndex].filterName === 'TOP SONG' ? (
+          ) : filter[selectedIndex].filterName ===
+            t('Home.Tab.TopSong.Title') ? (
             <TopSong
               dataSong={dataTopSong}
               onPress={onPressTopSong}

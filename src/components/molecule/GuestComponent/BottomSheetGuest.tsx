@@ -10,6 +10,7 @@ import {RootStackParams} from '../../../navigations';
 import {color, typography} from '../../../theme';
 import {Button, ButtonGradient} from '../../atom';
 import {heightPercentage, normalize} from '../../../utils';
+import {useTranslation} from 'react-i18next';
 
 interface BottomSheetGuestProps {
   modalVisible: boolean;
@@ -20,6 +21,7 @@ export const BottomSheetGuest: React.FC<BottomSheetGuestProps> = ({
   modalVisible,
   onPressClose,
 }) => {
+  const {t} = useTranslation();
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
 
@@ -37,29 +39,27 @@ export const BottomSheetGuest: React.FC<BottomSheetGuestProps> = ({
               typography.Heading4,
               {color: color.Neutral[10], textAlign: 'center'},
             ]}>
-            {'Sign Up or Sign In'}
+            {t('Modal.Guest.Title')}
           </Text>
           <Text style={[typography.Body1, styles.subtitle]}>
-            {
-              'You are exploring as guest,\nsign up or sign in to enjoy full content'
-            }
+            {t('Modal.Guest.Subtitle')}
           </Text>
         </View>
         <ButtonGradient
-          label="Sign Up"
+          label={t('Btn.SignUp')}
           textStyles={{fontSize: normalize(14)}}
           onPress={() => onPress('Signup')}
         />
         <Button
           type="border"
-          label="Sign In"
+          label={t('Btn.SignIn')}
           textStyles={{fontSize: normalize(14)}}
           containerStyles={{marginVertical: mvs(6)}}
           onPress={() => onPress('Login')}
         />
         <Button
           type="border"
-          label="Maybe Later"
+          label={t('Btn.MaybeLater')}
           borderColor="transparent"
           textStyles={{fontSize: normalize(14), color: color.Pink.linear}}
           onPress={onPressClose}
