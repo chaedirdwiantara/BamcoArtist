@@ -65,6 +65,7 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
     dataLoadMore,
     feedIsLoading,
     dataComment,
+    setDataLoadMore,
     setDataComment,
     setLikePost,
     setUnlikePost,
@@ -135,6 +136,7 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   const [commentLvl2, setCommentLvl2] = useState<CommentList2[]>();
   const [commentLvl3, setCommentLvl3] = useState<CommentList3[]>();
   const [staticId, setStaticId] = useState<string[]>([]);
+  const [commentCountLvl1, setCommmentCountLvl1] = useState<number>(0);
 
   // * LIKE / UNLIKE HOOKS
   const [likeCommentId, setLikeCommentId] = useState<string>('');
@@ -194,7 +196,7 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
     if (viewMore !== '' && value !== 0) {
       return handleViewMore();
     }
-  }, [viewMore]);
+  }, [viewMore, value]);
 
   // * 3RD call call by viewMore hook
   const handleViewMore = () => {
@@ -249,22 +251,25 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
 
   // * 5TH call when data load received from api
   useEffect(() => {
-    if (dataLoadMore !== null) {
+    if (dataLoadMore) {
       dataLoadMore?.map((item: CommentList) => {
         if (item.commentLevel === 1 && commentLvl1 === undefined) {
-          return setCommentLvl1(dataLoadMore);
+          return setCommentLvl1(dataLoadMore), setDataLoadMore(null);
         } else if (item.commentLevel === 1 && commentLvl1 !== undefined) {
-          return setCommentLvl2([...commentLvl1, ...dataLoadMore]);
+          return (
+            setCommentLvl1([...commentLvl1, ...dataLoadMore]),
+            setDataLoadMore(null)
+          );
         } else if (item.commentLevel === 2 && commentLvl2 === undefined) {
-          return setCommentLvl2(dataLoadMore);
+          setCommentLvl2(dataLoadMore), setDataLoadMore(null);
         } else if (item.commentLevel === 2 && commentLvl2 !== undefined) {
-          const mergedArray = [...commentLvl2, ...dataLoadMore];
-          return setCommentLvl2(mergedArray);
+          let mergedArray = [...commentLvl2, ...dataLoadMore];
+          setCommentLvl2(mergedArray), setDataLoadMore(null);
         } else if (item.commentLevel === 3 && commentLvl3 === undefined) {
-          return setCommentLvl3(dataLoadMore);
+          return setCommentLvl3(dataLoadMore), setDataLoadMore(null);
         } else if (item.commentLevel === 3 && commentLvl3 !== undefined) {
-          const mergedArray = [...commentLvl3, ...dataLoadMore];
-          return setCommentLvl3(mergedArray);
+          let mergedArray = [...commentLvl3, ...dataLoadMore];
+          return setCommentLvl3(mergedArray), setDataLoadMore(null);
         }
       });
     }
@@ -273,13 +278,14 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   // * 6TH call, delete static comments when comment level reach certain value
   // TODO: need implement more logic to delete the static comments
   useEffect(() => {
-    if (dataLoadMore !== null) {
+    if (dataLoadMore !== null && staticId.length > 0) {
       if (delStaticComment == 1 && commentLvl1?.length == 11) {
         for (var i = 0; i < commentLvl1.length; i++) {
           return setCommentLvl1(
             commentLvl1.filter((x: CommentList) => !staticId.includes(x.id)),
           );
         }
+        setDataLoadMore(null);
       } else if (
         delStaticComment == 2 &&
         commentLvl2 &&
@@ -291,6 +297,7 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
             commentLvl2.filter((x: CommentList2) => !staticId.includes(x.id)),
           );
         }
+        setDataLoadMore(null);
       } else if (
         delStaticComment == 3 &&
         commentLvl3 &&
@@ -302,12 +309,16 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
             commentLvl3.filter((x: CommentList3) => !staticId.includes(x.id)),
           );
         }
+        setDataLoadMore(null);
       }
     }
   }, [dataLoadMore, delStaticComment, commentLvl1]);
   // !END OF VIEW MORE
 
   // ! COMMENT AREA
+  useEffect(() => {
+    dataPostDetail && setCommmentCountLvl1(dataPostDetail.commentsCount);
+  }, [dataPostDetail]);
   // ? Handle Comment To Post
   const commentOnPress = (id: string, username: string) => {
     setInputCommentModal(true);
@@ -351,6 +362,9 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
         content: commentCaption,
       }),
         setCommentCaption('');
+      if (commentCountLvl1) {
+        setCommmentCountLvl1(commentCountLvl1 + 1);
+      }
     } else null;
     if (updateComment) {
       handleUpdateStaticComment();
@@ -487,6 +501,9 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
             commentLvl1.filter((x: CommentList) => !idComment.includes(x.id)),
           );
           setCommentDelete({id: idComment});
+          if (commentCountLvl1) {
+            setCommmentCountLvl1(commentCountLvl1 - 1);
+          }
         }
         if (selectedMenu.label === 'Edit Reply') {
           let commentNow = commentLvl1.filter((x: CommentList) =>
@@ -780,7 +797,7 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
                 marginTop: mvs(16),
                 height: heightPercentage(40),
               }}
-              commentCount={dataPostDetail.commentsCount}
+              commentCount={commentCountLvl1}
               disabled={true}
               children={
                 <View style={{width: '100%'}}>
