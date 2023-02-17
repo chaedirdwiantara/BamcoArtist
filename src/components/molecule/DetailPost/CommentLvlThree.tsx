@@ -68,7 +68,7 @@ const CommentLvlThree: React.FC<ListProps> = (props: ListProps) => {
         }}>
         <View style={[styles.topSection, {marginTop: showEdit ? ms(-7) : 0}]}>
           <Text style={styles.userName} onPress={toDetailOnPress}>
-            {elipsisText(userNameLvl3, 21)}
+            {elipsisText(userNameLvl3, 10)}
             <Text style={styles.regularText}>
               {' '}
               {elipsisText(userIdLvl3, 10)}
