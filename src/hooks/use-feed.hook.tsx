@@ -339,6 +339,7 @@ export const useFeedHook = () => {
     deletePostLoading,
     dataDeletePost,
     deletePostError,
+    setDataLoadMore,
     setDataComment,
     setDeletePost,
     getListDataPost,
