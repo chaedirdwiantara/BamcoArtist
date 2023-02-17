@@ -49,8 +49,6 @@ import categoryNormalize from '../../utils/categoryNormalize';
 import {ModalLoading} from '../../components/molecule/ModalLoading/ModalLoading';
 import {usePlayerHook} from '../../hooks/use-player.hook';
 import MusicListPreview from '../../components/molecule/MusicPreview/MusicListPreview';
-import {dummySongImg} from '../../data/image';
-import {ListDataSearchSongs} from '../../interface/search.interface';
 const {height} = Dimensions.get('screen');
 
 interface PostListProps {
@@ -127,13 +125,20 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
 
   useFocusEffect(
     useCallback(() => {
-      getListDataMyPost({page: page, perPage: perPage});
+      getListDataMyPost({page: 1, perPage: perPage});
+      setPage(1);
     }, []),
   );
 
   //* set response data list post to main data
   useEffect(() => {
-    dataPostList.length !== 0 && setDataMain([...dataMain, ...dataPostList]);
+    if (dataPostList.length !== 0) {
+      let filterDataPost = [...dataMain, ...dataPostList];
+      let filterDuplicate = filterDataPost.filter(
+        (v, i, a) => a.findIndex(v2 => v2.id === v.id) === i,
+      );
+      setDataMain(filterDuplicate);
+    }
   }, [dataPostList]);
 
   const resultDataFilter = (dataResultFilter: DataDropDownType) => {
@@ -295,6 +300,7 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
     ) {
       if (selectedMenu.label === 'Delete Post') {
         setDeletePost({id: selectedIdPost});
+        setDataMain(dataMain.filter(data => data.id !== selectedIdPost));
         setSelectedMenu(undefined);
       }
       if (selectedMenu.label === 'Edit Post') {
@@ -367,7 +373,11 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
             marginHorizontal: widthResponsive(-24),
           }}>
           <FlatList
-            data={dataMain}
+            data={dataMain.sort(
+              (a, b) =>
+                new Date(b.createdAt).getTime() -
+                new Date(a.createdAt).getTime(),
+            )}
             showsVerticalScrollIndicator={false}
             keyExtractor={(_, index) => index.toString()}
             contentContainerStyle={{
