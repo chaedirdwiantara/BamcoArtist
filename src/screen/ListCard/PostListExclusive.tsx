@@ -47,7 +47,6 @@ import categoryNormalize from '../../utils/categoryNormalize';
 import {ModalLoading} from '../../components/molecule/ModalLoading/ModalLoading';
 import {usePlayerHook} from '../../hooks/use-player.hook';
 import MusicListPreview from '../../components/molecule/MusicPreview/MusicListPreview';
-import {dummySongImg} from '../../data/image';
 
 const {height} = Dimensions.get('screen');
 
@@ -124,17 +123,24 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
     useCallback(() => {
       uuidMusician !== ''
         ? getListDataExclusivePost({
-            page: page,
+            page: 1,
             perPage: perPage,
             musician_uuid: uuidMusician,
           })
-        : getListDataExclusivePost({page: page, perPage: perPage});
+        : getListDataExclusivePost({page: 1, perPage: perPage});
+      setPage(1);
     }, [uuidMusician]),
   );
 
   //* set response data list post to main data
   useEffect(() => {
-    dataPostList.length !== 0 && setDataMain([...dataMain, ...dataPostList]);
+    if (dataPostList.length !== 0) {
+      let filterDataPost = [...dataMain, ...dataPostList];
+      let filterDuplicate = filterDataPost.filter(
+        (v, i, a) => a.findIndex(v2 => v2.id === v.id) === i,
+      );
+      setDataMain(filterDuplicate);
+    }
   }, [dataPostList]);
 
   const resultDataFilter = (dataResultFilter: DataDropDownType) => {
@@ -350,7 +356,11 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
       {dataMain !== null && dataMain.length !== 0 ? (
         <View style={{flex: 1, marginHorizontal: widthResponsive(-24)}}>
           <FlatList
-            data={dataMain}
+            data={dataMain.sort(
+              (a, b) =>
+                new Date(b.createdAt).getTime() -
+                new Date(a.createdAt).getTime(),
+            )}
             showsVerticalScrollIndicator={false}
             keyExtractor={(_, index) => index.toString()}
             contentContainerStyle={{
