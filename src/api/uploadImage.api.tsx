@@ -1,5 +1,4 @@
 import SsuAPI from './baseMusician';
-import {Platform} from 'react-native';
 import {Image} from 'react-native-image-crop-picker';
 import {UploadImageResponseType} from '../interface/uploadImage.interface';
 
@@ -8,7 +7,7 @@ export const uploadImage = async (
 ): Promise<UploadImageResponseType> => {
   let formData = new FormData();
   formData.append('image', {
-    uri: Platform.OS === 'android' ? image.path : image.sourceURL,
+    uri: image.path,
     name: `${Date.now()}.jpg`,
     type: image.mime,
   });

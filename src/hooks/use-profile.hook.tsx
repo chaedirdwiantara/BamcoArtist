@@ -14,6 +14,7 @@ import {applyReferral} from '../api/referral.api';
 import {ParamsProps} from '../interface/base.interface';
 import {PostPropsTypeA} from '../interface/feed.interface';
 import {
+  CollectPhotoRemoveProps,
   CollectPhotosProps,
   DataCountLiked,
   ProfileFansResponseType,
@@ -155,7 +156,7 @@ export const useProfileHook = () => {
     }
   };
 
-  const removeCollectPhotos = async (props?: CollectPhotosProps) => {
+  const removeCollectPhotos = async (props?: CollectPhotoRemoveProps) => {
     try {
       await removePhotos(props);
     } catch (error) {

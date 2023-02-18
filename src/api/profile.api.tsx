@@ -6,6 +6,7 @@ import {
   ProfileFansResponseType,
   ProfileResponseType,
   UpdateProfileResponseType,
+  CollectPhotoRemoveProps,
 } from '../interface/profile.interface';
 import SsuAPI from './baseMusician';
 import SsuAPIPublicRinjani from './basePublic';
@@ -80,7 +81,7 @@ export const addPhotos = async (
 };
 
 export const removePhotos = async (
-  props?: CollectPhotosProps,
+  props?: CollectPhotoRemoveProps,
 ): Promise<CollectPhotosResponseType> => {
   const {data} = await SsuAPI().request<CollectPhotosResponseType>({
     url: '/profile/collect-photos/delete',
