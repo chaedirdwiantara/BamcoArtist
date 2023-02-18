@@ -498,7 +498,8 @@
     "Playlist": {
       "Edit": "Edit Playlist",
       "Delete": "Delete Playlist",
-      "Share": "Share Playlist"
+      "Share": "Share Playlist",
+      "Success": "Song have been added to playlist!"
     },
     "Credit": {
       "Title": "Show Credit",

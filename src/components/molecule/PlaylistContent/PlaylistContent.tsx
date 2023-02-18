@@ -33,6 +33,7 @@ import {deletePlaylist} from '../../../api/playlist.api';
 import {SongList} from '../../../interface/song.interface';
 import {SongTitlePlay} from '../SongTitlePlay/SongTitlePlay';
 import {Playlist} from '../../../interface/playlist.interface';
+import {useTranslation} from 'react-i18next';
 
 interface Props {
   onPressGoBack: () => void;
@@ -50,13 +51,14 @@ export const PlaylistContent: React.FC<Props> = ({
   dataDetail,
   listSongs,
 }) => {
+  const {t} = useTranslation();
   const [isModalVisible, setModalVisible] = useState(false);
 
   const dataMore = [
-    {label: 'Add to Queue', value: 'AddToQueue'},
-    {label: 'Edit Playlist', value: 'EditPlaylist'},
-    {label: 'Share Playlist', value: 'SharePlaylist'},
-    {label: 'Delete Playlist', value: 'DeletePlaylist'},
+    {label: t('Home.Tab.TopSong.Queue'), value: 'AddToQueue'},
+    {label: t('Music.Playlist.Edit'), value: 'EditPlaylist'},
+    {label: t('Music.Playlist.Share'), value: 'SharePlaylist'},
+    {label: t('Music.Playlist.Delete'), value: 'DeletePlaylist'},
   ];
 
   const onPressDelete = async () => {
@@ -79,7 +81,7 @@ export const PlaylistContent: React.FC<Props> = ({
   return (
     <View style={styles.root}>
       <TopNavigation.Type4
-        title="Playlist"
+        title={t('Home.Topbar.Search.Playlist')}
         rightIcon={
           <Dropdown.More
             data={dataMore}
@@ -123,7 +125,7 @@ export const PlaylistContent: React.FC<Props> = ({
             onPress={goToAddSong}>
             <MusicSquareAddIcon />
             <Gap width={widthPercentage(10)} />
-            <Text style={styles.textAddSong}>Add Song</Text>
+            <Text style={styles.textAddSong}>{t('Music.Label.AddSong')}</Text>
           </TouchableOpacity>
         </View>
 
@@ -140,11 +142,11 @@ export const PlaylistContent: React.FC<Props> = ({
           )}
 
           <Text style={[typography.Subtitle1, {color: color.Success[500]}]}>
-            Song List
+            {t('Music.Label.SongList')}
           </Text>
           <View>
             {listSongs === null || listSongs?.length === 0 ? (
-              <Text style={styles.description}>No Song Added</Text>
+              <Text style={styles.description}>{t('Music.Label.NoSong')}</Text>
             ) : (
               <TopSong
                 dataSong={listSongs}
@@ -158,8 +160,8 @@ export const PlaylistContent: React.FC<Props> = ({
 
       <ModalConfirm
         modalVisible={isModalVisible}
-        title="Delete"
-        subtitle="Are you sure you want to delete this playlist?"
+        title={t('Btn.Delete') || ''}
+        subtitle={t('Modal.Playlist.Delete') || ''}
         onPressClose={() => setModalVisible(false)}
         onPressOk={onPressDelete}
       />

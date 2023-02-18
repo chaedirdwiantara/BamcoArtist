@@ -25,6 +25,7 @@ import {ModalImagePicker} from '../Modal/ModalImagePicker';
 import {Button, ButtonGradient, SsuInput} from '../../atom';
 import checkEmptyProperties from '../../../utils/checkEmptyProperties';
 import {heightPercentage, width, widthPercentage} from '../../../utils';
+import {useTranslation} from 'react-i18next';
 
 interface Props {
   goToPlaylist: (id: number) => void;
@@ -35,6 +36,7 @@ export const CreateNewPlaylistContent: React.FC<Props> = ({
   goToPlaylist,
   onPressGoBack,
 }) => {
+  const {t} = useTranslation();
   const [state, setState] = useState({
     playlistName: '',
     playlistDesc: '',
@@ -135,7 +137,7 @@ export const CreateNewPlaylistContent: React.FC<Props> = ({
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
       <View style={styles.root}>
         <TopNavigation.Type1
-          title="New Playlist"
+          title={t('Music.NewPlaylist.Title')}
           leftIcon={<ArrowLeftIcon />}
           itemStrokeColor={color.Neutral[10]}
           leftIconAction={onPressGoBack}
@@ -158,7 +160,7 @@ export const CreateNewPlaylistContent: React.FC<Props> = ({
               onChangeText={(newText: string) => {
                 onChangeText('playlistName', newText);
               }}
-              placeholder={'Playlist Name'}
+              placeholder={t('Music.NewPlaylist.Placeholder.Name') || ''}
               containerStyles={styles.textInput}
               maxLength={100}
               numberOfLines={1}
@@ -177,7 +179,7 @@ export const CreateNewPlaylistContent: React.FC<Props> = ({
               onChangeText={(newText: string) => {
                 onChangeText('playlistDesc', newText);
               }}
-              placeholder={'Playlist Description'}
+              placeholder={t('Music.NewPlaylist.Placeholder.Desc') || ''}
               inputStyles={styles.inputDesc}
               maxLength={600}
               numberOfLines={5}
@@ -196,8 +198,8 @@ export const CreateNewPlaylistContent: React.FC<Props> = ({
 
           <Dropdown.Input
             data={dataVisibility}
-            placeHolder={'Visibility'}
-            dropdownLabel={'Visibility'}
+            placeHolder={t('Music.NewPlaylist.Visibility.Title') || ''}
+            dropdownLabel={t('Music.NewPlaylist.Visibility.Title') || ''}
             textTyped={(newText: {label: string; value: string}) =>
               onChangeText('isPublic', newText.value)
             }
@@ -210,13 +212,13 @@ export const CreateNewPlaylistContent: React.FC<Props> = ({
           <View style={styles.footer}>
             <Button
               type="border"
-              label="Cancel"
+              label={t('Btn.Cancel') || ''}
               containerStyles={styles.btnContainer}
               textStyles={{color: color.Pink.linear}}
               onPress={onPressGoBack}
             />
             <ButtonGradient
-              label={'Create'}
+              label={t('Btn.Create') || ''}
               disabled={disabledButton}
               colors={disabledButton ? colorDisabled : defaultGradient}
               onPress={() => openModal('modalConfirm')}
@@ -226,7 +228,7 @@ export const CreateNewPlaylistContent: React.FC<Props> = ({
         </ScrollView>
 
         <ModalImagePicker
-          title="Edit Playlist Cover"
+          title={t('Music.NewPlaylist.Cover') || ''}
           modalVisible={isModalVisible.modalImage}
           sendUri={sendUri}
           sendUriMultiple={() => null}
@@ -237,8 +239,8 @@ export const CreateNewPlaylistContent: React.FC<Props> = ({
 
         <ModalConfirm
           modalVisible={isModalVisible.modalConfirm}
-          title="Save"
-          subtitle="Are you sure you want to save your new playlist?"
+          title={t('Btn.Save') || ''}
+          subtitle={t('Modal.Playlist.Save') || ''}
           onPressClose={closeModal}
           onPressOk={onPressConfirm}
           disabled={isLoading}
