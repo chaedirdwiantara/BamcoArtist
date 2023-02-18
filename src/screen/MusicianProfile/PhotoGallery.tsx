@@ -27,6 +27,7 @@ type PhotoGalleyProps = NativeStackScreenProps<RootStackParams, 'PhotoGallery'>;
 const PhotoGallery: FC<PhotoGalleyProps> = ({route}: PhotoGalleyProps) => {
   const imageData = route.params.imageData;
   const userName = route.params.userName;
+  const type = route.params.type;
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
 
@@ -63,7 +64,9 @@ const PhotoGallery: FC<PhotoGalleyProps> = ({route}: PhotoGalleyProps) => {
                 marginVertical: ms(1.5),
               }}>
               <FastImage
-                source={{uri: item.images[1].image}}
+                source={{
+                  uri: type === 'profile' ? item.images[1].image : item.path,
+                }}
                 style={{
                   width: '100%',
                   height: '100%',
@@ -78,6 +81,7 @@ const PhotoGallery: FC<PhotoGalleyProps> = ({route}: PhotoGalleyProps) => {
         modalVisible={isModalVisible}
         imageIdx={imgUrl}
         dataImageGallery={imageData}
+        type={type}
       />
     </View>
   );
