@@ -8,8 +8,10 @@ import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParams} from '../../navigations';
 import {profileStorage} from '../../hooks/use-storage.hook';
+import {useTranslation} from 'react-i18next';
 
 const ListToFollowMusician = () => {
+  const {t} = useTranslation();
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
 
@@ -32,7 +34,7 @@ const ListToFollowMusician = () => {
 
   return (
     <>
-      <Text style={styles.textStyle}>People who might fit your interest</Text>
+      <Text style={styles.textStyle}>{t('Musician.Label.Musicians')}</Text>
       <FlatList
         data={dataMusician}
         showsVerticalScrollIndicator={false}

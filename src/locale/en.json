@@ -219,7 +219,9 @@
       "HeaderPicture": "Edit Header",
       "Take": "Take Photo",
       "Add": "Add Photo From Gallery",
-      "Delete": "Delete Photo"
+      "Delete": "Delete Photo",
+      "Social": "Social Media Settings",
+      "About": "Tell us about yourself"
     }
   },
   "Musician": {
@@ -543,6 +545,7 @@
     "Exclusive": "You don’t have access to any exclusive content. Try subscribing to your favorite musician",
     "NoData": "No data available",
     "FollowMusician": "This musician doesn't seem to have any posts right now. Try following more musicians",
+    "DontHavePost": "You don't have any post",
     "Search": {
       "Album": "Album not found",
       "Event": "Event not found",

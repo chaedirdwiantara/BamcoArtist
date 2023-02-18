@@ -25,6 +25,7 @@ import {heightPercentage, widthPercentage} from '../../../utils';
 import ProfileComponent from '../../../screen/MusicianProfile/ProfileComponent';
 import {useProfileHook} from '../../../hooks/use-profile.hook';
 import {ModalLoading} from '../ModalLoading/ModalLoading';
+import {useTranslation} from 'react-i18next';
 
 interface EditProfileProps {
   profile: any;
@@ -44,6 +45,7 @@ export const EditProfile: React.FC<EditProfileProps> = ({
   setUploadImage,
   setResetImage,
 }) => {
+  const {t} = useTranslation();
   const {dataProfile, getProfileUser} = useProfileHook();
   const [bio, setBio] = useState(profile.bio || '');
   const [about, setAbout] = useState(profile.about || '');
@@ -120,7 +122,9 @@ export const EditProfile: React.FC<EditProfileProps> = ({
     uri?.backgroundUri?.path || profile.backgroundUri || null;
 
   const titleModalPicker =
-    uriType === 'avatarUri' ? 'Edit Display Profile' : 'Edit Header';
+    uriType === 'avatarUri'
+      ? t('Profile.Edit.ProfilePicture')
+      : t('Profile.Edit.HeaderPicture');
   const hideMenuDelete =
     uriType === 'avatarUri'
       ? avatarUri !== null && avatarUri !== ''
@@ -137,7 +141,7 @@ export const EditProfile: React.FC<EditProfileProps> = ({
   return (
     <View style={styles.root}>
       <TopNavigation.Type4
-        title="Edit Profile"
+        title={t('Profile.Edit.Title')}
         rightIcon={<SaveIcon />}
         leftIcon={<ArrowLeftIcon />}
         itemStrokeColor={Color.Neutral[10]}
@@ -157,10 +161,10 @@ export const EditProfile: React.FC<EditProfileProps> = ({
         />
 
         <View style={styles.textAreaContainer}>
-          <Text style={styles.title}>{'About'}</Text>
+          <Text style={styles.title}>{t('Musician.Label.About')}</Text>
           <SsuInput.InputLabel
-            label="Bio"
-            placeholder="Tell us about yourself"
+            label={t('Profile.Edit.Bio') || ''}
+            placeholder={t('Profile.Edit.About') || ''}
             value={bio}
             multiline
             maxLength={110}
@@ -176,8 +180,8 @@ export const EditProfile: React.FC<EditProfileProps> = ({
 
         <View style={styles.textAreaContainer}>
           <SsuInput.InputLabel
-            label="About"
-            placeholder="Tell us about yourself"
+            label={t('Musician.Label.About') || ''}
+            placeholder={t('Profile.Edit.About') || ''}
             value={about}
             multiline
             maxLength={600}
@@ -192,9 +196,11 @@ export const EditProfile: React.FC<EditProfileProps> = ({
         </View>
 
         <View style={styles.textAreaContainer}>
-          <Text style={styles.title}>{'Social Media'}</Text>
+          <Text style={styles.title}>{t('Musician.Label.Social')}</Text>
           <TouchableOpacity onPress={openModalSocMed}>
-            <Text style={styles.addText}>{'+ Social Media Settings'}</Text>
+            <Text style={styles.addText}>{`+ ${t(
+              'Profile.Edit.Social',
+            )}`}</Text>
           </TouchableOpacity>
           <ProfileComponent
             title=""
@@ -233,13 +239,13 @@ export const EditProfile: React.FC<EditProfileProps> = ({
       <ModalSocMed
         modalVisible={isModalVisible.modalSocMed}
         onPressClose={closeModal}
-        titleModal={'Social Media'}
+        titleModal={t('Musician.Label.Social')}
       />
 
       <ModalConfirm
         modalVisible={isModalVisible.modalConfirm}
-        title="Edit Profile"
-        subtitle="Are you sure to finish edit profile?"
+        title={t('Modal.EditProfile.Title') || ''}
+        subtitle={t('Modal.EditProfile.Subtitle') || ''}
         onPressClose={closeModal}
         onPressOk={() => onPressSave({bio, about})}
       />

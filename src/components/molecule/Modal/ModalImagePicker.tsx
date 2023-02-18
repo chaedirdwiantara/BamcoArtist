@@ -15,6 +15,7 @@ import Font from '../../../theme/Font';
 import Color from '../../../theme/Color';
 import SsuSheet from '../../atom/SsuSheet';
 import {heightPercentage, normalize, width} from '../../../utils';
+import {useTranslation} from 'react-i18next';
 
 interface ModalImagePickerProps {
   title?: string;
@@ -37,6 +38,8 @@ export const ModalImagePicker: React.FC<ModalImagePickerProps> = ({
   hideMenuDelete,
   multiple,
 }) => {
+  const {t} = useTranslation();
+
   const onImageLibraryPress = () => {
     ImagePicker.openPicker({
       compressImageMaxWidth: 1024,
@@ -82,22 +85,22 @@ export const ModalImagePicker: React.FC<ModalImagePickerProps> = ({
         <View style={styles.separator} />
         <View style={styles.containerMenu}>
           <TouchableOpacity style={{width: '100%'}} onPress={onCameraPress}>
-            <Text style={styles.textMenu}>Take Photo</Text>
+            <Text style={styles.textMenu}>{t('Profile.Edit.Take')}</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={{width: '100%', marginVertical: 10}}
             onPress={multiple ? onSelectMultiple : onImageLibraryPress}>
-            <Text style={styles.textMenu}>Add Photo from Gallery</Text>
+            <Text style={styles.textMenu}>{t('Profile.Edit.Add')}</Text>
           </TouchableOpacity>
           {hideMenuDelete && (
             <TouchableOpacity style={{width: '100%'}} onPress={onDeleteImage}>
-              <Text style={styles.textMenu}>Delete Photo</Text>
+              <Text style={styles.textMenu}>{t('Profile.Edit.Delete')}</Text>
             </TouchableOpacity>
           )}
         </View>
         <Button
           type="border"
-          label="Cancel"
+          label={t('Btn.Cancel')}
           containerStyles={styles.btnContainer}
           textStyles={{color: Color.Pink.linear}}
           onPress={onPressClose}

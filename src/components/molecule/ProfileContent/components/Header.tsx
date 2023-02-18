@@ -29,6 +29,7 @@ import initialname from '../../../../utils/initialname';
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParams} from '../../../../navigations';
+import {useTranslation} from 'react-i18next';
 
 export interface ProfileHeaderProps {
   avatarUri?: string;
@@ -63,6 +64,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = (
     backIcon,
   } = props;
 
+  const {t} = useTranslation();
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
 
@@ -112,7 +114,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = (
             <Text style={styles.description}>{bio}</Text>
             {noEdit ? null : (
               <ButtonGradient
-                label={'Edit Profile'}
+                label={t('Profile.Button.Edit')}
                 gradientStyles={styles.btnContainer}
                 onPress={() => {
                   onPress && onPress();

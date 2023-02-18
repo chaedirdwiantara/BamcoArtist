@@ -47,6 +47,7 @@ import categoryNormalize from '../../utils/categoryNormalize';
 import {ModalLoading} from '../../components/molecule/ModalLoading/ModalLoading';
 import {usePlayerHook} from '../../hooks/use-player.hook';
 import MusicListPreview from '../../components/molecule/MusicPreview/MusicListPreview';
+import {useTranslation} from 'react-i18next';
 
 const {height} = Dimensions.get('screen');
 
@@ -57,6 +58,7 @@ interface PostListProps {
 }
 
 const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
+  const {t} = useTranslation();
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
   const {dataRightDropdown, dataLeftDropdown, uuidMusician = ''} = props;
@@ -331,7 +333,7 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
           }}>
           <Dropdown.Menu
             data={dataLeftDropdown}
-            placeHolder={'Filter by'}
+            placeHolder={t('Feed.Sort.Title')}
             selectedMenu={resultDataFilter}
             containerStyle={{
               width: widthPercentage(138),
@@ -344,7 +346,7 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
           }}>
           <Dropdown.Menu
             data={dataRightDropdown}
-            placeHolder={'Category'}
+            placeHolder={t('Home.Tab.TopPost.Category.Title')}
             selectedMenu={resultDataCategory}
             containerStyle={{
               width: widthPercentage(138),
@@ -502,7 +504,7 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
       ) : dataMain?.length === 0 &&
         feedMessage === 'you not subscribe any premium content' ? (
         <EmptyState
-          text={`You don't have any exclusive content, try to subscribe your favorite musician`}
+          text={t('EmptyState.Donate') || ''}
           containerStyle={{
             justifyContent: 'flex-start',
             paddingTop: heightPercentage(24),
@@ -513,7 +515,7 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
         feedMessage ===
           'Your subscribed musician has not yet posted any exclusive content.' ? (
         <EmptyState
-          text={feedMessage}
+          text={t('EmptyState.Exclusive') || ''}
           containerStyle={{
             justifyContent: 'flex-start',
             paddingTop: heightPercentage(24),
@@ -522,7 +524,7 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
         />
       ) : (
         <EmptyState
-          text={'No data available'}
+          text={t('EmptyState.NoData') || ''}
           containerStyle={{
             justifyContent: 'flex-start',
             paddingTop: heightPercentage(24),

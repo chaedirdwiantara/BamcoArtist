@@ -218,7 +218,9 @@
       "HeaderPicture": "修改標題圖片",
       "Take": "拍攝照片",
       "Add": "由相簿添加",
-      "Delete": "刪除照片"
+      "Delete": "刪除照片",
+      "Social": "Social Media Settings",
+      "About": "Tell us about yourself"
     }
   },
   "Musician": {
@@ -543,6 +545,7 @@
     "Exclusive": "You don’t have access to any exclusive content. Try subsrcibing to your favorite musician",
     "NoData": "No data available",
     "FollowMusician": "This musician doesn't seem to have any posts right now. Try following more musicians",
+    "DontHavePost": "You don't have any post",
     "Search": {
       "Album": "Album not found",
       "Event": "Event not found",

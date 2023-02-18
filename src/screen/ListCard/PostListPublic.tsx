@@ -503,7 +503,7 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
         <ListToFollowMusician />
       ) : dataMain?.length === 0 && feedMessage === 'musician not have post' ? (
         <EmptyState
-          text={`Your following musician don't have any post, try to follow more musician`}
+          text={t('EmptyState.FollowMusician') || ''}
           containerStyle={{
             justifyContent: 'flex-start',
             paddingTop: heightPercentage(24),
@@ -511,7 +511,7 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
         />
       ) : (
         <EmptyState
-          text={'No data available'}
+          text={t('EmptyState.NoData') || ''}
           containerStyle={{
             justifyContent: 'flex-start',
             paddingTop: heightPercentage(24),
