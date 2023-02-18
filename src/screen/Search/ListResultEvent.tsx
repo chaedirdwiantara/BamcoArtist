@@ -7,12 +7,14 @@ import {EmptyState} from '../../components';
 import Color from '../../theme/Color';
 import {useQuery} from 'react-query';
 import {useSearchHook} from '../../hooks/use-search.hook';
+import {useTranslation} from 'react-i18next';
 
 interface Props {
   keyword: string;
 }
 
 const ListResultEvent: FC<Props> = ({keyword}: Props) => {
+  const {t} = useTranslation();
   const {getSearchEvents} = useSearchHook();
 
   const {
@@ -38,7 +40,7 @@ const ListResultEvent: FC<Props> = ({keyword}: Props) => {
           keyExtractor={item => item?.id.toString()}
           ListEmptyComponent={
             <EmptyState
-              text="Event not found"
+              text={t('EmptyState.Search.Event') || ''}
               containerStyle={styles.containerEmpty}
             />
           }

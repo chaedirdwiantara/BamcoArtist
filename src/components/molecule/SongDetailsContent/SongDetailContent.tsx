@@ -201,7 +201,7 @@ export const SongDetailsContent: React.FC<Props> = ({
         }
         modalVisible={modalShare}
         onPressClose={() => setModalShare(false)}
-        titleModal={'Share Music'}
+        titleModal={t('General.Share.Music')}
         imgUri={
           'https://i.pinimg.com/originals/b3/51/66/b35166174c9bde2d0cc436150a983912.jpg'
         }

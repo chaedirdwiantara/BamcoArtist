@@ -557,7 +557,7 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
         }
         modalVisible={modalShare}
         onPressClose={() => setModalShare(false)}
-        titleModal={'Share Feed'}
+        titleModal={t('General.Share.Feed')}
         hideMusic
         onPressCopy={() =>
           InteractionManager.runAfterInteractions(() => setToastVisible(true))

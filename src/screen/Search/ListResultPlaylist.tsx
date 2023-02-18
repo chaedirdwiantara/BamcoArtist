@@ -7,8 +7,10 @@ import {heightPercentage, heightResponsive} from '../../utils';
 import Color from '../../theme/Color';
 import {useSearchHook} from '../../hooks/use-search.hook';
 import {useQuery} from 'react-query';
+import {useTranslation} from 'react-i18next';
 
 const ListResultPlaylists: FC<KeywordProps> = ({keyword}: KeywordProps) => {
+  const {t} = useTranslation();
   const {getSearchPlaylists} = useSearchHook();
 
   const {
@@ -54,7 +56,7 @@ const ListResultPlaylists: FC<KeywordProps> = ({keyword}: KeywordProps) => {
           )}
           ListEmptyComponent={
             <EmptyState
-              text="Playlist not found"
+              text={t('EmptyState.Search.Playlist') || ''}
               containerStyle={styles.containerEmpty}
             />
           }

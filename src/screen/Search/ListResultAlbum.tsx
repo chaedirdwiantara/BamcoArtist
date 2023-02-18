@@ -7,8 +7,10 @@ import {useSearchHook} from '../../hooks/use-search.hook';
 import {heightPercentage, heightResponsive} from '../../utils';
 import Color from '../../theme/Color';
 import {useQuery} from 'react-query';
+import {useTranslation} from 'react-i18next';
 
 const ListResultAlbum: FC<KeywordProps> = ({keyword}: KeywordProps) => {
+  const {t} = useTranslation();
   const {getSearchAlbums} = useSearchHook();
   const {
     data: dataSearchAlbums,
@@ -51,7 +53,7 @@ const ListResultAlbum: FC<KeywordProps> = ({keyword}: KeywordProps) => {
           )}
           ListEmptyComponent={
             <EmptyState
-              text="Album not found"
+              text={t('EmptyState.Search.Album') || ''}
               containerStyle={styles.containerEmpty}
             />
           }

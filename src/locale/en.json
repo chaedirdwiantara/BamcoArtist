@@ -9,7 +9,12 @@
     "Thanks": "Thank You!",
     "LinkCopied": "Link have been copied to clipboard!",
     "Followers": "Followers",
-    "Listeners": "Listeners"
+    "Listeners": "Listeners",
+    "Share": {
+      "Feed": "Share Feed",
+      "Album": "Share Album",
+      "Music": "Share Music"
+    }
   },
   "Onboarding": {
     "Step1": {

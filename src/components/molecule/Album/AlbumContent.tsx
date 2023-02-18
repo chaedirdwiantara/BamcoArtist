@@ -152,7 +152,7 @@ export const AlbumContent: React.FC<Props> = ({onPressGoBack}) => {
         }
         modalVisible={modalShare}
         onPressClose={() => setModalShare(false)}
-        titleModal={'Share Album'}
+        titleModal={t('General.Share.Album')}
         imgUri={
           'https://i.pinimg.com/originals/b3/51/66/b35166174c9bde2d0cc436150a983912.jpg'
         }
