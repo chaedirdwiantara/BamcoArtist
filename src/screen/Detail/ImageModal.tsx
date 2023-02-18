@@ -1,19 +1,24 @@
+import React, {FC, useEffect, useRef, useState} from 'react';
 import {
   Animated,
   Dimensions,
   SafeAreaView,
+  ScrollView,
   StyleSheet,
   TouchableOpacity,
   View,
+  NativeScrollEvent,
+  NativeSyntheticEvent,
 } from 'react-native';
-import React, {FC, useEffect, useRef} from 'react';
 import Modal from 'react-native-modal';
-import {color} from '../../theme';
 import FastImage from 'react-native-fast-image';
-import {heightPercentage, heightResponsive, widthResponsive} from '../../utils';
-import {CloseCircleIcon} from '../../assets/icon';
+import {Image} from 'react-native-image-crop-picker';
+
+import {color} from '../../theme';
 import {imageTypes} from '../../interface/feed.interface';
 import {photos} from '../../interface/musician.interface';
+import {CloseCircleIcon, TrashIcon} from '../../assets/icon';
+import {heightPercentage, heightResponsive, widthResponsive} from '../../utils';
 
 export const {width} = Dimensions.get('screen');
 
@@ -22,24 +27,38 @@ interface ModalImageProps {
   modalVisible: boolean;
   imageIdx: number;
   dataImage?: imageTypes[][];
-  dataImageGallery?: photos[];
+  dataImageGallery?: photos[] | Image[];
+  type: string;
+  removePhoto?: (id: number) => void;
 }
 
+type OnScrollEventHandler = (
+  event: NativeSyntheticEvent<NativeScrollEvent>,
+) => void;
+
 const ImageModal: FC<ModalImageProps> = (props: ModalImageProps) => {
-  const {toggleModal, modalVisible, imageIdx, dataImage, dataImageGallery} =
-    props;
+  const {
+    toggleModal,
+    modalVisible,
+    imageIdx,
+    dataImage,
+    dataImageGallery,
+    type,
+    removePhoto,
+  } = props;
 
   const scrollX = useRef(new Animated.Value(0)).current;
   const imageSlider = useRef(null);
+  const [activeIndexSlide, setActiveIndexSlide] = useState<number>(imageIdx);
 
   useEffect(() => {
-    if (imageIdx !== -1) {
-      // @ts-ignore
-      imageSlider.current?.scrollToOffset({
-        offset: imageIdx * width,
-      });
-    }
+    setActiveIndexSlide(imageIdx);
   }, [imageIdx]);
+
+  const handleScroll: OnScrollEventHandler = event => {
+    let offsetX = event.nativeEvent.contentOffset.x;
+    setActiveIndexSlide(Math.ceil(offsetX / width));
+  };
 
   return (
     <Modal
@@ -49,15 +68,31 @@ const ImageModal: FC<ModalImageProps> = (props: ModalImageProps) => {
       style={{marginHorizontal: 0}}
       onBackButtonPress={toggleModal}>
       <SafeAreaView style={styles.container}>
-        <TouchableOpacity onPress={toggleModal} style={styles.closeButton}>
-          <CloseCircleIcon />
-        </TouchableOpacity>
+        <View style={styles.containerIcon}>
+          <TouchableOpacity onPress={toggleModal} style={styles.closeButton}>
+            <CloseCircleIcon />
+          </TouchableOpacity>
+
+          {type === 'editProfile' ? (
+            <TouchableOpacity
+              onPress={() => removePhoto && removePhoto(activeIndexSlide)}
+              style={styles.removeIcon}>
+              <TrashIcon />
+            </TouchableOpacity>
+          ) : null}
+        </View>
 
         <View style={styles.mainContainer}>
           {dataImageGallery ? (
-            <Animated.FlatList
+            <Animated.FlatList<Image | photos>
               ref={imageSlider}
               data={dataImageGallery}
+              initialScrollIndex={imageIdx}
+              getItemLayout={(data, index) => ({
+                length: width,
+                offset: width * index,
+                index,
+              })}
               keyExtractor={(_, index) => index.toString()}
               horizontal
               pagingEnabled
@@ -67,12 +102,21 @@ const ImageModal: FC<ModalImageProps> = (props: ModalImageProps) => {
                 [{nativeEvent: {contentOffset: {x: scrollX}}}],
                 {useNativeDriver: true},
               )}
-              renderItem={({item, index}) => (
+              renderScrollComponent={props => (
+                <ScrollView {...props} onScroll={handleScroll} />
+              )}
+              renderItem={({item}) => (
                 <Animated.View style={styles.mainImageWrapper}>
                   <View style={styles.imageWrapper}>
                     <FastImage
-                      source={{uri: item.images[3].image}}
+                      source={{
+                        uri:
+                          type === 'profile'
+                            ? item.images[3]?.image
+                            : item.path,
+                      }}
                       style={[styles.imageStyle]}
+                      resizeMode={FastImage.resizeMode.contain}
                     />
                   </View>
                 </Animated.View>
@@ -91,12 +135,13 @@ const ImageModal: FC<ModalImageProps> = (props: ModalImageProps) => {
                 [{nativeEvent: {contentOffset: {x: scrollX}}}],
                 {useNativeDriver: true},
               )}
-              renderItem={({item, index}) => (
+              renderItem={({item}) => (
                 <Animated.View style={styles.mainImageWrapper}>
                   <View style={styles.imageWrapper}>
                     <FastImage
                       source={{uri: item[3].image}}
                       style={[styles.imageStyle]}
+                      resizeMode={FastImage.resizeMode.contain}
                     />
                   </View>
                 </Animated.View>
@@ -133,7 +178,8 @@ const styles = StyleSheet.create({
   },
   imageWrapper: {
     width: width,
-    height: heightResponsive(320),
+    height: undefined,
+    aspectRatio: 1 / 2,
   },
   imageStyle: {
     height: '100%',
@@ -143,5 +189,15 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
     marginTop: heightPercentage(24),
     marginLeft: widthResponsive(24),
+  },
+  containerIcon: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: width,
+  },
+  removeIcon: {
+    alignSelf: 'flex-end',
+    marginTop: heightPercentage(24),
+    marginRight: widthResponsive(24),
   },
 });
