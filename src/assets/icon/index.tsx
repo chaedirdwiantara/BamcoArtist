@@ -80,6 +80,7 @@ import SoundIcon from './Sound.icon';
 import ThreeDotsIcon from './ThreeDots.icon';
 import TickCircleIcon from './TickCircle.icon';
 import TiktokIcon from './Tiktok.icon';
+import TrashIcon from './Trash.icon';
 import TwitterIcon from './Twitter.icon';
 import UserIcon from './User.icon';
 import UserProfileIcon from './UserProfile.icon';
@@ -174,6 +175,7 @@ export {
   ThreeDotsIcon,
   TickCircleIcon,
   TiktokIcon,
+  TrashIcon,
   TwitterIcon,
   UserIcon,
   UserProfileIcon,
