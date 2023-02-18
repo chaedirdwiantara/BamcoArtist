@@ -31,6 +31,10 @@ export type CollectPhotosProps = {
   photos: string[];
 };
 
+export type CollectPhotoRemoveProps = {
+  photos: string;
+};
+
 export type ListPhotosType = {
   images: ListImageType[];
 };

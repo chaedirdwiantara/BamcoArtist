@@ -33,6 +33,7 @@ export type ListPhotosType = {
 };
 
 export type photos = {
+  path: string | undefined;
   createdAt: string;
   images: imageTypes[];
 };

@@ -6,7 +6,7 @@ import {
   NativeStackNavigationProp,
 } from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-
+import {Image} from 'react-native-image-crop-picker';
 // Screen
 import {EventScreen} from '../screen/Event';
 import {FeedScreen} from '../screen/Feed';
@@ -153,7 +153,11 @@ export type RootStackParams = {
     info?: boolean;
     message?: string;
   };
-  PhotoGallery: {imageData: photos[]; userName: string};
+  PhotoGallery: {
+    imageData: photos[] | Image[];
+    userName: string;
+    type: string;
+  };
   Playlist: {
     id: number[];
   };
