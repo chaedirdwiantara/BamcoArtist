@@ -33,12 +33,17 @@ export const EditProfileScreen: React.FC<EditProfileProps> = ({
     dataProfile !== undefined && dataProfile.imageProfileUrls?.length > 0
       ? dataProfile.imageProfileUrls[2].image
       : null;
+
+  const photos =
+    dataProfile !== undefined && dataProfile.photos?.length > 0
+      ? dataProfile.photos
+      : [];
+
   const {isLoading, updateProfileUser, addCollectPhotos, deleteValueProfile} =
     useProfileHook();
 
   const [avatarUri, setAvatarUri] = useState(avatar || '');
   const [backgroundUri, setBackgroundUri] = useState(banners || '');
-  const [photos, setPhotos] = useState<string[]>([]);
   const [loadingUpload, setLoadingUpload] = useState<boolean>(false);
 
   const goBack = () => {
@@ -49,8 +54,9 @@ export const EditProfileScreen: React.FC<EditProfileProps> = ({
     bio: string;
     about: string;
     website: string;
+    photos: string[];
   }) => {
-    addCollectPhotos({photos});
+    addCollectPhotos({photos: param.photos});
     updateProfileUser({
       bio: param.bio,
       about: param.about,
@@ -65,7 +71,7 @@ export const EditProfileScreen: React.FC<EditProfileProps> = ({
     type === 'avatarUri' ? setAvatarUri('') : setBackgroundUri('');
   };
 
-  const setUploadImage = async (image: Image, type: string) => {
+  const setUploadPhoto = async (image: Image, type: string) => {
     InteractionManager.runAfterInteractions(() => setLoadingUpload(true));
     try {
       const response = await uploadImage(image);
@@ -73,8 +79,6 @@ export const EditProfileScreen: React.FC<EditProfileProps> = ({
         setAvatarUri(response.data);
       } else if (type === 'backgroundUri') {
         setBackgroundUri(response.data);
-      } else {
-        setPhotos([...photos, response.data]);
       }
     } catch (error) {
       console.log(error);
@@ -84,10 +88,13 @@ export const EditProfileScreen: React.FC<EditProfileProps> = ({
   };
 
   const userName = dataProfile?.fullname;
-  const imageData = dataProfile?.photos;
 
-  const goToGallery = () => {
-    navigation.navigate('PhotoGallery', {imageData, userName});
+  const goToGallery = (photo: Image[]) => {
+    navigation.navigate('PhotoGallery', {
+      userName,
+      imageData: photo,
+      type: 'editProfile',
+    });
   };
 
   const profile = {
@@ -98,6 +105,7 @@ export const EditProfileScreen: React.FC<EditProfileProps> = ({
     website: dataProfile?.website,
     avatarUri: avatarUri,
     backgroundUri: backgroundUri,
+    photos: photos,
   };
 
   return (
@@ -107,8 +115,8 @@ export const EditProfileScreen: React.FC<EditProfileProps> = ({
         type={'edit'}
         onPressGoBack={goBack}
         onPressSave={onPressSave}
-        setUploadImage={(image: Image, type: string) =>
-          setUploadImage(image, type)
+        setUploadPhoto={(image: Image, type: string) =>
+          setUploadPhoto(image, type)
         }
         setResetImage={(type: string) => {
           setResetImage(type);
