@@ -515,7 +515,8 @@
   "Post": {
     "Title": "帖",
     "Label": {
-      "RepliedTo": "回復了"
+      "RepliedTo": "回復了",
+      "ViewMoreReply": "View more reply"
     },
     "Placeholder": {
       "Write": "Write your reply"

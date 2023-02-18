@@ -14,6 +14,7 @@ import {ms, mvs} from 'react-native-size-matters';
 import {filterParentID} from './function';
 import {DataDropDownType} from '../../data/dropdown';
 import {dummyProfile} from '../../data/image';
+import {useTranslation} from 'react-i18next';
 interface CommentSectionType {
   postCommentCount: number;
   postId: string;
@@ -43,6 +44,7 @@ interface CommentSectionType {
 }
 
 const CommentSection: FC<CommentSectionType> = (props: CommentSectionType) => {
+  const {t} = useTranslation();
   const {
     dataLvl1,
     dataLvl2,
@@ -342,7 +344,7 @@ const CommentSection: FC<CommentSectionType> = (props: CommentSectionType) => {
                   <Text
                     style={styles.viewMore}
                     onPress={() => viewMoreOnPress(id, 3)}>
-                    View more reply
+                    {t('Post.Label.ViewMoreReply')}
                   </Text>
                 </TouchableOpacity>
               ) : dataLvl3 !== undefined &&
@@ -351,7 +353,7 @@ const CommentSection: FC<CommentSectionType> = (props: CommentSectionType) => {
                   <Text
                     style={styles.viewMore}
                     onPress={() => viewMoreOnPress(id, 3)}>
-                    View more reply
+                    {t('Post.Label.ViewMoreReply')}
                   </Text>
                 </TouchableOpacity>
               ) : null)}
@@ -476,14 +478,18 @@ const CommentSection: FC<CommentSectionType> = (props: CommentSectionType) => {
                   (dataLvl2 === undefined ? (
                     <TouchableOpacity
                       onPress={() => viewMoreOnPress(item.id, 2)}>
-                      <Text style={styles.viewMore}>View more reply</Text>
+                      <Text style={styles.viewMore}>
+                        {t('Post.Label.ViewMoreReply')}
+                      </Text>
                     </TouchableOpacity>
                   ) : dataLvl2 !== undefined &&
                     filterParentID(dataLvl2, item.id).length !=
                       item.commentsCount ? (
                     <TouchableOpacity
                       onPress={() => viewMoreOnPress(item.id, 2)}>
-                      <Text style={styles.viewMore}>View more reply</Text>
+                      <Text style={styles.viewMore}>
+                        {t('Post.Label.ViewMoreReply')}
+                      </Text>
                     </TouchableOpacity>
                   ) : null)}
               </>
@@ -500,7 +506,7 @@ const CommentSection: FC<CommentSectionType> = (props: CommentSectionType) => {
                 marginBottom: mvs(20),
               },
             ]}>
-            View more reply
+            {t('Post.Label.ViewMoreReply')}
           </Text>
         </TouchableOpacity>
       ) : null}

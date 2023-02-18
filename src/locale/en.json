@@ -515,7 +515,8 @@
   "Post": {
     "Title": "Post",
     "Label": {
-      "RepliedTo": "replied to"
+      "RepliedTo": "replied to",
+      "ViewMoreReply": "View more reply"
     },
     "Placeholder": {
       "Write": "Write your reply"

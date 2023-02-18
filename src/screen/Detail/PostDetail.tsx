@@ -44,6 +44,7 @@ import categoryNormalize from '../../utils/categoryNormalize';
 import {DataDropDownType} from '../../data/dropdown';
 import MusicListPreview from '../../components/molecule/MusicPreview/MusicListPreview';
 import {usePlayerHook} from '../../hooks/use-player.hook';
+import {useTranslation} from 'react-i18next';
 
 type cmntToCmnt = {
   id: string;
@@ -55,6 +56,7 @@ type cmntToCmnt = {
 type PostDetailProps = NativeStackScreenProps<RootStackParams, 'PostDetail'>;
 
 export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
+  const {t} = useTranslation();
   // ignore warning
   useEffect(() => {
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
@@ -747,7 +749,7 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
     <View style={styles.root}>
       {/* Header Section */}
       <TopNavigation.Type1
-        title={`${musicianName} Post`}
+        title={`${musicianName} ${t('Post.Title')}`}
         leftIconAction={() => navigation.goBack()}
         maxLengthTitle={40}
         itemStrokeColor={color.Neutral[10]}

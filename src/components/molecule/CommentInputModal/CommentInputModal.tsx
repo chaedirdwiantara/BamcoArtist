@@ -17,6 +17,7 @@ import {Avatar, Gap, SsuInput} from '../..';
 import {color, font} from '../../../theme';
 import {ms, mvs} from 'react-native-size-matters';
 import {CloseIcon} from '../../../assets/icon';
+import {useTranslation} from 'react-i18next';
 
 interface ModalImageProps {
   toggleModal: () => void;
@@ -30,6 +31,7 @@ interface ModalImageProps {
 }
 
 const CommentInputModal: FC<ModalImageProps> = (props: ModalImageProps) => {
+  const {t} = useTranslation();
   const {
     toggleModal,
     modalVisible,
@@ -52,7 +54,8 @@ const CommentInputModal: FC<ModalImageProps> = (props: ModalImageProps) => {
       <View style={styles.container}>
         <View style={styles.headerComment}>
           <Text style={styles.textHeader}>
-            Replied to<Text style={{color: color.Pink[100]}}> {name}</Text>
+            {t('Post.Label.RepliedTo')}
+            <Text style={{color: color.Pink[100]}}> {name}</Text>
           </Text>
           <TouchableOpacity style={styles.closeButton} onPress={toggleModal}>
             <CloseIcon
@@ -69,7 +72,7 @@ const CommentInputModal: FC<ModalImageProps> = (props: ModalImageProps) => {
             <SsuInput.InputText
               value={commentValue}
               onChangeText={(newText: string) => onCommentChange?.(newText)}
-              placeholder={'Write your reply...'}
+              placeholder={`${t('Post.Placeholder.Write')}...`}
               containerStyles={{
                 width: widthResponsive(290),
                 backgroundColor: 'transparent',
@@ -95,7 +98,7 @@ const CommentInputModal: FC<ModalImageProps> = (props: ModalImageProps) => {
           {commentValue?.length}/200
         </Text>
         <TouchableOpacity style={styles.buttonStyle} onPress={handleOnPress}>
-          <Text style={styles.buttonText}>Reply</Text>
+          <Text style={styles.buttonText}>{t('Btn.Reply')}</Text>
         </TouchableOpacity>
       </View>
       <KeyboardAvoidingView
