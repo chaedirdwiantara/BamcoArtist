@@ -1,35 +1,52 @@
-import React, {FC} from 'react';
+import React, {FC, useState} from 'react';
 import {Image} from 'react-native-image-crop-picker';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
-import {Gap} from '../../../components';
 import {color, font} from '../../../theme';
 import {ms} from 'react-native-size-matters';
 import {widthResponsive} from '../../../utils';
+import ImageModal from '../../../screen/Detail/ImageModal';
 import SquareComp from '../../../screen/MusicianProfile/SquareComp';
 
 interface PhotoProps {
   data: Image[];
-  photoOnpress: () => void;
+  photoOnpress: (photos: Image[]) => void;
+  removePhoto: (id: number) => void;
 }
 
 const ListPhotos: FC<PhotoProps> = (props: PhotoProps) => {
-  const {data, photoOnpress} = props;
+  const {data, removePhoto} = props;
+
+  const [isModalVisible, setModalVisible] = useState<boolean>(false);
+  const [imgUrl, setImgUrl] = useState<number>(0);
+
+  const toggleModalOnPress = (index: number) => {
+    setModalVisible(!isModalVisible);
+    setImgUrl(index);
+  };
+
+  const photoRemove = (id: number) => {
+    removePhoto(id);
+    if (data.length === 1) {
+      setModalVisible(false);
+    }
+  };
 
   return (
-    <View style={{marginHorizontal: widthResponsive(24), width: '100%'}}>
+    <View style={{width: '100%'}}>
       {data ? (
         <View style={{flexDirection: 'row', width: '100%'}}>
           {data.map((item, i) => (
             <View key={i}>
               {data.length <= 4 && (
-                <>
+                <TouchableOpacity
+                  onPress={() => toggleModalOnPress(i)}
+                  style={{marginRight: widthResponsive(10)}}>
                   <SquareComp imgUri={item.path} size={widthResponsive(76)} />
-                  <Gap width={8} />
-                </>
+                </TouchableOpacity>
               )}
               {data.length > 4 && i === 3 ? (
-                <TouchableOpacity onPress={photoOnpress}>
+                <TouchableOpacity onPress={() => toggleModalOnPress(i)}>
                   <View
                     style={{
                       backgroundColor: color.Neutral[10],
@@ -46,13 +63,22 @@ const ListPhotos: FC<PhotoProps> = (props: PhotoProps) => {
                   </View>
                 </TouchableOpacity>
               ) : data.length > 4 && i < 3 ? (
-                <>
+                <TouchableOpacity
+                  onPress={() => toggleModalOnPress(i)}
+                  style={{marginRight: widthResponsive(10)}}>
                   <SquareComp imgUri={item.path} size={widthResponsive(76)} />
-                  <Gap width={8} />
-                </>
+                </TouchableOpacity>
               ) : null}
             </View>
           ))}
+          <ImageModal
+            toggleModal={() => setModalVisible(!isModalVisible)}
+            modalVisible={isModalVisible}
+            imageIdx={imgUrl}
+            dataImageGallery={data}
+            type={'editProfile'}
+            removePhoto={photoRemove}
+          />
         </View>
       ) : null}
     </View>
