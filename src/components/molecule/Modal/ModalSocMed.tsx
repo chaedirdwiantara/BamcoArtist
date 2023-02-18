@@ -174,8 +174,8 @@ export const ModalSocMed: React.FC<ModalSocMedProps> = ({
       <>
         <Text style={styles.titleStyle}>{titleModal}</Text>
         <View style={styles.separator} />
-        {Social.map(item => {
-          return <ListSocMed item={item} />;
+        {Social.map((item, i) => {
+          return <ListSocMed key={i} item={item} />;
         })}
 
         <Button
