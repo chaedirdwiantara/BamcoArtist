@@ -22,6 +22,7 @@ import * as FCMService from '../../../service/notification';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {height, heightPercentage, width, widthPercentage} from '../../../utils';
 import {ModalConfirm} from '../Modal/ModalConfirm';
+import {useTranslation} from 'react-i18next';
 
 interface SettingProps {
   onPressGoBack: () => void;
@@ -34,6 +35,7 @@ export const SettingContent: React.FC<SettingProps> = ({
   onPressGoTo,
   handleWebview,
 }) => {
+  const {t} = useTranslation();
   const listMenu = menuSetting;
   const [isVisible, setIsVisible] = useState({
     modalReport: false,
@@ -84,17 +86,15 @@ export const SettingContent: React.FC<SettingProps> = ({
     return (
       <View style={styles.card}>
         <Text style={[typography.Heading6, {color: color.Neutral[10]}]}>
-          Need help?
+          {t('Setting.Report.Modal.Title')}
         </Text>
         <ListReport
-          title={'Report a bug'}
-          subtitle={
-            'Something in the app is broken or doesn’t work as expected'
-          }
+          title={t('Setting.Report.Modal.Bug')}
+          subtitle={t('Setting.Report.Modal.TextBug')}
         />
         <ListReport
-          title={'Suggest an improvement'}
-          subtitle={'New ideas or desired enhancement for this app'}
+          title={t('Setting.Report.Modal.Suggest')}
+          subtitle={t('Setting.Report.Modal.TextSuggest')}
         />
       </View>
     );
@@ -123,7 +123,7 @@ export const SettingContent: React.FC<SettingProps> = ({
   return (
     <View style={styles.root}>
       <TopNavigation.Type1
-        title="Settings"
+        title={t('Setting.Title')}
         leftIcon={<ArrowLeftIcon />}
         itemStrokeColor={color.Neutral[10]}
         leftIconAction={onPressGoBack}
@@ -133,14 +133,14 @@ export const SettingContent: React.FC<SettingProps> = ({
         {listMenu.map((val, i) => (
           <MenuText.RightIcon
             key={i}
-            text={val}
+            text={t(val.text) || ''}
             containerStyles={{marginTop: heightPercentage(12)}}
-            onPress={() => onPress(val)}
+            onPress={() => onPress(val.value)}
           />
         ))}
         <View style={styles.containerText}>
           <Text style={[Typography.Button2, styles.textVersion]}>
-            {'Version 1.0.0'}
+            {`${t('Setting.Version.Title')} 1.0.0`}
           </Text>
         </View>
       </ScrollView>
@@ -156,7 +156,7 @@ export const SettingContent: React.FC<SettingProps> = ({
           }>
           <LogOutIcon />
           <Text style={[Typography.Button2, styles.textSignOut]}>
-            {'Sign Out'}
+            {t('Btn.SignOut')}
           </Text>
         </TouchableOpacity>
       </View>
@@ -169,8 +169,8 @@ export const SettingContent: React.FC<SettingProps> = ({
 
       <ModalConfirm
         modalVisible={isVisible.modalConfirm}
-        title="Sign Out"
-        subtitle="Are you sure you want to sign out?"
+        title={t('Btn.SignOut') || ''}
+        subtitle={t('Modal.SignOut') || ''}
         onPressClose={closeModal}
         onPressOk={onPressSignout}
       />

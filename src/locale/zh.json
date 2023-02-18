@@ -273,15 +273,24 @@
       "Title": "帳戶",
       "Label": {
         "Username": "用戶名",
-        "Fullname": "全名",
-        "Gender": "性別",
-        "Location": "地點"
+        "Fullname": "Musician Name",
+        "Genre": "類型",
+        "Location": "地點",
+        "Label": "Label",
+        "Active": "活躍年期",
+        "Origin": "來自",
+        "Member": "Member",
+        "AddMore": "Add More"
       },
       "Placeholder": {
         "Username": "Add Username",
-        "Fullname": "Add Full Name",
-        "Gender": "Select Gender",
-        "Location": "Select Location"
+        "Fullname": "Add Musician Name",
+        "Genre": "Select Genre",
+        "Location": "Select Location",
+        "Country": "Select Country",
+        "City": "Select City",
+        "Member": "Add Member",
+        "Active": "Select Year"
       }
     },
     "Password": {
@@ -396,7 +405,8 @@
         "Title": "USE REFERRAL",
         "Text1": "於每筆交易獲取 5% Sunny Side Up 積分",
         "Text2": "你朋友的推薦碼",
-        "Text3": "推薦碼無法更改"
+        "Text3": "推薦碼無法更改",
+        "Invalid": "Referral code invalid"
       },
       "OnBoard": {
         "Title": "你有推薦碼嗎？",
@@ -441,6 +451,21 @@
     },
     "Version": {
       "Title": "版本"
+    },
+    "Exclusive": {
+      "Title": "專屬內容",
+      "Label": {
+        "Basic": "Basic Information",
+        "Cover": "Exclusive Content Cover",
+        "Title": "Title",
+        "Description": "描述",
+        "Pricing": "Pricing Plan"
+      },
+      "Placeholder": {
+        "Title": "Add Title",
+        "Description": "Add Description about your content",
+        "Price": "Input Price (In Credit)"
+      }
     }
   },
   "Music": {

@@ -37,6 +37,7 @@ import {useProfileHook} from '../../../hooks/use-profile.hook';
 import {dataYearsFrom, dataYearsTo} from '../../../data/Settings/account';
 import {ProfileResponseType} from '../../../interface/profile.interface';
 import {ArrowLeftIcon, ErrorIcon, TickCircleIcon} from '../../../assets/icon';
+import {useTranslation} from 'react-i18next';
 
 interface AccountProps {
   profile: ProfileResponseType;
@@ -93,6 +94,7 @@ export const AccountContent: React.FC<AccountProps> = ({
   setSelectedCountry,
   setInputType,
 }) => {
+  const {t} = useTranslation();
   const [userGenres, setUserGenres] = useState<(string | number | undefined)[]>(
     [],
   );
@@ -195,7 +197,7 @@ export const AccountContent: React.FC<AccountProps> = ({
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
       <View style={styles.root}>
         <TopNavigation.Type1
-          title="Account"
+          title={t('Setting.Account.Title')}
           leftIcon={<ArrowLeftIcon />}
           itemStrokeColor={Color.Neutral[10]}
           leftIconAction={onPressGoBack}
@@ -208,13 +210,13 @@ export const AccountContent: React.FC<AccountProps> = ({
             control={control}
             render={({field: {onChange, value}}) => (
               <SsuInput.InputLabel
-                label="Username"
+                label={t('Setting.Account.Label.Username') || ''}
                 value={value}
                 onChangeText={text => {
                   onChange(text.toLowerCase());
                   setIsError(false);
                 }}
-                placeholder={'Add Username'}
+                placeholder={t('Setting.Account.Placeholder.Username') || ''}
                 isError={errors?.username ? true : false}
                 errorMsg={errors?.username?.message}
                 containerStyles={{marginTop: heightPercentage(15)}}
@@ -227,13 +229,13 @@ export const AccountContent: React.FC<AccountProps> = ({
             control={control}
             render={({field: {onChange, value}}) => (
               <SsuInput.InputLabel
-                label="Musician Name"
+                label={t('Setting.Account.Label.Fullname') || ''}
                 value={value}
                 onChangeText={text => {
                   onChange(text);
                   setIsError(false);
                 }}
-                placeholder={'Add Musician Name'}
+                placeholder={t('Setting.Account.Placeholder.Fullname') || ''}
                 isError={errors?.fullname ? true : false}
                 errorMsg={errors?.fullname?.message}
                 containerStyles={{marginTop: heightPercentage(15)}}
@@ -243,8 +245,8 @@ export const AccountContent: React.FC<AccountProps> = ({
 
           <Dropdown.Multi
             data={formatValueName(dataFavourites[0]?.favorites) ?? []}
-            placeHolder={'Select Genre'}
-            dropdownLabel={'Genre'}
+            placeHolder={t('Setting.Account.Placeholder.Genre') || ''}
+            dropdownLabel={t('Setting.Account.Label.Genre') || ''}
             textTyped={(_newText: string) => null}
             containerStyles={{marginTop: heightPercentage(15)}}
             initialValue={userGenres}
@@ -256,13 +258,13 @@ export const AccountContent: React.FC<AccountProps> = ({
             control={control}
             render={({field: {onChange, value}}) => (
               <SsuInput.InputLabel
-                label="Label"
+                label={t('Setting.Account.Label.Label') || ''}
                 value={value}
                 onChangeText={text => {
                   onChange(text);
                   setIsError(false);
                 }}
-                placeholder={'Add Label Name'}
+                placeholder={t('Setting.Account.Placeholder.Label') || ''}
                 isError={errors?.labels ? true : false}
                 errorMsg={errors?.labels?.message}
                 containerStyles={{marginTop: heightPercentage(15)}}
@@ -278,8 +280,8 @@ export const AccountContent: React.FC<AccountProps> = ({
                 <Dropdown.Input
                   initialValue={value}
                   data={dataYearsFrom}
-                  placeHolder={'Select Years'}
-                  dropdownLabel={'Years Active'}
+                  placeHolder={t('Setting.Account.Placeholder.Active') || ''}
+                  dropdownLabel={t('Musician.Label.Active') || ''}
                   textTyped={(newText: {label: string; value: string}) =>
                     onChange(newText.value)
                   }
@@ -300,7 +302,7 @@ export const AccountContent: React.FC<AccountProps> = ({
                 <Dropdown.Input
                   initialValue={value}
                   data={dataYearsTo}
-                  placeHolder={'Select Years'}
+                  placeHolder={t('Setting.Account.Placeholder.Active') || ''}
                   dropdownLabel={''}
                   textTyped={(newText: {label: string; value: string}) =>
                     onChange(newText.value)
@@ -325,8 +327,8 @@ export const AccountContent: React.FC<AccountProps> = ({
                   type="location"
                   initialValue={value}
                   data={dataAllCountry}
-                  placeHolder={'Select Country'}
-                  dropdownLabel={'Origin'}
+                  placeHolder={t('Setting.Account.Placeholder.Country') || ''}
+                  dropdownLabel={t('Setting.Account.Label.Origin') || ''}
                   textTyped={(newText: {label: string; value: string}) => {
                     onChange(newText.value);
                     setSelectedOrigin(newText.value);
@@ -349,7 +351,7 @@ export const AccountContent: React.FC<AccountProps> = ({
                 <Dropdown.Input
                   initialValue={value}
                   data={dataCitiesOfOrigin}
-                  placeHolder={'Select City'}
+                  placeHolder={t('Setting.Account.Placeholder.City') || ''}
                   showSearch={true}
                   dropdownLabel={''}
                   textTyped={(newText: {label: string; value: string}) =>
@@ -369,14 +371,14 @@ export const AccountContent: React.FC<AccountProps> = ({
           {members.map((val, index) => (
             <SsuInput.InputLabel
               key={index}
-              label={index === 0 ? 'Member' : ''}
+              label={index === 0 ? t('Setting.Account.Label.Member') || '' : ''}
               value={val}
               onChangeText={text => {
                 let temp = [...members];
                 temp[index] = text;
                 setMembers(temp);
               }}
-              placeholder={'Add Member'}
+              placeholder={t('Setting.Account.Placeholder.Member') || ''}
               containerStyles={{
                 marginTop: index === 0 ? heightPercentage(15) : 0,
               }}
@@ -404,8 +406,8 @@ export const AccountContent: React.FC<AccountProps> = ({
                   type="location"
                   initialValue={value}
                   data={dataAllCountry}
-                  placeHolder={'Select Country'}
-                  dropdownLabel={'Location'}
+                  placeHolder={t('Setting.Account.Placeholder.Country') || ''}
+                  dropdownLabel={t('Setting.Account.Label.Location') || ''}
                   textTyped={(newText: {label: string; value: string}) => {
                     onChange(newText.value);
                     setSelectedCountry(newText.value);
@@ -429,7 +431,7 @@ export const AccountContent: React.FC<AccountProps> = ({
                   initialValue={value}
                   data={dataCitiesOfCountry}
                   showSearch={true}
-                  placeHolder={'Select City'}
+                  placeHolder={t('Setting.Account.Placeholder.City') || ''}
                   dropdownLabel={''}
                   textTyped={(newText: {label: string; value: string}) =>
                     onChange(newText.value)
@@ -454,7 +456,7 @@ export const AccountContent: React.FC<AccountProps> = ({
           ) : null}
 
           <Button
-            label="Edit"
+            label={t('Btn.Edit')}
             onPress={handleSubmit(onPressSave)}
             containerStyles={
               disabledButton ? styles.buttonDisabled : styles.button

@@ -114,12 +114,14 @@ export const confirmSmsOtpLogin = async (
 
 export const resendOtpEmail = async (
   email: string,
+  context?: string,
 ): Promise<ResendOTPResponseType> => {
   const {data} = await SsuAPI().request<ResendOTPResponseType>({
     url: '/resend-otp/email',
     method: 'POST',
     data: {
       email: email,
+      context: context,
     },
   });
   return data;

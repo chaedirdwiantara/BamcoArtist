@@ -274,15 +274,24 @@
       "Title": "Account",
       "Label": {
         "Username": "Username",
-        "Fullname": "Full Name",
-        "Gender": "Gender",
-        "Location": "Location"
+        "Fullname": "Musician Name",
+        "Genre": "Genre",
+        "Location": "Location",
+        "Label": "Label",
+        "Active": "Years Active",
+        "Origin": "Origin",
+        "Member": "Member",
+        "AddMore": "Add More"
       },
       "Placeholder": {
         "Username": "Add Username",
-        "Fullname": "Add Full Name",
-        "Gender": "Select Gender",
-        "Location": "Select Location"
+        "Fullname": "Add Musician Name",
+        "Genre": "Select Genre",
+        "Location": "Select Location",
+        "Country": "Select Country",
+        "City": "Select City",
+        "Member": "Add Member",
+        "Active": "Select Year"
       }
     },
     "Password": {
@@ -397,7 +406,8 @@
         "Title": "USE REFERRAL",
         "Text1": "Earn 50 free credits",
         "Text2": "Your Friend’s Referral Code",
-        "Text3": "Refferal code can not be changed"
+        "Text3": "Refferal code can not be changed",
+        "Invalid": "Referral code invalid"
       },
       "OnBoard": {
         "Title": "Do you have a referral code?",
@@ -442,6 +452,21 @@
     },
     "Version": {
       "Title": "Version"
+    },
+    "Exclusive": {
+      "Title": "Exclusive Content",
+      "Label": {
+        "Basic": "Basic Information",
+        "Cover": "Exclusive Content Cover",
+        "Title": "Title",
+        "Description": "Description",
+        "Pricing": "Pricing Plan"
+      },
+      "Placeholder": {
+        "Title": "Add Title",
+        "Description": "Add Description about your content",
+        "Price": "Input Price (In Credit)"
+      }
     }
   },
   "Music": {

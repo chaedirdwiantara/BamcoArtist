@@ -14,6 +14,7 @@ import {ms, mvs} from 'react-native-size-matters';
 import {ModalLoading} from '../ModalLoading/ModalLoading';
 import {font} from '../../../theme';
 import {PhoneSettingTypeProps} from '../../../interface/setting.interface';
+import {useTranslation} from 'react-i18next';
 
 interface ChangeEmailProps {
   oldEmail: string | undefined;
@@ -54,6 +55,7 @@ export const ChangeEmailContent: React.FC<ChangeEmailProps> = ({
   onSuccess,
   oldEmail,
 }) => {
+  const {t} = useTranslation();
   const [countryNumber, setCountryNumber] = useState<string | null>(null);
   const [disabledButton, setDisabledButton] = useState<boolean>(true);
   const [isSubmit, setIsSubmit] = useState<boolean>(false);
@@ -137,7 +139,11 @@ export const ChangeEmailContent: React.FC<ChangeEmailProps> = ({
   return (
     <View style={styles.root}>
       <TopNavigation.Type1
-        title={`${type} Email`}
+        title={
+          type === 'Add'
+            ? t('Setting.Email.Label.Add')
+            : t('Setting.Email.Label.Change')
+        }
         leftIcon={<ArrowLeftIcon />}
         itemStrokeColor={Color.Neutral[10]}
         leftIconAction={onPressGoBack}
@@ -148,7 +154,7 @@ export const ChangeEmailContent: React.FC<ChangeEmailProps> = ({
         <>
           <Gap height={10} />
           <SsuInput.InputLabel
-            label="Old Email"
+            label={t('Setting.Email.Label.Old') || ''}
             value={oldEmail}
             editable={false}
             containerInputStyles={{borderBottomWidth: 0}}
@@ -164,13 +170,13 @@ export const ChangeEmailContent: React.FC<ChangeEmailProps> = ({
         control={control}
         render={({field: {onChange, value}}) => (
           <SsuInput.InputLabel
-            label={`${type === 'Change' ? 'New ' : ''}Email`}
+            label={t('Setting.Email.Label.New') || ''}
             value={value}
             onChangeText={text => {
               onChange(text);
               setIsError(false);
             }}
-            placeholder={'Add Email'}
+            placeholder={t('Setting.Email.Label.Add') || ''}
             isError={errors?.newEmail ? true : false}
             errorMsg={errors?.newEmail?.message}
           />
@@ -185,7 +191,7 @@ export const ChangeEmailContent: React.FC<ChangeEmailProps> = ({
             control={control}
             render={({field: {onChange, value}}) => (
               <SsuInput.InputLabel
-                label="Current Password"
+                label={t('Setting.Email.Label.Password') || ''}
                 password
                 value={value}
                 onChangeText={text => {
@@ -210,7 +216,7 @@ export const ChangeEmailContent: React.FC<ChangeEmailProps> = ({
       ) : null}
 
       <Button
-        label="Send Verification Code"
+        label={t('Btn.VerificationCode') || ''}
         onPress={handleSubmit(onPressSave)}
         containerStyles={disabledButton ? styles.buttonDisabled : styles.button}
         disabled={disabledButton}

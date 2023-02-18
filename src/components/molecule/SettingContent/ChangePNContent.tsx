@@ -16,6 +16,7 @@ import {ms, mvs} from 'react-native-size-matters';
 import {ModalLoading} from '../ModalLoading/ModalLoading';
 import {font} from '../../../theme';
 import {PhoneSettingTypeProps} from '../../../interface/setting.interface';
+import {useTranslation} from 'react-i18next';
 
 interface ChangePNProps {
   oldPhone: string | undefined;
@@ -58,6 +59,7 @@ export const ChangePNContent: React.FC<ChangePNProps> = ({
   onSuccess,
   oldPhone,
 }) => {
+  const {t} = useTranslation();
   const [focusInput, setFocusInput] = useState<string | null>(null);
   const [countryNumber, setCountryNumber] = useState<string | null>(null);
   const [disabledButton, setDisabledButton] = useState<boolean>(true);
@@ -151,7 +153,11 @@ export const ChangePNContent: React.FC<ChangePNProps> = ({
   return (
     <View style={styles.root}>
       <TopNavigation.Type1
-        title={`${type} Phone Number`}
+        title={
+          (type === 'Change'
+            ? t('Setting.Phone.Label.Change')
+            : t('Setting.Phone.Label.Add')) || ''
+        }
         leftIcon={<ArrowLeftIcon />}
         itemStrokeColor={Color.Neutral[10]}
         leftIconAction={onPressGoBack}
@@ -162,7 +168,7 @@ export const ChangePNContent: React.FC<ChangePNProps> = ({
         <>
           <Gap height={10} />
           <SsuInput.InputLabel
-            label="Old Phone Number"
+            label={t('Setting.Phone.Label.Old') || ''}
             value={oldPhone}
             editable={false}
             containerInputStyles={{borderBottomWidth: 0}}
@@ -179,7 +185,11 @@ export const ChangePNContent: React.FC<ChangePNProps> = ({
         render={({field: {onChange, value}}) => (
           <Dropdown.Country
             type="label"
-            labelText={`${type === 'Change' ? 'New ' : ''}Phone Number`}
+            labelText={
+              (type === 'Change'
+                ? t('Setting.Phone.Label.New')
+                : t('Setting.Phone.Title')) || ''
+            }
             value={value}
             onChangeText={onChange}
             countryData={countryData}
@@ -203,7 +213,7 @@ export const ChangePNContent: React.FC<ChangePNProps> = ({
             control={control}
             render={({field: {onChange, value}}) => (
               <SsuInput.InputLabel
-                label="Current Password"
+                label={t('Setting.Phone.Label.Password') || ''}
                 password
                 value={value}
                 onChangeText={text => {
@@ -228,7 +238,7 @@ export const ChangePNContent: React.FC<ChangePNProps> = ({
       ) : null}
 
       <Button
-        label="Send Verification To Phone Number"
+        label={t('Btn.VerificationCode') || ''}
         onPress={handleSubmit(onPressSave)}
         containerStyles={disabledButton ? styles.buttonDisabled : styles.button}
         disabled={disabledButton}

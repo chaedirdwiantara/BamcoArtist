@@ -334,12 +334,12 @@ export const useAuthHook = () => {
     }
   };
 
-  const sendOtpEmail = async (email: string) => {
+  const sendOtpEmail = async (email: string, context?: string) => {
     setIsError(false);
     setErrorMsg('');
     setIsLoading(true);
     try {
-      const resp = await resendOtpEmail(email);
+      const resp = await resendOtpEmail(email, context);
       console.log(resp);
     } catch (error) {
       setIsError(true);

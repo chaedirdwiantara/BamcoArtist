@@ -7,6 +7,7 @@ import {TopNavigation} from '../TopNavigation';
 import {ArrowLeftIcon} from '../../../assets/icon';
 import {MenuText} from '../../atom/MenuText/MenuText';
 import {heightPercentage, width, widthPercentage} from '../../../utils';
+import {useTranslation} from 'react-i18next';
 
 interface EmailProps {
   email: string | undefined;
@@ -21,24 +22,25 @@ export const EmailContent: React.FC<EmailProps> = ({
   goToChangeEmail,
   registrationType,
 }) => {
+  const {t} = useTranslation();
   const isSSO = registrationType === ('apple' || 'google' || 'facebook');
   const text = isSSO
-    ? 'SSO Email Can`t Be Changed'
+    ? t('Setting.Email.Label.Sso')
     : email
-    ? 'Change Email'
-    : 'Add Email';
+    ? t('Setting.Email.Label.Change')
+    : t('Setting.Email.Label.Add');
 
   return (
     <View style={styles.root}>
       <TopNavigation.Type1
-        title="Email"
+        title={t('Setting.Email.Title')}
         leftIcon={<ArrowLeftIcon />}
         itemStrokeColor={Color.Neutral[10]}
         leftIconAction={onPressGoBack}
         containerStyles={{paddingHorizontal: widthPercentage(12)}}
       />
       <SsuInput.InputLabel
-        label="Email"
+        label={t('Setting.Email.Title') || ''}
         value={email ?? '-'}
         editable={false}
         containerInputStyles={{borderBottomWidth: 0}}

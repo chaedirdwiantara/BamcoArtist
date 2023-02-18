@@ -9,8 +9,10 @@ import {ArrowLeftIcon} from '../../assets/icon';
 import {Dropdown, TopNavigation} from '../../components';
 import {dataLanguage} from '../../data/Settings/language';
 import {heightPercentage, widthPercentage} from '../../utils';
+import {useTranslation} from 'react-i18next';
 
 export const LanguageScreen: React.FC = () => {
+  const {t} = useTranslation();
   const [, setLanguage] = useState('');
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
@@ -22,7 +24,7 @@ export const LanguageScreen: React.FC = () => {
   return (
     <View style={styles.root}>
       <TopNavigation.Type1
-        title="Language"
+        title={t('Setting.Language.Title')}
         leftIcon={<ArrowLeftIcon />}
         itemStrokeColor={Color.Neutral[10]}
         leftIconAction={onPressGoBack}
@@ -30,8 +32,8 @@ export const LanguageScreen: React.FC = () => {
       />
       <Dropdown.Input
         data={dataLanguage}
-        placeHolder={'Search Language'}
-        dropdownLabel={'Language'}
+        placeHolder={t('Setting.Language.Placeholder')}
+        dropdownLabel={t('Setting.Language.Title')}
         textTyped={(newText: string) => setLanguage(newText)}
         containerStyles={{marginTop: heightPercentage(15)}}
       />

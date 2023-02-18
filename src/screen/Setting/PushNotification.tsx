@@ -8,8 +8,10 @@ import {ArrowLeftIcon} from '../../assets/icon';
 import {RootStackParams} from '../../navigations';
 import {Button, Gap, TopNavigation} from '../../components';
 import {heightPercentage, width, widthPercentage} from '../../utils';
+import {useTranslation} from 'react-i18next';
 
 export const PushNotificationScreen: React.FC = () => {
+  const {t} = useTranslation();
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
 
@@ -22,22 +24,21 @@ export const PushNotificationScreen: React.FC = () => {
   return (
     <View style={styles.root}>
       <TopNavigation.Type1
-        title="Push Notification"
+        title={t('Setting.Notification.Title')}
         leftIcon={<ArrowLeftIcon />}
         itemStrokeColor={color.Neutral[10]}
         leftIconAction={onPressGoBack}
         containerStyles={{marginBottom: heightPercentage(15)}}
       />
       <Text style={[typography.Subtitle1, {color: color.Neutral[10]}]}>
-        Turn On Push Notification
+        {t('Setting.Notification.Label.Title')}
       </Text>
       <Gap height={heightPercentage(10)} />
       <Text style={[typography.Subtitle2, {color: color.Neutral[10]}]}>
-        You haven't activated push notifications on your cellphone. Activate now
-        to settings and get the latest info!
+        {t('Setting.Notification.Label.Subtitle')}
       </Text>
       <Button
-        label="Turn Off"
+        label={t('Btn.TurnOff')}
         onPress={openPhoneSettings}
         containerStyles={styles.button}
       />

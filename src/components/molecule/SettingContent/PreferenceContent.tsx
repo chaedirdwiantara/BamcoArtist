@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react';
+import {useTranslation} from 'react-i18next';
 import {StyleSheet, Text, View} from 'react-native';
 import {ms, mvs} from 'react-native-size-matters';
 import {ArrowLeftIcon, TickCircleIcon} from '../../../assets/icon';
@@ -28,6 +29,7 @@ type PreferenceContent = {
 };
 
 const PreferenceContent = (props: PreferenceContent) => {
+  const {t} = useTranslation();
   const {onPressGoBack, genres, moods, profile} = props;
   const {updateProfilePreference, isLoading, errorMsg, successMsg} =
     useProfileHook();
@@ -91,7 +93,7 @@ const PreferenceContent = (props: PreferenceContent) => {
   return (
     <>
       <TopNavigation.Type1
-        title="Preference"
+        title={t('Setting.Preference.Title')}
         leftIcon={<ArrowLeftIcon />}
         itemStrokeColor={Color.Neutral[10]}
         leftIconAction={onPressGoBack}
@@ -99,8 +101,8 @@ const PreferenceContent = (props: PreferenceContent) => {
       />
       <Dropdown.Multi
         data={formatValueName2(genres) ?? []}
-        placeHolder={'Select Genre'}
-        dropdownLabel={'Genre'}
+        placeHolder={t('Setting.Preference.Placeholder.Genre')}
+        dropdownLabel={t('Setting.Preference.Label.Genre')}
         textTyped={(_newText: string) => null}
         containerStyles={{marginTop: heightPercentage(15)}}
         initialValue={userGenres}
@@ -109,8 +111,8 @@ const PreferenceContent = (props: PreferenceContent) => {
       <Gap height={10} />
       <Dropdown.Multi
         data={formatValueName2(moods) ?? []}
-        placeHolder={'Select Mood'}
-        dropdownLabel={'Mood'}
+        placeHolder={t('Setting.Preference.Placeholder.Mood')}
+        dropdownLabel={t('Setting.Preference.Label.Mood')}
         textTyped={(_newText: string) => null}
         containerStyles={{marginTop: heightPercentage(15)}}
         initialValue={userMoods}
@@ -118,7 +120,7 @@ const PreferenceContent = (props: PreferenceContent) => {
       />
       <Gap height={40} />
       <Button
-        label="Save"
+        label={t('Btn.Save')}
         textStyles={{fontSize: mvs(14)}}
         onPress={onSave}
         disabled={disabledButton}

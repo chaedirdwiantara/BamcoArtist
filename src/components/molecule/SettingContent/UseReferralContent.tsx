@@ -12,10 +12,12 @@ import {GiftIcon} from '../../../assets/icon';
 import {color, typography} from '../../../theme';
 import ReferralImage from '../../../assets/image/Referral.image';
 import {heightPercentage, width, widthPercentage} from '../../../utils';
+import {useTranslation} from 'react-i18next';
 
 interface ReferralProps {}
 
 export const UseReferralContent: React.FC<ReferralProps> = ({}) => {
+  const {t} = useTranslation();
   const [refCode, setRefCode] = useState<string>('');
   const [error, setError] = useState<boolean>(false);
 
@@ -38,8 +40,8 @@ export const UseReferralContent: React.FC<ReferralProps> = ({}) => {
         <SsuInput.InputText
           value={refCode}
           isError={error}
-          placeholder={'Referral Code'}
-          errorMsg={'Referral code invalid'}
+          placeholder={t('Setting.Referral.Title') || ''}
+          errorMsg={t('Setting.Referral.UseRefer.Invalid') || ''}
           leftIcon={<GiftIcon />}
           fontColor={color.Neutral[10]}
           borderColor={color.Pink.linear}

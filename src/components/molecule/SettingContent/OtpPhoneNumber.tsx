@@ -20,6 +20,7 @@ import {ModalLoading} from '../ModalLoading/ModalLoading';
 import {PhoneSettingTypeProps} from '../../../interface/setting.interface';
 import {useAuthHook} from '../../../hooks/use-auth.hook';
 import {ModalConfirm} from '../Modal/ModalConfirm';
+import {useTranslation} from 'react-i18next';
 
 interface OtpPNProps {
   countryNumber: string | null;
@@ -44,6 +45,7 @@ export const OtpPhoneNumber: React.FC<OtpPNProps> = ({
   type,
   onSuccess,
 }) => {
+  const {t} = useTranslation();
   const [disabledButton, setDisabledButton] = useState<boolean>(true);
   const [visibleModal, setVisibleModal] = useState<boolean>(false);
   const [isSubmit, setIsSubmit] = useState<boolean>(false);
@@ -158,14 +160,18 @@ export const OtpPhoneNumber: React.FC<OtpPNProps> = ({
     <>
       <View style={styles.root}>
         <TopNavigation.Type2
-          title={`${type} Phone Number`}
+          title={
+            (type === 'Change'
+              ? t('Setting.Phone.Label.Change')
+              : t('Setting.Phone.Label.Add')) || ''
+          }
           itemStrokeColor={Color.Neutral[10]}
         />
 
         <Gap height={10} />
         <View>
           <Text style={[typography.Overline, styles.label]}>
-            New Phone Number
+            {t('Setting.Phone.Label.New')}
           </Text>
           <Gap height={8} />
           <View style={{flexDirection: 'row'}}>
@@ -181,13 +187,13 @@ export const OtpPhoneNumber: React.FC<OtpPNProps> = ({
           control={control}
           render={({field: {onChange, value}}) => (
             <SsuInput.InputLabel
-              label="Input Verification codes"
+              label={t('Setting.EnterVerifCode') || ''}
               value={value}
               onChangeText={text => {
                 onChange(text);
                 setIsError(false);
               }}
-              placeholder={'Input Verification codes'}
+              placeholder={t('Setting.EnterVerifCode') || ''}
               isError={errors?.code ? true : false}
               errorMsg={errorMsg}
             />
@@ -195,13 +201,11 @@ export const OtpPhoneNumber: React.FC<OtpPNProps> = ({
         />
 
         <TouchableOpacity style={styles.containerResend} onPress={onResendOTP}>
-          <Text style={styles.resend}>
-            Didn’t receive verification codes? click to resend
-          </Text>
+          <Text style={styles.resend}>{t('General.NoVerifCode')}</Text>
         </TouchableOpacity>
 
         <Button
-          label="Submit"
+          label={t('Btn.Submit')}
           textStyles={{fontSize: mvs(14)}}
           containerStyles={
             disabledButton ? styles.buttonDisabled : styles.button
@@ -211,7 +215,7 @@ export const OtpPhoneNumber: React.FC<OtpPNProps> = ({
         />
         <Gap height={4} />
         <Button
-          label="Cancel"
+          label={t('Btn.Cancel')}
           type="border"
           borderColor="transparent"
           textStyles={{fontSize: mvs(14), color: color.Pink.linear}}
@@ -223,8 +227,15 @@ export const OtpPhoneNumber: React.FC<OtpPNProps> = ({
       </View>
       <ModalConfirm
         modalVisible={isModalVisible.modalConfirm}
-        title="Add Phone Number"
-        subtitle="Are you sure you want to add new phone number?"
+        title={
+          (type === 'Change'
+            ? t('Setting.Phone.Label.Change')
+            : t('Setting.Phone.Label.Add')) || ''
+        }
+        subtitle={
+          (type === 'Add' ? t('Modal.Phone.Add') : t('Modal.Phone.Change')) ||
+          ''
+        }
         onPressClose={closeModal}
         onPressOk={onPressConfirm}
       />

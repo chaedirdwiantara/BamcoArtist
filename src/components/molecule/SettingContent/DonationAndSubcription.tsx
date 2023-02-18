@@ -17,18 +17,20 @@ import {ArrowLeftIcon} from '../../../assets/icon';
 import {ModalConfirm} from '../Modal/ModalConfirm';
 import {EmptyState} from '../EmptyState/EmptyState';
 import {dropDownDataSubscription} from '../../../data/dropdown';
+import {useTranslation} from 'react-i18next';
 
 interface DASProps {
   onPressGoBack: () => void;
 }
 
 export const DASContent: FC<DASProps> = ({onPressGoBack}) => {
+  const {t} = useTranslation();
   const [isModalVisible, setModalVisible] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [changeTab, setChangeTab] = useState('current');
   const [filter] = useState([
-    {filterName: 'Donation'},
-    {filterName: 'Subscription'},
+    {filterName: t('Setting.Tips.Tab.Donation')},
+    {filterName: t('Setting.Tips.Tab.Subs')},
   ]);
   const filterData = (item: any, index: number) => {
     setSelectedIndex(index);
@@ -41,7 +43,7 @@ export const DASContent: FC<DASProps> = ({onPressGoBack}) => {
   return (
     <View style={styles.root}>
       <TopNavigation.Type1
-        title="Donation And Subcription"
+        title={t('Setting.Tips.Title')}
         leftIcon={<ArrowLeftIcon />}
         itemStrokeColor={Color.Neutral[10]}
         leftIconAction={onPressGoBack}
@@ -57,14 +59,14 @@ export const DASContent: FC<DASProps> = ({onPressGoBack}) => {
         <View style={{flexDirection: 'row'}}>
           <Button
             type={changeTab === 'current' ? '' : 'border'}
-            label="Current"
+            label={t('Setting.Tips.Label.Current')}
             textStyles={{fontSize: normalize(10)}}
             onPress={() => setChangeTab('current')}
             containerStyles={styles.containerButtonCurrent}
           />
           <Button
             type={changeTab === 'past' ? '' : 'border'}
-            label="Past"
+            label={t('Setting.Tips.Label.Past')}
             textStyles={{fontSize: normalize(10)}}
             containerStyles={styles.containerButtonPast}
             onPress={() => setChangeTab('past')}
@@ -73,7 +75,7 @@ export const DASContent: FC<DASProps> = ({onPressGoBack}) => {
         <View style={{width: widthPercentage(80)}}>
           <Dropdown.Menu
             data={dropDownDataSubscription}
-            placeHolder={'Duration'}
+            placeHolder={t('Setting.Tips.Filter.Duration')}
             selectedMenu={() => null}
             containerStyle={styles.dropdown}
           />
@@ -92,15 +94,15 @@ export const DASContent: FC<DASProps> = ({onPressGoBack}) => {
         />
       ) : (
         <EmptyState
-          text="Seems like you aren’t rewarded any musician yet, try to donate your favorite musician"
+          text={t('EmptyState.Donate') || ''}
           containerStyle={styles.emptyState}
         />
       )}
 
       <ModalConfirm
         modalVisible={isModalVisible}
-        title="Unsubscribe"
-        subtitle="Are you sure you want to unsubscribe Dialog Dini Hari?"
+        title={t('Setting.Tips.Menu.Sub.Unsubs') || ''}
+        subtitle={t('Modal.Donation.Unsubs') || ''}
         onPressClose={() => setModalVisible(false)}
         onPressOk={() => setModalVisible(false)}
       />

@@ -13,15 +13,17 @@ import Color from '../../theme/Color';
 import {RootStackParams} from '../../navigations';
 import {ArrowLeftIcon} from '../../assets/icon';
 import {heightPercentage, width, widthPercentage} from '../../utils';
+import {useTranslation} from 'react-i18next';
 
 export const ReferralCodeSetting: React.FC = () => {
+  const {t} = useTranslation();
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
 
   const [selectedIndex, setSelectedIndex] = useState(-0);
   const [filter] = useState([
-    {filterName: 'REFER A FRIEND'},
-    {filterName: 'USE REFERRAL'},
+    {filterName: t('Setting.Referral.ReferFriend.Title')},
+    {filterName: t('Setting.Referral.UseRefer.Title')},
   ]);
   const filterData = (item: any, index: any) => {
     setSelectedIndex(index);
@@ -34,7 +36,7 @@ export const ReferralCodeSetting: React.FC = () => {
   return (
     <View style={styles.root}>
       <TopNavigation.Type1
-        title="Referral Code"
+        title={t('Setting.Referral.Title')}
         leftIcon={<ArrowLeftIcon />}
         itemStrokeColor={Color.Neutral[10]}
         leftIconAction={onPressGoBack}
@@ -51,7 +53,8 @@ export const ReferralCodeSetting: React.FC = () => {
         TouchableStyle={{width: width * 0.45}}
       />
 
-      {filter[selectedIndex].filterName === 'REFER A FRIEND' ? (
+      {filter[selectedIndex].filterName ===
+      t('Setting.Referral.ReferFriend.Title') ? (
         <ReferAFriend />
       ) : (
         <UseReferralContent />

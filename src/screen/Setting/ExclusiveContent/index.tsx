@@ -34,8 +34,10 @@ import {useSettingHook} from '../../../hooks/use-setting.hook';
 import {profileStorage} from '../../../hooks/use-storage.hook';
 import {TopNavigation, SsuToast, Gap} from '../../../components';
 import {DataExclusiveProps} from '../../../interface/setting.interface';
+import {useTranslation} from 'react-i18next';
 
 export const ExclusiveContentSetting: React.FC = () => {
+  const {t} = useTranslation();
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
 
@@ -99,7 +101,7 @@ export const ExclusiveContentSetting: React.FC = () => {
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
       <View style={styles.root}>
         <TopNavigation.Type1
-          title="Exclusive Content"
+          title={t('Setting.Exclusive.Title')}
           leftIcon={<ArrowLeftIcon />}
           itemStrokeColor={color.Neutral[10]}
           leftIconAction={onPressGoBack}
