@@ -10,8 +10,10 @@ import {BoxStore} from '../../assets/icon';
 import Color from '../../theme/Color';
 import {useQuery} from 'react-query';
 import {MerchData} from '../../interface/event.interface';
+import {useTranslation} from 'react-i18next';
 
 const MerchList: FC = () => {
+  const {t} = useTranslation();
   const {getListDataMerch} = useEventHook();
 
   const {data: dataMerchList, isLoading} = useQuery(['/merch'], () =>
@@ -39,7 +41,7 @@ const MerchList: FC = () => {
                 style={styles.iconEmpty}
               />
             }
-            text="No Merch Available"
+            text={t('Event.Merch.NoMerch') || ''}
             containerStyle={styles.containerEmpty}
           />
         }

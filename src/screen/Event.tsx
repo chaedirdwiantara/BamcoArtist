@@ -10,10 +10,15 @@ import {BoxStore, CartIcon} from '../assets/icon';
 import ConcertList from './ListCard/ConcertList';
 import {useIsFocused} from '@react-navigation/native';
 import {usePlayerHook} from '../hooks/use-player.hook';
+import {useTranslation} from 'react-i18next';
 
 export const EventScreen: React.FC = () => {
+  const {t} = useTranslation();
   const [selectedIndex, setSelectedIndex] = useState(-0);
-  const [filter] = useState([{filterName: 'Concert'}, {filterName: 'Merch'}]);
+  const [filter] = useState([
+    {filterName: t('Event.Concert.Title')},
+    {filterName: t('Event.Merch.Title')},
+  ]);
   const isLogin = storage.getString('profile');
   const isFocused = useIsFocused();
   const {isPlaying, showPlayer, hidePlayer} = usePlayerHook();
@@ -35,7 +40,7 @@ export const EventScreen: React.FC = () => {
       {isLogin ? (
         <View>
           <TopNavigation.Type4
-            title="Store"
+            title={t('Event.Title')}
             maxLengthTitle={20}
             itemStrokeColor={'white'}
             rightIcon={<CartIcon />}
@@ -54,7 +59,7 @@ export const EventScreen: React.FC = () => {
               }}
               TouchableStyle={{width: widthPercentageToDP(45)}}
             />
-            {filter[selectedIndex].filterName === 'Concert' ? (
+            {filter[selectedIndex].filterName === t('Event.Concert.Title') ? (
               <ConcertList />
             ) : (
               <MerchList />

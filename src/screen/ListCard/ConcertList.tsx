@@ -10,8 +10,10 @@ import {useEventHook} from '../../hooks/use-event.hook';
 import {ModalLoading} from '../../components/molecule/ModalLoading/ModalLoading';
 import {MerchData} from '../../interface/event.interface';
 import {useQuery} from 'react-query';
+import {useTranslation} from 'react-i18next';
 
 const ConcertList: FC = () => {
+  const {t} = useTranslation();
   const {getListDataConcert} = useEventHook();
 
   const {data: dataConcertList, isLoading} = useQuery(['/concert'], () =>
@@ -41,7 +43,7 @@ const ConcertList: FC = () => {
                 style={styles.iconEmpty}
               />
             }
-            text="No Event Available"
+            text={t('Event.Concert.NoConcert') || ''}
             containerStyle={styles.containerEmpty}
           />
         }
