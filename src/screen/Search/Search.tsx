@@ -16,8 +16,10 @@ import ListResultAlbum from './ListResultAlbum';
 import ListResultPlaylists from './ListResultPlaylist';
 import ListResultMerch from './ListResultMerch';
 import ListResultEvent from './ListResultEvent';
+import {useTranslation} from 'react-i18next';
 
 export const SearchScreen: React.FC = () => {
+  const {t} = useTranslation();
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
 
@@ -28,13 +30,13 @@ export const SearchScreen: React.FC = () => {
   const [typeSearch, setTypeSearch] = useState<string>('');
 
   const filter: string[] = [
-    'Song',
-    'Musician',
-    'Fans',
-    'Album',
-    'Playlist',
-    'Merch',
-    'Event',
+    t('Home.Topbar.Search.Song'),
+    t('Home.Topbar.Search.Musician'),
+    t('Home.Topbar.Search.Fans'),
+    t('Home.Topbar.Search.Album'),
+    t('Home.Topbar.Search.Playlist'),
+    t('Home.Topbar.Search.Merch'),
+    t('Home.Topbar.Search.Event'),
   ];
 
   const filterData = (item: string, index: number) => {
@@ -50,7 +52,7 @@ export const SearchScreen: React.FC = () => {
     <>
       <View style={styles.root}>
         <TopNavigation.Type1
-          title={`Search`}
+          title={t('Home.Topbar.Search.Title')}
           leftIconAction={() => navigation.goBack()}
           maxLengthTitle={40}
           itemStrokeColor={color.Neutral[10]}
@@ -72,17 +74,27 @@ export const SearchScreen: React.FC = () => {
                 onPress={filterData}
                 selectedIndex={selectedIndex}
               />
-              {typeSearch === 'Musician' && (
+              {typeSearch === t('Home.Topbar.Search.Musician') && (
                 <ListResultMusician keyword={state} />
               )}
-              {typeSearch === 'Fans' && <ListResultFans keyword={state} />}
-              {typeSearch === 'Song' && <ListResultSong keyword={state} />}
-              {typeSearch === 'Album' && <ListResultAlbum keyword={state} />}
-              {typeSearch === 'Playlist' && (
+              {typeSearch === t('Home.Topbar.Search.Fans') && (
+                <ListResultFans keyword={state} />
+              )}
+              {typeSearch === t('Home.Topbar.Search.Song') && (
+                <ListResultSong keyword={state} />
+              )}
+              {typeSearch === t('Home.Topbar.Search.Album') && (
+                <ListResultAlbum keyword={state} />
+              )}
+              {typeSearch === t('Home.Topbar.Search.Playlist') && (
                 <ListResultPlaylists keyword={state} />
               )}
-              {typeSearch === 'Merch' && <ListResultMerch keyword={state} />}
-              {typeSearch === 'Event' && <ListResultEvent keyword={state} />}
+              {typeSearch === t('Home.Topbar.Search.Merch') && (
+                <ListResultMerch keyword={state} />
+              )}
+              {typeSearch === t('Home.Topbar.Search.Event') && (
+                <ListResultEvent keyword={state} />
+              )}
             </>
           ) : null}
         </View>
