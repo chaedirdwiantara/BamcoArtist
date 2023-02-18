@@ -32,7 +32,7 @@ const DataMusician: FC<DataMusicianProps> = (props: DataMusicianProps) => {
   const imageData = profile?.photos;
 
   const handleOnPress = () => {
-    navigation.navigate('PhotoGallery', {imageData, userName});
+    navigation.navigate('PhotoGallery', {imageData, userName, type: 'profile'});
   };
 
   return (
