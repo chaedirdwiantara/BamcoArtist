@@ -85,7 +85,7 @@ const PostListHome: FC<PostListProps> = (props: PostListProps) => {
     addPlaylistFeed,
   } = usePlayerHook();
 
-  const [dataCategory, setDataCategory] = useState<PostList[]>(dataTopPost);
+  const [dataMain, setDataMain] = useState<PostList[]>([]);
   const [inputCommentModal, setInputCommentModal] = useState<boolean>(false);
   const [musicianId, setMusicianId] = useState<string>('');
   const [userName, setUserName] = useState<string>('');
@@ -100,7 +100,6 @@ const PostListHome: FC<PostListProps> = (props: PostListProps) => {
   const [trigger2ndModal, setTrigger2ndModal] = useState<boolean>(false);
   const [page, setPage] = useState<number>(1);
   const [perPage, setPerPage] = useState<number>(15);
-  const [dataMain, setDataMain] = useState<PostList[]>([]);
 
   // * UPDATE HOOKS
   const [selectedIdPost, setSelectedIdPost] = useState<string>();
@@ -116,9 +115,8 @@ const PostListHome: FC<PostListProps> = (props: PostListProps) => {
     }, []),
   );
 
-  //* set response data list post to main data
   useEffect(() => {
-    dataTopPost.length !== 0 && setDataMain([...dataMain, ...dataTopPost]);
+    setDataMain(dataTopPost);
   }, [dataTopPost]);
 
   const resultDataFilter = (dataResultFilter: any) => {
@@ -126,7 +124,7 @@ const PostListHome: FC<PostListProps> = (props: PostListProps) => {
     dates.setDate(dates.getDate() - Number(dataResultFilter.value));
     let dataFilter = [...dataTopPost];
     dataFilter = dataFilter.filter(x => new Date(x.createdAt) > dates);
-    setDataCategory(dataFilter);
+    setDataMain(dataFilter);
   };
 
   const resultDataCategory = (dataResultCategory: DataDropDownType) => {
@@ -137,12 +135,6 @@ const PostListHome: FC<PostListProps> = (props: PostListProps) => {
           perPage: perPage,
           category: dataResultCategory.value,
         });
-  };
-
-  //* Handle when end of Scroll
-  const handleEndScroll = () => {
-    getListTopPost({page: page + 1, perPage: perPage});
-    setPage(page + 1);
   };
 
   const cardOnPress = (data: PostList) => {
@@ -349,7 +341,7 @@ const PostListHome: FC<PostListProps> = (props: PostListProps) => {
           />
         </View>
       </View>
-      {dataMain !== null && dataMain.length !== 0 ? (
+      {dataMain?.length !== 0 ? (
         <View
           style={{
             flex: 1,
@@ -492,7 +484,7 @@ const PostListHome: FC<PostListProps> = (props: PostListProps) => {
         </View>
       ) : dataMain?.length === 0 ? (
         <EmptyState
-          text={feedMessage}
+          text={'No data available'}
           containerStyle={{
             justifyContent: 'flex-start',
             paddingTop: heightPercentage(24),
