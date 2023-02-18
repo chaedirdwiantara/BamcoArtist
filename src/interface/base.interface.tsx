@@ -31,6 +31,7 @@ export type imageTypes = {
 export type nameValue = {
   name: string;
   value: number | string;
+  username: string;
   Name?: string;
   Value?: number | string;
 };

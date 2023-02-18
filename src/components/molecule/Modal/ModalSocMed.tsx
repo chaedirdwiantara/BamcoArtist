@@ -54,8 +54,8 @@ export const ModalSocMed: React.FC<ModalSocMedProps> = ({
   const [listSocmed, setListSocmed] = useState<nameValue[]>([]);
   const [submit, setSubmit] = useState<boolean>(false);
 
-  const onPressSave = (name: string, value: string) => {
-    const newArray = {name: name, value: value};
+  const onPressSave = (name: string, value: string, username: string) => {
+    const newArray = {name, value, username};
     setListSocmed([...listSocmed, newArray]);
     setSubmit(true);
   };
@@ -91,9 +91,8 @@ export const ModalSocMed: React.FC<ModalSocMedProps> = ({
   }, []);
 
   const ListSocMed = ({item}: {item: string}) => {
-    const defaultValue =
-      (listSocmed.find(i => i.Name === item)?.Value as string) ??
-      (listSocmed.find(i => i.name === item)?.value as string);
+    const defaultValue = listSocmed.find(i => i.name === item)
+      ?.username as string;
     const [newValue, setNewValue] = useState(defaultValue);
     const isFocus = focusInput === item;
     const icon =
@@ -149,7 +148,8 @@ export const ModalSocMed: React.FC<ModalSocMedProps> = ({
               justifyContent: 'space-around',
               width: '25%',
             }}>
-            <TouchableOpacity onPress={() => onPressSave(item, newValue)}>
+            <TouchableOpacity
+              onPress={() => onPressSave(item, newValue, newValue)}>
               <CheckIcon width={30} height={30} />
             </TouchableOpacity>
             <TouchableOpacity onPress={() => setFocusInput('')}>
@@ -180,7 +180,7 @@ export const ModalSocMed: React.FC<ModalSocMedProps> = ({
 
         <Button
           type="border"
-          label={t('Btn.Cancel')}
+          label={t('Btn.Finish')}
           containerStyles={styles.btnCancel}
           textStyles={{color: color.Pink.linear}}
           onPress={onPressClose}
