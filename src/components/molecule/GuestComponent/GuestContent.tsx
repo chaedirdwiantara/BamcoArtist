@@ -8,6 +8,7 @@ import {color, typography} from '../../../theme';
 import {Button, ButtonGradient} from '../../atom';
 import {heightPercentage, normalize, width} from '../../../utils';
 import {ListContentType, listContentGuest} from '../../../data/guest';
+import {useTranslation} from 'react-i18next';
 
 interface GuestProps {
   containerStyle?: ViewStyle;
@@ -23,6 +24,7 @@ const ListContent: React.FC<ListContentType> = ({image, text}) => {
 };
 
 export const GuestContent: React.FC<GuestProps> = ({containerStyle}) => {
+  const {t} = useTranslation();
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
 
@@ -30,7 +32,7 @@ export const GuestContent: React.FC<GuestProps> = ({containerStyle}) => {
     <View style={[styles.root, containerStyle]}>
       <View style={{width: '80%'}}>
         <Text style={[typography.Heading4, styles.text]}>
-          Sign Up to Interact with Musician
+          {t('Guest.Title')}
         </Text>
         <Text
           style={[
@@ -38,7 +40,7 @@ export const GuestContent: React.FC<GuestProps> = ({containerStyle}) => {
             styles.text,
             {marginTop: heightPercentage(12)},
           ]}>
-          When you are sign up, you can
+          {t('Guest.Subtitle')}
         </Text>
       </View>
       <View style={styles.containerContent}>
@@ -47,13 +49,13 @@ export const GuestContent: React.FC<GuestProps> = ({containerStyle}) => {
         ))}
       </View>
       <ButtonGradient
-        label="Sign Up"
+        label={t('Btn.SignUp')}
         textStyles={{fontSize: normalize(14)}}
         onPress={() => navigation.navigate('Signup')}
       />
       <Button
         type="border"
-        label="Sign In"
+        label={t('Btn.SignIn')}
         textStyles={{fontSize: normalize(14), color: color.Pink.linear}}
         containerStyles={{marginVertical: heightPercentage(6)}}
         onPress={() => navigation.navigate('Login')}

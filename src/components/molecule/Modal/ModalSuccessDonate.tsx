@@ -6,6 +6,7 @@ import {Button} from '../../atom';
 import {color, typography} from '../../../theme';
 import {CheckGradientIcon} from '../../../assets/icon';
 import {heightResponsive, widthResponsive} from '../../../utils';
+import {useTranslation} from 'react-i18next';
 
 interface ModalSuccessProps {
   toggleModal: () => void;
@@ -19,6 +20,7 @@ interface ModalSuccessProps {
 export const ModalSuccessDonate: FC<ModalSuccessProps> = (
   props: ModalSuccessProps,
 ) => {
+  const {t} = useTranslation();
   const {toggleModal, modalVisible, title, subtitle, buttonText} = props;
   return (
     <Modal
@@ -29,7 +31,7 @@ export const ModalSuccessDonate: FC<ModalSuccessProps> = (
       <View style={styles.container}>
         <CheckGradientIcon style={styles.iconStyle} />
         <Text style={[typography.Subtitle1, styles.textStyles]}>
-          {title ? title : 'Congratulations! Your Donation have been Sent!'}
+          {title ? title : t('Setting.Tips.Label.Success')}
         </Text>
         {subtitle && (
           <Text style={[typography.Button2, styles.textStyles]}>
@@ -37,7 +39,7 @@ export const ModalSuccessDonate: FC<ModalSuccessProps> = (
           </Text>
         )}
         <Button
-          label={buttonText ? buttonText : 'Dismiss'}
+          label={buttonText ? buttonText : t('Btn.Dismiss')}
           containerStyles={styles.btnDonate}
           onPress={toggleModal}
         />

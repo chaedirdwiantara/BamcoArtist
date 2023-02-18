@@ -9,6 +9,7 @@ import {
 import {Avatar, Gap} from '../../atom';
 import {color, font} from '../../../theme';
 import {DefaultAvatar, PauseIcon, PlayIcon} from '../../../assets/icon';
+import {useTranslation} from 'react-i18next';
 
 interface SongTitlePlayProps {
   title: string;
@@ -25,6 +26,7 @@ export const SongTitlePlay: React.FC<SongTitlePlayProps> = ({
   createdBy,
   avatarUri = '',
 }) => {
+  const {t} = useTranslation();
   const [played, setPlayed] = useState(false);
 
   return (
@@ -33,7 +35,9 @@ export const SongTitlePlay: React.FC<SongTitlePlayProps> = ({
         <View>
           <Text style={styles.title}>{title}</Text>
           <Text style={styles.createdOn}>
-            {`Created on ${createdDate} · ${totalSong} songs`}
+            {`${t('Music.Label.CreatedOn')} ${createdDate} · ${totalSong} ${t(
+              'Music.Label.Songs',
+            )}`}
           </Text>
         </View>
         {played ? (

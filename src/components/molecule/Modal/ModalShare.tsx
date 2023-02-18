@@ -21,6 +21,7 @@ import SsuSheet from '../../atom/SsuSheet';
 import {color, font} from '../../../theme';
 import {CopyIcon} from '../../../assets/icon';
 import {Button, Gap, SquareImage} from '../../atom';
+import {useTranslation} from 'react-i18next';
 
 interface ModalShareProps {
   url: string;
@@ -49,6 +50,7 @@ export const ModalShare: React.FC<ModalShareProps> = ({
   onPressCopy,
   hideMusic,
 }) => {
+  const {t} = useTranslation();
   const onPressCopyLink = () => {
     onPressCopy();
     onPressClose();
@@ -80,13 +82,13 @@ export const ModalShare: React.FC<ModalShareProps> = ({
         </TouchableOpacity>
 
         <Button
-          label="Copy Link"
+          label={t('Btn.CopyLink')}
           containerStyles={styles.btnCopy}
           onPress={onPressCopyLink}
         />
         <Button
           type="border"
-          label="Cancel"
+          label={t('Btn.Cancel')}
           containerStyles={styles.btnCancel}
           textStyles={{color: Color.Pink.linear}}
           onPress={onPressClose}

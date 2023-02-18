@@ -29,12 +29,14 @@ import {
   ModalShare,
   ModalSuccessDonate,
 } from '../';
+import {useTranslation} from 'react-i18next';
 
 interface Props {
   onPressGoBack: () => void;
 }
 
 export const AlbumContent: React.FC<Props> = ({onPressGoBack}) => {
+  const {t} = useTranslation();
   const [toastVisible, setToastVisible] = useState(false);
   const [modalDonate, setModalDonate] = useState<boolean>(false);
   const [modalShare, setModalShare] = useState<boolean>(false);
@@ -73,7 +75,7 @@ export const AlbumContent: React.FC<Props> = ({onPressGoBack}) => {
   return (
     <View style={styles.root}>
       <TopNavigation.Type4
-        title="Album"
+        title={t('Musician.Label.Album')}
         rightIcon={
           <Dropdown.More
             data={dropDownHeaderAlbum}
@@ -113,7 +115,7 @@ export const AlbumContent: React.FC<Props> = ({onPressGoBack}) => {
         <View style={styles.containerContent}>
           <View style={{marginBottom: heightPercentage(15)}}>
             <Text style={[typography.Subtitle1, {color: color.Success[500]}]}>
-              Description
+              {t('Event.Description')}
             </Text>
             <Text style={styles.description}>
               {
@@ -123,7 +125,7 @@ export const AlbumContent: React.FC<Props> = ({onPressGoBack}) => {
           </View>
 
           <Text style={[typography.Subtitle1, {color: color.Success[500]}]}>
-            Song List
+            {t('Music.Label.SongList')}
           </Text>
           <View style={{marginBottom: heightPercentage(30)}}>
             <TopSong onPress={() => null} hideDropdownMore={true} />
@@ -175,7 +177,7 @@ export const AlbumContent: React.FC<Props> = ({onPressGoBack}) => {
             />
             <Gap width={widthPercentage(7)} />
             <Text style={[typography.Button2, styles.textStyle]}>
-              Link have been copied to clipboard!
+              {t('General.LinkCopied')}
             </Text>
           </View>
         }

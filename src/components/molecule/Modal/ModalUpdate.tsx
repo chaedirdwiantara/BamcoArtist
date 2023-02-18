@@ -7,6 +7,7 @@ import Color from '../../../theme/Color';
 import {heightPercentage, width, widthPercentage} from '../../../utils';
 import {Button} from '../../atom';
 import {color} from '../../../theme';
+import {useTranslation} from 'react-i18next';
 
 interface ModalUpdateProps {
   modalVisible: boolean;
@@ -17,6 +18,7 @@ interface ModalUpdateProps {
 export const ModalUpdate: React.FC<ModalUpdateProps> = (
   props: ModalUpdateProps,
 ) => {
+  const {t} = useTranslation();
   const {modalVisible, onPressClose, onPressOk} = props;
   return (
     <Modal
@@ -34,15 +36,12 @@ export const ModalUpdate: React.FC<ModalUpdateProps> = (
             <Image source={require('../../../assets/image/update.png')} />
           </View>
 
-          <Text style={styles.title}>New Version Available</Text>
-          <Text style={styles.subtitle}>
-            We added new feature and fix some bug to make your experience
-            better. Please update your application to the latest version.
-          </Text>
+          <Text style={styles.title}>{t('Modal.Update.Title')}</Text>
+          <Text style={styles.subtitle}>{t('Modal.Update.Subtitle')}</Text>
 
           <View style={styles.containerButton}>
             <Button
-              label="Update"
+              label={t('Btn.Update')}
               textStyles={{fontSize: mvs(14)}}
               containerStyles={{
                 width: '100%',
@@ -52,7 +51,7 @@ export const ModalUpdate: React.FC<ModalUpdateProps> = (
             />
             {onPressClose && (
               <Button
-                label="Maybe Later"
+                label={t('Btn.MaybeLater')}
                 type="border"
                 borderColor="transparent"
                 textStyles={{fontSize: mvs(14), color: color.Pink.linear}}

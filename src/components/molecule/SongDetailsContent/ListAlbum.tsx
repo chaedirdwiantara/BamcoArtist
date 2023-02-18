@@ -4,6 +4,7 @@ import {heightPercentage, normalize, widthPercentage} from '../../../utils';
 import {SquareImage} from '../../atom';
 import {color, font, typography} from '../../../theme';
 import {DefaultImage} from '../../../assets/icon';
+import {useTranslation} from 'react-i18next';
 
 interface ListAlbumProps {
   title?: string;
@@ -22,6 +23,7 @@ export const ListAlbum: React.FC<ListAlbumProps> = ({
   onPress,
   imgUri = 'https://wallpaperspeed.id/wp-content/uploads/2021/09/dragon-ball-z-wallpaper-goku-super-saiyan-god-source-moddroid.com_.webp',
 }) => {
+  const {t} = useTranslation();
   return (
     <TouchableOpacity onPress={onPress}>
       {title && (
@@ -33,7 +35,9 @@ export const ListAlbum: React.FC<ListAlbumProps> = ({
         <DefaultImage.PlaylistCover width={96} height={96} />
       )}
       <Text style={styles.albumName}>{albumName}</Text>
-      <Text style={styles.createdOn}>{`${createdOn} · Album`}</Text>
+      <Text style={styles.createdOn}>{`${createdOn} · ${t(
+        'Musician.Label.Album',
+      )}`}</Text>
     </TouchableOpacity>
   );
 };

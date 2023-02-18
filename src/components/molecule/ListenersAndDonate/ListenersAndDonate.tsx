@@ -10,6 +10,7 @@ import {Gap} from '../../atom';
 import {color, font} from '../../../theme';
 import {DonateCoinIcon} from '../../../assets/icon';
 import {mvs} from 'react-native-size-matters';
+import {useTranslation} from 'react-i18next';
 
 interface ListenersAndDonateProps {
   totalListener: number;
@@ -20,12 +21,13 @@ export const ListenersAndDonate: React.FC<ListenersAndDonateProps> = ({
   totalListener,
   onPress,
 }) => {
+  const {t} = useTranslation();
   return (
     <TouchableOpacity style={styles.root} onPress={onPress}>
       <View style={styles.containerContent}>
         <Text style={styles.totalListener}>{kFormatter(totalListener)}</Text>
         <Gap width={widthPercentage(5)} />
-        <Text style={styles.textListener}>Listeners</Text>
+        <Text style={styles.textListener}>{t('General.Listeners')}</Text>
       </View>
       <DonateCoinIcon />
     </TouchableOpacity>

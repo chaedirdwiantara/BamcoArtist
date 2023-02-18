@@ -5,7 +5,11 @@
     "TopDescription": "登入或註冊以探索完整功能並支持音樂人",
     "Yes": "是的",
     "No": "不",
-    "NoVerifCode": "Didn’t receive verification codes? click to resend"
+    "NoVerifCode": "Didn’t receive verification codes? click to resend",
+    "Thanks": "Thank You!",
+    "LinkCopied": "Link have been copied to clipboard!",
+    "Followers": "追蹤者",
+    "Listeners": "Listeners"
   },
   "Onboarding": {
     "Step1": {
@@ -61,7 +65,9 @@
       "Subtitle": "我們已將六位驗證碼發送至地址 {{email}} 檢查您的收件箱並在此處輸入驗證碼"
     },
     "ResendAfter": "You can resend recovery code after ",
-    "ResendSuccess": "We've just resend a new code!"
+    "ResendSuccess": "We've just resend a new code!",
+    "Accepted": "Recovery code accepted",
+    "Rejected": "Please enter a valid recovery code"
   },
   "Btn": {
     "Next": "下一步",
@@ -86,7 +92,12 @@
     "Send": "發送",
     "Create": "創造",
     "Reply": "回复",
-    "GoToHome": "回主頁"
+    "GoToHome": "回主頁",
+    "CopyLink": "Copy Link",
+    "Set": "Set",
+    "Unset": "Unset",
+    "Dismiss": "Dismiss",
+    "Update": "Update"
   },
   "ForgotPassword": {
     "Title": "更改密碼",
@@ -171,7 +182,8 @@
       "Title": "排序方式",
       "Latest": "最新的",
       "Popular": "最新的"
-    }
+    },
+    "NoMore": "No more feeds"
   },
   "Event": {
     "Title": "活動",
@@ -264,7 +276,10 @@
     "Month": "月",
     "Year": "年",
     "Support": "為您的計劃添加支援",
-    "Optional": "支援（可選）"
+    "Optional": "支援（可選）",
+    "InputBonus": "Input Bonus",
+    "ErrorCoinBonus": "Insufficient coin, add more coin to give bonus",
+    "ErrorCoinSubs": "Insufficient coin, add more coin to subscribe"
   },
   "Setting": {
     "Title": "設定",
@@ -379,7 +394,8 @@
         "TipType": "單筆",
         "AddMoreCoin": "Add More Coin",
         "YourCoin": "Your Coin",
-        "InputDonation": "Input Donation"
+        "InputDonation": "Input Donation",
+        "Success": "Congratulations! Your Donation have been Sent!"
       },
       "Menu": {
         "Donation": {
@@ -565,6 +581,10 @@
     "Guest": {
       "Title": "註冊或登入",
       "Subtitle": "您正以訪客身份探索，註冊或登錄以享受完整內容"
+    },
+    "Update": {
+      "Title": "New Version Available",
+      "Subtitle": "We added new feature and fix some bug to make your experience better. Please update your application to the latest version."
     }
   },
   "EmptyState": {
@@ -594,5 +614,16 @@
     "GetEvent": "取得最新活動資訊",
     "GetExclusive": "獲取獨家內容",
     "Support": "支持你的音樂人"
+  },
+  "Topup": {
+    "Title": "Top Up",
+    "Subtitle1": "SSU Coin is your way to show your appreciation",
+    "Subtitle2": "SSU Coin allows you to parcitipate in Musician’s upside and grow their community",
+    "Subtitle3": "Find Musician who is providing a lot of value? Rewards them with SSU Coin as a support",
+    "MyCoin": "My Coin",
+    "Filter": {
+      "Buy": "Buy Package",
+      "Transaction": "Transaction"
+    }
   }
 }

@@ -84,7 +84,7 @@ export const MusicSection: React.FC<ListProps> = (props: ListProps) => {
 
   const onPressCopy = () => {
     setToastVisible(true);
-    setTextToast('Link have been copied to clipboard!');
+    setTextToast(t('General.LinkCopied') || '');
   };
 
   const resultDataMore = (dataResult: DataMore) => {

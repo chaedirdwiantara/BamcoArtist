@@ -6,7 +6,10 @@
     "Yes": "Yes",
     "No": "No",
     "NoVerifCode": "Didn’t receive verification codes? click to resend",
-    "Thanks": "Thank You!"
+    "Thanks": "Thank You!",
+    "LinkCopied": "Link have been copied to clipboard!",
+    "Followers": "Followers",
+    "Listeners": "Listeners"
   },
   "Onboarding": {
     "Step1": {
@@ -62,7 +65,9 @@
       "Subtitle": "We have sent a 6-digit verification code to your email {{email}}. Check your inbox and enter the verification code here"
     },
     "ResendAfter": "You can resend recovery code after ",
-    "ResendSuccess": "We've just resend a new code!"
+    "ResendSuccess": "We've just resend a new code!",
+    "Accepted": "Recovery code accepted",
+    "Rejected": "Please enter a valid recovery code"
   },
   "Btn": {
     "Next": "Next",
@@ -87,7 +92,12 @@
     "Send": "Send",
     "Create": "Create",
     "Reply": "Reply",
-    "GoToHome": "Go To Home"
+    "GoToHome": "Go To Home",
+    "CopyLink": "Copy Link",
+    "Set": "Set",
+    "Unset": "Unset",
+    "Dismiss": "Dismiss",
+    "Update": "Update"
   },
   "ForgotPassword": {
     "Title": "Update Your Password",
@@ -172,7 +182,8 @@
       "Title": "Sort by",
       "Latest": "Latest",
       "Popular": "Popular"
-    }
+    },
+    "NoMore": "No more feeds"
   },
   "Event": {
     "Title": "Event",
@@ -265,7 +276,10 @@
     "Month": "Month",
     "Year": "Year",
     "Support": "Add support to your plan",
-    "Optional": "Support (optional)"
+    "Optional": "Support (optional)",
+    "InputBonus": "Input Bonus",
+    "ErrorCoinBonus": "Insufficient coin, add more coin to give bonus",
+    "ErrorCoinSubs": "Insufficient coin, add more coin to subscribe"
   },
   "Setting": {
     "Title": "Settings",
@@ -380,7 +394,8 @@
         "TipType": "Tip Type",
         "AddMoreCoin": "Add More Coin",
         "YourCoin": "Your Coin",
-        "InputDonation": "Input Donation"
+        "InputDonation": "Input Donation",
+        "Success": "Congratulations! Your Donation have been Sent!"
       },
       "Menu": {
         "Donation": {
@@ -565,6 +580,10 @@
     "Guest": {
       "Title": "Sign Up or Sign In",
       "Subtitle": "You are exploring as guest, sign up or sign in to enoy full content"
+    },
+    "Update": {
+      "Title": "New Version Available",
+      "Subtitle": "We added new feature and fix some bug to make your experience better. Please update your application to the latest version."
     }
   },
   "EmptyState": {
@@ -594,5 +613,16 @@
     "GetEvent": "Get Latest Event Update",
     "GetExclusive": "Get Exclusive Content",
     "Support": "Support Your Musician"
+  },
+  "Topup": {
+    "Title": "Top Up",
+    "Subtitle1": "SSU Coin is your way to show your appreciation",
+    "Subtitle2": "SSU Coin allows you to parcitipate in Musician’s upside and grow their community",
+    "Subtitle3": "Find Musician who is providing a lot of value? Rewards them with SSU Coin as a support",
+    "MyCoin": "My Coin",
+    "Filter": {
+      "Buy": "Buy Package",
+      "Transaction": "Transaction"
+    }
   }
 }

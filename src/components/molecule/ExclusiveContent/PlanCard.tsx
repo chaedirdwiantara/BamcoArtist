@@ -12,6 +12,7 @@ import {RadioButton} from '../RadioButton/RadioButton';
 import {heightPercentage, width, widthPercentage} from '../../../utils';
 import {ErrorIcon} from '../../../assets/icon';
 import {Gap} from '../../atom';
+import {useTranslation} from 'react-i18next';
 
 interface PlanCard {
   title: string;
@@ -33,6 +34,7 @@ export const PlanCard: React.FC<PlanCard> = ({
   onPressError,
   onPressSelected,
 }) => {
+  const {t} = useTranslation();
   const newBorderColor = selected ? color.Success[400] : color.Dark[500];
   return (
     <View>
@@ -62,13 +64,13 @@ export const PlanCard: React.FC<PlanCard> = ({
             <ErrorIcon fill={color.Error[400]} />
             <Gap width={widthPercentage(4)} />
             <Text style={[typography.Body4, {color: color.Error[400]}]}>
-              {'Insufficient coin, add more coin to subscribe'}
+              {t('ExclusiveContent.ErrorCoinSubs')}
             </Text>
           </View>
 
           <TouchableOpacity onPress={onPressError}>
             <Text style={[typography.Body4, {color: color.Pink[2]}]}>
-              + Add More Coin
+              + {t('Setting.Tips.Label.AddMoreCoin')}
             </Text>
           </TouchableOpacity>
         </View>
