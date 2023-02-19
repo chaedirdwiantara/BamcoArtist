@@ -159,7 +159,8 @@ export type RootStackParams = {
     type: string;
   };
   Playlist: {
-    id: number[];
+    id: number;
+    name: string;
   };
   Preference: undefined;
   PreferenceSetting: undefined;
