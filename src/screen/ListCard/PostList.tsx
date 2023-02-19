@@ -54,13 +54,14 @@ interface PostListProps {
   dataRightDropdown: DataDropDownType[];
   dataLeftDropdown: DropDownFilterType[] | DropDownSortType[];
   data: PostListType[];
+  dataProfileImg: string;
 }
 
 const PostListHome: FC<PostListProps> = (props: PostListProps) => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
   const isLogin = storage.getString('profile');
-  const {dataRightDropdown, dataLeftDropdown} = props;
+  const {dataRightDropdown, dataLeftDropdown, dataProfileImg} = props;
   // ignore warning
   useEffect(() => {
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
@@ -498,6 +499,7 @@ const PostListHome: FC<PostListProps> = (props: PostListProps) => {
         commentValue={commentType}
         onCommentChange={setCommentType}
         handleOnPress={handleReplyOnPress}
+        userAvatarUri={dataProfileImg}
       />
       <BottomSheetGuest
         modalVisible={modalGuestVisible}

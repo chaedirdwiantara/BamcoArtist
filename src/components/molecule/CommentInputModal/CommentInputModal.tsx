@@ -98,6 +98,10 @@ const CommentInputModal: FC<ModalImageProps> = (props: ModalImageProps) => {
           <Text style={styles.buttonText}>Reply</Text>
         </TouchableOpacity>
       </View>
+      <View style={{backgroundColor: color.Dark[800]}}>
+        <Gap height={10} />
+      </View>
+
       <KeyboardAvoidingView
         behavior={
           Platform.OS === 'ios' ? 'padding' : 'height'
@@ -112,7 +116,6 @@ const styles = StyleSheet.create({
   modalStyle: {
     marginHorizontal: 0,
     marginVertical: 0,
-    marginBottom: heightResponsive(10),
     justifyContent: 'flex-end',
   },
   container: {
@@ -163,7 +166,6 @@ const styles = StyleSheet.create({
   buttonStyle: {
     backgroundColor: color.Pink[2],
     borderRadius: 4,
-    // paddingVertical: mvs(6),
     width: widthResponsive(64),
     height: heightResponsive(24),
     alignItems: 'center',
