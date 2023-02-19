@@ -39,6 +39,7 @@ interface MusicianDetailProps {
   followOnPress: () => void;
   unfollowOnPress: () => void;
   donateOnPress: () => void;
+  followersCount: number;
 }
 
 export const MusicianDetail: React.FC<MusicianDetailProps> = ({
@@ -48,6 +49,7 @@ export const MusicianDetail: React.FC<MusicianDetailProps> = ({
   followOnPress,
   unfollowOnPress,
   donateOnPress,
+  followersCount,
 }) => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
@@ -121,7 +123,11 @@ export const MusicianDetail: React.FC<MusicianDetailProps> = ({
           donateOnPress={donateOnPress}
         />
         <View style={styles.infoCard}>
-          <UserInfoCard onPress={() => {}} profile={musicianProfile} />
+          <UserInfoCard
+            onPress={() => {}}
+            profile={musicianProfile}
+            followersCount={followersCount}
+          />
           <ExclusiveDailyContent />
           <Gap height={10} />
           <View style={styles.containerContent}>
