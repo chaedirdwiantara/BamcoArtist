@@ -11,19 +11,19 @@ export interface ListContentType {
 
 export const listContentGuest: ListContentType[] = [
   {
-    text: 'Play Unlimited\nSong',
+    text: 'Guest.UnlimitedSong',
     image: <MusicPlayerImage />,
   },
   {
-    text: 'Get Latest\nEvent Update',
+    text: 'Guest.GetEvent',
     image: <TicketImage />,
   },
   {
-    text: 'Get Exclusive\nContent',
+    text: 'Guest.GetExclusive',
     image: <ContentPhoneImage />,
   },
   {
-    text: 'Support Your\nMusician',
+    text: 'Guest.Support',
     image: <HandImage />,
   },
 ];

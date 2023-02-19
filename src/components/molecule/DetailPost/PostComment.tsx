@@ -96,6 +96,7 @@ const PostComment: React.FC<ListProps> = (props: ListProps) => {
                   marginLeft: widthResponsive(-97),
                   marginTop: Platform.OS === 'android' ? ms(-35) : ms(-10),
                 }}
+                translation={true}
               />
             ) : null}
           </View>

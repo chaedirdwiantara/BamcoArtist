@@ -334,6 +334,7 @@ const PostListHome: FC<PostListProps> = (props: PostListProps) => {
             containerStyle={{
               width: widthPercentage(138),
             }}
+            translation={true}
           />
         </View>
         <View
@@ -348,6 +349,7 @@ const PostListHome: FC<PostListProps> = (props: PostListProps) => {
               width: widthResponsive(138),
               marginLeft: widthPercentage(-57),
             }}
+            translation={true}
           />
         </View>
       </View>

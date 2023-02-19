@@ -41,6 +41,7 @@ export const DonateCardContent: React.FC<DonateCardProps> = ({
           data={dropDownSubscription}
           selectedMenu={onPressMore}
           containerStyle={styles.dropdown}
+          translation={true}
         />
       </View>
 

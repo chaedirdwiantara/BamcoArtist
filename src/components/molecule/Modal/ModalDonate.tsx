@@ -77,7 +77,7 @@ export const ModalDonate: React.FC<ModalDonateProps> = ({
           {donateList.map((val, i) => (
             <View key={i}>
               <RadioButton
-                text={val.text}
+                text={t(val.text)}
                 selected={val.selected}
                 onPress={() => onPressSelected(i)}
               />

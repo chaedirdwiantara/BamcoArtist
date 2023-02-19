@@ -81,6 +81,7 @@ export const AlbumContent: React.FC<Props> = ({onPressGoBack}) => {
             data={dropDownHeaderAlbum}
             selectedMenu={resultDataMore}
             containerStyle={styles.dropDownMore}
+            translation={true}
           />
         }
         leftIcon={<ArrowLeftIcon />}

@@ -12,7 +12,9 @@ import {useTranslation} from 'react-i18next';
 interface FooterContentProps {
   type?: string;
   activeIndexSlide: number;
-  data: {title: string; list: PreferenceList[]}[] | DataOnboardType[];
+  data:
+    | {title: string; subtitle: string; list: PreferenceList[]}[]
+    | DataOnboardType[];
   onPressGoTo?: () => void;
   onPressNext: () => void;
 }
@@ -38,8 +40,8 @@ export const FooterContent: React.FC<FooterContentProps> = ({
             return (
               <DescriptionBoarding
                 key={index}
-                title={item.title}
-                subtitle={item.subtitle}
+                title={t(item.title) || ''}
+                subtitle={t(item.subtitle as string) || ''}
               />
             );
           }

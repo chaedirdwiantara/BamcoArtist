@@ -45,7 +45,7 @@ export const GuestContent: React.FC<GuestProps> = ({containerStyle}) => {
       </View>
       <View style={styles.containerContent}>
         {listContentGuest.map((val, index) => (
-          <ListContent key={index} image={val.image} text={val.text} />
+          <ListContent key={index} image={val.image} text={t(val.text)} />
         ))}
       </View>
       <ButtonGradient

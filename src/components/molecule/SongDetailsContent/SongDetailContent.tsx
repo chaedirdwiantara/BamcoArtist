@@ -96,6 +96,7 @@ export const SongDetailsContent: React.FC<Props> = ({
             data={dropDownHeaderSongDetails}
             selectedMenu={resultDataMore}
             containerStyle={styles.containerMore}
+            translation={true}
           />
         }
         leftIcon={<ArrowLeftIcon />}

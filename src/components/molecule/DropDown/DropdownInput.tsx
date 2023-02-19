@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Platform, StyleSheet, Text, View, ViewStyle} from 'react-native';
 import {ms, mvs} from 'react-native-size-matters';
 import {Dropdown} from 'react-native-element-dropdown';
@@ -6,6 +6,7 @@ import {Gap} from '../../atom';
 import {color, font} from '../../../theme';
 import {ErrorIcon} from '../../../assets/icon';
 import {heightPercentage, normalize, widthPercentage} from '../../../utils';
+import {useTranslation} from 'react-i18next';
 
 interface dataProps {
   label: string;
@@ -23,6 +24,7 @@ interface InputDropdownProps {
   errorMsg?: string;
   type?: string;
   showSearch?: boolean;
+  translation?: boolean;
 }
 
 const borderColor = color.Dark[500];
@@ -32,6 +34,7 @@ const fontColorMain = color.Neutral[10];
 const InputDropdown: React.FC<InputDropdownProps> = (
   props: InputDropdownProps,
 ) => {
+  const {t} = useTranslation();
   const {
     initialValue,
     data,
@@ -43,11 +46,24 @@ const InputDropdown: React.FC<InputDropdownProps> = (
     errorMsg,
     type = '',
     showSearch,
+    translation,
   } = props;
   const initValue = {label: initialValue, value: initialValue};
 
   const [value, setValue] = useState(initValue || null);
   const [isFocus, setIsFocus] = useState(false);
+  const [dataTranslation, setDataTranslation] = useState<dataProps[]>([]);
+
+  let setTranslation: dataProps[] = [];
+  useEffect(() => {
+    data.map((item: dataProps) => {
+      setTranslation.push({
+        label: t(item.label),
+        value: item.value,
+      });
+    });
+    setDataTranslation(setTranslation);
+  }, []);
 
   const renderLabel = () => {
     return <Text style={[styles.label]}>{dropdownLabel}</Text>;
@@ -61,7 +77,7 @@ const InputDropdown: React.FC<InputDropdownProps> = (
         containerStyle={styles.containerStyle}
         placeholderStyle={styles.placeholderStyle}
         iconStyle={styles.iconStyle}
-        data={data}
+        data={translation ? dataTranslation : data}
         maxHeight={mvs(300)}
         labelField="label"
         valueField="value"

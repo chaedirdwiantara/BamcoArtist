@@ -538,7 +538,11 @@
     "Title": "帖",
     "Label": {
       "RepliedTo": "回復了",
-      "ViewMoreReply": "View more reply"
+      "ViewMoreReply": "View more reply",
+      "EditReply": "Edit Reply",
+      "DeleteReply": "Delete Reply",
+      "EditPost": "Edit Post",
+      "DeletePost": "Delete Post"
     },
     "Placeholder": {
       "Write": "Write your reply"

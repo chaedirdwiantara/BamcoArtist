@@ -1,5 +1,6 @@
-import React, {useState} from 'react';
-import {StyleSheet, Text, TextStyle, View, ViewStyle} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {useTranslation} from 'react-i18next';
+import {StyleSheet, TextStyle, View, ViewStyle} from 'react-native';
 import {Dropdown} from 'react-native-element-dropdown';
 import {ms, mvs} from 'react-native-size-matters';
 import {color, font} from '../../../theme';
@@ -16,6 +17,7 @@ interface DropdownMenuProps {
   selectedMenu: (data: any) => void;
   containerStyle?: ViewStyle;
   placeHolderStyles?: TextStyle;
+  translation?: boolean;
 }
 
 const itemBg = color.Dark[900];
@@ -23,10 +25,29 @@ const itemBg = color.Dark[900];
 const DropdownMenu: React.FC<DropdownMenuProps> = (
   props: DropdownMenuProps,
 ) => {
-  const {data, placeHolder, selectedMenu, containerStyle, placeHolderStyles} =
-    props;
+  const {
+    data,
+    placeHolder,
+    selectedMenu,
+    containerStyle,
+    placeHolderStyles,
+    translation,
+  } = props;
+  const {t} = useTranslation();
   const [value, setValue] = useState(null);
   const [isFocus, setIsFocus] = useState(false);
+  const [dataTranslation, setDataTranslation] = useState<dataProps[]>([]);
+
+  let setTranslation: dataProps[] = [];
+  useEffect(() => {
+    data.map((item: dataProps) => {
+      setTranslation.push({
+        label: t(item.label),
+        value: item.value,
+      });
+    });
+    setDataTranslation(setTranslation);
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -38,7 +59,7 @@ const DropdownMenu: React.FC<DropdownMenuProps> = (
         itemTextStyle={styles.fontAll}
         itemContainerStyle={[styles.itemContainer]}
         iconStyle={styles.iconStyle}
-        data={data}
+        data={translation ? dataTranslation : data}
         maxHeight={300}
         labelField="label"
         valueField="value"

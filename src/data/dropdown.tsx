@@ -1,5 +1,3 @@
-import i18n from '../locale';
-
 export interface DataCountryType {
   value: string;
   label: string;
@@ -45,28 +43,28 @@ export interface DataDropDownType {
 }
 
 export const dropDownDataCategory: DataDropDownType[] = [
-  {label: i18n.t('Home.Tab.TopPost.Category.All'), value: ''},
-  {label: i18n.t('Home.Tab.TopPost.Category.ComingUp'), value: 'coming_up'},
-  {label: i18n.t('Home.Tab.TopPost.Category.Tour'), value: 'otr'},
-  {label: i18n.t('Home.Tab.TopPost.Category.DailyLife'), value: 'day_in_life'},
+  {label: 'Home.Tab.TopPost.Category.All', value: ''},
+  {label: 'Home.Tab.TopPost.Category.ComingUp', value: 'coming_up'},
+  {label: 'Home.Tab.TopPost.Category.Tour', value: 'otr'},
+  {label: 'Home.Tab.TopPost.Category.DailyLife', value: 'day_in_life'},
   {
-    label: i18n.t('Home.Tab.TopPost.Category.BTS'),
+    label: 'Home.Tab.TopPost.Category.BTS',
     value: 'behind_the_scene',
   },
-  {label: i18n.t('Home.Tab.TopPost.Category.Highlight'), value: 'highlight'},
-  {label: i18n.t('Home.Tab.TopPost.Category.Backstage'), value: 'backstage'},
+  {label: 'Home.Tab.TopPost.Category.Highlight', value: 'highlight'},
+  {label: 'Home.Tab.TopPost.Category.Backstage', value: 'backstage'},
 ];
 
 export const dropdownCategoryMusician: DataDropDownType[] = [
-  {label: i18n.t('Home.Tab.TopPost.Category.ComingUp'), value: 'coming_up'},
-  {label: i18n.t('Home.Tab.TopPost.Category.Tour'), value: 'otr'},
-  {label: i18n.t('Home.Tab.TopPost.Category.DailyLife'), value: 'day_in_life'},
+  {label: 'Home.Tab.TopPost.Category.ComingUp', value: 'coming_up'},
+  {label: 'Home.Tab.TopPost.Category.Tour', value: 'otr'},
+  {label: 'Home.Tab.TopPost.Category.DailyLife', value: 'day_in_life'},
   {
-    label: i18n.t('Home.Tab.TopPost.Category.BTS'),
+    label: 'Home.Tab.TopPost.Category.BTS',
     value: 'behind_the_scene',
   },
-  {label: i18n.t('Home.Tab.TopPost.Category.Highlight'), value: 'highlight'},
-  {label: i18n.t('Home.Tab.TopPost.Category.Backstage'), value: 'backstage'},
+  {label: 'Home.Tab.TopPost.Category.Highlight', value: 'highlight'},
+  {label: 'Home.Tab.TopPost.Category.Backstage', value: 'backstage'},
 ];
 
 export interface DropDownFilterType {
@@ -75,9 +73,9 @@ export interface DropDownFilterType {
 }
 
 export const dropDownDataFilter: DropDownFilterType[] = [
-  {label: i18n.t('Home.Tab.TopPost.Filter.Today'), value: '1'},
-  {label: i18n.t('Home.Tab.TopPost.Filter.LastWeek'), value: '7'},
-  {label: i18n.t('Home.Tab.TopPost.Filter.ThisMonth'), value: '30'},
+  {label: 'Home.Tab.TopPost.Filter.Today', value: '1'},
+  {label: 'Home.Tab.TopPost.Filter.LastWeek', value: '7'},
+  {label: 'Home.Tab.TopPost.Filter.ThisMonth', value: '30'},
 ];
 
 export interface DropDownSortType {
@@ -86,47 +84,47 @@ export interface DropDownSortType {
 }
 
 export const dropDownDataSort: DropDownSortType[] = [
-  {label: i18n.t('Feed.Sort.Latest'), value: '1'},
-  {label: i18n.t('Feed.Sort.Popular'), value: '2'},
+  {label: 'Feed.Sort.Latest', value: '1'},
+  {label: 'Feed.Sort.Popular', value: '2'},
 ];
 
 export const dropDownDataSubscription: DataDropDownType[] = [
-  {label: i18n.t('Setting.Tips.Filter.All'), value: '1'},
-  {label: i18n.t('Setting.Tips.Filter.OneTime'), value: '2'},
-  {label: i18n.t('Setting.Tips.Filter.Weekly'), value: '3'},
-  {label: i18n.t('Setting.Tips.Filter.Monthly'), value: '4'},
-  {label: i18n.t('Setting.Tips.Filter.Yearly'), value: '5'},
+  {label: 'Setting.Tips.Filter.All', value: '1'},
+  {label: 'Setting.Tips.Filter.OneTime', value: '2'},
+  {label: 'Setting.Tips.Filter.Weekly', value: '3'},
+  {label: 'Setting.Tips.Filter.Monthly', value: '4'},
+  {label: 'Setting.Tips.Filter.Yearly', value: '5'},
 ];
 
 export const dropDownHeaderAlbum: DataDropDownType[] = [
-  {label: 'Add to Queue', value: '1'},
-  {label: 'Share Album', value: '2'},
-  {label: 'Add to My Playlist', value: '3'},
+  {label: 'Home.Tab.TopSong.Queue', value: '1'},
+  {label: 'General.Share.Album', value: '2'},
+  {label: 'Music.Label.AddToMyPlaylist', value: '3'},
 ];
 
 export const dropDownHeaderSongDetails: DataDropDownType[] = [
-  {label: 'Add to Playlist', value: '1'},
-  {label: 'Add to Queue', value: '2'},
-  {label: 'Share Music', value: '3'},
-  {label: 'Show Credits', value: '4'},
+  {label: 'Home.Tab.TopSong.Playlist', value: '1'},
+  {label: 'Home.Tab.TopSong.Queue', value: '2'},
+  {label: 'Home.Tab.TopSong.Share', value: '3'},
+  {label: 'Home.Tab.TopSong.Credit', value: '4'},
 ];
 
 export const dropDownSubscription: DataDropDownType[] = [
-  {label: i18n.t('Setting.Tips.Menu.Subs.GoToMusician'), value: '1'},
-  {label: i18n.t('Setting.Tips.Menu.Subs.Unsubs'), value: '2'},
+  {label: 'Setting.Tips.Menu.Subs.GoToMusician', value: '1'},
+  {label: 'Setting.Tips.Menu.Subs.Unsubs', value: '2'},
 ];
 
 export const dropDownSetAudience: DataDropDownType[] = [
-  {label: i18n.t('Feed.Public'), value: '1'},
-  {label: i18n.t('Feed.Exclusive'), value: '2'},
+  {label: 'Feed.Public', value: '1'},
+  {label: 'Feed.Exclusive', value: '2'},
 ];
 
 export const dataUpdateComment: DataDropDownType[] = [
-  {label: 'Edit Reply', value: '1'},
-  {label: 'Delete Reply', value: '2'},
+  {label: 'Post.Label.EditReply', value: '1'},
+  {label: 'Post.Label.DeleteReply', value: '2'},
 ];
 
 export const dataUpdatePost: DataDropDownType[] = [
-  {label: 'Edit Post', value: '1'},
-  {label: 'Delete Post', value: '2'},
+  {label: 'Post.Label.EditPost', value: '1'},
+  {label: 'Post.Label.DeletePost', value: '2'},
 ];

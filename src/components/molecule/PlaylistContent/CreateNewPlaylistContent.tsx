@@ -207,6 +207,7 @@ export const CreateNewPlaylistContent: React.FC<Props> = ({
               marginTop: heightPercentage(15),
               width: width * 0.9,
             }}
+            translation={true}
           />
 
           <View style={styles.footer}>

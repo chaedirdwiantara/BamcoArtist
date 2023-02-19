@@ -153,7 +153,7 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
     });
   };
   const resultDataCategory = (dataResultCategory: DataDropDownType) => {
-    dataResultCategory.label === 'All'
+    dataResultCategory.label === t('Home.Tab.TopPost.Category.All')
       ? getListDataExclusivePost({page: page, perPage: perPage})
       : getListDataExclusivePost({
           page: page,
@@ -338,6 +338,7 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
             containerStyle={{
               width: widthPercentage(138),
             }}
+            translation={true}
           />
         </View>
         <View
@@ -352,6 +353,7 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
               width: widthPercentage(138),
               marginLeft: widthPercentage(-57),
             }}
+            translation={true}
           />
         </View>
       </View>

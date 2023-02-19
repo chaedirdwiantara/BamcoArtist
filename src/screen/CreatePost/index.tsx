@@ -444,7 +444,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
               />
               <Gap width={12} />
               <ButtonGradientwithIcon
-                label={label ? label : t('Post.Create.Category')}
+                label={label ? t(label) : t('Post.Create.Category')}
                 onPress={() =>
                   setModalVisible({
                     modalFilter: true,
@@ -542,6 +542,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
                     marginLeft: widthResponsive(-57),
                   }}
                   placeHolderStyles={styles.placeHolderStyle}
+                  translation={true}
                 />
               </View>
             </View>
@@ -598,6 +599,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
           dataFilter={dropdownCategoryMusician}
           filterOnPress={setLabel}
           sendCategory={setValueFilter}
+          translation={true}
         />
         <ModalImagePicker
           title={t('Post.Create.Media') || ''}

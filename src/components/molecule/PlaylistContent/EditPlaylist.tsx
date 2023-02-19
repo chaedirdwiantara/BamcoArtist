@@ -232,6 +232,7 @@ export const EditPlaylistContent: React.FC<EditPlaylistProps> = ({
                 marginTop: heightPercentage(15),
                 width: width * 0.9,
               }}
+              translation={true}
             />
           </View>
 

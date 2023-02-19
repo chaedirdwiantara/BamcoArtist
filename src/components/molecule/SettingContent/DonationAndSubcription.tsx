@@ -78,6 +78,7 @@ export const DASContent: FC<DASProps> = ({onPressGoBack}) => {
             placeHolder={t('Setting.Tips.Filter.Duration')}
             selectedMenu={() => null}
             containerStyle={styles.dropdown}
+            translation={true}
           />
         </View>
       </View>

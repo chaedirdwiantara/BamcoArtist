@@ -4,6 +4,6 @@ export interface PropsType {
 }
 
 export const dataVisibility: PropsType[] = [
-  {label: 'Public', value: 'Public'},
-  {label: 'Private', value: 'Private'},
+  {label: 'Music.NewPlaylist.Visibility.Public', value: 'Public'},
+  {label: 'Music.NewPlaylist.Visibility.Private', value: 'Private'},
 ];

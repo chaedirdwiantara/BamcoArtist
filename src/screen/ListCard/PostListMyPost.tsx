@@ -151,7 +151,7 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
     });
   };
   const resultDataCategory = (dataResultCategory: DataDropDownType) => {
-    dataResultCategory.label === 'All'
+    dataResultCategory.label === t('Home.Tab.TopPost.Category.All')
       ? getListDataMyPost({page: page, perPage: perPage})
       : getListDataMyPost({
           page: page,
@@ -351,6 +351,7 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
             containerStyle={{
               width: widthPercentage(138),
             }}
+            translation={true}
           />
         </View>
         <View
@@ -365,6 +366,7 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
               width: widthPercentage(138),
               marginLeft: widthPercentage(-57),
             }}
+            translation={true}
           />
         </View>
       </View>
