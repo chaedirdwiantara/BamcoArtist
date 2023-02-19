@@ -99,6 +99,7 @@ export type ListDataSearchSongs = {
   UpdatedAt?: string;
   songDuration: number;
   transcodedSongUrl: Transcode[];
+  isLiked?: boolean;
 };
 
 export type ListSearchSongsResponseType = {

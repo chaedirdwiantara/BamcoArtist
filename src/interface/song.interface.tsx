@@ -1,5 +1,9 @@
 import {imageTypes, PaginationType} from './base.interface';
 
+export type SongPropsTypeA = {
+  id: number;
+};
+
 export type SongList = {
   isAddedToThisPlaylist: boolean;
   played: boolean;
@@ -12,6 +16,7 @@ export type SongList = {
   lyrics: string;
   transcodedSongUrl: TranscodedSongType[];
   originalSongUrl: string;
+  isLiked: boolean;
 };
 
 export type TranscodedSongType = {
@@ -200,6 +205,13 @@ export type DataDetailAlbum = {
 export type DetailAlbumResponseType = {
   code: number;
   data: DataDetailAlbum;
+  message: string;
+  status: number;
+};
+
+export type LikeSongResponseType = {
+  code: number;
+  data: string | null;
   message: string;
   status: number;
 };

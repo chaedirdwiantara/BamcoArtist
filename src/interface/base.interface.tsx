@@ -21,6 +21,7 @@ export type ParamsProps = {
   albumID?: number;
   id?: string;
   context?: string;
+  listType?: string;
 };
 
 export type imageTypes = {
