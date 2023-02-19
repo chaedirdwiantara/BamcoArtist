@@ -75,6 +75,7 @@ export const HomeScreen: React.FC = () => {
 
   const isLogin = storage.getBoolean('isLogin');
   const isFocused = useIsFocused();
+  const [selectedIndex, setSelectedIndex] = useState(-0);
 
   useEffect(() => {
     getListDataBanner();
@@ -86,7 +87,7 @@ export const HomeScreen: React.FC = () => {
       getProfileUser();
       getListDataMusician();
       getListDataTopSong();
-    }, []),
+    }, [selectedIndex]),
   );
 
   useEffect(() => {
@@ -132,7 +133,6 @@ export const HomeScreen: React.FC = () => {
     navigation.navigate(screen);
   };
 
-  const [selectedIndex, setSelectedIndex] = useState(-0);
   const [filter] = useState([
     {filterName: 'Home.Tab.TopMusician.Title'},
     {filterName: 'Home.Tab.TopSong.Title'},
@@ -251,6 +251,7 @@ export const HomeScreen: React.FC = () => {
               dataSong={dataTopSong}
               onPress={onPressTopSong}
               type={'home'}
+              loveIcon={true}
             />
           ) : (
             <PostList

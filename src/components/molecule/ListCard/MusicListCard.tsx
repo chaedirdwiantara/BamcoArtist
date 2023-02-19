@@ -17,7 +17,7 @@ import {
 import {Dropdown} from '../DropDown';
 import {color, font} from '../../../theme';
 import {Gap, SquareImage} from '../../atom';
-import {DefaultImage, SoundIcon} from '../../../assets/icon';
+import {DefaultImage, LoveIcon, SoundIcon} from '../../../assets/icon';
 import {useTranslation} from 'react-i18next';
 
 interface ListProps {
@@ -36,6 +36,9 @@ interface ListProps {
   played?: boolean;
   hideDropdownMore?: boolean;
   activeOpacity?: number;
+  loveIcon?: boolean;
+  likeOnPress?: () => void;
+  isLiked?: boolean;
 }
 
 const MusicListCard: React.FC<ListProps> = ({
@@ -53,6 +56,9 @@ const MusicListCard: React.FC<ListProps> = ({
   played,
   hideDropdownMore = false,
   activeOpacity,
+  loveIcon,
+  likeOnPress,
+  isLiked,
 }) => {
   const {t} = useTranslation();
   // ? Dropdown Menu Example
@@ -102,6 +108,16 @@ const MusicListCard: React.FC<ListProps> = ({
           {singerName}
         </Text>
       </View>
+      {loveIcon && (
+        <TouchableOpacity
+          onPress={likeOnPress}
+          style={styles.containerLoveIcon}>
+          <LoveIcon
+            fill={isLiked ? color.Pink[100] : 'none'}
+            stroke={isLiked ? 'none' : color.Dark[100]}
+          />
+        </TouchableOpacity>
+      )}
       {rightIcon ? (
         <TouchableOpacity onPress={onPressIcon}>
           {rightIconComponent}
@@ -167,5 +183,10 @@ const styles = StyleSheet.create({
   },
   dotsButton: {
     justifyContent: 'center',
+  },
+  containerLoveIcon: {
+    width: widthPercentage(30),
+    marginRight: widthPercentage(10),
+    alignItems: 'center',
   },
 });
