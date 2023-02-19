@@ -16,7 +16,6 @@ import {CheckCircleIcon, GiftIcon} from '../../../assets/icon';
 import ReferralImage from '../../../assets/image/Referral.image';
 import {heightPercentage, widthPercentage} from '../../../utils';
 import {useTranslation} from 'react-i18next';
-import i18n from '../../../locale';
 
 const {width} = Dimensions.get('window');
 
@@ -33,19 +32,20 @@ interface ActivatedProps {
   refCode?: string;
 }
 
-const title1 = i18n.t('Setting.Referral.OnBoard.Title');
-const title2 = i18n.t('Setting.Referral.OnBoard.Actived');
-const description1 = i18n.t('Setting.Referral.OnBoard.Subtitle');
-const description2 = i18n.t('Setting.Referral.OnBoard.Success');
-const friendReferral = i18n.t('Setting.Referral.UseRefer.Text2');
-const refCannotBeChanged = i18n.t('Setting.Referral.UseRefer.Text3');
+const title1 = 'Setting.Referral.OnBoard.Title';
+const title2 = 'Setting.Referral.OnBoard.Actived';
+const description1 = 'Setting.Referral.OnBoard.Subtitle';
+const description2 = 'Setting.Referral.OnBoard.Success';
+const friendReferral = 'Setting.Referral.UseRefer.Text2';
+const refCannotBeChanged = 'Setting.Referral.UseRefer.Text3';
 
 const ReferralActivated: React.FC<ActivatedProps> = ({refCode}) => {
+  const {t} = useTranslation();
   return (
     <View style={styles.containerActivated}>
       <View style={styles.containerReferralCode}>
         <Text style={[Typography.Subtitle2, styles.textFriendRef]}>
-          {friendReferral}
+          {t(friendReferral)}
         </Text>
         <View style={styles.containerCode}>
           <CheckCircleIcon />
@@ -53,7 +53,7 @@ const ReferralActivated: React.FC<ActivatedProps> = ({refCode}) => {
         </View>
       </View>
       <Text style={[Typography.Overline, styles.note]}>
-        {refCannotBeChanged}
+        {t(refCannotBeChanged)}
       </Text>
     </View>
   );
@@ -91,10 +91,10 @@ export const ReferralContent: React.FC<ReferralContentProps> = ({
 
         <View style={styles.containerText}>
           <Text style={[Typography.Heading4, styles.title]}>
-            {type === 'input' ? title1 : title2}
+            {type === 'input' ? t(title1) : t(title2)}
           </Text>
           <Text style={[Typography.Subtitle2, styles.description]}>
-            {type === 'input' ? description1 : description2}
+            {type === 'input' ? t(description1) : t(description2)}
           </Text>
         </View>
 

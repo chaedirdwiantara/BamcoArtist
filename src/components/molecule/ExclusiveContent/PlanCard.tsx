@@ -18,6 +18,7 @@ interface PlanCard {
   title: string;
   subtitle: string;
   coin: string;
+  time: string;
   selected: boolean;
   isError?: boolean;
   onPressError?: () => void;
@@ -29,6 +30,7 @@ export const PlanCard: React.FC<PlanCard> = ({
   title,
   subtitle,
   coin,
+  time,
   selected,
   isError,
   onPressError,
@@ -43,12 +45,12 @@ export const PlanCard: React.FC<PlanCard> = ({
         onPress={onPressSelected}>
         <View style={styles.containerTitle}>
           <RadioButton
-            text={title}
+            text={t(title)}
             selected={selected}
             onPress={onPressSelected}
           />
           <Text style={[typography.Subtitle2, {color: color.Success[400]}]}>
-            {coin}
+            {coin} + {t(time)}
           </Text>
         </View>
         <View style={styles.subtitle}>
