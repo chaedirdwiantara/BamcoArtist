@@ -9,10 +9,11 @@ import {
   widthPercentage,
 } from '../../../utils';
 import {ListCard} from '../ListCard';
-import {CloseIcon, PauseIcon, PlayIcon} from '../../../assets/icon';
 import {color} from '../../../theme';
-import {usePlayerHook} from '../../../hooks/use-player.hook';
+import {storage} from '../../../hooks/use-storage.hook';
 import {SetupService} from '../../../service/musicPlayer';
+import {usePlayerHook} from '../../../hooks/use-player.hook';
+import {CloseIcon, PauseIcon, PlayIcon} from '../../../assets/icon';
 
 interface ModalPlayMusicProps {
   onPressModal: () => void;
@@ -43,6 +44,7 @@ export const ModalPlayMusic: React.FC<ModalPlayMusicProps> = ({
   const handleClose = async () => {
     hidePlayer();
     resetPlayer();
+    storage.set('resetPlayer', true);
   };
 
   const handlePlayPaused = () => {
@@ -81,9 +83,15 @@ export const ModalPlayMusic: React.FC<ModalPlayMusicProps> = ({
     );
   };
 
+  const isWithoutBottomTab = storage.getBoolean('withoutBottomTab');
+  const isWithoutBottomTabiOS = isWithoutBottomTab ? 0 : 84;
+  const isWithoutBottomTabAndroid = isWithoutBottomTab ? 0 : 64;
+  const bottom =
+    Platform.OS === 'ios' ? isWithoutBottomTabiOS : isWithoutBottomTabAndroid;
+
   return (
     <Portal>
-      <View style={[styles.root, {display: visible ? 'flex' : 'none'}]}>
+      <View style={[styles.root, {display: visible ? 'flex' : 'none', bottom}]}>
         <ListCard.MusicList
           rightIcon={true}
           rightIconComponent={<RightIcon />}
@@ -95,7 +103,10 @@ export const ModalPlayMusic: React.FC<ModalPlayMusicProps> = ({
         />
       </View>
       <View
-        style={[styles.containerLine, {display: visible ? 'flex' : 'none'}]}>
+        style={[
+          styles.containerLine,
+          {display: visible ? 'flex' : 'none', bottom},
+        ]}>
         <View
           style={[
             styles.greenLine,
