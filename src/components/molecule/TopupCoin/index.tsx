@@ -20,8 +20,8 @@ export const TopupCoinContent: React.FC<TopupCoinProps> = ({onPressGoBack}) => {
   const {t} = useTranslation();
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [filter] = useState([
-    {filterName: t('TopUp.Filter.Buy')},
-    {filterName: t('TopUp.Filter.Transaction')},
+    {filterName: 'TopUp.Filter.Buy'},
+    {filterName: 'TopUp.Filter.Transaction'},
   ]);
   const filterData = (item: any, index: number) => {
     setSelectedIndex(index);
@@ -69,9 +69,10 @@ export const TopupCoinContent: React.FC<TopupCoinProps> = ({onPressGoBack}) => {
           onPress={filterData}
           selectedIndex={selectedIndex}
           TouchableStyle={{width: width * 0.45}}
+          translation={true}
         />
 
-        {filter[selectedIndex].filterName === t('TopUp.Filter.Buy') ? (
+        {filter[selectedIndex].filterName === 'TopUp.Filter.Buy' ? (
           <View style={styles.containerListPrice}>
             {listPrice.map((val, i) => (
               <View key={i} style={styles.padding}>

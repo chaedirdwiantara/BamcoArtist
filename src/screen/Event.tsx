@@ -16,8 +16,8 @@ export const EventScreen: React.FC = () => {
   const {t} = useTranslation();
   const [selectedIndex, setSelectedIndex] = useState(-0);
   const [filter] = useState([
-    {filterName: t('Event.Concert.Title')},
-    {filterName: t('Event.Merch.Title')},
+    {filterName: 'Event.Concert.Title'},
+    {filterName: 'Event.Merch.Title'},
   ]);
   const isLogin = storage.getString('profile');
   const isFocused = useIsFocused();
@@ -58,8 +58,9 @@ export const EventScreen: React.FC = () => {
                 justifyContent: 'space-between',
               }}
               TouchableStyle={{width: widthPercentageToDP(45)}}
+              translation={true}
             />
-            {filter[selectedIndex].filterName === t('Event.Concert.Title') ? (
+            {filter[selectedIndex].filterName === 'Event.Concert.Title' ? (
               <ConcertList />
             ) : (
               <MerchList />

@@ -53,7 +53,6 @@ type OnScrollEventHandler = (
 ) => void;
 
 export const HomeScreen: React.FC = () => {
-  const {t} = useTranslation();
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
   const {dataBanner, getListDataBanner} = useBannerHook();

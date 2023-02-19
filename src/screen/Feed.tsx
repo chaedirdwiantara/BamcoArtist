@@ -23,8 +23,8 @@ export const FeedScreen: React.FC = () => {
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
   const [selectedIndex, setSelectedIndex] = useState(-0);
   const [filter] = useState([
-    {filterName: t('Feed.MyPost')},
-    {filterName: t('Feed.Public')},
+    {filterName: 'Feed.MyPost'},
+    {filterName: 'Feed.Public'},
   ]);
   const isLogin = storage.getString('profile');
   const isFocused = useIsFocused();
@@ -69,8 +69,9 @@ export const FeedScreen: React.FC = () => {
                 justifyContent: 'space-between',
               }}
               TouchableStyle={{width: widthPercentageToDP(45)}}
+              translation={true}
             />
-            {filter[selectedIndex].filterName === t('Feed.Public') ? (
+            {filter[selectedIndex].filterName === 'Feed.Public' ? (
               <PostListPublic
                 dataRightDropdown={dropDownDataCategory}
                 dataLeftDropdown={dropDownDataSort}

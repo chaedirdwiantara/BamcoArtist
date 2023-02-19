@@ -28,6 +28,7 @@ import PostListPublic from '../ListCard/PostListPublic';
 import {dropDownDataCategory, dropDownDataSort} from '../../data/dropdown';
 import PostListExclusive from '../ListCard/PostListExclusive';
 import DataMusician from './DataMusician';
+import {useTranslation} from 'react-i18next';
 
 type OnScrollEventHandler = (
   event: NativeSyntheticEvent<NativeScrollEvent>,
@@ -54,11 +55,11 @@ export const MusicianDetail: React.FC<MusicianDetailProps> = ({
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [scrolEffect, setScrollEffect] = useState(false);
   const [filter] = useState([
-    {filterName: 'PROFILE'},
-    {filterName: 'POST'},
-    {filterName: 'EXCLUSIVE'},
-    {filterName: 'MUSIC'},
-    {filterName: 'FANS'},
+    {filterName: 'Musician.Tab.Profile'},
+    {filterName: 'Musician.Tab.Post'},
+    {filterName: 'Musician.Tab.Exclusive'},
+    {filterName: 'Musician.Tab.Music'},
+    {filterName: 'Musician.Tab.Fans'},
   ]);
 
   const filterData = (item: string, index: number) => {
@@ -130,10 +131,11 @@ export const MusicianDetail: React.FC<MusicianDetailProps> = ({
               onPress={filterData}
               selectedIndex={selectedIndex}
               flatlistContainerStyle={{paddingHorizontal: widthResponsive(24)}}
+              translation={true}
             />
-            {filter[selectedIndex].filterName === 'PROFILE' ? (
+            {filter[selectedIndex].filterName === 'Musician.Tab.Profile' ? (
               <DataMusician profile={profile} dataAlbum={dataAlbum} />
-            ) : filter[selectedIndex].filterName === 'POST' ? (
+            ) : filter[selectedIndex].filterName === 'Musician.Tab.Post' ? (
               <View
                 style={{
                   paddingHorizontal: widthResponsive(24),
@@ -145,7 +147,8 @@ export const MusicianDetail: React.FC<MusicianDetailProps> = ({
                   dataLeftDropdown={dropDownDataSort}
                 />
               </View>
-            ) : filter[selectedIndex].filterName === 'EXCLUSIVE' ? (
+            ) : filter[selectedIndex].filterName ===
+              'Musician.Tab.Exclusive' ? (
               <View
                 style={{
                   paddingHorizontal: widthResponsive(24),

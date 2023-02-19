@@ -29,8 +29,8 @@ export const DASContent: FC<DASProps> = ({onPressGoBack}) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [changeTab, setChangeTab] = useState('current');
   const [filter] = useState([
-    {filterName: t('Setting.Tips.Tab.Donation')},
-    {filterName: t('Setting.Tips.Tab.Subs')},
+    {filterName: 'Setting.Tips.Tab.Donation'},
+    {filterName: 'Setting.Tips.Tab.Subs'},
   ]);
   const filterData = (item: any, index: number) => {
     setSelectedIndex(index);
@@ -53,6 +53,7 @@ export const DASContent: FC<DASProps> = ({onPressGoBack}) => {
         onPress={filterData}
         selectedIndex={selectedIndex}
         TouchableStyle={{width: width * 0.45}}
+        translation={true}
       />
 
       <View style={styles.containerTab}>
@@ -83,7 +84,7 @@ export const DASContent: FC<DASProps> = ({onPressGoBack}) => {
         </View>
       </View>
 
-      {filter[selectedIndex].filterName === 'Subscription' ? (
+      {filter[selectedIndex].filterName === 'Setting.Tips.Tab.Subs' ? (
         <DonateCardContent
           avatarUri={
             'https://www.vantage.id/wp-content/uploads/2022/03/FOE32FCVQBgK565-1024x1024.jpg'

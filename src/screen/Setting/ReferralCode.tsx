@@ -22,8 +22,8 @@ export const ReferralCodeSetting: React.FC = () => {
 
   const [selectedIndex, setSelectedIndex] = useState(-0);
   const [filter] = useState([
-    {filterName: t('Setting.Referral.ReferFriend.Title')},
-    {filterName: t('Setting.Referral.UseRefer.Title')},
+    {filterName: 'Setting.Referral.ReferFriend.Title'},
+    {filterName: 'Setting.Referral.UseRefer.Title'},
   ]);
   const filterData = (item: any, index: any) => {
     setSelectedIndex(index);
@@ -54,7 +54,7 @@ export const ReferralCodeSetting: React.FC = () => {
       />
 
       {filter[selectedIndex].filterName ===
-      t('Setting.Referral.ReferFriend.Title') ? (
+      'Setting.Referral.ReferFriend.Title' ? (
         <ReferAFriend />
       ) : (
         <UseReferralContent />
