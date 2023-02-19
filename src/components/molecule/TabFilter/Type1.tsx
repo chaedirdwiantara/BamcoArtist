@@ -1,4 +1,5 @@
 import React from 'react';
+import {useTranslation} from 'react-i18next';
 import {
   StyleSheet,
   Text,
@@ -22,6 +23,7 @@ interface TabFilterProps {
   containerStyle?: ViewStyle;
   flatlistContainerStyle?: ViewStyle;
   TouchableStyle?: ViewStyle;
+  translation?: boolean;
 }
 
 const SelectedColor = color.Pink[100];
@@ -34,7 +36,9 @@ const Type1: React.FC<TabFilterProps> = ({
   containerStyle,
   flatlistContainerStyle,
   TouchableStyle,
+  translation,
 }) => {
+  const {t} = useTranslation();
   return (
     <View style={[styles.tab, containerStyle]}>
       <FlatList
@@ -68,7 +72,7 @@ const Type1: React.FC<TabFilterProps> = ({
                       color: UnSelectedColor,
                     },
               ]}>
-              {item.filterName}
+              {translation ? t(item.filterName) : item.filterName}
             </Text>
           </TouchableOpacity>
         )}

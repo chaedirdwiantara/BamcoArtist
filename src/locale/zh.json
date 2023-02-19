@@ -438,7 +438,11 @@
     },
     "Language": {
       "Title": "語言",
-      "Placeholder": "Select Language"
+      "Placeholder": "Select Language",
+      "Modal": {
+        "Title": "Change Language",
+        "Subtitle": "Are you sure you want to change your language?"
+      }
     },
     "Notification": {
       "Title": "推送通知",

@@ -135,9 +135,9 @@ export const HomeScreen: React.FC = () => {
 
   const [selectedIndex, setSelectedIndex] = useState(-0);
   const [filter] = useState([
-    {filterName: t('Home.Tab.TopMusician.Title')},
-    {filterName: t('Home.Tab.TopSong.Title')},
-    {filterName: t('Home.Tab.TopPost.Title')},
+    {filterName: 'Home.Tab.TopMusician.Title'},
+    {filterName: 'Home.Tab.TopSong.Title'},
+    {filterName: 'Home.Tab.TopPost.Title'},
   ]);
   const filterData = (item: any, index: any) => {
     setSelectedIndex(index);
@@ -233,9 +233,9 @@ export const HomeScreen: React.FC = () => {
             filterData={filter}
             onPress={filterData}
             selectedIndex={selectedIndex}
+            translation={true}
           />
-          {filter[selectedIndex].filterName ===
-          t('Home.Tab.TopMusician.Title') ? (
+          {filter[selectedIndex].filterName === 'Home.Tab.TopMusician.Title' ? (
             <TopMusician
               dataMusician={dataMusician}
               setFollowMusician={(
@@ -247,8 +247,7 @@ export const HomeScreen: React.FC = () => {
                 params?: ParamsProps,
               ) => setUnfollowMusician(props, params)}
             />
-          ) : filter[selectedIndex].filterName ===
-            t('Home.Tab.TopSong.Title') ? (
+          ) : filter[selectedIndex].filterName === 'Home.Tab.TopSong.Title' ? (
             <TopSong
               dataSong={dataTopSong}
               onPress={onPressTopSong}

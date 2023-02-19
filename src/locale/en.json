@@ -438,7 +438,11 @@
     },
     "Language": {
       "Title": "Language",
-      "Placeholder": "Select Language"
+      "Placeholder": "Select Language",
+      "Modal": {
+        "Title": "Change Language",
+        "Subtitle": "Are you sure you want to change your language?"
+      }
     },
     "Notification": {
       "Title": "Push Notifications",

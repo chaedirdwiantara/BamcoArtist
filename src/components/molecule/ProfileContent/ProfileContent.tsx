@@ -75,17 +75,17 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [scrollEffect, setScrollEffect] = useState(false);
   const [filter] = useState([
-    {filterName: t('Profile.Tab.Playlist')},
-    {filterName: t('Profile.Tab.TopMusician')},
-    {filterName: t('Profile.Tab.Badge')},
+    {filterName: 'Profile.Tab.Playlist'},
+    {filterName: 'Profile.Tab.TopMusician'},
+    {filterName: 'Profile.Tab.Badge'},
   ]);
 
   const [filter2] = useState([
-    {filterName: t('Musician.Tab.Profile')},
-    {filterName: t('Musician.Tab.Post')},
-    {filterName: t('Musician.Tab.Exclusive')},
-    {filterName: t('Musician.Tab.Music')},
-    {filterName: t('Musician.Tab.Fans')},
+    {filterName: 'Musician.Tab.Profile'},
+    {filterName: 'Musician.Tab.Post'},
+    {filterName: 'Musician.Tab.Exclusive'},
+    {filterName: 'Musician.Tab.Music'},
+    {filterName: 'Musician.Tab.Fans'},
   ]);
 
   const filterData = (item: any, index: any) => {
@@ -138,9 +138,10 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
             filterData={ownProfile ? filter2 : filter}
             onPress={filterData}
             selectedIndex={selectedIndex}
+            translation={true}
           />
           {!ownProfile &&
-          filter[selectedIndex].filterName === t('Profile.Tab.Playlist') ? (
+          filter[selectedIndex].filterName === 'Profile.Tab.Playlist' ? (
             TopSongListData.length > 0 ? (
               <View>
                 <ListPlaylist
@@ -186,14 +187,14 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
           {ownProfile &&
           dataDetailMusician &&
           dataAlbum &&
-          filter2[selectedIndex].filterName === t('Musician.Tab.Profile') ? (
+          filter2[selectedIndex].filterName === 'Musician.Tab.Profile' ? (
             <View style={{marginHorizontal: widthResponsive(-23)}}>
               <DataMusician
                 profile={dataDetailMusician}
                 dataAlbum={dataAlbum}
               />
             </View>
-          ) : filter2[selectedIndex].filterName === t('Musician.Tab.Post') ? (
+          ) : filter2[selectedIndex].filterName === 'Musician.Tab.Post' ? (
             <View
               style={{
                 width: '100%',
@@ -204,8 +205,7 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
                 dataLeftDropdown={dropDownDataSort}
               />
             </View>
-          ) : filter2[selectedIndex].filterName ===
-            t('Musician.Tab.Exclusive') ? (
+          ) : filter2[selectedIndex].filterName === 'Musician.Tab.Exclusive' ? (
             <View
               style={{
                 width: '100%',
@@ -216,7 +216,7 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
                 dataLeftDropdown={dropDownDataSort}
               />
             </View>
-          ) : filter2[selectedIndex].filterName === t('Musician.Tab.Music') ? (
+          ) : filter2[selectedIndex].filterName === 'Musician.Tab.Music' ? (
             <View>
               {ownProfile && (
                 <CreateNewCard
