@@ -36,12 +36,15 @@ import {Playlist} from '../../../interface/playlist.interface';
 import {useTranslation} from 'react-i18next';
 
 interface Props {
-  onPressGoBack: () => void;
   goBackProfile: (showToast: boolean) => void;
   goToEditPlaylist: () => void;
   goToAddSong: () => void;
   dataDetail: Playlist;
   listSongs: SongList[] | undefined;
+  onPressSong: (param: SongList | null) => void;
+  playerVisible: boolean;
+  isPlaying: boolean;
+  handlePlayPaused: () => void;
 }
 
 export const PlaylistContent: React.FC<Props> = ({
@@ -50,6 +53,10 @@ export const PlaylistContent: React.FC<Props> = ({
   goToAddSong,
   dataDetail,
   listSongs,
+  onPressSong,
+  playerVisible,
+  isPlaying,
+  handlePlayPaused,
 }) => {
   const {t} = useTranslation();
   const [isModalVisible, setModalVisible] = useState(false);
@@ -78,6 +85,9 @@ export const PlaylistContent: React.FC<Props> = ({
     }
   };
 
+  const songIsExist = listSongs !== null && listSongs !== undefined;
+  const firstSong = songIsExist ? listSongs[0] : null;
+
   return (
     <View style={styles.root}>
       <TopNavigation.Type4
@@ -96,7 +106,8 @@ export const PlaylistContent: React.FC<Props> = ({
         containerStyles={{paddingHorizontal: widthPercentage(20)}}
       />
 
-      <ScrollView>
+<ScrollView
+        style={{marginBottom: playerVisible ? heightPercentage(40) : 0}}>
         <View style={{paddingHorizontal: widthPercentage(10)}}>
           <View style={{alignSelf: 'center'}}>
             {dataDetail?.thumbnailUrl ? (
@@ -118,6 +129,10 @@ export const PlaylistContent: React.FC<Props> = ({
             createdDate={dateFormat(dataDetail?.createdAt)}
             createdBy={dataDetail?.playlistOwner?.fullname}
             avatarUri={dataDetail?.playlistOwner?.image}
+            showIconPlay={songIsExist && listSongs?.length > 0}
+            isPlaying={isPlaying}
+            handlePlayPaused={handlePlayPaused}
+            onPressSong={() => onPressSong(firstSong)}
           />
 
           <TouchableOpacity
@@ -151,7 +166,9 @@ export const PlaylistContent: React.FC<Props> = ({
               <TopSong
                 dataSong={listSongs}
                 hideDropdownMore={true}
-                onPress={() => null}
+                type={'home'}
+                onPress={onPressSong}
+                loveIcon={true}
               />
             )}
           </View>
