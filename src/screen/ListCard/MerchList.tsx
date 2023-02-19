@@ -1,5 +1,5 @@
 import React, {FC} from 'react';
-import {StyleSheet} from 'react-native';
+import {StyleSheet, Text, View} from 'react-native';
 import {heightPercentage, heightResponsive, widthResponsive} from '../../utils';
 import {FlashList} from '@shopify/flash-list';
 import MerchListCard from '../../components/molecule/ListCard/MerchListCard';
@@ -26,45 +26,50 @@ const MerchList: FC = () => {
 
   return (
     <>
-      <FlashList
-        data={filterList?.data}
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.ListContainer}
-        keyExtractor={item => item?.id.toString()}
-        ListEmptyComponent={
-          <EmptyState
-            icon={
-              <BoxStore
-                stroke={Color.Dark[500]}
-                width={widthResponsive(150)}
-                height={heightResponsive(150)}
-                style={styles.iconEmpty}
-              />
-            }
-            text={t('Event.Merch.NoMerch') || ''}
-            containerStyle={styles.containerEmpty}
-          />
-        }
-        renderItem={({item, index}: any) => (
-          <MerchListCard
-            id={item.id}
-            containerStyles={
-              index % 2 == 0 ? {marginRight: 10} : {marginLeft: 10}
-            }
-            image={item.pic}
-            title={item.name}
-            owner={item.organizer?.name}
-            ownerImage={item.organizer?.pic}
-            price={item.price}
-            desc={item.content}
-            currency={item.currencyCode}
-            type={'merch'}
-          />
-        )}
-        estimatedItemSize={150}
-        numColumns={2}
-      />
-      <ModalLoading visible={isLoading} />
+      {isLoading ? (
+        <View style={styles.loadingContainer}>
+          <Text style={styles.loading}>Loading...</Text>
+        </View>
+      ) : (
+        <FlashList
+          data={filterList?.data}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.ListContainer}
+          keyExtractor={item => item?.id.toString()}
+          ListEmptyComponent={
+            <EmptyState
+              icon={
+                <BoxStore
+                  stroke={Color.Dark[500]}
+                  width={widthResponsive(150)}
+                  height={heightResponsive(150)}
+                  style={styles.iconEmpty}
+                />
+              }
+              text={t('Event.Merch.NoMerch') || ''}
+              containerStyle={styles.containerEmpty}
+            />
+          }
+          renderItem={({item, index}: any) => (
+            <MerchListCard
+              id={item.id}
+              containerStyles={
+                index % 2 == 0 ? {marginRight: 10} : {marginLeft: 10}
+              }
+              image={item.pic}
+              title={item.name}
+              owner={item.organizer?.name}
+              ownerImage={item.organizer?.pic}
+              price={item.price}
+              desc={item.content}
+              currency={item.currencyCode}
+              type={'merch'}
+            />
+          )}
+          estimatedItemSize={150}
+          numColumns={2}
+        />
+      )}
     </>
   );
 };
@@ -82,5 +87,13 @@ const styles = StyleSheet.create({
   },
   iconEmpty: {
     marginBottom: 12,
+  },
+  loading: {
+    color: Color.Neutral[10],
+  },
+  loadingContainer: {
+    flex: 1,
+    alignItems: 'center',
+    paddingTop: heightPercentage(50),
   },
 });
