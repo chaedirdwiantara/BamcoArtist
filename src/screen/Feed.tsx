@@ -103,11 +103,11 @@ const styles = StyleSheet.create({
   },
   buttonStyle: {
     position: 'absolute',
-    height: widthResponsive(50),
+    height: widthResponsive(94),
     width: widthResponsive(50),
     justifyContent: 'center',
     alignItems: 'center',
-    right: widthResponsive(36),
+    right: widthResponsive(24),
     bottom: widthResponsive(94),
   },
   floatingIcon: {
