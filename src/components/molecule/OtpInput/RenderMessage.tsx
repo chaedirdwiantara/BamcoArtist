@@ -3,6 +3,7 @@ import React, {FC} from 'react';
 import {ms, mvs} from 'react-native-size-matters';
 import {color, font} from '../../../theme';
 import {ErrorIcon} from '../../../assets/icon';
+import {useTranslation} from 'react-i18next';
 
 interface OTPErrorMsg {
   containerStyle?: object;
@@ -11,6 +12,7 @@ interface OTPErrorMsg {
 }
 
 const RenderMessage: FC<OTPErrorMsg> = (props: OTPErrorMsg) => {
+  const {t} = useTranslation();
   const {otpSuccess, valMessage, containerStyle} = props;
   return (
     <View style={[styles.messageContainer, containerStyle]}>
@@ -29,8 +31,8 @@ const RenderMessage: FC<OTPErrorMsg> = (props: OTPErrorMsg) => {
         {valMessage
           ? valMessage
           : otpSuccess
-          ? 'Recovery code accepted'
-          : 'Please enter a valid recovery code'}
+          ? t('OTP.Accepted')
+          : t('OTP.Rejected')}
       </Text>
     </View>
   );

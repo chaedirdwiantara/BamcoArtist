@@ -13,12 +13,14 @@ import RenderMessage from '../components/molecule/OtpInput/RenderMessage';
 import {SSULogo} from '../assets/logo';
 import {storage} from '../hooks/use-storage.hook';
 import {KeyboardShift} from '../components/molecule/KeyboardShift';
+import {useTranslation} from 'react-i18next';
 
 const {width, height} = Dimensions.get('screen');
 
 type OtpProps = NativeStackScreenProps<RootStackParams, 'Otp'>;
 
 export const Otp: FC<OtpProps> = ({navigation, route}: OtpProps) => {
+  const {t} = useTranslation();
   const timer = 30;
   const {
     isError,
@@ -119,7 +121,7 @@ export const Otp: FC<OtpProps> = ({navigation, route}: OtpProps) => {
         <Text style={styles.titleStyle}>Begin Today</Text>
         <Gap height={12} />
         <Text style={[styles.descStyle, {textAlign: 'center'}]}>
-          Sign in or Register to explore full features and support the musician
+          {t('General.TopDescription')}
         </Text>
         <Gap height={160} />
       </View>

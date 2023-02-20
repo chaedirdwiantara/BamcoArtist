@@ -26,6 +26,7 @@ import {Button, Gap, SsuInput} from '../../atom';
 import {listDonate} from '../../../data/listDonate';
 import {RadioButton} from '../RadioButton/RadioButton';
 import {CoinIcon, CoinInput} from '../../../assets/icon';
+import {useTranslation} from 'react-i18next';
 
 interface ModalDonateProps {
   totalCoin: string;
@@ -42,6 +43,7 @@ export const ModalDonate: React.FC<ModalDonateProps> = ({
   onPressDonate,
   onModalHide,
 }) => {
+  const {t} = useTranslation();
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
   const [donate, setDonate] = useState('');
@@ -65,17 +67,17 @@ export const ModalDonate: React.FC<ModalDonateProps> = ({
   const children = () => {
     return (
       <>
-        <Text style={styles.titleStyle}>{'Donate'}</Text>
+        <Text style={styles.titleStyle}>{t('Home.Tab.TopMusician.Tip')}</Text>
         <View style={styles.separator} />
         <View style={styles.containerContent}>
           <Text style={[typography.Subtitle1, {color: color.Neutral[10]}]}>
-            Donation Type
+            {t('Setting.Tips.Label.TipType')}
           </Text>
           <Gap height={heightPercentage(20)} />
           {donateList.map((val, i) => (
             <View key={i}>
               <RadioButton
-                text={val.text}
+                text={t(val.text)}
                 selected={val.selected}
                 onPress={() => onPressSelected(i)}
               />
@@ -87,7 +89,7 @@ export const ModalDonate: React.FC<ModalDonateProps> = ({
           value={donate}
           leftIcon={<CoinInput />}
           onChangeText={(newText: string) => setDonate(newText)}
-          placeholder={'Input Donation'}
+          placeholder={t('Setting.Tips.Label.InputDonation') || ''}
           fontColor={color.Neutral[10]}
           borderColor={color.Pink.linear}
           onFocus={() => {
@@ -104,7 +106,7 @@ export const ModalDonate: React.FC<ModalDonateProps> = ({
         <View style={styles.containerCoin}>
           <View style={{flexDirection: 'row'}}>
             <Text style={[typography.Button2, {color: color.Neutral[10]}]}>
-              Your coin
+              {t('Setting.Tips.Label.YourCoin')}
             </Text>
             <CoinIcon style={styles.coinIcon} />
             <Text style={[typography.Button2, {color: color.Pink.linear}]}>
@@ -114,19 +116,19 @@ export const ModalDonate: React.FC<ModalDonateProps> = ({
 
           <TouchableOpacity onPress={goToScreenCoin}>
             <Text style={[typography.Button2, {color: color.Pink[2]}]}>
-              + Add More Coin
+              + {t('Setting.Tips.Label.AddMoreCoin')}
             </Text>
           </TouchableOpacity>
         </View>
 
         <Button
-          label="Donate"
+          label={t('Home.Tab.TopMusician.Tip')}
           containerStyles={styles.btnDonate}
           onPress={onPressDonate}
         />
         <Button
           type="border"
-          label="Cancel"
+          label={t('Btn.Cancel')}
           containerStyles={styles.btnCancel}
           textStyles={{color: Color.Pink.linear}}
           onPress={onPressClose}

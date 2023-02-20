@@ -4,6 +4,7 @@ import {mvs} from 'react-native-size-matters';
 import Color from '../../../theme/Color';
 import {TickCircleIcon} from '../../../assets/icon';
 import Typography from '../../../theme/Typography';
+import {useTranslation} from 'react-i18next';
 
 const {width} = Dimensions.get('window');
 
@@ -12,10 +13,13 @@ interface NoMoreFeedsProps {
 }
 
 export const NoMoreFeeds: React.FC<NoMoreFeedsProps> = ({containerStyle}) => {
+  const {t} = useTranslation();
   return (
     <View style={[styles.root, containerStyle]}>
       <TickCircleIcon />
-      <Text style={[Typography.Subtitle1, styles.text]}>{'No more feeds'}</Text>
+      <Text style={[Typography.Subtitle1, styles.text]}>
+        {t('Feed.NoMore')}
+      </Text>
     </View>
   );
 };

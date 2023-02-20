@@ -14,6 +14,7 @@ import {heightPercentage, heightResponsive, widthResponsive} from '../../utils';
 import {DataDropDownType} from '../../data/dropdown';
 import {ms, mvs} from 'react-native-size-matters';
 import {heightPercentageToDP} from 'react-native-responsive-screen';
+import {useTranslation} from 'react-i18next';
 
 export const {width} = Dimensions.get('screen');
 
@@ -23,11 +24,19 @@ interface ModalFilterProps {
   dataFilter: DataDropDownType[];
   filterOnPress: (label: string) => void;
   sendCategory: (value: string) => void;
+  translation?: boolean;
 }
 
 const FilterModal: FC<ModalFilterProps> = (props: ModalFilterProps) => {
-  const {toggleModal, modalVisible, dataFilter, filterOnPress, sendCategory} =
-    props;
+  const {t} = useTranslation();
+  const {
+    toggleModal,
+    modalVisible,
+    dataFilter,
+    filterOnPress,
+    sendCategory,
+    translation,
+  } = props;
 
   const filterButtonHandler = (data: DataDropDownType) => {
     toggleModal();
@@ -55,7 +64,9 @@ const FilterModal: FC<ModalFilterProps> = (props: ModalFilterProps) => {
             <TouchableOpacity
               style={styles.textContainer}
               onPress={() => filterButtonHandler(item)}>
-              <Text style={styles.textFilter}>{item.label}</Text>
+              <Text style={styles.textFilter}>
+                {translation ? t(item.label) : item.label}
+              </Text>
             </TouchableOpacity>
           )}
         />

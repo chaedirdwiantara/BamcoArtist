@@ -6,10 +6,12 @@ import {CopyIcon} from '../../../assets/icon';
 import {color, typography} from '../../../theme';
 import ReferralImage from '../../../assets/image/Referral.image';
 import {heightPercentage, width, widthPercentage} from '../../../utils';
+import {useTranslation} from 'react-i18next';
 
 interface ReferralProps {}
 
 export const ReferAFriend: React.FC<ReferralProps> = ({}) => {
+  const {t} = useTranslation();
   const onPressSave = () => {};
 
   return (
@@ -20,11 +22,11 @@ export const ReferAFriend: React.FC<ReferralProps> = ({}) => {
         style={{marginTop: heightPercentage(40), alignSelf: 'center'}}
       />
       <Text style={[typography.Heading6, styles.text]}>
-        {'Refer & Earn 5% Commission for every transaction'}
+        {t('Setting.Referral.ReferFriend.Text1')}
       </Text>
 
       <Text style={[typography.Overline, styles.useUsername]}>
-        {'Use your @username as referral code'}
+        {t('Setting.Referral.ReferFriend.Text2')}
       </Text>
       <View style={styles.containerUsername}>
         <Text style={[typography.Heading4, {color: color.Neutral[10]}]}>
@@ -36,13 +38,13 @@ export const ReferAFriend: React.FC<ReferralProps> = ({}) => {
 
       <View style={{alignSelf: 'center'}}>
         <Button
-          label="Refer a friends using link"
+          label={t('Setting.Referral.ReferFriend.Btn1')}
           onPress={onPressSave}
           containerStyles={styles.button}
         />
         <Button
           type="border"
-          label="Read Terms and Conditions"
+          label={t('Setting.Referral.ReferFriend.Btn2')}
           borderColor="transparent"
           textStyles={{color: color.Pink.linear}}
           containerStyles={{width: width * 0.9}}

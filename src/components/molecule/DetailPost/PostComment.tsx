@@ -16,6 +16,7 @@ import {ms, mvs} from 'react-native-size-matters';
 import {Dropdown} from '../DropDown';
 import {dataUpdateComment} from '../../../data/dropdown';
 import {DataDropDownType} from '../../../data/dropdown';
+import {useTranslation} from 'react-i18next';
 
 interface ListProps extends TouchableOpacityProps {
   imgUri: string;
@@ -39,6 +40,7 @@ interface ListProps extends TouchableOpacityProps {
 }
 
 const PostComment: React.FC<ListProps> = (props: ListProps) => {
+  const {t} = useTranslation();
   const {
     imgUri,
     fullName,
@@ -94,6 +96,7 @@ const PostComment: React.FC<ListProps> = (props: ListProps) => {
                   marginLeft: widthResponsive(-97),
                   marginTop: Platform.OS === 'android' ? ms(-35) : ms(-10),
                 }}
+                translation={true}
               />
             ) : null}
           </View>
@@ -102,7 +105,7 @@ const PostComment: React.FC<ListProps> = (props: ListProps) => {
         <View
           style={[styles.bottomSection, {marginTop: showEdit ? ms(-8) : 0}]}>
           <Text style={styles.reply}>
-            {'replied to '}{' '}
+            {t('Post.Label.RepliedTo')}{' '}
             <Text style={[styles.reply, {color: color.Pink[100]}]}>
               {artistPostId}
             </Text>

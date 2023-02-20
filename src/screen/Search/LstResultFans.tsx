@@ -8,8 +8,10 @@ import {useSearchHook} from '../../hooks/use-search.hook';
 import {heightPercentage, heightResponsive} from '../../utils';
 import Color from '../../theme/Color';
 import {EmptyState} from '../../components';
+import {useTranslation} from 'react-i18next';
 
 const ListResultFans: FC<KeywordProps> = ({keyword}: KeywordProps) => {
+  const {t} = useTranslation();
   const {getSearchFans} = useSearchHook();
 
   const {
@@ -52,7 +54,7 @@ const ListResultFans: FC<KeywordProps> = ({keyword}: KeywordProps) => {
           )}
           ListEmptyComponent={
             <EmptyState
-              text="Fans not found"
+              text={t('EmptyState.Search.Fans') || ''}
               containerStyle={styles.containerEmpty}
             />
           }

@@ -1,4 +1,5 @@
 import React from 'react';
+import {useTranslation} from 'react-i18next';
 import {StyleSheet, TextInputProps, View, ViewStyle} from 'react-native';
 import {SearchIcon} from '../../../assets/icon';
 import {color} from '../../../theme';
@@ -18,13 +19,14 @@ interface SearchProps extends TextInputProps {
 }
 
 const SearchBar: React.FC<SearchProps> = props => {
+  const {t} = useTranslation();
   const {onChangeText, value, rightIcon, reset, containerStyle} = props;
   return (
     <View style={[styles.container, containerStyle]}>
       <SsuInput.InputText
         value={value}
         onChangeText={onChangeText}
-        placeholder={'Search'}
+        placeholder={t('Home.Topbar.Search.Title') || ''}
         leftIcon={<SearchIcon stroke={color.Dark[50]} />}
         backgroundColor={color.Dark[600]}
         rightIcon={rightIcon}

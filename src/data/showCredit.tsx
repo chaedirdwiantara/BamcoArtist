@@ -5,31 +5,31 @@ export interface ShowCreditType {
 
 export const dataShowCredit: ShowCreditType[] = [
   {
-    title: 'Sing By',
+    title: 'Music.Credit.SingBy',
     content: ['Imagine Dragons', 'The Weekend'],
   },
   {
-    title: 'Featuring',
+    title: 'Music.Credit.Featuring',
     content: ['Zedd'],
   },
   {
-    title: 'Format',
+    title: 'Music.Credit.Format',
     content: ['Album'],
   },
   {
-    title: 'Label Name',
+    title: 'Music.Credit.Label',
     content: ['Sony Entertainment'],
   },
   {
-    title: 'Genre',
+    title: 'Music.Credit.Genre',
     content: ['Pop, Pop Batak'],
   },
   {
-    title: 'Release Date',
+    title: 'Music.Credit.Release',
     content: ['October 10, 2022'],
   },
   {
-    title: 'Copyright',
+    title: 'Music.Credit.Copyright',
     content: [
       '© Sony Entertainment',
       '℗ SM Entertainmenr',

@@ -1,4 +1,5 @@
 import React, {useState, useEffect, FC} from 'react';
+import {useTranslation} from 'react-i18next';
 import {View, StyleSheet, Text} from 'react-native';
 import {ms, mvs} from 'react-native-size-matters';
 import {color, font} from '../../../theme';
@@ -11,6 +12,7 @@ interface Props {
 }
 
 const SsuOTPTimer: FC<Props> = props => {
+  const {t} = useTranslation();
   const [resend, setResend] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
   const [timer, setTimer] = useState<any>(30);
@@ -60,7 +62,7 @@ const SsuOTPTimer: FC<Props> = props => {
     return (
       <View style={styles.resend}>
         <Button
-          label="Resend Code"
+          label={t('Btn.ResendCode')}
           onPress={() => {
             setModalVisible(true);
             setResend(true);
@@ -83,10 +85,11 @@ const SsuOTPTimer: FC<Props> = props => {
       <>
         <View style={styles.renderTimer}>
           <Text style={styles.renderTimeText}>
-            You can resend recovery code after <Text>00:{timer}</Text>
+            {t('OTP.ResendAfter')}
+            <Text>00:{timer}</Text>
           </Text>
           <Button
-            label={'Resend Code'}
+            label={t('Btn.ResendCode')}
             disabled={true}
             type="border"
             containerStyles={{
@@ -102,9 +105,7 @@ const SsuOTPTimer: FC<Props> = props => {
             onBackPressed={() => setModalVisible(false)}
             children={
               <View style={[styles.modalContainer]}>
-                <Text style={[styles.textStyle]}>
-                  We've just resend a new code!
-                </Text>
+                <Text style={[styles.textStyle]}>{t('OTP.ResendSuccess')}</Text>
               </View>
             }
             modalStyle={{marginHorizontal: ms(24)}}

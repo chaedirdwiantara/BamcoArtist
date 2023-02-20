@@ -34,6 +34,7 @@ import {ListenersAndDonate} from '../ListenersAndDonate/ListenersAndDonate';
 import {DataDetailSong, SongAlbum} from '../../../interface/song.interface';
 import {mvs} from 'react-native-size-matters';
 import {dateLongMonth} from '../../../utils/date-format';
+import {useTranslation} from 'react-i18next';
 
 interface Props {
   onPressGoBack: () => void;
@@ -48,6 +49,7 @@ export const SongDetailsContent: React.FC<Props> = ({
   goToShowCredit,
   dataDetail,
 }) => {
+  const {t} = useTranslation();
   const [toastVisible, setToastVisible] = useState(false);
   const [modalDonate, setModalDonate] = useState<boolean>(false);
   const [modalShare, setModalShare] = useState<boolean>(false);
@@ -88,12 +90,13 @@ export const SongDetailsContent: React.FC<Props> = ({
   return (
     <View style={styles.root}>
       <TopNavigation.Type4
-        title="Song Details"
+        title={t('Music.Label.SongDetails')}
         rightIcon={
           <Dropdown.More
             data={dropDownHeaderSongDetails}
             selectedMenu={resultDataMore}
             containerStyle={styles.containerMore}
+            translation={true}
           />
         }
         leftIcon={<ArrowLeftIcon />}
@@ -143,7 +146,7 @@ export const SongDetailsContent: React.FC<Props> = ({
         <View style={styles.containerContent}>
           <View style={{marginBottom: heightResponsive(15)}}>
             <ListAvatar
-              title="Musician"
+              title={t('Home.Topbar.Search.Musician')}
               text={dataDetail.musicianName}
               avatarUri={
                 dataDetail.imageUrl !== null && dataDetail.imageUrl.length !== 0
@@ -153,19 +156,19 @@ export const SongDetailsContent: React.FC<Props> = ({
             />
             {dataDetail.featuringArtists ? (
               <ListAvatar
-                title="Featuring"
+                title={t('Music.Credit.Featuring')}
                 featuring
                 featuringData={dataDetail.featuringArtists}
               />
             ) : null}
 
             <Text style={[typography.Subtitle1, styles.titleContent]}>
-              Song Description
+              {t('Music.Label.SongDesc')}
             </Text>
             <Text style={styles.description}>{dataDetail.description}</Text>
 
             <ListAlbum
-              title={'Album'}
+              title={t('Home.Topbar.Search.Album')}
               albumName={dataDetail.album.title}
               onPress={() => goToAlbum(dataDetail.album)}
               createdOn={dateLongMonth(dataDetail.album.publishedDate)}
@@ -199,7 +202,7 @@ export const SongDetailsContent: React.FC<Props> = ({
         }
         modalVisible={modalShare}
         onPressClose={() => setModalShare(false)}
-        titleModal={'Share Music'}
+        titleModal={t('General.Share.Music')}
         imgUri={
           'https://i.pinimg.com/originals/b3/51/66/b35166174c9bde2d0cc436150a983912.jpg'
         }
@@ -224,7 +227,7 @@ export const SongDetailsContent: React.FC<Props> = ({
             />
             <Gap width={widthPercentage(7)} />
             <Text style={[typography.Button2, styles.textStyle]}>
-              Link have been copied to clipboard!
+              {t('General.LinkCopied')}
             </Text>
           </View>
         }

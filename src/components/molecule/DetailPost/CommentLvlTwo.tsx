@@ -20,6 +20,7 @@ import {CommentIcon, LoveIcon} from '../../../assets/icon';
 import {ms} from 'react-native-size-matters';
 import {DataDropDownType, dataUpdateComment} from '../../../data/dropdown';
 import {Dropdown} from '../DropDown';
+import {useTranslation} from 'react-i18next';
 
 interface ListProps extends TouchableOpacityProps {
   imgUriLvl2: string;
@@ -43,6 +44,7 @@ interface ListProps extends TouchableOpacityProps {
 }
 
 const CommentLvlTwo: React.FC<ListProps> = (props: ListProps) => {
+  const {t} = useTranslation();
   const {
     imgUriLvl2,
     userNameLvl2,
@@ -101,6 +103,7 @@ const CommentLvlTwo: React.FC<ListProps> = (props: ListProps) => {
                   marginLeft: widthResponsive(-97),
                   marginTop: Platform.OS === 'android' ? ms(-35) : ms(-10),
                 }}
+                translation={true}
               />
             ) : null}
           </View>
@@ -109,7 +112,7 @@ const CommentLvlTwo: React.FC<ListProps> = (props: ListProps) => {
         <View
           style={[styles.bottomSection, {marginTop: showEdit ? ms(-8) : 0}]}>
           <Text style={styles.reply}>
-            {'replied to '}{' '}
+            {t('Post.Label.RepliedTo')}{' '}
             <Text style={[styles.reply, {color: color.Pink[100]}]}>
               {userCommentedId}
             </Text>

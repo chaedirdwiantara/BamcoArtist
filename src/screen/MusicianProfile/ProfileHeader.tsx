@@ -1,4 +1,5 @@
 import React from 'react';
+import {useTranslation} from 'react-i18next';
 import {
   Text,
   View,
@@ -34,6 +35,7 @@ export interface ProfileHeaderProps {
 export const ProfileHeader: React.FC<ProfileHeaderProps> = (
   props: ProfileHeaderProps,
 ) => {
+  const {t} = useTranslation();
   const {
     avatarUri = '',
     backgroundUri = '',
@@ -92,13 +94,13 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = (
               {isFollowed ? (
                 <>
                   <ButtonGradient
-                    label={'Unfollow'}
+                    label={t('Musician.Label.Following')}
                     gradientStyles={styles.btnContainer}
                     onPress={unFollowOnPressed}
                   />
                   <Gap width={11} />
                   <Button
-                    label={'Donate'}
+                    label={t('Musician.Label.Tip')}
                     containerStyles={styles.btnContainer2}
                     onPress={donate}
                   />
@@ -106,13 +108,13 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = (
               ) : (
                 <>
                   <ButtonGradient
-                    label={'Follow'}
+                    label={t('Musician.Label.Follow')}
                     gradientStyles={styles.btnContainer}
                     onPress={followOnPressed}
                   />
                   <Gap width={11} />
                   <Button
-                    label={'Donate'}
+                    label={t('Musician.Label.Tip')}
                     containerStyles={styles.btnContainer2}
                     onPress={donate}
                   />

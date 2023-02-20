@@ -12,6 +12,7 @@ import {color, font} from '../../../theme';
 import {DefaultAvatar} from '../../../assets/icon';
 import {normalize, widthResponsive} from '../../../utils';
 import {imageTypes} from '../../../interface/base.interface';
+import {useTranslation} from 'react-i18next';
 
 interface ListProps {
   musicianNum?: number;
@@ -25,6 +26,7 @@ interface ListProps {
 }
 
 const FollowMusicianCard: React.FC<ListProps> = (props: ListProps) => {
+  const {t} = useTranslation();
   const {
     musicianNum,
     musicianName,
@@ -36,13 +38,17 @@ const FollowMusicianCard: React.FC<ListProps> = (props: ListProps) => {
     toDetailOnPress,
   } = props;
 
-  const follow = stateButton ? 'Following' : 'Follow';
+  const follow = stateButton
+    ? t('Preference.Following')
+    : t('Preference.Follow');
   const [textFollow, setTextFollow] = useState(follow);
   const [countFollower, setCountFollower] = useState(followerCount);
 
   const onPressFollow = () => {
     const followers = stateButton ? countFollower - 1 : countFollower + 1;
-    setTextFollow(stateButton ? 'Follow' : 'Following');
+    setTextFollow(
+      (stateButton ? t('Preference.Follow') : t('Preference.Following')) || '',
+    );
     setCountFollower(followers);
     followOnPress();
   };
@@ -54,7 +60,9 @@ const FollowMusicianCard: React.FC<ListProps> = (props: ListProps) => {
           styles.followButton,
           {
             backgroundColor:
-              textFollow === 'Following' ? undefined : color.Pink[200],
+              textFollow === t('Preference.Following')
+                ? undefined
+                : color.Pink[200],
           },
         ]}
         onPress={onPressFollow}>
@@ -92,7 +100,7 @@ const FollowMusicianCard: React.FC<ListProps> = (props: ListProps) => {
         </Text>
 
         <Text style={styles.followerCount} numberOfLines={1}>
-          {countFollower} Followers
+          {countFollower + ' ' + t('General.Followers')}
         </Text>
       </View>
       <View style={styles.rightContainer}>{followMenu()}</View>

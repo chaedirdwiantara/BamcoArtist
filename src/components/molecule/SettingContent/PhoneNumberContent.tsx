@@ -7,6 +7,7 @@ import {TopNavigation} from '../TopNavigation';
 import {ArrowLeftIcon} from '../../../assets/icon';
 import {MenuText} from '../../atom/MenuText/MenuText';
 import {heightPercentage, width, widthPercentage} from '../../../utils';
+import {useTranslation} from 'react-i18next';
 
 interface PhoneProps {
   phone: string | undefined;
@@ -19,24 +20,29 @@ export const PhoneNumberContent: React.FC<PhoneProps> = ({
   onPressGoBack,
   goToChangePhoneNumber,
 }) => {
+  const {t} = useTranslation();
   return (
     <View style={styles.root}>
       <TopNavigation.Type1
-        title="Phone Number"
+        title={t('Setting.Phone.Title')}
         leftIcon={<ArrowLeftIcon />}
         itemStrokeColor={Color.Neutral[10]}
         leftIconAction={onPressGoBack}
         containerStyles={{paddingHorizontal: widthPercentage(12)}}
       />
       <SsuInput.InputLabel
-        label="Phone Number"
+        label={t('Setting.Phone.Title') || ''}
         value={phone ?? '-'}
         editable={false}
         containerInputStyles={{borderBottomWidth: 0}}
         containerStyles={styles.containerInput}
       />
       <MenuText.RightIcon
-        text={`${phone ? 'Change' : 'Add'} Phone Number`}
+        text={
+          (phone
+            ? t('Setting.Phone.Label.Change')
+            : t('Setting.Phone.Label.Add')) || ''
+        }
         containerStyles={{marginTop: heightPercentage(15)}}
         onPress={goToChangePhoneNumber}
       />

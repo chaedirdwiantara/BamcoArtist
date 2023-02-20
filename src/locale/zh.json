@@ -1,0 +1,642 @@
+{
+  "General": {
+    "Or": "或",
+    "Begin": "即日開始",
+    "TopDescription": "登入或註冊以探索完整功能並支持音樂人",
+    "Yes": "是的",
+    "No": "不",
+    "NoVerifCode": "Didn’t receive verification codes? click to resend",
+    "Thanks": "Thank You!",
+    "LinkCopied": "Link have been copied to clipboard!",
+    "Followers": "追蹤者",
+    "Listeners": "Listeners",
+    "Share": {
+      "Feed": "Share Feed",
+      "Album": "Share Album",
+      "Music": "Share Music"
+    }
+  },
+  "Onboarding": {
+    "Step1": {
+      "Title": "Grow Your Cult of Superfans",
+      "Description": "We're excited to welcome you to our community of musicians and fans"
+    },
+    "Step2": {
+      "Title": "Engage and Monetise! ",
+      "Description": "Our tools enable you to identify and engage your loyal fans along your journey to stardom"
+    },
+    "Step3": {
+      "Title": "Grow and Reward the People that Love You!",
+      "Description": "Built for musicians. By musicians. It's the fans that matter most."
+    }
+  },
+  "Login": {
+    "Title": "登入",
+    "Footer": "Grow Your Cult of Superfans",
+    "ExploreGuest": "以訪客身份瀏覽",
+    "DontHaveAccount": "沒有帳號？",
+    "ForgotPassword": "忘記密碼",
+    "Form": {
+      "Email": "電子郵箱",
+      "PhoneNumber": "電話號碼"
+    },
+    "Placeholder": {
+      "EmailOrUsername": "電子郵箱或用戶名稱",
+      "Password": "密碼"
+    }
+  },
+  "SignUp": {
+    "Title": "註冊",
+    "Email": "電子郵箱",
+    "Phone": "電話號碼",
+    "FullName": "全名",
+    "Password": "密碼",
+    "PasswordRepeat": "重複輸入密碼",
+    "TnC": {
+      "Phrase1": "我同意 SunnySideUp ",
+      "Phrase2": "條款",
+      "Phrase3": "和",
+      "Phrase4": "隱私政策"
+    },
+    "Footer": "已有帳號？"
+  },
+  "OTP": {
+    "Phone": {
+      "Title": "短信驗證碼",
+      "Subtitle": "請輸入發送至 {{phone}} 的驗證碼"
+    },
+    "Email": {
+      "Title": "電郵驗證碼",
+      "Subtitle": "我們已將六位驗證碼發送至地址 {{email}} 檢查您的收件箱並在此處輸入驗證碼"
+    },
+    "ResendAfter": "You can resend recovery code after ",
+    "ResendSuccess": "We've just resend a new code!",
+    "Accepted": "Recovery code accepted",
+    "Rejected": "Please enter a valid recovery code"
+  },
+  "Btn": {
+    "Next": "下一步",
+    "Skip": "略過",
+    "Finish": "完成",
+    "SignIn": "登入",
+    "SignUp": "註冊",
+    "Submit": "提交",
+    "Back": "返回",
+    "ResendCode": "重發驗證碼",
+    "BuyNow": "立即購買",
+    "AddToCart": "加到購物車",
+    "Cancel": "取消",
+    "Purchase": "購買",
+    "Save": "保存",
+    "Edit": "編輯",
+    "VerificationCode": "發送驗證碼",
+    "TurnOff": "關閉",
+    "TurnOn": "打開",
+    "SignOut": "Sign Out",
+    "MaybeLater": "以後再說",
+    "Send": "發送",
+    "Create": "創造",
+    "Reply": "回复",
+    "GoToHome": "回主頁",
+    "CopyLink": "Copy Link",
+    "Set": "Set",
+    "Unset": "Unset",
+    "Dismiss": "Dismiss",
+    "Update": "Update"
+  },
+  "ForgotPassword": {
+    "Title": "更改密碼",
+    "Subtitle": "請輸入電郵地址以取回密碼",
+    "Placeholder": {
+      "Email": "請輸入電郵地址以取回密碼"
+    },
+    "Otp": {
+      "Title": "Input OTP",
+      "Subtitle": "Enter the recovery code we just sent to"
+    },
+    "Modal": {
+      "Title": "Set New Password",
+      "Subtitle": "Are you sure you want to leave your progress unsaved?"
+    }
+  },
+  "Preference": {
+    "Genre": "選擇您喜歡的類型",
+    "Mood": "適合你的氣氛？",
+    "Support": "我是來這裡...",
+    "Musician": "Who To Follow",
+    "Follow": "追蹤",
+    "Following": "正在追蹤"
+  },
+  "Home": {
+    "Topbar": {
+      "Hi": "您好, {{name}}",
+      "Search": {
+        "Title": "搜索",
+        "Song": "歌曲",
+        "Musician": "音樂家",
+        "Fans": "樂迷",
+        "Album": "專輯",
+        "Merch": "產品",
+        "Event": "活動",
+        "Playlist": "播放清單"
+      }
+    },
+    "Tab": {
+      "TopMusician": {
+        "Title": "TOP MUSICIAN",
+        "Follow": "追蹤",
+        "Unfollow": "取消关注",
+        "Tip": "捐贈",
+        "Profile": "進入音樂人頁面"
+      },
+      "TopSong": {
+        "Title": "TOP SONG",
+        "Playlist": "儲存至播放清單",
+        "Tip": "捐贈",
+        "Queue": "加入序列",
+        "Share": "分享歌曲",
+        "Credit": "顯示積分"
+      },
+      "TopPost": {
+        "Title": "TOP POST",
+        "Filter": {
+          "Title": "篩選",
+          "Today": "今天",
+          "LastWeek": "上週",
+          "ThisMonth": "本月"
+        },
+        "Category": {
+          "Title": "分類",
+          "All": "全部",
+          "ComingUp": "快將推出",
+          "Tour": "演出",
+          "DailyLife": "日常生活",
+          "BTS": "幕後花絮",
+          "Backstage": "後台",
+          "Highlight": "突出显示帖子"
+        }
+      }
+    }
+  },
+  "Feed": {
+    "Title": "動態",
+    "Public": "公開",
+    "Exclusive": "專屬內容",
+    "MyPost": "My Post",
+    "Sort": {
+      "Title": "排序方式",
+      "Latest": "最新的",
+      "Popular": "最新的"
+    },
+    "NoMore": "No more feeds"
+  },
+  "Event": {
+    "Title": "活動",
+    "Quantity": "數量",
+    "Description": "描述",
+    "Concert": {
+      "Title": "門票",
+      "NoConcert": "未有活動",
+      "Detail": "門票詳情",
+      "LineUp": "排隊",
+      "Class": "選擇等級"
+    },
+    "Merch": {
+      "Title": "產品",
+      "NoMerch": "未有產品",
+      "Detail": "產品詳情",
+      "Size": "尺碼",
+      "Color": "顏色"
+    }
+  },
+  "Profile": {
+    "Label": {
+      "Description": "我是來支持音樂人的",
+      "Following": "追蹤中",
+      "Liked": "喜歡的歌曲",
+      "Point": "積分",
+      "CreatedBy": "製作的",
+      "NoMusician": "您尚未對任何音樂人作出貢獻",
+      "NoBadge": "你尚未有任何徽章"
+    },
+    "Button": {
+      "Edit": "編輯個人資料",
+      "CreatePlaylist": "新增播放清單"
+    },
+    "Tab": {
+      "Playlist": "播放清單",
+      "TopMusician": "TOP MUSICIAN",
+      "Badge": "BADGE"
+    },
+    "Edit": {
+      "Title": "編輯個人資料",
+      "Bio": "簡介",
+      "ProfilePicture": "修改頭像",
+      "HeaderPicture": "修改標題圖片",
+      "Take": "拍攝照片",
+      "Add": "由相簿添加",
+      "Delete": "刪除照片",
+      "Social": "Social Media Settings",
+      "About": "Tell us about yourself"
+    }
+  },
+  "Musician": {
+    "Label": {
+      "Fans": "樂迷",
+      "Follow": "追蹤",
+      "Following": " 正在追蹤",
+      "Tip": "捐贈",
+      "Followers": "追蹤者",
+      "Releases": "發布",
+      "Playlists": "播放清單",
+      "Rank": "排名",
+      "About": "關於",
+      "Social": "社交媒體",
+      "Origin": "來自",
+      "Active": "活躍年期",
+      "Members": "會員/成員",
+      "Website": "網站",
+      "Photos": "相片",
+      "Album": "專輯",
+      "Merch": "產品",
+      "Exclusive": "專屬每日內容",
+      "Musicians": "People who might fit your interest"
+    },
+    "Tab": {
+      "Profile": "人資料",
+      "Post": "POST",
+      "Exclusive": "專屬內容",
+      "Music": "MUSIC",
+      "Fans": "樂迷"
+    }
+  },
+  "ExclusiveContent": {
+    "Title": "專屬內容",
+    "Content": "內容",
+    "Choose": "選擇一個計劃",
+    "Weekly": "每週",
+    "Monthly": "每月",
+    "Yearly": "每年",
+    "Week": "週",
+    "Month": "月",
+    "Year": "年",
+    "Support": "為您的計劃添加支援",
+    "Optional": "支援（可選）",
+    "InputBonus": "Input Bonus",
+    "ErrorCoinBonus": "Insufficient coin, add more coin to give bonus",
+    "ErrorCoinSubs": "Insufficient coin, add more coin to subscribe"
+  },
+  "Setting": {
+    "Title": "設定",
+    "EnterVerifCode": "輸入驗證碼",
+    "Account": {
+      "Title": "帳戶",
+      "Label": {
+        "Username": "用戶名",
+        "Fullname": "Musician Name",
+        "Genre": "類型",
+        "Location": "地點",
+        "Label": "Label",
+        "Active": "活躍年期",
+        "Origin": "來自",
+        "Member": "Member",
+        "AddMore": "Add More"
+      },
+      "Placeholder": {
+        "Username": "Add Username",
+        "Fullname": "Add Musician Name",
+        "Genre": "Select Genre",
+        "Location": "Select Location",
+        "Country": "Select Country",
+        "City": "Select City",
+        "Member": "Add Member",
+        "Active": "Select Year"
+      }
+    },
+    "Password": {
+      "Title": "更改密碼",
+      "Label": {
+        "Old": "輸入舊密碼",
+        "New": "新密碼",
+        "Repeat": "重複輸入密碼"
+      }
+    },
+    "Email": {
+      "Title": "電郵",
+      "Label": {
+        "Add": "添加電子郵件",
+        "Change": "更改電郵",
+        "Old": "更改電郵",
+        "New": "新電郵",
+        "Sso": "SSO Email Can`t Be Changed",
+        "Password": "Current Password"
+      },
+      "Placeholder": {
+        "Email": "添加電子郵件"
+      }
+    },
+    "Phone": {
+      "Title": "電話號碼",
+      "Label": {
+        "Change": "更改電話號碼",
+        "Add": "Add Phone Number",
+        "Old": "舊電話號碼",
+        "New": "新電話號碼",
+        "Password": "Current Password"
+      }
+    },
+    "Shipping": {
+      "Title": "運送信息",
+      "Label": {
+        "Email": "電子郵件",
+        "Phone": "電話號碼",
+        "Fullname": "全名",
+        "State": "州/省",
+        "Country": "國家",
+        "Postal": "郵政編碼",
+        "City": "城市",
+        "Address": "地址"
+      },
+      "Placeholder": {
+        "Email": "Add Email",
+        "Phone": "Add Phone Number",
+        "Fullname": "Add Full Name",
+        "State": "Select State/Province",
+        "Country": "Select Country",
+        "Postal": "Add Postal Code",
+        "City": "Select City",
+        "Address": "Add Address"
+      }
+    },
+    "Preference": {
+      "Title": "偏好",
+      "Label": {
+        "Genre": "類型",
+        "Mood": "氣氛"
+      },
+      "Placeholder": {
+        "Genre": "Select Genre",
+        "Mood": "Select Mood"
+      }
+    },
+    "Tips": {
+      "Title": "捐贈與訂閱",
+      "Tab": {
+        "Donation": "Donation",
+        "Subs": "Subscription"
+      },
+      "Filter": {
+        "Duration": "付款間距",
+        "All": "全部",
+        "OneTime": "一次性",
+        "Weekly": "每週",
+        "Monthly": "每月",
+        "Yearly": "每年"
+      },
+      "Label": {
+        "Past": "過去",
+        "Current": "現有/進行中",
+        "TipType": "單筆",
+        "AddMoreCoin": "Add More Coin",
+        "YourCoin": "Your Coin",
+        "InputDonation": "Input Donation",
+        "Success": "Congratulations! Your Donation have been Sent!"
+      },
+      "Menu": {
+        "Donation": {
+          "GoToMusician": "往音樂人頁面",
+          "Stop": "停止捐贈"
+        },
+        "Subs": {
+          "GoToMusician": "往音樂人頁面",
+          "Unsubs": "終止訂閱"
+        }
+      }
+    },
+    "Referral": {
+      "Title": "推薦碼",
+      "ReferFriend": {
+        "Title": "REFER A FRIEND",
+        "Text1": "每筆交易推薦並賺取 5% 的佣金",
+        "Text2": "使用您的@用戶名作為推薦碼",
+        "Btn1": "使用鏈接推薦給朋友",
+        "Btn2": "閱讀條款細則"
+      },
+      "UseRefer": {
+        "Title": "USE REFERRAL",
+        "Text1": "於每筆交易獲取 5% Sunny Side Up 積分",
+        "Text2": "你朋友的推薦碼",
+        "Text3": "推薦碼無法更改",
+        "Invalid": "Referral code invalid"
+      },
+      "OnBoard": {
+        "Title": "你有推薦碼嗎？",
+        "Subtitle": "輸入您的推薦碼以快速啟動您的 Sunny Side Up 之旅！",
+        "Actived": "推薦已激活",
+        "Success": "恭喜！ 現在您每筆交易將獲得 5% 的積分！"
+      }
+    },
+    "Language": {
+      "Title": "語言",
+      "Placeholder": "Select Language",
+      "Modal": {
+        "Title": "Change Language",
+        "Subtitle": "Are you sure you want to change your language?"
+      }
+    },
+    "Notification": {
+      "Title": "推送通知",
+      "Label": {
+        "Title": "打開推送通知",
+        "Subtitle": "您尚未在手機上激活推送通知。 立即激活以獲取最新信息！"
+      }
+    },
+    "Report": {
+      "Title": "發送報告",
+      "Modal": {
+        "Title": "需要幫忙？",
+        "Bug": "報告錯誤",
+        "TextBug": "應用程式中的某些內容已損壞或無法按預期操作",
+        "Suggest": "改進建議",
+        "TextSuggest": "此應用程式的新想法或需要加強的功能"
+      },
+      "Placeholder": {
+        "Email": "輸入你的電郵",
+        "Text": "我們如何改善您使用此應用程式的體驗？"
+      }
+    },
+    "Helps": {
+      "Title": "幫助"
+    },
+    "TnC": {
+      "Title": "服務條款"
+    },
+    "Privacy": {
+      "Title": "隱私政策"
+    },
+    "Version": {
+      "Title": "版本"
+    },
+    "Exclusive": {
+      "Title": "專屬內容",
+      "Label": {
+        "Basic": "Basic Information",
+        "Cover": "Exclusive Content Cover",
+        "Title": "Title",
+        "Description": "描述",
+        "Pricing": "Pricing Plan"
+      },
+      "Placeholder": {
+        "Title": "Add Title",
+        "Description": "Add Description about your content",
+        "Price": "Input Price (In Credit)"
+      }
+    }
+  },
+  "Music": {
+    "Label": {
+      "NowPlaying": "正在播放",
+      "SongDetails": "歌曲詳情",
+      "SongDesc": "歌曲描述",
+      "SingBy": "唱",
+      "AddToMyPlaylist": "新增到我的播放清單",
+      "By": "由 ",
+      "SongList": "歌曲列表",
+      "AddSong": "新增歌曲",
+      "CreatedOn": "製作於",
+      "NoSong": "No Song Added",
+      "Songs": "歌曲"
+    },
+    "NewPlaylist": {
+      "Title": "New Playlist",
+      "Cover": "Edit Playlist Cover",
+      "Placeholder": {
+        "Name": "Playlist Name",
+        "Desc": "Playlist Description"
+      },
+      "Visibility": {
+        "Title": "Visibility",
+        "Public": "公開",
+        "Private": "私人"
+      }
+    },
+    "Playlist": {
+      "Edit": "Edit Playlist",
+      "Delete": "Delete Playlist",
+      "Share": "Share Playlist",
+      "Success": "Song have been added to playlist!"
+    },
+    "Credit": {
+      "Title": "顯示製作人",
+      "SingBy": "唱",
+      "Featuring": "特色",
+      "Writer": "作曲",
+      "Format": "格式",
+      "Label": "唱片公司",
+      "Genre": "類型",
+      "Release": "發布日期",
+      "Copyright": "版權"
+    }
+  },
+  "Post": {
+    "Title": "帖",
+    "Label": {
+      "RepliedTo": "回復了",
+      "ViewMoreReply": "View more reply",
+      "EditReply": "Edit Reply",
+      "DeleteReply": "Delete Reply",
+      "EditPost": "Edit Post",
+      "DeletePost": "Delete Post"
+    },
+    "Placeholder": {
+      "Write": "Write your reply"
+    },
+    "Create": {
+      "Title": "Create Post",
+      "Category": "Select Category",
+      "Write": "Write Something",
+      "Audience": "Set Audience",
+      "Quote": "Quote Music",
+      "Media": "Upload Media",
+      "Preview": "Add Preview"
+    }
+  },
+  "Notification": {
+    "Title": "通知"
+  },
+  "Modal": {
+    "EditProfile": {
+      "Title": "編輯個人資料",
+      "Subtitle": "Are you sure to finish edit profile?"
+    },
+    "Playlist": {
+      "Save": "Are you sure you want to save your new playlist?",
+      "Update": "Are you sure you want to update your playlist?",
+      "Delete": "Are you sure you want to delete this playlist?",
+      "Cover": "Edit Playlist Cover"
+    },
+    "Donation": {
+      "Unsubs": "您確定要終止訂閱 {{name}}?"
+    },
+    "Email": {
+      "Add": "Are you sure you want to add new email?",
+      "Change": "您確定要更改電郵？"
+    },
+    "Phone": {
+      "Add": "Are you sure you want to add new phone number?",
+      "Change": "您確定要更改電話號碼？"
+    },
+    "Report": {
+      "Success": "We’ve received your feedback. Thank you for helping us make sunny Side Up better.",
+      "Back": "Back to Settings"
+    },
+    "SignOut": "Are you sure you want to sign out?",
+    "Guest": {
+      "Title": "註冊或登入",
+      "Subtitle": "您正以訪客身份探索，註冊或登錄以享受完整內容"
+    },
+    "Update": {
+      "Title": "New Version Available",
+      "Subtitle": "We added new feature and fix some bug to make your experience better. Please update your application to the latest version."
+    }
+  },
+  "EmptyState": {
+    "Donate": "你還沒有獎勵任何音樂人，嘗試捐贈你喜歡的音樂人",
+    "Exclusive": "You don’t have access to any exclusive content. Try subsrcibing to your favorite musician",
+    "NoData": "No data available",
+    "FollowMusician": "This musician doesn't seem to have any posts right now. Try following more musicians",
+    "DontHavePost": "You don't have any post",
+    "Search": {
+      "Album": "Album not found",
+      "Event": "Event not found",
+      "Merch": "Merch not found",
+      "Musician": "Musician not found",
+      "Playlist": "Playlist not found",
+      "Song": "Song not found",
+      "Fans": "Fans not found"
+    },
+    "NoAlbum": "No Album Available",
+    "NoMerch": "未有產品",
+    "NoInfo": "No Information Given.",
+    "NoPhoto": "No Photos Available"
+  },
+  "Guest": {
+    "Title": "立即註冊與音樂人互動",
+    "Subtitle": "註冊後，你就可以",
+    "UnlimitedSong": "無限播放歌曲",
+    "GetEvent": "取得最新活動資訊",
+    "GetExclusive": "獲取獨家內容",
+    "Support": "支持你的音樂人"
+  },
+  "Topup": {
+    "Title": "Top Up",
+    "Subtitle1": "SSU Coin is your way to show your appreciation",
+    "Subtitle2": "SSU Coin allows you to parcitipate in Musician’s upside and grow their community",
+    "Subtitle3": "Find Musician who is providing a lot of value? Rewards them with SSU Coin as a support",
+    "MyCoin": "My Coin",
+    "Filter": {
+      "Buy": "Buy Package",
+      "Transaction": "Transaction"
+    }
+  }
+}

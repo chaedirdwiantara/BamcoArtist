@@ -8,6 +8,7 @@ import {ArrowLeftIcon} from '../../../assets/icon';
 import {color, font, typography} from '../../../theme';
 import {heightPercentage, normalize, widthPercentage} from '../../../utils';
 import {dataShowCredit, ShowCreditType} from '../../../data/showCredit';
+import {useTranslation} from 'react-i18next';
 
 interface ShowCreditProps {
   onPressGoBack: () => void;
@@ -41,6 +42,7 @@ const Content: React.FC<ShowCreditType> = ({title, content}) => {
 export const ShowCreditContent: React.FC<ShowCreditProps> = ({
   onPressGoBack,
 }) => {
+  const {t} = useTranslation();
   return (
     <View style={styles.root}>
       <TopNavigation.Type1
@@ -53,7 +55,7 @@ export const ShowCreditContent: React.FC<ShowCreditProps> = ({
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={{marginTop: heightPercentage(30)}}>
           {dataShowCredit.map((val, i) => (
-            <Content key={i} title={val.title} content={val.content} />
+            <Content key={i} title={t(val.title)} content={val.content} />
           ))}
         </View>
       </ScrollView>

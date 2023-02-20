@@ -7,11 +7,14 @@ import {heightPercentage, width, widthPercentage} from '../../../utils';
 import {PreferenceList} from '../../../interface/setting.interface';
 import DescriptionBoarding from '../../atom/DescriptionBoarding/DescriptionBoarding';
 import {DataOnboardType} from '../../../data/onboard';
+import {useTranslation} from 'react-i18next';
 
 interface FooterContentProps {
   type?: string;
   activeIndexSlide: number;
-  data: {title: string; list: PreferenceList[]}[] | DataOnboardType[];
+  data:
+    | {title: string; subtitle: string; list: PreferenceList[]}[]
+    | DataOnboardType[];
   onPressGoTo?: () => void;
   onPressNext: () => void;
 }
@@ -23,6 +26,7 @@ export const FooterContent: React.FC<FooterContentProps> = ({
   onPressGoTo,
   onPressNext,
 }) => {
+  const {t} = useTranslation();
   const activeColor =
     type === 'Preference' ? Color.Dark[100] : Color.Success[400];
   const inActiveColor =
@@ -36,8 +40,8 @@ export const FooterContent: React.FC<FooterContentProps> = ({
             return (
               <DescriptionBoarding
                 key={index}
-                title={item.title}
-                subtitle={item.subtitle}
+                title={t(item.title) || ''}
+                subtitle={t(item.subtitle as string) || ''}
               />
             );
           }
@@ -52,13 +56,13 @@ export const FooterContent: React.FC<FooterContentProps> = ({
         <View style={styles.footer}>
           <Button
             type="border"
-            label="Skip"
+            label={t('Btn.Skip')}
             containerStyles={styles.btnContainer}
             textStyles={{color: Color.Pink.linear}}
             onPress={onPressGoTo}
           />
           <ButtonGradient
-            label={activeIndexSlide === 3 ? 'Finish' : 'Next'}
+            label={activeIndexSlide === 3 ? t('Btn.Finish') : t('Btn.Next')}
             onPress={onPressNext}
             gradientStyles={styles.btnContainer}
           />
@@ -66,13 +70,13 @@ export const FooterContent: React.FC<FooterContentProps> = ({
       ) : (
         <View>
           <ButtonGradient
-            label="Next"
+            label={t('Btn.Next')}
             onPress={onPressNext}
             containerStyles={{paddingTop: heightPercentage(20)}}
           />
           <Button
             type="border"
-            label="Skip"
+            label={t('Btn.Finish')}
             borderColor="transparent"
             textStyles={{color: Color.Pink.linear}}
             onPress={onPressGoTo}

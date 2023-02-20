@@ -16,12 +16,14 @@ import {TopNavigation} from '../TopNavigation';
 import {ArrowLeftIcon, CoinInput} from '../../../assets/icon';
 import {listPlan} from '../../../data/exclusiveContent';
 import {heightPercentage, width, widthPercentage} from '../../../utils';
+import {useTranslation} from 'react-i18next';
 
 interface ExclusiveProps {
   onPressGoBack: () => void;
 }
 
 export const ExclusiveContent: React.FC<ExclusiveProps> = ({onPressGoBack}) => {
+  const {t} = useTranslation();
   const [support, setSupport] = useState('');
   const [planList, setPlanList] = useState(listPlan);
   const [focusInput, setFocusInput] = useState(false);
@@ -43,7 +45,7 @@ export const ExclusiveContent: React.FC<ExclusiveProps> = ({onPressGoBack}) => {
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
       <View style={styles.root}>
         <TopNavigation.Type1
-          title="Exclusive Content"
+          title={t('ExclusiveContent.Title')}
           leftIcon={<ArrowLeftIcon />}
           itemStrokeColor={color.Neutral[10]}
           leftIconAction={onPressGoBack}
@@ -56,7 +58,9 @@ export const ExclusiveContent: React.FC<ExclusiveProps> = ({onPressGoBack}) => {
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={styles.containerContent}>
             <View>
-              <Text style={[typography.Subtitle1, styles.title]}>Content</Text>
+              <Text style={[typography.Subtitle1, styles.title]}>
+                {t('ExclusiveContent.Content')}
+              </Text>
               <ContentCard
                 title="Exclusive Content (My Uncut Video) My Lifetime Journey"
                 subtitle="My Up to dated daily life with with my Band, meet with people in event, video when recording music etc"
@@ -65,7 +69,7 @@ export const ExclusiveContent: React.FC<ExclusiveProps> = ({onPressGoBack}) => {
 
             <View>
               <Text style={[typography.Subtitle1, styles.titlePlan]}>
-                Choose A Plan
+                {t('ExclusiveContent.Choose')}
               </Text>
               {planList.map((val, i) => (
                 <PlanCard
@@ -79,18 +83,18 @@ export const ExclusiveContent: React.FC<ExclusiveProps> = ({onPressGoBack}) => {
 
             <View>
               <Text style={[typography.Subtitle1, styles.titlePlan]}>
-                Add support to your plan
+                {t('ExclusiveContent.Support')}
               </Text>
 
               <Text style={[typography.Overline, styles.label]}>
-                Bonus support (optional)
+                {t('ExclusiveContent.Optional')}
               </Text>
 
               <SsuInput.InputText
                 value={support}
                 leftIcon={<CoinInput />}
                 onChangeText={(newText: string) => setSupport(newText)}
-                placeholder={'Input Bonus'}
+                placeholder={t('ExclusiveContent.InputBonus') || ''}
                 fontColor={color.Neutral[10]}
                 borderColor={color.Pink.linear}
                 onFocus={() => {
@@ -103,18 +107,18 @@ export const ExclusiveContent: React.FC<ExclusiveProps> = ({onPressGoBack}) => {
                 isFocus={focusInput}
                 keyboardType={'number-pad'}
                 isError={false}
-                errorMsg={'Insufficient coin, add more coin to give bonus'}
+                errorMsg={t('ExclusiveContent.ErrorCoinBonus') || ''}
               />
             </View>
 
             <Button
-              label="Purchase"
+              label={t('Btn.Purchase')}
               onPress={onPressSave}
               containerStyles={styles.button}
             />
             <Button
               type="border"
-              label="Cancel"
+              label={t('Btn.Cancel')}
               containerStyles={styles.btnCancel}
               textStyles={{color: color.Pink.linear}}
               onPress={onPressSave}

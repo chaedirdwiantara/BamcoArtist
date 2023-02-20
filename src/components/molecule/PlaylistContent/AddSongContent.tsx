@@ -17,6 +17,7 @@ import {Gap, SearchBar, SsuToast} from '../../atom';
 import TopSong from '../../../screen/ListCard/TopSong';
 import {SongList} from '../../../interface/song.interface';
 import {heightPercentage, widthPercentage} from '../../../utils';
+import {useTranslation} from 'react-i18next';
 
 interface AddSongProps {
   search: string;
@@ -35,6 +36,7 @@ export const AddSongContent: React.FC<AddSongProps> = ({
   onPressGoBack,
   setAddSongToPlaylist,
 }) => {
+  const {t} = useTranslation();
   const [toastVisible, setToastVisible] = useState(false);
 
   useEffect(() => {
@@ -52,7 +54,7 @@ export const AddSongContent: React.FC<AddSongProps> = ({
   return (
     <View style={styles.root}>
       <TopNavigation.Type1
-        title="Add Songs"
+        title={t('Music.Label.AddSong')}
         leftIcon={<ArrowLeftIcon />}
         itemStrokeColor={Color.Neutral[10]}
         leftIconAction={onPressGoBack}
@@ -94,7 +96,7 @@ export const AddSongContent: React.FC<AddSongProps> = ({
             />
             <Gap width={widthPercentage(7)} />
             <Text style={[typography.Button2, styles.textStyle]}>
-              Song have been added to playlist!
+              {t('Music.Playlist.Success')}
             </Text>
           </View>
         }

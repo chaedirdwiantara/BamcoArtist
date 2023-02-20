@@ -11,6 +11,7 @@ import {useUploadImageHook} from '../../../hooks/use-uploadImage.hook';
 import {heightPercentage, width, widthPercentage} from '../../../utils';
 import {sendReport} from '../../../api/setting.api';
 import {ModalSuccessDonate} from '../Modal/ModalSuccessDonate';
+import {useTranslation} from 'react-i18next';
 
 interface SendReportProps {
   title: string;
@@ -21,6 +22,7 @@ export const SendReportContent: React.FC<SendReportProps> = ({
   title,
   onPressGoBack,
 }) => {
+  const {t} = useTranslation();
   const [state, setState] = useState({
     email: '',
     message: '',
@@ -107,7 +109,7 @@ export const SendReportContent: React.FC<SendReportProps> = ({
       <SsuInput.InputLabel
         value={state.email}
         onChangeText={(newText: string) => onChangeText('email', newText)}
-        placeholder={'Enter your email'}
+        placeholder={t('Setting.Report.Placeholder.Email') || ''}
         containerStyles={styles.textInput}
         inputStyles={{paddingHorizontal: widthPercentage(10)}}
       />
@@ -115,7 +117,7 @@ export const SendReportContent: React.FC<SendReportProps> = ({
       <SsuInput.InputLabel
         value={state.message}
         onChangeText={(newText: string) => onChangeText('message', newText)}
-        placeholder={'How can we improve your experience using this app?\n\n'}
+        placeholder={t('Setting.Report.Placeholder.Text') || ''}
         containerStyles={styles.textArea}
         multiline
         numberOfLines={10}
@@ -131,15 +133,15 @@ export const SendReportContent: React.FC<SendReportProps> = ({
       <ModalLoading visible={isLoadingImage} />
 
       <ModalSuccessDonate
-        title="Thank You!"
-        subtitle="We’ve received your feedback. Thank you for helping us make sunny Side Up better."
-        buttonText="Back to Settings"
+        title={t('General.Thanks') || ''}
+        subtitle={t('Modal.Report.Success') || ''}
+        buttonText={t('Modal.Report.Back') || ''}
         modalVisible={showModalSuccess}
         toggleModal={onPressGoBack}
       />
 
       <Button
-        label="Send"
+        label={t('Btn.Send')}
         onPress={onPressSend}
         containerStyles={styles.button}
       />

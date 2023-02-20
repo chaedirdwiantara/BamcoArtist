@@ -28,6 +28,7 @@ import {updateShipping} from '../../../api/setting.api';
 import {Button, Gap, SsuInput, SsuToast} from '../../atom';
 import {DataDropDownType, countryData} from '../../../data/dropdown';
 import {DataShippingProps} from '../../../interface/setting.interface';
+import {useTranslation} from 'react-i18next';
 
 interface ShippingInformationProps {
   dataShipping: DataShippingProps | null;
@@ -48,6 +49,7 @@ export const ShippingInformationContent: React.FC<ShippingInformationProps> = ({
   setSelectedCountry,
   setSelectedState,
 }) => {
+  const {t} = useTranslation();
   const [state, setState] = useState({
     email: dataShipping?.email || '',
     phoneNumber: dataShipping?.phoneNumber || '',
@@ -123,7 +125,7 @@ export const ShippingInformationContent: React.FC<ShippingInformationProps> = ({
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
       <View style={styles.root}>
         <TopNavigation.Type1
-          title="Shipping Information"
+          title={t('Setting.Shipping.Title') || ''}
           leftIcon={<ArrowLeftIcon />}
           itemStrokeColor={Color.Neutral[10]}
           leftIconAction={onPressGoBack}
@@ -132,8 +134,8 @@ export const ShippingInformationContent: React.FC<ShippingInformationProps> = ({
 
         <ScrollView>
           <SsuInput.InputLabel
-            label="Email"
-            placeholder="Add Email"
+            label={t('Setting.Shipping.Label.Email') || ''}
+            placeholder={t('Setting.Shipping.Placeholder.Email') || ''}
             value={state.email}
             onChangeText={(newText: string) => onChangeText('email', newText)}
           />
@@ -141,8 +143,8 @@ export const ShippingInformationContent: React.FC<ShippingInformationProps> = ({
           <View style={{marginTop: heightPercentage(15)}}>
             <Dropdown.Country
               type="label"
-              labelText={'New Phone Number'}
-              placeholder={'New Phone Number'}
+              labelText={t('Setting.Shipping.Label.Phone') || ''}
+              placeholder={t('Setting.Shipping.Label.Phone') || ''}
               value={state.phoneNumber}
               onChangeText={(newText: string) =>
                 onChangeText('phoneNumber', newText)
@@ -157,8 +159,8 @@ export const ShippingInformationContent: React.FC<ShippingInformationProps> = ({
           </View>
 
           <SsuInput.InputLabel
-            label="Full Name"
-            placeholder="Add Full Name"
+            label={t('Setting.Shipping.Label.Fullname') || ''}
+            placeholder={t('Setting.Shipping.Placeholder.Fullname') || ''}
             value={state.fullname}
             errorMsg={'Full Name can not be blank, please input your Full Name'}
             onChangeText={(newText: string) =>
@@ -171,9 +173,9 @@ export const ShippingInformationContent: React.FC<ShippingInformationProps> = ({
             <Dropdown.Input
               type="location"
               data={dataAllCountry}
-              placeHolder={'Select Country'}
+              placeHolder={t('Setting.Shipping.Placeholder.Country') || ''}
               initialValue={state.country}
-              dropdownLabel={'Country'}
+              dropdownLabel={t('Setting.Shipping.Label.Country')}
               textTyped={(newText: {label: string; value: string}) => {
                 setSelectedCountry(newText.value);
                 setState({
@@ -192,8 +194,8 @@ export const ShippingInformationContent: React.FC<ShippingInformationProps> = ({
               data={dataState}
               initialValue={state.province}
               showSearch={true}
-              placeHolder={'Select State/Province'}
-              dropdownLabel={'State/Province'}
+              placeHolder={t('Setting.Shipping.Placeholder.State')}
+              dropdownLabel={t('Setting.Shipping.Label.State')}
               textTyped={(newText: {label: string; value: string}) => {
                 setSelectedState(newText.value);
                 setState({
@@ -211,8 +213,8 @@ export const ShippingInformationContent: React.FC<ShippingInformationProps> = ({
           <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
             <Dropdown.Input
               data={dataCities}
-              placeHolder={'Select City'}
-              dropdownLabel={'City'}
+              placeHolder={t('Setting.Shipping.Placeholder.City')}
+              dropdownLabel={t('Setting.Shipping.Label.City')}
               showSearch={true}
               initialValue={state.city}
               textTyped={(newText: {label: string; value: string}) => {
@@ -227,8 +229,8 @@ export const ShippingInformationContent: React.FC<ShippingInformationProps> = ({
             />
 
             <SsuInput.InputLabel
-              label="Postal Code"
-              placeholder="Add Postal Code"
+              label={t('Setting.Shipping.Label.Postal') || ''}
+              placeholder={t('Setting.Shipping.Placeholder.Postal') || ''}
               value={state.postalCode}
               keyboardType={'number-pad'}
               onChangeText={(newText: string) =>
@@ -240,15 +242,15 @@ export const ShippingInformationContent: React.FC<ShippingInformationProps> = ({
           </View>
 
           <SsuInput.InputLabel
-            label="Address"
-            placeholder="Add Address"
+            label={t('Setting.Shipping.Label.Address') || ''}
+            placeholder={t('Setting.Shipping.Placeholder.Address') || ''}
             value={state.address}
             onChangeText={(newText: string) => onChangeText('address', newText)}
             containerStyles={{marginTop: heightPercentage(15)}}
           />
 
           <Button
-            label="Save"
+            label={t('Btn.Save')}
             onPress={onPressSave}
             disabled={disabledButton}
             containerStyles={{

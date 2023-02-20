@@ -15,6 +15,7 @@ import {ModalLoading} from '../ModalLoading/ModalLoading';
 import {PhoneSettingTypeProps} from '../../../interface/setting.interface';
 import {useAuthHook} from '../../../hooks/use-auth.hook';
 import {ModalConfirm} from '../Modal/ModalConfirm';
+import {useTranslation} from 'react-i18next';
 
 interface OtpPNProps {
   email: string;
@@ -37,6 +38,7 @@ export const OtpEmail: React.FC<OtpPNProps> = ({
   type,
   onSuccess,
 }) => {
+  const {t} = useTranslation();
   const [disabledButton, setDisabledButton] = useState<boolean>(true);
   const [visibleModal, setVisibleModal] = useState<boolean>(false);
   const [isSubmit, setIsSubmit] = useState<boolean>(false);
@@ -152,14 +154,18 @@ export const OtpEmail: React.FC<OtpPNProps> = ({
     <>
       <View style={styles.root}>
         <TopNavigation.Type2
-          title={`${type} Email`}
+          title={
+            type === 'Add'
+              ? t('Setting.Email.Label.Add')
+              : t('Setting.Email.Label.Change')
+          }
           itemStrokeColor={Color.Neutral[10]}
         />
 
         <Gap height={10} />
         <View>
           <SsuInput.InputLabel
-            label="New Email"
+            label={t('Setting.Email.Label.New') || ''}
             value={email}
             editable={false}
             containerInputStyles={{borderBottomWidth: 0}}
@@ -173,13 +179,13 @@ export const OtpEmail: React.FC<OtpPNProps> = ({
           control={control}
           render={({field: {onChange, value}}) => (
             <SsuInput.InputLabel
-              label="Input Verification codes"
+              label={t('Setting.EnterVerifCode') || ''}
               value={value}
               onChangeText={text => {
                 onChange(text);
                 setIsError(false);
               }}
-              placeholder={'Input Verification codes'}
+              placeholder={t('Setting.EnterVerifCode') || ''}
               isError={errors?.code ? true : false}
               errorMsg={errorMsg}
             />
@@ -187,13 +193,11 @@ export const OtpEmail: React.FC<OtpPNProps> = ({
         />
 
         <TouchableOpacity style={styles.containerResend} onPress={onResendOTP}>
-          <Text style={styles.resend}>
-            Didn’t receive verification codes? click to resend
-          </Text>
+          <Text style={styles.resend}>{t('General.NoVerifCode')}</Text>
         </TouchableOpacity>
 
         <Button
-          label="Submit"
+          label={t('Btn.Submit')}
           textStyles={{fontSize: mvs(14)}}
           containerStyles={
             disabledButton ? styles.buttonDisabled : styles.button
@@ -203,7 +207,7 @@ export const OtpEmail: React.FC<OtpPNProps> = ({
         />
         <Gap height={4} />
         <Button
-          label="Cancel"
+          label={t('Btn.Cancel')}
           type="border"
           borderColor="transparent"
           textStyles={{fontSize: mvs(14), color: color.Pink.linear}}
@@ -215,8 +219,15 @@ export const OtpEmail: React.FC<OtpPNProps> = ({
       </View>
       <ModalConfirm
         modalVisible={isModalVisible.modalConfirm}
-        title="Add Email"
-        subtitle="Are you sure you want to add new phone number?"
+        title={
+          (type === 'Add'
+            ? t('Setting.Email.Label.Add')
+            : t('Setting.Email.Label.Change')) || ''
+        }
+        subtitle={
+          (type === 'Add' ? t('Modal.Email.Add') : t('Modal.Email.Change')) ||
+          ''
+        }
         onPressClose={closeModal}
         onPressOk={onPressConfirm}
       />

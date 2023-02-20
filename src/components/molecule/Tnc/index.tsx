@@ -1,33 +1,35 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import {color, font} from '../../../theme';
-import {normalize, widthResponsive} from '../../../utils';
-import {ms, mvs} from 'react-native-size-matters';
+import {widthResponsive} from '../../../utils';
+import {mvs} from 'react-native-size-matters';
 import {CheckBox, Gap} from '../../atom';
 import {CheckBoxProps} from '../../../interface/checkbox.interface';
 import {ErrorIcon} from '../../../assets/icon';
+import {useTranslation} from 'react-i18next';
 
 const ErrorColor = color.Error[400];
 
 const TermAndConditions: React.FC<
   CheckBoxProps & {onTncPress: () => void; onPrivacyPress: () => void}
 > = ({handleOnPress, active, errorMsg, onTncPress, onPrivacyPress}) => {
+  const {t} = useTranslation();
   return (
     <View>
       <View style={styles.container}>
         <CheckBox handleOnPress={handleOnPress} active={active} />
         <Text style={styles.textStyle}>
-          I Agree with SunnySideUp{' '}
+          {t('SignUp.TnC.Phrase1')}
           <Text
             style={[styles.textStyle, {color: color.Success[400]}]}
             onPress={onTncPress}>
-            Terms Conditions{' '}
+            {t('SignUp.TnC.Phrase2')}
           </Text>
-          and{' '}
+          {t('SignUp.TnC.Phrase3')}
           <Text
             style={[styles.textStyle, {color: color.Success[400]}]}
             onPress={onPrivacyPress}>
-            Privacy Policy
+            {t('SignUp.TnC.Phrase4')}
           </Text>
         </Text>
       </View>

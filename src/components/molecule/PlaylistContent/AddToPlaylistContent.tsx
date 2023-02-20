@@ -8,6 +8,7 @@ import {ArrowLeftIcon} from '../../../assets/icon';
 import TopSong from '../../../screen/ListCard/TopSong';
 import {CreateNewCard} from '../CreateNewCard/CreateNewCard';
 import {heightPercentage, widthPercentage} from '../../../utils';
+import {useTranslation} from 'react-i18next';
 
 interface AddToPlaylistProps {
   onPressGoBack: () => void;
@@ -16,11 +17,12 @@ interface AddToPlaylistProps {
 export const AddToPlaylistContent: React.FC<AddToPlaylistProps> = ({
   onPressGoBack,
 }) => {
+  const {t} = useTranslation();
   const [search, setSearch] = useState('');
   return (
     <View style={styles.root}>
       <TopNavigation.Type1
-        title="Add to Playlist"
+        title={t('Home.Tab.TopSong.Playlist')}
         leftIcon={<ArrowLeftIcon />}
         itemStrokeColor={Color.Neutral[10]}
         leftIconAction={onPressGoBack}
@@ -38,7 +40,7 @@ export const AddToPlaylistContent: React.FC<AddToPlaylistProps> = ({
       <ScrollView style={{paddingHorizontal: widthPercentage(20)}}>
         <CreateNewCard
           num="00"
-          text="Create New Playlist"
+          text={t('Profile.Button.CreatePlaylist')}
           // onPress={() => onPressGoTo('CreateNewPlaylist')}
         />
         <TopSong

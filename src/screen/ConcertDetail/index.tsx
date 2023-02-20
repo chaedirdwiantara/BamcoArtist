@@ -4,6 +4,7 @@ import {
   NativeStackScreenProps,
 } from '@react-navigation/native-stack';
 import React, {useEffect, useState} from 'react';
+import {useTranslation} from 'react-i18next';
 import {
   View,
   StyleSheet,
@@ -62,6 +63,7 @@ const renderPagination = (index: number, total: number) => {
 export const ConcertDetail: React.FC<MerchDetailProps> = ({
   route,
 }: MerchDetailProps) => {
+  const {t} = useTranslation();
   const data = route.params;
   const {
     dataMusician,
@@ -124,7 +126,7 @@ export const ConcertDetail: React.FC<MerchDetailProps> = ({
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
       <View style={styles.root}>
         <TopNavigation.Type4
-          title="Ticket Detail"
+          title={t('Event.Concert.Detail')}
           maxLengthTitle={20}
           itemStrokeColor={'white'}
           rightIcon={<ThreeDotsIcon fill={Color.Neutral[10]} />}
@@ -175,13 +177,13 @@ export const ConcertDetail: React.FC<MerchDetailProps> = ({
           </View>
           <SsuDivider />
           <View style={styles.descContainer}>
-            <Text style={styles.subtitle}>Description</Text>
+            <Text style={styles.subtitle}>{t('Event.Description')}</Text>
             <Text style={styles.desc}>{data.desc ? data.desc : '-'}</Text>
           </View>
           <SsuDivider />
           <View style={styles.descContainer}>
             <View style={styles.attribute}>
-              <Text style={styles.subtitle}>Line Up</Text>
+              <Text style={styles.subtitle}>{t('Event.Concert.LineUp')}</Text>
               <TopMusician
                 dataMusician={dataMusician ? dataMusician : []}
                 setFollowMusician={(
@@ -200,7 +202,7 @@ export const ConcertDetail: React.FC<MerchDetailProps> = ({
               />
             </View>
             <View style={styles.attribute}>
-              <Text style={styles.subtitle}>Select Class</Text>
+              <Text style={styles.subtitle}>{t('Event.Concert.Class')}</Text>
               <SelectSize
                 selectedSize={selectedSize}
                 sizes={sizes}
@@ -208,7 +210,7 @@ export const ConcertDetail: React.FC<MerchDetailProps> = ({
               />
             </View>
             <View>
-              <Text style={styles.subtitle}>Quantity</Text>
+              <Text style={styles.subtitle}>{t('Event.Quantity')}</Text>
               <QuantityInput
                 value={quantity.toString()}
                 onPress={handleQuantity}
@@ -220,7 +222,7 @@ export const ConcertDetail: React.FC<MerchDetailProps> = ({
           </View>
           <View style={styles.descContainer}>
             <ButtonGradient
-              label="Buy Now"
+              label={t('Btn.BuyNow')}
               gradientStyles={{width: '100%'}}
               containerStyles={{marginBottom: 8}}
               onPress={() => null}

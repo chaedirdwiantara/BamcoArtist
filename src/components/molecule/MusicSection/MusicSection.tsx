@@ -15,6 +15,7 @@ import {storage} from '../../../hooks/use-storage.hook';
 import {ModalSuccessDonate} from '../Modal/ModalSuccessDonate';
 import {heightPercentage, normalize, widthResponsive} from '../../../utils';
 import {BottomSheetGuest} from '../GuestComponent/BottomSheetGuest';
+import {useTranslation} from 'react-i18next';
 
 interface ListProps {
   imgUri: string;
@@ -38,16 +39,17 @@ interface DataMore {
 }
 
 export const MusicSection: React.FC<ListProps> = (props: ListProps) => {
+  const {t} = useTranslation();
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
   const isLogin = storage.getString('profile');
 
   const dataMore = [
-    {label: 'Add to Playlist', value: '1'},
-    {label: 'Send Donation', value: '2'},
-    {label: 'Add to Queue', value: '3'},
-    {label: 'Share Music', value: '4'},
-    {label: 'Show Credits', value: '5'},
+    {label: t('Home.Tab.TopSong.Playlist'), value: '1'},
+    {label: t('Home.Tab.TopSong.Tip'), value: '2'},
+    {label: t('Home.Tab.TopSong.Queue'), value: '3'},
+    {label: t('Home.Tab.TopSong.Share'), value: '4'},
+    {label: t('Home.Tab.TopSong.Credit'), value: '5'},
   ];
   const [textToast, setTextToast] = useState<string>('');
   const [toastVisible, setToastVisible] = useState<boolean>(false);
@@ -82,7 +84,7 @@ export const MusicSection: React.FC<ListProps> = (props: ListProps) => {
 
   const onPressCopy = () => {
     setToastVisible(true);
-    setTextToast('Link have been copied to clipboard!');
+    setTextToast(t('General.LinkCopied') || '');
   };
 
   const resultDataMore = (dataResult: DataMore) => {
@@ -126,7 +128,7 @@ export const MusicSection: React.FC<ListProps> = (props: ListProps) => {
         }
         modalVisible={modalShare}
         onPressClose={() => setModalShare(false)}
-        titleModal={'Share Music'}
+        titleModal={t('Home.Tab.TopSong.Share')}
         hideMusic={true}
         onPressCopy={onPressCopy}
       />

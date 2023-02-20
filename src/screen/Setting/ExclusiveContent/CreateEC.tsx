@@ -12,6 +12,7 @@ import {uploadImage} from '../../../api/uploadImage.api';
 import {Button, ModalImagePicker, SsuInput} from '../../../components';
 import {heightPercentage, width, widthPercentage} from '../../../utils';
 import {PhotoPlaylist} from '../../../components/molecule/PlaylistContent/PhotoPlaylist';
+import {useTranslation} from 'react-i18next';
 
 interface CreateProps {
   data: DataExclusiveResponse | null;
@@ -19,6 +20,7 @@ interface CreateProps {
 }
 
 export const CreateEC: React.FC<CreateProps> = ({data, onPress}) => {
+  const {t} = useTranslation();
   const priceWeekly = data?.pricingPlans.filter(
     val => val.durationUnit === 'weekly',
   )[0];
@@ -110,7 +112,7 @@ export const CreateEC: React.FC<CreateProps> = ({data, onPress}) => {
           typography.Button2,
           {color: color.Neutral[50], marginVertical: heightPercentage(8)},
         ]}>
-        Basic Information
+        {t('Setting.Exclusive.Label.Basic')}
       </Text>
       <View style={{marginBottom: heightPercentage(5)}}>
         <Text
@@ -118,7 +120,7 @@ export const CreateEC: React.FC<CreateProps> = ({data, onPress}) => {
             typography.Caption,
             {color: color.Neutral[50], marginVertical: heightPercentage(7)},
           ]}>
-          Exclusive Content Cover
+          {t('Setting.Exclusive.Label.Cover')}
         </Text>
         <PhotoPlaylist
           uri={firstUri}
@@ -131,8 +133,8 @@ export const CreateEC: React.FC<CreateProps> = ({data, onPress}) => {
 
       <View style={styles.containerInput}>
         <SsuInput.InputLabel
-          label="Title"
-          placeholder="Add Title"
+          label={t('Setting.Exclusive.Label.Title') || ''}
+          placeholder={t('Setting.Exclusive.Placeholder.Title') || ''}
           value={title}
           multiline
           maxLength={120}
@@ -148,8 +150,8 @@ export const CreateEC: React.FC<CreateProps> = ({data, onPress}) => {
 
       <View style={styles.containerInput}>
         <SsuInput.InputLabel
-          label="Description"
-          placeholder="Add Description about your content"
+          label={t('Setting.Exclusive.Label.Description') || ''}
+          placeholder={t('Setting.Exclusive.Placeholder.Description') || ''}
           value={description}
           multiline
           maxLength={200}
@@ -172,8 +174,8 @@ export const CreateEC: React.FC<CreateProps> = ({data, onPress}) => {
       </Text>
 
       <SsuInput.InputLabel
-        label="Weekly"
-        placeholder="Input Price (In Credit)"
+        label={t('ExclusiveContent.Weekly') || ''}
+        placeholder={t('Setting.Exclusive.Placeholder.Price') || ''}
         value={price.weekly.toString()}
         multiline
         maxLength={200}
@@ -194,8 +196,8 @@ export const CreateEC: React.FC<CreateProps> = ({data, onPress}) => {
       />
 
       <SsuInput.InputLabel
-        label="Monthly"
-        placeholder="Input Price (In Credit)"
+        label={t('ExclusiveContent.Monthly') || ''}
+        placeholder={t('Setting.Exclusive.Placeholder.Price') || ''}
         value={price.monthly.toString()}
         multiline
         maxLength={200}
@@ -205,8 +207,8 @@ export const CreateEC: React.FC<CreateProps> = ({data, onPress}) => {
       />
 
       <SsuInput.InputLabel
-        label="Yearly"
-        placeholder="Input Price (In Credit)"
+        label={t('ExclusiveContent.Yearly') || ''}
+        placeholder={t('Setting.Exclusive.Placeholder.Price') || ''}
         value={price.yearly.toString()}
         multiline
         maxLength={200}
@@ -216,13 +218,13 @@ export const CreateEC: React.FC<CreateProps> = ({data, onPress}) => {
       />
 
       <Button
-        label="Save"
+        label={t('Btn.Save')}
         onPress={onPressSave}
         containerStyles={styles.button}
       />
 
       <ModalImagePicker
-        title="Exclusive Content Cover"
+        title={t('Setting.Exclusive.Label.Cover') || ''}
         modalVisible={modalVisible}
         sendUri={sendUri}
         sendUriMultiple={() => {}}

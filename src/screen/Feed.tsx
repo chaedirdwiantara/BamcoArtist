@@ -15,12 +15,17 @@ import {AddPostIcon} from '../assets/icon';
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParams} from '../navigations';
+import {useTranslation} from 'react-i18next';
 
 export const FeedScreen: React.FC = () => {
+  const {t} = useTranslation();
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
   const [selectedIndex, setSelectedIndex] = useState(-0);
-  const [filter] = useState([{filterName: 'My Post'}, {filterName: 'Public'}]);
+  const [filter] = useState([
+    {filterName: 'Feed.MyPost'},
+    {filterName: 'Feed.Public'},
+  ]);
   const isLogin = storage.getString('profile');
   const isFocused = useIsFocused();
   const {isPlaying, showPlayer, hidePlayer} = usePlayerHook();
@@ -45,7 +50,7 @@ export const FeedScreen: React.FC = () => {
       {isLogin ? (
         <View>
           <TopNavigation.Type2
-            title="FEED"
+            title={t('Feed.Title')}
             maxLengthTitle={20}
             itemStrokeColor={'white'}
           />
@@ -64,8 +69,9 @@ export const FeedScreen: React.FC = () => {
                 justifyContent: 'space-between',
               }}
               TouchableStyle={{width: widthPercentageToDP(45)}}
+              translation={true}
             />
-            {filter[selectedIndex].filterName === 'Public' ? (
+            {filter[selectedIndex].filterName === 'Feed.Public' ? (
               <PostListPublic
                 dataRightDropdown={dropDownDataCategory}
                 dataLeftDropdown={dropDownDataSort}

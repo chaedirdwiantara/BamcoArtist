@@ -40,6 +40,7 @@ import {
   width,
   widthPercentage,
 } from '../../../utils';
+import {useTranslation} from 'react-i18next';
 
 interface EditPlaylistProps {
   playlist: Playlist;
@@ -62,6 +63,7 @@ export const EditPlaylistContent: React.FC<EditPlaylistProps> = ({
   onPressRemoveSong,
   toastText,
 }) => {
+  const {t} = useTranslation();
   const isPublic = playlist.isPublic ? 'Public' : 'Private';
   const [state, setState] = useState({
     playlistName: playlist.name || '',
@@ -158,7 +160,7 @@ export const EditPlaylistContent: React.FC<EditPlaylistProps> = ({
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
       <View style={styles.root}>
         <TopNavigation.Type4
-          title="Edit Playlist"
+          itle={t('Music.Playlist.Edit')}
           rightIcon={<SaveIcon />}
           leftIcon={<ArrowLeftIcon />}
           itemStrokeColor={color.Neutral[10]}
@@ -182,7 +184,7 @@ export const EditPlaylistContent: React.FC<EditPlaylistProps> = ({
                 onChangeText={(newText: string) => {
                   onChangeText('playlistName', newText);
                 }}
-                placeholder={'Playlist Name'}
+                placeholder={t('Music.NewPlaylist.Placeholder.Name') || ''}
                 containerStyles={styles.textInput}
                 maxLength={100}
                 numberOfLines={1}
@@ -201,7 +203,7 @@ export const EditPlaylistContent: React.FC<EditPlaylistProps> = ({
                 onChangeText={(newText: string) => {
                   onChangeText('playlistDesc', newText);
                 }}
-                placeholder={'Playlist Description'}
+                placeholder={t('Music.NewPlaylist.Placeholder.Desc') || ''}
                 inputStyles={styles.inputDesc}
                 maxLength={600}
                 numberOfLines={5}
@@ -221,8 +223,8 @@ export const EditPlaylistContent: React.FC<EditPlaylistProps> = ({
             <Dropdown.Input
               data={dataVisibility}
               initialValue={state.isPublic}
-              placeHolder={'Visibility'}
-              dropdownLabel={'Visibility'}
+              placeHolder={t('Music.NewPlaylist.Visibility.Title') || ''}
+              dropdownLabel={t('Music.NewPlaylist.Visibility.Title') || ''}
               textTyped={(newText: {label: string; value: string}) =>
                 onChangeText('isPublic', newText.value)
               }
@@ -230,6 +232,7 @@ export const EditPlaylistContent: React.FC<EditPlaylistProps> = ({
                 marginTop: heightPercentage(15),
                 width: width * 0.9,
               }}
+              translation={true}
             />
           </View>
 
@@ -266,7 +269,7 @@ export const EditPlaylistContent: React.FC<EditPlaylistProps> = ({
         </ScrollView>
 
         <ModalImagePicker
-          title="Edit Playlist Cover"
+          title={t('Modal.Playlist.Cover') || ''}
           modalVisible={isModalVisible.modalImage}
           sendUri={sendUri}
           onDeleteImage={resetImage}
@@ -276,8 +279,8 @@ export const EditPlaylistContent: React.FC<EditPlaylistProps> = ({
 
         <ModalConfirm
           modalVisible={isModalVisible.modalConfirm}
-          title="Save"
-          subtitle="Are you sure you want to update your playlist?"
+          title={t('Btn.Save') || ''}
+          subtitle={t('Modal.Playlist.Edit') || ''}
           onPressClose={closeModal}
           onPressOk={onPressConfirm}
         />

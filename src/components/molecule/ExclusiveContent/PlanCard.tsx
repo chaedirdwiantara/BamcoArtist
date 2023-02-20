@@ -12,11 +12,13 @@ import {RadioButton} from '../RadioButton/RadioButton';
 import {heightPercentage, width, widthPercentage} from '../../../utils';
 import {ErrorIcon} from '../../../assets/icon';
 import {Gap} from '../../atom';
+import {useTranslation} from 'react-i18next';
 
 interface PlanCard {
   title: string;
   subtitle: string;
   coin: string;
+  time: string;
   selected: boolean;
   isError?: boolean;
   onPressError?: () => void;
@@ -28,11 +30,13 @@ export const PlanCard: React.FC<PlanCard> = ({
   title,
   subtitle,
   coin,
+  time,
   selected,
   isError,
   onPressError,
   onPressSelected,
 }) => {
+  const {t} = useTranslation();
   const newBorderColor = selected ? color.Success[400] : color.Dark[500];
   return (
     <View>
@@ -41,12 +45,12 @@ export const PlanCard: React.FC<PlanCard> = ({
         onPress={onPressSelected}>
         <View style={styles.containerTitle}>
           <RadioButton
-            text={title}
+            text={t(title)}
             selected={selected}
             onPress={onPressSelected}
           />
           <Text style={[typography.Subtitle2, {color: color.Success[400]}]}>
-            {coin}
+            {coin} + {t(time)}
           </Text>
         </View>
         <View style={styles.subtitle}>
@@ -62,13 +66,13 @@ export const PlanCard: React.FC<PlanCard> = ({
             <ErrorIcon fill={color.Error[400]} />
             <Gap width={widthPercentage(4)} />
             <Text style={[typography.Body4, {color: color.Error[400]}]}>
-              {'Insufficient coin, add more coin to subscribe'}
+              {t('ExclusiveContent.ErrorCoinSubs')}
             </Text>
           </View>
 
           <TouchableOpacity onPress={onPressError}>
             <Text style={[typography.Body4, {color: color.Pink[2]}]}>
-              + Add More Coin
+              + {t('Setting.Tips.Label.AddMoreCoin')}
             </Text>
           </TouchableOpacity>
         </View>

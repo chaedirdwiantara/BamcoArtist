@@ -5,6 +5,7 @@ import SquareComp from './SquareComp';
 import {widthResponsive} from '../../utils';
 import {color, font} from '../../theme';
 import {ms} from 'react-native-size-matters';
+import {useTranslation} from 'react-i18next';
 
 interface ImagesProps {
   image: string;
@@ -20,6 +21,7 @@ interface PhotoProps {
 }
 
 const Photo: FC<PhotoProps> = (props: PhotoProps) => {
+  const {t} = useTranslation();
   const {title, data, photoOnpress, showWarning = true} = props;
 
   return (
@@ -73,7 +75,7 @@ const Photo: FC<PhotoProps> = (props: PhotoProps) => {
         </View>
       ) : (
         showWarning && (
-          <Text style={styles.captionStyle}>No Photos available</Text>
+          <Text style={styles.captionStyle}>{t('EmptyState.NoPhoto')}</Text>
         )
       )}
     </View>

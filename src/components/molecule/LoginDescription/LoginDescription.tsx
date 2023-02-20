@@ -6,6 +6,7 @@ import {width} from '../../../utils';
 import Color from '../../../theme/Color';
 import {SSULogo} from '../../../assets/logo';
 import Typography from '../../../theme/Typography';
+import {useTranslation} from 'react-i18next';
 
 interface LoginDescriptionProps {
   containerStyle?: ViewStyle;
@@ -14,9 +15,9 @@ interface LoginDescriptionProps {
 export const LoginDescription: React.FC<LoginDescriptionProps> = ({
   containerStyle,
 }) => {
-  const title = 'Begin Today';
-  const description =
-    'Sign In or Register to explore full features and support the musician';
+  const {t} = useTranslation();
+  const title = t('General.Begin');
+  const description = t('General.TopDescription');
 
   return (
     <View style={[styles.root, containerStyle]}>

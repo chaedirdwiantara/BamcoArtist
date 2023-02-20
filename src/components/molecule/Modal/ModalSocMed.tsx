@@ -34,6 +34,7 @@ import {useProfileHook} from '../../../hooks/use-profile.hook';
 import {nameValue} from '../../../interface/base.interface';
 import {Social} from '../../../data/profile';
 import {ModalLoading} from '../ModalLoading/ModalLoading';
+import {useTranslation} from 'react-i18next';
 
 interface ModalSocMedProps {
   titleModal: string;
@@ -46,6 +47,7 @@ export const ModalSocMed: React.FC<ModalSocMedProps> = ({
   modalVisible,
   onPressClose,
 }) => {
+  const {t} = useTranslation();
   const {isLoading, updateProfileUser, getProfileUser, dataProfile} =
     useProfileHook();
   const [focusInput, setFocusInput] = useState<string>('');
@@ -129,7 +131,7 @@ export const ModalSocMed: React.FC<ModalSocMedProps> = ({
           {icon}
         </View>
         <SsuInput.InputText
-          placeholder={'Add Link'}
+          placeholder={t('Setting.Account.Placeholder.Username') || ''}
           fontColor={color.Neutral[10]}
           disabled={!isFocus}
           containerStyles={styles.containerContent}
@@ -156,7 +158,7 @@ export const ModalSocMed: React.FC<ModalSocMedProps> = ({
           </View>
         ) : (
           <Button
-            label={newValue ? 'Unset' : 'Set'}
+            label={newValue ? t('Btn.Unset') : t('Btn.Set')}
             onPress={() =>
               newValue ? onPressUnset(item) : setFocusInput(item)
             }
@@ -178,7 +180,7 @@ export const ModalSocMed: React.FC<ModalSocMedProps> = ({
 
         <Button
           type="border"
-          label="Cancel"
+          label={t('Btn.Cancel')}
           containerStyles={styles.btnCancel}
           textStyles={{color: color.Pink.linear}}
           onPress={onPressClose}

@@ -18,6 +18,7 @@ import {Dropdown} from '../DropDown';
 import {color, font} from '../../../theme';
 import {Gap, SquareImage} from '../../atom';
 import {DefaultImage, SoundIcon} from '../../../assets/icon';
+import {useTranslation} from 'react-i18next';
 
 interface ListProps {
   imgUri: string | null;
@@ -53,13 +54,14 @@ const MusicListCard: React.FC<ListProps> = ({
   hideDropdownMore = false,
   activeOpacity,
 }) => {
+  const {t} = useTranslation();
   // ? Dropdown Menu Example
   const dataMore = [
-    {label: 'Add to Playlist', value: '1'},
-    {label: 'Send Donation', value: '2'},
-    {label: 'Add to Queue', value: '3'},
-    {label: 'Share Music', value: '4'},
-    {label: 'Show Credits', value: '5'},
+    {label: t('Home.Tab.TopSong.Playlist'), value: '1'},
+    {label: t('Home.Tab.TopSong.Tip'), value: '2'},
+    {label: t('Home.Tab.TopSong.Queue'), value: '3'},
+    {label: t('Home.Tab.TopSong.Share'), value: '4'},
+    {label: t('Home.Tab.TopSong.Credit'), value: '5'},
   ];
 
   const titleColor = played ? color.Success[400] : color.Neutral[10];

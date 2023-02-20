@@ -4,6 +4,7 @@ import {
   NativeStackScreenProps,
 } from '@react-navigation/native-stack';
 import React, {useState} from 'react';
+import {useTranslation} from 'react-i18next';
 import {
   View,
   StyleSheet,
@@ -55,6 +56,7 @@ const renderPagination = (index: number, total: number) => {
 export const MerchDetail: React.FC<MerchDetailProps> = ({
   route,
 }: MerchDetailProps) => {
+  const {t} = useTranslation();
   const data = route.params;
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
@@ -120,7 +122,7 @@ export const MerchDetail: React.FC<MerchDetailProps> = ({
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
       <View style={styles.root}>
         <TopNavigation.Type4
-          title="Merch Detail"
+          title={t('Event.Merch.Detail')}
           maxLengthTitle={20}
           itemStrokeColor={'white'}
           rightIcon={<ThreeDotsIcon fill={Color.Neutral[10]} />}
@@ -171,13 +173,13 @@ export const MerchDetail: React.FC<MerchDetailProps> = ({
           </View>
           <SsuDivider />
           <View style={styles.descContainer}>
-            <Text style={styles.subtitle}>Description</Text>
+            <Text style={styles.subtitle}>{t('Event.Description')}</Text>
             <Text style={styles.desc}>{data.desc ? data.desc : '-'}</Text>
           </View>
           <SsuDivider />
           <View style={styles.descContainer}>
             <View style={styles.attribute}>
-              <Text style={styles.subtitle}>Select Size</Text>
+              <Text style={styles.subtitle}>{t('Event.Merch.Size')}</Text>
               <SelectSize
                 selectedSize={selectedSize}
                 sizes={sizes}
@@ -185,7 +187,7 @@ export const MerchDetail: React.FC<MerchDetailProps> = ({
               />
             </View>
             <View style={styles.attribute}>
-              <Text style={styles.subtitle}>Choose Color</Text>
+              <Text style={styles.subtitle}>{t('Event.Merch.Color')}</Text>
               <SelectColor
                 selectedColor={selectedColor}
                 colors={colors}
@@ -193,7 +195,7 @@ export const MerchDetail: React.FC<MerchDetailProps> = ({
               />
             </View>
             <View>
-              <Text style={styles.subtitle}>Quantity</Text>
+              <Text style={styles.subtitle}>{t('Event.Quantity')}</Text>
               <QuantityInput
                 value={quantity.toString()}
                 onPress={handleQuantity}
@@ -205,13 +207,13 @@ export const MerchDetail: React.FC<MerchDetailProps> = ({
           </View>
           <View style={styles.descContainer}>
             <ButtonGradient
-              label="Buy Now"
+              label={t('Btn.BuyNow')}
               gradientStyles={{width: '100%'}}
               containerStyles={{marginBottom: 8}}
               onPress={() => null}
             />
             <Button
-              label="Add to Cart"
+              label={t('Btn.AddToCart')}
               type="border"
               containerStyles={{width: '100%'}}
             />

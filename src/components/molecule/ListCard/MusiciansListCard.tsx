@@ -18,6 +18,7 @@ import {
 import {color, font} from '../../../theme';
 import {Dropdown} from '../DropDown';
 import {DefaultAvatar} from '../../../assets/icon';
+import {useTranslation} from 'react-i18next';
 
 export interface ListProps {
   musicianNum?: number | string;
@@ -34,6 +35,7 @@ export interface ListProps {
 }
 
 const MusiciansListCard: React.FC<ListProps> = (props: ListProps) => {
+  const {t} = useTranslation();
   const {
     musicianNum,
     onPressMore,
@@ -50,9 +52,9 @@ const MusiciansListCard: React.FC<ListProps> = (props: ListProps) => {
 
   // ? Dropdown Menu Example
   const dataMore = [
-    {label: 'Follow', value: '1'},
-    {label: 'Send Donation', value: '2'},
-    {label: 'Go To Musician', value: '3'},
+    {label: t('Home.Tab.TopMusician.Follow'), value: '1'},
+    {label: t('Home.Tab.TopMusician.Tip'), value: '2'},
+    {label: t('Home.Tab.TopMusician.Profile'), value: '3'},
   ];
 
   const moreMenu = () => {
@@ -98,11 +100,11 @@ const MusiciansListCard: React.FC<ListProps> = (props: ListProps) => {
                 <Text style={styles.followersCount} numberOfLines={1}>
                   {`${toCurrency(followersCount, {
                     withFraction: false,
-                  })} Followers`}
+                  })} ${t('General.Followers')}`}
                 </Text>
               ) : (
                 <Text style={styles.followersCount} numberOfLines={1}>
-                  0 Followers
+                  0 {t('General.Followers')}
                 </Text>
               )}
             </View>

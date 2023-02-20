@@ -8,6 +8,7 @@ import Color from '../../../../theme/Color';
 import {TopNavigation} from '../../TopNavigation';
 import {dataRecommendedArtist} from '../../../../data/following';
 import {heightPercentage, width, widthPercentage} from '../../../../utils';
+import {useTranslation} from 'react-i18next';
 
 interface FollowingListProps {
   onPressGoBack: () => void;
@@ -16,6 +17,7 @@ interface FollowingListProps {
 export const FollowingList: React.FC<FollowingListProps> = ({
   onPressGoBack,
 }) => {
+  const {t} = useTranslation();
   const [search, setSearch] = useState('');
 
   const followOnPress = () => {};
@@ -23,7 +25,7 @@ export const FollowingList: React.FC<FollowingListProps> = ({
   return (
     <View style={styles.root}>
       <TopNavigation.Type1
-        title="Following"
+        title={t('Preference.Following')}
         leftIcon={<ArrowLeftIcon />}
         itemStrokeColor={Color.Neutral[10]}
         leftIconAction={onPressGoBack}

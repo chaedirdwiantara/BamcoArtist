@@ -15,8 +15,9 @@ import {
 } from '../../../utils';
 import Font from '../../../theme/Font';
 import Color from '../../../theme/Color';
-import {InfoProfileType, infoProfileUser} from '../../../data/profile';
+import {InfoProfileType} from '../../../data/profile';
 import {ProfileFansResponseData} from '../../../interface/profile.interface';
+import {useTranslation} from 'react-i18next';
 
 interface UserInfoCardProps {
   profile?: any;
@@ -60,44 +61,42 @@ const UserInfoCard: FC<UserInfoCardProps> = (props: UserInfoCardProps) => {
     selfProfile,
     totalCountlikedSong,
   } = props;
+  const {t} = useTranslation();
   const infoProfileArtist = [
     {
       point: profile?.totalFans ? profile.totalFans : 0,
-      title: 'FANS',
+      title: t('Musician.Label.Fans'),
     },
     {
       point: profile?.totalFollowers ? profile.totalFollowers : 0,
-      title: 'FOLLOWERS',
+      title: t('Musician.Label.Followers'),
     },
     {
       point: profile?.totalRelease ? profile.totalRelease : 0,
-      title: 'RELEASE',
+      title: t('Musician.Label.Releases'),
     },
     {
       point: profile?.totalPlaylist ? profile.totalPlaylist : 0,
-      title: 'PLAYLIST',
+      title: t('Musician.Label.Playlists'),
     },
     {
       point: profile?.rank ? profile.rank : 0,
-      title: 'RANK',
+      title: t('Musician.Label.Rank'),
     },
   ];
 
   const infoProfileUser = [
     {
       point: selfProfile?.following ? selfProfile.following : 0,
-      title: 'FOLLOWING',
+      title: t('Profile.Label.Following'),
     },
     {
       point: totalCountlikedSong ? totalCountlikedSong : 0,
-      title: 'LIKED SONGS',
+      title: t('Profile.Label.Liked'),
     },
     {
-      point:
-        selfProfile?.point !== undefined && selfProfile?.point.daily
-          ? selfProfile.point.daily
-          : 0,
-      title: 'POINTS',
+      point: selfProfile?.points.daily ? selfProfile.points.daily : 0,
+      title: t('Profile.Label.Point'),
     },
   ];
 
@@ -107,7 +106,7 @@ const UserInfoCard: FC<UserInfoCardProps> = (props: UserInfoCardProps) => {
   return (
     <View style={[styles.root, containerStyles]}>
       {listItem.map((val, i) => {
-        const isFollowing = val.title === 'FOLLOWING';
+        const isFollowing = val.title === t('Profile.Label.Following');
         const newOnPress = () => {
           isFollowing ? onPress() : null;
         };

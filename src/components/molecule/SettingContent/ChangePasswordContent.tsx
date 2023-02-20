@@ -16,6 +16,7 @@ import {
 import {useSettingHook} from '../../../hooks/use-setting.hook';
 import {ms, mvs} from 'react-native-size-matters';
 import {color, font, typography} from '../../../theme';
+import {useTranslation} from 'react-i18next';
 
 interface ChangePasswordProps {
   onPressGoBack: () => void;
@@ -45,6 +46,7 @@ interface InputProps {
 export const ChangePasswordContent: React.FC<ChangePasswordProps> = ({
   onPressGoBack,
 }) => {
+  const {t} = useTranslation();
   const [disabledButton, setDisabledButton] = useState<boolean>(true);
   const [toastVisible, setToastVisible] = useState<boolean>(false);
   const [isSubmit, setIsSubmit] = useState<boolean>(false);
@@ -105,7 +107,7 @@ export const ChangePasswordContent: React.FC<ChangePasswordProps> = ({
   return (
     <View style={styles.root}>
       <TopNavigation.Type1
-        title="Change Password"
+        title={t('Setting.Password.Title')}
         leftIcon={<ArrowLeftIcon />}
         itemStrokeColor={color.Neutral[10]}
         leftIconAction={onPressGoBack}
@@ -117,14 +119,14 @@ export const ChangePasswordContent: React.FC<ChangePasswordProps> = ({
         control={control}
         render={({field: {onChange, value}}) => (
           <SsuInput.InputLabel
-            label="Input Old Password"
+            label={t('Setting.Password.Label.Old') || ''}
             password
             value={value}
             onChangeText={text => {
               onChange(text);
               setIsError(false);
             }}
-            placeholder={'Input Old Password'}
+            placeholder={t('Setting.Password.Label.Old') || ''}
             isError={errors?.password ? true : false}
             errorMsg={errors?.password?.message}
             containerStyles={{marginTop: heightPercentage(15)}}
@@ -145,14 +147,14 @@ export const ChangePasswordContent: React.FC<ChangePasswordProps> = ({
         control={control}
         render={({field: {onChange, value}}) => (
           <SsuInput.InputLabel
-            label="New Password"
+            label={t('Setting.Password.Label.New') || ''}
             password
             value={value}
             onChangeText={text => {
               onChange(text);
               setIsError(false);
             }}
-            placeholder={'New Password'}
+            placeholder={t('Setting.Password.Label.New') || ''}
             isError={errors?.newPassword ? true : false}
             errorMsg={errors?.newPassword?.message}
             containerStyles={{marginTop: heightPercentage(15)}}
@@ -165,14 +167,14 @@ export const ChangePasswordContent: React.FC<ChangePasswordProps> = ({
         control={control}
         render={({field: {onChange, value}}) => (
           <SsuInput.InputLabel
-            label="Repeat Password"
+            label={t('Setting.Password.Label.Repeat') || ''}
             password
             value={value}
             onChangeText={text => {
               onChange(text);
               setIsError(false);
             }}
-            placeholder={'Repeat Password'}
+            placeholder={t('Setting.Password.Label.Repeat') || ''}
             isError={errors?.repeatPassword ? true : false}
             errorMsg={errors?.repeatPassword?.message}
             containerStyles={{marginTop: heightPercentage(15)}}
@@ -181,7 +183,7 @@ export const ChangePasswordContent: React.FC<ChangePasswordProps> = ({
       />
 
       <Button
-        label="Change Password"
+        label={t('Setting.Password.Title')}
         onPress={handleSubmit(onPressSave)}
         containerStyles={disabledButton ? styles.buttonDisabled : styles.button}
         disabled={disabledButton}

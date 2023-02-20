@@ -13,6 +13,7 @@ import {uploadImage} from '../../api/uploadImage.api';
 import {useProfileHook} from '../../hooks/use-profile.hook';
 import {MainTabParams, RootStackParams} from '../../navigations';
 import {ModalLoading} from '../../components/molecule/ModalLoading/ModalLoading';
+import {useTranslation} from 'react-i18next';
 
 type EditProfileProps = NativeStackScreenProps<RootStackParams, 'EditProfile'>;
 
@@ -20,6 +21,7 @@ export const EditProfileScreen: React.FC<EditProfileProps> = ({
   navigation,
   route,
 }: EditProfileProps) => {
+  const {t} = useTranslation();
   const navigation2 = useNavigation<NativeStackNavigationProp<MainTabParams>>();
   const dataProfile = route.params;
   const banners =
@@ -85,7 +87,7 @@ export const EditProfileScreen: React.FC<EditProfileProps> = ({
   const profile = {
     fullname: dataProfile?.fullname,
     username: '@' + dataProfile?.username,
-    bio: dataProfile?.bio || "I'm here to support the musician",
+    bio: dataProfile?.bio || t('Profile.Label.Description'),
     about: dataProfile?.about,
     avatarUri: avatarUri,
     backgroundUri: backgroundUri,

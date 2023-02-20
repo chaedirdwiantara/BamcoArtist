@@ -12,6 +12,7 @@ import {Button} from '../../../components';
 import {color, font, typography} from '../../../theme';
 import {DataExclusiveResponse} from '../../../interface/setting.interface';
 import {PhotoPlaylist} from '../../../components/molecule/PlaylistContent/PhotoPlaylist';
+import {useTranslation} from 'react-i18next';
 
 interface ItemProps {
   title: string;
@@ -33,6 +34,7 @@ const ListItem: React.FC<ItemProps> = ({title, description}) => {
 };
 
 export const EditEC: React.FC<CreateProps> = ({data, onPress}) => {
+  const {t} = useTranslation();
   const priceWeekly = data.pricingPlans.filter(
     val => val.durationUnit === 'weekly',
   );
@@ -44,15 +46,21 @@ export const EditEC: React.FC<CreateProps> = ({data, onPress}) => {
   );
   const weekly =
     priceWeekly.length > 0
-      ? kFormatter(priceWeekly[0].price) + ' Credit/Week'
+      ? kFormatter(priceWeekly[0].price) +
+        ' Credit/' +
+        t('ExclusiveContent.Week')
       : '-';
   const monthly =
     priceMonthly.length > 0
-      ? kFormatter(priceMonthly[0].price) + ' Credit/Month'
+      ? kFormatter(priceMonthly[0].price) +
+        ' Credit/' +
+        t('ExclusiveContent.Month')
       : '-';
   const yearly =
     priceYearly.length > 0
-      ? kFormatter(priceYearly[0].price) + ' Credit/Year'
+      ? kFormatter(priceYearly[0].price) +
+        ' Credit/' +
+        t('ExclusiveContent.Year')
       : '-';
 
   return (
@@ -62,7 +70,7 @@ export const EditEC: React.FC<CreateProps> = ({data, onPress}) => {
           typography.Button2,
           {color: color.Neutral[50], marginVertical: heightPercentage(8)},
         ]}>
-        Basic Information
+        {t('Setting.Exclusive.Label.Basic')}
       </Text>
       <View style={{marginBottom: heightPercentage(5)}}>
         <Text
@@ -70,7 +78,7 @@ export const EditEC: React.FC<CreateProps> = ({data, onPress}) => {
             typography.Caption,
             {color: color.Neutral[50], marginVertical: heightPercentage(7)},
           ]}>
-          Exclusive Content Cover
+          {t('Setting.Exclusive.Label.Cover')}
         </Text>
         <PhotoPlaylist
           uri={data.coverImage}
@@ -79,8 +87,14 @@ export const EditEC: React.FC<CreateProps> = ({data, onPress}) => {
           iconStyles={{width: widthPercentage(22), height: widthPercentage(22)}}
         />
 
-        <ListItem title={'Title'} description={data.title} />
-        <ListItem title={'Description'} description={data.description} />
+        <ListItem
+          title={t('Setting.Exclusive.Label.Title')}
+          description={data.title}
+        />
+        <ListItem
+          title={t('Setting.Exclusive.Label.Description')}
+          description={data.description}
+        />
 
         <Text
           style={[
@@ -90,12 +104,16 @@ export const EditEC: React.FC<CreateProps> = ({data, onPress}) => {
           Pricing Plan
         </Text>
 
-        <ListItem title={'Weekly'} description={weekly} />
-        <ListItem title={'Monthly'} description={monthly} />
-        <ListItem title={'Yearly'} description={yearly} />
+        <ListItem title={t('ExclusiveContent.Weekly')} description={weekly} />
+        <ListItem title={t('ExclusiveContent.Monthly')} description={monthly} />
+        <ListItem title={t('ExclusiveContent.Yearly')} description={yearly} />
       </View>
 
-      <Button label="Edit" onPress={onPress} containerStyles={styles.button} />
+      <Button
+        label={t('Btn.Edit')}
+        onPress={onPress}
+        containerStyles={styles.button}
+      />
     </View>
   );
 };

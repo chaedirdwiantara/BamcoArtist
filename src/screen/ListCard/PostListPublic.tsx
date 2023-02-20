@@ -46,6 +46,7 @@ import categoryNormalize from '../../utils/categoryNormalize';
 import {ModalLoading} from '../../components/molecule/ModalLoading/ModalLoading';
 import {usePlayerHook} from '../../hooks/use-player.hook';
 import MusicListPreview from '../../components/molecule/MusicPreview/MusicListPreview';
+import {useTranslation} from 'react-i18next';
 
 const {height} = Dimensions.get('screen');
 
@@ -56,6 +57,7 @@ interface PostListProps {
 }
 
 const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
+  const {t} = useTranslation();
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
   const {dataRightDropdown, dataLeftDropdown, uuidMusician = ''} = props;
@@ -151,7 +153,7 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
     });
   };
   const resultDataCategory = (dataResultCategory: DataDropDownType) => {
-    dataResultCategory.label === 'All'
+    dataResultCategory.label === t('Home.Tab.TopPost.Category.All')
       ? getListDataPost({page: page, perPage: perPage})
       : getListDataPost({
           page: page,
@@ -331,11 +333,12 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
           }}>
           <Dropdown.Menu
             data={dataLeftDropdown}
-            placeHolder={'Filter by'}
+            placeHolder={t('Feed.Sort.Title')}
             selectedMenu={resultDataFilter}
             containerStyle={{
               width: widthPercentage(138),
             }}
+            translation={true}
           />
         </View>
         <View
@@ -344,12 +347,13 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
           }}>
           <Dropdown.Menu
             data={dataRightDropdown}
-            placeHolder={'Category'}
+            placeHolder={t('Home.Tab.TopPost.Category.Title')}
             selectedMenu={resultDataCategory}
             containerStyle={{
               width: widthPercentage(138),
               marginLeft: widthPercentage(-57),
             }}
+            translation={true}
           />
         </View>
       </View>
@@ -501,7 +505,7 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
         <ListToFollowMusician />
       ) : dataMain?.length === 0 && feedMessage === 'musician not have post' ? (
         <EmptyState
-          text={`Your following musician don't have any post, try to follow more musician`}
+          text={t('EmptyState.FollowMusician') || ''}
           containerStyle={{
             justifyContent: 'flex-start',
             paddingTop: heightPercentage(24),
@@ -509,7 +513,7 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
         />
       ) : (
         <EmptyState
-          text={'No data available'}
+          text={t('EmptyState.NoData') || ''}
           containerStyle={{
             justifyContent: 'flex-start',
             paddingTop: heightPercentage(24),
@@ -531,7 +535,7 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
         }
         modalVisible={modalShare}
         onPressClose={() => setModalShare(false)}
-        titleModal={'Share Feed'}
+        titleModal={t('General.Share.Feed')}
         hideMusic
         onPressCopy={() =>
           InteractionManager.runAfterInteractions(() => setToastVisible(true))
@@ -549,7 +553,7 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
             />
             <Gap width={widthResponsive(7)} />
             <Text style={[typography.Button2, styles.textStyle]}>
-              Link have been copied to clipboard!
+              {t('General.LinkCopied')}
             </Text>
           </View>
         }
