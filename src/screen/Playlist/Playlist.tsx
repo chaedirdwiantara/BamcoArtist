@@ -60,11 +60,13 @@ export const PlaylistScreen: React.FC<PlaylistProps> = ({
       hidePlayer();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isFocused]);
+  }, [isFocused, isPlaying]);
 
   const goBackProfile = (showToast: boolean) => {
     storage.set('withoutBottomTab', false);
-    navigation2.navigate('Profile', {deletePlaylist: showToast});
+    setTimeout(() => {
+      navigation2.navigate('Profile', {deletePlaylist: showToast});
+    }, 500);
   };
 
   useBackHandler(() => {
@@ -124,6 +126,7 @@ export const PlaylistScreen: React.FC<PlaylistProps> = ({
           listSong={dataSongsPlaylist}
           onPressSong={onPressSong}
           playerVisible={playerVisible}
+          onPressGoBack={() => goBackProfile(false)}
         />
       )}
     </View>

@@ -1,12 +1,9 @@
 import React from 'react';
 import {ScrollView, StyleSheet, View} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
 import {color} from '../../theme';
 import TopSong from '../ListCard/TopSong';
 import {ArrowLeftIcon} from '../../assets/icon';
-import {RootStackParams} from '../../navigations';
 import {SongList} from '../../interface/song.interface';
 import {EmptyState, TopNavigation} from '../../components';
 import {heightPercentage, widthPercentage} from '../../utils';
@@ -15,20 +12,15 @@ interface Props {
   listSong: SongList[] | undefined;
   onPressSong: (param: SongList | null) => void;
   playerVisible: boolean;
+  onPressGoBack: () => void;
 }
 
 export const DefaultPlaylist: React.FC<Props> = ({
   listSong,
   onPressSong,
   playerVisible,
+  onPressGoBack,
 }) => {
-  const navigation =
-    useNavigation<NativeStackNavigationProp<RootStackParams>>();
-
-  const onPressGoBack = () => {
-    navigation.goBack();
-  };
-
   return (
     <View style={styles.root}>
       <TopNavigation.Type4
