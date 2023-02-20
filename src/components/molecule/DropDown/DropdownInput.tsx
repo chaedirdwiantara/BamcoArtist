@@ -26,6 +26,7 @@ interface InputDropdownProps {
   showSearch?: boolean;
   translation?: boolean;
   disable?: boolean;
+  dropdownPosition?: 'auto' | 'bottom' | 'top';
 }
 
 const borderColor = color.Dark[500];
@@ -49,6 +50,7 @@ const InputDropdown: React.FC<InputDropdownProps> = (
     showSearch,
     translation,
     disable,
+    dropdownPosition,
   } = props;
   const initValue = {label: initialValue, value: initialValue};
 
@@ -103,6 +105,7 @@ const InputDropdown: React.FC<InputDropdownProps> = (
         search={showSearch || type === 'location'}
         searchPlaceholder="Search..."
         inputSearchStyle={styles.selectedTextStyle}
+        dropdownPosition={dropdownPosition}
       />
       {isError ? (
         <View style={styles.containerErrorMsg}>
