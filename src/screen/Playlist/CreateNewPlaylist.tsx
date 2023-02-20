@@ -1,22 +1,28 @@
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
 
 import Color from '../../theme/Color';
 import {RootStackParams} from '../../navigations';
 import {CreateNewPlaylistContent} from '../../components';
 
-export const CreateNewPlaylist: React.FC = () => {
-  const navigation =
-    useNavigation<NativeStackNavigationProp<RootStackParams>>();
+type CreateNewPlaylistProps = NativeStackScreenProps<
+  RootStackParams,
+  'CreateNewPlaylist'
+>;
+
+export const CreateNewPlaylist: React.FC<CreateNewPlaylistProps> = ({
+  navigation,
+  route,
+}: CreateNewPlaylistProps) => {
+  const {params} = route;
 
   const onPressGoBack = () => {
     navigation.goBack();
   };
 
   const goToPlaylist = (id: number) => {
-    navigation.navigate('Playlist', {id});
+    navigation.navigate('Playlist', {id, name: ''});
   };
 
   return (
@@ -24,6 +30,7 @@ export const CreateNewPlaylist: React.FC = () => {
       <CreateNewPlaylistContent
         onPressGoBack={onPressGoBack}
         goToPlaylist={goToPlaylist}
+        songAddedToPlaylist={params}
       />
     </View>
   );
