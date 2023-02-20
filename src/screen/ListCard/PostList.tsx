@@ -76,6 +76,7 @@ const PostListHome: FC<PostListProps> = (props: PostListProps) => {
     setUnlikePost,
     setCommentToPost,
     getListTopPost,
+    setDeletePost,
   } = useFeedHook();
 
   const {
@@ -283,11 +284,23 @@ const PostListHome: FC<PostListProps> = (props: PostListProps) => {
 
   // ! UPDATE COMMENT AREA
   useEffect(() => {
-    if (selectedIdPost !== undefined && selectedMenu !== undefined) {
-      console.log('selectedIdPost', selectedIdPost);
-      console.log('selectedMenu', selectedMenu);
+    if (
+      selectedIdPost !== undefined &&
+      selectedMenu !== undefined &&
+      dataMain
+    ) {
+      if (selectedMenu.label === 'Delete Post') {
+        setDeletePost({id: selectedIdPost});
+        setDataMain(dataMain.filter(data => data.id !== selectedIdPost));
+        setSelectedMenu(undefined);
+      }
+      if (selectedMenu.label === 'Edit Post') {
+        let dataSelected = dataMain.filter(data => data.id === selectedIdPost);
+        navigation.navigate('CreatePost', {postData: dataSelected[0]});
+        setSelectedMenu(undefined);
+      }
     }
-  }, [selectedIdPost, selectedMenu]);
+  }, [selectedIdPost, selectedMenu, dataMain]);
   // ! END OF UPDATE COMMENT AREA
 
   // ! MUSIC AREA
