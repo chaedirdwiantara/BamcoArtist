@@ -348,7 +348,7 @@ const CommentSection: FC<CommentSectionType> = (props: CommentSectionType) => {
                   </Text>
                 </TouchableOpacity>
               ) : dataLvl3 !== undefined &&
-                filterParentID(dataLvl3, id).length != commentsCount ? (
+                filterParentID(dataLvl3, id).length !== commentsCount ? (
                 <TouchableOpacity>
                   <Text
                     style={styles.viewMore}

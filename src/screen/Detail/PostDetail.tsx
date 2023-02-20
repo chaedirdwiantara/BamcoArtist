@@ -137,6 +137,7 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   const [commentLvl1, setCommentLvl1] = useState<CommentList[]>();
   const [commentLvl2, setCommentLvl2] = useState<CommentList2[]>();
   const [commentLvl3, setCommentLvl3] = useState<CommentList3[]>();
+  const [disallowStatic, setDisallowStatic] = useState<boolean>(false);
   const [staticId, setStaticId] = useState<string[]>([]);
   const [commentCountLvl1, setCommmentCountLvl1] = useState<number>(0);
 
@@ -339,7 +340,7 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   useEffect(() => {
     if (cmntToCmnt !== undefined) {
       setUserName(cmntToCmnt.userName);
-      setInputCommentModal(!inputCommentModal);
+      setInputCommentModal(true);
     }
   }, [cmntToCmnt]);
 
@@ -407,39 +408,50 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
       },
     ];
     setTemporaryIds(comment[0].id);
-    if (cmntToCmntLvl0?.commentLvl === 0 && commentLvl1 !== undefined) {
-      return (
-        setCommentLvl1([...commentLvl1, ...comment]),
-        setCmntToCmntLvl0(undefined),
-        setStaticId([...staticId, comment[0].id])
-      );
-    } else if (cmntToCmntLvl0?.commentLvl === 0 && commentLvl1 === undefined) {
-      return (
-        setCommentLvl1(comment),
-        setCmntToCmntLvl0(undefined),
-        setStaticId([...staticId, comment[0].id])
-      );
-    } else if (cmntToCmnt?.commentLvl === 1 && commentLvl2 !== undefined) {
-      return (
-        setCommentLvl2([...commentLvl2, ...comment]),
-        setStaticId([...staticId, comment[0].id])
-      );
-    } else if (cmntToCmnt?.commentLvl === 1 && commentLvl2 === undefined) {
-      return setCommentLvl2(comment), setStaticId([...staticId, comment[0].id]);
-    } else if (cmntToCmnt?.commentLvl === 2 && commentLvl3 !== undefined) {
-      return (
-        setCommentLvl3([...commentLvl3, ...comment]),
-        setStaticId([...staticId, comment[0].id])
-      );
-    } else if (cmntToCmnt?.commentLvl === 2 && commentLvl3 === undefined) {
-      return setCommentLvl3(comment), setStaticId([...staticId, comment[0].id]);
-    } else if (cmntToCmnt?.commentLvl === 3 && commentLvl3 !== undefined) {
-      return (
-        setCommentLvl3([...commentLvl3, ...comment]),
-        setStaticId([...staticId, comment[0].id])
-      );
-    } else if (cmntToCmnt?.commentLvl === 3 && commentLvl3 === undefined) {
-      return setCommentLvl3(comment), setStaticId([...staticId, comment[0].id]);
+    if (dataComment === null) {
+      if (cmntToCmntLvl0?.commentLvl === 0 && commentLvl1 !== undefined) {
+        return (
+          setCommentLvl1([...commentLvl1, ...comment]),
+          setCmntToCmntLvl0(undefined),
+          setStaticId([...staticId, comment[0].id])
+        );
+      } else if (
+        cmntToCmntLvl0?.commentLvl === 0 &&
+        commentLvl1 === undefined
+      ) {
+        return (
+          setCommentLvl1(comment),
+          setCmntToCmntLvl0(undefined),
+          setStaticId([...staticId, comment[0].id])
+        );
+      } else if (cmntToCmnt?.commentLvl === 1 && commentLvl2 !== undefined) {
+        return (
+          setCommentLvl2([...commentLvl2, ...comment]),
+          setStaticId([...staticId, comment[0].id])
+        );
+      } else if (cmntToCmnt?.commentLvl === 1 && commentLvl2 === undefined) {
+        return (
+          setCommentLvl2(comment), setStaticId([...staticId, comment[0].id])
+        );
+      } else if (cmntToCmnt?.commentLvl === 2 && commentLvl3 !== undefined) {
+        return (
+          setCommentLvl3([...commentLvl3, ...comment]),
+          setStaticId([...staticId, comment[0].id])
+        );
+      } else if (cmntToCmnt?.commentLvl === 2 && commentLvl3 === undefined) {
+        return (
+          setCommentLvl3(comment), setStaticId([...staticId, comment[0].id])
+        );
+      } else if (cmntToCmnt?.commentLvl === 3 && commentLvl3 !== undefined) {
+        return (
+          setCommentLvl3([...commentLvl3, ...comment]),
+          setStaticId([...staticId, comment[0].id])
+        );
+      } else if (cmntToCmnt?.commentLvl === 3 && commentLvl3 === undefined) {
+        return (
+          setCommentLvl3(comment), setStaticId([...staticId, comment[0].id])
+        );
+      }
     }
   };
 
@@ -475,9 +487,10 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
         setCommentLvl3(theComment);
         setDataComment(null);
         setTemporaryIds(undefined);
+        setDisallowStatic(true);
       }
     }
-  }, [dataComment]);
+  }, [dataComment, temporaryIds]);
 
   // * reset all state when modal comment is closed
   const onModalCommentHide = () => {
@@ -519,6 +532,7 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
           });
           setCommentCaption(commentNow.caption);
           setUpdateComment(true);
+          setDisallowStatic(false);
         }
       }
       // * delete/edit comment lvl2
@@ -541,6 +555,7 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
           });
           setCommentCaption(commentNow.caption);
           setUpdateComment(true);
+          setDisallowStatic(false);
         }
       }
       // * delete/edit comment lvl3
@@ -563,6 +578,7 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
           });
           setCommentCaption(commentNow.caption);
           setUpdateComment(true);
+          setDisallowStatic(false);
         }
       }
       // ? the call of update api will be handled on handleReplyOnPress
@@ -598,7 +614,7 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
         },
       },
     ];
-    // TODO: setTemporaryIds(comment[0].id); // COMMENTED cz response from be still not valid
+    setTemporaryIds(commentUpdate[0].id);
     if (cmntToCmnt?.commentLvl === 1 && commentLvl1) {
       let theComment = commentLvl1;
       let theIndex = theComment?.findIndex((x: CommentList) =>
@@ -615,7 +631,11 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
       theComment?.splice(theIndex, 1, commentUpdate[0]);
       setCommentLvl2(theComment);
     }
-    if (cmntToCmnt?.commentLvl === 3 && commentLvl3) {
+    if (
+      cmntToCmnt?.commentLvl === 3 &&
+      commentLvl3 &&
+      disallowStatic === false
+    ) {
       let theComment = commentLvl3;
       let theIndex = theComment?.findIndex((x: CommentList3) =>
         cmntToCmnt.id.includes(x.id),

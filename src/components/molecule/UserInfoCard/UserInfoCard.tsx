@@ -34,6 +34,7 @@ interface UserInfoCardProps {
   onPress: () => void;
   selfProfile?: ProfileFansResponseData;
   totalCountlikedSong?: number;
+  followersCount: number;
 }
 
 type Props = {
@@ -60,6 +61,7 @@ const UserInfoCard: FC<UserInfoCardProps> = (props: UserInfoCardProps) => {
     onPress,
     selfProfile,
     totalCountlikedSong,
+    followersCount,
   } = props;
   const {t} = useTranslation();
   const infoProfileArtist = [
@@ -68,7 +70,7 @@ const UserInfoCard: FC<UserInfoCardProps> = (props: UserInfoCardProps) => {
       title: t('Musician.Label.Fans'),
     },
     {
-      point: profile?.totalFollowers ? profile.totalFollowers : 0,
+      point: followersCount,
       title: t('Musician.Label.Followers'),
     },
     {
@@ -95,7 +97,7 @@ const UserInfoCard: FC<UserInfoCardProps> = (props: UserInfoCardProps) => {
       title: t('Profile.Label.Liked'),
     },
     {
-      point: selfProfile?.points.daily ? selfProfile.points.daily : 0,
+      point: selfProfile?.point.daily ? selfProfile.point.daily : 0,
       title: t('Profile.Label.Point'),
     },
   ];

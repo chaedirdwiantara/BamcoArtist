@@ -167,3 +167,39 @@ export type DetailSongResponseType = {
   message: string;
   status: number;
 };
+
+export type DataDetailAlbum = {
+  id: number;
+  musician: string;
+  musicianName: string;
+  title: string;
+  description: string;
+  imageUrl: imageTypes[];
+  featuringArtist: FeaturingArtists[];
+  genre: string;
+  subgenre: string;
+  likesCount: number;
+  shareCount: number;
+  mood: string;
+  copyrightProducer: string[];
+  copyrightVisual: string[];
+  copyrightFans: string[];
+  productionYear: string;
+  releaseDate: string;
+  publishedDate: string;
+  isPublished: boolean;
+  language: string;
+  label: string[];
+  barcodeUpc: string;
+  createdAt: string;
+  updatedAt: string;
+  status: string;
+  totalCountListener: number;
+};
+
+export type DetailAlbumResponseType = {
+  code: number;
+  data: DataDetailAlbum;
+  message: string;
+  status: number;
+};

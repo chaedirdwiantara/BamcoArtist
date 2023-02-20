@@ -19,7 +19,7 @@ import {Gap, SsuToast} from '../../atom';
 import {TopNavigation} from '../TopNavigation';
 import TopSong from '../../../screen/ListCard/TopSong';
 import {color, font, typography} from '../../../theme';
-import {dropDownHeaderAlbum} from '../../../data/dropdown';
+import {dataUpdateComment, dropDownHeaderAlbum} from '../../../data/dropdown';
 import {PhotoPlaylist} from '../PlaylistContent/PhotoPlaylist';
 import {ArrowLeftIcon, TickCircleIcon} from '../../../assets/icon';
 import {
@@ -30,18 +30,33 @@ import {
   ModalSuccessDonate,
 } from '../';
 import {useTranslation} from 'react-i18next';
+import {DataDetailAlbum, SongList} from '../../../interface/song.interface';
+import {dateFormat} from '../../../utils/date-format';
+import {useNavigation} from '@react-navigation/native';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {RootStackParams} from '../../../navigations';
 
 interface Props {
+  dataSong: SongList[] | null;
+  detailAlbum: DataDetailAlbum;
   onPressGoBack: () => void;
 }
 
-export const AlbumContent: React.FC<Props> = ({onPressGoBack}) => {
+export const AlbumContent: React.FC<Props> = ({
+  detailAlbum,
+  dataSong,
+  onPressGoBack,
+}) => {
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParams>>();
+
   const {t} = useTranslation();
   const [toastVisible, setToastVisible] = useState(false);
   const [modalDonate, setModalDonate] = useState<boolean>(false);
   const [modalShare, setModalShare] = useState<boolean>(false);
   const [modalSuccessDonate, setModalSuccessDonate] = useState<boolean>(false);
   const [trigger2ndModal, setTrigger2ndModal] = useState<boolean>(false);
+  const [songIdList, setSongIdList] = useState<number[]>([]);
 
   useEffect(() => {
     toastVisible &&
@@ -57,9 +72,22 @@ export const AlbumContent: React.FC<Props> = ({onPressGoBack}) => {
       }, 3000);
   }, [modalSuccessDonate, trigger2ndModal]);
 
+  useEffect(() => {
+    if (dataSong !== null) {
+      let Xter = [];
+      for (let i = 1; i <= dataSong.length; i++) {
+        Xter.push(dataSong[i].id);
+      }
+      setSongIdList(Xter);
+    }
+  }, [dataSong]);
+
   const resultDataMore = (dataResult: any) => {
     if (dataResult.value === '2') {
       setModalShare(true);
+    }
+    if (dataResult.value === '3') {
+      navigation.navigate('Playlist', {id: songIdList});
     }
   };
 
@@ -87,26 +115,39 @@ export const AlbumContent: React.FC<Props> = ({onPressGoBack}) => {
         leftIcon={<ArrowLeftIcon />}
         itemStrokeColor={Color.Neutral[10]}
         leftIconAction={onPressGoBack}
-        rightIconAction={() => null}
+        rightIconAction={() => {}}
         containerStyles={{paddingHorizontal: widthPercentage(20)}}
       />
 
       <ScrollView>
         <View style={{paddingHorizontal: widthPercentage(10)}}>
           <View style={{alignSelf: 'center'}}>
-            <PhotoPlaylist uri="https://i.pinimg.com/originals/b3/51/66/b35166174c9bde2d0cc436150a983912.jpg" />
+            <PhotoPlaylist
+              uri={
+                detailAlbum?.imageUrl.length > 0
+                  ? detailAlbum?.imageUrl[1].image
+                  : ''
+              }
+            />
           </View>
           <SongTitlePlay
-            title={'Smoke + Mirror'}
-            totalSong={10}
-            createdDate={'December 7, 2017'}
-            createdBy={'Imagine Dragons'}
+            title={detailAlbum?.title}
+            totalSong={dataSong?.length || 0}
+            createdDate={dateFormat(detailAlbum?.createdAt)}
+            createdBy={detailAlbum?.musicianName}
             avatarUri={
-              'https://thisis-images.scdn.co/37i9dQZF1DZ06evO2YqUuI-large.jpg'
+              detailAlbum?.imageUrl.length > 0
+                ? detailAlbum?.imageUrl[0].image
+                : ''
             }
+            showPlay={false}
           />
           <ListenersAndDonate
-            totalListener={66900}
+            totalListener={
+              detailAlbum?.totalCountListener
+                ? detailAlbum?.totalCountListener
+                : 0
+            }
             onPress={() => setModalDonate(true)}
           />
         </View>
@@ -118,11 +159,7 @@ export const AlbumContent: React.FC<Props> = ({onPressGoBack}) => {
             <Text style={[typography.Subtitle1, {color: color.Success[500]}]}>
               {t('Event.Description')}
             </Text>
-            <Text style={styles.description}>
-              {
-                "Born on the sofa of his childhood home, singer Lukas Forchhammer entered the world in unconventional surroundings. His parents' resided within the 84 acres of Christiania: an alternative, tightly knit community, formed in 1971 by squatters and artists in Cophenhagen. "
-              }
-            </Text>
+            <Text style={styles.description}>{detailAlbum.description}</Text>
           </View>
 
           <Text style={[typography.Subtitle1, {color: color.Success[500]}]}>
