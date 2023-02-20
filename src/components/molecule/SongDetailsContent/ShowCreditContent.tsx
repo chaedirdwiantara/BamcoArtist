@@ -1,16 +1,18 @@
 import React from 'react';
 import {StyleSheet, ScrollView, View, Text} from 'react-native';
+import {useTranslation} from 'react-i18next';
 
 import {Gap} from '../../atom';
 import Color from '../../../theme/Color';
 import {TopNavigation} from '../TopNavigation';
 import {ArrowLeftIcon} from '../../../assets/icon';
 import {color, font, typography} from '../../../theme';
-import {heightPercentage, normalize, widthPercentage} from '../../../utils';
+import {DataDetailSong} from '../../../interface/song.interface';
 import {dataShowCredit, ShowCreditType} from '../../../data/showCredit';
-import {useTranslation} from 'react-i18next';
+import {heightPercentage, normalize, widthPercentage} from '../../../utils';
 
 interface ShowCreditProps {
+  dataDetail: DataDetailSong | null;
   onPressGoBack: () => void;
 }
 
@@ -40,6 +42,7 @@ const Content: React.FC<ShowCreditType> = ({title, content}) => {
 };
 
 export const ShowCreditContent: React.FC<ShowCreditProps> = ({
+  dataDetail,
   onPressGoBack,
 }) => {
   const {t} = useTranslation();
