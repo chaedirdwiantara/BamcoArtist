@@ -87,7 +87,7 @@ export const AlbumContent: React.FC<Props> = ({
       setModalShare(true);
     }
     if (dataResult.value === '3') {
-      navigation.navigate('Playlist', {id: songIdList});
+      navigation.navigate('AddToPlaylist', {id: songIdList, type: 'album'});
     }
   };
 
@@ -140,7 +140,10 @@ export const AlbumContent: React.FC<Props> = ({
                 ? detailAlbum?.imageUrl[0].image
                 : ''
             }
-            showPlay={false}
+            showIconPlay={false}
+            isPlaying={false}
+            handlePlayPaused={() => {}}
+            onPressSong={() => {}}
           />
           <ListenersAndDonate
             totalListener={

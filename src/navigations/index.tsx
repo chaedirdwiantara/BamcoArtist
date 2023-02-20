@@ -109,7 +109,7 @@ export type RootStackParams = {
   Account: {
     data: ProfileResponseType;
   };
-  AddToPlaylist: undefined;
+  AddToPlaylist: {id: number[]; type?: string};
   AddSong: Playlist;
   AddPreview: ListDataSearchSongs;
   Album: AlbumData | SongAlbum | {id: number};
@@ -155,7 +155,8 @@ export type RootStackParams = {
   };
   PhotoGallery: {imageData: photos[]; userName: string};
   Playlist: {
-    id: number[];
+    id: number;
+    name: string;
   };
   Preference: undefined;
   PreferenceSetting: undefined;
