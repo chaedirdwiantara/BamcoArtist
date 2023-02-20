@@ -1,5 +1,6 @@
 import SsuAPI from './baseSemeruMusician';
 import {
+  DetailAlbumResponseType,
   DetailSongResponseType,
   ListSongResponseType,
 } from '../interface/song.interface';
@@ -32,6 +33,17 @@ export const detailSong = async (
 ): Promise<DetailSongResponseType> => {
   const {data} = await SsuAPI().request<DetailSongResponseType>({
     url: `/songs/detail/${props?.id}`,
+    method: 'GET',
+  });
+
+  return data;
+};
+
+export const detailAlbum = async (
+  props?: PostPropsTypeA,
+): Promise<DetailAlbumResponseType> => {
+  const {data} = await SsuAPI().request<DetailAlbumResponseType>({
+    url: `/albums/detail/${props?.id}`,
     method: 'GET',
   });
 

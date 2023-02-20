@@ -7,8 +7,13 @@ import {useSearchHook} from '../../hooks/use-search.hook';
 import {heightPercentage, heightResponsive} from '../../utils';
 import Color from '../../theme/Color';
 import {useQuery} from 'react-query';
+import {useNavigation} from '@react-navigation/native';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {RootStackParams} from '../../navigations';
 
 const ListResultAlbum: FC<KeywordProps> = ({keyword}: KeywordProps) => {
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParams>>();
   const {getSearchAlbums} = useSearchHook();
   const {
     data: dataSearchAlbums,
@@ -25,6 +30,10 @@ const ListResultAlbum: FC<KeywordProps> = ({keyword}: KeywordProps) => {
 
   const resultDataMore = (dataResult: any) => {
     console.log(dataResult, 'resultDataMenu');
+  };
+
+  const cardOnPress = (id: number) => {
+    navigation.navigate('Album', {id});
   };
 
   return (
@@ -45,7 +54,9 @@ const ListResultAlbum: FC<KeywordProps> = ({keyword}: KeywordProps) => {
               singerName={item.title}
               onPressMore={resultDataMore}
               containerStyles={{marginTop: mvs(20)}}
-              onPressCard={() => {}}
+              onPressCard={() => {
+                cardOnPress(item.id);
+              }}
               hideDropdownMore
             />
           )}
