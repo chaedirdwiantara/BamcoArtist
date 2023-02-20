@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {InteractionManager, StyleSheet, Text, View} from 'react-native';
 import * as yup from 'yup';
 import {Controller, useForm} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
@@ -97,7 +97,7 @@ export const ChangePasswordContent: React.FC<ChangePasswordProps> = ({
   useEffect(() => {
     if (isSubmit) {
       if (!isError && !isLoading) {
-        setToastVisible(true);
+        InteractionManager.runAfterInteractions(() => setToastVisible(true));
       }
       setIsSubmit(false);
     }

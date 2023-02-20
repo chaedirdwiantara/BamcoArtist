@@ -130,7 +130,7 @@ const MusicListCard: React.FC<ListProps> = ({
               onPressMore && onPressMore(data);
             }}
             containerStyle={{
-              width: widthPercentage(120),
+              width: widthPercentage(122),
               marginLeft: widthPercentage(-110),
               marginTop: heightPercentage(-8),
             }}

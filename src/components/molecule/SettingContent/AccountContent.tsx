@@ -378,6 +378,7 @@ export const AccountContent: React.FC<AccountProps> = ({
                   }}
                   isError={errors?.originCountry ? true : false}
                   errorMsg={errors?.originCountry?.message}
+                  dropdownPosition="top"
                 />
               )}
             />
@@ -403,6 +404,7 @@ export const AccountContent: React.FC<AccountProps> = ({
                   }}
                   isError={errors?.originCity ? true : false}
                   errorMsg={errors?.originCity?.message}
+                  dropdownPosition="top"
                 />
               )}
             />
