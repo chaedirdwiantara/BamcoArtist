@@ -1,4 +1,5 @@
 import {useState} from 'react';
+import {InteractionManager} from 'react-native';
 import {Image} from 'react-native-image-crop-picker';
 import {uploadImage} from '../api/uploadImage.api';
 import {UploadImageResponseType} from '../interface/uploadImage.interface';
@@ -9,7 +10,7 @@ export const useUploadImageHook = () => {
   const [isErrorImage, setIsErrorImage] = useState(false);
 
   const setUploadImage = async (image: Image) => {
-    setIsLoadingImage(true);
+    InteractionManager.runAfterInteractions(() => setIsLoadingImage(true));
     try {
       const response = await uploadImage(image);
       setDataImage(response);

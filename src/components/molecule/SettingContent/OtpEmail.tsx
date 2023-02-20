@@ -197,7 +197,7 @@ export const OtpEmail: React.FC<OtpPNProps> = ({
         </TouchableOpacity>
 
         <Button
-          label={t('Btn.Submit')}
+          label={t('Email.Submit')}
           textStyles={{fontSize: mvs(14)}}
           containerStyles={
             disabledButton ? styles.buttonDisabled : styles.button

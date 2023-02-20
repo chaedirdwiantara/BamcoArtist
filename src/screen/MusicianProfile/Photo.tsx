@@ -1,11 +1,12 @@
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import React, {FC} from 'react';
+import React, {FC, useState} from 'react';
 import {Gap, Title} from '../../components';
 import SquareComp from './SquareComp';
 import {widthResponsive} from '../../utils';
 import {color, font} from '../../theme';
 import {ms} from 'react-native-size-matters';
 import {useTranslation} from 'react-i18next';
+import ImageModal from '../Detail/ImageModal';
 
 interface ImagesProps {
   image: string;
@@ -24,6 +25,14 @@ const Photo: FC<PhotoProps> = (props: PhotoProps) => {
   const {t} = useTranslation();
   const {title, data, photoOnpress, showWarning = true} = props;
 
+  const [isModalVisible, setModalVisible] = useState<boolean>(false);
+  const [imgUrl, setImgUrl] = useState<number>(0);
+
+  const toggleModalOnPress = (index: number) => {
+    setModalVisible(!isModalVisible);
+    setImgUrl(index);
+  };
+
   return (
     <View style={{marginHorizontal: widthResponsive(24), width: '100%'}}>
       <Title text={title} />
@@ -33,13 +42,14 @@ const Photo: FC<PhotoProps> = (props: PhotoProps) => {
           {data.map((item, i) => (
             <View key={i}>
               {data.length <= 4 && (
-                <>
+                <TouchableOpacity
+                  onPress={() => toggleModalOnPress(i)}
+                  style={{marginRight: widthResponsive(8)}}>
                   <SquareComp
                     imgUri={item.images[2]?.image}
                     size={widthResponsive(76)}
                   />
-                  <Gap width={8} />
-                </>
+                </TouchableOpacity>
               )}
               {data.length > 4 && i === 3 ? (
                 <TouchableOpacity onPress={photoOnpress}>
@@ -62,13 +72,14 @@ const Photo: FC<PhotoProps> = (props: PhotoProps) => {
                   </View>
                 </TouchableOpacity>
               ) : data.length > 4 && i < 3 ? (
-                <>
+                <TouchableOpacity
+                  onPress={() => toggleModalOnPress(i)}
+                  style={{marginRight: widthResponsive(8)}}>
                   <SquareComp
-                    imgUri={item.images[2].image}
+                    imgUri={item.images[2]?.image}
                     size={widthResponsive(76)}
                   />
-                  <Gap width={8} />
-                </>
+                </TouchableOpacity>
               ) : null}
             </View>
           ))}
@@ -78,6 +89,14 @@ const Photo: FC<PhotoProps> = (props: PhotoProps) => {
           <Text style={styles.captionStyle}>{t('EmptyState.NoPhoto')}</Text>
         )
       )}
+
+      <ImageModal
+        toggleModal={() => setModalVisible(!isModalVisible)}
+        modalVisible={isModalVisible}
+        imageIdx={imgUrl}
+        dataImageGallery={data}
+        type={'profile'}
+      />
     </View>
   );
 };

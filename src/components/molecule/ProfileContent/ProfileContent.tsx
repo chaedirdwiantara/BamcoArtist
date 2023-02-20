@@ -45,7 +45,7 @@ type OnScrollEventHandler = (
 interface ProfileContentProps {
   profile: any;
   goToEditProfile: () => void;
-  goToPlaylist: (id: number) => void;
+  goToPlaylist: (id: number, name: string) => void;
   dataPlaylist?: Playlist[];
   onPressGoTo: (
     screenName: 'Setting' | 'Following' | 'CreateNewPlaylist',

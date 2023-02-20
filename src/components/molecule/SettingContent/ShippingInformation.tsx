@@ -6,6 +6,7 @@ import {
   Platform,
   ScrollView,
   Text,
+  InteractionManager,
 } from 'react-native';
 import {ms} from 'react-native-size-matters';
 
@@ -103,11 +104,11 @@ export const ShippingInformationContent: React.FC<ShippingInformationProps> = ({
         postalCode: Number(state.postalCode),
       };
       await updateShipping(payload);
-      setToastVisible(true);
       setToastError(false);
+      InteractionManager.runAfterInteractions(() => setToastVisible(true));
     } catch (error) {
-      setToastVisible(true);
       setToastError(true);
+      InteractionManager.runAfterInteractions(() => setToastVisible(true));
     }
   };
 
@@ -188,6 +189,7 @@ export const ShippingInformationContent: React.FC<ShippingInformationProps> = ({
                 });
               }}
               containerStyles={{marginTop: heightPercentage(15), width: '45%'}}
+              dropdownPosition="top"
             />
 
             <Dropdown.Input
@@ -207,6 +209,7 @@ export const ShippingInformationContent: React.FC<ShippingInformationProps> = ({
                 });
               }}
               containerStyles={{marginTop: heightPercentage(15), width: '45%'}}
+              dropdownPosition="top"
             />
           </View>
 
@@ -226,6 +229,7 @@ export const ShippingInformationContent: React.FC<ShippingInformationProps> = ({
                 });
               }}
               containerStyles={{marginTop: heightPercentage(15), width: '45%'}}
+              dropdownPosition="top"
             />
 
             <SsuInput.InputLabel

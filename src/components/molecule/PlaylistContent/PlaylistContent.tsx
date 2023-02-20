@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   StyleSheet,
@@ -17,10 +17,11 @@ import {
 } from '../../../utils';
 import {
   ArrowLeftIcon,
+  CheckCircle2Icon,
   DefaultImage,
   MusicSquareAddIcon,
 } from '../../../assets/icon';
-import {Gap} from '../../atom';
+import {Gap, SsuToast} from '../../atom';
 import {Dropdown} from '../DropDown';
 import Color from '../../../theme/Color';
 import {PhotoPlaylist} from './PhotoPlaylist';
@@ -36,12 +37,15 @@ import {Playlist} from '../../../interface/playlist.interface';
 import {useTranslation} from 'react-i18next';
 
 interface Props {
-  onPressGoBack: () => void;
   goBackProfile: (showToast: boolean) => void;
   goToEditPlaylist: () => void;
   goToAddSong: () => void;
   dataDetail: Playlist;
   listSongs: SongList[] | undefined;
+  onPressSong: (param: SongList | null) => void;
+  playerVisible: boolean;
+  isPlaying: boolean;
+  handlePlayPaused: () => void;
 }
 
 export const PlaylistContent: React.FC<Props> = ({
@@ -50,9 +54,21 @@ export const PlaylistContent: React.FC<Props> = ({
   goToAddSong,
   dataDetail,
   listSongs,
+  onPressSong,
+  playerVisible,
+  isPlaying,
+  handlePlayPaused,
 }) => {
   const {t} = useTranslation();
-  const [isModalVisible, setModalVisible] = useState(false);
+  const [isModalVisible, setModalVisible] = useState<boolean>(false);
+  const [toastVisible, setToastVisible] = useState<boolean>(false);
+
+  useEffect(() => {
+    toastVisible &&
+      setTimeout(() => {
+        setToastVisible(false);
+      }, 3000);
+  }, [toastVisible]);
 
   const dataMore = [
     {label: t('Home.Tab.TopSong.Queue'), value: 'AddToQueue'},
@@ -75,8 +91,13 @@ export const PlaylistContent: React.FC<Props> = ({
       setModalVisible(true);
     } else if (dataResult?.value === 'EditPlaylist') {
       goToEditPlaylist();
+    } else if (dataResult?.value === 'AddToQueue') {
+      setToastVisible(true);
     }
   };
+
+  const songIsExist = listSongs !== null && listSongs !== undefined;
+  const firstSong = songIsExist ? listSongs[0] : null;
 
   return (
     <View style={styles.root}>
@@ -96,7 +117,8 @@ export const PlaylistContent: React.FC<Props> = ({
         containerStyles={{paddingHorizontal: widthPercentage(20)}}
       />
 
-      <ScrollView>
+      <ScrollView
+        style={{marginBottom: playerVisible ? heightPercentage(40) : 0}}>
         <View style={{paddingHorizontal: widthPercentage(10)}}>
           <View style={{alignSelf: 'center'}}>
             {dataDetail?.thumbnailUrl ? (
@@ -118,6 +140,10 @@ export const PlaylistContent: React.FC<Props> = ({
             createdDate={dateFormat(dataDetail?.createdAt)}
             createdBy={dataDetail?.playlistOwner?.fullname}
             avatarUri={dataDetail?.playlistOwner?.image}
+            showIconPlay={songIsExist && listSongs?.length > 0}
+            isPlaying={isPlaying}
+            handlePlayPaused={handlePlayPaused}
+            onPressSong={() => onPressSong(firstSong)}
           />
 
           <TouchableOpacity
@@ -151,7 +177,9 @@ export const PlaylistContent: React.FC<Props> = ({
               <TopSong
                 dataSong={listSongs}
                 hideDropdownMore={true}
-                onPress={() => null}
+                type={'home'}
+                onPress={onPressSong}
+                loveIcon={true}
               />
             )}
           </View>
@@ -160,10 +188,25 @@ export const PlaylistContent: React.FC<Props> = ({
 
       <ModalConfirm
         modalVisible={isModalVisible}
-        title={t('Btn.Delete') || ''}
+        title={t('Music.Playlist.Delete') || ''}
         subtitle={t('Modal.Playlist.Delete') || ''}
         onPressClose={() => setModalVisible(false)}
         onPressOk={onPressDelete}
+      />
+
+      <SsuToast
+        modalVisible={toastVisible}
+        onBackPressed={() => setToastVisible(false)}
+        children={
+          <View style={[styles.modalContainer]}>
+            <CheckCircle2Icon />
+            <Gap width={4} />
+            <Text style={[styles.textStyle]} numberOfLines={2}>
+              {'Playlist added to queue!'}
+            </Text>
+          </View>
+        }
+        modalStyle={styles.toast}
       />
     </View>
   );
@@ -208,5 +251,28 @@ const styles = StyleSheet.create({
     fontFamily: font.InterRegular,
     lineHeight: heightPercentage(16),
     paddingTop: heightPercentage(8),
+  },
+  modalContainer: {
+    width: '90%',
+    position: 'absolute',
+    bottom: heightPercentage(22),
+    height: heightPercentage(36),
+    backgroundColor: color.Success[400],
+    paddingHorizontal: widthResponsive(12),
+    borderRadius: 4,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  textStyle: {
+    color: color.Neutral[10],
+    fontFamily: font.InterRegular,
+    fontWeight: '500',
+    fontSize: normalize(13),
+  },
+  toast: {
+    maxWidth: '100%',
+    marginHorizontal: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

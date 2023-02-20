@@ -6,13 +6,17 @@ import {
   TouchableOpacity,
   NativeScrollEvent,
   NativeSyntheticEvent,
+  Text,
 } from 'react-native';
 import {
   useNavigation,
   useIsFocused,
   useFocusEffect,
 } from '@react-navigation/native';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {
+  NativeStackNavigationProp,
+  NativeStackScreenProps,
+} from '@react-navigation/native-stack';
 
 import {
   TopNavigation,
@@ -22,14 +26,16 @@ import {
   IconNotif,
   SsuStatusBar,
   BottomSheetGuest,
+  SsuToast,
+  Gap,
 } from '../components';
 import Color from '../theme/Color';
-import {dataSlider} from '../data/home';
 import TopSong from './ListCard/TopSong';
-import {SearchIcon} from '../assets/icon';
+import {CheckCircle2Icon, SearchIcon} from '../assets/icon';
 import PostList from './ListCard/PostList';
+import {defaultBanner} from '../data/home';
 import {PostlistData} from '../data/postlist';
-import {RootStackParams} from '../navigations';
+import {MainTabParams, RootStackParams} from '../navigations';
 import TopMusician from './ListCard/TopMusician';
 import {useFcmHook} from '../hooks/use-fcm.hook';
 import {storage} from '../hooks/use-storage.hook';
@@ -52,7 +58,10 @@ type OnScrollEventHandler = (
   event: NativeSyntheticEvent<NativeScrollEvent>,
 ) => void;
 
-export const HomeScreen: React.FC = () => {
+type HomeProps = NativeStackScreenProps<MainTabParams, 'Home'>;
+
+export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
+  const {showToast} = route.params;
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
   const {dataBanner, getListDataBanner} = useBannerHook();
@@ -75,6 +84,7 @@ export const HomeScreen: React.FC = () => {
 
   const isLogin = storage.getBoolean('isLogin');
   const isFocused = useIsFocused();
+  const [selectedIndex, setSelectedIndex] = useState<number>(-0);
 
   useEffect(() => {
     getListDataBanner();
@@ -86,7 +96,7 @@ export const HomeScreen: React.FC = () => {
       getProfileUser();
       getListDataMusician();
       getListDataTopSong();
-    }, []),
+    }, [selectedIndex]),
   );
 
   useEffect(() => {
@@ -98,8 +108,24 @@ export const HomeScreen: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isFocused, isPlaying]);
 
-  const [modalGuestVisible, setModalGuestVisible] = useState(false);
-  const [scrollEffect, setScrollEffect] = useState(false);
+  const [modalGuestVisible, setModalGuestVisible] = useState<boolean>(false);
+  const [scrollEffect, setScrollEffect] = useState<boolean>(false);
+  const [toastText, setToastText] = useState<string>('');
+  const [toastVisible, setToastVisible] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (showToast !== undefined) {
+      setToastVisible(showToast);
+      setToastText('Song have been added to playlist!');
+    }
+  }, [route.params]);
+
+  useEffect(() => {
+    toastVisible &&
+      setTimeout(() => {
+        setToastVisible(false);
+      }, 3000);
+  }, [toastVisible]);
 
   useEffect(() => {
     FCMService.getTokenFCM({onGetToken: handleOnGetToken});
@@ -132,7 +158,6 @@ export const HomeScreen: React.FC = () => {
     navigation.navigate(screen);
   };
 
-  const [selectedIndex, setSelectedIndex] = useState(-0);
   const [filter] = useState([
     {filterName: 'Home.Tab.TopMusician.Title'},
     {filterName: 'Home.Tab.TopSong.Title'},
@@ -216,7 +241,7 @@ export const HomeScreen: React.FC = () => {
           />
         </TouchableOpacity>
         <Carousel
-          data={isLogin && dataBanner?.length > 0 ? dataBanner : dataSlider}
+          data={dataBanner?.length > 0 ? dataBanner : defaultBanner}
           onPressBanner={handleWebview}
         />
         <View
@@ -251,6 +276,7 @@ export const HomeScreen: React.FC = () => {
               dataSong={dataTopSong}
               onPress={onPressTopSong}
               type={'home'}
+              loveIcon={true}
             />
           ) : (
             <PostList
@@ -268,6 +294,20 @@ export const HomeScreen: React.FC = () => {
       <BottomSheetGuest
         modalVisible={modalGuestVisible}
         onPressClose={() => setModalGuestVisible(false)}
+      />
+
+      <SsuToast
+        modalVisible={toastVisible}
+        onBackPressed={() => setToastVisible(false)}
+        children={
+          <View style={[styles.modalContainer]}>
+            <CheckCircle2Icon />
+            <Gap width={4} />
+            <Text style={[styles.textStyle]} numberOfLines={2}>
+              {toastText}
+            </Text>
+          </View>
+        }
       />
 
       <ModalPlayMusic onPressModal={() => goToScreen('MusicPlayer')} />
@@ -289,5 +329,19 @@ const styles = StyleSheet.create({
   containerIcon: {
     flexDirection: 'row',
     alignItems: 'center',
+  },
+  modalContainer: {
+    width: '100%',
+    position: 'absolute',
+    bottom: heightPercentage(22),
+    height: heightPercentage(36),
+    backgroundColor: Color.Success[400],
+    paddingHorizontal: widthPercentage(12),
+    borderRadius: 4,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  textStyle: {
+    color: Color.Neutral[10],
   },
 });

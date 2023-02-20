@@ -106,7 +106,7 @@ export const dropDownHeaderSongDetails: DataDropDownType[] = [
   {label: 'Home.Tab.TopSong.Playlist', value: '1'},
   {label: 'Home.Tab.TopSong.Queue', value: '2'},
   {label: 'Home.Tab.TopSong.Share', value: '3'},
-  {label: 'Home.Tab.TopSong.Credit', value: '4'},
+  {label: 'Home.Tab.TopSong.Details', value: '4'},
 ];
 
 export const dropDownSubscription: DataDropDownType[] = [

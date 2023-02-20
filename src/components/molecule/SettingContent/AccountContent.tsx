@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   KeyboardAvoidingView,
   Platform,
+  InteractionManager,
 } from 'react-native';
 import * as yup from 'yup';
 import {ms, mvs} from 'react-native-size-matters';
@@ -28,14 +29,15 @@ import {
 import Color from '../../../theme/Color';
 import {TopNavigation} from '../TopNavigation';
 import Typography from '../../../theme/Typography';
+import {ModalConfirm} from '../Modal/ModalConfirm';
 import {dataProps} from '../DropDown/DropdownMulti';
 import {dataFavourites} from '../../../data/following';
 import {color, font, typography} from '../../../theme';
-import {Button, Gap, SsuInput, SsuToast} from '../../atom';
 import {DataDropDownType} from '../../../data/dropdown';
+import {Button, Gap, SsuInput, SsuToast} from '../../atom';
 import {useProfileHook} from '../../../hooks/use-profile.hook';
-import {dataYearsFrom, dataYearsTo} from '../../../data/Settings/account';
 import {ProfileResponseType} from '../../../interface/profile.interface';
+import {dataYearsFrom, dataYearsTo} from '../../../data/Settings/account';
 import {ArrowLeftIcon, ErrorIcon, TickCircleIcon} from '../../../assets/icon';
 import {useTranslation} from 'react-i18next';
 
@@ -102,7 +104,9 @@ export const AccountContent: React.FC<AccountProps> = ({
   const [members, setMembers] = useState<string[]>(
     profile?.data.members || [''],
   );
-
+  const [type, setType] = useState(t('Btn.Edit'));
+  const [changes, setChanges] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   const [disabledButton, setDisabledButton] = useState<boolean>(true);
   const [toastVisible, setToastVisible] = useState<boolean>(false);
   const [isSubmit, setIsSubmit] = useState<boolean>(false);
@@ -163,7 +167,15 @@ export const AccountContent: React.FC<AccountProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isValidating, isValid]);
 
-  const onPressSave = async () => {
+  const onPressSave = () => {
+    if (type === t('Btn.Edit')) {
+      setType(t('Btn.Save'));
+    } else {
+      changes ? setShowModal(true) : setType(t('Btn.Edit'));
+    }
+  };
+
+  const onPressConfirm = async () => {
     await updateProfilePreference({
       username: getValues('username'),
       fullname: getValues('fullname'),
@@ -178,13 +190,23 @@ export const AccountContent: React.FC<AccountProps> = ({
       favoriteGeneres: valueGenres as number[],
     });
 
+    setType(t('Btn.Edit'));
     setIsSubmit(true);
+    setShowModal(false);
+    setChanges(false);
+  };
+
+  const onPressAddMember = () => {
+    if (type === t('Btn.Save')) {
+      setMembers([...members, '']);
+      setChanges(true);
+    }
   };
 
   useEffect(() => {
     if (isSubmit) {
       if (!isError && !isLoading) {
-        setToastVisible(true);
+        InteractionManager.runAfterInteractions(() => setToastVisible(true));
       }
       setIsSubmit(false);
     }
@@ -212,9 +234,11 @@ export const AccountContent: React.FC<AccountProps> = ({
               <SsuInput.InputLabel
                 label={t('Setting.Account.Label.Username') || ''}
                 value={value}
+                editable={type === t('Btn.Save')}
                 onChangeText={text => {
                   onChange(text.toLowerCase());
                   setIsError(false);
+                  setChanges(true);
                 }}
                 placeholder={t('Setting.Account.Placeholder.Username') || ''}
                 isError={errors?.username ? true : false}
@@ -231,9 +255,11 @@ export const AccountContent: React.FC<AccountProps> = ({
               <SsuInput.InputLabel
                 label={t('Setting.Account.Label.Fullname') || ''}
                 value={value}
+                editable={type === t('Btn.Save')}
                 onChangeText={text => {
                   onChange(text);
                   setIsError(false);
+                  setChanges(true);
                 }}
                 placeholder={t('Setting.Account.Placeholder.Fullname') || ''}
                 isError={errors?.fullname ? true : false}
@@ -247,10 +273,14 @@ export const AccountContent: React.FC<AccountProps> = ({
             data={formatValueName(dataFavourites[0]?.favorites) ?? []}
             placeHolder={t('Setting.Account.Placeholder.Genre') || ''}
             dropdownLabel={t('Setting.Account.Label.Genre') || ''}
+            disable={type !== t('Btn.Save')}
             textTyped={(_newText: string) => null}
             containerStyles={{marginTop: heightPercentage(15)}}
             initialValue={userGenres}
-            setValues={val => setValueGenres(val)}
+            setValues={val => {
+              setValueGenres(val);
+              setChanges(true);
+            }}
           />
 
           <Controller
@@ -260,9 +290,11 @@ export const AccountContent: React.FC<AccountProps> = ({
               <SsuInput.InputLabel
                 label={t('Setting.Account.Label.Label') || ''}
                 value={value}
+                editable={type === t('Btn.Save')}
                 onChangeText={text => {
                   onChange(text);
                   setIsError(false);
+                  setChanges(true);
                 }}
                 placeholder={t('Setting.Account.Placeholder.Label') || ''}
                 isError={errors?.labels ? true : false}
@@ -280,11 +312,13 @@ export const AccountContent: React.FC<AccountProps> = ({
                 <Dropdown.Input
                   initialValue={value}
                   data={dataYearsFrom}
+                  disable={type !== t('Btn.Save')}
                   placeHolder={t('Setting.Account.Placeholder.Active') || ''}
                   dropdownLabel={t('Musician.Label.Active') || ''}
-                  textTyped={(newText: {label: string; value: string}) =>
-                    onChange(newText.value)
-                  }
+                  textTyped={(newText: {label: string; value: string}) => {
+                    onChange(newText.value);
+                    setChanges(true);
+                  }}
                   containerStyles={{
                     marginTop: heightPercentage(15),
                     width: '49%',
@@ -303,10 +337,12 @@ export const AccountContent: React.FC<AccountProps> = ({
                   initialValue={value}
                   data={dataYearsTo}
                   placeHolder={t('Setting.Account.Placeholder.Active') || ''}
+                  disable={type !== t('Btn.Save')}
                   dropdownLabel={''}
-                  textTyped={(newText: {label: string; value: string}) =>
-                    onChange(newText.value)
-                  }
+                  textTyped={(newText: {label: string; value: string}) => {
+                    onChange(newText.value);
+                    setChanges(true);
+                  }}
                   containerStyles={{
                     marginTop: heightPercentage(15),
                     width: '49%',
@@ -329,10 +365,12 @@ export const AccountContent: React.FC<AccountProps> = ({
                   data={dataAllCountry}
                   placeHolder={t('Setting.Account.Placeholder.Country') || ''}
                   dropdownLabel={t('Setting.Account.Label.Origin') || ''}
+                  disable={type !== t('Btn.Save')}
                   textTyped={(newText: {label: string; value: string}) => {
                     onChange(newText.value);
                     setSelectedOrigin(newText.value);
                     setInputType('origin');
+                    setChanges(true);
                   }}
                   containerStyles={{
                     marginTop: heightPercentage(15),
@@ -340,6 +378,7 @@ export const AccountContent: React.FC<AccountProps> = ({
                   }}
                   isError={errors?.originCountry ? true : false}
                   errorMsg={errors?.originCountry?.message}
+                  dropdownPosition="top"
                 />
               )}
             />
@@ -352,17 +391,20 @@ export const AccountContent: React.FC<AccountProps> = ({
                   initialValue={value}
                   data={dataCitiesOfOrigin}
                   placeHolder={t('Setting.Account.Placeholder.City') || ''}
+                  disable={type !== t('Btn.Save')}
                   showSearch={true}
                   dropdownLabel={''}
-                  textTyped={(newText: {label: string; value: string}) =>
-                    onChange(newText.value)
-                  }
+                  textTyped={(newText: {label: string; value: string}) => {
+                    onChange(newText.value);
+                    setChanges(true);
+                  }}
                   containerStyles={{
                     marginTop: heightPercentage(15),
                     width: '49%',
                   }}
                   isError={errors?.originCity ? true : false}
                   errorMsg={errors?.originCity?.message}
+                  dropdownPosition="top"
                 />
               )}
             />
@@ -373,10 +415,12 @@ export const AccountContent: React.FC<AccountProps> = ({
               key={index}
               label={index === 0 ? t('Setting.Account.Label.Member') || '' : ''}
               value={val}
+              editable={type === t('Btn.Save')}
               onChangeText={text => {
                 let temp = [...members];
                 temp[index] = text;
                 setMembers(temp);
+                setChanges(true);
               }}
               placeholder={t('Setting.Account.Placeholder.Member') || ''}
               containerStyles={{
@@ -384,7 +428,7 @@ export const AccountContent: React.FC<AccountProps> = ({
               }}
             />
           ))}
-          <TouchableOpacity onPress={() => setMembers([...members, ''])}>
+          <TouchableOpacity onPress={onPressAddMember}>
             <Text
               style={[
                 Typography.Body4,
@@ -408,10 +452,12 @@ export const AccountContent: React.FC<AccountProps> = ({
                   data={dataAllCountry}
                   placeHolder={t('Setting.Account.Placeholder.Country') || ''}
                   dropdownLabel={t('Setting.Account.Label.Location') || ''}
+                  disable={type !== t('Btn.Save')}
                   textTyped={(newText: {label: string; value: string}) => {
                     onChange(newText.value);
                     setSelectedCountry(newText.value);
                     setInputType('location');
+                    setChanges(true);
                   }}
                   containerStyles={{
                     marginTop: heightPercentage(15),
@@ -432,10 +478,12 @@ export const AccountContent: React.FC<AccountProps> = ({
                   data={dataCitiesOfCountry}
                   showSearch={true}
                   placeHolder={t('Setting.Account.Placeholder.City') || ''}
+                  disable={type !== t('Btn.Save')}
                   dropdownLabel={''}
-                  textTyped={(newText: {label: string; value: string}) =>
-                    onChange(newText.value)
-                  }
+                  textTyped={(newText: {label: string; value: string}) => {
+                    onChange(newText.value);
+                    setChanges(true);
+                  }}
                   containerStyles={{
                     marginTop: heightPercentage(15),
                     width: '49%',
@@ -456,12 +504,20 @@ export const AccountContent: React.FC<AccountProps> = ({
           ) : null}
 
           <Button
-            label={t('Btn.Edit')}
-            onPress={handleSubmit(onPressSave)}
+            label={type}
+            onPress={onPressSave}
             containerStyles={
               disabledButton ? styles.buttonDisabled : styles.button
             }
             disabled={disabledButton}
+          />
+
+          <ModalConfirm
+            modalVisible={showModal}
+            title="Account"
+            subtitle="Are you sure you want to update your account?"
+            onPressClose={() => setShowModal(false)}
+            onPressOk={handleSubmit(onPressConfirm)}
           />
 
           <SsuToast

@@ -3,6 +3,7 @@ import {useState} from 'react';
 import {
   addPhotos,
   countLikedSong,
+  deleteProfile,
   getOtherUserProfile,
   getProfile,
   removePhotos,
@@ -13,6 +14,7 @@ import {applyReferral} from '../api/referral.api';
 import {ParamsProps} from '../interface/base.interface';
 import {PostPropsTypeA} from '../interface/feed.interface';
 import {
+  CollectPhotoRemoveProps,
   CollectPhotosProps,
   DataCountLiked,
   ProfileFansResponseType,
@@ -154,7 +156,7 @@ export const useProfileHook = () => {
     }
   };
 
-  const removeCollectPhotos = async (props?: CollectPhotosProps) => {
+  const removeCollectPhotos = async (props?: CollectPhotoRemoveProps) => {
     try {
       await removePhotos(props);
     } catch (error) {
@@ -169,6 +171,17 @@ export const useProfileHook = () => {
     try {
       const response = await countLikedSong(props);
       setCountLiked(response.data);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const deleteValueProfile = async (props?: ParamsProps) => {
+    setIsLoading(true);
+    try {
+      await deleteProfile(props);
     } catch (error) {
       console.log(error);
     } finally {
@@ -197,5 +210,6 @@ export const useProfileHook = () => {
     removeCollectPhotos,
     getCheckUser,
     getUserCountLikedSong,
+    deleteValueProfile,
   };
 };

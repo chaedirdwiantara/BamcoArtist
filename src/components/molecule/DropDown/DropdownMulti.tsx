@@ -19,6 +19,7 @@ interface InputDropdownProps {
   containerStyles?: ViewStyle;
   initialValue?: (string | number | undefined)[] | null;
   setValues: (val: number[]) => void;
+  disable?: boolean;
 }
 
 const borderColor = color.Dark[500];
@@ -36,6 +37,7 @@ const MultiDropdown: React.FC<InputDropdownProps> = (
     textTyped,
     containerStyles,
     setValues,
+    disable,
   } = props;
 
   const [value, setValue] = useState(initialValue ?? []);
@@ -98,6 +100,7 @@ const MultiDropdown: React.FC<InputDropdownProps> = (
         valueField="value"
         placeholder={value.length > 0 ? mappingValue().toString() : placeHolder}
         value={value}
+        disable={disable}
         onChange={item => {
           setValue(item);
           textTyped(item);

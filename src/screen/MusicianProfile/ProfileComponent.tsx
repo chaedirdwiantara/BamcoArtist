@@ -91,59 +91,59 @@ const ProfileComponent: FC<ProfileProps> = (props: ProfileProps) => {
               showsHorizontalScrollIndicator={false}
               contentContainerStyle={{}}
               renderItem={({item}) =>
-                item.Name === 'facebook' ? (
+                item.name === 'facebook' ? (
                   <TouchableOpacity
                     style={styles.touchStyle}
                     onPress={() =>
-                      handleWebview(item.Name as string, item.Value as string)
+                      handleWebview(item.name as string, item.value as string)
                     }>
                     <FbIcon />
                   </TouchableOpacity>
-                ) : item.Name === 'twitter' ? (
+                ) : item.name === 'twitter' ? (
                   <TouchableOpacity
                     style={styles.touchStyle}
                     onPress={() =>
-                      handleWebview(item.Name as string, item.Value as string)
+                      handleWebview(item.name as string, item.value as string)
                     }>
                     <TwitterIcon />
                   </TouchableOpacity>
-                ) : item.Name === 'instagram' ? (
+                ) : item.name === 'instagram' ? (
                   <TouchableOpacity
                     style={styles.touchStyle}
                     onPress={() =>
-                      handleWebview(item.Name as string, item.Value as string)
+                      handleWebview(item.name as string, item.value as string)
                     }>
                     <InstagramIcon />
                   </TouchableOpacity>
-                ) : item.Name === 'tiktok' ? (
+                ) : item.name === 'tiktok' ? (
                   <TouchableOpacity
                     style={styles.touchStyle}
                     onPress={() =>
-                      handleWebview(item.Name as string, item.Value as string)
+                      handleWebview(item.name as string, item.value as string)
                     }>
                     <TiktokIcon />
                   </TouchableOpacity>
-                ) : item.Name === 'snapchat' ? (
+                ) : item.name === 'snapchat' ? (
                   <TouchableOpacity
                     style={styles.touchStyle}
                     onPress={() =>
-                      handleWebview(item.Name as string, item.Value as string)
+                      handleWebview(item.name as string, item.value as string)
                     }>
                     <SnapchatIcon />
                   </TouchableOpacity>
-                ) : item.Name === 'vk' ? (
+                ) : item.name === 'vk' ? (
                   <TouchableOpacity
                     style={styles.touchStyle}
                     onPress={() =>
-                      handleWebview(item.Name as string, item.Value as string)
+                      handleWebview(item.name as string, item.value as string)
                     }>
                     <VkIcon style={{marginTop: ms(-3)}} />
                   </TouchableOpacity>
-                ) : item.Name === 'weibo' ? (
+                ) : item.name === 'weibo' ? (
                   <TouchableOpacity
                     style={styles.touchStyle}
                     onPress={() =>
-                      handleWebview(item.Name as string, item.Value as string)
+                      handleWebview(item.name as string, item.value as string)
                     }>
                     <WeiboIcon />
                   </TouchableOpacity>

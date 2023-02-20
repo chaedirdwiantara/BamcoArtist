@@ -6,7 +6,7 @@ import {
   NativeStackNavigationProp,
 } from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-
+import {Image} from 'react-native-image-crop-picker';
 // Screen
 import {EventScreen} from '../screen/Event';
 import {FeedScreen} from '../screen/Feed';
@@ -109,7 +109,7 @@ export type RootStackParams = {
   Account: {
     data: ProfileResponseType;
   };
-  AddToPlaylist: undefined;
+  AddToPlaylist: {id: number[]; type?: string};
   AddSong: Playlist;
   AddPreview: ListDataSearchSongs;
   Album: AlbumData | SongAlbum | {id: number};
@@ -125,7 +125,7 @@ export type RootStackParams = {
     oldPhone: string;
   };
   OtpPhoneNumber: OtpPhoneScreen;
-  CreateNewPlaylist: undefined;
+  CreateNewPlaylist: {id: number[]; type?: string};
   DonationAndSubscription: undefined;
   EditProfile: ProfileResponseData;
   EditPlaylist: Playlist;
@@ -153,9 +153,14 @@ export type RootStackParams = {
     info?: boolean;
     message?: string;
   };
-  PhotoGallery: {imageData: photos[]; userName: string};
+  PhotoGallery: {
+    imageData: photos[] | Image[];
+    userName: string;
+    type: string;
+  };
   Playlist: {
-    id: number[];
+    id: number;
+    name: string;
   };
   Preference: undefined;
   PreferenceSetting: undefined;
@@ -176,7 +181,9 @@ export type RootStackParams = {
   ShippingInformation: {
     data: DataShippingProps | null;
   };
-  ShowCredit: undefined;
+  ShowCredit: {
+    songId: number;
+  };
   SongDetails: {
     id: number;
   };
@@ -202,7 +209,9 @@ export type MainTabParams = {
   Collection: undefined;
   Event: undefined;
   Feed: undefined;
-  Home: undefined;
+  Home: {
+    showToast?: boolean;
+  };
   Profile: {
     showToast?: boolean;
     deletePlaylist?: boolean;
@@ -235,12 +244,19 @@ const TabScreen = () => {
       <MainTab.Screen
         name="Home"
         component={HomeScreen}
+        initialParams={{showToast: false}}
         options={{
           tabBarIcon: ({color}) => (
-            <View style={styles.root}>
+            <TouchableOpacity
+              style={styles.root}
+              onPress={() =>
+                navigation.navigate('Home', {
+                  showToast: false,
+                })
+              }>
               <HomeIcon stroke={color} />
               <Text style={[styles.label, {color}]}>{'Home'}</Text>
-            </View>
+            </TouchableOpacity>
           ),
         }}
       />

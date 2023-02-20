@@ -19,7 +19,7 @@ import {ModalConfirm} from '../Modal/ModalConfirm';
 import {Image} from 'react-native-image-crop-picker';
 import {dataVisibility} from '../../../data/playlist';
 import {uploadImage} from '../../../api/uploadImage.api';
-import {createPlaylist} from '../../../api/playlist.api';
+import {addSong, createPlaylist} from '../../../api/playlist.api';
 import {ModalLoading} from '../ModalLoading/ModalLoading';
 import {ModalImagePicker} from '../Modal/ModalImagePicker';
 import {Button, ButtonGradient, SsuInput} from '../../atom';
@@ -30,11 +30,13 @@ import {useTranslation} from 'react-i18next';
 interface Props {
   goToPlaylist: (id: number) => void;
   onPressGoBack: () => void;
+  songAddedToPlaylist: {id: number[]; type?: string};
 }
 
 export const CreateNewPlaylistContent: React.FC<Props> = ({
   goToPlaylist,
   onPressGoBack,
+  songAddedToPlaylist,
 }) => {
   const {t} = useTranslation();
   const [state, setState] = useState({
@@ -97,6 +99,17 @@ export const CreateNewPlaylistContent: React.FC<Props> = ({
     });
   };
 
+  const addSongToPlaylist = async (id: number) => {
+    if (songAddedToPlaylist !== undefined) {
+      if (songAddedToPlaylist?.type === 'song') {
+        await addSong({
+          playlistId: id,
+          songId: songAddedToPlaylist.id[0],
+        });
+      }
+    }
+  };
+
   const onPressConfirm = async () => {
     InteractionManager.runAfterInteractions(() => setIsLoading(true));
     try {
@@ -107,6 +120,8 @@ export const CreateNewPlaylistContent: React.FC<Props> = ({
         isPublic: state.isPublic === 'Public',
       };
       const response = await createPlaylist(payload);
+      // to add song to new created playlist
+      addSongToPlaylist(response.data.id);
       goToPlaylist(response.data.id);
       closeModal();
     } catch (error) {
@@ -232,7 +247,6 @@ export const CreateNewPlaylistContent: React.FC<Props> = ({
           title={t('Music.NewPlaylist.Cover') || ''}
           modalVisible={isModalVisible.modalImage}
           sendUri={sendUri}
-          sendUriMultiple={() => null}
           onDeleteImage={resetImage}
           onPressClose={closeModal}
           hideMenuDelete={hideMenuDelete}

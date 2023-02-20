@@ -155,7 +155,7 @@
         "Tip": "捐贈",
         "Queue": "加入序列",
         "Share": "分享歌曲",
-        "Credit": "顯示積分"
+        "Details": "顯示積分"
       },
       "TopPost": {
         "Title": "TOP POST",
@@ -221,7 +221,8 @@
     },
     "Button": {
       "Edit": "編輯個人資料",
-      "CreatePlaylist": "新增播放清單"
+      "CreatePlaylist": "新增播放清單",
+      "NewPlaylist": "New Playlist"
     },
     "Tab": {
       "Playlist": "播放清單",
@@ -237,7 +238,9 @@
       "Add": "由相簿添加",
       "Delete": "刪除照片",
       "Social": "Social Media Settings",
-      "About": "Tell us about yourself"
+      "About": "Tell us about yourself",
+      "Website": "Add your website address",
+      "Photos": "Add Photos"
     }
   },
   "Musician": {

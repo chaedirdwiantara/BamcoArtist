@@ -84,8 +84,6 @@ export const useLocationHook = () => {
       newResp.sort((a, b) =>
         a.value > b.value ? 1 : b.value > a.value ? -1 : 0,
       );
-      console.log('props', props);
-
       if (params.type === 'origin') {
         setDataCitiesOfOrigin(newResp);
       } else {

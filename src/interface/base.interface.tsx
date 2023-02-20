@@ -20,6 +20,8 @@ export type ParamsProps = {
   playlistID?: number;
   albumID?: number;
   id?: string;
+  context?: string;
+  listType?: string;
 };
 
 export type imageTypes = {
@@ -30,6 +32,7 @@ export type imageTypes = {
 export type nameValue = {
   name: string;
   value: number | string;
+  username: string;
   Name?: string;
   Value?: number | string;
 };

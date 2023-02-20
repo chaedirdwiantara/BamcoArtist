@@ -11,30 +11,37 @@ import {mvs} from 'react-native-size-matters';
 import {Image} from 'react-native-image-crop-picker';
 
 import {ModalConfirm} from '../..';
-import {Gap, SsuInput} from '../../atom';
-
 import ListPhotos from './ListPhotos';
 import Font from '../../../theme/Font';
+import {Gap, SsuInput} from '../../atom';
 import Color from '../../../theme/Color';
 import {TopNavigation} from '../TopNavigation';
 import {ModalSocMed} from '../Modal/ModalSocMed';
 import {ProfileHeader} from './components/Header';
+import {ModalLoading} from '../ModalLoading/ModalLoading';
 import {ModalImagePicker} from '../Modal/ModalImagePicker';
 import {ArrowLeftIcon, SaveIcon} from '../../../assets/icon';
-import {heightPercentage, widthPercentage} from '../../../utils';
-import ProfileComponent from '../../../screen/MusicianProfile/ProfileComponent';
+import {ParamsProps} from '../../../interface/base.interface';
 import {useProfileHook} from '../../../hooks/use-profile.hook';
-import {ModalLoading} from '../ModalLoading/ModalLoading';
+import {heightPercentage, widthPercentage} from '../../../utils';
+import {useUploadImageHook} from '../../../hooks/use-uploadImage.hook';
+import ProfileComponent from '../../../screen/MusicianProfile/ProfileComponent';
 import {useTranslation} from 'react-i18next';
 
 interface EditProfileProps {
   profile: any;
   type: string;
   onPressGoBack: () => void;
-  onPressSave: (params: {bio: string; about: string}) => void;
-  setUploadImage: (image: Image, type: string) => void;
+  onPressSave: (params: {
+    bio: string;
+    about: string;
+    website: string;
+    photos: string[];
+  }) => void;
+  setUploadPhoto: (image: Image, type: string) => void;
   setResetImage: (type: string) => void;
-  goToGallery: () => void;
+  goToGallery: (photos: Image[]) => void;
+  deleteValueProfile: (props?: ParamsProps) => void;
 }
 
 export const EditProfile: React.FC<EditProfileProps> = ({
@@ -42,13 +49,18 @@ export const EditProfile: React.FC<EditProfileProps> = ({
   profile,
   onPressGoBack,
   onPressSave,
-  setUploadImage,
+  setUploadPhoto,
   setResetImage,
+  deleteValueProfile,
+  goToGallery,
 }) => {
   const {t} = useTranslation();
-  const {dataProfile, getProfileUser} = useProfileHook();
+  const {dataProfile, getProfileUser, removeCollectPhotos} = useProfileHook();
+  const {isLoadingImage, dataImage, setUploadImage} = useUploadImageHook();
+
   const [bio, setBio] = useState(profile.bio || '');
   const [about, setAbout] = useState(profile.about || '');
+  const [website, setWebsite] = useState(profile.website || '');
   const [isModalVisible, setModalVisible] = useState({
     modalConfirm: false,
     modalImage: false,
@@ -56,10 +68,52 @@ export const EditProfile: React.FC<EditProfileProps> = ({
   });
   const [uriType, setUriType] = useState('');
   const [uri, setUri] = useState({
-    avatarUri: {path: null},
-    backgroundUri: {path: null},
+    avatarUri: {path: profile.avatarUri || null},
+    backgroundUri: {path: profile.backgroundUri || null},
   });
   const [photos, setPhotos] = useState<Image[]>([]);
+  const [unUploadedPhotos, setUnUploadedPhotos] = useState<Image[]>([]);
+  const [dataResponseImg, setDataResponseImg] = useState<string[]>([]);
+  const [active, setActive] = useState<boolean>(false);
+  const [savedPhotos, setSavedPhotos] = useState<number>(0);
+
+  useEffect(() => {
+    if (profile?.photos.length > 0) {
+      let newPhotos: {path: string; size: number; filename: string}[] = [];
+      let newDataResponseImg: string[] = [];
+      profile.photos.map((val: {images: {image: string}[]}, i: number) => {
+        if (val.images.length > 0) {
+          const newPath = val.images[2]?.image;
+          newPhotos.push({
+            path: newPath,
+            size: i,
+            filename: `${i.toString()}.jpg`,
+          });
+          newDataResponseImg.push(newPath);
+        }
+      });
+
+      setPhotos(newPhotos);
+      setDataResponseImg(newDataResponseImg);
+      setSavedPhotos(newDataResponseImg.length);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (unUploadedPhotos.length > 0 && active) {
+      for (let i = 0; i < unUploadedPhotos.length; i++) {
+        setUploadImage(unUploadedPhotos[i]);
+      }
+    }
+  }, [unUploadedPhotos]);
+
+  useEffect(() => {
+    if (active) {
+      dataImage?.data !== undefined && !dataResponseImg.includes(dataImage.data)
+        ? setDataResponseImg([...dataResponseImg, dataImage?.data])
+        : null;
+    }
+  }, [dataImage]);
 
   const openModalConfirm = () => {
     setModalVisible({
@@ -89,6 +143,12 @@ export const EditProfile: React.FC<EditProfileProps> = ({
   const resetImage = () => {
     setUri({...uri, [uriType]: null});
     setResetImage(uriType);
+
+    // call api delete image
+    const valueName = uriType === 'avatarUri' ? 'imageProfileUrl' : 'banner';
+    deleteValueProfile({
+      context: valueName,
+    });
     closeModal();
   };
 
@@ -102,24 +162,49 @@ export const EditProfile: React.FC<EditProfileProps> = ({
   };
 
   const sendUri = (val: Image) => {
-    setUploadImage(val, uriType);
-    setUri({...uri, [uriType]: val});
-  };
-
-  const sendMultipleUri = (val: Image[]) => {
-    setPhotos([...photos, ...val]);
-    for (let i = 0; i < val.length; i++) {
-      setUploadImage(val[i], 'photos');
+    if (uriType === 'photos') {
+      sendMultipleUri([val]);
+    } else {
+      setUploadPhoto(val, uriType);
+      setUri({...uri, [uriType]: val});
     }
   };
 
-  const closeImage = (id: number) => {
-    setPhotos(photos.filter((x: Image) => x.path !== photos[id].path));
+  const unique = (arr: Image[]) => {
+    const propertyToCompare = Platform.OS === 'ios' ? 'filename' : 'size';
+    return arr.filter(
+      (v, i, a) =>
+        a.findIndex(v2 => v[propertyToCompare] === v2[propertyToCompare]) === i,
+    );
   };
 
-  const avatarUri = uri?.avatarUri?.path || profile.avatarUri || null;
-  const backgroundUri =
-    uri?.backgroundUri?.path || profile.backgroundUri || null;
+  const sendMultipleUri = (val: Image[]) => {
+    setActive(true);
+    let newUniqueImageVal: Image[] = [];
+    val.map(res => {
+      // check if new image is not include in photos, compare using filename / size
+      const propertyToCompare = Platform.OS === 'ios' ? 'filename' : 'size';
+      if (
+        photos.length === 0 ||
+        photos.filter(v => v[propertyToCompare] === res[propertyToCompare])
+          .length === 0
+      ) {
+        newUniqueImageVal.push(res);
+      }
+    });
+    setUnUploadedPhotos(newUniqueImageVal);
+
+    const allPhotos = unique([...photos, ...val]);
+    setPhotos(allPhotos);
+  };
+
+  const removePhoto = (id: number) => {
+    setActive(false);
+    removeCollectPhotos({photos: dataResponseImg[id]});
+    setPhotos(photos.filter((x: Image) => x.path !== photos[id].path));
+    setDataResponseImg(dataResponseImg.filter((val, index) => index !== id));
+    id < savedPhotos && setSavedPhotos(savedPhotos - 1);
+  };
 
   const titleModalPicker =
     uriType === 'avatarUri'
@@ -127,8 +212,8 @@ export const EditProfile: React.FC<EditProfileProps> = ({
       : t('Profile.Edit.HeaderPicture');
   const hideMenuDelete =
     uriType === 'avatarUri'
-      ? avatarUri !== null && avatarUri !== ''
-      : backgroundUri !== null && backgroundUri !== '';
+      ? uri.avatarUri !== null && uri.avatarUri?.path !== null
+      : uri.backgroundUri !== null && uri.backgroundUri?.path !== null;
 
   const newColorBio = bio.length === 110 ? Color.Error[400] : Color.Neutral[10];
   const newColorAbout =
@@ -152,8 +237,8 @@ export const EditProfile: React.FC<EditProfileProps> = ({
       <ScrollView>
         <ProfileHeader
           type={type}
-          avatarUri={avatarUri}
-          backgroundUri={backgroundUri}
+          avatarUri={uri.avatarUri?.path}
+          backgroundUri={uri.backgroundUri?.path}
           fullname={profile.fullname}
           username={profile.username}
           containerStyles={{height: heightPercentage(206)}}
@@ -196,6 +281,21 @@ export const EditProfile: React.FC<EditProfileProps> = ({
         </View>
 
         <View style={styles.textAreaContainer}>
+          <SsuInput.InputLabel
+            label={t('Musician.Label.Website')}
+            placeholder={t('Profile.Edit.Website')}
+            value={website}
+            onChangeText={(newText: string) => setWebsite(newText)}
+            containerStyles={{marginTop: heightPercentage(15)}}
+          />
+          <Text
+            style={[
+              styles.length,
+              {color: newColorAbout},
+            ]}>{`${about.length}/600`}</Text>
+        </View>
+
+        <View style={styles.textAreaContainer}>
           <Text style={styles.title}>{t('Musician.Label.Social')}</Text>
           <TouchableOpacity onPress={openModalSocMed}>
             <Text style={styles.addText}>{`+ ${t(
@@ -211,18 +311,25 @@ export const EditProfile: React.FC<EditProfileProps> = ({
           />
         </View>
 
-        {/* <View
+        <View
           style={[
             styles.textAreaContainer,
             {marginBottom: heightPercentage(30)},
           ]}>
-          <Text style={styles.title}>{'Photos'}</Text>
+          <Text style={styles.title}>{t('Musician.Label.Photos')}</Text>
           <TouchableOpacity onPress={() => openModalImage('photos')}>
-            <Text style={styles.addText}>{'+ Add Photos'}</Text>
+            <Text style={styles.addText}>{`+ ${t(
+              'Profile.Edit.Photos',
+            )}`}</Text>
           </TouchableOpacity>
           <Gap height={heightPercentage(20)} />
-          <ListPhotos data={photos} photoOnpress={() => null} />
-        </View> */}
+
+          <ListPhotos
+            data={photos}
+            photoOnpress={goToGallery}
+            removePhoto={removePhoto}
+          />
+        </View>
       </ScrollView>
 
       <ModalImagePicker
@@ -247,10 +354,17 @@ export const EditProfile: React.FC<EditProfileProps> = ({
         title={t('Modal.EditProfile.Title') || ''}
         subtitle={t('Modal.EditProfile.Subtitle') || ''}
         onPressClose={closeModal}
-        onPressOk={() => onPressSave({bio, about})}
+        onPressOk={() =>
+          onPressSave({
+            bio,
+            about,
+            website,
+            photos: dataResponseImg.slice(savedPhotos, dataResponseImg.length),
+          })
+        }
       />
 
-      {/* <ModalLoading visible={isLoading || loadingUpload} /> */}
+      <ModalLoading visible={isLoadingImage} />
     </View>
   );
 };

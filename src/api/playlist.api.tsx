@@ -6,6 +6,7 @@ import {
   PlaylistPropsTypeA,
   PlaylistResponseType,
   PlaylistResponseTypeC,
+  AddSongPropsTypeB,
 } from '../interface/playlist.interface';
 import {ParamsProps} from '../interface/base.interface';
 import {ListSongResponseType} from '../interface/song.interface';
@@ -99,6 +100,18 @@ export const removeSongFromPlaylist = async (
 ): Promise<PlaylistResponseTypeC> => {
   const {data} = await SsuAPI().request<PlaylistResponseTypeC>({
     url: '/playlists/remove-song',
+    method: 'POST',
+    data: props,
+  });
+
+  return data;
+};
+
+export const addSongToPlaylist = async (
+  props?: AddSongPropsTypeB,
+): Promise<PlaylistResponseTypeC> => {
+  const {data} = await SsuAPI().request<PlaylistResponseTypeC>({
+    url: '/playlists/add-to-my-playlist',
     method: 'POST',
     data: props,
   });

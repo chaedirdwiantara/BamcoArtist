@@ -24,7 +24,7 @@ export const CreateNewCard: React.FC<ListProps> = ({
     <TouchableOpacity
       style={[styles.container, containerStyles]}
       onPress={onPress}>
-      <Text style={styles.numStyle}>{num}</Text>
+      {num ? <Text style={styles.numStyle}>{num}</Text> : null}
       <SquareImage type="add" size={widthPercentage(44)} />
       <Text style={[Typography.Subtitle1, styles.labelStyle]}>{text}</Text>
     </TouchableOpacity>

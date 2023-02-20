@@ -1,4 +1,5 @@
 export type Playlist = {
+  isDefaultPlaylist: boolean;
   id: number;
   name: string;
   description: string;
@@ -31,6 +32,10 @@ export type PlaylistPropsType = {
 export type AddSongPropsType = {
   playlistId: number;
   songId: number;
+};
+
+export type AddSongPropsTypeB = {
+  playlistReferenceId: number;
 };
 
 export type PlaylistResponseType = {
