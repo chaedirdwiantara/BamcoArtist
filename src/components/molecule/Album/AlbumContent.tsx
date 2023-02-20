@@ -19,7 +19,7 @@ import {Gap, SsuToast} from '../../atom';
 import {TopNavigation} from '../TopNavigation';
 import TopSong from '../../../screen/ListCard/TopSong';
 import {color, font, typography} from '../../../theme';
-import {dropDownHeaderAlbum} from '../../../data/dropdown';
+import {dataUpdateComment, dropDownHeaderAlbum} from '../../../data/dropdown';
 import {PhotoPlaylist} from '../PlaylistContent/PhotoPlaylist';
 import {ArrowLeftIcon, TickCircleIcon} from '../../../assets/icon';
 import {
@@ -32,6 +32,9 @@ import {
 import {useTranslation} from 'react-i18next';
 import {DataDetailAlbum, SongList} from '../../../interface/song.interface';
 import {dateFormat} from '../../../utils/date-format';
+import {useNavigation} from '@react-navigation/native';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {RootStackParams} from '../../../navigations';
 
 interface Props {
   dataSong: SongList[] | null;
@@ -44,12 +47,16 @@ export const AlbumContent: React.FC<Props> = ({
   dataSong,
   onPressGoBack,
 }) => {
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParams>>();
+
   const {t} = useTranslation();
   const [toastVisible, setToastVisible] = useState(false);
   const [modalDonate, setModalDonate] = useState<boolean>(false);
   const [modalShare, setModalShare] = useState<boolean>(false);
   const [modalSuccessDonate, setModalSuccessDonate] = useState<boolean>(false);
   const [trigger2ndModal, setTrigger2ndModal] = useState<boolean>(false);
+  const [songIdList, setSongIdList] = useState<number[]>([]);
 
   useEffect(() => {
     toastVisible &&
@@ -65,9 +72,22 @@ export const AlbumContent: React.FC<Props> = ({
       }, 3000);
   }, [modalSuccessDonate, trigger2ndModal]);
 
+  useEffect(() => {
+    if (dataSong !== null) {
+      let Xter = [];
+      for (let i = 1; i <= dataSong.length; i++) {
+        Xter.push(dataSong[i].id);
+      }
+      setSongIdList(Xter);
+    }
+  }, [dataSong]);
+
   const resultDataMore = (dataResult: any) => {
     if (dataResult.value === '2') {
       setModalShare(true);
+    }
+    if (dataResult.value === '3') {
+      navigation.navigate('Playlist', {id: songIdList});
     }
   };
 
@@ -102,18 +122,32 @@ export const AlbumContent: React.FC<Props> = ({
       <ScrollView>
         <View style={{paddingHorizontal: widthPercentage(10)}}>
           <View style={{alignSelf: 'center'}}>
-            <PhotoPlaylist uri={detailAlbum?.imageUrl[1].image} />
+            <PhotoPlaylist
+              uri={
+                detailAlbum?.imageUrl.length > 0
+                  ? detailAlbum?.imageUrl[1].image
+                  : ''
+              }
+            />
           </View>
           <SongTitlePlay
             title={detailAlbum?.title}
             totalSong={dataSong?.length || 0}
             createdDate={dateFormat(detailAlbum?.createdAt)}
             createdBy={detailAlbum?.musicianName}
-            avatarUri={detailAlbum?.imageUrl[0].image}
+            avatarUri={
+              detailAlbum?.imageUrl.length > 0
+                ? detailAlbum?.imageUrl[0].image
+                : ''
+            }
             showPlay={false}
           />
           <ListenersAndDonate
-            totalListener={66900}
+            totalListener={
+              detailAlbum?.totalCountListener
+                ? detailAlbum?.totalCountListener
+                : 0
+            }
             onPress={() => setModalDonate(true)}
           />
         </View>
