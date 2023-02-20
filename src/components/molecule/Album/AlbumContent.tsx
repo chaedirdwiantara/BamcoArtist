@@ -31,6 +31,7 @@ import {
 } from '../';
 import {useTranslation} from 'react-i18next';
 import {DataDetailAlbum, SongList} from '../../../interface/song.interface';
+import {dateFormat} from '../../../utils/date-format';
 
 interface Props {
   dataSong: SongList[] | null;
@@ -94,23 +95,22 @@ export const AlbumContent: React.FC<Props> = ({
         leftIcon={<ArrowLeftIcon />}
         itemStrokeColor={Color.Neutral[10]}
         leftIconAction={onPressGoBack}
-        rightIconAction={() => null}
+        rightIconAction={() => {}}
         containerStyles={{paddingHorizontal: widthPercentage(20)}}
       />
 
       <ScrollView>
         <View style={{paddingHorizontal: widthPercentage(10)}}>
           <View style={{alignSelf: 'center'}}>
-            <PhotoPlaylist uri={detailAlbum.imageUrl[1].image} />
+            <PhotoPlaylist uri={detailAlbum?.imageUrl[1].image} />
           </View>
           <SongTitlePlay
-            title={'Smoke + Mirror'}
-            totalSong={10}
-            createdDate={'December 7, 2017'}
-            createdBy={'Imagine Dragons'}
-            avatarUri={
-              'https://thisis-images.scdn.co/37i9dQZF1DZ06evO2YqUuI-large.jpg'
-            }
+            title={detailAlbum?.title}
+            totalSong={dataSong?.length || 0}
+            createdDate={dateFormat(detailAlbum?.createdAt)}
+            createdBy={detailAlbum?.musicianName}
+            avatarUri={detailAlbum?.imageUrl[0].image}
+            showPlay={false}
           />
           <ListenersAndDonate
             totalListener={66900}
@@ -125,11 +125,7 @@ export const AlbumContent: React.FC<Props> = ({
             <Text style={[typography.Subtitle1, {color: color.Success[500]}]}>
               {t('Event.Description')}
             </Text>
-            <Text style={styles.description}>
-              {
-                "Born on the sofa of his childhood home, singer Lukas Forchhammer entered the world in unconventional surroundings. His parents' resided within the 84 acres of Christiania: an alternative, tightly knit community, formed in 1971 by squatters and artists in Cophenhagen. "
-              }
-            </Text>
+            <Text style={styles.description}>{detailAlbum.description}</Text>
           </View>
 
           <Text style={[typography.Subtitle1, {color: color.Success[500]}]}>

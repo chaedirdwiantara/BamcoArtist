@@ -8,8 +8,13 @@ import Color from '../../theme/Color';
 import {useSearchHook} from '../../hooks/use-search.hook';
 import {useQuery} from 'react-query';
 import {useTranslation} from 'react-i18next';
+import {useNavigation} from '@react-navigation/native';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {RootStackParams} from '../../navigations';
 
 const ListResultPlaylists: FC<KeywordProps> = ({keyword}: KeywordProps) => {
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParams>>();
   const {t} = useTranslation();
   const {getSearchPlaylists} = useSearchHook();
 
@@ -32,6 +37,10 @@ const ListResultPlaylists: FC<KeywordProps> = ({keyword}: KeywordProps) => {
     console.log(dataResult, 'resultDataMenu');
   };
 
+  const cardOnPress = (id: number) => {
+    navigation.navigate('Playlist', {id});
+  };
+
   return (
     <View style={styles.container}>
       {isFetched && !isRefetching && (
@@ -50,7 +59,7 @@ const ListResultPlaylists: FC<KeywordProps> = ({keyword}: KeywordProps) => {
               singerName={item.name}
               onPressMore={resultDataMore}
               containerStyles={{marginTop: mvs(20)}}
-              onPressCard={() => {}}
+              onPressCard={() => cardOnPress(item.id)}
               hideDropdownMore
             />
           )}

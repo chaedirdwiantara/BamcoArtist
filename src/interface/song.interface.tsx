@@ -171,6 +171,7 @@ export type DetailSongResponseType = {
 export type DataDetailAlbum = {
   id: number;
   musician: string;
+  musicianName: string;
   title: string;
   description: string;
   imageUrl: imageTypes[];

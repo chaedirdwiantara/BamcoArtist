@@ -17,6 +17,7 @@ interface SongTitlePlayProps {
   createdDate: string;
   createdBy: string;
   avatarUri?: string | null;
+  showPlay?: boolean;
 }
 
 export const SongTitlePlay: React.FC<SongTitlePlayProps> = ({
@@ -25,6 +26,7 @@ export const SongTitlePlay: React.FC<SongTitlePlayProps> = ({
   createdDate,
   createdBy,
   avatarUri = '',
+  showPlay = true,
 }) => {
   const {t} = useTranslation();
   const [played, setPlayed] = useState(false);
@@ -40,15 +42,15 @@ export const SongTitlePlay: React.FC<SongTitlePlayProps> = ({
             )}`}
           </Text>
         </View>
-        {played ? (
+        {played && showPlay ? (
           <TouchableOpacity onPress={() => setPlayed(false)}>
             <PauseIcon />
           </TouchableOpacity>
-        ) : (
+        ) : !played && showPlay ? (
           <TouchableOpacity onPress={() => setPlayed(true)}>
             <PlayIcon />
           </TouchableOpacity>
-        )}
+        ) : null}
       </View>
 
       <View style={styles.containerCreatedBy}>
