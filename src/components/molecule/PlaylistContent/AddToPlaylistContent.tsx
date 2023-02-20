@@ -5,17 +5,24 @@ import {SearchBar} from '../../atom';
 import Color from '../../../theme/Color';
 import {TopNavigation} from '../TopNavigation';
 import {ArrowLeftIcon} from '../../../assets/icon';
-import TopSong from '../../../screen/ListCard/TopSong';
 import {CreateNewCard} from '../CreateNewCard/CreateNewCard';
+import {Playlist} from '../../../interface/playlist.interface';
 import {heightPercentage, widthPercentage} from '../../../utils';
 import {useTranslation} from 'react-i18next';
+import ListPlaylist from '../../../screen/ListCard/ListPlaylist';
 
 interface AddToPlaylistProps {
+  dataPlaylist: Playlist[];
   onPressGoBack: () => void;
+  goToCreatePlaylist: () => void;
+  pressAddToPlaylist: (id: number) => void;
 }
 
 export const AddToPlaylistContent: React.FC<AddToPlaylistProps> = ({
+  dataPlaylist,
   onPressGoBack,
+  goToCreatePlaylist,
+  pressAddToPlaylist,
 }) => {
   const {t} = useTranslation();
   const [search, setSearch] = useState('');
@@ -38,16 +45,19 @@ export const AddToPlaylistContent: React.FC<AddToPlaylistProps> = ({
         }}
       />
       <ScrollView style={{paddingHorizontal: widthPercentage(20)}}>
-        <CreateNewCard
-          num="00"
-          text={t('Profile.Button.CreatePlaylist')}
-          // onPress={() => onPressGoTo('CreateNewPlaylist')}
-        />
-        <TopSong
-          hideDropdownMore={true}
-          scrollable={false}
-          onPress={() => null}
-        />
+        <View>
+          <CreateNewCard
+            num=""
+            text={t('Profile.Button.CreatePlaylist')}
+            onPress={goToCreatePlaylist}
+          />
+          <ListPlaylist
+            data={dataPlaylist === null ? [] : dataPlaylist}
+            onPress={pressAddToPlaylist}
+            scrollable={false}
+            withoutNum={true}
+          />
+        </View>
       </ScrollView>
     </View>
   );
