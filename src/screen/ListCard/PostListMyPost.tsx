@@ -78,7 +78,7 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
   const [page, setPage] = useState<number>(1);
   const [perPage, setPerPage] = useState<number>(15);
   const [dataMain, setDataMain] = useState<PostList[]>([]);
-  const [filterActive, setFilterActive] = useState<boolean>(false);
+  const [filterActive, setFilterActive] = useState<boolean>(true);
   const [filterByValue, setFilterByValue] = useState<string>();
   const [categoryValue, setCategoryValue] = useState<string>();
 
@@ -176,7 +176,7 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
 
   //* Handle when end of Scroll
   const handleEndScroll = () => {
-    if (dataMain.length > 15) {
+    if (dataMain.length >= 15) {
       getListDataMyPost({
         page: page + 1,
         perPage: perPage,
@@ -184,6 +184,7 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
         sortBy: filterByValue,
       });
       setPage(page + 1);
+      setFilterActive(false);
     }
   };
 
