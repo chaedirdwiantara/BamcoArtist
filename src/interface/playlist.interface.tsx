@@ -33,6 +33,10 @@ export type AddSongPropsType = {
   songId: number;
 };
 
+export type AddSongPropsTypeB = {
+  playlistReferenceId: number;
+};
+
 export type PlaylistResponseType = {
   code: number;
   data: Playlist[];

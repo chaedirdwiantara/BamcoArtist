@@ -9,10 +9,11 @@ interface ListPlaylistScreen {
   data?: Playlist[];
   onPress: (id: number, name: string) => void;
   scrollable?: boolean;
+  withoutNum?: boolean;
 }
 
 const ListPlaylist: FC<ListPlaylistScreen> = (props: ListPlaylistScreen) => {
-  const {onPress, scrollable, data} = props;
+  const {onPress, scrollable, data, withoutNum} = props;
 
   return (
     <FlashList
@@ -23,7 +24,7 @@ const ListPlaylist: FC<ListPlaylistScreen> = (props: ListPlaylistScreen) => {
       renderItem={({item, index}) => (
         <ListCard.Playlist
           imgUri={item.thumbnailUrl !== null ? item.thumbnailUrl : ''}
-          musicNum={index + 1}
+          musicNum={withoutNum ? '' : index + 1}
           musicTitle={elipsisText(item.name, 22)}
           singerName={'by ' + item.playlistOwner.fullname}
           onPressCard={() => onPress(item.id, item.name)}
