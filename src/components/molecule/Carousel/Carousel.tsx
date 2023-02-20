@@ -59,7 +59,7 @@ export const Carousel: FC<CarouselProps> = ({data, onPressBanner}) => {
         ref={flatListRef}
         data={dataWithPlaceholders}
         renderItem={({item, index}) => {
-          if (!item.imageUrls || !item.title) {
+          if (!item.imageUrls) {
             return <View style={{width: EMPTY_ITEM_LENGTH}} />;
           }
 
@@ -96,7 +96,11 @@ export const Carousel: FC<CarouselProps> = ({data, onPressBanner}) => {
                   styles.itemContent,
                 ]}>
                 <Image
-                  source={{uri: item.imageUrls[3].image}}
+                  source={
+                    item.isDefault
+                      ? item.imageUrls
+                      : {uri: item.imageUrls[3].image}
+                  }
                   style={styles.itemImage}
                 />
                 <Animated.Text
@@ -137,14 +141,16 @@ export const Carousel: FC<CarouselProps> = ({data, onPressBanner}) => {
           itemVisiblePercentThreshold: 100,
         }}
       />
-      <View style={styles.containerIndicator}>
-        <Indicator
-          activeIndex={activeIndexSlide}
-          totalIndex={data.length}
-          activeColor={Color.Dark[100]}
-          inActiveColor={Color.Dark[300]}
-        />
-      </View>
+      {data.length === 1 ? null : (
+        <View style={styles.containerIndicator}>
+          <Indicator
+            activeIndex={activeIndexSlide}
+            totalIndex={data.length}
+            activeColor={Color.Dark[100]}
+            inActiveColor={Color.Dark[300]}
+          />
+        </View>
+      )}
     </View>
   );
 };
@@ -180,7 +186,8 @@ const styles = StyleSheet.create({
   },
   itemImage: {
     width: '100%',
-    height: heightPercentage(159),
+    height: undefined,
+    aspectRatio: 2 / 1,
     resizeMode: 'cover',
     borderRadius: 8,
   },
