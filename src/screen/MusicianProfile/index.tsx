@@ -67,9 +67,18 @@ const MusicianProfile: FC<PostDetailProps> = ({route}: PostDetailProps) => {
     }
   }, [dataFollow]);
 
+  const [followersCount, setFollowersCount] = useState<number>(0);
+
+  useEffect(() => {
+    if (dataDetailMusician !== undefined && dataDetailMusician.followers) {
+      setFollowersCount(dataDetailMusician.followers);
+    }
+  }, [dataDetailMusician]);
+
   const followOnPress = () => {
     if (isLogin) {
       setFollowMusician({musicianID: uuid}, {}, false);
+      setFollowersCount(followersCount + 1);
     } else {
       setModalGuestVisible(true);
     }
@@ -78,6 +87,7 @@ const MusicianProfile: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   const unFollowOnPress = () => {
     if (isLogin) {
       setUnfollowMusician({musicianID: uuid}, {}, false);
+      setFollowersCount(followersCount - 1);
     } else {
       setModalGuestVisible(true);
     }
@@ -116,6 +126,7 @@ const MusicianProfile: FC<PostDetailProps> = ({route}: PostDetailProps) => {
           followOnPress={followOnPress}
           unfollowOnPress={unFollowOnPress}
           donateOnPress={donateOnPress}
+          followersCount={followersCount}
         />
       )}
       <ModalLoading visible={isLoading} />

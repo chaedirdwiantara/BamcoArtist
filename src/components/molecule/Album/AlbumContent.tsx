@@ -30,12 +30,19 @@ import {
   ModalSuccessDonate,
 } from '../';
 import {useTranslation} from 'react-i18next';
+import {DataDetailAlbum, SongList} from '../../../interface/song.interface';
 
 interface Props {
+  dataSong: SongList[] | null;
+  detailAlbum: DataDetailAlbum;
   onPressGoBack: () => void;
 }
 
-export const AlbumContent: React.FC<Props> = ({onPressGoBack}) => {
+export const AlbumContent: React.FC<Props> = ({
+  detailAlbum,
+  dataSong,
+  onPressGoBack,
+}) => {
   const {t} = useTranslation();
   const [toastVisible, setToastVisible] = useState(false);
   const [modalDonate, setModalDonate] = useState<boolean>(false);
@@ -94,7 +101,7 @@ export const AlbumContent: React.FC<Props> = ({onPressGoBack}) => {
       <ScrollView>
         <View style={{paddingHorizontal: widthPercentage(10)}}>
           <View style={{alignSelf: 'center'}}>
-            <PhotoPlaylist uri="https://i.pinimg.com/originals/b3/51/66/b35166174c9bde2d0cc436150a983912.jpg" />
+            <PhotoPlaylist uri={detailAlbum.imageUrl[1].image} />
           </View>
           <SongTitlePlay
             title={'Smoke + Mirror'}

@@ -83,7 +83,9 @@ const CommentLvlThree: React.FC<ListProps> = (props: ListProps) => {
               alignItems: 'center',
               marginRight: showEdit ? ms(-7) : 0,
             }}>
-            <Text style={styles.postDateStyle}>{postDateLvl3}</Text>
+            <Text style={styles.postDateStyle}>
+              {elipsisText(postDateLvl3, 10)}
+            </Text>
             {showEdit ? (
               <Dropdown.More
                 data={dataUpdateComment}

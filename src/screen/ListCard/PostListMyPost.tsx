@@ -3,8 +3,6 @@ import {
   Dimensions,
   FlatList,
   InteractionManager,
-  Platform,
-  SafeAreaView,
   StyleSheet,
   Text,
   View,
@@ -30,7 +28,6 @@ import {
   elipsisText,
   heightPercentage,
   heightResponsive,
-  normalize,
   widthPercentage,
   widthResponsive,
 } from '../../utils';
@@ -81,6 +78,9 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
   const [page, setPage] = useState<number>(1);
   const [perPage, setPerPage] = useState<number>(15);
   const [dataMain, setDataMain] = useState<PostList[]>([]);
+  const [filterActive, setFilterActive] = useState<boolean>(false);
+  const [filterByValue, setFilterByValue] = useState<string>();
+  const [categoryValue, setCategoryValue] = useState<string>();
 
   // * UPDATE HOOKS
   const [selectedIdPost, setSelectedIdPost] = useState<string>();
@@ -134,36 +134,57 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
 
   //* set response data list post to main data
   useEffect(() => {
-    if (dataPostList.length !== 0) {
+    if (dataPostList.length !== 0 && filterActive === false) {
       let filterDataPost = [...dataMain, ...dataPostList];
       let filterDuplicate = filterDataPost.filter(
         (v, i, a) => a.findIndex(v2 => v2.id === v.id) === i,
       );
       setDataMain(filterDuplicate);
     }
-  }, [dataPostList]);
+    if (dataPostList.length !== 0 && filterActive) {
+      setDataMain(dataPostList);
+    }
+  }, [dataPostList, filterActive]);
 
   const resultDataFilter = (dataResultFilter: DataDropDownType) => {
     getListDataMyPost({
-      page: page,
-      perPage: perPage,
+      page: 1,
+      perPage: perPage * page,
       sortBy: dataResultFilter.label.toLowerCase(),
+      category: categoryValue,
     });
+    setFilterActive(true);
+    setFilterByValue(dataResultFilter.label.toLowerCase());
   };
   const resultDataCategory = (dataResultCategory: DataDropDownType) => {
     dataResultCategory.label === t('Home.Tab.TopPost.Category.All')
-      ? getListDataMyPost({page: page, perPage: perPage})
-      : getListDataMyPost({
+      ? (getListDataMyPost({
           page: page,
           perPage: perPage,
+          sortBy: filterByValue,
+        }),
+        setFilterActive(false))
+      : (getListDataMyPost({
+          page: 1,
+          perPage: perPage * page,
           category: dataResultCategory.value,
-        });
+          sortBy: filterByValue,
+        }),
+        setFilterActive(true));
+    setCategoryValue(dataResultCategory.value);
   };
 
   //* Handle when end of Scroll
   const handleEndScroll = () => {
-    getListDataMyPost({page: page + 1, perPage: perPage});
-    setPage(page + 1);
+    if (dataMain.length > 15) {
+      getListDataMyPost({
+        page: page + 1,
+        perPage: perPage,
+        category: categoryValue,
+        sortBy: filterByValue,
+      });
+      setPage(page + 1);
+    }
   };
 
   const cardOnPress = (data: PostList) => {
@@ -377,11 +398,15 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
             marginHorizontal: widthResponsive(-24),
           }}>
           <FlatList
-            data={dataMain.sort(
-              (a, b) =>
-                new Date(b.createdAt).getTime() -
-                new Date(a.createdAt).getTime(),
-            )}
+            data={
+              filterActive
+                ? dataMain
+                : dataMain.sort(
+                    (a, b) =>
+                      new Date(b.createdAt).getTime() -
+                      new Date(a.createdAt).getTime(),
+                  )
+            }
             showsVerticalScrollIndicator={false}
             keyExtractor={(_, index) => index.toString()}
             contentContainerStyle={{
