@@ -155,7 +155,7 @@
         "Tip": "Send Tip",
         "Queue": "Add to Queue",
         "Share": "Share Music",
-        "Credit": "Show Credits"
+        "Details": "Show Details"
       },
       "TopPost": {
         "Title": "TOP POST",
@@ -221,7 +221,8 @@
     },
     "Button": {
       "Edit": "Edit Profile",
-      "CreatePlaylist": "Create New Playlist"
+      "CreatePlaylist": "Create New Playlist",
+      "NewPlaylist": "New Playlist"
     },
     "Tab": {
       "Playlist": "PLAYLIST",

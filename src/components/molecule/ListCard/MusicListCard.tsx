@@ -67,7 +67,7 @@ const MusicListCard: React.FC<ListProps> = ({
     {label: t('Home.Tab.TopSong.Tip'), value: '2'},
     {label: t('Home.Tab.TopSong.Queue'), value: '3'},
     {label: t('Home.Tab.TopSong.Share'), value: '4'},
-    {label: t('Home.Tab.TopSong.Credit'), value: '5'},
+    {label: t('Home.Tab.TopSong.Details'), value: '5'},
   ];
 
   const titleColor = played ? color.Success[400] : color.Neutral[10];
