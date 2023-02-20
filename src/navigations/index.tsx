@@ -207,7 +207,9 @@ export type MainTabParams = {
   Collection: undefined;
   Event: undefined;
   Feed: undefined;
-  Home: undefined;
+  Home: {
+    showToast?: boolean;
+  };
   Profile: {
     showToast?: boolean;
     deletePlaylist?: boolean;
@@ -240,12 +242,19 @@ const TabScreen = () => {
       <MainTab.Screen
         name="Home"
         component={HomeScreen}
+        initialParams={{showToast: false}}
         options={{
           tabBarIcon: ({color}) => (
-            <View style={styles.root}>
+            <TouchableOpacity
+              style={styles.root}
+              onPress={() =>
+                navigation.navigate('Home', {
+                  showToast: false,
+                })
+              }>
               <HomeIcon stroke={color} />
               <Text style={[styles.label, {color}]}>{'Home'}</Text>
-            </View>
+            </TouchableOpacity>
           ),
         }}
       />
