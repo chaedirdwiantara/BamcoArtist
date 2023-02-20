@@ -15,6 +15,7 @@ export type BannerList = {
     image: string;
     presetName: string;
   }[];
+  isDefault?: boolean;
 };
 
 export type ListBannerResponseType = {
