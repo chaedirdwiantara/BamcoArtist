@@ -160,7 +160,7 @@ export const EditPlaylistContent: React.FC<EditPlaylistProps> = ({
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
       <View style={styles.root}>
         <TopNavigation.Type4
-          itle={t('Music.Playlist.Edit')}
+          title={t('Music.Playlist.Edit')}
           rightIcon={<SaveIcon />}
           leftIcon={<ArrowLeftIcon />}
           itemStrokeColor={color.Neutral[10]}
@@ -272,6 +272,7 @@ export const EditPlaylistContent: React.FC<EditPlaylistProps> = ({
           title={t('Modal.Playlist.Cover') || ''}
           modalVisible={isModalVisible.modalImage}
           sendUri={sendUri}
+          sendUriMultiple={() => null}
           onDeleteImage={resetImage}
           onPressClose={closeModal}
           hideMenuDelete={hideMenuDelete}
@@ -280,7 +281,7 @@ export const EditPlaylistContent: React.FC<EditPlaylistProps> = ({
         <ModalConfirm
           modalVisible={isModalVisible.modalConfirm}
           title={t('Btn.Save') || ''}
-          subtitle={t('Modal.Playlist.Edit') || ''}
+          subtitle={t('Modal.Playlist.Update') || ''}
           onPressClose={closeModal}
           onPressOk={onPressConfirm}
         />

@@ -1,12 +1,14 @@
 import React, {FC, useEffect, useState} from 'react';
-import {MusicSection} from '../../components';
 import {mvs} from 'react-native-size-matters';
 import {FlashList} from '@shopify/flash-list';
+
+import {MusicSection} from '../../components';
+import {DataDropDownType} from '../../data/dropdown';
+import {useSongHook} from '../../hooks/use-song.hook';
 import {SongList} from '../../interface/song.interface';
 import {elipsisText, heightResponsive} from '../../utils';
-import {ListDataSearchSongs} from '../../interface/search.interface';
 import {usePlayerHook} from '../../hooks/use-player.hook';
-import {useSongHook} from '../../hooks/use-song.hook';
+import {ListDataSearchSongs} from '../../interface/search.interface';
 
 interface TopSongPropsScreen {
   type?: string;
@@ -19,6 +21,8 @@ interface TopSongPropsScreen {
   onPressIcon?: (data: number) => void;
   activeOpacity?: number;
   loveIcon?: boolean;
+  newDataMore?: DataDropDownType[];
+  newOnPressMore?: (data: DataDropDownType) => void;
 }
 
 const TopSong: FC<TopSongPropsScreen> = (props: TopSongPropsScreen) => {
@@ -33,6 +37,8 @@ const TopSong: FC<TopSongPropsScreen> = (props: TopSongPropsScreen) => {
     onPressIcon,
     activeOpacity,
     loveIcon,
+    newDataMore,
+    newOnPressMore,
   } = props;
   const {currentTrack, isPlaying, addSong} = usePlayerHook();
   const {setLikeSong, setUnlikeSong} = useSongHook();
@@ -71,7 +77,7 @@ const TopSong: FC<TopSongPropsScreen> = (props: TopSongPropsScreen) => {
       keyExtractor={item => item.id.toString()}
       renderItem={({item, index}) => (
         <MusicSection
-          imgUri={item.imageUrl?.length !== 0 ? item.imageUrl[0].image : ''}
+          imgUri={item.imageUrl[0]?.image ?? ''}
           musicNum={index + 1}
           musicTitle={elipsisText(item.title, 22)}
           singerName={item.musicianName}
@@ -99,6 +105,8 @@ const TopSong: FC<TopSongPropsScreen> = (props: TopSongPropsScreen) => {
           isLiked={item.isLiked}
           onPressAddToQueue={() => addSong(item)}
           songId={item.id}
+          newDataMore={newDataMore}
+          newOnPressMore={newOnPressMore}
         />
       )}
       estimatedItemSize={heightResponsive(500)}

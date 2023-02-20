@@ -41,7 +41,7 @@ export const ProfileScreen: React.FC<ProfileProps> = ({
     } else if (!isFocused) {
       hidePlayer();
     }
-  }, [isFocused]);
+  }, [isFocused, isPlaying]);
 
   const uuid = dataProfile?.data.uuid;
 
