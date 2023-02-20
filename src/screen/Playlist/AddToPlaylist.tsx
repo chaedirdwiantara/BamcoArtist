@@ -1,22 +1,42 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
+import {
+  NativeStackNavigationProp,
+  NativeStackScreenProps,
+} from '@react-navigation/native-stack';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
 import Color from '../../theme/Color';
-import {MainTabParams, RootStackParams} from '../../navigations';
+import {addSong} from '../../api/playlist.api';
 import {AddToPlaylistContent} from '../../components';
 import {profileStorage} from '../../hooks/use-storage.hook';
 import {usePlaylistHook} from '../../hooks/use-playlist.hook';
-import {addSongToPlaylist} from '../../api/playlist.api';
+import {MainTabParams, RootStackParams} from '../../navigations';
 
-export const AddToPlaylistScreen: React.FC = () => {
-  const navigation =
-    useNavigation<NativeStackNavigationProp<RootStackParams>>();
+type AddToPlaylistProps = NativeStackScreenProps<
+  RootStackParams,
+  'AddToPlaylist'
+>;
+
+export const AddToPlaylistScreen: React.FC<AddToPlaylistProps> = ({
+  navigation,
+  route,
+}: AddToPlaylistProps) => {
+  const {params} = route;
   const navigation2 = useNavigation<NativeStackNavigationProp<MainTabParams>>();
 
   const uuid = profileStorage()?.uuid;
   const {dataPlaylist, getPlaylist} = usePlaylistHook();
+
+  const [toastVisible, setToastVisible] = useState<boolean>(false);
+  const [toastError, setToastError] = useState<boolean>(false);
+
+  useEffect(() => {
+    toastVisible &&
+      setTimeout(() => {
+        setToastVisible(false);
+      }, 3000);
+  }, [toastVisible]);
 
   useFocusEffect(
     useCallback(() => {
@@ -31,14 +51,25 @@ export const AddToPlaylistScreen: React.FC = () => {
   };
 
   const goToCreatePlaylist = () => {
-    navigation.navigate('CreateNewPlaylist');
+    navigation.navigate('CreateNewPlaylist', {
+      id: params.id,
+      type: 'song',
+    });
   };
 
   const onPressPlaylist = async (id: number) => {
     try {
-      await addSongToPlaylist({playlistReferenceId: id});
+      const payload = {
+        playlistId: id,
+        songId: params.id[0],
+      };
+      if (params?.type === 'song') {
+        await addSong(payload);
+      }
       navigation2.navigate('Home', {showToast: true});
     } catch (error) {
+      setToastVisible(true);
+      setToastError(true);
       console.log(error);
     }
   };
@@ -50,6 +81,9 @@ export const AddToPlaylistScreen: React.FC = () => {
         onPressGoBack={onPressGoBack}
         goToCreatePlaylist={goToCreatePlaylist}
         pressAddToPlaylist={onPressPlaylist}
+        toastVisible={toastVisible}
+        setToastVisible={setToastVisible}
+        toastError={toastError}
       />
     </View>
   );
