@@ -52,7 +52,7 @@ export const OtherUserProfile: FC<OtherProfileProps> = ({
 
   useFocusEffect(
     useCallback(() => {
-      getPlaylist();
+      getPlaylist({uuid: data.id});
       getOtherProfileUser({id: data.id});
       getUserCountLikedSong({uuid: data.id});
     }, []),
