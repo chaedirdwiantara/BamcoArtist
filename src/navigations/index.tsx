@@ -109,7 +109,7 @@ export type RootStackParams = {
   Account: {
     data: ProfileResponseType;
   };
-  AddToPlaylist: undefined;
+  AddToPlaylist: {id: number[]; type?: string};
   AddSong: Playlist;
   AddPreview: ListDataSearchSongs;
   Album: AlbumData | SongAlbum | {id: number};
@@ -125,7 +125,7 @@ export type RootStackParams = {
     oldPhone: string;
   };
   OtpPhoneNumber: OtpPhoneScreen;
-  CreateNewPlaylist: undefined;
+  CreateNewPlaylist: {id: number[]; type?: string};
   DonationAndSubscription: undefined;
   EditProfile: ProfileResponseData;
   EditPlaylist: Playlist;
@@ -181,7 +181,9 @@ export type RootStackParams = {
   ShippingInformation: {
     data: DataShippingProps | null;
   };
-  ShowCredit: undefined;
+  ShowCredit: {
+    songId: number;
+  };
   SongDetails: {
     id: number;
   };

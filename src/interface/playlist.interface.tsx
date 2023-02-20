@@ -1,4 +1,5 @@
 export type Playlist = {
+  isDefaultPlaylist: boolean;
   id: number;
   name: string;
   description: string;
