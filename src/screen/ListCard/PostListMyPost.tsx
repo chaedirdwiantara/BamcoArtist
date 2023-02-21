@@ -141,14 +141,14 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
 
   //* set response data list post to main data
   useEffect(() => {
-    if (dataPostList.length !== 0 && filterActive === false) {
+    if (dataPostList && filterActive === false) {
       let filterDataPost = [...dataMain, ...dataPostList];
       let filterDuplicate = filterDataPost.filter(
         (v, i, a) => a.findIndex(v2 => v2.id === v.id) === i,
       );
       setDataMain(filterDuplicate);
     }
-    if (dataPostList.length !== 0 && filterActive) {
+    if (dataPostList && filterActive) {
       setDataMain(dataPostList);
     }
   }, [dataPostList, filterActive]);

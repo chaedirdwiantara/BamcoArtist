@@ -141,6 +141,7 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
             translation={true}
           />
           {!ownProfile &&
+          dataPlaylist !== null &&
           filter[selectedIndex].filterName === 'Profile.Tab.Playlist' ? (
             TopSongListData.length > 0 ? (
               <View>

@@ -34,7 +34,7 @@ interface UserInfoCardProps {
   onPress: () => void;
   selfProfile?: ProfileFansResponseData;
   totalCountlikedSong?: number;
-  followersCount: number;
+  followersCount?: number;
 }
 
 type Props = {
