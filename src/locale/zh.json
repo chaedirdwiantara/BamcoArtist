@@ -13,7 +13,8 @@
     "Share": {
       "Feed": "Share Feed",
       "Album": "Share Album",
-      "Music": "Share Music"
+      "Music": "Share Music",
+      "Playlist": "Share Playlist"
     }
   },
   "Onboarding": {
@@ -527,7 +528,8 @@
       "Edit": "Edit Playlist",
       "Delete": "Delete Playlist",
       "Share": "Share Playlist",
-      "Success": "Song have been added to playlist!"
+      "Success": "Song have been added to playlist!",
+      "Remove": "Remove from Playlist"
     },
     "Credit": {
       "Title": "顯示製作人",

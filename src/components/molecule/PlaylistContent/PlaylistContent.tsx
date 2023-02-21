@@ -5,6 +5,7 @@ import {
   Text,
   ScrollView,
   TouchableOpacity,
+  InteractionManager,
 } from 'react-native';
 
 import {
@@ -35,6 +36,7 @@ import {SongList} from '../../../interface/song.interface';
 import {SongTitlePlay} from '../SongTitlePlay/SongTitlePlay';
 import {Playlist} from '../../../interface/playlist.interface';
 import {useTranslation} from 'react-i18next';
+import {ModalShare} from '../Modal/ModalShare';
 
 interface Props {
   goBackProfile: (showToast: boolean) => void;
@@ -62,6 +64,8 @@ export const PlaylistContent: React.FC<Props> = ({
   const {t} = useTranslation();
   const [isModalVisible, setModalVisible] = useState<boolean>(false);
   const [toastVisible, setToastVisible] = useState<boolean>(false);
+  const [toastText, setToastText] = useState<string>('');
+  const [modalShare, setModalShare] = useState<boolean>(false);
 
   useEffect(() => {
     toastVisible &&
@@ -75,6 +79,13 @@ export const PlaylistContent: React.FC<Props> = ({
     {label: t('Music.Playlist.Edit'), value: 'EditPlaylist'},
     {label: t('Music.Playlist.Share'), value: 'SharePlaylist'},
     {label: t('Music.Playlist.Delete'), value: 'DeletePlaylist'},
+  ];
+
+  const songDataMore = [
+    {label: t('Home.Tab.TopSong.Queue'), value: 'AddToQueue'},
+    {label: t('Music.Playlist.Remove'), value: 'RemoveFromPlaylist'},
+    {label: t('Home.Tab.TopSong.Share'), value: 'ShareSong'},
+    {label: t('Home.Tab.TopSong.Details'), value: 'ShowDetails'},
   ];
 
   const onPressDelete = async () => {
@@ -93,6 +104,22 @@ export const PlaylistContent: React.FC<Props> = ({
       goToEditPlaylist();
     } else if (dataResult?.value === 'AddToQueue') {
       setToastVisible(true);
+      setToastText('Playlist added to queue!');
+    } else {
+      setModalShare(true);
+    }
+  };
+
+  const pressSongDataMore = (dataResult: any) => {
+    if (dataResult?.value === 'DeletePlaylist') {
+      setModalVisible(true);
+    } else if (dataResult?.value === 'EditPlaylist') {
+      goToEditPlaylist();
+    } else if (dataResult?.value === 'AddToQueue') {
+      setToastVisible(true);
+      setToastText('Song added to queue!');
+    } else {
+      setModalShare(true);
     }
   };
 
@@ -180,6 +207,8 @@ export const PlaylistContent: React.FC<Props> = ({
                 type={'home'}
                 onPress={onPressSong}
                 loveIcon={true}
+                newDataMore={songDataMore}
+                newOnPressMore={pressSongDataMore}
               />
             )}
           </View>
@@ -202,11 +231,29 @@ export const PlaylistContent: React.FC<Props> = ({
             <CheckCircle2Icon />
             <Gap width={4} />
             <Text style={[styles.textStyle]} numberOfLines={2}>
-              {'Playlist added to queue!'}
+              {toastText}
             </Text>
           </View>
         }
         modalStyle={styles.toast}
+      />
+
+      <ModalShare
+        url={
+          'https://open.ssu.io/track/19AiJfAtRiccvSU1EWcttT?si=36b9a686dad44ae0'
+        }
+        modalVisible={modalShare}
+        onPressClose={() => setModalShare(false)}
+        titleModal={t('General.Share.Playlist')}
+        imgUri={dataDetail?.thumbnailUrl}
+        type={'Playlist'}
+        titleSong={dataDetail?.name}
+        createdOn={dateFormat(dataDetail?.createdAt)}
+        artist={dataDetail?.playlistOwner?.fullname}
+        onPressCopy={() => {
+          InteractionManager.runAfterInteractions(() => setToastVisible(true));
+          setToastText(t('General.LinkCopied') || '');
+        }}
       />
     </View>
   );

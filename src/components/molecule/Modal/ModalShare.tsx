@@ -19,7 +19,7 @@ import Font from '../../../theme/Font';
 import Color from '../../../theme/Color';
 import SsuSheet from '../../atom/SsuSheet';
 import {color, font} from '../../../theme';
-import {CopyIcon} from '../../../assets/icon';
+import {CopyIcon, DefaultImage} from '../../../assets/icon';
 import {Button, Gap, SquareImage} from '../../atom';
 import {useTranslation} from 'react-i18next';
 
@@ -64,7 +64,14 @@ export const ModalShare: React.FC<ModalShareProps> = ({
 
         {!hideMusic ? (
           <View style={styles.containerSong}>
-            <SquareImage imgUri={imgUri || ''} size={widthPercentage(56)} />
+            {imgUri ? (
+              <SquareImage imgUri={imgUri} size={widthPercentage(56)} />
+            ) : (
+              <DefaultImage.PlaylistCover
+                width={widthPercentage(56)}
+                height={widthPercentage(56)}
+              />
+            )}
             <View style={styles.textContainer}>
               <Text style={styles.songTitle}>{titleSong}</Text>
               <Gap height={2} />

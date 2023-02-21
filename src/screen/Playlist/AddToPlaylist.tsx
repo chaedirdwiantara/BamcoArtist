@@ -9,7 +9,7 @@ import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import Color from '../../theme/Color';
 import {addSong} from '../../api/playlist.api';
 import {AddToPlaylistContent} from '../../components';
-import {profileStorage} from '../../hooks/use-storage.hook';
+import {profileStorage, storage} from '../../hooks/use-storage.hook';
 import {usePlaylistHook} from '../../hooks/use-playlist.hook';
 import {MainTabParams, RootStackParams} from '../../navigations';
 
@@ -58,6 +58,7 @@ export const AddToPlaylistScreen: React.FC<AddToPlaylistProps> = ({
   };
 
   const onPressPlaylist = async (id: number) => {
+    storage.set('withoutBottomTab', false);
     try {
       const payload = {
         playlistId: id,
