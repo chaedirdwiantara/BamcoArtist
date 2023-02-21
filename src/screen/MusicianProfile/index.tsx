@@ -15,6 +15,7 @@ import {
   ModalSuccessDonate,
 } from '../../components';
 import {storage} from '../../hooks/use-storage.hook';
+import {useCreditHook} from '../../hooks/use-credit.hook';
 
 type PostDetailProps = NativeStackScreenProps<
   RootStackParams,
@@ -42,10 +43,16 @@ const MusicianProfile: FC<PostDetailProps> = ({route}: PostDetailProps) => {
     setDataFollow,
   } = useMusicianHook();
 
+  const {creditCount, getCreditCount} = useCreditHook();
+
   const [modalDonate, setModalDonate] = useState<boolean>(false);
   const [modalSuccessDonate, setModalSuccessDonate] = useState<boolean>(false);
   const [trigger2ndModal, setTrigger2ndModal] = useState<boolean>(false);
   const [modalGuestVisible, setModalGuestVisible] = useState<boolean>(false);
+
+  useEffect(() => {
+    getCreditCount();
+  }, [modalDonate]);
 
   //  ? Get Detail Musician
   useFocusEffect(
@@ -131,7 +138,7 @@ const MusicianProfile: FC<PostDetailProps> = ({route}: PostDetailProps) => {
       )}
       <ModalLoading visible={isLoading} />
       <ModalDonate
-        totalCoin={'1000'}
+        totalCoin={creditCount}
         onPressDonate={onPressDonate}
         modalVisible={modalDonate}
         onPressClose={onPressCloseModalDonate}

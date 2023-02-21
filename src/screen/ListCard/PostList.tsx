@@ -50,6 +50,7 @@ import {usePlayerHook} from '../../hooks/use-player.hook';
 import MusicListPreview from '../../components/molecule/MusicPreview/MusicListPreview';
 import {dummySongImg} from '../../data/image';
 import {useTranslation} from 'react-i18next';
+import {useCreditHook} from '../../hooks/use-credit.hook';
 
 interface PostListProps {
   dataRightDropdown: DataDropDownType[];
@@ -89,6 +90,8 @@ const PostListHome: FC<PostListProps> = (props: PostListProps) => {
     addPlaylistFeed,
   } = usePlayerHook();
 
+  const {creditCount, getCreditCount} = useCreditHook();
+
   const [dataMain, setDataMain] = useState<PostList[]>([]);
   const [inputCommentModal, setInputCommentModal] = useState<boolean>(false);
   const [musicianId, setMusicianId] = useState<string>('');
@@ -112,6 +115,10 @@ const PostListHome: FC<PostListProps> = (props: PostListProps) => {
   //* MUSIC HOOKS
   const [pauseModeOn, setPauseModeOn] = useState<boolean>(false);
   const [idNowPlaying, setIdNowPlaing] = useState<string>();
+
+  useEffect(() => {
+    getCreditCount();
+  }, [modalDonate]);
 
   useFocusEffect(
     useCallback(() => {
@@ -553,7 +560,7 @@ const PostListHome: FC<PostListProps> = (props: PostListProps) => {
         modalStyle={{marginHorizontal: widthResponsive(24)}}
       />
       <ModalDonate
-        totalCoin={'1000'}
+        totalCoin={creditCount}
         onPressDonate={onPressDonate}
         modalVisible={modalDonate}
         onPressClose={onPressCloseModalDonate}

@@ -6,7 +6,7 @@ import {
   Text,
   Animated,
 } from 'react-native';
-import React, {FC, useRef, useState} from 'react';
+import React, {FC, useEffect, useRef, useState} from 'react';
 import {color, font} from '../../theme';
 import {ModalDonate, ModalSuccessDonate, SsuStatusBar} from '../../components';
 import {heightResponsive, widthResponsive} from '../../utils';
@@ -20,6 +20,7 @@ import {songs, SongsProps} from '../../data/music';
 import {usePlayerHook} from '../../hooks/use-player.hook';
 import {RootStackParams} from '../../navigations';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {useCreditHook} from '../../hooks/use-credit.hook';
 
 export const {width} = Dimensions.get('screen');
 
@@ -28,6 +29,7 @@ type MusicProps = NativeStackScreenProps<RootStackParams, 'MusicPlayer'>;
 export const MusicPlayer: FC<MusicProps> = ({navigation}: MusicProps) => {
   const scrollX = useRef(new Animated.Value(0)).current;
   const {playerProgress, currentTrack, seekPlayer} = usePlayerHook();
+  const {creditCount, getCreditCount} = useCreditHook();
   const [modalDonate, setModalDonate] = useState<boolean>(false);
   const [modalSuccessDonate, setModalSuccessDonate] = useState<boolean>(false);
   const [trigger2ndModal, setTrigger2ndModal] = useState<boolean>(false);
@@ -40,6 +42,10 @@ export const MusicPlayer: FC<MusicProps> = ({navigation}: MusicProps) => {
   //     setSongIndex(index);
   //   });
   // }, []);
+
+  useEffect(() => {
+    getCreditCount();
+  }, [modalDonate]);
 
   const RenderSongs = (item: SongsProps, index: number) => {
     return (
@@ -148,7 +154,7 @@ export const MusicPlayer: FC<MusicProps> = ({navigation}: MusicProps) => {
 
       {/* modal */}
       <ModalDonate
-        totalCoin="1000"
+        totalCoin={creditCount}
         onPressClose={onPressCloseModalDonate}
         onPressDonate={onPressDonate}
         modalVisible={modalDonate}

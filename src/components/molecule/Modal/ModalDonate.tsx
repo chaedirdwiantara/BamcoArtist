@@ -29,7 +29,7 @@ import {CoinIcon, CoinInput} from '../../../assets/icon';
 import {useTranslation} from 'react-i18next';
 
 interface ModalDonateProps {
-  totalCoin: string;
+  totalCoin: number;
   modalVisible: boolean;
   onPressClose: () => void;
   onPressDonate: () => void;

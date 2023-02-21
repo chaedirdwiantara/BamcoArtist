@@ -18,6 +18,7 @@ import {MainTabParams, RootStackParams} from '../../../navigations';
 import {profileStorage, storage} from '../../../hooks/use-storage.hook';
 import {heightPercentage, normalize, widthResponsive} from '../../../utils';
 import {useTranslation} from 'react-i18next';
+import {useCreditHook} from '../../../hooks/use-credit.hook';
 
 interface MusicianProps {
   userId: string;
@@ -41,6 +42,7 @@ interface DataMore {
 
 const MusicianSection: React.FC<MusicianProps> = (props: MusicianProps) => {
   const {t} = useTranslation();
+  const {creditCount, getCreditCount} = useCreditHook();
   const {isFollowed, followOnPress, userId, type} = props;
 
   const followText = isFollowed
@@ -89,6 +91,10 @@ const MusicianSection: React.FC<MusicianProps> = (props: MusicianProps) => {
       navigation.navigate('MusicianProfile', {id: userId});
     }
   };
+
+  useEffect(() => {
+    getCreditCount();
+  }, [modalDonate]);
 
   useEffect(() => {
     toastVisible &&
@@ -148,7 +154,7 @@ const MusicianSection: React.FC<MusicianProps> = (props: MusicianProps) => {
         {...props}
       />
       <ModalDonate
-        totalCoin={'1000'}
+        totalCoin={creditCount}
         onPressDonate={onPressDonate}
         modalVisible={modalDonate}
         onPressClose={() => setModalDonate(false)}

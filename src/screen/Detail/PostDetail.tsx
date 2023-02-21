@@ -45,6 +45,7 @@ import {DataDropDownType} from '../../data/dropdown';
 import MusicListPreview from '../../components/molecule/MusicPreview/MusicListPreview';
 import {usePlayerHook} from '../../hooks/use-player.hook';
 import {useTranslation} from 'react-i18next';
+import {useCreditHook} from '../../hooks/use-credit.hook';
 
 type cmntToCmnt = {
   id: string;
@@ -99,6 +100,8 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
     dataProfile,
     getProfileUser,
   } = useProfileHook();
+
+  const {creditCount, getCreditCount} = useCreditHook();
 
   const data = route.params;
   const musicianName = data.musician.fullname;
@@ -155,6 +158,10 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   //* MUSIC HOOKS
   const [pauseModeOn, setPauseModeOn] = useState<boolean>(false);
   const [idNowPlaying, setIdNowPlaing] = useState<string>();
+
+  useEffect(() => {
+    getCreditCount();
+  }, [modalDonate]);
 
   // ! FIRST LOAD when open the screen
   // ? Get Profile
@@ -965,7 +972,7 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
           modalStyle={{marginHorizontal: widthResponsive(24)}}
         />
         <ModalDonate
-          totalCoin={'1000'}
+          totalCoin={creditCount}
           onPressDonate={onPressDonate}
           modalVisible={modalDonate}
           onPressClose={() => setModalDonate(false)}

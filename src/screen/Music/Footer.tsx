@@ -7,7 +7,6 @@ import {normalize} from '../../utils';
 const Footer = () => {
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Show Lyrics</Text>
       <ExportMusicIcon />
     </View>
   );
@@ -18,7 +17,7 @@ export default Footer;
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-end',
   },
   text: {
     color: color.Neutral[10],

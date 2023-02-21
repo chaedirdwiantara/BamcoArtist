@@ -35,6 +35,7 @@ import {DataDetailSong, SongAlbum} from '../../../interface/song.interface';
 import {mvs} from 'react-native-size-matters';
 import {dateLongMonth} from '../../../utils/date-format';
 import {useTranslation} from 'react-i18next';
+import {useCreditHook} from '../../../hooks/use-credit.hook';
 
 interface Props {
   onPressGoBack: () => void;
@@ -50,11 +51,16 @@ export const SongDetailsContent: React.FC<Props> = ({
   dataDetail,
 }) => {
   const {t} = useTranslation();
+  const {creditCount, getCreditCount} = useCreditHook();
   const [toastVisible, setToastVisible] = useState(false);
   const [modalDonate, setModalDonate] = useState<boolean>(false);
   const [modalShare, setModalShare] = useState<boolean>(false);
   const [modalSuccessDonate, setModalSuccessDonate] = useState<boolean>(false);
   const [trigger2ndModal, setTrigger2ndModal] = useState<boolean>(false);
+
+  useEffect(() => {
+    getCreditCount();
+  }, [modalDonate]);
 
   useEffect(() => {
     toastVisible &&
@@ -168,7 +174,7 @@ export const SongDetailsContent: React.FC<Props> = ({
             <Text style={styles.description}>{dataDetail.description}</Text>
 
             <ListAlbum
-              title={t('Home.Topbar.Search.Album')}
+              title={t('Home.Topbar.Search.Album') || ''}
               albumName={dataDetail.album.title}
               onPress={() => goToAlbum(dataDetail.album)}
               createdOn={dateLongMonth(dataDetail.album.publishedDate)}
@@ -184,7 +190,7 @@ export const SongDetailsContent: React.FC<Props> = ({
       </ScrollView>
 
       <ModalDonate
-        totalCoin={'120,000'}
+        totalCoin={creditCount}
         onPressDonate={onPressDonate}
         modalVisible={modalDonate}
         onModalHide={() => setModalSuccessDonate(true)}

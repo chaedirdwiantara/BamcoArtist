@@ -16,6 +16,7 @@ import {ModalSuccessDonate} from '../Modal/ModalSuccessDonate';
 import {heightPercentage, normalize, widthResponsive} from '../../../utils';
 import {BottomSheetGuest} from '../GuestComponent/BottomSheetGuest';
 import {useTranslation} from 'react-i18next';
+import {useCreditHook} from '../../../hooks/use-credit.hook';
 
 interface DataMore {
   label: string;
@@ -50,6 +51,7 @@ export const MusicSection: React.FC<ListProps> = (props: ListProps) => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
   const isLogin = storage.getString('profile');
+  const {creditCount, getCreditCount} = useCreditHook();
 
   const dataMore = [
     {label: t('Home.Tab.TopSong.Playlist'), value: '1'},
@@ -65,6 +67,10 @@ export const MusicSection: React.FC<ListProps> = (props: ListProps) => {
   const [modalGuestVisible, setModalGuestVisible] = useState<boolean>(false);
   const [modalSuccessDonate, setModalSuccessDonate] = useState<boolean>(false);
   const [trigger2ndModal, setTrigger2ndModal] = useState<boolean>(false);
+
+  useEffect(() => {
+    getCreditCount();
+  }, [modalDonate]);
 
   useEffect(() => {
     toastVisible &&
@@ -126,7 +132,7 @@ export const MusicSection: React.FC<ListProps> = (props: ListProps) => {
       />
 
       <ModalDonate
-        totalCoin="1000"
+        totalCoin={creditCount}
         onPressDonate={onPressDonate}
         modalVisible={modalDonate}
         onPressClose={() => setModalDonate(false)}
