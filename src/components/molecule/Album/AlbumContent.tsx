@@ -82,7 +82,7 @@ export const AlbumContent: React.FC<Props> = ({
     if (dataSong !== null) {
       let Xter = [];
       for (let i = 1; i <= dataSong.length; i++) {
-        Xter.push(dataSong[i].id);
+        Xter.push(dataSong[i]?.id);
       }
       setSongIdList(Xter);
     }
