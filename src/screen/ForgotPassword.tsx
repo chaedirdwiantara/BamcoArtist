@@ -380,7 +380,7 @@ export const ForgotPassword: FC = () => {
                 handleFocusInput(null);
               }}
               isError={errors?.confirmPassword ? true : false}
-              errorMsg={errors?.email?.message}
+              errorMsg={errors?.confirmPassword?.message}
               isFocus={focusInput === 'confirmPassword'}
             />
           )}
