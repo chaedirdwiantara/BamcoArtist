@@ -59,7 +59,6 @@ export const MusicianDetail: React.FC<MusicianDetailProps> = ({
   const [filter] = useState([
     {filterName: 'Musician.Tab.Profile'},
     {filterName: 'Musician.Tab.Post'},
-    {filterName: 'Musician.Tab.Exclusive'},
     {filterName: 'Musician.Tab.Music'},
     {filterName: 'Musician.Tab.Fans'},
   ]);
@@ -148,19 +147,6 @@ export const MusicianDetail: React.FC<MusicianDetailProps> = ({
                   width: '100%',
                 }}>
                 <PostListPublic
-                  uuidMusician={uuid}
-                  dataRightDropdown={dropDownDataCategory}
-                  dataLeftDropdown={dropDownDataSort}
-                />
-              </View>
-            ) : filter[selectedIndex].filterName ===
-              'Musician.Tab.Exclusive' ? (
-              <View
-                style={{
-                  paddingHorizontal: widthResponsive(24),
-                  width: '100%',
-                }}>
-                <PostListExclusive
                   uuidMusician={uuid}
                   dataRightDropdown={dropDownDataCategory}
                   dataLeftDropdown={dropDownDataSort}

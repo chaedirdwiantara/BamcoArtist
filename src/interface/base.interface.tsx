@@ -22,6 +22,7 @@ export type ParamsProps = {
   id?: string;
   context?: string;
   listType?: string;
+  isPremium?: boolean;
 };
 
 export type imageTypes = {

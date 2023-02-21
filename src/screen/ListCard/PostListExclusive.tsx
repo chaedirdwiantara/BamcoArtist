@@ -96,7 +96,7 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
     feedIsError,
     feedMessage,
     dataPostList,
-    getListDataExclusivePost,
+    getListDataMyPost,
     setLikePost,
     setUnlikePost,
     setCommentToPost,
@@ -134,12 +134,13 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
   useFocusEffect(
     useCallback(() => {
       uuidMusician !== ''
-        ? getListDataExclusivePost({
+        ? getListDataMyPost({
             page: 1,
             perPage: perPage,
             musician_uuid: uuidMusician,
+            isPremium: true,
           })
-        : getListDataExclusivePost({page: 1, perPage: perPage});
+        : getListDataMyPost({page: 1, perPage: perPage, isPremium: true});
       setPage(1);
     }, [uuidMusician]),
   );
@@ -159,28 +160,31 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
   }, [dataPostList, filterActive]);
 
   const resultDataFilter = (dataResultFilter: DataDropDownType) => {
-    getListDataExclusivePost({
+    getListDataMyPost({
       page: 1,
       perPage: perPage * page,
       sortBy: dataResultFilter.label.toLowerCase(),
       category: categoryValue,
+      isPremium: true,
     });
     setFilterActive(true);
     setFilterByValue(dataResultFilter.label.toLowerCase());
   };
   const resultDataCategory = (dataResultCategory: DataDropDownType) => {
     dataResultCategory.label === t('Home.Tab.TopPost.Category.All')
-      ? (getListDataExclusivePost({
+      ? (getListDataMyPost({
           page: page,
           perPage: perPage,
           sortBy: filterByValue,
+          isPremium: true,
         }),
         setFilterActive(false))
-      : (getListDataExclusivePost({
+      : (getListDataMyPost({
           page: 1,
           perPage: perPage * page,
           category: dataResultCategory.value,
           sortBy: filterByValue,
+          isPremium: true,
         }),
         setFilterActive(true));
     setCategoryValue(dataResultCategory.value);
@@ -189,11 +193,12 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
   //* Handle when end of Scroll
   const handleEndScroll = () => {
     if (dataMain.length >= 15) {
-      getListDataExclusivePost({
+      getListDataMyPost({
         page: page + 1,
         perPage: perPage,
         category: categoryValue,
         sortBy: filterByValue,
+        isPremium: true,
       });
       setPage(page + 1);
       setFilterActive(false);
