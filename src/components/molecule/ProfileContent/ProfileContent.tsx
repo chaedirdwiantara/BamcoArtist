@@ -37,6 +37,7 @@ import PostListExclusive from '../../../screen/ListCard/PostListExclusive';
 import {dropDownDataCategory, dropDownDataSort} from '../../../data/dropdown';
 import {ProfileFansResponseType} from '../../../interface/profile.interface';
 import {useTranslation} from 'react-i18next';
+import PostListMyPost from '../../../screen/ListCard/PostListMyPost';
 
 type OnScrollEventHandler = (
   event: NativeSyntheticEvent<NativeScrollEvent>,
@@ -200,11 +201,19 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
               style={{
                 width: '100%',
               }}>
-              <PostListPublic
-                uuidMusician={uuid}
-                dataRightDropdown={dropDownDataCategory}
-                dataLeftDropdown={dropDownDataSort}
-              />
+              {ownProfile ? (
+                <PostListMyPost
+                  uuidMusician={uuid}
+                  dataRightDropdown={dropDownDataCategory}
+                  dataLeftDropdown={dropDownDataSort}
+                />
+              ) : (
+                <PostListPublic
+                  uuidMusician={uuid}
+                  dataRightDropdown={dropDownDataCategory}
+                  dataLeftDropdown={dropDownDataSort}
+                />
+              )}
             </View>
           ) : filter2[selectedIndex].filterName === 'Musician.Tab.Exclusive' ? (
             <View
