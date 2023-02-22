@@ -251,7 +251,7 @@ export const LoginScreen: React.FC = () => {
   const children = () => {
     return (
       <>
-        <Text style={styles.titleStyle}>{t('Login.Title')}</Text>
+        <Text style={styles.titleStyle}>{t('Btn.SignIn')}</Text>
         <Gap height={16} />
         <View
           style={{
@@ -391,7 +391,7 @@ export const LoginScreen: React.FC = () => {
           containerStyles={{width: '100%'}}
           onPress={handleOnPressBack}
         />
-        <Gap height={18} />
+        <Gap height={70} />
         <Text style={styles.forgotPassStyle}>
           {t('Login.DontHaveAccount')}{' '}
           <Text
