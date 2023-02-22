@@ -75,8 +75,9 @@ const validation = yup.object({
     ),
   fullname: yup
     .string()
-    .required('Full Name can not be blank, please input your Full Name')
-    .matches(/^.{3,21}$/, 'Full Name should be between 3 to 21 characters'),
+    .strict(true)
+    .trim('Full name cannot include leading and trailing spaces')
+    .matches(/^.{3,50}$/, 'Fullname allowed 3 to 50 character'),
   labels: yup.string(),
   yearsActiveFrom: yup.string(),
   yearsActiveTo: yup.string(),
@@ -504,7 +505,7 @@ export const AccountContent: React.FC<AccountProps> = ({
           ) : null}
 
           <Button
-            label={type}
+            label={type || ''}
             onPress={onPressSave}
             containerStyles={
               disabledButton ? styles.buttonDisabled : styles.button
