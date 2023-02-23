@@ -56,7 +56,9 @@ export const ButtonGradientwithIcon: React.FC<ButtonGradientProps> = (
           style={{
             flexDirection: 'row',
             paddingHorizontal: ms(12),
-            paddingVertical: ms(6),
+            paddingVertical: ms(5),
+            justifyContent: 'center',
+            alignItems: 'center',
           }}>
           <Text style={[styles.text, textStyles]}>{label}</Text>
           <ChevronDownIcon width={16} height={16} stroke={color.Neutral[10]} />
@@ -68,7 +70,7 @@ export const ButtonGradientwithIcon: React.FC<ButtonGradientProps> = (
 
 const styles = StyleSheet.create({
   gradient: {
-    borderRadius: 10,
+    borderRadius: 30,
     justifyContent: 'center',
     alignItems: 'center',
   },

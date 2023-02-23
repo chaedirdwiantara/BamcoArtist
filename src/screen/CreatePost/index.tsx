@@ -1,5 +1,6 @@
 import {
   KeyboardAvoidingView,
+  NativeModules,
   Platform,
   StyleSheet,
   Text,
@@ -52,6 +53,9 @@ import {useProfileHook} from '../../hooks/use-profile.hook';
 import {useTranslation} from 'react-i18next';
 
 type PostDetailProps = NativeStackScreenProps<RootStackParams, 'CreatePost'>;
+
+const {StatusBarManager} = NativeModules;
+const barHeight = StatusBarManager.HEIGHT;
 
 const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   const {t} = useTranslation();
@@ -372,6 +376,8 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
       lyrics: dataMusic[0] ? dataMusic[0].lyrics : '',
       transcodedSongUrl: [transcode, transcode],
       originalSongUrl: dataMusic[0] ? dataMusic[0].originalSongUrl : '',
+      isLiked:
+        dataMusic[0]?.isLiked !== undefined ? dataMusic[0].isLiked : false,
     };
 
     addPlaylist({
@@ -420,6 +426,19 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
     setUri(uri.filter((x: Image) => x.path !== uri[id].path));
   };
 
+  // ? OFFSET AREA
+  const [offset, setOffset] = React.useState<{px: number; py: number}>();
+  const [allowOffset, setAllowOffset] = React.useState<boolean>(true);
+
+  //* Prevent ref to set offset non stop
+  useEffect(() => {
+    if (offset !== undefined) {
+      setAllowOffset(false);
+    }
+  }, [offset]);
+
+  // ? END OF OFFSET AREA
+
   return (
     <KeyboardAvoidingView
       style={{flex: 1}}
@@ -443,21 +462,32 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
                 }
               />
               <Gap width={12} />
-              <ButtonGradientwithIcon
-                label={label ? t(label) : t('Post.Create.Category')}
-                onPress={() =>
-                  setModalVisible({
-                    modalFilter: true,
-                    modalImagePicker: false,
-                  })
-                }
-                gradientStyles={{}}
-                textStyles={{
-                  fontFamily: font.InterRegular,
-                  fontWeight: '500',
-                  fontSize: mvs(10),
+              <View
+                onLayout={event => {
+                  event.target.measure((x, y, width, height, pageX, pageY) => {
+                    setOffset({
+                      px: pageX,
+                      py: Platform.OS === 'android' ? pageY - barHeight : pageY,
+                    });
+                  });
                 }}
-              />
+                style={{opacity: 1}}>
+                <ButtonGradientwithIcon
+                  label={label ? t(label) : t('Post.Create.Category')}
+                  onPress={() =>
+                    setModalVisible({
+                      modalFilter: true,
+                      modalImagePicker: false,
+                    })
+                  }
+                  gradientStyles={{}}
+                  textStyles={{
+                    fontFamily: font.InterRegular,
+                    fontWeight: '500',
+                    fontSize: mvs(10),
+                  }}
+                />
+              </View>
             </View>
             <View style={{}}>
               <SsuInput.InputText
@@ -588,19 +618,23 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
         </View>
 
         {/* //! MODAL AREA */}
-        <FilterModal
-          toggleModal={() =>
-            setModalVisible({
-              modalFilter: !isModalVisible.modalFilter,
-              modalImagePicker: false,
-            })
-          }
-          modalVisible={isModalVisible.modalFilter}
-          dataFilter={dropdownCategoryMusician}
-          filterOnPress={setLabel}
-          sendCategory={setValueFilter}
-          translation={true}
-        />
+        {offset !== undefined && (
+          <FilterModal
+            toggleModal={() =>
+              setModalVisible({
+                modalFilter: !isModalVisible.modalFilter,
+                modalImagePicker: false,
+              })
+            }
+            modalVisible={isModalVisible.modalFilter}
+            dataFilter={dropdownCategoryMusician}
+            filterOnPress={setLabel}
+            sendCategory={setValueFilter}
+            translation={true}
+            xPosition={offset?.px}
+            yPosition={offset?.py}
+          />
+        )}
         <ModalImagePicker
           title={t('Post.Create.Media') || ''}
           modalVisible={isModalVisible.modalImagePicker}

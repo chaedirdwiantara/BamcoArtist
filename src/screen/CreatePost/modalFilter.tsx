@@ -25,6 +25,8 @@ interface ModalFilterProps {
   filterOnPress: (label: string) => void;
   sendCategory: (value: string) => void;
   translation?: boolean;
+  xPosition: number;
+  yPosition: number;
 }
 
 const FilterModal: FC<ModalFilterProps> = (props: ModalFilterProps) => {
@@ -36,6 +38,8 @@ const FilterModal: FC<ModalFilterProps> = (props: ModalFilterProps) => {
     filterOnPress,
     sendCategory,
     translation,
+    xPosition,
+    yPosition,
   } = props;
 
   const filterButtonHandler = (data: DataDropDownType) => {
@@ -54,7 +58,15 @@ const FilterModal: FC<ModalFilterProps> = (props: ModalFilterProps) => {
       animationOut={'fadeOut'}
       style={{marginHorizontal: 0}}
       onBackButtonPress={toggleModal}>
-      <View style={styles.container}>
+      <View
+        style={[
+          styles.container,
+          {
+            position: 'absolute',
+            top: yPosition + 11,
+            left: xPosition,
+          },
+        ]}>
         <FlatList
           data={dataFilter}
           showsVerticalScrollIndicator={false}
@@ -62,7 +74,7 @@ const FilterModal: FC<ModalFilterProps> = (props: ModalFilterProps) => {
           keyExtractor={(_, index) => index.toString()}
           renderItem={({item}) => (
             <TouchableOpacity
-              style={styles.textContainer}
+              style={styles.buttonContainer}
               onPress={() => filterButtonHandler(item)}>
               <Text style={styles.textFilter}>
                 {translation ? t(item.label) : item.label}
@@ -79,20 +91,18 @@ export default FilterModal;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: color.Pink[100],
-    borderColor: color.Pink[100],
-    width: widthResponsive(120),
+    backgroundColor: color.Dark[600],
+    borderColor: color.Dark[600],
     alignItems: 'flex-start',
-    position: 'absolute',
-    top: Platform.OS === 'ios' ? heightResponsive(112) : heightResponsive(97),
-    left: widthResponsive(70),
+    borderRadius: 8,
+    paddingVertical: 5,
   },
-  textContainer: {
-    backgroundColor: color.Pink[100],
+  buttonContainer: {
+    backgroundColor: 'transparent',
     justifyContent: 'center',
-    paddingHorizontal: ms(13),
-    paddingVertical: mvs(6),
-    borderColor: color.Pink[100],
+    paddingHorizontal: ms(12),
+    paddingVertical: mvs(5),
+    borderColor: color.Dark[600],
   },
   textFilter: {
     fontSize: mvs(10),
