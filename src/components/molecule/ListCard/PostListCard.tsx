@@ -89,7 +89,9 @@ const PostListCard: React.FC<ListProps> = (props: ListProps) => {
           <Gap height={4} />
           <View style={styles.bottomSection}>
             <Text style={styles.songDesc}>{musicianId}</Text>
-            <Text style={styles.songDesc}>{postDate}</Text>
+            <Text style={[styles.songDesc, {color: color.Dark[100]}]}>
+              {postDate}
+            </Text>
           </View>
           {/* BODY SECTION */}
           <View style={styles.bodyContainer}>{children}</View>
@@ -98,8 +100,8 @@ const PostListCard: React.FC<ListProps> = (props: ListProps) => {
             style={[
               styles.bottomContainer,
               {
-                marginTop: !myPost ? 0 : ms(-7),
-                marginBottom: !myPost ? 0 : ms(-7),
+                marginTop: !myPost ? 0 : -6.5,
+                marginBottom: !myPost ? 3 : -4,
               },
             ]}>
             <View style={styles.socialContainer}>
@@ -179,7 +181,7 @@ const styles = StyleSheet.create({
     paddingBottom: heightResponsive(5),
     paddingHorizontal: widthResponsive(24),
     borderBottomWidth: mvs(1),
-    borderBottomColor: color.Dark[300],
+    borderBottomColor: color.Dark[500],
   },
   rankStyle: {
     fontSize: mvs(10),

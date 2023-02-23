@@ -18,11 +18,21 @@ import {useProfileHook} from '../../hooks/use-profile.hook';
 import {GuestContent, ProfileContent} from '../../components';
 import {usePlaylistHook} from '../../hooks/use-playlist.hook';
 import {ModalLoading} from '../../components/molecule/ModalLoading/ModalLoading';
+import {OtherUserProfileContent} from './OtherUserProfileContent';
 
 type OtherProfileProps = NativeStackScreenProps<
   RootStackParams,
   'OtherUserProfile'
 >;
+
+type profile = {
+  fullname: string;
+  username: string;
+  bio: string;
+  backgroundUri: string;
+  avatarUri: string;
+  totalFollowing: number;
+};
 
 export const OtherUserProfile: FC<OtherProfileProps> = ({
   route,
@@ -58,25 +68,31 @@ export const OtherUserProfile: FC<OtherProfileProps> = ({
     }, []),
   );
 
-  const profile = {
-    fullname: dataFansProfile?.data.fullname,
+  const profile: profile = {
+    fullname:
+      dataFansProfile?.data.fullname !== undefined
+        ? dataFansProfile.data.fullname
+        : '',
     username: '@' + dataFansProfile?.data.username,
-    bio: dataFansProfile?.data.about,
+    bio: dataFansProfile?.data.about ? dataFansProfile?.data.about : '',
     backgroundUri:
-      dataFansProfile?.data?.banners.length !== 0
+      dataFansProfile && dataFansProfile?.data?.banners.length !== 0
         ? dataFansProfile?.data?.banners[3].image
         : '',
     avatarUri:
-      dataFansProfile?.data.images.length !== 0
+      dataFansProfile && dataFansProfile?.data.images.length !== 0
         ? dataFansProfile?.data.images[1].image
         : '',
-    totalFollowing: dataFansProfile?.data.following,
+    totalFollowing:
+      dataFansProfile && dataFansProfile.data.following
+        ? dataFansProfile?.data.following
+        : 0,
   };
 
   return (
     <View style={styles.root}>
       {isLogin ? (
-        <ProfileContent
+        <OtherUserProfileContent
           profile={profile}
           selfProfile={dataFansProfile}
           goToPlaylist={() => {}}

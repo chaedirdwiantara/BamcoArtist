@@ -15,36 +15,42 @@ import {
   widthPercentage,
   heightPercentage,
   widthResponsive,
-} from '../../../utils';
-import {font} from '../../../theme';
-import {TabFilter} from '../TabFilter';
-import Color from '../../../theme/Color';
-import {SettingIcon} from '../../../assets/icon';
-import {ProfileHeader} from './components/Header';
-import {EmptyState} from '../EmptyState/EmptyState';
-import {TopSongListData} from '../../../data/topSong';
-import {UserInfoCard} from '../UserInfoCard/UserInfoCard';
-import {CreateNewCard} from '../CreateNewCard/CreateNewCard';
-import {Playlist} from '../../../interface/playlist.interface';
-import ListPlaylist from '../../../screen/ListCard/ListPlaylist';
+} from '../../utils';
+import {font} from '../../theme';
+import {
+  TabFilter,
+  ProfileHeader,
+  EmptyState,
+  UserInfoCard,
+  CreateNewCard,
+} from '../../components';
+import Color from '../../theme/Color';
+import {SettingIcon} from '../../assets/icon';
+import {TopSongListData} from '../../data/topSong';
+import {Playlist} from '../../interface/playlist.interface';
+import ListPlaylist from '../../screen/ListCard/ListPlaylist';
 import {
   AlbumData,
   DataDetailMusician,
-} from '../../../interface/musician.interface';
-import DataMusician from '../../../screen/MusicianProfile/DataMusician';
-import PostListPublic from '../../../screen/ListCard/PostListPublic';
-import PostListExclusive from '../../../screen/ListCard/PostListExclusive';
-import {dropDownDataCategory, dropDownDataSort} from '../../../data/dropdown';
-import {ProfileFansResponseType} from '../../../interface/profile.interface';
+} from '../../interface/musician.interface';
+import {ProfileFansResponseType} from '../../interface/profile.interface';
 import {useTranslation} from 'react-i18next';
-import PostListMyPost from '../../../screen/ListCard/PostListMyPost';
 
 type OnScrollEventHandler = (
   event: NativeSyntheticEvent<NativeScrollEvent>,
 ) => void;
 
+type profile = {
+  fullname: string;
+  username: string;
+  bio: string;
+  backgroundUri: string;
+  avatarUri: string;
+  totalFollowing: number;
+};
+
 interface ProfileContentProps {
-  profile: any;
+  profile: profile;
   goToEditProfile: () => void;
   goToPlaylist: (id: number, name: string) => void;
   dataPlaylist?: Playlist[];
@@ -59,7 +65,7 @@ interface ProfileContentProps {
   totalCountlikedSong?: number;
 }
 
-export const ProfileContent: React.FC<ProfileContentProps> = ({
+export const OtherUserProfileContent: React.FC<ProfileContentProps> = ({
   profile,
   goToEditProfile,
   goToPlaylist,
@@ -81,15 +87,7 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
     {filterName: 'Profile.Tab.Badge'},
   ]);
 
-  const [filter2] = useState([
-    {filterName: 'Musician.Tab.Profile'},
-    {filterName: 'Musician.Tab.Post'},
-    {filterName: 'Musician.Tab.Exclusive'},
-    {filterName: 'Musician.Tab.Music'},
-    {filterName: 'Musician.Tab.Fans'},
-  ]);
-
-  const filterData = (item: any, index: any) => {
+  const filterData = (item: string, index: number) => {
     setSelectedIndex(index);
   };
 
@@ -136,7 +134,7 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
         />
         <View style={styles.containerContent}>
           <TabFilter.Type1
-            filterData={ownProfile ? filter2 : filter}
+            filterData={filter}
             onPress={filterData}
             selectedIndex={selectedIndex}
             translation={true}
@@ -167,67 +165,6 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
               containerStyle={{marginTop: heightPercentage(30)}}
             />
           ) : null}
-          {ownProfile &&
-          dataDetailMusician &&
-          dataAlbum &&
-          filter2[selectedIndex].filterName === 'Musician.Tab.Profile' ? (
-            <View style={{marginHorizontal: widthResponsive(-23)}}>
-              <DataMusician
-                profile={dataDetailMusician}
-                dataAlbum={dataAlbum}
-              />
-            </View>
-          ) : filter2[selectedIndex].filterName === 'Musician.Tab.Post' ? (
-            <View
-              style={{
-                width: '100%',
-              }}>
-              {ownProfile ? (
-                <PostListMyPost
-                  uuidMusician={uuid}
-                  dataRightDropdown={dropDownDataCategory}
-                  dataLeftDropdown={dropDownDataSort}
-                />
-              ) : (
-                <PostListPublic
-                  uuidMusician={uuid}
-                  dataRightDropdown={dropDownDataCategory}
-                  dataLeftDropdown={dropDownDataSort}
-                />
-              )}
-            </View>
-          ) : filter2[selectedIndex].filterName === 'Musician.Tab.Exclusive' ? (
-            <View
-              style={{
-                width: '100%',
-              }}>
-              <PostListExclusive
-                uuidMusician={uuid}
-                dataRightDropdown={dropDownDataCategory}
-                dataLeftDropdown={dropDownDataSort}
-              />
-            </View>
-          ) : filter2[selectedIndex].filterName === 'Musician.Tab.Music' ? (
-            <View>
-              {ownProfile && (
-                <CreateNewCard
-                  num="00"
-                  text={t('Profile.Button.CreatePlaylist')}
-                  onPress={() => onPressGoTo('CreateNewPlaylist')}
-                />
-              )}
-              <ListPlaylist
-                data={dataPlaylist === null ? [] : dataPlaylist}
-                onPress={goToPlaylist}
-                scrollable={false}
-              />
-            </View>
-          ) : (
-            <EmptyState
-              text={t('EmptyState.NoData') || ''}
-              containerStyle={{marginTop: heightPercentage(30)}}
-            />
-          )}
         </View>
       </ScrollView>
     </View>

@@ -173,10 +173,15 @@ export type DetailSongResponseType = {
   status: number;
 };
 
+export type Musician = {
+  uuid: string;
+  name: string;
+  image: string;
+};
+
 export type DataDetailAlbum = {
   id: number;
-  musician: string;
-  musicianName: string;
+  musician: Musician;
   title: string;
   description: string;
   imageUrl: imageTypes[];

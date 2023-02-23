@@ -28,7 +28,6 @@ import {
   elipsisText,
   heightPercentage,
   heightResponsive,
-  normalize,
   widthPercentage,
   widthResponsive,
 } from '../../utils';
@@ -82,6 +81,7 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
   const [filterActive, setFilterActive] = useState<boolean>(true);
   const [filterByValue, setFilterByValue] = useState<string>();
   const [categoryValue, setCategoryValue] = useState<string>();
+  const [uuid, setUuid] = useState<string>();
 
   // * UPDATE HOOKS
   const [selectedIdPost, setSelectedIdPost] = useState<string>();
@@ -100,6 +100,7 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
     setLikePost,
     setUnlikePost,
     setCommentToPost,
+    setDeletePost,
   } = useFeedHook();
 
   const {
@@ -134,12 +135,13 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
   useFocusEffect(
     useCallback(() => {
       uuidMusician !== ''
-        ? getListDataMyPost({
+        ? (getListDataMyPost({
             page: 1,
             perPage: perPage,
             musician_uuid: uuidMusician,
             isPremium: true,
-          })
+          }),
+          setUuid(uuidMusician))
         : getListDataMyPost({page: 1, perPage: perPage, isPremium: true});
       setPage(1);
     }, [uuidMusician]),
@@ -166,6 +168,7 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
       sortBy: dataResultFilter.label.toLowerCase(),
       category: categoryValue,
       isPremium: true,
+      musician_uuid: uuid,
     });
     setFilterActive(true);
     setFilterByValue(dataResultFilter.label.toLowerCase());
@@ -177,6 +180,7 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
           perPage: perPage,
           sortBy: filterByValue,
           isPremium: true,
+          musician_uuid: uuid,
         }),
         setFilterActive(false))
       : (getListDataMyPost({
@@ -185,6 +189,7 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
           category: dataResultCategory.value,
           sortBy: filterByValue,
           isPremium: true,
+          musician_uuid: uuid,
         }),
         setFilterActive(true));
     setCategoryValue(dataResultCategory.value);
@@ -199,6 +204,7 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
         category: categoryValue,
         sortBy: filterByValue,
         isPremium: true,
+        musician_uuid: uuid,
       });
       setPage(page + 1);
       setFilterActive(false);
@@ -331,11 +337,23 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
 
   // ! UPDATE COMMENT AREA
   useEffect(() => {
-    if (selectedIdPost !== undefined && selectedMenu !== undefined) {
-      console.log('selectedIdPost', selectedIdPost);
-      console.log('selectedMenu', selectedMenu);
+    if (
+      selectedIdPost !== undefined &&
+      selectedMenu !== undefined &&
+      dataMain
+    ) {
+      if (selectedMenu.label === 'Delete Post') {
+        setDeletePost({id: selectedIdPost});
+        setDataMain(dataMain.filter(data => data.id !== selectedIdPost));
+        setSelectedMenu(undefined);
+      }
+      if (selectedMenu.label === 'Edit Post') {
+        let dataSelected = dataMain.filter(data => data.id === selectedIdPost);
+        navigation.navigate('CreatePost', {postData: dataSelected[0]});
+        setSelectedMenu(undefined);
+      }
     }
-  }, [selectedIdPost, selectedMenu]);
+  }, [selectedIdPost, selectedMenu, dataMain]);
   // ! END OF UPDATE COMMENT AREA
 
   // ! MUSIC AREA
