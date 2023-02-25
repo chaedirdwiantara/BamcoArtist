@@ -4,8 +4,10 @@ import {
   Platform,
   StyleSheet,
   Text,
+  TextStyle,
   TouchableOpacity,
   View,
+  ViewStyle,
 } from 'react-native';
 import React, {FC} from 'react';
 import Modal from 'react-native-modal';
@@ -27,6 +29,8 @@ interface ModalFilterProps {
   translation?: boolean;
   xPosition: number;
   yPosition: number;
+  containerStyle?: ViewStyle;
+  textStyle?: TextStyle;
 }
 
 const FilterModal: FC<ModalFilterProps> = (props: ModalFilterProps) => {
@@ -40,6 +44,8 @@ const FilterModal: FC<ModalFilterProps> = (props: ModalFilterProps) => {
     translation,
     xPosition,
     yPosition,
+    containerStyle,
+    textStyle,
   } = props;
 
   const filterButtonHandler = (data: DataDropDownType) => {
@@ -66,6 +72,7 @@ const FilterModal: FC<ModalFilterProps> = (props: ModalFilterProps) => {
             top: yPosition + 11,
             left: xPosition,
           },
+          containerStyle,
         ]}>
         <FlatList
           data={dataFilter}
@@ -76,7 +83,7 @@ const FilterModal: FC<ModalFilterProps> = (props: ModalFilterProps) => {
             <TouchableOpacity
               style={styles.buttonContainer}
               onPress={() => filterButtonHandler(item)}>
-              <Text style={styles.textFilter}>
+              <Text style={[styles.textFilter, textStyle]}>
                 {translation ? t(item.label) : item.label}
               </Text>
             </TouchableOpacity>

@@ -10,9 +10,8 @@ import {
 import LinearGradient from 'react-native-linear-gradient';
 
 import Font from '../../../theme/Font';
-import Color from '../../../theme/Color';
-import {heightPercentage, normalize, widthPercentage} from '../../../utils';
-import {ChevronDown2, ChevronDownIcon} from '../../../assets/icon';
+import {normalize} from '../../../utils';
+import {ChevronDownIcon} from '../../../assets/icon';
 import {color} from '../../../theme';
 import {ms} from 'react-native-size-matters';
 
@@ -70,7 +69,7 @@ export const ButtonGradientwithIcon: React.FC<ButtonGradientProps> = (
 
 const styles = StyleSheet.create({
   gradient: {
-    borderRadius: 30,
+    borderRadius: 4,
     justifyContent: 'center',
     alignItems: 'center',
   },

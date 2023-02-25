@@ -69,6 +69,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   const [isModalVisible, setModalVisible] = useState({
     modalFilter: false,
     modalImagePicker: false,
+    modalSetAudience: false,
   });
 
   const {
@@ -89,6 +90,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   } = usePlayerHook();
   const {dataProfile, getProfileUser} = useProfileHook();
   const [label, setLabel] = useState<string>();
+  // const [labelAudience, setLabelAudience] = useState<string>();
   const [valueFilter, setValueFilter] = useState<string>();
   const [dataAudience, setDataAudience] = useState<string>('');
   const [dataResponseImg, setDataResponseImg] = useState<string[]>([]);
@@ -194,7 +196,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
       setCreatePost({
         caption: inputText,
         category: valueFilter ? valueFilter : 'highlight',
-        isPremium: dataAudience === t('Feed.Exclusive') ? true : false,
+        isPremium: dataAudience === 'Feed.Exclusive' ? true : false,
       });
     }
 
@@ -209,7 +211,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
         id: dataUpdatePostProps.id,
         caption: inputText,
         category: valueFilter ? valueFilter : 'highlight',
-        isPremium: dataAudience === t('Feed.Exclusive') ? true : false,
+        isPremium: dataAudience === 'Feed.Exclusive' ? true : false,
       });
     }
 
@@ -228,7 +230,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
       setCreatePost({
         caption: inputText,
         category: valueFilter ? valueFilter : 'highlight',
-        isPremium: dataAudience === t('Feed.Exclusive') ? true : false,
+        isPremium: dataAudience === 'Feed.Exclusive' ? true : false,
         quoteToPost:
           musicData !== undefined && musicData?.transcodedSongUrl !== undefined
             ? {
@@ -258,7 +260,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
         id: userId,
         caption: inputText,
         category: valueFilter ? valueFilter : 'highlight',
-        isPremium: dataAudience === t('Feed.Exclusive') ? true : false,
+        isPremium: dataAudience === 'Feed.Exclusive' ? true : false,
         quoteToPost:
           musicData !== undefined && musicData?.transcodedSongUrl !== undefined
             ? {
@@ -295,7 +297,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
           caption: inputText,
           category: valueFilter ? valueFilter : 'highlight',
           image: dataResponseImg,
-          isPremium: dataAudience === t('Feed.Exclusive') ? true : false,
+          isPremium: dataAudience === 'Feed.Exclusive' ? true : false,
         }),
         setActive(false))
       : null;
@@ -312,7 +314,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
           caption: inputText,
           category: valueFilter ? valueFilter : 'highlight',
           image: dataResponseImg,
-          isPremium: dataAudience === t('Feed.Exclusive') ? true : false,
+          isPremium: dataAudience === 'Feed.Exclusive' ? true : false,
         }),
         setActive(false))
       : null;
@@ -419,6 +421,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
     setModalVisible({
       modalFilter: false,
       modalImagePicker: false,
+      modalSetAudience: false,
     });
   };
 
@@ -428,6 +431,10 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
 
   // ? OFFSET AREA
   const [offset, setOffset] = React.useState<{px: number; py: number}>();
+  const [offsetAudience, setOffsetAudience] = React.useState<{
+    px: number;
+    py: number;
+  }>();
   const [allowOffset, setAllowOffset] = React.useState<boolean>(true);
 
   //* Prevent ref to set offset non stop
@@ -478,6 +485,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
                     setModalVisible({
                       modalFilter: true,
                       modalImagePicker: false,
+                      modalSetAudience: false,
                     })
                   }
                   gradientStyles={{}}
@@ -548,6 +556,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
                         setModalVisible({
                           modalFilter: false,
                           modalImagePicker: true,
+                          modalSetAudience: false,
                         })
                       }>
                       <ImportPhotoIcon />
@@ -562,17 +571,35 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
                   </TouchableOpacity>
                 )}
               </View>
-              <View style={styles.dropdownContainer}>
-                <Dropdown.Menu
-                  data={dropDownSetAudience}
-                  placeHolder={t('Post.Create.Audience')}
-                  selectedMenu={resultDataAudience}
-                  containerStyle={{
-                    width: widthResponsive(138),
-                    marginLeft: widthResponsive(-57),
+              <View
+                style={styles.dropdownContainer}
+                onLayout={event => {
+                  event.target.measure((x, y, width, height, pageX, pageY) => {
+                    setOffsetAudience({
+                      px: pageX,
+                      py: Platform.OS === 'android' ? pageY - barHeight : pageY,
+                    });
+                  });
+                }}>
+                <Button
+                  label={
+                    dataAudience ? t(dataAudience) : t('Post.Create.Audience')
+                  }
+                  type="border"
+                  containerStyles={{
+                    width: widthResponsive(100),
+                    marginLeft: ms(2.5),
                   }}
-                  placeHolderStyles={styles.placeHolderStyle}
-                  translation={true}
+                  textStyles={{fontSize: mvs(12), fontWeight: '500'}}
+                  borderColor={'transparent'}
+                  typeOfButton={'withIcon'}
+                  onPress={() =>
+                    setModalVisible({
+                      modalFilter: false,
+                      modalImagePicker: false,
+                      modalSetAudience: true,
+                    })
+                  }
                 />
               </View>
             </View>
@@ -624,6 +651,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
               setModalVisible({
                 modalFilter: !isModalVisible.modalFilter,
                 modalImagePicker: false,
+                modalSetAudience: false,
               })
             }
             modalVisible={isModalVisible.modalFilter}
@@ -633,6 +661,30 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
             translation={true}
             xPosition={offset?.px}
             yPosition={offset?.py}
+          />
+        )}
+        {offsetAudience !== undefined && (
+          <FilterModal
+            toggleModal={() =>
+              setModalVisible({
+                modalFilter: false,
+                modalImagePicker: false,
+                modalSetAudience: false,
+              })
+            }
+            modalVisible={isModalVisible.modalSetAudience}
+            dataFilter={dropDownSetAudience}
+            filterOnPress={setDataAudience}
+            sendCategory={() => {}}
+            translation={true}
+            xPosition={offsetAudience?.px}
+            yPosition={offsetAudience?.py}
+            containerStyle={{
+              top: offsetAudience?.py + -96,
+              left: offsetAudience?.px,
+              width: widthResponsive(102),
+            }}
+            textStyle={{fontSize: mvs(12)}}
           />
         )}
         <ModalImagePicker
@@ -691,7 +743,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     borderTopWidth: ms(1),
     borderBottomWidth: 1,
-    borderColor: color.Dark[50],
+    borderColor: color.Dark[500],
     paddingHorizontal: widthResponsive(24),
     paddingVertical: widthResponsive(8),
     marginBottom: heightResponsive(12),
