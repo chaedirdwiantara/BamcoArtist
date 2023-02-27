@@ -93,11 +93,7 @@ const PostListHome: FC<PostListProps> = (props: PostListProps) => {
   const {creditCount, getCreditCount} = useCreditHook();
 
   const [dataMain, setDataMain] = useState<PostList[]>([]);
-  const [inputCommentModal, setInputCommentModal] = useState<boolean>(false);
-  const [musicianId, setMusicianId] = useState<string>('');
-  const [userName, setUserName] = useState<string>('');
   const [modalGuestVisible, setModalGuestVisible] = useState<boolean>(false);
-  const [commentType, setCommentType] = useState<string>('');
   const [recorder, setRecorder] = useState<string[]>([]);
   const [selectedId, setSelectedId] = useState<string[]>();
   const [modalShare, setModalShare] = useState<boolean>(false);
@@ -229,28 +225,6 @@ const PostListHome: FC<PostListProps> = (props: PostListProps) => {
       if (!recorder.includes(id)) {
         setRecorder([...recorder, id]);
       }
-    }
-  };
-
-  const commentOnPress = (id: string, username: string) => {
-    if (isLogin) {
-      setInputCommentModal(!inputCommentModal);
-      setMusicianId(id);
-      setUserName(username);
-    } else {
-      setModalGuestVisible(true);
-    }
-  };
-
-  const handleReplyOnPress = () => {
-    if (isLogin) {
-      commentType.length > 0
-        ? setCommentToPost({postId: musicianId, content: commentType})
-        : null;
-      setInputCommentModal(false);
-      setCommentType('');
-    } else {
-      setModalGuestVisible(true);
     }
   };
 
@@ -435,9 +409,6 @@ const PostListHome: FC<PostListProps> = (props: PostListProps) => {
                       ? item.likesCount
                       : item.likesCount
                   }
-                  commentOnPress={() =>
-                    commentOnPress(item.id, item.musician.username)
-                  }
                   tokenOnPress={tokenOnPress}
                   shareOnPress={shareOnPress}
                   commentCount={item.commentsCount}
@@ -516,15 +487,6 @@ const PostListHome: FC<PostListProps> = (props: PostListProps) => {
           }}
         />
       ) : null}
-      <CommentInputModal
-        toggleModal={() => setInputCommentModal(!inputCommentModal)}
-        modalVisible={inputCommentModal}
-        name={userName}
-        commentValue={commentType}
-        onCommentChange={setCommentType}
-        handleOnPress={handleReplyOnPress}
-        userAvatarUri={dataProfileImg}
-      />
       <BottomSheetGuest
         modalVisible={modalGuestVisible}
         onPressClose={() => setModalGuestVisible(false)}

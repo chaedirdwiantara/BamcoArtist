@@ -29,7 +29,6 @@ interface ListProps extends TouchableOpacityProps {
   postDate: string;
   children: React.ReactNode;
   likeOnPress: () => void;
-  commentOnPress: () => void;
   tokenOnPress: () => void;
   shareOnPress: () => void;
   likePressed: boolean;
@@ -52,7 +51,6 @@ const PostListCard: React.FC<ListProps> = (props: ListProps) => {
     postDate,
     children,
     likeOnPress,
-    commentOnPress,
     tokenOnPress,
     shareOnPress,
     likePressed,
@@ -120,13 +118,11 @@ const PostListCard: React.FC<ListProps> = (props: ListProps) => {
               </View>
               {/* comment section */}
               <View>
-                <TouchableOpacity
-                  onPress={commentOnPress}
-                  style={styles.socialIcon}>
+                <View style={styles.socialIcon}>
                   <CommentIcon stroke={color.Dark[100]} />
                   <Gap width={3} />
                   <Text style={styles.regularText}>{commentCount}</Text>
-                </TouchableOpacity>
+                </View>
               </View>
               {/* token section */}
               <View>

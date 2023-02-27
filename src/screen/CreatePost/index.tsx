@@ -38,7 +38,7 @@ import {
   dropdownCategoryMusician,
   dropDownSetAudience,
 } from '../../data/dropdown';
-import FilterModal from './modalFilter';
+import FilterModal from '../../components/molecule/V2/DropdownFilter/modalFilter';
 import ImageList from './showImage';
 import {useFeedHook} from '../../hooks/use-feed.hook';
 import {useUploadImageHook} from '../../hooks/use-uploadImage.hook';

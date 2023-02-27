@@ -11,9 +11,13 @@ import {
 } from 'react-native';
 import React, {FC} from 'react';
 import Modal from 'react-native-modal';
-import {color, font} from '../../theme';
-import {heightPercentage, heightResponsive, widthResponsive} from '../../utils';
-import {DataDropDownType} from '../../data/dropdown';
+import {color, font} from '../../../../theme';
+import {
+  heightPercentage,
+  heightResponsive,
+  widthResponsive,
+} from '../../../../utils';
+import {DataDropDownType} from '../../../../data/dropdown';
 import {ms, mvs} from 'react-native-size-matters';
 import {heightPercentageToDP} from 'react-native-responsive-screen';
 import {useTranslation} from 'react-i18next';
