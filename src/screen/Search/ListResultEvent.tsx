@@ -81,6 +81,7 @@ const styles = StyleSheet.create({
     marginTop: heightPercentage(8),
     width: '100%',
     height: '100%',
+    paddingBottom: heightPercentage(200),
   },
   ListContainer: {
     paddingVertical: heightPercentage(25),
