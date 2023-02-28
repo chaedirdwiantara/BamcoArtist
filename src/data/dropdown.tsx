@@ -128,3 +128,8 @@ export const dataUpdatePost: DataDropDownType[] = [
   {label: 'Post.Label.EditPost', value: '1'},
   {label: 'Post.Label.DeletePost', value: '2'},
 ];
+
+export const dataStatusPost: DataDropDownType[] = [
+  {label: 'Public', value: 'createPublicContent'},
+  {label: 'Exclusive', value: 'createExclusiveContent'},
+];
