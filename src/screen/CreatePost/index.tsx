@@ -430,7 +430,11 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   };
 
   // ? OFFSET AREA
-  const [offset, setOffset] = React.useState<{px: number; py: number}>();
+  const [offset, setOffset] = React.useState<{
+    px: number;
+    py: number;
+    width: number;
+  }>();
   const [offsetAudience, setOffsetAudience] = React.useState<{
     px: number;
     py: number;
@@ -452,6 +456,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
       <View style={styles.container}>
         <TopNavigation.Type1
+          // TODO: change text into Public / Exclusive Content
           title={t('Post.Create.Title')}
           maxLengthTitle={20}
           itemStrokeColor={'white'}
@@ -460,7 +465,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
         <View style={styles.mainContainer}>
           {/* //! TOP AREA */}
           <View style={styles.topBody}>
-            <View style={styles.userCategory}>
+            {/* <View style={styles.userCategory}>
               <Avatar
                 imgUri={
                   dataProfile && dataProfile?.data.imageProfileUrls.length > 0
@@ -496,7 +501,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
                   }}
                 />
               </View>
-            </View>
+            </View> */}
             <View style={{}}>
               <SsuInput.InputText
                 value={inputText}
@@ -547,6 +552,20 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
 
           {/* //! BOTTOM AREA */}
           <View style={styles.footerBody}>
+            <Text
+              style={[
+                styles.footerText,
+                {
+                  marginLeft: widthResponsive(24),
+                  marginBottom: widthResponsive(12),
+                  color:
+                    inputText.length === 400
+                      ? color.Error[400]
+                      : color.Neutral[10],
+                },
+              ]}>
+              {inputText.length}/400
+            </Text>
             <View style={styles.iconsAndCategory}>
               <View style={styles.iconsContainer}>
                 {!musicData && (
@@ -571,7 +590,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
                   </TouchableOpacity>
                 )}
               </View>
-              <View
+              {/* <View
                 style={styles.dropdownContainer}
                 onLayout={event => {
                   event.target.measure((x, y, width, height, pageX, pageY) => {
@@ -601,10 +620,49 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
                     })
                   }
                 />
+              </View> */}
+              <View
+                onLayout={event => {
+                  event.target.measure((x, y, width, height, pageX, pageY) => {
+                    setOffset({
+                      px: pageX,
+                      py: Platform.OS === 'android' ? pageY - barHeight : pageY,
+                      width: width,
+                    });
+                  });
+                }}
+                style={{opacity: 1}}>
+                <ButtonGradientwithIcon
+                  label={label ? t(label) : t('Post.Create.Category')}
+                  onPress={() =>
+                    setModalVisible({
+                      modalFilter: true,
+                      modalImagePicker: false,
+                      modalSetAudience: false,
+                    })
+                  }
+                  containerStyles={{
+                    width: widthResponsive(147),
+                    alignItems: 'flex-start',
+                  }}
+                  gradientStyles={{
+                    width: '100%',
+                  }}
+                  textIconContainer={{
+                    paddingVertical: ms(6),
+                    width: '100%',
+                    justifyContent: 'space-between',
+                  }}
+                  textStyles={{
+                    fontFamily: font.InterRegular,
+                    fontWeight: '500',
+                    fontSize: ms(12),
+                  }}
+                />
               </View>
             </View>
             <View style={styles.textCounter}>
-              <Text
+              {/* <Text
                 style={[
                   styles.footerText,
                   {
@@ -615,13 +673,14 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
                   },
                 ]}>
                 {inputText.length}/400
-              </Text>
+              </Text> */}
               {inputText.length === 0 ? (
                 <Button
                   label={t('Post.Title')}
                   containerStyles={{
-                    width: widthResponsive(100),
-                    aspectRatio: heightResponsive(279 / 77),
+                    width: '100%',
+                    height: heightResponsive(36),
+                    aspectRatio: undefined,
                     backgroundColor: color.Dark[50],
                   }}
                   textStyles={{}}
@@ -631,9 +690,15 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
               ) : (
                 <ButtonGradient
                   label={t('Post.Title')}
+                  containerStyles={{
+                    width: '100%',
+                    height: heightResponsive(36),
+                    aspectRatio: undefined,
+                  }}
                   gradientStyles={{
-                    width: widthResponsive(100),
-                    aspectRatio: heightResponsive(279 / 77),
+                    width: '100%',
+                    height: '100%',
+                    aspectRatio: undefined,
                   }}
                   textStyles={{}}
                   onPress={handlePostOnPress}
@@ -660,7 +725,9 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
             sendCategory={setValueFilter}
             translation={true}
             xPosition={offset?.px}
-            yPosition={offset?.py}
+            yPosition={offset?.py - widthResponsive(202)}
+            textStyle={{fontSize: ms(12)}}
+            containerStyle={{width: offset?.width}}
           />
         )}
         {offsetAudience !== undefined && (
@@ -716,7 +783,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   topBody: {
-    paddingTop: widthResponsive(16),
+    // paddingTop: widthResponsive(16),
     paddingHorizontal: widthResponsive(24),
   },
   footerBody: {
