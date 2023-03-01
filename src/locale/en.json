@@ -9,6 +9,7 @@
     "Thanks": "Thank You!",
     "LinkCopied": "Link have been copied to clipboard!",
     "Followers": "Followers",
+    "FollowYou": "Follow you",
     "Listeners": "Listeners",
     "Share": {
       "Feed": "Share Feed",
@@ -212,7 +213,7 @@
   },
   "Profile": {
     "Label": {
-      "Description": "I'm here to support musicians",
+      "Description": "I'm here to share my music career and connect further with my fans!",
       "Following": "FOLLOWING",
       "Liked": "LIKED SONGS",
       "Point": "POINTS",
@@ -314,7 +315,8 @@
         "Country": "Select Country",
         "City": "Select City",
         "Member": "Add Member",
-        "Active": "Select Year"
+        "Active": "Select Year",
+        "Label": "Add Label Name"
       }
     },
     "Password": {
@@ -619,10 +621,10 @@
       "Song": "Song not found",
       "Fans": "Fans not found"
     },
-    "NoAlbum": "No Album Available",
-    "NoMerch": "No Merch Available",
+    "NoAlbum": "No Album Available.",
+    "NoMerch": "No Merch Available.",
     "NoInfo": "No Information Given.",
-    "NoPhoto": "No Photos Available"
+    "NoPhoto": "No Photos Available."
   },
   "Guest": {
     "Title": "Sign Up to Interact with Musician",
