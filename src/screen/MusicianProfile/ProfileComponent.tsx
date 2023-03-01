@@ -6,30 +6,34 @@ import {
   TouchableOpacity,
   View,
   ViewStyle,
+  Linking,
 } from 'react-native';
-import {Gap, Title} from '../../components';
-import {color, font} from '../../theme';
-import {widthResponsive} from '../../utils';
-import {ms} from 'react-native-size-matters';
+import {useTranslation} from 'react-i18next';
+import {ms, mvs} from 'react-native-size-matters';
+import {useNavigation} from '@react-navigation/native';
+
 import {
   FbIcon,
-  InstagramIcon,
-  SnapchatIcon,
-  TiktokIcon,
-  TwitterIcon,
   VkIcon,
   WeiboIcon,
+  TiktokIcon,
+  TwitterIcon,
+  SnapchatIcon,
+  InstagramIcon,
 } from '../../assets/icon';
-import {useNavigation} from '@react-navigation/native';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {MainTabParams, RootStackParams} from '../../navigations';
+import {color, font} from '../../theme';
+import {Gap, Title} from '../../components';
+import {widthResponsive} from '../../utils';
+import {RootStackParams} from '../../navigations';
 import {nameValue} from '../../interface/base.interface';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
 interface ProfileProps {
   title: string;
   content?: string;
   gap?: number;
   socmedSection?: boolean;
+  websiteSection?: boolean;
   socmed?: nameValue[];
   memberSection?: boolean;
   members?: string[];
@@ -37,17 +41,20 @@ interface ProfileProps {
 }
 
 const ProfileComponent: FC<ProfileProps> = (props: ProfileProps) => {
+  const {t} = useTranslation();
   const {
     title,
     content,
     gap = 8,
     socmedSection,
+    websiteSection,
     socmed,
     members,
     memberSection,
     containerStyles,
   } = props;
 
+  const noDataText = t('EmptyState.NoInfo');
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
 
@@ -58,11 +65,31 @@ const ProfileComponent: FC<ProfileProps> = (props: ProfileProps) => {
     });
   };
 
+  const onPressLink = (url: string) => {
+    websiteSection ? Linking.openURL(url) : null;
+  };
+
+  const isWebsite = websiteSection && content !== noDataText;
+
   return (
     <View style={[{paddingHorizontal: widthResponsive(24)}, containerStyles]}>
-      <Title text={title} />
+      <Title textStyle={{fontSize: mvs(13)}} text={title} />
       <Gap height={gap} />
-      {content && <Text style={styles.captionStyle}>{content}</Text>}
+      {content && (
+        <TouchableOpacity
+          activeOpacity={isWebsite ? 0 : 1}
+          onPress={() => onPressLink(content)}>
+          <Text
+            style={[
+              styles.captionStyle,
+              {
+                color: isWebsite ? color.Pink[2] : color.Neutral[10],
+              },
+            ]}>
+            {content}
+          </Text>
+        </TouchableOpacity>
+      )}
       {memberSection && (
         <View>
           {members ? (
@@ -78,7 +105,7 @@ const ProfileComponent: FC<ProfileProps> = (props: ProfileProps) => {
               )}
             />
           ) : (
-            <Text style={styles.captionStyle}>No information given</Text>
+            <Text style={styles.captionStyle}>{noDataText}</Text>
           )}
         </View>
       )}
@@ -151,7 +178,7 @@ const ProfileComponent: FC<ProfileProps> = (props: ProfileProps) => {
               }
             />
           ) : (
-            <Text style={styles.captionStyle}>No information given</Text>
+            <Text style={styles.captionStyle}>{noDataText}</Text>
           )}
         </View>
       )}
@@ -166,7 +193,7 @@ const styles = StyleSheet.create({
     color: color.Neutral[10],
     fontFamily: font.InterRegular,
     fontWeight: '500',
-    fontSize: ms(12),
+    fontSize: ms(14),
   },
   touchStyle: {
     marginRight: widthResponsive(16),

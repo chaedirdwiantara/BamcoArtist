@@ -77,7 +77,8 @@ const DataMusician: FC<DataMusicianProps> = (props: DataMusicianProps) => {
       <Gap height={24} />
       <ProfileComponent
         title={t('Musician.Label.Website')}
-        content={profile.website}
+        websiteSection
+        content={profile.website ? profile.website : noDataText}
       />
       <Gap height={24} />
       <Photo

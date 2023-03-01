@@ -18,12 +18,11 @@ interface PhotoProps {
     images: ImagesProps[];
   }[];
   photoOnpress: () => void;
-  showWarning?: boolean;
 }
 
 const Photo: FC<PhotoProps> = (props: PhotoProps) => {
   const {t} = useTranslation();
-  const {title, data, photoOnpress, showWarning = true} = props;
+  const {title, data, photoOnpress} = props;
 
   const [isModalVisible, setModalVisible] = useState<boolean>(false);
   const [imgUrl, setImgUrl] = useState<number>(0);
@@ -37,7 +36,7 @@ const Photo: FC<PhotoProps> = (props: PhotoProps) => {
     <View style={{marginHorizontal: widthResponsive(24), width: '100%'}}>
       <Title text={title} />
       <Gap height={12} />
-      {data ? (
+      {data?.length > 0 ? (
         <View style={{flexDirection: 'row', width: '100%'}}>
           {data.map((item, i) => (
             <View key={i}>
@@ -85,9 +84,7 @@ const Photo: FC<PhotoProps> = (props: PhotoProps) => {
           ))}
         </View>
       ) : (
-        showWarning && (
-          <Text style={styles.captionStyle}>{t('EmptyState.NoPhoto')}</Text>
-        )
+        <Text style={styles.captionStyle}>{t('EmptyState.NoPhoto')}</Text>
       )}
 
       <ImageModal
@@ -140,6 +137,6 @@ const styles = StyleSheet.create({
     color: color.Neutral[10],
     fontFamily: font.InterRegular,
     fontWeight: '500',
-    fontSize: ms(12),
+    fontSize: ms(14),
   },
 });
