@@ -9,6 +9,7 @@ import {
   View,
   NativeScrollEvent,
   NativeSyntheticEvent,
+  StatusBar,
 } from 'react-native';
 import Modal from 'react-native-modal';
 import FastImage from 'react-native-fast-image';
@@ -26,7 +27,7 @@ interface ModalImageProps {
   toggleModal: () => void;
   modalVisible: boolean;
   imageIdx: number;
-  dataImage?: imageTypes[][];
+  dataImage?: imageTypes[][] | string[];
   dataImageGallery?: photos[] | Image[];
   type: string;
   removePhoto?: (id: number) => void;
@@ -67,6 +68,7 @@ const ImageModal: FC<ModalImageProps> = (props: ModalImageProps) => {
       backdropColor={color.Dark[800]}
       style={{marginHorizontal: 0}}
       onBackButtonPress={toggleModal}>
+      <StatusBar backgroundColor={color.Dark[800]} />
       <SafeAreaView style={styles.container}>
         <View style={styles.containerIcon}>
           <TouchableOpacity onPress={toggleModal} style={styles.closeButton}>
@@ -139,7 +141,9 @@ const ImageModal: FC<ModalImageProps> = (props: ModalImageProps) => {
                 <Animated.View style={styles.mainImageWrapper}>
                   <View style={styles.imageWrapper}>
                     <FastImage
-                      source={{uri: item[3].image}}
+                      source={{
+                        uri: type === 'zoomProfile' ? item : item[3].image,
+                      }}
                       style={[styles.imageStyle]}
                       resizeMode={FastImage.resizeMode.contain}
                     />
