@@ -45,9 +45,7 @@ interface AccountProps {
   profile: ProfileResponseType;
   onPressGoBack: () => void;
   dataAllCountry: DataDropDownType[];
-  dataCitiesOfOrigin: DataDropDownType[];
   dataCitiesOfCountry: DataDropDownType[];
-  setSelectedOrigin: (value: string) => void;
   setSelectedCountry: (value: string) => void;
   setInputType: (value: string) => void;
 }
@@ -59,8 +57,6 @@ interface InputProps {
   labels: string;
   yearsActiveFrom: string;
   yearsActiveTo: string;
-  originCountry: string;
-  originCity: string;
   locationCountry: string;
   locationCity: string;
 }
@@ -81,8 +77,6 @@ const validation = yup.object({
   labels: yup.string(),
   yearsActiveFrom: yup.string(),
   yearsActiveTo: yup.string(),
-  originCountry: yup.string(),
-  originCity: yup.string(),
   locationCountry: yup.string(),
   locationCity: yup.string(),
 });
@@ -91,9 +85,7 @@ export const AccountContent: React.FC<AccountProps> = ({
   profile,
   onPressGoBack,
   dataAllCountry,
-  dataCitiesOfOrigin,
   dataCitiesOfCountry,
-  setSelectedOrigin,
   setSelectedCountry,
   setInputType,
 }) => {
@@ -105,7 +97,6 @@ export const AccountContent: React.FC<AccountProps> = ({
   const [members, setMembers] = useState<string[]>(
     profile?.data.members || [''],
   );
-  const [type, setType] = useState(t('Btn.Edit'));
   const [changes, setChanges] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [disabledButton, setDisabledButton] = useState<boolean>(true);
@@ -116,7 +107,6 @@ export const AccountContent: React.FC<AccountProps> = ({
 
   const {
     control,
-    handleSubmit,
     formState: {errors, isValid, isValidating},
     getValues,
   } = useForm<InputProps>({
@@ -128,8 +118,6 @@ export const AccountContent: React.FC<AccountProps> = ({
       labels: profile?.data.labels || '',
       yearsActiveFrom: profile?.data.yearsActiveFrom || '',
       yearsActiveTo: profile?.data.yearsActiveTo || '',
-      originCountry: profile?.data.originCountry || '',
-      originCity: profile?.data.originCity || '',
       locationCountry: profile?.data.locationCountry || '',
       locationCity: profile?.data.locationCity || '',
     },
@@ -169,11 +157,7 @@ export const AccountContent: React.FC<AccountProps> = ({
   }, [isValidating, isValid]);
 
   const onPressSave = () => {
-    if (type === t('Btn.Edit')) {
-      setType(t('Btn.Save'));
-    } else {
-      changes ? setShowModal(true) : setType(t('Btn.Edit'));
-    }
+    changes ? setShowModal(true) : onPressConfirm();
   };
 
   const onPressConfirm = async () => {
@@ -183,25 +167,20 @@ export const AccountContent: React.FC<AccountProps> = ({
       labels: getValues('labels'),
       yearsActiveFrom: getValues('yearsActiveFrom'),
       yearsActiveTo: getValues('yearsActiveTo'),
-      originCountry: getValues('originCountry'),
-      originCity: getValues('originCity'),
       locationCountry: getValues('locationCountry'),
       locationCity: getValues('locationCity'),
       members: members,
       favoriteGeneres: valueGenres as number[],
     });
 
-    setType(t('Btn.Edit'));
     setIsSubmit(true);
     setShowModal(false);
     setChanges(false);
   };
 
   const onPressAddMember = () => {
-    if (type === t('Btn.Save')) {
-      setMembers([...members, '']);
-      setChanges(true);
-    }
+    setMembers([...members, '']);
+    setChanges(true);
   };
 
   useEffect(() => {
@@ -242,7 +221,6 @@ export const AccountContent: React.FC<AccountProps> = ({
               <SsuInput.InputLabel
                 label={t('Setting.Account.Label.Username') || ''}
                 value={value}
-                editable={type === t('Btn.Save')}
                 onChangeText={text => {
                   onChange(text.toLowerCase());
                   setIsError(false);
@@ -263,7 +241,6 @@ export const AccountContent: React.FC<AccountProps> = ({
               <SsuInput.InputLabel
                 label={t('Setting.Account.Label.Fullname') || ''}
                 value={value}
-                editable={type === t('Btn.Save')}
                 onChangeText={text => {
                   onChange(text);
                   setIsError(false);
@@ -281,7 +258,6 @@ export const AccountContent: React.FC<AccountProps> = ({
             data={formatValueName(dataFavourites[0]?.favorites) ?? []}
             placeHolder={t('Setting.Account.Placeholder.Genre') || ''}
             dropdownLabel={t('Setting.Account.Label.Genre') || ''}
-            disable={type !== t('Btn.Save')}
             textTyped={(_newText: string) => null}
             containerStyles={{marginTop: heightPercentage(15)}}
             initialValue={userGenres}
@@ -298,7 +274,6 @@ export const AccountContent: React.FC<AccountProps> = ({
               <SsuInput.InputLabel
                 label={t('Setting.Account.Label.Label') || ''}
                 value={value}
-                editable={type === t('Btn.Save')}
                 onChangeText={text => {
                   onChange(text);
                   setIsError(false);
@@ -312,6 +287,63 @@ export const AccountContent: React.FC<AccountProps> = ({
             )}
           />
 
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              marginTop: heightPercentage(10),
+            }}>
+            <Controller
+              name="locationCountry"
+              control={control}
+              render={({field: {onChange, value}}) => (
+                <Dropdown.Input
+                  type="location"
+                  initialValue={value}
+                  data={dataAllCountry}
+                  placeHolder={t('Setting.Account.Placeholder.Country') || ''}
+                  dropdownLabel={t('Setting.Account.Label.Location') || ''}
+                  textTyped={(newText: {label: string; value: string}) => {
+                    onChange(newText.value);
+                    setSelectedCountry(newText.value);
+                    setInputType('location');
+                    setChanges(true);
+                  }}
+                  containerStyles={{
+                    marginTop: heightPercentage(15),
+                    width: '49%',
+                  }}
+                  isError={errors?.locationCountry ? true : false}
+                  errorMsg={errors?.locationCountry?.message}
+                />
+              )}
+            />
+
+            <Controller
+              name="locationCity"
+              control={control}
+              render={({field: {onChange, value}}) => (
+                <Dropdown.Input
+                  initialValue={value}
+                  data={dataCitiesOfCountry}
+                  showSearch={true}
+                  placeHolder={t('Setting.Account.Placeholder.City') || ''}
+                  dropdownLabel={''}
+                  textTyped={(newText: {label: string; value: string}) => {
+                    onChange(newText.value);
+                    setChanges(true);
+                  }}
+                  containerStyles={{
+                    marginTop: heightPercentage(15),
+                    width: '49%',
+                  }}
+                  isError={errors?.locationCity ? true : false}
+                  errorMsg={errors?.locationCity?.message}
+                />
+              )}
+            />
+          </View>
+
           <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
             <Controller
               name="yearsActiveFrom"
@@ -320,7 +352,6 @@ export const AccountContent: React.FC<AccountProps> = ({
                 <Dropdown.Input
                   initialValue={value}
                   data={dataYearsFrom}
-                  disable={type !== t('Btn.Save')}
                   placeHolder={t('Setting.Account.Placeholder.Active') || ''}
                   dropdownLabel={t('Musician.Label.Active') || ''}
                   textTyped={(newText: {label: string; value: string}) => {
@@ -345,7 +376,6 @@ export const AccountContent: React.FC<AccountProps> = ({
                   initialValue={value}
                   data={dataYearsTo}
                   placeHolder={t('Setting.Account.Placeholder.Active') || ''}
-                  disable={type !== t('Btn.Save')}
                   dropdownLabel={''}
                   textTyped={(newText: {label: string; value: string}) => {
                     onChange(newText.value);
@@ -362,68 +392,11 @@ export const AccountContent: React.FC<AccountProps> = ({
             />
           </View>
 
-          <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-            <Controller
-              name="originCountry"
-              control={control}
-              render={({field: {onChange, value}}) => (
-                <Dropdown.Input
-                  type="location"
-                  initialValue={value}
-                  data={dataAllCountry}
-                  placeHolder={t('Setting.Account.Placeholder.Country') || ''}
-                  dropdownLabel={t('Setting.Account.Label.Origin') || ''}
-                  disable={type !== t('Btn.Save')}
-                  textTyped={(newText: {label: string; value: string}) => {
-                    onChange(newText.value);
-                    setSelectedOrigin(newText.value);
-                    setInputType('origin');
-                    setChanges(true);
-                  }}
-                  containerStyles={{
-                    marginTop: heightPercentage(15),
-                    width: '49%',
-                  }}
-                  isError={errors?.originCountry ? true : false}
-                  errorMsg={errors?.originCountry?.message}
-                  dropdownPosition="top"
-                />
-              )}
-            />
-
-            <Controller
-              name="originCity"
-              control={control}
-              render={({field: {onChange, value}}) => (
-                <Dropdown.Input
-                  initialValue={value}
-                  data={dataCitiesOfOrigin}
-                  placeHolder={t('Setting.Account.Placeholder.City') || ''}
-                  disable={type !== t('Btn.Save')}
-                  showSearch={true}
-                  dropdownLabel={''}
-                  textTyped={(newText: {label: string; value: string}) => {
-                    onChange(newText.value);
-                    setChanges(true);
-                  }}
-                  containerStyles={{
-                    marginTop: heightPercentage(14),
-                    width: '49%',
-                  }}
-                  isError={errors?.originCity ? true : false}
-                  errorMsg={errors?.originCity?.message}
-                  dropdownPosition="top"
-                />
-              )}
-            />
-          </View>
-
           {members.map((val, index) => (
             <SsuInput.InputLabel
               key={index}
               label={index === 0 ? t('Setting.Account.Label.Member') || '' : ''}
               value={val}
-              editable={type === t('Btn.Save')}
               onChangeText={text => {
                 let temp = [...members];
                 temp[index] = text;
@@ -450,65 +423,6 @@ export const AccountContent: React.FC<AccountProps> = ({
             </Text>
           </TouchableOpacity>
 
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              marginTop: heightPercentage(10),
-            }}>
-            <Controller
-              name="locationCountry"
-              control={control}
-              render={({field: {onChange, value}}) => (
-                <Dropdown.Input
-                  type="location"
-                  initialValue={value}
-                  data={dataAllCountry}
-                  placeHolder={t('Setting.Account.Placeholder.Country') || ''}
-                  dropdownLabel={t('Setting.Account.Label.Location') || ''}
-                  disable={type !== t('Btn.Save')}
-                  textTyped={(newText: {label: string; value: string}) => {
-                    onChange(newText.value);
-                    setSelectedCountry(newText.value);
-                    setInputType('location');
-                    setChanges(true);
-                  }}
-                  containerStyles={{
-                    marginTop: heightPercentage(15),
-                    width: '49%',
-                  }}
-                  isError={errors?.locationCountry ? true : false}
-                  errorMsg={errors?.locationCountry?.message}
-                />
-              )}
-            />
-
-            <Controller
-              name="locationCity"
-              control={control}
-              render={({field: {onChange, value}}) => (
-                <Dropdown.Input
-                  initialValue={value}
-                  data={dataCitiesOfCountry}
-                  showSearch={true}
-                  placeHolder={t('Setting.Account.Placeholder.City') || ''}
-                  disable={type !== t('Btn.Save')}
-                  dropdownLabel={''}
-                  textTyped={(newText: {label: string; value: string}) => {
-                    onChange(newText.value);
-                    setChanges(true);
-                  }}
-                  containerStyles={{
-                    marginTop: heightPercentage(15),
-                    width: '49%',
-                  }}
-                  isError={errors?.locationCity ? true : false}
-                  errorMsg={errors?.locationCity?.message}
-                />
-              )}
-            />
-          </View>
-
           {isError ? (
             <View style={styles.containerErrorMsg}>
               <ErrorIcon fill={Color.Error[400]} />
@@ -518,7 +432,7 @@ export const AccountContent: React.FC<AccountProps> = ({
           ) : null}
 
           <Button
-            label={type || ''}
+            label={t('Btn.Save') || ''}
             onPress={onPressSave}
             textStyles={{fontSize: mvs(15)}}
             containerStyles={
@@ -532,7 +446,7 @@ export const AccountContent: React.FC<AccountProps> = ({
             title="Account"
             subtitle="Are you sure you want to update your account?"
             onPressClose={() => setShowModal(false)}
-            onPressOk={handleSubmit(onPressConfirm)}
+            onPressOk={onPressConfirm}
           />
 
           <SsuToast
