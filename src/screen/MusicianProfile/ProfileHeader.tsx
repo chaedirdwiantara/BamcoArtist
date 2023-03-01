@@ -91,7 +91,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = (
             <View style={styles.containerFooter}>
               <Text style={styles.description}>{bio}</Text>
               <Gap height={16} />
-              <View style={{flexDirection: 'row'}}>
+              <View style={styles.buttonContainer}>
                 {isFollowed ? (
                   <>
                     <ButtonGradient
@@ -161,6 +161,11 @@ const styles = StyleSheet.create({
     fontFamily: font.InterRegular,
     maxWidth: width * 0.9,
     textAlign: 'center',
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   btnContainer: {
     height: undefined,

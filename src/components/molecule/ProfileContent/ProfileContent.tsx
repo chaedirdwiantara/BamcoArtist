@@ -129,7 +129,7 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
           profile={profile}
           type={ownProfile ? '' : 'self'}
           containerStyles={styles.infoCard}
-          totalFollowing={profile.totalFollowing}
+          totalFollowing={profile.totalFollowers}
           onPress={() => onPressGoTo('Following')}
           selfProfile={selfProfile?.data}
           totalCountlikedSong={totalCountlikedSong}
