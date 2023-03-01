@@ -23,15 +23,11 @@ import {
   dataStatusPost,
   dropDownDataCategory,
   dropDownDataSort,
+  dropDownSetAudience,
 } from '../data/dropdown';
 import {useIsFocused} from '@react-navigation/native';
 import {usePlayerHook} from '../hooks/use-player.hook';
-import {
-  AddPostIcon,
-  CancelCreatePostIcon,
-  Gift2Icon,
-  GlobalIcon,
-} from '../assets/icon';
+import {AddPostIcon, CancelCreatePostIcon} from '../assets/icon';
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParams} from '../navigations';
@@ -53,7 +49,7 @@ export const FeedScreen: React.FC = () => {
   const isLogin = storage.getString('profile');
   const isFocused = useIsFocused();
   const {isPlaying, showPlayer, hidePlayer} = usePlayerHook();
-  const [selectedCategory, setSelectedCategory] = useState<string>('');
+  const [selectedCategory, setSelectedCategory] = useState<string>();
   const [offsetCategoryFilter, setOffsetCategoryFilter] = React.useState<{
     px: number;
     py: number;
@@ -68,13 +64,20 @@ export const FeedScreen: React.FC = () => {
     }
   }, [isFocused]);
 
+  useEffect(() => {
+    if (selectedCategory) {
+      navigation.navigate('CreatePost', {audience: selectedCategory});
+      setModalVisible(false);
+      setSelectedCategory(undefined);
+    }
+  }, [selectedCategory]);
+
   const filterData = (item: any, index: any) => {
     setSelectedIndex(index);
   };
 
   const handleFloatingIcon = () => {
     setModalVisible(true);
-    // navigation.navigate('CreatePost');
   };
 
   return (
@@ -136,7 +139,7 @@ export const FeedScreen: React.FC = () => {
             <FilterModal
               toggleModal={() => setModalVisible(false)}
               modalVisible={isModalVisible}
-              dataFilter={dataStatusPost}
+              dataFilter={dropDownSetAudience}
               filterOnPress={setSelectedCategory}
               sendCategory={() => {}}
               translation={true}

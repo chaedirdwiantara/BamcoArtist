@@ -115,8 +115,8 @@ export const dropDownSubscription: DataDropDownType[] = [
 ];
 
 export const dropDownSetAudience: DataDropDownType[] = [
-  {label: 'Feed.Public', value: '1'},
-  {label: 'Feed.Exclusive', value: '2'},
+  {label: 'Feed.Public', value: 'createPublicContent'},
+  {label: 'Feed.Exclusive', value: 'createExclusiveContent'},
 ];
 
 export const dataUpdateComment: DataDropDownType[] = [

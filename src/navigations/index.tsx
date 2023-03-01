@@ -201,7 +201,9 @@ export type RootStackParams = {
   MusicPlayer: undefined;
   MerchDetail: MerchListType;
   ConcertDetail: MerchListType;
-  CreatePost: {songData?: ListDataSearchSongs; postData?: PostList} | undefined;
+  CreatePost:
+    | {songData?: ListDataSearchSongs; postData?: PostList; audience?: string}
+    | undefined;
   SplashScreen: undefined;
 };
 

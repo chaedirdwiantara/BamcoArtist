@@ -64,6 +64,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
 
   const dataSongNavigation = route.params?.songData;
   const dataUpdatePostProps = route.params?.postData;
+  const dataAudienceChoosen = route.params?.audience;
 
   const [inputText, setInputText] = useState<string>('');
   const [isModalVisible, setModalVisible] = useState({
@@ -106,6 +107,12 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   useEffect(() => {
     getProfileUser();
   }, []);
+
+  useEffect(() => {
+    if (dataAudienceChoosen) {
+      setDataAudience(dataAudienceChoosen);
+    }
+  }, [dataAudienceChoosen]);
 
   // ! EDIT POST AREA
   useEffect(() => {
