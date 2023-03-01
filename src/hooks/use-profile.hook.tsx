@@ -6,6 +6,7 @@ import {
   deleteProfile,
   getOtherUserProfile,
   getProfile,
+  getTotalCount,
   removePhotos,
   updateProfile,
   UpdateProfilePropsType,
@@ -17,6 +18,7 @@ import {
   CollectPhotoRemoveProps,
   CollectPhotosProps,
   DataCountLiked,
+  DataTotalCountPropsType,
   ProfileFansResponseType,
   ProfileResponseType,
 } from '../interface/profile.interface';
@@ -34,6 +36,8 @@ export const useProfileHook = () => {
   const [dataFansProfile, setDataFansProfile] =
     useState<ProfileFansResponseType>();
   const [dataCountLiked, setCountLiked] = useState<DataCountLiked>();
+  const [dataCountProfile, setDataCountProfile] =
+    useState<DataTotalCountPropsType>();
 
   const getProfileUser = async () => {
     setIsLoading(true);
@@ -189,6 +193,17 @@ export const useProfileHook = () => {
     }
   };
 
+  const getTotalCountProfile = async (props: ParamsProps) => {
+    try {
+      const response = await getTotalCount(props);
+      setDataCountProfile(response.data);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return {
     isLoading,
     isError,
@@ -199,6 +214,7 @@ export const useProfileHook = () => {
     dataFansProfile,
     dataUserCheck,
     dataCountLiked,
+    dataCountProfile,
     setIsError,
     setDataUserCheck,
     getProfileUser,
@@ -211,5 +227,6 @@ export const useProfileHook = () => {
     getCheckUser,
     getUserCountLikedSong,
     deleteValueProfile,
+    getTotalCountProfile,
   };
 };
