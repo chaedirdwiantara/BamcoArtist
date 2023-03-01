@@ -224,10 +224,17 @@ export const AccountContent: React.FC<AccountProps> = ({
           leftIcon={<ArrowLeftIcon />}
           itemStrokeColor={Color.Neutral[10]}
           leftIconAction={onPressGoBack}
-          containerStyles={{marginBottom: heightPercentage(15)}}
+          containerStyles={{
+            marginBottom: heightPercentage(15),
+            paddingHorizontal: widthResponsive(15),
+          }}
         />
 
-        <ScrollView showsVerticalScrollIndicator={false}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          style={{
+            paddingHorizontal: widthResponsive(20),
+          }}>
           <Controller
             name="username"
             control={control}
@@ -345,7 +352,7 @@ export const AccountContent: React.FC<AccountProps> = ({
                     setChanges(true);
                   }}
                   containerStyles={{
-                    marginTop: heightPercentage(15),
+                    marginTop: heightPercentage(14),
                     width: '49%',
                   }}
                   isError={errors?.yearsActiveTo ? true : false}
@@ -400,7 +407,7 @@ export const AccountContent: React.FC<AccountProps> = ({
                     setChanges(true);
                   }}
                   containerStyles={{
-                    marginTop: heightPercentage(15),
+                    marginTop: heightPercentage(14),
                     width: '49%',
                   }}
                   isError={errors?.originCity ? true : false}
@@ -435,14 +442,20 @@ export const AccountContent: React.FC<AccountProps> = ({
                 Typography.Body4,
                 {
                   color: color.Pink[2],
-                  paddingTop: mvs(5),
+                  paddingTop: mvs(7),
+                  fontSize: mvs(11),
                 },
               ]}>
               + Add More
             </Text>
           </TouchableOpacity>
 
-          <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              marginTop: heightPercentage(10),
+            }}>
             <Controller
               name="locationCountry"
               control={control}
@@ -507,6 +520,7 @@ export const AccountContent: React.FC<AccountProps> = ({
           <Button
             label={type || ''}
             onPress={onPressSave}
+            textStyles={{fontSize: mvs(15)}}
             containerStyles={
               disabledButton ? styles.buttonDisabled : styles.button
             }
@@ -555,11 +569,10 @@ const styles = StyleSheet.create({
   root: {
     flex: 1,
     backgroundColor: Color.Dark[800],
-    paddingHorizontal: widthPercentage(12),
   },
   button: {
     width: width * 0.9,
-    aspectRatio: widthPercentage(327 / 36),
+    aspectRatio: widthPercentage(327 / 38),
     marginVertical: heightPercentage(25),
     alignSelf: 'center',
     backgroundColor: Color.Pink[200],
