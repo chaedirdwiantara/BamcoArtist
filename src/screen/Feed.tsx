@@ -1,5 +1,11 @@
 import React, {useEffect, useState} from 'react';
-import {View, StyleSheet, TouchableOpacity} from 'react-native';
+import {
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  Platform,
+  NativeModules,
+} from 'react-native';
 import {widthPercentageToDP} from 'react-native-responsive-screen';
 
 import {color} from '../theme';
@@ -7,15 +13,29 @@ import {storage} from '../hooks/use-storage.hook';
 import PostListPublic from './ListCard/PostListPublic';
 import {heightPercentage, widthResponsive} from '../utils';
 import PostListMyPost from './ListCard/PostListMyPost';
-import {GuestContent, TabFilter, TopNavigation} from '../components';
-import {dropDownDataCategory, dropDownDataSort} from '../data/dropdown';
+import {
+  FilterModal,
+  GuestContent,
+  TabFilter,
+  TopNavigation,
+} from '../components';
+import {
+  dataStatusPost,
+  dropDownDataCategory,
+  dropDownDataSort,
+  dropDownSetAudience,
+} from '../data/dropdown';
 import {useIsFocused} from '@react-navigation/native';
 import {usePlayerHook} from '../hooks/use-player.hook';
-import {AddPostIcon} from '../assets/icon';
+import {AddPostIcon, CancelCreatePostIcon} from '../assets/icon';
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParams} from '../navigations';
 import {useTranslation} from 'react-i18next';
+import {mvs} from 'react-native-size-matters';
+
+const {StatusBarManager} = NativeModules;
+const barHeight = StatusBarManager.HEIGHT;
 
 export const FeedScreen: React.FC = () => {
   const {t} = useTranslation();
@@ -29,6 +49,12 @@ export const FeedScreen: React.FC = () => {
   const isLogin = storage.getString('profile');
   const isFocused = useIsFocused();
   const {isPlaying, showPlayer, hidePlayer} = usePlayerHook();
+  const [selectedCategory, setSelectedCategory] = useState<string>();
+  const [offsetCategoryFilter, setOffsetCategoryFilter] = React.useState<{
+    px: number;
+    py: number;
+  }>();
+  const [isModalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
     if (isFocused && isPlaying) {
@@ -38,13 +64,22 @@ export const FeedScreen: React.FC = () => {
     }
   }, [isFocused]);
 
+  useEffect(() => {
+    if (selectedCategory) {
+      navigation.navigate('CreatePost', {audience: selectedCategory});
+      setModalVisible(false);
+      setSelectedCategory(undefined);
+    }
+  }, [selectedCategory]);
+
   const filterData = (item: any, index: any) => {
     setSelectedIndex(index);
   };
 
   const handleFloatingIcon = () => {
-    navigation.navigate('CreatePost');
+    setModalVisible(true);
   };
+
   return (
     <View style={styles.root}>
       {isLogin ? (
@@ -85,9 +120,43 @@ export const FeedScreen: React.FC = () => {
           </View>
           <TouchableOpacity
             style={styles.buttonStyle}
-            onPress={handleFloatingIcon}>
-            <AddPostIcon style={styles.floatingIcon} />
+            onPress={handleFloatingIcon}
+            onLayout={event => {
+              event.target.measure((x, y, width, height, pageX, pageY) => {
+                setOffsetCategoryFilter({
+                  px: pageX + width,
+                  py: Platform.OS === 'android' ? pageY - barHeight : pageY,
+                });
+              });
+            }}>
+            {isModalVisible ? (
+              <CancelCreatePostIcon style={styles.floatingIcon} />
+            ) : (
+              <AddPostIcon style={styles.floatingIcon} />
+            )}
           </TouchableOpacity>
+          {offsetCategoryFilter !== undefined && (
+            <FilterModal
+              toggleModal={() => setModalVisible(false)}
+              modalVisible={isModalVisible}
+              dataFilter={dropDownSetAudience}
+              filterOnPress={setSelectedCategory}
+              sendCategory={() => {}}
+              translation={true}
+              xPosition={offsetCategoryFilter?.px}
+              yPosition={offsetCategoryFilter?.py}
+              containerStyle={{
+                top: offsetCategoryFilter?.py - widthResponsive(93),
+                left: offsetCategoryFilter?.px - widthResponsive(125),
+                width: widthResponsive(125),
+              }}
+              textStyle={{fontSize: mvs(13)}}
+              icon={true}
+              buttonContainerStyle={{
+                paddingVertical: widthResponsive(10),
+              }}
+            />
+          )}
         </View>
       ) : (
         <GuestContent />

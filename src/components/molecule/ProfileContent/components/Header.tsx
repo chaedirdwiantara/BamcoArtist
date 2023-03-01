@@ -98,34 +98,36 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = (
         source={{uri: backgroundUri}}
         resizeMode="cover"
         style={styles.image}>
-        <AvatarProfile
-          initialName={initialname(fullname)}
-          imgUri={avatarUri}
-          type={type}
-          showIcon={type === 'edit'}
-          icon={<CameraIcon />}
-          onPress={() => iconPress('avatarUri')}
-        />
-        <Text style={[Typography.Heading5, styles.fullname]}>{fullname}</Text>
-        <Text style={styles.username}>{username}</Text>
+        <View style={styles.bgChild}>
+          <AvatarProfile
+            initialName={initialname(fullname)}
+            imgUri={avatarUri}
+            type={type}
+            showIcon={type === 'edit'}
+            icon={<CameraIcon />}
+            onPress={() => iconPress('avatarUri')}
+          />
+          <Text style={[Typography.Heading5, styles.fullname]}>{fullname}</Text>
+          <Text style={styles.username}>{username}</Text>
 
-        {type === '' && (
-          <View style={styles.containerFooter}>
-            <Text style={styles.description}>{bio}</Text>
-            {noEdit ? null : (
-              <ButtonGradient
-                label={t('Profile.Button.Edit')}
-                gradientStyles={styles.btnContainer}
-                onPress={() => {
-                  onPress && onPress();
-                }}
-              />
-            )}
-          </View>
-        )}
+          {type === '' && (
+            <View style={styles.containerFooter}>
+              <Text style={styles.description}>{bio}</Text>
+              {noEdit ? null : (
+                <ButtonGradient
+                  label={t('Profile.Button.Edit')}
+                  gradientStyles={styles.btnContainer}
+                  onPress={() => {
+                    onPress && onPress();
+                  }}
+                />
+              )}
+            </View>
+          )}
 
-        {noEdit ? null : iconRight()}
-        {backIcon ? iconLeft() : null}
+          {noEdit ? null : iconRight()}
+          {backIcon ? iconLeft() : null}
+        </View>
       </ImageBackground>
     </View>
   );
@@ -193,5 +195,12 @@ const styles = StyleSheet.create({
   },
   initialName: {
     color: color.Neutral[10],
+  },
+  bgChild: {
+    height: '100%',
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0,0,0,0.2)',
   },
 });

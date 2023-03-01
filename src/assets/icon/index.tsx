@@ -6,6 +6,7 @@ import ArrowRightIcon from './ArrowRight.icon';
 import AudioMusic from './AudioMusic.icon';
 import BellNotif from './BellNotif.icon';
 import CameraIcon from './Camera';
+import CancelCreatePostIcon from './CancelCreatePost.icon';
 import CheckBoxIcon from './CheckBox.icon';
 import CheckCircleIcon from './CheckCircle.icon';
 import CheckCircle2Icon from './CheckCircle2.icon';
@@ -42,6 +43,8 @@ import FullNameIcon from './FullName.icon';
 import GalleryAddIcon from './GalleryAdd.icon';
 import GalleryEditIcon from './GalleryEdit.icon';
 import GiftIcon from './Gift.icon';
+import Gift2Icon from './Gift2.icon';
+import GlobalIcon from './Global.icon';
 import HeartIcon from './Heart.icon';
 import HomeIcon from './Home.icon';
 import InfoCircleIcon from './InfoCircle.icon';
@@ -101,6 +104,7 @@ export {
   AudioMusic,
   BellNotif,
   CameraIcon,
+  CancelCreatePostIcon,
   CheckBoxIcon,
   CheckGradientIcon,
   CheckCircleIcon,
@@ -137,6 +141,8 @@ export {
   GalleryAddIcon,
   GalleryEditIcon,
   GiftIcon,
+  Gift2Icon,
+  GlobalIcon,
   HeartIcon,
   HomeIcon,
   InfoCircleIcon,

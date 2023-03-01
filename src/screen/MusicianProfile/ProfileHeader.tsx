@@ -74,55 +74,57 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = (
         source={{uri: backgroundUri}}
         resizeMode="cover"
         style={styles.image}>
-        <AvatarProfile
-          initialName={initialname(fullname)}
-          imgUri={avatarUri}
-          type={type}
-          showIcon={type === 'edit'}
-          icon={<CameraIcon />}
-          // onPress={() => iconPress('avatarUri')}
-        />
-        <Gap height={12} />
-        <Text style={styles.fullname}>{fullname}</Text>
-        <Text style={styles.username}>{username}</Text>
-        <Gap height={19} />
-        {type === '' && (
-          <View style={styles.containerFooter}>
-            <Text style={styles.description}>{bio}</Text>
-            <Gap height={16} />
-            <View style={{flexDirection: 'row'}}>
-              {isFollowed ? (
-                <>
-                  <ButtonGradient
-                    label={t('Musician.Label.Following')}
-                    gradientStyles={styles.btnContainer}
-                    onPress={unFollowOnPressed}
-                  />
-                  <Gap width={11} />
-                  <Button
-                    label={t('Musician.Label.Tip')}
-                    containerStyles={styles.btnContainer2}
-                    onPress={donate}
-                  />
-                </>
-              ) : (
-                <>
-                  <ButtonGradient
-                    label={t('Musician.Label.Follow')}
-                    gradientStyles={styles.btnContainer}
-                    onPress={followOnPressed}
-                  />
-                  <Gap width={11} />
-                  <Button
-                    label={t('Musician.Label.Tip')}
-                    containerStyles={styles.btnContainer2}
-                    onPress={donate}
-                  />
-                </>
-              )}
+        <View style={styles.bgChild}>
+          <AvatarProfile
+            initialName={initialname(fullname)}
+            imgUri={avatarUri}
+            type={type}
+            showIcon={type === 'edit'}
+            icon={<CameraIcon />}
+            // onPress={() => iconPress('avatarUri')}
+          />
+          <Gap height={12} />
+          <Text style={styles.fullname}>{fullname}</Text>
+          <Text style={styles.username}>{username}</Text>
+          <Gap height={19} />
+          {type === '' && (
+            <View style={styles.containerFooter}>
+              <Text style={styles.description}>{bio}</Text>
+              <Gap height={16} />
+              <View style={styles.buttonContainer}>
+                {isFollowed ? (
+                  <>
+                    <ButtonGradient
+                      label={t('Preference.Following')}
+                      gradientStyles={styles.btnContainer}
+                      onPress={unFollowOnPressed}
+                    />
+                    <Gap width={11} />
+                    <Button
+                      label={t('Musician.Label.Tip')}
+                      containerStyles={styles.btnContainer2}
+                      onPress={donate}
+                    />
+                  </>
+                ) : (
+                  <>
+                    <ButtonGradient
+                      label={t('Preference.Follow')}
+                      gradientStyles={styles.btnContainer}
+                      onPress={followOnPressed}
+                    />
+                    <Gap width={11} />
+                    <Button
+                      label={t('Musician.Label.Tip')}
+                      containerStyles={styles.btnContainer2}
+                      onPress={donate}
+                    />
+                  </>
+                )}
+              </View>
             </View>
-          </View>
-        )}
+          )}
+        </View>
       </ImageBackground>
     </View>
   );
@@ -160,6 +162,11 @@ const styles = StyleSheet.create({
     maxWidth: width * 0.9,
     textAlign: 'center',
   },
+  buttonContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   btnContainer: {
     height: undefined,
     width: widthResponsive(100),
@@ -186,5 +193,12 @@ const styles = StyleSheet.create({
   },
   initialName: {
     color: color.Neutral[10],
+  },
+  bgChild: {
+    height: '100%',
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0,0,0,0.2)',
   },
 });

@@ -19,7 +19,7 @@ import {Gap, SsuToast} from '../../atom';
 import {TopNavigation} from '../TopNavigation';
 import TopSong from '../../../screen/ListCard/TopSong';
 import {color, font, typography} from '../../../theme';
-import {dataUpdateComment, dropDownHeaderAlbum} from '../../../data/dropdown';
+import {dropDownHeaderAlbum} from '../../../data/dropdown';
 import {PhotoPlaylist} from '../PlaylistContent/PhotoPlaylist';
 import {ArrowLeftIcon, TickCircleIcon} from '../../../assets/icon';
 import {
@@ -140,7 +140,11 @@ export const AlbumContent: React.FC<Props> = ({
             title={detailAlbum?.title}
             totalSong={dataSong?.length || 0}
             createdDate={dateFormat(detailAlbum?.createdAt)}
-            createdBy={detailAlbum?.musicianName}
+            createdBy={
+              detailAlbum?.musician?.name !== undefined
+                ? detailAlbum?.musician.name
+                : ''
+            }
             avatarUri={
               detailAlbum?.imageUrl.length > 0
                 ? detailAlbum?.imageUrl[0].image
@@ -175,7 +179,13 @@ export const AlbumContent: React.FC<Props> = ({
             {t('Music.Label.SongList')}
           </Text>
           <View style={{marginBottom: heightPercentage(30)}}>
-            <TopSong onPress={() => null} hideDropdownMore={true} />
+            {dataSong !== null && (
+              <TopSong
+                onPress={() => null}
+                hideDropdownMore={true}
+                dataSong={dataSong}
+              />
+            )}
           </View>
         </View>
       </ScrollView>

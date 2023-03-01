@@ -3,14 +3,18 @@ import {
   Dimensions,
   FlatList,
   InteractionManager,
+  NativeModules,
+  Platform,
   StyleSheet,
   Text,
   View,
 } from 'react-native';
-import {mvs} from 'react-native-size-matters';
+import {ms, mvs} from 'react-native-size-matters';
 import {
+  Button,
   CommentInputModal,
   Dropdown,
+  FilterModal,
   Gap,
   ListCard,
   ModalDonate,
@@ -28,7 +32,6 @@ import {
   elipsisText,
   heightPercentage,
   heightResponsive,
-  normalize,
   widthPercentage,
   widthResponsive,
 } from '../../utils';
@@ -58,16 +61,15 @@ interface PostListProps {
   uuidMusician?: string;
 }
 
+const {StatusBarManager} = NativeModules;
+const barHeight = StatusBarManager.HEIGHT;
+
 const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
   const {t} = useTranslation();
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
   const {dataRightDropdown, dataLeftDropdown, uuidMusician = ''} = props;
 
-  const [inputCommentModal, setInputCommentModal] = useState<boolean>(false);
-  const [musicianId, setMusicianId] = useState<string>('');
-  const [userName, setUserName] = useState<string>('');
-  const [commentType, setCommentType] = useState<string>('');
   const [dataProfileImg, setDataProfileImg] = useState<string>('');
   const [recorder, setRecorder] = useState<string[]>([]);
   const [selectedId, setSelectedId] = useState<string[]>();
@@ -82,6 +84,15 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
   const [filterActive, setFilterActive] = useState<boolean>(true);
   const [filterByValue, setFilterByValue] = useState<string>();
   const [categoryValue, setCategoryValue] = useState<string>();
+  const [uuid, setUuid] = useState<string>();
+  const [selectedSort, setSelectedSort] = useState<string>('');
+  const [selectedCategory, setSelectedCategory] = useState<string>('');
+  const [selectedCategoryValue, setSelectedCategoryValue] =
+    useState<string>('');
+  const [isModalVisible, setModalVisible] = useState({
+    modalSortBy: false,
+    modalCategory: false,
+  });
 
   // * UPDATE HOOKS
   const [selectedIdPost, setSelectedIdPost] = useState<string>();
@@ -100,6 +111,7 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
     setLikePost,
     setUnlikePost,
     setCommentToPost,
+    setDeletePost,
   } = useFeedHook();
 
   const {
@@ -134,12 +146,13 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
   useFocusEffect(
     useCallback(() => {
       uuidMusician !== ''
-        ? getListDataMyPost({
+        ? (getListDataMyPost({
             page: 1,
             perPage: perPage,
             musician_uuid: uuidMusician,
             isPremium: true,
-          })
+          }),
+          setUuid(uuidMusician))
         : getListDataMyPost({page: 1, perPage: perPage, isPremium: true});
       setPage(1);
     }, [uuidMusician]),
@@ -159,36 +172,51 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
     }
   }, [dataPostList, filterActive]);
 
-  const resultDataFilter = (dataResultFilter: DataDropDownType) => {
-    getListDataMyPost({
-      page: 1,
-      perPage: perPage * page,
-      sortBy: dataResultFilter.label.toLowerCase(),
-      category: categoryValue,
-      isPremium: true,
-    });
-    setFilterActive(true);
-    setFilterByValue(dataResultFilter.label.toLowerCase());
-  };
-  const resultDataCategory = (dataResultCategory: DataDropDownType) => {
-    dataResultCategory.label === t('Home.Tab.TopPost.Category.All')
-      ? (getListDataMyPost({
-          page: page,
-          perPage: perPage,
-          sortBy: filterByValue,
-          isPremium: true,
-        }),
-        setFilterActive(false))
-      : (getListDataMyPost({
-          page: 1,
-          perPage: perPage * page,
-          category: dataResultCategory.value,
-          sortBy: filterByValue,
-          isPremium: true,
-        }),
-        setFilterActive(true));
-    setCategoryValue(dataResultCategory.value);
-  };
+  //* hit sort by endpoint
+  useEffect(() => {
+    if (selectedSort) {
+      const dataSortS =
+        t(selectedSort.toLowerCase()) === 'feed.sort.latest'
+          ? 'latest'
+          : 'popular';
+
+      getListDataMyPost({
+        page: 1,
+        perPage: perPage * page,
+        sortBy: dataSortS,
+        category: categoryValue,
+        isPremium: true,
+        musician_uuid: uuid,
+      });
+      setFilterActive(true);
+      setFilterByValue(dataSortS);
+    }
+  }, [selectedSort]);
+
+  //* hit category endpoint
+  useEffect(() => {
+    if (selectedCategory) {
+      selectedCategory === 'Home.Tab.TopPost.Category.All'
+        ? (getListDataMyPost({
+            page: 1,
+            perPage: perPage * page,
+            sortBy: filterByValue,
+            isPremium: true,
+            musician_uuid: uuid,
+          }),
+          setFilterActive(false))
+        : (getListDataMyPost({
+            page: 1,
+            perPage: perPage * page,
+            category: selectedCategoryValue,
+            sortBy: filterByValue,
+            isPremium: true,
+            musician_uuid: uuid,
+          }),
+          setFilterActive(true));
+      setCategoryValue(selectedCategoryValue);
+    }
+  }, [selectedCategory, selectedCategoryValue]);
 
   //* Handle when end of Scroll
   const handleEndScroll = () => {
@@ -199,6 +227,7 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
         category: categoryValue,
         sortBy: filterByValue,
         isPremium: true,
+        musician_uuid: uuid,
       });
       setPage(page + 1);
       setFilterActive(false);
@@ -287,20 +316,6 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
     }
   };
 
-  const commentOnPress = (id: string, username: string) => {
-    setInputCommentModal(!inputCommentModal);
-    setMusicianId(id);
-    setUserName(username);
-  };
-
-  const handleReplyOnPress = () => {
-    commentType.length > 0
-      ? setCommentToPost({postId: musicianId, content: commentType})
-      : null;
-    setInputCommentModal(false);
-    setCommentType('');
-  };
-
   const shareOnPress = () => {
     setModalShare(true);
   };
@@ -331,11 +346,23 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
 
   // ! UPDATE COMMENT AREA
   useEffect(() => {
-    if (selectedIdPost !== undefined && selectedMenu !== undefined) {
-      console.log('selectedIdPost', selectedIdPost);
-      console.log('selectedMenu', selectedMenu);
+    if (
+      selectedIdPost !== undefined &&
+      selectedMenu !== undefined &&
+      dataMain
+    ) {
+      if (selectedMenu.label === 'Delete Post') {
+        setDeletePost({id: selectedIdPost});
+        setDataMain(dataMain.filter(data => data.id !== selectedIdPost));
+        setSelectedMenu(undefined);
+      }
+      if (selectedMenu.label === 'Edit Post') {
+        let dataSelected = dataMain.filter(data => data.id === selectedIdPost);
+        navigation.navigate('CreatePost', {postData: dataSelected[0]});
+        setSelectedMenu(undefined);
+      }
     }
-  }, [selectedIdPost, selectedMenu]);
+  }, [selectedIdPost, selectedMenu, dataMain]);
   // ! END OF UPDATE COMMENT AREA
 
   // ! MUSIC AREA
@@ -361,36 +388,73 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
   };
   // ! END OF MUSIC AREA
 
+  // ? OFFSET AREA
+  const [offsetSortFilter, setOffsetSortFilter] = React.useState<{
+    px: number;
+    py: number;
+  }>();
+  const [offsetCategoryFilter, setOffsetCategoryFilter] = React.useState<{
+    px: number;
+    py: number;
+  }>();
+
+  // ? END OF OFFSET AREA
+
   return (
     <>
       <View style={styles.container}>
         <View
-          style={{
-            width: widthPercentage(70),
+          style={styles.dropdownContainer}
+          onLayout={event => {
+            event.target.measure((x, y, width, height, pageX, pageY) => {
+              setOffsetSortFilter({
+                px: pageX + width,
+                py: Platform.OS === 'android' ? pageY - barHeight : pageY,
+              });
+            });
           }}>
-          <Dropdown.Menu
-            data={dataLeftDropdown}
-            placeHolder={t('Feed.Sort.Title')}
-            selectedMenu={resultDataFilter}
-            containerStyle={{
-              width: widthPercentage(138),
-            }}
-            translation={true}
+          <Button
+            label={selectedSort ? t(selectedSort) : t('Feed.Sort.Title')}
+            type="border"
+            containerStyles={styles.categoryContainerStyle}
+            textStyles={styles.categoryTextStyle}
+            borderColor={'transparent'}
+            typeOfButton={'withIcon'}
+            onPress={() =>
+              setModalVisible({
+                modalSortBy: true,
+                modalCategory: false,
+              })
+            }
           />
         </View>
         <View
-          style={{
-            width: widthPercentage(80),
+          style={styles.dropdownContainer}
+          onLayout={event => {
+            event.target.measure((x, y, width, height, pageX, pageY) => {
+              setOffsetCategoryFilter({
+                px: pageX + width,
+                py: Platform.OS === 'android' ? pageY - barHeight : pageY,
+              });
+            });
           }}>
-          <Dropdown.Menu
-            data={dataRightDropdown}
-            placeHolder={t('Home.Tab.TopPost.Category.Title')}
-            selectedMenu={resultDataCategory}
-            containerStyle={{
-              width: widthPercentage(138),
-              marginLeft: widthPercentage(-57),
-            }}
-            translation={true}
+          <Button
+            label={
+              selectedCategory
+                ? t(selectedCategory)
+                : t('Home.Tab.TopPost.Category.Title')
+            }
+            type="border"
+            containerStyles={styles.categoryContainerStyle}
+            textStyles={styles.categoryTextStyle}
+            borderColor={'transparent'}
+            typeOfButton={'withIcon'}
+            onPress={() =>
+              setModalVisible({
+                modalSortBy: false,
+                modalCategory: true,
+              })
+            }
           />
         </View>
       </View>
@@ -461,9 +525,6 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
                         item.isLiked === false
                       ? item.likesCount
                       : item.likesCount
-                  }
-                  commentOnPress={() =>
-                    commentOnPress(item.id, item.musician.username)
                   }
                   tokenOnPress={tokenOnPress}
                   shareOnPress={shareOnPress}
@@ -567,15 +628,6 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
           icon={<FriedEggIcon />}
         />
       )}
-      <CommentInputModal
-        toggleModal={() => setInputCommentModal(!inputCommentModal)}
-        modalVisible={inputCommentModal}
-        name={userName}
-        commentValue={commentType}
-        onCommentChange={setCommentType}
-        handleOnPress={handleReplyOnPress}
-        userAvatarUri={dataProfileImg}
-      />
       <ModalShare
         url={
           'https://open.ssu.io/track/19AiJfAtRiccvSU1EWcttT?si=36b9a686dad44ae0'
@@ -617,6 +669,52 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
         modalVisible={modalSuccessDonate && trigger2ndModal ? true : false}
         toggleModal={onPressSuccess}
       />
+      {offsetCategoryFilter !== undefined && (
+        <FilterModal
+          toggleModal={() =>
+            setModalVisible({
+              modalCategory: false,
+              modalSortBy: false,
+            })
+          }
+          modalVisible={isModalVisible.modalCategory}
+          dataFilter={dataRightDropdown}
+          filterOnPress={setSelectedCategory}
+          sendCategory={setSelectedCategoryValue}
+          translation={true}
+          xPosition={offsetCategoryFilter?.px}
+          yPosition={offsetCategoryFilter?.py}
+          containerStyle={{
+            top: offsetCategoryFilter?.py + ms(2),
+            left: offsetCategoryFilter?.px - widthResponsive(125),
+            width: widthResponsive(125),
+          }}
+          textStyle={{fontSize: mvs(10)}}
+        />
+      )}
+      {offsetSortFilter !== undefined && (
+        <FilterModal
+          toggleModal={() =>
+            setModalVisible({
+              modalCategory: false,
+              modalSortBy: false,
+            })
+          }
+          modalVisible={isModalVisible.modalSortBy}
+          dataFilter={dataLeftDropdown}
+          filterOnPress={setSelectedSort}
+          sendCategory={() => {}}
+          translation={true}
+          xPosition={offsetSortFilter?.px}
+          yPosition={offsetSortFilter?.py}
+          containerStyle={{
+            top: offsetSortFilter?.py + ms(2),
+            left: offsetSortFilter?.px - widthResponsive(58),
+            width: widthResponsive(125),
+          }}
+          textStyle={{fontSize: mvs(10)}}
+        />
+      )}
       <ModalLoading visible={feedIsLoading} />
     </>
   );
@@ -654,5 +752,20 @@ const styles = StyleSheet.create({
   },
   textStyle: {
     color: color.Neutral[10],
+  },
+  dropdownContainer: {
+    marginTop: 7,
+    marginBottom: 9,
+  },
+  categoryContainerStyle: {
+    width: undefined,
+    aspectRatio: undefined,
+    alignSelf: 'flex-end',
+    marginRight: widthResponsive(-3),
+  },
+  categoryTextStyle: {
+    fontSize: mvs(10),
+    fontWeight: '500',
+    color: color.Dark[50],
   },
 });

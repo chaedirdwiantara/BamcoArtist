@@ -1,5 +1,6 @@
 import {
   KeyboardAvoidingView,
+  NativeModules,
   Platform,
   StyleSheet,
   Text,
@@ -37,7 +38,7 @@ import {
   dropdownCategoryMusician,
   dropDownSetAudience,
 } from '../../data/dropdown';
-import FilterModal from './modalFilter';
+import FilterModal from '../../components/molecule/V2/DropdownFilter/modalFilter';
 import ImageList from './showImage';
 import {useFeedHook} from '../../hooks/use-feed.hook';
 import {useUploadImageHook} from '../../hooks/use-uploadImage.hook';
@@ -53,6 +54,9 @@ import {useTranslation} from 'react-i18next';
 
 type PostDetailProps = NativeStackScreenProps<RootStackParams, 'CreatePost'>;
 
+const {StatusBarManager} = NativeModules;
+const barHeight = StatusBarManager.HEIGHT;
+
 const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   const {t} = useTranslation();
   const navigation =
@@ -60,11 +64,13 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
 
   const dataSongNavigation = route.params?.songData;
   const dataUpdatePostProps = route.params?.postData;
+  const dataAudienceChoosen = route.params?.audience;
 
   const [inputText, setInputText] = useState<string>('');
   const [isModalVisible, setModalVisible] = useState({
     modalFilter: false,
     modalImagePicker: false,
+    modalSetAudience: false,
   });
 
   const {
@@ -85,6 +91,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   } = usePlayerHook();
   const {dataProfile, getProfileUser} = useProfileHook();
   const [label, setLabel] = useState<string>();
+  // const [labelAudience, setLabelAudience] = useState<string>();
   const [valueFilter, setValueFilter] = useState<string>();
   const [dataAudience, setDataAudience] = useState<string>('');
   const [dataResponseImg, setDataResponseImg] = useState<string[]>([]);
@@ -100,6 +107,12 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   useEffect(() => {
     getProfileUser();
   }, []);
+
+  useEffect(() => {
+    if (dataAudienceChoosen) {
+      setDataAudience(dataAudienceChoosen);
+    }
+  }, [dataAudienceChoosen]);
 
   // ! EDIT POST AREA
   useEffect(() => {
@@ -190,7 +203,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
       setCreatePost({
         caption: inputText,
         category: valueFilter ? valueFilter : 'highlight',
-        isPremium: dataAudience === t('Feed.Exclusive') ? true : false,
+        isPremium: dataAudience === 'Feed.Exclusive' ? true : false,
       });
     }
 
@@ -205,7 +218,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
         id: dataUpdatePostProps.id,
         caption: inputText,
         category: valueFilter ? valueFilter : 'highlight',
-        isPremium: dataAudience === t('Feed.Exclusive') ? true : false,
+        isPremium: dataAudience === 'Feed.Exclusive' ? true : false,
       });
     }
 
@@ -224,7 +237,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
       setCreatePost({
         caption: inputText,
         category: valueFilter ? valueFilter : 'highlight',
-        isPremium: dataAudience === t('Feed.Exclusive') ? true : false,
+        isPremium: dataAudience === 'Feed.Exclusive' ? true : false,
         quoteToPost:
           musicData !== undefined && musicData?.transcodedSongUrl !== undefined
             ? {
@@ -254,7 +267,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
         id: userId,
         caption: inputText,
         category: valueFilter ? valueFilter : 'highlight',
-        isPremium: dataAudience === t('Feed.Exclusive') ? true : false,
+        isPremium: dataAudience === 'Feed.Exclusive' ? true : false,
         quoteToPost:
           musicData !== undefined && musicData?.transcodedSongUrl !== undefined
             ? {
@@ -291,7 +304,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
           caption: inputText,
           category: valueFilter ? valueFilter : 'highlight',
           image: dataResponseImg,
-          isPremium: dataAudience === t('Feed.Exclusive') ? true : false,
+          isPremium: dataAudience === 'Feed.Exclusive' ? true : false,
         }),
         setActive(false))
       : null;
@@ -308,7 +321,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
           caption: inputText,
           category: valueFilter ? valueFilter : 'highlight',
           image: dataResponseImg,
-          isPremium: dataAudience === t('Feed.Exclusive') ? true : false,
+          isPremium: dataAudience === 'Feed.Exclusive' ? true : false,
         }),
         setActive(false))
       : null;
@@ -372,6 +385,8 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
       lyrics: dataMusic[0] ? dataMusic[0].lyrics : '',
       transcodedSongUrl: [transcode, transcode],
       originalSongUrl: dataMusic[0] ? dataMusic[0].originalSongUrl : '',
+      isLiked:
+        dataMusic[0]?.isLiked !== undefined ? dataMusic[0].isLiked : false,
     };
 
     addPlaylist({
@@ -413,6 +428,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
     setModalVisible({
       modalFilter: false,
       modalImagePicker: false,
+      modalSetAudience: false,
     });
   };
 
@@ -420,12 +436,34 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
     setUri(uri.filter((x: Image) => x.path !== uri[id].path));
   };
 
+  // ? OFFSET AREA
+  const [offset, setOffset] = React.useState<{
+    px: number;
+    py: number;
+    width: number;
+  }>();
+  const [offsetAudience, setOffsetAudience] = React.useState<{
+    px: number;
+    py: number;
+  }>();
+  const [allowOffset, setAllowOffset] = React.useState<boolean>(true);
+
+  //* Prevent ref to set offset non stop
+  useEffect(() => {
+    if (offset !== undefined) {
+      setAllowOffset(false);
+    }
+  }, [offset]);
+
+  // ? END OF OFFSET AREA
+
   return (
     <KeyboardAvoidingView
       style={{flex: 1}}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
       <View style={styles.container}>
         <TopNavigation.Type1
+          // TODO: change text into Public / Exclusive Content
           title={t('Post.Create.Title')}
           maxLengthTitle={20}
           itemStrokeColor={'white'}
@@ -434,7 +472,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
         <View style={styles.mainContainer}>
           {/* //! TOP AREA */}
           <View style={styles.topBody}>
-            <View style={styles.userCategory}>
+            {/* <View style={styles.userCategory}>
               <Avatar
                 imgUri={
                   dataProfile && dataProfile?.data.imageProfileUrls.length > 0
@@ -443,22 +481,34 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
                 }
               />
               <Gap width={12} />
-              <ButtonGradientwithIcon
-                label={label ? t(label) : t('Post.Create.Category')}
-                onPress={() =>
-                  setModalVisible({
-                    modalFilter: true,
-                    modalImagePicker: false,
-                  })
-                }
-                gradientStyles={{}}
-                textStyles={{
-                  fontFamily: font.InterRegular,
-                  fontWeight: '500',
-                  fontSize: mvs(10),
+              <View
+                onLayout={event => {
+                  event.target.measure((x, y, width, height, pageX, pageY) => {
+                    setOffset({
+                      px: pageX,
+                      py: Platform.OS === 'android' ? pageY - barHeight : pageY,
+                    });
+                  });
                 }}
-              />
-            </View>
+                style={{opacity: 1}}>
+                <ButtonGradientwithIcon
+                  label={label ? t(label) : t('Post.Create.Category')}
+                  onPress={() =>
+                    setModalVisible({
+                      modalFilter: true,
+                      modalImagePicker: false,
+                      modalSetAudience: false,
+                    })
+                  }
+                  gradientStyles={{}}
+                  textStyles={{
+                    fontFamily: font.InterRegular,
+                    fontWeight: '500',
+                    fontSize: mvs(10),
+                  }}
+                />
+              </View>
+            </View> */}
             <View style={{}}>
               <SsuInput.InputText
                 value={inputText}
@@ -509,6 +559,20 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
 
           {/* //! BOTTOM AREA */}
           <View style={styles.footerBody}>
+            <Text
+              style={[
+                styles.footerText,
+                {
+                  marginLeft: widthResponsive(24),
+                  marginBottom: widthResponsive(12),
+                  color:
+                    inputText.length === 400
+                      ? color.Error[400]
+                      : color.Neutral[10],
+                },
+              ]}>
+              {inputText.length}/400
+            </Text>
             <View style={styles.iconsAndCategory}>
               <View style={styles.iconsContainer}>
                 {!musicData && (
@@ -518,6 +582,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
                         setModalVisible({
                           modalFilter: false,
                           modalImagePicker: true,
+                          modalSetAudience: false,
                         })
                       }>
                       <ImportPhotoIcon />
@@ -532,22 +597,79 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
                   </TouchableOpacity>
                 )}
               </View>
-              <View style={styles.dropdownContainer}>
-                <Dropdown.Menu
-                  data={dropDownSetAudience}
-                  placeHolder={t('Post.Create.Audience')}
-                  selectedMenu={resultDataAudience}
-                  containerStyle={{
-                    width: widthResponsive(138),
-                    marginLeft: widthResponsive(-57),
+              {/* <View
+                style={styles.dropdownContainer}
+                onLayout={event => {
+                  event.target.measure((x, y, width, height, pageX, pageY) => {
+                    setOffsetAudience({
+                      px: pageX,
+                      py: Platform.OS === 'android' ? pageY - barHeight : pageY,
+                    });
+                  });
+                }}>
+                <Button
+                  label={
+                    dataAudience ? t(dataAudience) : t('Post.Create.Audience')
+                  }
+                  type="border"
+                  containerStyles={{
+                    width: widthResponsive(100),
+                    marginLeft: ms(2.5),
                   }}
-                  placeHolderStyles={styles.placeHolderStyle}
-                  translation={true}
+                  textStyles={{fontSize: mvs(12), fontWeight: '500'}}
+                  borderColor={'transparent'}
+                  typeOfButton={'withIcon'}
+                  onPress={() =>
+                    setModalVisible({
+                      modalFilter: false,
+                      modalImagePicker: false,
+                      modalSetAudience: true,
+                    })
+                  }
+                />
+              </View> */}
+              <View
+                onLayout={event => {
+                  event.target.measure((x, y, width, height, pageX, pageY) => {
+                    setOffset({
+                      px: pageX,
+                      py: Platform.OS === 'android' ? pageY - barHeight : pageY,
+                      width: width,
+                    });
+                  });
+                }}
+                style={{opacity: 1}}>
+                <ButtonGradientwithIcon
+                  label={label ? t(label) : t('Post.Create.Category')}
+                  onPress={() =>
+                    setModalVisible({
+                      modalFilter: true,
+                      modalImagePicker: false,
+                      modalSetAudience: false,
+                    })
+                  }
+                  containerStyles={{
+                    width: widthResponsive(147),
+                    alignItems: 'flex-start',
+                  }}
+                  gradientStyles={{
+                    width: '100%',
+                  }}
+                  textIconContainer={{
+                    paddingVertical: ms(6),
+                    width: '100%',
+                    justifyContent: 'space-between',
+                  }}
+                  textStyles={{
+                    fontFamily: font.InterRegular,
+                    fontWeight: '500',
+                    fontSize: ms(12),
+                  }}
                 />
               </View>
             </View>
             <View style={styles.textCounter}>
-              <Text
+              {/* <Text
                 style={[
                   styles.footerText,
                   {
@@ -558,13 +680,14 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
                   },
                 ]}>
                 {inputText.length}/400
-              </Text>
+              </Text> */}
               {inputText.length === 0 ? (
                 <Button
                   label={t('Post.Title')}
                   containerStyles={{
-                    width: widthResponsive(100),
-                    aspectRatio: heightResponsive(279 / 77),
+                    width: '100%',
+                    height: heightResponsive(36),
+                    aspectRatio: undefined,
                     backgroundColor: color.Dark[50],
                   }}
                   textStyles={{}}
@@ -574,9 +697,15 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
               ) : (
                 <ButtonGradient
                   label={t('Post.Title')}
+                  containerStyles={{
+                    width: '100%',
+                    height: heightResponsive(36),
+                    aspectRatio: undefined,
+                  }}
                   gradientStyles={{
-                    width: widthResponsive(100),
-                    aspectRatio: heightResponsive(279 / 77),
+                    width: '100%',
+                    height: '100%',
+                    aspectRatio: undefined,
                   }}
                   textStyles={{}}
                   onPress={handlePostOnPress}
@@ -588,19 +717,50 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
         </View>
 
         {/* //! MODAL AREA */}
-        <FilterModal
-          toggleModal={() =>
-            setModalVisible({
-              modalFilter: !isModalVisible.modalFilter,
-              modalImagePicker: false,
-            })
-          }
-          modalVisible={isModalVisible.modalFilter}
-          dataFilter={dropdownCategoryMusician}
-          filterOnPress={setLabel}
-          sendCategory={setValueFilter}
-          translation={true}
-        />
+        {offset !== undefined && (
+          <FilterModal
+            toggleModal={() =>
+              setModalVisible({
+                modalFilter: !isModalVisible.modalFilter,
+                modalImagePicker: false,
+                modalSetAudience: false,
+              })
+            }
+            modalVisible={isModalVisible.modalFilter}
+            dataFilter={dropdownCategoryMusician}
+            filterOnPress={setLabel}
+            sendCategory={setValueFilter}
+            translation={true}
+            xPosition={offset?.px}
+            yPosition={offset?.py - widthResponsive(202)}
+            textStyle={{fontSize: ms(12)}}
+            containerStyle={{width: offset?.width}}
+          />
+        )}
+        {offsetAudience !== undefined && (
+          <FilterModal
+            toggleModal={() =>
+              setModalVisible({
+                modalFilter: false,
+                modalImagePicker: false,
+                modalSetAudience: false,
+              })
+            }
+            modalVisible={isModalVisible.modalSetAudience}
+            dataFilter={dropDownSetAudience}
+            filterOnPress={setDataAudience}
+            sendCategory={() => {}}
+            translation={true}
+            xPosition={offsetAudience?.px}
+            yPosition={offsetAudience?.py}
+            containerStyle={{
+              top: offsetAudience?.py + -96,
+              left: offsetAudience?.px,
+              width: widthResponsive(102),
+            }}
+            textStyle={{fontSize: mvs(12)}}
+          />
+        )}
         <ModalImagePicker
           title={t('Post.Create.Media') || ''}
           modalVisible={isModalVisible.modalImagePicker}
@@ -630,7 +790,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   topBody: {
-    paddingTop: widthResponsive(16),
+    // paddingTop: widthResponsive(16),
     paddingHorizontal: widthResponsive(24),
   },
   footerBody: {
@@ -657,7 +817,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     borderTopWidth: ms(1),
     borderBottomWidth: 1,
-    borderColor: color.Dark[50],
+    borderColor: color.Dark[500],
     paddingHorizontal: widthResponsive(24),
     paddingVertical: widthResponsive(8),
     marginBottom: heightResponsive(12),

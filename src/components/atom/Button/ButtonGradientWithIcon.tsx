@@ -10,9 +10,8 @@ import {
 import LinearGradient from 'react-native-linear-gradient';
 
 import Font from '../../../theme/Font';
-import Color from '../../../theme/Color';
-import {heightPercentage, normalize, widthPercentage} from '../../../utils';
-import {ChevronDown2, ChevronDownIcon} from '../../../assets/icon';
+import {normalize} from '../../../utils';
+import {ChevronDownIcon} from '../../../assets/icon';
 import {color} from '../../../theme';
 import {ms} from 'react-native-size-matters';
 
@@ -25,6 +24,7 @@ interface ButtonGradientProps {
   textStyles?: TextStyle;
   gradientStyles?: ViewStyle;
   containerStyles?: ViewStyle;
+  textIconContainer?: ViewStyle;
 }
 
 export const ButtonGradientwithIcon: React.FC<ButtonGradientProps> = (
@@ -39,6 +39,7 @@ export const ButtonGradientwithIcon: React.FC<ButtonGradientProps> = (
     textStyles,
     gradientStyles,
     containerStyles,
+    textIconContainer,
   } = props;
 
   return (
@@ -52,12 +53,7 @@ export const ButtonGradientwithIcon: React.FC<ButtonGradientProps> = (
         colors={colors}
         angle={angle}
         style={[styles.gradient, gradientStyles]}>
-        <View
-          style={{
-            flexDirection: 'row',
-            paddingHorizontal: ms(12),
-            paddingVertical: ms(6),
-          }}>
+        <View style={[styles.textIconContainer, textIconContainer]}>
           <Text style={[styles.text, textStyles]}>{label}</Text>
           <ChevronDownIcon width={16} height={16} stroke={color.Neutral[10]} />
         </View>
@@ -68,7 +64,14 @@ export const ButtonGradientwithIcon: React.FC<ButtonGradientProps> = (
 
 const styles = StyleSheet.create({
   gradient: {
-    borderRadius: 10,
+    borderRadius: 4,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  textIconContainer: {
+    flexDirection: 'row',
+    paddingHorizontal: ms(12),
+    paddingVertical: ms(5),
     justifyContent: 'center',
     alignItems: 'center',
   },

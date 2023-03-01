@@ -29,7 +29,6 @@ interface ListProps extends TouchableOpacityProps {
   postDate: string;
   children: React.ReactNode;
   likeOnPress: () => void;
-  commentOnPress: () => void;
   tokenOnPress: () => void;
   shareOnPress: () => void;
   likePressed: boolean;
@@ -52,7 +51,6 @@ const PostListCard: React.FC<ListProps> = (props: ListProps) => {
     postDate,
     children,
     likeOnPress,
-    commentOnPress,
     tokenOnPress,
     shareOnPress,
     likePressed,
@@ -89,7 +87,9 @@ const PostListCard: React.FC<ListProps> = (props: ListProps) => {
           <Gap height={4} />
           <View style={styles.bottomSection}>
             <Text style={styles.songDesc}>{musicianId}</Text>
-            <Text style={styles.songDesc}>{postDate}</Text>
+            <Text style={[styles.songDesc, {color: color.Dark[100]}]}>
+              {postDate}
+            </Text>
           </View>
           {/* BODY SECTION */}
           <View style={styles.bodyContainer}>{children}</View>
@@ -98,8 +98,8 @@ const PostListCard: React.FC<ListProps> = (props: ListProps) => {
             style={[
               styles.bottomContainer,
               {
-                marginTop: !myPost ? 0 : ms(-7),
-                marginBottom: !myPost ? 0 : ms(-7),
+                marginTop: !myPost ? 0 : -6.5,
+                marginBottom: !myPost ? 3 : -4,
               },
             ]}>
             <View style={styles.socialContainer}>
@@ -118,13 +118,11 @@ const PostListCard: React.FC<ListProps> = (props: ListProps) => {
               </View>
               {/* comment section */}
               <View>
-                <TouchableOpacity
-                  onPress={commentOnPress}
-                  style={styles.socialIcon}>
+                <View style={styles.socialIcon}>
                   <CommentIcon stroke={color.Dark[100]} />
                   <Gap width={3} />
                   <Text style={styles.regularText}>{commentCount}</Text>
-                </TouchableOpacity>
+                </View>
               </View>
               {/* token section */}
               <View>
@@ -179,7 +177,7 @@ const styles = StyleSheet.create({
     paddingBottom: heightResponsive(5),
     paddingHorizontal: widthResponsive(24),
     borderBottomWidth: mvs(1),
-    borderBottomColor: color.Dark[300],
+    borderBottomColor: color.Dark[500],
   },
   rankStyle: {
     fontSize: mvs(10),

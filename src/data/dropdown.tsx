@@ -115,8 +115,8 @@ export const dropDownSubscription: DataDropDownType[] = [
 ];
 
 export const dropDownSetAudience: DataDropDownType[] = [
-  {label: 'Feed.Public', value: '1'},
-  {label: 'Feed.Exclusive', value: '2'},
+  {label: 'Feed.Public', value: 'createPublicContent'},
+  {label: 'Feed.Exclusive', value: 'createExclusiveContent'},
 ];
 
 export const dataUpdateComment: DataDropDownType[] = [
@@ -127,4 +127,9 @@ export const dataUpdateComment: DataDropDownType[] = [
 export const dataUpdatePost: DataDropDownType[] = [
   {label: 'Post.Label.EditPost', value: '1'},
   {label: 'Post.Label.DeletePost', value: '2'},
+];
+
+export const dataStatusPost: DataDropDownType[] = [
+  {label: 'Public', value: 'createPublicContent'},
+  {label: 'Exclusive', value: 'createExclusiveContent'},
 ];

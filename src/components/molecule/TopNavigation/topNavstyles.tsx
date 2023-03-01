@@ -11,7 +11,7 @@ const topNavstyles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     borderBottomWidth: mvs(1),
-    borderBottomColor: color.Dark[300],
+    borderBottomColor: color.Dark[500],
     paddingTop:
       Platform.OS === 'ios'
         ? heightResponsive(barHeight)

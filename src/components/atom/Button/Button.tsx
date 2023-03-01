@@ -5,12 +5,16 @@ import {
   TouchableOpacity,
   ViewStyle,
   TextStyle,
+  View,
 } from 'react-native';
 import {ms} from 'react-native-size-matters';
 
 import Font from '../../../theme/Font';
 import Color from '../../../theme/Color';
 import {heightPercentage, normalize, widthPercentage} from '../../../utils';
+import {ChevronDownIcon} from '../../../assets/icon';
+import {color} from '../../../theme';
+import Gap from '../Gap/Gap';
 
 interface ButtonProps {
   label: string;
@@ -20,6 +24,7 @@ interface ButtonProps {
   textStyles?: TextStyle;
   disabled?: boolean;
   onPress?: () => void;
+  typeOfButton?: 'withIcon' | undefined;
 }
 
 export const Button: React.FC<ButtonProps> = (props: ButtonProps) => {
@@ -31,6 +36,7 @@ export const Button: React.FC<ButtonProps> = (props: ButtonProps) => {
     textStyles,
     disabled,
     onPress,
+    typeOfButton,
   } = props;
 
   const withBorder = type === 'border' && {
@@ -45,7 +51,20 @@ export const Button: React.FC<ButtonProps> = (props: ButtonProps) => {
       disabled={disabled}
       testID={'ssu-button'}
       onPress={onPress}>
-      <Text style={[styles.labelStyle, textStyles]}>{label}</Text>
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
+        <Text style={[styles.labelStyle, textStyles]}>{label}</Text>
+        {typeOfButton === 'withIcon' && (
+          <View style={{flexDirection: 'row'}}>
+            <Gap width={4} />
+            <ChevronDownIcon width={16} height={16} stroke={color.Pink[200]} />
+          </View>
+        )}
+      </View>
     </TouchableOpacity>
   );
 };
