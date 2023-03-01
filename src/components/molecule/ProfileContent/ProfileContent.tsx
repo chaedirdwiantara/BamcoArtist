@@ -8,6 +8,7 @@ import {
   NativeSyntheticEvent,
   Text,
 } from 'react-native';
+import {useTranslation} from 'react-i18next';
 
 import {
   width,
@@ -19,25 +20,23 @@ import {
 import {font} from '../../../theme';
 import {TabFilter} from '../TabFilter';
 import Color from '../../../theme/Color';
-import {SettingIcon} from '../../../assets/icon';
-import {ProfileHeader} from './components/Header';
-import {EmptyState} from '../EmptyState/EmptyState';
-import {TopSongListData} from '../../../data/topSong';
-import {UserInfoCard} from '../UserInfoCard/UserInfoCard';
-import {CreateNewCard} from '../CreateNewCard/CreateNewCard';
-import {Playlist} from '../../../interface/playlist.interface';
-import ListPlaylist from '../../../screen/ListCard/ListPlaylist';
 import {
   AlbumData,
   DataDetailMusician,
 } from '../../../interface/musician.interface';
-import DataMusician from '../../../screen/MusicianProfile/DataMusician';
+import {SettingIcon} from '../../../assets/icon';
+import {ProfileHeader} from './components/Header';
+import {EmptyState} from '../EmptyState/EmptyState';
+import {UserInfoCard} from '../UserInfoCard/UserInfoCard';
+import {CreateNewCard} from '../CreateNewCard/CreateNewCard';
+import {Playlist} from '../../../interface/playlist.interface';
+import ListPlaylist from '../../../screen/ListCard/ListPlaylist';
 import PostListPublic from '../../../screen/ListCard/PostListPublic';
+import DataMusician from '../../../screen/MusicianProfile/DataMusician';
 import PostListExclusive from '../../../screen/ListCard/PostListExclusive';
-import {dropDownDataCategory, dropDownDataSort} from '../../../data/dropdown';
 import {ProfileFansResponseType} from '../../../interface/profile.interface';
-import {useTranslation} from 'react-i18next';
 import PostListMyPost from '../../../screen/ListCard/PostListMyPost';
+import {dropDownDataCategory, dropDownDataSort} from '../../../data/dropdown';
 
 type OnScrollEventHandler = (
   event: NativeSyntheticEvent<NativeScrollEvent>,
@@ -57,6 +56,7 @@ interface ProfileContentProps {
   selfProfile?: ProfileFansResponseType;
   ownProfile?: boolean;
   totalCountlikedSong?: number;
+  goToFollowers: () => void;
 }
 
 export const ProfileContent: React.FC<ProfileContentProps> = ({
@@ -71,6 +71,7 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
   selfProfile,
   totalCountlikedSong,
   ownProfile = false,
+  goToFollowers,
 }) => {
   const {t} = useTranslation();
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -129,10 +130,11 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
           profile={profile}
           type={ownProfile ? '' : 'self'}
           containerStyles={styles.infoCard}
-          totalFollowing={profile.totalFollowers}
-          onPress={() => onPressGoTo('Following')}
+          totalFollowing={profile.totalFollowing}
+          onPress={goToFollowers}
           selfProfile={selfProfile?.data}
           totalCountlikedSong={totalCountlikedSong}
+          followersCount={profile.totalFollowers}
         />
         <View style={styles.containerContent}>
           <TabFilter.Type1
@@ -144,21 +146,13 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
           {!ownProfile &&
           dataPlaylist !== null &&
           filter[selectedIndex].filterName === 'Profile.Tab.Playlist' ? (
-            TopSongListData.length > 0 ? (
-              <View>
-                <ListPlaylist
-                  data={dataPlaylist}
-                  onPress={goToPlaylist}
-                  scrollable={false}
-                />
-              </View>
-            ) : (
-              <CreateNewCard
-                num="01"
-                text="Default Playlist"
-                onPress={() => onPressGoTo('CreateNewPlaylist')}
+            <View>
+              <ListPlaylist
+                data={dataPlaylist}
+                onPress={goToPlaylist}
+                scrollable={false}
               />
-            )
+            </View>
           ) : !ownProfile &&
             filter[selectedIndex].filterName ===
               t('Profile.Tab.TopMusician') ? (

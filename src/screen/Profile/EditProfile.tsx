@@ -50,20 +50,20 @@ export const EditProfileScreen: React.FC<EditProfileProps> = ({
     navigation.goBack();
   };
 
-  const onPressSave = (param: {
+  const onPressSave = async (param: {
     bio: string;
     about: string;
     website: string;
     photos: string[];
   }) => {
-    addCollectPhotos({photos: param.photos});
-    updateProfileUser({
+    await updateProfileUser({
       bio: param.bio,
       about: param.about,
       Website: param.website,
       imageProfileUrl: avatarUri,
       banner: backgroundUri,
     });
+    await addCollectPhotos({photos: param.photos});
     setTimeout(() => {
       navigation2.navigate('Profile', {showToast: true});
     }, 500);
