@@ -89,12 +89,20 @@ const UserInfoCard: FC<UserInfoCardProps> = (props: UserInfoCardProps) => {
 
   const infoProfileUser = [
     {
-      point: selfProfile?.following ? selfProfile.following : 0,
+      point: selfProfile?.following ? selfProfile.following : totalFollowing,
       title: t('Profile.Label.Following'),
+    },
+    {
+      point: 0,
+      title: 'LINE',
     },
     {
       point: totalCountlikedSong ? totalCountlikedSong : 0,
       title: t('Profile.Label.Liked'),
+    },
+    {
+      point: 0,
+      title: 'LINE',
     },
     {
       point: selfProfile?.point.daily ? selfProfile.point.daily : 0,
@@ -108,9 +116,11 @@ const UserInfoCard: FC<UserInfoCardProps> = (props: UserInfoCardProps) => {
   return (
     <View style={[styles.root, containerStyles]}>
       {listItem.map((val, i) => {
-        const isFollowing = val.title === t('Profile.Label.Following');
+        const canPress =
+          val.title === t('Profile.Label.Following') ||
+          val.title === t('Musician.Label.Followers');
         const newOnPress = () => {
-          isFollowing ? onPress() : null;
+          canPress ? onPress() : null;
         };
 
         if (val.title === 'LINE') {
@@ -118,11 +128,7 @@ const UserInfoCard: FC<UserInfoCardProps> = (props: UserInfoCardProps) => {
         } else {
           return (
             <View key={i} style={{width: type === 'self' ? '30%' : '20%'}}>
-              <Item
-                point={isFollowing ? totalFollowing : val.point}
-                title={val.title}
-                onPress={newOnPress}
-              />
+              <Item point={val.point} title={val.title} onPress={newOnPress} />
             </View>
           );
         }
