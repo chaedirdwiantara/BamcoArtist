@@ -191,7 +191,11 @@ export const ChangePNContent: React.FC<ChangePNProps> = ({
                 : t('Setting.Phone.Title')) || ''
             }
             value={value}
-            onChangeText={onChange}
+            onChangeText={text => {
+              onChange(text);
+              clearErrors('newPhoneNumber');
+              setIsError(false);
+            }}
             countryData={countryData}
             numberTyped={resultData}
             onFocus={() => handleFocusInput('newPhoneNumber')}

@@ -8,16 +8,23 @@ import {
   Platform,
 } from 'react-native';
 import React, {FC, useEffect, useState} from 'react';
+import {useTranslation} from 'react-i18next';
 import {SsuInput} from '../../atom/InputText/SsuInput';
 import {color, font, typography} from '../../../theme';
 import {ms, mvs} from 'react-native-size-matters';
 import Modal from 'react-native-modal';
 import SearchBar from '../../atom/SearchBar';
 import {FlashList} from '@shopify/flash-list';
-import {heightPercentage, normalize, widthResponsive} from '../../../utils';
+import {
+  heightPercentage,
+  normalize,
+  widthPercentage,
+  widthResponsive,
+} from '../../../utils';
 import Gap from '../../atom/Gap/Gap';
 import {ChevronDownIcon, ErrorIcon} from '../../../assets/icon';
 import Color from '../../../theme/Color';
+import {Dropdown} from 'react-native-element-dropdown';
 
 interface CountryData {
   value: string;
@@ -36,6 +43,9 @@ interface SelectCountryProps extends TextInputProps {
   labelText?: string;
 }
 
+const itemBg = color.Dark[700];
+const fontColorMain = color.Neutral[10];
+
 const DropdownSelectCountry: FC<SelectCountryProps> = (
   props: SelectCountryProps,
 ) => {
@@ -51,7 +61,7 @@ const DropdownSelectCountry: FC<SelectCountryProps> = (
     type = 'input',
     labelText,
   } = props;
-  const [modalVisible, setModalVisible] = useState(false);
+  const {t} = useTranslation();
   const [data, setData] = useState<any>([]);
   const [query, setQuery] = useState('');
   const [fullData, setFullData] = useState<any>([]);
@@ -61,6 +71,7 @@ const DropdownSelectCountry: FC<SelectCountryProps> = (
   useEffect(() => {
     setData(countryData);
     setFullData(countryData);
+    countryOnPress(countryData[0]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -89,12 +100,39 @@ const DropdownSelectCountry: FC<SelectCountryProps> = (
 
   const countryOnPress = (item: any) => {
     setValue(item);
-    setModalVisible(false);
     onSelectCountry(item.code);
   };
 
   const onEndEditing = () => {
     console.log('pressed end editing');
+  };
+
+  const renderItem = (item: any) => {
+    return (
+      <View style={stylesDropdown.item}>
+        <View style={styles.countryListContainer}>
+          <Image source={item.image} style={styles.imageStyle} />
+          <Gap width={4} />
+          <Text style={styles.listFont}>{item.label}</Text>
+        </View>
+        <Text style={styles.listFont}>{item.code}</Text>
+      </View>
+    );
+  };
+
+  const renderInputSearch = () => {
+    return (
+      <View style={{paddingHorizontal: widthPercentage(12), marginBottom: 10}}>
+        <SearchBar
+          style={{height: 28}}
+          value={query}
+          onChangeText={queryText => handleSearch(queryText)}
+          rightIcon={showIcon}
+          reset={onReset}
+          onEndEditing={onEndEditing}
+        />
+      </View>
+    );
   };
 
   if (type === 'input') {
@@ -108,7 +146,7 @@ const DropdownSelectCountry: FC<SelectCountryProps> = (
         <SsuInput.InputText
           value={valueNumber}
           onChangeText={onChangeText}
-          placeholder={'Phone Number'}
+          placeholder={t('SignUp.Phone') || ''}
           keyboardType={'number-pad'}
           fontSize={mvs(12)}
           onEndEditing={() => numberTyped(value?.code)}
@@ -119,7 +157,7 @@ const DropdownSelectCountry: FC<SelectCountryProps> = (
               value && value?.code.length > 2
                 ? widthResponsive(30)
                 : value && value?.code.length <= 2
-                ? widthResponsive(20)
+                ? widthResponsive(22)
                 : widthResponsive(8),
           }}
           isError={isError}
@@ -127,57 +165,37 @@ const DropdownSelectCountry: FC<SelectCountryProps> = (
           isFocus={isFocus}
           leftIcon={
             <View style={styles.leftIconContainer}>
-              <TouchableOpacity
-                style={styles.selectCountryContainer}
-                onPress={() => {
-                  setModalVisible(true);
-                }}>
-                <Text style={styles.leftLabel}>{value?.label}</Text>
-                <ChevronDownIcon />
-              </TouchableOpacity>
+              <Text style={styles.leftLabel}>{value?.label}</Text>
+              <Dropdown
+                style={stylesDropdown.dropdown}
+                containerStyle={[stylesDropdown.containerStyle]}
+                placeholderStyle={stylesDropdown.placeholderStyle}
+                selectedTextStyle={stylesDropdown.fontAll}
+                itemTextStyle={stylesDropdown.fontAll}
+                itemContainerStyle={[stylesDropdown.itemContainer]}
+                iconStyle={stylesDropdown.iconStyle}
+                data={data}
+                maxHeight={300}
+                labelField="label"
+                valueField="value"
+                value={value}
+                onChange={item => {
+                  countryOnPress(item);
+                }}
+                fontFamily={font.InterRegular}
+                showsVerticalScrollIndicator={false}
+                autoScroll={false}
+                activeColor={color.Dark[500]}
+                renderInputSearch={renderInputSearch}
+                search
+                renderItem={renderItem}
+                dropdownPosition={'bottom'}
+              />
               <Text style={styles.selectedCountryCode}>{value?.code}</Text>
             </View>
           }
           {...props}
         />
-        <Modal
-          isVisible={modalVisible}
-          scrollOffsetMax={400 - 300}
-          onBackButtonPress={() => setModalVisible(false)}
-          onBackdropPress={() => setModalVisible(false)}
-          propagateSwipe={true}>
-          <View style={styles.modalContainer}>
-            <View>
-              <SearchBar
-                value={query}
-                onChangeText={queryText => handleSearch(queryText)}
-                rightIcon={showIcon}
-                reset={onReset}
-                onEndEditing={onEndEditing}
-              />
-            </View>
-            <FlashList
-              data={data}
-              showsVerticalScrollIndicator={false}
-              // keyExtractor={}
-              renderItem={({item}: any) => (
-                <View>
-                  <TouchableOpacity
-                    style={styles.countryList}
-                    onPress={() => countryOnPress(item)}>
-                    <View style={styles.countryListContainer}>
-                      <Image source={item.image} style={styles.imageStyle} />
-                      <Gap width={4} />
-                      <Text style={styles.listFont}>{item.label}</Text>
-                    </View>
-                    <Text style={styles.listFont}>{item.code}</Text>
-                  </TouchableOpacity>
-                </View>
-              )}
-              estimatedItemSize={31}
-            />
-          </View>
-        </Modal>
       </View>
     );
   }
@@ -210,21 +228,38 @@ const DropdownSelectCountry: FC<SelectCountryProps> = (
                 : Color.Dark[500],
             },
           ]}>
-          <TouchableOpacity
-            style={stylesLabel.selectCountryContainer}
-            onPress={() => {
-              setModalVisible(true);
-            }}>
-            <ChevronDownIcon />
-            {value ? (
-              <Text style={stylesLabel.leftLabel}>{value?.code}</Text>
-            ) : (
-              <Text style={stylesLabel.placeholder}>+1</Text>
-            )}
-          </TouchableOpacity>
+          <View style={styles.leftIconContainer}>
+            <Dropdown
+              style={stylesLabel.dropdown}
+              containerStyle={[stylesDropdown.containerStyle]}
+              placeholderStyle={stylesDropdown.placeholderStyle}
+              selectedTextStyle={stylesDropdown.fontAll}
+              itemTextStyle={stylesDropdown.fontAll}
+              itemContainerStyle={[stylesDropdown.itemContainer]}
+              iconStyle={stylesLabel.iconStyle}
+              data={data}
+              maxHeight={300}
+              labelField="label"
+              valueField="value"
+              value={value}
+              onChange={item => {
+                countryOnPress(item);
+              }}
+              fontFamily={font.InterRegular}
+              showsVerticalScrollIndicator={false}
+              autoScroll={false}
+              activeColor={color.Dark[500]}
+              renderInputSearch={renderInputSearch}
+              search
+              renderItem={renderItem}
+              dropdownPosition={'bottom'}
+            />
+            <Text style={stylesLabel.selectedCountryCode}>{value?.code}</Text>
+          </View>
         </View>
         <Gap width={widthResponsive(15)} />
         <SsuInput.InputLabel
+          {...props}
           containerInputStyles={{
             width: widthResponsive(275),
             borderBottomColor: isError
@@ -235,56 +270,16 @@ const DropdownSelectCountry: FC<SelectCountryProps> = (
           }}
           value={valueNumber}
           onChangeText={onChangeText}
-          placeholder={'Phone Number'}
+          placeholder={t('SignUp.Phone') || ''}
           keyboardType={'number-pad'}
           onEndEditing={() => numberTyped(value?.code)}
           isError={false}
           errorMsg={errorMsg}
           isFocus={isFocus}
           isPhone
-          // {...props}
         />
-
-        <Modal
-          isVisible={modalVisible}
-          scrollOffsetMax={400 - 300}
-          onBackButtonPress={() => setModalVisible(false)}
-          onBackdropPress={() => setModalVisible(false)}
-          propagateSwipe={true}>
-          <View style={styles.modalContainer}>
-            <View>
-              <SearchBar
-                value={query}
-                onChangeText={queryText => handleSearch(queryText)}
-                rightIcon={showIcon}
-                reset={onReset}
-                onEndEditing={onEndEditing}
-              />
-            </View>
-            <FlashList
-              data={data}
-              showsVerticalScrollIndicator={false}
-              // keyExtractor={}
-              renderItem={({item}: any) => (
-                <View>
-                  <TouchableOpacity
-                    style={styles.countryList}
-                    onPress={() => countryOnPress(item)}>
-                    <View style={styles.countryListContainer}>
-                      <Image source={item.image} style={styles.imageStyle} />
-                      <Gap width={4} />
-                      <Text style={styles.listFont}>{item.label}</Text>
-                    </View>
-                    <Text style={styles.listFont}>{item.code}</Text>
-                  </TouchableOpacity>
-                </View>
-              )}
-              estimatedItemSize={31}
-            />
-          </View>
-        </Modal>
       </View>
-      {isError ? (
+      {errorMsg ? (
         <View style={styles.containerErrorMsg}>
           <ErrorIcon fill={Color.Error[400]} />
           <Gap width={ms(4)} />
@@ -320,14 +315,16 @@ const styles = StyleSheet.create({
     fontFamily: font.InterLight,
     fontSize: mvs(12),
     fontWeight: '400',
+    position: 'absolute',
+    left: '20%',
+    zIndex: 2,
   },
   selectedCountryCode: {
-    color: color.Dark[300],
+    color: color.Neutral[10],
     fontWeight: '400',
     fontFamily: font.InterLight,
     fontSize: mvs(12),
     marginLeft: ms(4),
-    marginTop: ms(-1),
   },
   modalContainer: {
     backgroundColor: color.Dark[700],
@@ -396,5 +393,88 @@ const stylesLabel = StyleSheet.create({
     fontFamily: font.InterLight,
     fontSize: normalize(12),
     fontWeight: '400',
+  },
+  iconStyle: {
+    width: ms(28),
+    height: ms(20),
+    left: '10%',
+  },
+  item: {
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    flexDirection: 'row',
+    paddingHorizontal: widthPercentage(15),
+  },
+  dropdown: {
+    flexDirection: 'row',
+    height: Platform.OS === 'ios' ? heightPercentage(13) : heightPercentage(22),
+  },
+  selectedCountryCode: {
+    color: color.Neutral[10],
+    fontWeight: '400',
+    fontFamily: font.InterLight,
+    fontSize: mvs(12),
+    paddingTop:
+      Platform.OS === 'ios' ? heightPercentage(21) : heightPercentage(12),
+    paddingRight:
+      Platform.OS === 'ios' ? widthPercentage(10) : widthPercentage(13),
+  },
+});
+
+const stylesDropdown = StyleSheet.create({
+  selectedTextStyle: {
+    fontSize: normalize(13),
+    color: fontColorMain,
+  },
+  itemTextStyle: {
+    fontSize: normalize(13),
+    color: fontColorMain,
+  },
+  iconStyle: {
+    width: ms(28),
+    height: ms(20),
+    left: '70%',
+  },
+  item: {
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    flexDirection: 'row',
+    paddingHorizontal: widthPercentage(15),
+  },
+  dropdown: {
+    flexDirection: 'row',
+    height: '100%',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    width: '100%',
+    backgroundColor: itemBg,
+    borderTopLeftRadius: 5,
+    borderBottomLeftRadius: 5,
+  },
+  // Dropdown modal container
+  containerStyle: {
+    borderWidth: 0,
+    backgroundColor: itemBg,
+    width: widthPercentage(200),
+    paddingVertical: widthPercentage(10),
+  },
+  // Item container in modal container
+  itemContainer: {
+    paddingVertical: 5,
+    backgroundColor: itemBg,
+    borderColor: itemBg,
+  },
+  placeholderStyle: {
+    fontFamily: font.InterRegular,
+    fontWeight: '500',
+    fontSize: normalize(10),
+    lineHeight: mvs(12),
+    color: color.Dark[50],
+  },
+  fontAll: {
+    fontFamily: font.InterRegular,
+    fontWeight: '500',
+    fontSize: normalize(10),
+    color: color.Neutral[10],
   },
 });
