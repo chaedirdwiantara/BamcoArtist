@@ -170,9 +170,11 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   btnContainer: {
+    width: undefined,
     height: undefined,
-    width: widthPercentage(100),
-    aspectRatio: heightPercentage(100 / 32),
+    aspectRatio: undefined,
+    paddingHorizontal: widthPercentage(20),
+    paddingVertical: heightPercentage(10),
     marginVertical: heightPercentage(10),
   },
   editIcon: {
