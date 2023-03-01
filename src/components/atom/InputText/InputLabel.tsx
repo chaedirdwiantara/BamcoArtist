@@ -199,6 +199,7 @@ const styles = StyleSheet.create({
     color: Color.Neutral[10],
     paddingVertical: heightPercentage(12),
     paddingRight: mvs(40),
+    fontSize: mvs(15),
     // lineHeight: Platform.OS === 'ios' ? mvs(20) : undefined,
   },
   containerErrorMsg: {
