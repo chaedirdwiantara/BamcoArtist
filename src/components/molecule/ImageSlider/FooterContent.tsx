@@ -15,16 +15,20 @@ interface FooterContentProps {
   data:
     | {title: string; subtitle: string; list: PreferenceList[]}[]
     | DataOnboardType[];
+  onPressBack?: () => void;
   onPressGoTo?: () => void;
   onPressNext: () => void;
+  selectedData: number[][];
 }
 
 export const FooterContent: React.FC<FooterContentProps> = ({
   type,
   activeIndexSlide,
   data,
+  onPressBack,
   onPressGoTo,
   onPressNext,
+  selectedData,
 }) => {
   const {t} = useTranslation();
   const activeColor =
@@ -54,25 +58,43 @@ export const FooterContent: React.FC<FooterContentProps> = ({
       />
       {type === 'Preference' ? (
         <View style={styles.footer}>
-          <Button
-            type="border"
-            label={t('Btn.Skip')}
-            containerStyles={styles.btnContainer}
-            textStyles={{color: Color.Pink.linear}}
-            onPress={onPressGoTo}
-          />
-          <ButtonGradient
-            label={activeIndexSlide === 3 ? t('Btn.Finish') : t('Btn.Next')}
-            onPress={onPressNext}
-            gradientStyles={styles.btnContainer}
-          />
+          {activeIndexSlide === 0 ? (
+            <ButtonGradient
+              label={t('Btn.Next')}
+              onPress={onPressNext}
+              gradientStyles={styles.btnFull}
+              disabled={selectedData[0].length === 0}
+            />
+          ) : (
+            <>
+              <Button
+                type="border"
+                label={activeIndexSlide === 3 ? t('Btn.Skip') : t('Btn.Back')}
+                containerStyles={styles.btnContainer}
+                textStyles={{color: Color.Pink.linear}}
+                onPress={activeIndexSlide === 3 ? onPressGoTo : onPressBack}
+              />
+              <ButtonGradient
+                label={activeIndexSlide === 3 ? t('Btn.Finish') : t('Btn.Next')}
+                onPress={onPressNext}
+                gradientStyles={styles.btnContainer}
+                disabled={
+                  activeIndexSlide < 3
+                    ? selectedData[activeIndexSlide].length === 0
+                    : false
+                }
+              />
+            </>
+          )}
         </View>
       ) : (
         <View>
           <ButtonGradient
             label={t('Btn.Next')}
             onPress={onPressNext}
-            containerStyles={{paddingTop: heightPercentage(20)}}
+            containerStyles={
+              (styles.btnContainer, {paddingTop: heightPercentage(20)})
+            }
           />
           <Button
             type="border"
@@ -80,6 +102,7 @@ export const FooterContent: React.FC<FooterContentProps> = ({
             borderColor="transparent"
             textStyles={{color: Color.Pink.linear}}
             onPress={onPressGoTo}
+            containerStyles={styles.btnContainer}
           />
         </View>
       )}
@@ -105,6 +128,9 @@ const styles = StyleSheet.create({
   },
   btnContainer: {
     width: widthPercentage(155),
-    aspectRatio: heightPercentage(155 / 44),
+    aspectRatio: heightPercentage(155 / 46),
+  },
+  btnFull: {
+    width: '100%',
   },
 });

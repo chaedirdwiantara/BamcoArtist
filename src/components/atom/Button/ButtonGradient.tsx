@@ -45,7 +45,7 @@ export const ButtonGradient: React.FC<ButtonGradientProps> = (
       onPress={onPress}>
       <LinearGradient
         useAngle
-        colors={colors}
+        colors={disabled ? [Color.Dark[50], Color.Dark[50]] : colors}
         angle={angle}
         style={[styles.gradient, gradientStyles]}>
         <Text style={[styles.text, textStyles]}>{label}</Text>

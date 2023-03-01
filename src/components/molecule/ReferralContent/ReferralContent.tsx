@@ -136,7 +136,7 @@ export const ReferralContent: React.FC<ReferralContentProps> = ({
               disabled={emptyString}
               containerStyles={{
                 width: widthPercentage(155),
-                aspectRatio: heightPercentage(155 / 40),
+                aspectRatio: heightPercentage(155 / 46),
                 backgroundColor: emptyString
                   ? Color.Dark[50]
                   : Color.Pink.linear,
