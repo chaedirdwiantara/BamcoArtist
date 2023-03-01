@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
   },
   btnContainer: {
     width: widthPercentage(155),
-    aspectRatio: heightPercentage(155 / 40),
+    aspectRatio: heightPercentage(155 / 46),
   },
   containerActivated: {
     marginBottom: mvs(40),
