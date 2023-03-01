@@ -70,7 +70,7 @@ const UserInfoCard: FC<UserInfoCardProps> = (props: UserInfoCardProps) => {
       title: t('Musician.Label.Fans'),
     },
     {
-      point: totalFollowing,
+      point: followersCount,
       title: t('Musician.Label.Followers'),
     },
     {
