@@ -44,6 +44,7 @@ export interface ProfileHeaderProps {
   containerStyles?: ViewStyle;
   noEdit?: boolean;
   backIcon?: boolean;
+  onPressImage?: (uri: string) => void;
 }
 
 export const ProfileHeader: React.FC<ProfileHeaderProps> = (
@@ -62,6 +63,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = (
     scrollEffect,
     noEdit,
     backIcon,
+    onPressImage,
   } = props;
 
   const {t} = useTranslation();
@@ -92,43 +94,61 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = (
     );
   };
 
+  const avatarPress = type === 'edit' || avatarUri === '' || avatarUri === null;
+  const backgroundPress =
+    type === 'edit' || backgroundUri === '' || backgroundUri === null;
+
   return (
     <View style={[styles.root, containerStyles]}>
-      <ImageBackground
-        source={{uri: backgroundUri}}
-        resizeMode="cover"
-        style={styles.image}>
-        <View style={styles.bgChild}>
-          <AvatarProfile
-            initialName={initialname(fullname)}
-            imgUri={avatarUri}
-            type={type}
-            showIcon={type === 'edit'}
-            icon={<CameraIcon />}
-            onPress={() => iconPress('avatarUri')}
-          />
-          <Text style={[Typography.Heading5, styles.fullname]}>{fullname}</Text>
-          <Text style={styles.username}>{username}</Text>
+      <TouchableOpacity
+        activeOpacity={backgroundPress ? 1 : 0.7}
+        onPress={() =>
+          backgroundPress ? null : onPressImage && onPressImage(backgroundUri)
+        }>
+        <ImageBackground
+          source={{uri: backgroundUri}}
+          resizeMode="cover"
+          style={styles.image}>
+          <View style={styles.bgChild}>
+            <TouchableOpacity
+              activeOpacity={avatarPress ? 1 : 0.5}
+              onPress={() =>
+                avatarPress ? null : onPressImage && onPressImage(avatarUri)
+              }>
+              <AvatarProfile
+                initialName={initialname(fullname)}
+                imgUri={avatarUri}
+                type={type}
+                showIcon={type === 'edit'}
+                icon={<CameraIcon />}
+                onPress={() => iconPress('avatarUri')}
+              />
+            </TouchableOpacity>
+            <Text style={[Typography.Heading5, styles.fullname]}>
+              {fullname}
+            </Text>
+            <Text style={styles.username}>{username}</Text>
 
-          {type === '' && (
-            <View style={styles.containerFooter}>
-              <Text style={styles.description}>{bio}</Text>
-              {noEdit ? null : (
-                <ButtonGradient
-                  label={t('Profile.Button.Edit')}
-                  gradientStyles={styles.btnContainer}
-                  onPress={() => {
-                    onPress && onPress();
-                  }}
-                />
-              )}
-            </View>
-          )}
+            {type === '' && (
+              <View style={styles.containerFooter}>
+                <Text style={styles.description}>{bio}</Text>
+                {noEdit ? null : (
+                  <ButtonGradient
+                    label={t('Profile.Button.Edit')}
+                    gradientStyles={styles.btnContainer}
+                    onPress={() => {
+                      onPress && onPress();
+                    }}
+                  />
+                )}
+              </View>
+            )}
 
-          {noEdit ? null : iconRight()}
-          {backIcon ? iconLeft() : null}
-        </View>
-      </ImageBackground>
+            {noEdit ? null : iconRight()}
+            {backIcon ? iconLeft() : null}
+          </View>
+        </ImageBackground>
+      </TouchableOpacity>
     </View>
   );
 };

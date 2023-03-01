@@ -37,6 +37,7 @@ import PostListExclusive from '../../../screen/ListCard/PostListExclusive';
 import {ProfileFansResponseType} from '../../../interface/profile.interface';
 import PostListMyPost from '../../../screen/ListCard/PostListMyPost';
 import {dropDownDataCategory, dropDownDataSort} from '../../../data/dropdown';
+import ImageModal from '../../../screen/Detail/ImageModal';
 
 type OnScrollEventHandler = (
   event: NativeSyntheticEvent<NativeScrollEvent>,
@@ -89,6 +90,13 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
     {filterName: 'Musician.Tab.Music'},
     {filterName: 'Musician.Tab.Fans'},
   ]);
+  const [isModalVisible, setModalVisible] = useState<boolean>(false);
+  const [zoomImage, setZoomImage] = useState<string[]>([]);
+
+  const showImage = (uri: string) => {
+    setModalVisible(!isModalVisible);
+    setZoomImage([uri]);
+  };
 
   const filterData = (item: any, index: any) => {
     setSelectedIndex(index);
@@ -125,6 +133,7 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
           scrollEffect={scrollEffect}
           noEdit={!ownProfile}
           backIcon={!ownProfile}
+          onPressImage={showImage}
         />
         <UserInfoCard
           profile={profile}
@@ -224,6 +233,14 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
           )}
         </View>
       </ScrollView>
+
+      <ImageModal
+        toggleModal={() => setModalVisible(!isModalVisible)}
+        modalVisible={isModalVisible}
+        imageIdx={0}
+        dataImage={zoomImage}
+        type={'zoomProfile'}
+      />
     </View>
   );
 };
