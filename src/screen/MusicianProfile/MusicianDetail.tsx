@@ -30,6 +30,7 @@ import PostListExclusive from '../ListCard/PostListExclusive';
 import DataMusician from './DataMusician';
 import {Playlist} from '../../interface/playlist.interface';
 import ListPlaylist from '../ListCard/ListPlaylist';
+import ImageModal from '../Detail/ImageModal';
 
 type OnScrollEventHandler = (
   event: NativeSyntheticEvent<NativeScrollEvent>,
@@ -67,6 +68,13 @@ export const MusicianDetail: React.FC<MusicianDetailProps> = ({
     {filterName: 'Musician.Tab.Music'},
     {filterName: 'Musician.Tab.Fans'},
   ]);
+  const [isModalVisible, setModalVisible] = useState<boolean>(false);
+  const [zoomImage, setZoomImage] = useState<string[]>([]);
+
+  const showImage = (uri: string) => {
+    setModalVisible(!isModalVisible);
+    setZoomImage([uri]);
+  };
 
   const filterData = (item: string, index: number) => {
     setSelectedIndex(index);
@@ -130,6 +138,7 @@ export const MusicianDetail: React.FC<MusicianDetailProps> = ({
           followOnPress={followOnPress}
           unfollowOnPress={unfollowOnPress}
           donateOnPress={donateOnPress}
+          onPressImage={showImage}
         />
         <View style={styles.infoCard}>
           <UserInfoCard
@@ -186,6 +195,14 @@ export const MusicianDetail: React.FC<MusicianDetailProps> = ({
           </View>
         </View>
       </ScrollView>
+
+      <ImageModal
+        toggleModal={() => setModalVisible(!isModalVisible)}
+        modalVisible={isModalVisible}
+        imageIdx={0}
+        dataImage={zoomImage}
+        type={'zoomProfile'}
+      />
     </View>
   );
 };
