@@ -133,3 +133,10 @@ export type ListAllPreference = {
   genre: PreferenceList[];
   expectation: PreferenceList[];
 };
+
+export type LanguageResponseType = {
+  code: number;
+  data: null;
+  message: string;
+  status: number;
+};
