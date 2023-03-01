@@ -11,6 +11,7 @@ import {dataLanguage} from '../../data/Settings/language';
 import {heightPercentage, widthPercentage} from '../../utils';
 import {useTranslation} from 'react-i18next';
 import {storage} from '../../hooks/use-storage.hook';
+import {setLanguageSettings} from '../../api/setting.api';
 
 export const LanguageScreen: React.FC = () => {
   const {t, i18n} = useTranslation();
@@ -38,6 +39,7 @@ export const LanguageScreen: React.FC = () => {
     setShowModal(false);
     i18n.changeLanguage(language);
     storage.set('lang', language);
+    setLanguageSettings(language);
   };
 
   return (

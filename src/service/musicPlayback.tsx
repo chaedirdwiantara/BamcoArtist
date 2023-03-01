@@ -1,4 +1,6 @@
 import TrackPlayer, {Event, RepeatMode, State} from 'react-native-track-player';
+import {listenerLogSong} from '../api/playlist.api';
+import {ListenerLogPropsType} from '../interface/playlist.interface';
 import {usePlayerStore} from '../store/player.store';
 
 let wasPausedByDuck = false;
@@ -66,8 +68,17 @@ export async function PlaybackService() {
     // console.log('Event.PlaybackQueueEnded', event);
   });
 
-  TrackPlayer.addEventListener(Event.PlaybackTrackChanged, event => {
-    // console.log('Event.PlaybackTrackChanged', event);
+  TrackPlayer.addEventListener(Event.PlaybackTrackChanged, async event => {
+    const currentIndex = await TrackPlayer.getCurrentTrack();
+    if (currentIndex) {
+      const track = await TrackPlayer.getTrack(currentIndex);
+      let payload: ListenerLogPropsType = {
+        songId: track?.id,
+        start: '0',
+        end: Math.round(event.position).toString(),
+      };
+      await listenerLogSong(payload);
+    }
   });
 
   TrackPlayer.addEventListener(Event.PlaybackProgressUpdated, async event => {

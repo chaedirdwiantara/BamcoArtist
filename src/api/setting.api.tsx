@@ -15,6 +15,7 @@ import {
   SendReportResponseType,
   PreferenceProps,
   PreferenceResponseType,
+  LanguageResponseType,
 } from '../interface/setting.interface';
 import {ParamsProps} from '../interface/base.interface';
 
@@ -214,6 +215,20 @@ export const getListExpectations = async (
     url: '/expectations',
     method: 'GET',
     params: props,
+  });
+
+  return data;
+};
+
+export const setLanguageSettings = async (
+  lang: string,
+): Promise<LanguageResponseType> => {
+  const {data} = await SsuAPI().request<LanguageResponseType>({
+    url: '/account/add-language',
+    method: 'POST',
+    data: {
+      language: lang,
+    },
   });
 
   return data;

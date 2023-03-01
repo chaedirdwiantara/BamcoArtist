@@ -7,6 +7,8 @@ import {
   PlaylistResponseType,
   PlaylistResponseTypeC,
   AddSongPropsTypeB,
+  ListenerLogPropsType,
+  ListenerLogResponseType,
 } from '../interface/playlist.interface';
 import {ParamsProps} from '../interface/base.interface';
 import {ListSongResponseType} from '../interface/song.interface';
@@ -114,6 +116,21 @@ export const addSongToPlaylist = async (
     url: '/playlists/add-to-my-playlist',
     method: 'POST',
     data: props,
+  });
+
+  return data;
+};
+
+export const listenerLogSong = async (
+  props: ListenerLogPropsType,
+): Promise<ListenerLogResponseType> => {
+  const {data} = await SsuAPI().request<ListenerLogResponseType>({
+    url: `/songs/${props.songId}/listener-log`,
+    method: 'POST',
+    data: {
+      startStreamAt: props.start,
+      endStreamAt: props.end,
+    },
   });
 
   return data;

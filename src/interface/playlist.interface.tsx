@@ -58,3 +58,16 @@ export type PlaylistResponseTypeC = {
   message: string;
   status: number;
 };
+
+export type ListenerLogPropsType = {
+  songId: number;
+  start: string;
+  end: string;
+};
+
+export type ListenerLogResponseType = {
+  code: number;
+  data: null;
+  message: string;
+  status: number;
+};

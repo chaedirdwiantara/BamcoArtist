@@ -9,6 +9,7 @@ const setupAPIClient = () => {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
+      'Accept-Language': storage.getString('lang') ?? 'en',
     },
   });
 
