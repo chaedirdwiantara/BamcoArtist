@@ -39,6 +39,7 @@ interface ModalFilterProps {
   textStyle?: TextStyle;
   icon?: boolean;
   buttonContainerStyle?: ViewStyle;
+  onModalHide?: () => void;
 }
 
 const FilterModal: FC<ModalFilterProps> = (props: ModalFilterProps) => {
@@ -56,6 +57,7 @@ const FilterModal: FC<ModalFilterProps> = (props: ModalFilterProps) => {
     textStyle,
     icon,
     buttonContainerStyle,
+    onModalHide,
   } = props;
 
   const filterButtonHandler = (data: DataDropDownType) => {
@@ -73,7 +75,8 @@ const FilterModal: FC<ModalFilterProps> = (props: ModalFilterProps) => {
       animationIn={'fadeIn'}
       animationOut={'fadeOut'}
       style={{marginHorizontal: 0}}
-      onBackButtonPress={toggleModal}>
+      onBackButtonPress={toggleModal}
+      onModalHide={onModalHide}>
       <View
         style={[
           styles.container,

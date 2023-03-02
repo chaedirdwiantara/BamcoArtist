@@ -602,6 +602,12 @@
     "Update": {
       "Title": "New Version Available",
       "Subtitle": "We added new feature and fix some bug to make your experience better. Please update your application to the latest version."
+    },
+    "ExclusiveContentConfirm": {
+      "Title": "Exclusive Content",
+      "Body":"To Create Exclusive content, you need to set up your exclusive content pricing and duration, do you want to continue?",
+      "ButtonOk": "Yes",
+      "ButtonCancel": "Maybe Later"
     }
   },
   "EmptyState": {

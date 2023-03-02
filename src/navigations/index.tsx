@@ -134,7 +134,7 @@ export type RootStackParams = {
     message?: string;
   };
   ExclusiveContent: undefined;
-  ExclusiveContentSetting: undefined;
+  ExclusiveContentSetting: {type?: string} | undefined;
   Following: undefined;
   ForgotPassword: undefined;
   Language: undefined;
