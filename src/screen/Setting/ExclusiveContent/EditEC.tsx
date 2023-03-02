@@ -101,12 +101,19 @@ export const EditEC: React.FC<CreateProps> = ({data, onPress}) => {
             typography.Button2,
             {color: color.Neutral[50], marginTop: heightPercentage(20)},
           ]}>
-          Pricing Plan
+          {t('Setting.Exclusive.Label.Pricing')}
         </Text>
 
-        <ListItem title={t('ExclusiveContent.Weekly')} description={weekly} />
-        <ListItem title={t('ExclusiveContent.Monthly')} description={monthly} />
-        <ListItem title={t('ExclusiveContent.Yearly')} description={yearly} />
+        <ListItem
+          title={t('Setting.Exclusive.Label.Price')}
+          description={
+            data.pricingPlans[0].durationUnit === 'weekly'
+              ? weekly
+              : data.pricingPlans[0].durationUnit === 'monthly'
+              ? monthly
+              : yearly
+          }
+        />
       </View>
 
       <Button

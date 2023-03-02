@@ -491,12 +491,14 @@
         "Cover": "Exclusive Content Cover",
         "Title": "Title",
         "Description": "描述",
-        "Pricing": "Pricing Plan"
+        "Pricing": "Pricing Plan",
+        "Price": "Exclusive Content Price"
       },
       "Placeholder": {
         "Title": "Add Title",
         "Description": "Add Description about your content",
-        "Price": "Input Price (In Credit)"
+        "Price": "Input Price (In Credit)",
+        "Duration": "Select Duration"
       }
     }
   },
