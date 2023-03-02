@@ -135,7 +135,7 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
 
   const fetchExclusiveContent = () => {
     const id = profileStorage()?.uuid;
-    getExclusiveContent({id});
+    getExclusiveContent({uuid: id});
   };
 
   useEffect(() => {
