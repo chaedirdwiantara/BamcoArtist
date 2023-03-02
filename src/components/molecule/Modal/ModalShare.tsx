@@ -136,18 +136,18 @@ const styles = StyleSheet.create({
     right: 0,
   },
   btnCopy: {
-    width: widthPercentage(327),
-    aspectRatio: heightPercentage(327 / 40),
+    width: width * 0.9,
+    aspectRatio: heightPercentage(327 / 38),
     marginTop: heightPercentage(20),
     backgroundColor: color.Pink[2],
   },
   btnCancel: {
-    width: widthPercentage(327),
-    aspectRatio: heightPercentage(327 / 40),
+    width: width * 0.9,
+    aspectRatio: heightPercentage(327 / 38),
     marginTop: heightPercentage(10),
   },
   containerSong: {
-    width: widthPercentage(327),
+    width: width * 0.9,
     flexDirection: 'row',
     marginBottom: heightPercentage(15),
   },
