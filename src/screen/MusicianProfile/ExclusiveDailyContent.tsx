@@ -64,9 +64,9 @@ const ExclusiveDailyContent = (props: ECProps) => {
           <TouchableOpacity
             style={styles.bottomBody}
             onPress={() =>
-              navigation.navigate(
-                edit ? 'ExclusiveContentSetting' : 'ExclusiveContent',
-              )
+              edit
+                ? navigation.navigate('ExclusiveContentSetting')
+                : navigation.navigate('ExclusiveContent', {data: props})
             }>
             <Text style={styles.bottomBodyText}>
               {edit ? t('ExclusiveContent.Edit') : t('Guest.GetExclusive')}

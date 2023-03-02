@@ -1,4 +1,5 @@
 export interface ListPlanType {
+  id: string;
   title: string;
   subtitle: string;
   coin: string;
@@ -8,6 +9,7 @@ export interface ListPlanType {
 
 export const listPlan: ListPlanType[] = [
   {
+    id: 'weekly',
     title: 'ExclusiveContent.Weekly',
     subtitle:
       'You will get 1 Week exclusive content with 3 days grace period, you can cancel it anytime.',
@@ -16,6 +18,7 @@ export const listPlan: ListPlanType[] = [
     selected: false,
   },
   {
+    id: 'monthly',
     title: 'ExclusiveContent.Monthly',
     subtitle:
       'You will get 1 Month exclusive content with 3 days grace period, you can cancel it anytime.',
@@ -24,6 +27,7 @@ export const listPlan: ListPlanType[] = [
     selected: false,
   },
   {
+    id: 'yearly',
     title: 'ExclusiveContent.Yearly',
     subtitle:
       'You will get 1 Year exclusive content with 3 days grace period, you can cancel it anytime.',

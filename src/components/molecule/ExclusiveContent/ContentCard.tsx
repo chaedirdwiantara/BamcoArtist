@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
     borderColor: color.Dark[300],
     borderWidth: heightPercentage(1),
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     paddingHorizontal: widthPercentage(12),
     paddingVertical: heightPercentage(12),
   },
@@ -54,6 +54,7 @@ const styles = StyleSheet.create({
     height: widthPercentage(80),
     width: widthPercentage(80),
     resizeMode: 'cover',
+    borderRadius: 4,
   },
   containerText: {
     width: '70%',

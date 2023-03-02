@@ -15,14 +15,24 @@ import {ContentCard} from './ContentCard';
 import {TopNavigation} from '../TopNavigation';
 import {ArrowLeftIcon, CoinInput} from '../../../assets/icon';
 import {listPlan} from '../../../data/exclusiveContent';
-import {heightPercentage, width, widthPercentage} from '../../../utils';
+import {
+  heightPercentage,
+  kFormatter,
+  width,
+  widthPercentage,
+} from '../../../utils';
 import {useTranslation} from 'react-i18next';
+import {DataExclusiveResponse} from '../../../interface/setting.interface';
 
 interface ExclusiveProps {
   onPressGoBack: () => void;
+  data: DataExclusiveResponse;
 }
 
-export const ExclusiveContent: React.FC<ExclusiveProps> = ({onPressGoBack}) => {
+export const ExclusiveContent: React.FC<ExclusiveProps> = ({
+  onPressGoBack,
+  data,
+}) => {
   const {t} = useTranslation();
   const [support, setSupport] = useState('');
   const [planList, setPlanList] = useState(listPlan);
@@ -62,8 +72,9 @@ export const ExclusiveContent: React.FC<ExclusiveProps> = ({onPressGoBack}) => {
                 {t('ExclusiveContent.Content')}
               </Text>
               <ContentCard
-                title="Exclusive Content (My Uncut Video) My Lifetime Journey"
-                subtitle="My Up to dated daily life with with my Band, meet with people in event, video when recording music etc"
+                imgUri={data?.coverImage}
+                title={data?.title || ''}
+                subtitle={data?.description || ''}
               />
             </View>
 
@@ -71,14 +82,20 @@ export const ExclusiveContent: React.FC<ExclusiveProps> = ({onPressGoBack}) => {
               <Text style={[typography.Subtitle1, styles.titlePlan]}>
                 {t('ExclusiveContent.Choose')}
               </Text>
-              {planList.map((val, i) => (
-                <PlanCard
-                  key={i}
-                  {...val}
-                  isError={val.selected}
-                  onPressSelected={() => onPressSelected(i)}
-                />
-              ))}
+              {planList.map((val, i) =>
+                val.id === data?.pricingPlans[0].durationUnit ? (
+                  <PlanCard
+                    key={i}
+                    title={val.title}
+                    subtitle={val.subtitle}
+                    coin={kFormatter(data?.pricingPlans[0].price) + '/'}
+                    time={val.time}
+                    isError={val.selected}
+                    onPressSelected={() => onPressSelected(i)}
+                    selected={val.selected}
+                  />
+                ) : null,
+              )}
             </View>
 
             <View>

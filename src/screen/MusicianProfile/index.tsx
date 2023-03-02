@@ -66,6 +66,7 @@ const MusicianProfile: FC<PostDetailProps> = ({route}: PostDetailProps) => {
       getTotalCountProfile({uuid});
       getDetailMusician({id: uuid});
       getPlaylist({uuid});
+      getExclusiveContent({uuid: uuid});
     }, [uuid]),
   );
 
@@ -73,7 +74,6 @@ const MusicianProfile: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   useFocusEffect(
     useCallback(() => {
       getAlbum({uuid: uuid});
-      getExclusiveContent({uuid: uuid});
     }, [uuid]),
   );
 
