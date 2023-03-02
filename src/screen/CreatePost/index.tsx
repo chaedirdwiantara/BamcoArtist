@@ -464,7 +464,11 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
       <View style={styles.container}>
         <TopNavigation.Type1
           // TODO: change text into Public / Exclusive Content
-          title={t('Post.Create.Title')}
+          title={
+            dataAudience === 'Feed.Exclusive'
+              ? t('Post.Create.ExclusiveTitle')
+              : t('Post.Create.PublicTitle')
+          }
           maxLengthTitle={20}
           itemStrokeColor={'white'}
           leftIconAction={navigation.goBack}
@@ -472,43 +476,6 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
         <View style={styles.mainContainer}>
           {/* //! TOP AREA */}
           <View style={styles.topBody}>
-            {/* <View style={styles.userCategory}>
-              <Avatar
-                imgUri={
-                  dataProfile && dataProfile?.data.imageProfileUrls.length > 0
-                    ? dataProfile?.data.imageProfileUrls[0].image
-                    : ''
-                }
-              />
-              <Gap width={12} />
-              <View
-                onLayout={event => {
-                  event.target.measure((x, y, width, height, pageX, pageY) => {
-                    setOffset({
-                      px: pageX,
-                      py: Platform.OS === 'android' ? pageY - barHeight : pageY,
-                    });
-                  });
-                }}
-                style={{opacity: 1}}>
-                <ButtonGradientwithIcon
-                  label={label ? t(label) : t('Post.Create.Category')}
-                  onPress={() =>
-                    setModalVisible({
-                      modalFilter: true,
-                      modalImagePicker: false,
-                      modalSetAudience: false,
-                    })
-                  }
-                  gradientStyles={{}}
-                  textStyles={{
-                    fontFamily: font.InterRegular,
-                    fontWeight: '500',
-                    fontSize: mvs(10),
-                  }}
-                />
-              </View>
-            </View> */}
             <View style={{}}>
               <SsuInput.InputText
                 value={inputText}
@@ -597,37 +564,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
                   </TouchableOpacity>
                 )}
               </View>
-              {/* <View
-                style={styles.dropdownContainer}
-                onLayout={event => {
-                  event.target.measure((x, y, width, height, pageX, pageY) => {
-                    setOffsetAudience({
-                      px: pageX,
-                      py: Platform.OS === 'android' ? pageY - barHeight : pageY,
-                    });
-                  });
-                }}>
-                <Button
-                  label={
-                    dataAudience ? t(dataAudience) : t('Post.Create.Audience')
-                  }
-                  type="border"
-                  containerStyles={{
-                    width: widthResponsive(100),
-                    marginLeft: ms(2.5),
-                  }}
-                  textStyles={{fontSize: mvs(12), fontWeight: '500'}}
-                  borderColor={'transparent'}
-                  typeOfButton={'withIcon'}
-                  onPress={() =>
-                    setModalVisible({
-                      modalFilter: false,
-                      modalImagePicker: false,
-                      modalSetAudience: true,
-                    })
-                  }
-                />
-              </View> */}
+
               <View
                 onLayout={event => {
                   event.target.measure((x, y, width, height, pageX, pageY) => {
@@ -669,18 +606,6 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
               </View>
             </View>
             <View style={styles.textCounter}>
-              {/* <Text
-                style={[
-                  styles.footerText,
-                  {
-                    color:
-                      inputText.length === 400
-                        ? color.Error[400]
-                        : color.Neutral[10],
-                  },
-                ]}>
-                {inputText.length}/400
-              </Text> */}
               {inputText.length === 0 ? (
                 <Button
                   label={t('Post.Title')}

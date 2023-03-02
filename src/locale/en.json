@@ -556,7 +556,8 @@
       "Write": "Write your reply"
     },
     "Create": {
-      "Title": "Create Post",
+      "PublicTitle": "Public Content",
+      "ExclusiveTitle": "Exclusive Content",
       "Category": "Select Category",
       "Write": "Write Something",
       "Audience": "Set Audience",
