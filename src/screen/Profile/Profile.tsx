@@ -19,6 +19,7 @@ import {useProfileHook} from '../../hooks/use-profile.hook';
 import {usePlaylistHook} from '../../hooks/use-playlist.hook';
 import {useMusicianHook} from '../../hooks/use-musician.hook';
 import {ModalLoading} from '../../components/molecule/ModalLoading/ModalLoading';
+import {useSettingHook} from '../../hooks/use-setting.hook';
 
 type ProfileProps = NativeStackScreenProps<MainTabParams, 'Profile'>;
 
@@ -40,6 +41,7 @@ export const ProfileScreen: React.FC<ProfileProps> = ({
   const {playlistLoading, dataPlaylist, getPlaylist} = usePlaylistHook();
   const isFocused = useIsFocused();
   const {isPlaying, showPlayer, hidePlayer} = usePlayerHook();
+  const {dataExclusiveContent, getExclusiveContent} = useSettingHook();
 
   const {dataDetailMusician, dataAlbum, getDetailMusician, getAlbum} =
     useMusicianHook();
@@ -63,6 +65,7 @@ export const ProfileScreen: React.FC<ProfileProps> = ({
         getDetailMusician({id: uuid});
         getAlbum({uuid});
         getPlaylist({uuid});
+        getExclusiveContent({uuid});
       }
     }, [uuid]),
   );
@@ -114,20 +117,19 @@ export const ProfileScreen: React.FC<ProfileProps> = ({
 
   return (
     <View style={styles.root}>
-      {dataProfile && (
-        <ProfileContent
-          profile={profile}
-          goToPlaylist={goToPlaylist}
-          dataPlaylist={dataPlaylist}
-          goToEditProfile={goToEditProfile}
-          onPressGoTo={screenName => onPressGoTo(screenName)}
-          uuid={uuid}
-          dataAlbum={dataAlbum}
-          dataDetailMusician={dataDetailMusician}
-          ownProfile
-          goToFollowers={goToFollowers}
-        />
-      )}
+      <ProfileContent
+        profile={profile}
+        goToPlaylist={goToPlaylist}
+        dataPlaylist={dataPlaylist}
+        goToEditProfile={goToEditProfile}
+        onPressGoTo={screenName => onPressGoTo(screenName)}
+        uuid={uuid}
+        dataAlbum={dataAlbum}
+        dataDetailMusician={dataDetailMusician}
+        ownProfile
+        goToFollowers={goToFollowers}
+        exclusiveContent={dataExclusiveContent ?? undefined}
+      />
 
       <ModalLoading visible={isLoading || playlistLoading} />
     </View>

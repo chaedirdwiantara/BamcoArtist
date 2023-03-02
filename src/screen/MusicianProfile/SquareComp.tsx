@@ -6,6 +6,7 @@ import {
   View,
   TouchableOpacity,
   TouchableOpacityProps,
+  ImageStyle,
 } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import {color} from '../../theme';
@@ -18,6 +19,7 @@ export interface SquareImageProps extends TouchableOpacityProps {
   height?: number;
   id?: number;
   containerStyle?: ViewStyle;
+  radius?: number;
 }
 
 const SquareComp: React.FC<SquareImageProps> = (props: SquareImageProps) => {
@@ -27,6 +29,7 @@ const SquareComp: React.FC<SquareImageProps> = (props: SquareImageProps) => {
     height = undefined,
     id,
     containerStyle,
+    radius,
   } = props;
 
   return (
@@ -39,6 +42,7 @@ const SquareComp: React.FC<SquareImageProps> = (props: SquareImageProps) => {
             width: size,
             height: height,
             aspectRatio: !height ? 1 / 1 : undefined,
+            borderRadius: radius ?? 0,
           },
         ]}
         testID={`Image ${id}`}

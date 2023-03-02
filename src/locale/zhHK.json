@@ -290,7 +290,8 @@
     "Optional": "支援（可選）",
     "InputBonus": "Input Bonus",
     "ErrorCoinBonus": "Insufficient coin, add more coin to give bonus",
-    "ErrorCoinSubs": "Insufficient coin, add more coin to subscribe"
+    "ErrorCoinSubs": "Insufficient coin, add more coin to subscribe",
+    "Edit": "Edit My Exclusive Content"
   },
   "Setting": {
     "Title": "設定",
@@ -641,7 +642,9 @@
     "NoAlbum": "No Album Available.",
     "NoMerch": "未有產品",
     "NoInfo": "No Information Given.",
-    "NoPhoto": "No Photos Available."
+    "NoPhoto": "No Photos Available.",
+    "NoECSetting": "You have not set your exclusive content yet, let’s try to make one",
+    "NoECData": "You don’t have any exclusive content, try to make a new one!"
   },
   "Guest": {
     "Title": "立即註冊與音樂人互動",
