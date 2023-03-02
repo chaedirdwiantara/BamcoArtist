@@ -52,6 +52,7 @@ import {ProfileScreen} from '../screen/Profile/Profile';
 import {EditProfileScreen} from '../screen/Profile/EditProfile';
 import {FollowingScreen} from '../screen/Profile/FollowingScreen';
 import {ExclusiveContentScreen} from '../screen/ExclusiveContent';
+import {FollowersScreen} from '../screen/Profile/ListFollowers';
 
 // Playlist
 import {PlaylistScreen} from '../screen/Playlist/Playlist';
@@ -136,6 +137,9 @@ export type RootStackParams = {
   ExclusiveContent: undefined;
   ExclusiveContentSetting: undefined;
   Following: undefined;
+  Followers: {
+    uuid: string;
+  };
   ForgotPassword: undefined;
   Language: undefined;
   Login: undefined;
@@ -160,7 +164,7 @@ export type RootStackParams = {
   };
   Playlist: {
     id: number;
-    name: string;
+    name?: string;
   };
   Preference: undefined;
   PreferenceSetting: undefined;
@@ -372,6 +376,7 @@ export const RootStackScreen = () => (
       name="ExclusiveContent"
       component={ExclusiveContentScreen}
     />
+    <RootStack.Screen name="Followers" component={FollowersScreen} />
     <RootStack.Screen name="PostDetail" component={PostDetail} />
     <RootStack.Screen name="SearchScreen" component={SearchScreen} />
     <RootStack.Screen name="MusicianProfile" component={MusicianProfile} />

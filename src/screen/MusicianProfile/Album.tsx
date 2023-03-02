@@ -1,15 +1,16 @@
-import {FlatList, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React, {FC} from 'react';
-import {Gap, SquareImage, Title} from '../../components';
-import {heightResponsive, widthResponsive} from '../../utils';
-import {color, font} from '../../theme';
-import {ms} from 'react-native-size-matters';
-import SquareComp from './SquareComp';
-import {AlbumData} from '../../interface/musician.interface';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {ms, mvs} from 'react-native-size-matters';
 import {useNavigation} from '@react-navigation/native';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {RootStackParams} from '../../navigations';
+
+import SquareComp from './SquareComp';
+import {color, font} from '../../theme';
+import {Gap, Title} from '../../components';
 import {dummySongImg} from '../../data/image';
+import {RootStackParams} from '../../navigations';
+import {AlbumData} from '../../interface/musician.interface';
+import {heightResponsive, widthResponsive} from '../../utils';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
 interface AlbumProps {
   title: string;
@@ -30,9 +31,9 @@ const Album: FC<AlbumProps> = (props: AlbumProps) => {
 
   return (
     <View style={{marginHorizontal: widthResponsive(24)}}>
-      <Title text={title} />
+      <Title textStyle={{fontSize: mvs(13)}} text={title} />
       <Gap height={12} />
-      {data ? (
+      {data?.length > 0 ? (
         <View>
           {data.map((item, i) => (
             <TouchableOpacity
@@ -106,6 +107,6 @@ const styles = StyleSheet.create({
     color: color.Neutral[10],
     fontFamily: font.InterRegular,
     fontWeight: '500',
-    fontSize: ms(12),
+    fontSize: ms(14),
   },
 });

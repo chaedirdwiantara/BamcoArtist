@@ -160,3 +160,17 @@ export type CountLikedResponseType = {
   message: string;
   status: number;
 };
+
+export type DataTotalCountPropsType = {
+  uuid: string;
+  countPlaylist: number;
+  countSong: number;
+  countAlbumReleased: number;
+};
+
+export type ProfileCountResponseType = {
+  code: number;
+  data: DataTotalCountPropsType;
+  message: string;
+  status: number;
+};

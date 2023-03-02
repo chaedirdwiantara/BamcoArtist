@@ -108,35 +108,46 @@ const MusicListCard: React.FC<ListProps> = ({
           {singerName}
         </Text>
       </View>
-      {loveIcon && (
-        <TouchableOpacity
-          onPress={likeOnPress}
-          style={styles.containerLoveIcon}>
-          <LoveIcon
-            fill={isLiked ? color.Pink[100] : 'none'}
-            stroke={isLiked ? 'none' : color.Dark[100]}
-          />
-        </TouchableOpacity>
-      )}
-      {rightIcon ? (
-        <TouchableOpacity onPress={onPressIcon}>
-          {rightIconComponent}
-        </TouchableOpacity>
-      ) : (
-        !hideDropdownMore && (
-          <Dropdown.More
-            data={dataFilter ? dataFilter : dataMore}
-            selectedMenu={(data: any) => {
-              onPressMore && onPressMore(data);
-            }}
-            containerStyle={{
-              width: widthPercentage(122),
-              marginLeft: widthPercentage(-110),
-              marginTop: heightPercentage(-8),
-            }}
-          />
-        )
-      )}
+      <TouchableOpacity
+        style={styles.containerIcon}
+        activeOpacity={1}
+        onPress={() => null}>
+        {loveIcon && (
+          <>
+            <Gap width={widthResponsive(20)} />
+            <TouchableOpacity
+              onPress={likeOnPress}
+              style={styles.containerLoveIcon}>
+              <LoveIcon
+                fill={isLiked ? color.Pink[100] : 'none'}
+                stroke={isLiked ? 'none' : color.Dark[100]}
+                width={widthPercentage(24)}
+                height={widthPercentage(24)}
+              />
+            </TouchableOpacity>
+          </>
+        )}
+        {rightIcon ? (
+          <TouchableOpacity onPress={onPressIcon}>
+            {rightIconComponent}
+          </TouchableOpacity>
+        ) : (
+          !hideDropdownMore && (
+            <Dropdown.More
+              data={dataFilter ? dataFilter : dataMore}
+              selectedMenu={(data: any) => {
+                onPressMore && onPressMore(data);
+              }}
+              containerStyle={{
+                width: widthPercentage(122),
+                marginLeft: widthPercentage(-110),
+                marginTop: heightPercentage(-8),
+              }}
+              sizeIcon={widthPercentage(3)}
+            />
+          )
+        )}
+      </TouchableOpacity>
     </TouchableOpacity>
   );
 };
@@ -183,6 +194,12 @@ const styles = StyleSheet.create({
   },
   dotsButton: {
     justifyContent: 'center',
+  },
+  containerIcon: {
+    zIndex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   containerLoveIcon: {
     width: widthPercentage(30),

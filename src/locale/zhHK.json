@@ -9,6 +9,7 @@
     "Thanks": "謝謝你！",
     "LinkCopied": "Link have been copied to clipboard!",
     "Followers": "追蹤者",
+    "FollowYou": "Follow you",
     "Listeners": "人聽過",
     "Share": {
       "Feed": "Share Feed",
@@ -212,7 +213,7 @@
   },
   "Profile": {
     "Label": {
-      "Description": "我是來支持音樂人的",
+      "Description": "I'm here to share my music career and connect further with my fans!",
       "Following": "追蹤中",
       "Liked": "喜歡的歌曲",
       "Point": "積分",
@@ -314,7 +315,8 @@
         "Country": "Select Country",
         "City": "Select City",
         "Member": "Add Member",
-        "Active": "Select Year"
+        "Active": "Select Year",
+        "Label": "Add Label Name"
       }
     },
     "Password": {
@@ -620,10 +622,10 @@
       "Song": "Song not found",
       "Fans": "Fans not found"
     },
-    "NoAlbum": "No Album Available",
+    "NoAlbum": "No Album Available.",
     "NoMerch": "未有產品",
     "NoInfo": "No Information Given.",
-    "NoPhoto": "No Photos Available"
+    "NoPhoto": "No Photos Available."
   },
   "Guest": {
     "Title": "立即註冊與音樂人互動",

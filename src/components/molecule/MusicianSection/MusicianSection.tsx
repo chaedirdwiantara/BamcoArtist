@@ -85,10 +85,14 @@ const MusicianSection: React.FC<MusicianProps> = (props: MusicianProps) => {
   const [trigger2ndModal, setTrigger2ndModal] = useState<boolean>(false);
 
   const handleNavigate = () => {
-    if (type === 'fans') {
-      navigation.navigate('OtherUserProfile', {id: userId});
+    if (userId === profileStorage()?.uuid) {
+      navigation2.navigate('Profile', {});
     } else {
-      navigation.navigate('MusicianProfile', {id: userId});
+      if (type === 'fans') {
+        navigation.navigate('OtherUserProfile', {id: userId});
+      } else {
+        navigation.navigate('MusicianProfile', {id: userId});
+      }
     }
   };
 
@@ -150,6 +154,7 @@ const MusicianSection: React.FC<MusicianProps> = (props: MusicianProps) => {
         dataFilter={newDataMore}
         onPressMore={resultDataMore}
         activeMore={!self}
+        self={self}
         onPressImage={handleNavigate}
         {...props}
       />

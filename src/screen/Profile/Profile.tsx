@@ -9,6 +9,7 @@ import {
   NativeStackNavigationProp,
   NativeStackScreenProps,
 } from '@react-navigation/native-stack';
+import {useTranslation} from 'react-i18next';
 
 import Color from '../../theme/Color';
 import {MainTabParams, RootStackParams} from '../../navigations';
@@ -25,9 +26,17 @@ export const ProfileScreen: React.FC<ProfileProps> = ({
   route,
 }: ProfileProps) => {
   // const {showToast, deletePlaylist} = route.params;
+
+  const {t} = useTranslation();
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
-  const {isLoading, dataProfile, getProfileUser} = useProfileHook();
+  const {
+    isLoading,
+    dataProfile,
+    dataCountProfile,
+    getProfileUser,
+    getTotalCountProfile,
+  } = useProfileHook();
   const {playlistLoading, dataPlaylist, getPlaylist} = usePlaylistHook();
   const isFocused = useIsFocused();
   const {isPlaying, showPlayer, hidePlayer} = usePlayerHook();
@@ -50,6 +59,7 @@ export const ProfileScreen: React.FC<ProfileProps> = ({
     useCallback(() => {
       getProfileUser();
       if (uuid) {
+        getTotalCountProfile({uuid});
         getDetailMusician({id: uuid});
         getAlbum({uuid});
         getPlaylist({uuid});
@@ -73,6 +83,10 @@ export const ProfileScreen: React.FC<ProfileProps> = ({
     navigation.navigate('Playlist', {id, name});
   };
 
+  const goToFollowers = () => {
+    uuid && navigation.navigate('Followers', {uuid});
+  };
+
   const banners =
     dataProfile?.data !== undefined && dataProfile?.data.banners?.length > 0
       ? dataProfile?.data.banners[2].image
@@ -87,30 +101,33 @@ export const ProfileScreen: React.FC<ProfileProps> = ({
   const profile = {
     fullname: dataProfile?.data.fullname,
     username: '@' + dataProfile?.data.username,
-    bio: dataProfile?.data.bio || "I'm here to support the musician",
+    bio: dataProfile?.data.bio || t('Profile.Label.Description'),
     backgroundUri: banners,
     avatarUri: avatar,
     totalFollowing: dataProfile?.data.following,
     totalFollowers: dataProfile?.data.followers,
     totalFans: dataProfile?.data.fans,
-    totalRelease: 0,
-    totalPlaylist: 0,
+    totalRelease: dataCountProfile?.countAlbumReleased,
+    totalPlaylist: dataCountProfile?.countPlaylist,
     rank: 0,
   };
 
   return (
     <View style={styles.root}>
-      <ProfileContent
-        profile={profile}
-        goToPlaylist={goToPlaylist}
-        dataPlaylist={dataPlaylist}
-        goToEditProfile={goToEditProfile}
-        onPressGoTo={screenName => onPressGoTo(screenName)}
-        uuid={uuid}
-        dataAlbum={dataAlbum}
-        dataDetailMusician={dataDetailMusician}
-        ownProfile
-      />
+      {dataProfile && (
+        <ProfileContent
+          profile={profile}
+          goToPlaylist={goToPlaylist}
+          dataPlaylist={dataPlaylist}
+          goToEditProfile={goToEditProfile}
+          onPressGoTo={screenName => onPressGoTo(screenName)}
+          uuid={uuid}
+          dataAlbum={dataAlbum}
+          dataDetailMusician={dataDetailMusician}
+          ownProfile
+          goToFollowers={goToFollowers}
+        />
+      )}
 
       <ModalLoading visible={isLoading || playlistLoading} />
     </View>

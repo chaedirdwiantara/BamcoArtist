@@ -227,6 +227,10 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
     isLogin ? goToScreen('TopupCoin') : setModalGuestVisible(true);
   };
 
+  if (dataProfile?.data === undefined) {
+    return <View style={styles.root} />;
+  }
+
   return (
     <View style={styles.root}>
       <SsuStatusBar type="black" />

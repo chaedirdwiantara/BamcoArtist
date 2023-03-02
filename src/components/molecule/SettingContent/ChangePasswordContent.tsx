@@ -111,83 +111,93 @@ export const ChangePasswordContent: React.FC<ChangePasswordProps> = ({
         leftIcon={<ArrowLeftIcon />}
         itemStrokeColor={color.Neutral[10]}
         leftIconAction={onPressGoBack}
-        containerStyles={{marginBottom: heightPercentage(15)}}
+        containerStyles={{
+          marginBottom: heightPercentage(15),
+          paddingHorizontal: widthResponsive(15),
+        }}
       />
 
-      <Controller
-        name="password"
-        control={control}
-        render={({field: {onChange, value}}) => (
-          <SsuInput.InputLabel
-            label={t('Setting.Password.Label.Old') || ''}
-            password
-            value={value}
-            onChangeText={text => {
-              onChange(text);
-              setIsError(false);
-            }}
-            placeholder={t('Setting.Password.Label.Old') || ''}
-            isError={errors?.password ? true : false}
-            errorMsg={errors?.password?.message}
-            containerStyles={{marginTop: heightPercentage(15)}}
-          />
-        )}
-      />
+      <View
+        style={{
+          paddingHorizontal: widthResponsive(20),
+        }}>
+        <Controller
+          name="password"
+          control={control}
+          render={({field: {onChange, value}}) => (
+            <SsuInput.InputLabel
+              label={t('Setting.Password.Label.Old') || ''}
+              password
+              value={value}
+              onChangeText={text => {
+                onChange(text);
+                setIsError(false);
+              }}
+              placeholder={t('Setting.Password.Label.Old') || ''}
+              isError={errors?.password ? true : false}
+              errorMsg={errors?.password?.message}
+              containerStyles={{marginTop: heightPercentage(15)}}
+            />
+          )}
+        />
 
-      {isError ? (
-        <View style={styles.containerErrorMsg}>
-          <ErrorIcon fill={color.Error[400]} />
-          <Gap width={ms(4)} />
-          <Text style={styles.errorMsg}>{errorMsg}</Text>
-        </View>
-      ) : null}
+        {isError ? (
+          <View style={styles.containerErrorMsg}>
+            <ErrorIcon fill={color.Error[400]} />
+            <Gap width={ms(4)} />
+            <Text style={styles.errorMsg}>{errorMsg}</Text>
+          </View>
+        ) : null}
 
-      <Controller
-        name="newPassword"
-        control={control}
-        render={({field: {onChange, value}}) => (
-          <SsuInput.InputLabel
-            label={t('Setting.Password.Label.New') || ''}
-            password
-            value={value}
-            onChangeText={text => {
-              onChange(text);
-              setIsError(false);
-            }}
-            placeholder={t('Setting.Password.Label.New') || ''}
-            isError={errors?.newPassword ? true : false}
-            errorMsg={errors?.newPassword?.message}
-            containerStyles={{marginTop: heightPercentage(15)}}
-          />
-        )}
-      />
+        <Controller
+          name="newPassword"
+          control={control}
+          render={({field: {onChange, value}}) => (
+            <SsuInput.InputLabel
+              label={t('Setting.Password.Label.New') || ''}
+              password
+              value={value}
+              onChangeText={text => {
+                onChange(text);
+                setIsError(false);
+              }}
+              placeholder={t('Setting.Password.Label.New') || ''}
+              isError={errors?.newPassword ? true : false}
+              errorMsg={errors?.newPassword?.message}
+              containerStyles={{marginTop: heightPercentage(15)}}
+            />
+          )}
+        />
 
-      <Controller
-        name="repeatPassword"
-        control={control}
-        render={({field: {onChange, value}}) => (
-          <SsuInput.InputLabel
-            label={t('Setting.Password.Label.Repeat') || ''}
-            password
-            value={value}
-            onChangeText={text => {
-              onChange(text);
-              setIsError(false);
-            }}
-            placeholder={t('Setting.Password.Label.Repeat') || ''}
-            isError={errors?.repeatPassword ? true : false}
-            errorMsg={errors?.repeatPassword?.message}
-            containerStyles={{marginTop: heightPercentage(15)}}
-          />
-        )}
-      />
+        <Controller
+          name="repeatPassword"
+          control={control}
+          render={({field: {onChange, value}}) => (
+            <SsuInput.InputLabel
+              label={t('Setting.Password.Label.Repeat') || ''}
+              password
+              value={value}
+              onChangeText={text => {
+                onChange(text);
+                setIsError(false);
+              }}
+              placeholder={t('Setting.Password.Label.Repeat') || ''}
+              isError={errors?.repeatPassword ? true : false}
+              errorMsg={errors?.repeatPassword?.message}
+              containerStyles={{marginTop: heightPercentage(15)}}
+            />
+          )}
+        />
 
-      <Button
-        label={t('Setting.Password.Title')}
-        onPress={handleSubmit(onPressSave)}
-        containerStyles={disabledButton ? styles.buttonDisabled : styles.button}
-        disabled={disabledButton}
-      />
+        <Button
+          label={t('Setting.Password.Title')}
+          onPress={handleSubmit(onPressSave)}
+          containerStyles={
+            disabledButton ? styles.buttonDisabled : styles.button
+          }
+          disabled={disabledButton}
+        />
+      </View>
 
       <SsuToast
         modalVisible={toastVisible}
@@ -215,7 +225,6 @@ const styles = StyleSheet.create({
   root: {
     flex: 1,
     backgroundColor: color.Dark[800],
-    paddingHorizontal: widthPercentage(15),
   },
   containerErrorMsg: {
     width: '100%',

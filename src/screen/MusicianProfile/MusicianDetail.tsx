@@ -28,7 +28,9 @@ import PostListPublic from '../ListCard/PostListPublic';
 import {dropDownDataCategory, dropDownDataSort} from '../../data/dropdown';
 import PostListExclusive from '../ListCard/PostListExclusive';
 import DataMusician from './DataMusician';
-import {useTranslation} from 'react-i18next';
+import {Playlist} from '../../interface/playlist.interface';
+import ListPlaylist from '../ListCard/ListPlaylist';
+import ImageModal from '../Detail/ImageModal';
 
 type OnScrollEventHandler = (
   event: NativeSyntheticEvent<NativeScrollEvent>,
@@ -37,20 +39,24 @@ interface MusicianDetailProps {
   profile: DataDetailMusician;
   uuid: string;
   dataAlbum: AlbumData[];
+  dataPlaylist: Playlist[];
   followOnPress: () => void;
   unfollowOnPress: () => void;
   donateOnPress: () => void;
   followersCount: number;
+  goToPlaylist: (id: number) => void;
 }
 
 export const MusicianDetail: React.FC<MusicianDetailProps> = ({
   profile,
   uuid,
   dataAlbum,
+  dataPlaylist,
   followOnPress,
   unfollowOnPress,
   donateOnPress,
   followersCount,
+  goToPlaylist,
 }) => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
@@ -62,6 +68,13 @@ export const MusicianDetail: React.FC<MusicianDetailProps> = ({
     {filterName: 'Musician.Tab.Music'},
     {filterName: 'Musician.Tab.Fans'},
   ]);
+  const [isModalVisible, setModalVisible] = useState<boolean>(false);
+  const [zoomImage, setZoomImage] = useState<string[]>([]);
+
+  const showImage = (uri: string) => {
+    setModalVisible(!isModalVisible);
+    setZoomImage([uri]);
+  };
 
   const filterData = (item: string, index: number) => {
     setSelectedIndex(index);
@@ -71,6 +84,10 @@ export const MusicianDetail: React.FC<MusicianDetailProps> = ({
     let offsetY = event.nativeEvent.contentOffset.y;
     const scrolled = offsetY > 10;
     setScrollEffect(scrolled);
+  };
+
+  const goToFollowers = () => {
+    navigation.navigate('Followers', {uuid});
   };
 
   const musicianProfile = {
@@ -85,8 +102,8 @@ export const MusicianDetail: React.FC<MusicianDetailProps> = ({
         : '',
     totalFollowers: profile.followers,
     totalFans: profile.fans,
-    totalRelease: 0,
-    totalPlaylist: 0,
+    totalRelease: profile.countAlbumReleased,
+    totalPlaylist: profile.countPlaylist,
     rank: 0,
   };
 
@@ -121,10 +138,11 @@ export const MusicianDetail: React.FC<MusicianDetailProps> = ({
           followOnPress={followOnPress}
           unfollowOnPress={unfollowOnPress}
           donateOnPress={donateOnPress}
+          onPressImage={showImage}
         />
         <View style={styles.infoCard}>
           <UserInfoCard
-            onPress={() => {}}
+            onPress={goToFollowers}
             profile={musicianProfile}
             followersCount={followersCount}
           />
@@ -152,10 +170,39 @@ export const MusicianDetail: React.FC<MusicianDetailProps> = ({
                   dataLeftDropdown={dropDownDataSort}
                 />
               </View>
+            ) : filter[selectedIndex].filterName ===
+              'Musician.Tab.Exclusive' ? (
+              <View
+                style={{
+                  paddingHorizontal: widthResponsive(24),
+                  width: '100%',
+                }}>
+                <PostListExclusive
+                  uuidMusician={uuid}
+                  dataRightDropdown={dropDownDataCategory}
+                  dataLeftDropdown={dropDownDataSort}
+                />
+              </View>
+            ) : filter[selectedIndex].filterName === 'Musician.Tab.Music' ? (
+              <View style={{paddingHorizontal: widthResponsive(30)}}>
+                <ListPlaylist
+                  data={dataPlaylist}
+                  onPress={goToPlaylist}
+                  scrollable={false}
+                />
+              </View>
             ) : null}
           </View>
         </View>
       </ScrollView>
+
+      <ImageModal
+        toggleModal={() => setModalVisible(!isModalVisible)}
+        modalVisible={isModalVisible}
+        imageIdx={0}
+        dataImage={zoomImage}
+        type={'zoomProfile'}
+      />
     </View>
   );
 };

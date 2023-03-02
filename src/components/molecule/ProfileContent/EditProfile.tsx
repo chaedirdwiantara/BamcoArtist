@@ -83,7 +83,7 @@ export const EditProfile: React.FC<EditProfileProps> = ({
       let newDataResponseImg: string[] = [];
       profile.photos.map((val: {images: {image: string}[]}, i: number) => {
         if (val.images.length > 0) {
-          const newPath = val.images[2]?.image;
+          const newPath = val.images[0]?.image;
           newPhotos.push({
             path: newPath,
             size: i,
@@ -282,8 +282,8 @@ export const EditProfile: React.FC<EditProfileProps> = ({
 
         <View style={styles.textAreaContainer}>
           <SsuInput.InputLabel
-            label={t('Musician.Label.Website')}
-            placeholder={t('Profile.Edit.Website')}
+            label={t('Musician.Label.Website') || ''}
+            placeholder={t('Profile.Edit.Website') || ''}
             value={website}
             onChangeText={(newText: string) => setWebsite(newText)}
             containerStyles={{marginTop: heightPercentage(15)}}

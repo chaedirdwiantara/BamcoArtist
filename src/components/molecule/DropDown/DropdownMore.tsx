@@ -1,13 +1,13 @@
 import React, {useEffect, useState} from 'react';
+import {StyleSheet, View, ViewStyle} from 'react-native';
 import {useTranslation} from 'react-i18next';
-import {StyleSheet, TouchableOpacity, View, ViewStyle} from 'react-native';
-import {Dropdown} from 'react-native-element-dropdown';
 import {mvs} from 'react-native-size-matters';
-import {ThreeDotsIcon} from '../../../assets/icon';
-import {DataDropDownType} from '../../../data/dropdown';
-import {color, font} from '../../../theme';
-import {normalize, widthPercentage} from '../../../utils';
+import {Dropdown} from 'react-native-element-dropdown';
+
 import {Gap} from '../../atom';
+import {normalize} from '../../../utils';
+import {color, font} from '../../../theme';
+import {DataDropDownType} from '../../../data/dropdown';
 
 interface dataProps {
   label: string;
@@ -24,6 +24,7 @@ interface DropdownMoreProps {
   idComment?: string;
   selectedIdComment?: (idComment: string) => void;
   translation?: boolean;
+  sizeIcon?: number;
 }
 
 const itemBg = color.Dark[900];
@@ -42,6 +43,7 @@ const DropdownMore: React.FC<DropdownMoreProps> = (
     idComment,
     selectedIdComment,
     translation,
+    sizeIcon,
   } = props;
   const [value, setValue] = useState(null);
   const [isFocus, setIsFocus] = useState(false);
@@ -57,6 +59,8 @@ const DropdownMore: React.FC<DropdownMoreProps> = (
     });
     setDataTranslation(setTranslation);
   }, []);
+
+  const newSizePointIcon = sizeIcon ? sizeIcon : 2.5;
 
   return (
     <View style={styles.container}>
@@ -88,30 +92,33 @@ const DropdownMore: React.FC<DropdownMoreProps> = (
         activeColor={itemBg}
         renderRightIcon={() => (
           <View
-            style={{
-              paddingHorizontal: 8,
-              paddingVertical: 3,
-            }}>
+            style={[
+              {
+                paddingHorizontal: 8,
+                paddingVertical: 3,
+              },
+              iconStyle,
+            ]}>
             <View
               style={{
-                width: 2.5,
-                height: 2.5,
+                width: newSizePointIcon,
+                height: newSizePointIcon,
                 borderRadius: 50,
                 backgroundColor: iconFill ? iconFill : color.Neutral[10],
               }}></View>
-            <Gap height={2.5} />
+            <Gap height={newSizePointIcon} />
             <View
               style={{
-                width: 2.5,
-                height: 2.5,
+                width: newSizePointIcon,
+                height: newSizePointIcon,
                 borderRadius: 50,
                 backgroundColor: iconFill ? iconFill : color.Neutral[10],
               }}></View>
-            <Gap height={2.5} />
+            <Gap height={newSizePointIcon} />
             <View
               style={{
-                width: 2.5,
-                height: 2.5,
+                width: newSizePointIcon,
+                height: newSizePointIcon,
                 borderRadius: 50,
                 backgroundColor: iconFill ? iconFill : color.Neutral[10],
               }}></View>

@@ -1,18 +1,27 @@
+import {useState} from 'react';
 import {
-  albumSearch,
+  songSearch,
   fansSearch,
+  albumSearch,
   musicianSearch,
   playlistSearch,
-  songSearch,
+  listFollowers,
 } from '../api/search.api';
-import {ListDataSearchSongs, SearchProps} from '../interface/search.interface';
+import {
+  SearchProps,
+  ListDataSearchFans,
+  ListDataSearchSongs,
+  FollowersProps,
+} from '../interface/search.interface';
 import {searchEvent} from '../api/event.api';
-import {useState} from 'react';
 
 export const useSearchHook = () => {
   const [dataSearchSongs, setDataSearchSongs] = useState<ListDataSearchSongs[]>(
     [],
   );
+  const [searchLoading, setSearchLoading] = useState<boolean>(false);
+  const [dataFollowers, setDataFollowers] = useState<ListDataSearchFans[]>([]);
+
   const getSearchFans = async (props?: SearchProps) => {
     try {
       const response = await fansSearch(props);
@@ -97,14 +106,29 @@ export const useSearchHook = () => {
     }
   };
 
+  const getListFollowers = async (props: FollowersProps) => {
+    setSearchLoading(true);
+    try {
+      const response = await listFollowers(props);
+      setDataFollowers(response.data);
+    } catch (error) {
+      setDataFollowers([]);
+    } finally {
+      setSearchLoading(false);
+    }
+  };
+
   return {
+    searchLoading,
+    dataFollowers,
     dataSearchSongs,
     getSearchFans,
-    getSearchMusicians,
-    getSearchAlbums,
     getSearchSongs,
-    getSearchPlaylists,
+    getSearchAlbums,
     getSearchMerchs,
     getSearchEvents,
+    getListFollowers,
+    getSearchMusicians,
+    getSearchPlaylists,
   };
 };
