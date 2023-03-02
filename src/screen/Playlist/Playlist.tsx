@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {
   useFocusEffect,
@@ -44,13 +44,19 @@ export const PlaylistScreen: React.FC<PlaylistProps> = ({
   } = usePlayerHook();
 
   const isFocused = useIsFocused();
+  const [fetchListSong, setFetchListSong] = useState<boolean>(false);
 
   useFocusEffect(
     useCallback(() => {
       getDetailPlaylist({id: route.params.id});
-      getListSongsPlaylist({id: route.params.id});
       storage.set('withoutBottomTab', true);
     }, []),
+  );
+
+  useFocusEffect(
+    useCallback(() => {
+      getListSongsPlaylist({id: route.params.id});
+    }, [fetchListSong]),
   );
 
   useEffect(() => {
@@ -86,6 +92,14 @@ export const PlaylistScreen: React.FC<PlaylistProps> = ({
     }
   };
 
+  const goToAlbum = (id: number) => {
+    navigation.navigate('Album', {id});
+  };
+
+  const goToDetailSong = (id: number) => {
+    navigation.navigate('ShowCredit', {songId: id});
+  };
+
   const onPressSong = (val: SongList | null) => {
     addPlaylist({
       dataSong: dataSongsPlaylist !== undefined ? dataSongsPlaylist : [],
@@ -118,6 +132,10 @@ export const PlaylistScreen: React.FC<PlaylistProps> = ({
           playerVisible={playerVisible}
           isPlaying={isPlaying}
           handlePlayPaused={handlePlayPaused}
+          playlistId={route.params.id}
+          setFetchListSong={() => setFetchListSong(!fetchListSong)}
+          goToAlbum={goToAlbum}
+          goToDetailSong={goToDetailSong}
         />
       )}
 
