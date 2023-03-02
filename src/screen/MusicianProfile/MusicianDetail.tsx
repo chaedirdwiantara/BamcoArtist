@@ -31,6 +31,8 @@ import DataMusician from './DataMusician';
 import {Playlist} from '../../interface/playlist.interface';
 import ListPlaylist from '../ListCard/ListPlaylist';
 import ImageModal from '../Detail/ImageModal';
+import {useTranslation} from 'react-i18next';
+import {DataExclusiveResponse} from '../../interface/setting.interface';
 
 type OnScrollEventHandler = (
   event: NativeSyntheticEvent<NativeScrollEvent>,
@@ -45,6 +47,7 @@ interface MusicianDetailProps {
   donateOnPress: () => void;
   followersCount: number;
   goToPlaylist: (id: number) => void;
+  exclusiveContent?: DataExclusiveResponse;
 }
 
 export const MusicianDetail: React.FC<MusicianDetailProps> = ({
@@ -57,6 +60,7 @@ export const MusicianDetail: React.FC<MusicianDetailProps> = ({
   donateOnPress,
   followersCount,
   goToPlaylist,
+  exclusiveContent,
 }) => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
@@ -146,7 +150,8 @@ export const MusicianDetail: React.FC<MusicianDetailProps> = ({
             profile={musicianProfile}
             followersCount={followersCount}
           />
-          <ExclusiveDailyContent />
+          {exclusiveContent && <ExclusiveDailyContent {...exclusiveContent} />}
+
           <Gap height={10} />
           <View style={styles.containerContent}>
             <TabFilter.Type1
