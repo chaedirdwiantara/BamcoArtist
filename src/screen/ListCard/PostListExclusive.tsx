@@ -12,8 +12,7 @@ import {
 import {ms, mvs} from 'react-native-size-matters';
 import {
   Button,
-  CommentInputModal,
-  Dropdown,
+  ButtonGradient,
   FilterModal,
   Gap,
   ListCard,
@@ -52,6 +51,8 @@ import {usePlayerHook} from '../../hooks/use-player.hook';
 import MusicListPreview from '../../components/molecule/MusicPreview/MusicListPreview';
 import {useTranslation} from 'react-i18next';
 import {useCreditHook} from '../../hooks/use-credit.hook';
+import {useSettingHook} from '../../hooks/use-setting.hook';
+import {profileStorage} from '../../hooks/use-storage.hook';
 
 const {height} = Dimensions.get('screen');
 
@@ -70,6 +71,7 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
   const {dataRightDropdown, dataLeftDropdown, uuidMusician = ''} = props;
 
+  const {dataExclusiveContent, getExclusiveContent} = useSettingHook();
   const [dataProfileImg, setDataProfileImg] = useState<string>('');
   const [recorder, setRecorder] = useState<string[]>([]);
   const [selectedId, setSelectedId] = useState<string[]>();
@@ -110,7 +112,6 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
     getListDataMyPost,
     setLikePost,
     setUnlikePost,
-    setCommentToPost,
     setDeletePost,
   } = useFeedHook();
 
@@ -132,8 +133,14 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
     getCreditCount();
   }, [modalDonate]);
 
+  const fetchExclusiveContent = () => {
+    const id = profileStorage()?.uuid;
+    getExclusiveContent({uuid: id});
+  };
+
   useEffect(() => {
     getProfileUser();
+    fetchExclusiveContent();
   }, []);
 
   useEffect(() => {
@@ -458,175 +465,209 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
           />
         </View>
       </View>
-      {dataMain !== null && dataMain.length !== 0 ? (
-        <View style={{flex: 1, marginHorizontal: widthResponsive(-24)}}>
-          <FlatList
-            data={dataMain}
-            showsVerticalScrollIndicator={false}
-            keyExtractor={(_, index) => index.toString()}
-            contentContainerStyle={{
-              flexGrow: 1,
-              paddingBottom:
-                uuidMusician !== ''
-                  ? undefined
-                  : height >= 800
-                  ? heightResponsive(220)
-                  : heightResponsive(160),
-            }}
-            onEndReached={handleEndScroll}
-            renderItem={({item}) => (
-              <>
-                <ListCard.PostList
-                  toDetailOnPress={() =>
-                    handleToDetailMusician(item.musician.uuid)
-                  }
-                  musicianName={item.musician.fullname}
-                  musicianId={`@${item.musician.username}`}
-                  imgUri={
-                    item.musician.imageProfileUrls.length !== 0
-                      ? item.musician.imageProfileUrls[0]?.image
-                      : ''
-                  }
-                  postDate={dateFormat(item.createdAt)}
-                  category={categoryNormalize(item.category)}
-                  onPress={() => cardOnPress(item)}
-                  likeOnPress={() => likeOnPress(item.id, item.isLiked)}
-                  likePressed={
-                    selectedId === undefined
-                      ? item.isLiked
-                      : selectedId.includes(item.id) &&
-                        recorder.includes(item.id)
-                      ? true
-                      : !selectedId.includes(item.id) &&
-                        recorder.includes(item.id)
-                      ? false
-                      : !selectedId.includes(item.id) &&
-                        !recorder.includes(item.id)
-                      ? item.isLiked
-                      : item.isLiked
-                  }
-                  likeCount={
-                    selectedId === undefined
-                      ? item.likesCount
-                      : selectedId.includes(item.id) &&
-                        recorder.includes(item.id) &&
-                        item.isLiked === true
-                      ? item.likesCount
-                      : selectedId.includes(item.id) &&
-                        recorder.includes(item.id) &&
-                        item.isLiked === false
-                      ? item.likesCount + 1
-                      : !selectedId.includes(item.id) &&
-                        recorder.includes(item.id) &&
-                        item.isLiked === true
-                      ? item.likesCount - 1
-                      : !selectedId.includes(item.id) &&
-                        recorder.includes(item.id) &&
-                        item.isLiked === false
-                      ? item.likesCount
-                      : item.likesCount
-                  }
-                  tokenOnPress={tokenOnPress}
-                  shareOnPress={shareOnPress}
-                  commentCount={item.commentsCount}
-                  myPost={item.musician.uuid === dataProfile?.data.uuid}
-                  selectedMenu={setSelectedMenu}
-                  idPost={item.id}
-                  selectedIdPost={setSelectedIdPost}
-                  children={
-                    <View style={{width: '100%'}}>
-                      <Text style={styles.childrenPostTitle}>
-                        {elipsisText(item.caption, 600)}
-                      </Text>
-                      {item.images !== null ? (
-                        <>
-                          <Gap height={4} />
-                          <View
-                            style={{
-                              flexDirection: 'row',
-                            }}>
-                            <View style={{height: '100%', width: '100%'}}>
-                              <ImageList
-                                imgData={item.images}
-                                width={143}
-                                height={69.5}
-                                heightType2={142}
-                                widthType2={289}
-                                onPress={() => {}}
-                              />
-                              {item.images.length === 0 &&
-                              item.quoteToPost.encodeHlsUrl ? (
-                                <MusicListPreview
-                                  hideClose
-                                  targetId={item.quoteToPost.targetId}
-                                  targetType={item.quoteToPost.targetType}
-                                  title={item.quoteToPost.title}
-                                  musician={item.quoteToPost.musician}
-                                  coverImage={
-                                    item.quoteToPost.coverImage[1]?.image !==
-                                    undefined
-                                      ? item.quoteToPost.coverImage[1].image
-                                      : ''
-                                  }
-                                  encodeDashUrl={item.quoteToPost.encodeDashUrl}
-                                  encodeHlsUrl={item.quoteToPost.encodeHlsUrl}
-                                  startAt={item.quoteToPost.startAt}
-                                  endAt={item.quoteToPost.endAt}
-                                  postList={item}
-                                  onPress={onPressPlaySong}
-                                  isPlay={isPlaying}
-                                  playOrPause={handlePausePlay}
-                                  pauseModeOn={pauseModeOn}
-                                  currentProgress={playerProgress.position}
-                                  duration={playerProgress.duration}
-                                  seekPlayer={seekPlayer}
-                                  isIdNowPlaying={item.id === idNowPlaying}
+      {dataExclusiveContent ? (
+        dataMain !== null && dataMain.length !== 0 ? (
+          <View style={{flex: 1, marginHorizontal: widthResponsive(-24)}}>
+            <FlatList
+              data={dataMain}
+              showsVerticalScrollIndicator={false}
+              keyExtractor={(_, index) => index.toString()}
+              contentContainerStyle={{
+                flexGrow: 1,
+                paddingBottom:
+                  uuidMusician !== ''
+                    ? undefined
+                    : height >= 800
+                    ? heightResponsive(220)
+                    : heightResponsive(160),
+              }}
+              onEndReached={handleEndScroll}
+              renderItem={({item}) => (
+                <>
+                  <ListCard.PostList
+                    toDetailOnPress={() =>
+                      handleToDetailMusician(item.musician.uuid)
+                    }
+                    musicianName={item.musician.fullname}
+                    musicianId={`@${item.musician.username}`}
+                    imgUri={
+                      item.musician.imageProfileUrls.length !== 0
+                        ? item.musician.imageProfileUrls[0]?.image
+                        : ''
+                    }
+                    postDate={dateFormat(item.createdAt)}
+                    category={categoryNormalize(item.category)}
+                    onPress={() => cardOnPress(item)}
+                    likeOnPress={() => likeOnPress(item.id, item.isLiked)}
+                    likePressed={
+                      selectedId === undefined
+                        ? item.isLiked
+                        : selectedId.includes(item.id) &&
+                          recorder.includes(item.id)
+                        ? true
+                        : !selectedId.includes(item.id) &&
+                          recorder.includes(item.id)
+                        ? false
+                        : !selectedId.includes(item.id) &&
+                          !recorder.includes(item.id)
+                        ? item.isLiked
+                        : item.isLiked
+                    }
+                    likeCount={
+                      selectedId === undefined
+                        ? item.likesCount
+                        : selectedId.includes(item.id) &&
+                          recorder.includes(item.id) &&
+                          item.isLiked === true
+                        ? item.likesCount
+                        : selectedId.includes(item.id) &&
+                          recorder.includes(item.id) &&
+                          item.isLiked === false
+                        ? item.likesCount + 1
+                        : !selectedId.includes(item.id) &&
+                          recorder.includes(item.id) &&
+                          item.isLiked === true
+                        ? item.likesCount - 1
+                        : !selectedId.includes(item.id) &&
+                          recorder.includes(item.id) &&
+                          item.isLiked === false
+                        ? item.likesCount
+                        : item.likesCount
+                    }
+                    tokenOnPress={tokenOnPress}
+                    shareOnPress={shareOnPress}
+                    commentCount={item.commentsCount}
+                    myPost={item.musician.uuid === dataProfile?.data.uuid}
+                    selectedMenu={setSelectedMenu}
+                    idPost={item.id}
+                    selectedIdPost={setSelectedIdPost}
+                    children={
+                      <View style={{width: '100%'}}>
+                        <Text style={styles.childrenPostTitle}>
+                          {elipsisText(item.caption, 600)}
+                        </Text>
+                        {item.images !== null ? (
+                          <>
+                            <Gap height={4} />
+                            <View
+                              style={{
+                                flexDirection: 'row',
+                              }}>
+                              <View style={{height: '100%', width: '100%'}}>
+                                <ImageList
+                                  imgData={item.images}
+                                  width={143}
+                                  height={69.5}
+                                  heightType2={142}
+                                  widthType2={289}
+                                  onPress={() => {}}
                                 />
-                              ) : null}
+                                {item.images.length === 0 &&
+                                item.quoteToPost.encodeHlsUrl ? (
+                                  <MusicListPreview
+                                    hideClose
+                                    targetId={item.quoteToPost.targetId}
+                                    targetType={item.quoteToPost.targetType}
+                                    title={item.quoteToPost.title}
+                                    musician={item.quoteToPost.musician}
+                                    coverImage={
+                                      item.quoteToPost.coverImage[1]?.image !==
+                                      undefined
+                                        ? item.quoteToPost.coverImage[1].image
+                                        : ''
+                                    }
+                                    encodeDashUrl={
+                                      item.quoteToPost.encodeDashUrl
+                                    }
+                                    encodeHlsUrl={item.quoteToPost.encodeHlsUrl}
+                                    startAt={item.quoteToPost.startAt}
+                                    endAt={item.quoteToPost.endAt}
+                                    postList={item}
+                                    onPress={onPressPlaySong}
+                                    isPlay={isPlaying}
+                                    playOrPause={handlePausePlay}
+                                    pauseModeOn={pauseModeOn}
+                                    currentProgress={playerProgress.position}
+                                    duration={playerProgress.duration}
+                                    seekPlayer={seekPlayer}
+                                    isIdNowPlaying={item.id === idNowPlaying}
+                                  />
+                                ) : null}
+                              </View>
                             </View>
-                          </View>
-                        </>
-                      ) : null}
-                    </View>
-                  }
-                />
-                <Gap height={16} />
-              </>
-            )}
+                          </>
+                        ) : null}
+                      </View>
+                    }
+                  />
+                  <Gap height={16} />
+                </>
+              )}
+            />
+          </View>
+        ) : dataMain?.length === 0 &&
+          feedMessage === 'you not follow anyone' ? (
+          <ListToFollowMusician />
+        ) : dataMain?.length === 0 &&
+          feedMessage === 'you not subscribe any premium content' ? (
+          <EmptyState
+            text={t('EmptyState.Donate') || ''}
+            containerStyle={{
+              justifyContent: 'flex-start',
+              paddingTop: heightPercentage(24),
+            }}
+            icon={<FriedEggIcon />}
           />
-        </View>
-      ) : dataMain?.length === 0 && feedMessage === 'you not follow anyone' ? (
-        <ListToFollowMusician />
-      ) : dataMain?.length === 0 &&
-        feedMessage === 'you not subscribe any premium content' ? (
-        <EmptyState
-          text={t('EmptyState.Donate') || ''}
-          containerStyle={{
-            justifyContent: 'flex-start',
-            paddingTop: heightPercentage(24),
-          }}
-          icon={<FriedEggIcon />}
-        />
-      ) : dataMain?.length === 0 &&
-        feedMessage ===
-          'Your subscribed musician has not yet posted any exclusive content.' ? (
-        <EmptyState
-          text={t('EmptyState.Exclusive') || ''}
-          containerStyle={{
-            justifyContent: 'flex-start',
-            paddingTop: heightPercentage(24),
-          }}
-          icon={<FriedEggIcon />}
-        />
+        ) : dataMain?.length === 0 &&
+          feedMessage ===
+            'Your subscribed musician has not yet posted any exclusive content.' ? (
+          <EmptyState
+            text={t('EmptyState.Exclusive') || ''}
+            containerStyle={{
+              justifyContent: 'flex-start',
+              paddingTop: heightPercentage(24),
+            }}
+            icon={<FriedEggIcon />}
+          />
+        ) : (
+          <>
+            <EmptyState
+              text={t('EmptyState.NoECData') || ''}
+              containerStyle={{
+                justifyContent: 'flex-start',
+                paddingTop: heightPercentage(24),
+              }}
+              icon={<FriedEggIcon />}
+            />
+            <View style={styles.btnECContainer}>
+              <ButtonGradient
+                label={t('Btn.Create')}
+                onPress={() => navigation.navigate('CreatePost')}
+                containerStyles={{paddingTop: heightPercentage(20)}}
+                gradientStyles={styles.btnEC}
+              />
+            </View>
+          </>
+        )
       ) : (
-        <EmptyState
-          text={t('EmptyState.NoData') || ''}
-          containerStyle={{
-            justifyContent: 'flex-start',
-            paddingTop: heightPercentage(24),
-          }}
-          icon={<FriedEggIcon />}
-        />
+        <>
+          <EmptyState
+            text={t('EmptyState.NoECSetting') || ''}
+            containerStyle={{
+              justifyContent: 'flex-start',
+              paddingTop: heightPercentage(24),
+            }}
+            icon={<FriedEggIcon />}
+          />
+          <View style={styles.btnECContainer}>
+            <ButtonGradient
+              label={t('Btn.Create')}
+              onPress={() => navigation.navigate('ExclusiveContentSetting')}
+              containerStyles={{paddingTop: heightPercentage(20)}}
+              gradientStyles={styles.btnEC}
+            />
+          </View>
+        </>
       )}
       <ModalShare
         url={
@@ -767,5 +808,14 @@ const styles = StyleSheet.create({
     fontSize: mvs(10),
     fontWeight: '500',
     color: color.Dark[50],
+  },
+  btnEC: {
+    width: widthPercentage(120),
+    aspectRatio: heightPercentage(155 / 45),
+  },
+  btnECContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'column',
   },
 });

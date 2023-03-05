@@ -1,22 +1,27 @@
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {
+  NativeStackNavigationProp,
+  NativeStackScreenProps,
+} from '@react-navigation/native-stack';
 import Color from '../theme/Color';
 import {RootStackParams} from '../navigations';
 import {ExclusiveContent} from '../components';
 
-export const ExclusiveContentScreen: React.FC = () => {
-  const navigation =
-    useNavigation<NativeStackNavigationProp<RootStackParams>>();
+type ECProps = NativeStackScreenProps<RootStackParams, 'ExclusiveContent'>;
 
+export const ExclusiveContentScreen = ({navigation, route}: ECProps) => {
   const onPressGoBack = () => {
     navigation.goBack();
   };
 
   return (
     <View style={styles.root}>
-      <ExclusiveContent onPressGoBack={onPressGoBack} />
+      <ExclusiveContent
+        onPressGoBack={onPressGoBack}
+        data={route.params.data}
+      />
     </View>
   );
 };

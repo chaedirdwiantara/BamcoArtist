@@ -38,6 +38,9 @@ import {ProfileFansResponseType} from '../../../interface/profile.interface';
 import PostListMyPost from '../../../screen/ListCard/PostListMyPost';
 import {dropDownDataCategory, dropDownDataSort} from '../../../data/dropdown';
 import ImageModal from '../../../screen/Detail/ImageModal';
+import ExclusiveDailyContent from '../../../screen/MusicianProfile/ExclusiveDailyContent';
+import {Gap} from '../../atom';
+import {DataExclusiveResponse} from '../../../interface/setting.interface';
 
 type OnScrollEventHandler = (
   event: NativeSyntheticEvent<NativeScrollEvent>,
@@ -58,6 +61,7 @@ interface ProfileContentProps {
   ownProfile?: boolean;
   totalCountlikedSong?: number;
   goToFollowers: () => void;
+  exclusiveContent?: DataExclusiveResponse;
 }
 
 export const ProfileContent: React.FC<ProfileContentProps> = ({
@@ -73,6 +77,7 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
   totalCountlikedSong,
   ownProfile = false,
   goToFollowers,
+  exclusiveContent,
 }) => {
   const {t} = useTranslation();
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -145,6 +150,16 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
           totalCountlikedSong={totalCountlikedSong}
           followersCount={profile.totalFollowers}
         />
+        {exclusiveContent ? (
+          <>
+            <Gap height={heightPercentage(50)} />
+            <ExclusiveDailyContent {...exclusiveContent} edit={true} />
+            <Gap height={heightPercentage(20)} />
+          </>
+        ) : (
+          <Gap height={heightPercentage(70)} />
+        )}
+
         <View style={styles.containerContent}>
           <TabFilter.Type1
             filterData={ownProfile ? filter2 : filter}
@@ -256,7 +271,7 @@ const styles = StyleSheet.create({
   },
   containerContent: {
     flex: 1,
-    marginTop: heightPercentage(70),
+    // marginTop: heightPercentage(70),
     paddingHorizontal: widthPercentage(20),
     marginBottom: heightPercentage(20),
     width: '100%',

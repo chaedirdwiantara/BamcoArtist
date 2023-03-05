@@ -98,6 +98,7 @@ import {OtpPNScreen} from '../screen/Setting/PhoneNumber/OTP';
 import {useNavigation} from '@react-navigation/native';
 import {ListDataSearchSongs} from '../interface/search.interface';
 import {
+  DataExclusiveResponse,
   DataShippingProps,
   OtpEmailScreen as OtpEmailProps,
   OtpPhoneScreen,
@@ -134,7 +135,9 @@ export type RootStackParams = {
     info?: boolean;
     message?: string;
   };
-  ExclusiveContent: undefined;
+  ExclusiveContent: {
+    data?: DataExclusiveResponse;
+  };
   ExclusiveContentSetting: {type?: string} | undefined;
   Following: undefined;
   Followers: {

@@ -66,7 +66,7 @@ export type DataExclusiveProps = {
   coverImage: string;
   description: string;
   pricingPlans: {
-    duration: number;
+    durationInDays: number;
     durationUnit: string;
     price: number;
   }[];

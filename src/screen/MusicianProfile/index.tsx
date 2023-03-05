@@ -17,6 +17,7 @@ import {storage} from '../../hooks/use-storage.hook';
 import {useCreditHook} from '../../hooks/use-credit.hook';
 import {useProfileHook} from '../../hooks/use-profile.hook';
 import {usePlaylistHook} from '../../hooks/use-playlist.hook';
+import {useSettingHook} from '../../hooks/use-setting.hook';
 
 type PostDetailProps = NativeStackScreenProps<
   RootStackParams,
@@ -48,6 +49,7 @@ const MusicianProfile: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   } = useMusicianHook();
 
   const {creditCount, getCreditCount} = useCreditHook();
+  const {dataExclusiveContent, getExclusiveContent} = useSettingHook();
 
   const [modalDonate, setModalDonate] = useState<boolean>(false);
   const [modalSuccessDonate, setModalSuccessDonate] = useState<boolean>(false);
@@ -64,6 +66,7 @@ const MusicianProfile: FC<PostDetailProps> = ({route}: PostDetailProps) => {
       getTotalCountProfile({uuid});
       getDetailMusician({id: uuid});
       getPlaylist({uuid});
+      getExclusiveContent({uuid: uuid});
     }, [uuid]),
   );
 
@@ -151,6 +154,7 @@ const MusicianProfile: FC<PostDetailProps> = ({route}: PostDetailProps) => {
           donateOnPress={donateOnPress}
           followersCount={followersCount}
           goToPlaylist={goToPlaylist}
+          exclusiveContent={dataExclusiveContent ?? undefined}
         />
       )}
       <ModalLoading visible={isLoading} />

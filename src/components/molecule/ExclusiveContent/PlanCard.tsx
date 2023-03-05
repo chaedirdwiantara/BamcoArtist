@@ -50,7 +50,8 @@ export const PlanCard: React.FC<PlanCard> = ({
             onPress={onPressSelected}
           />
           <Text style={[typography.Subtitle2, {color: color.Success[400]}]}>
-            {coin} + {t(time)}
+            {coin}
+            {t(time)}
           </Text>
         </View>
         <View style={styles.subtitle}>
