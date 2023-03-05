@@ -9,7 +9,10 @@ import {
 } from 'react-native';
 import {mvs} from 'react-native-size-matters';
 import {useNavigation} from '@react-navigation/native';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {
+  NativeStackNavigationProp,
+  NativeStackScreenProps,
+} from '@react-navigation/native-stack';
 
 import {
   heightPercentage,
@@ -36,10 +39,19 @@ import {TopNavigation, SsuToast, Gap} from '../../../components';
 import {DataExclusiveProps} from '../../../interface/setting.interface';
 import {useTranslation} from 'react-i18next';
 
-export const ExclusiveContentSetting: React.FC = () => {
+type ExclusiveContentSettingProps = NativeStackScreenProps<
+  RootStackParams,
+  'ExclusiveContentSetting'
+>;
+
+export const ExclusiveContentSetting: React.FC<
+  ExclusiveContentSettingProps
+> = ({route}: ExclusiveContentSettingProps) => {
   const {t} = useTranslation();
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
+
+  const statusType = route.params?.type;
 
   const {fetchData, dataExclusiveContent, getExclusiveContent} =
     useSettingHook();
@@ -91,6 +103,13 @@ export const ExclusiveContentSetting: React.FC = () => {
       setToastError(true);
     }
   };
+
+  // * navigate to create post when user navigated into this screen and finished setup the content
+  useEffect(() => {
+    if (statusType === 'navToCreatePost' && dataExclusiveContent !== null) {
+      navigation.navigate('CreatePost', {audience: 'Feed.Exclusive'});
+    }
+  }, [statusType, dataExclusiveContent]);
 
   const toastBg = toastError ? color.Error[400] : color.Success[400];
 

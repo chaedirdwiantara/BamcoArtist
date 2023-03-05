@@ -13,13 +13,23 @@ interface ModalConfirmProps {
   onPressClose?: () => void;
   onPressOk?: () => void;
   disabled?: boolean;
+  yesText?: string;
+  noText?: string;
 }
 
 export const ModalConfirm: React.FC<ModalConfirmProps> = (
   props: ModalConfirmProps,
 ) => {
-  const {title, subtitle, modalVisible, onPressClose, onPressOk, disabled} =
-    props;
+  const {
+    title,
+    subtitle,
+    modalVisible,
+    onPressClose,
+    onPressOk,
+    disabled,
+    yesText,
+    noText,
+  } = props;
   return (
     <Modal
       isVisible={modalVisible}
@@ -36,10 +46,10 @@ export const ModalConfirm: React.FC<ModalConfirmProps> = (
           <Text style={styles.subtitle}>{subtitle}</Text>
           <View style={styles.containerButton}>
             <TouchableOpacity onPress={onPressClose}>
-              <Text style={styles.option}>{'No'}</Text>
+              <Text style={styles.option}>{noText ? noText : 'No'}</Text>
             </TouchableOpacity>
             <TouchableOpacity disabled={disabled} onPress={onPressOk}>
-              <Text style={styles.option}>{'Yes'}</Text>
+              <Text style={styles.option}>{yesText ? yesText : 'Yes'}</Text>
             </TouchableOpacity>
           </View>
         </View>

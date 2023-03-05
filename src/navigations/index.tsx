@@ -135,7 +135,7 @@ export type RootStackParams = {
     message?: string;
   };
   ExclusiveContent: undefined;
-  ExclusiveContentSetting: undefined;
+  ExclusiveContentSetting: {type?: string} | undefined;
   Following: undefined;
   Followers: {
     uuid: string;

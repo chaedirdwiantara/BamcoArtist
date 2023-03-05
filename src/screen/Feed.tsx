@@ -16,6 +16,7 @@ import PostListMyPost from './ListCard/PostListMyPost';
 import {
   FilterModal,
   GuestContent,
+  ModalConfirm,
   TabFilter,
   TopNavigation,
 } from '../components';
@@ -33,6 +34,8 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParams} from '../navigations';
 import {useTranslation} from 'react-i18next';
 import {mvs} from 'react-native-size-matters';
+import {useSettingHook} from '../hooks/use-setting.hook';
+import {profileStorage} from '../hooks/use-storage.hook';
 
 const {StatusBarManager} = NativeModules;
 const barHeight = StatusBarManager.HEIGHT;
@@ -47,14 +50,20 @@ export const FeedScreen: React.FC = () => {
     {filterName: 'Feed.Public'},
   ]);
   const isLogin = storage.getString('profile');
+  const uuid = profileStorage()?.uuid;
+
   const isFocused = useIsFocused();
   const {isPlaying, showPlayer, hidePlayer} = usePlayerHook();
+  const {dataExclusiveContent, getExclusiveContent} = useSettingHook();
   const [selectedCategory, setSelectedCategory] = useState<string>();
   const [offsetCategoryFilter, setOffsetCategoryFilter] = React.useState<{
     px: number;
     py: number;
   }>();
-  const [isModalVisible, setModalVisible] = useState(false);
+  const [isModalVisible, setModalVisible] = useState({
+    filterModal: false,
+    confirmModal: false,
+  });
 
   useEffect(() => {
     if (isFocused && isPlaying) {
@@ -64,20 +73,39 @@ export const FeedScreen: React.FC = () => {
     }
   }, [isFocused]);
 
-  useEffect(() => {
+  const handleOnCloseModal = () => {
     if (selectedCategory) {
-      navigation.navigate('CreatePost', {audience: selectedCategory});
-      setModalVisible(false);
-      setSelectedCategory(undefined);
+      if (
+        dataExclusiveContent === null &&
+        selectedCategory === 'Feed.Exclusive'
+      ) {
+        setModalVisible({filterModal: false, confirmModal: true});
+      } else {
+        setModalVisible({filterModal: false, confirmModal: false});
+        setSelectedCategory(undefined);
+        navigation.navigate('CreatePost', {audience: selectedCategory});
+      }
     }
-  }, [selectedCategory]);
+  };
 
   const filterData = (item: any, index: any) => {
     setSelectedIndex(index);
   };
 
   const handleFloatingIcon = () => {
-    setModalVisible(true);
+    setModalVisible({filterModal: true, confirmModal: false});
+    getExclusiveContent({uuid});
+  };
+
+  const handleConfirmModal = () => {
+    setModalVisible({filterModal: false, confirmModal: false});
+    setSelectedCategory(undefined);
+    navigation.navigate('ExclusiveContentSetting', {type: 'navToCreatePost'});
+  };
+
+  const handleMaybeLater = () => {
+    setModalVisible({filterModal: false, confirmModal: false});
+    setSelectedCategory(undefined);
   };
 
   return (
@@ -129,7 +157,7 @@ export const FeedScreen: React.FC = () => {
                 });
               });
             }}>
-            {isModalVisible ? (
+            {isModalVisible.filterModal ? (
               <CancelCreatePostIcon style={styles.floatingIcon} />
             ) : (
               <AddPostIcon style={styles.floatingIcon} />
@@ -137,8 +165,10 @@ export const FeedScreen: React.FC = () => {
           </TouchableOpacity>
           {offsetCategoryFilter !== undefined && (
             <FilterModal
-              toggleModal={() => setModalVisible(false)}
-              modalVisible={isModalVisible}
+              toggleModal={() =>
+                setModalVisible({filterModal: false, confirmModal: false})
+              }
+              modalVisible={isModalVisible.filterModal}
               dataFilter={dropDownSetAudience}
               filterOnPress={setSelectedCategory}
               sendCategory={() => {}}
@@ -155,8 +185,18 @@ export const FeedScreen: React.FC = () => {
               buttonContainerStyle={{
                 paddingVertical: widthResponsive(10),
               }}
+              onModalHide={handleOnCloseModal}
             />
           )}
+          <ModalConfirm
+            modalVisible={isModalVisible.confirmModal}
+            title={t('Modal.ExclusiveContentConfirm.Title') || ''}
+            subtitle={t('Modal.ExclusiveContentConfirm.Body') || ''}
+            yesText={t('Modal.ExclusiveContentConfirm.ButtonOk') || ''}
+            noText={t('Modal.ExclusiveContentConfirm.ButtonCancel') || ''}
+            onPressClose={handleMaybeLater}
+            onPressOk={handleConfirmModal}
+          />
         </View>
       ) : (
         <GuestContent />

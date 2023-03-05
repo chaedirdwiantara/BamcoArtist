@@ -29,7 +29,7 @@ interface ModalImageProps {
   imageIdx: number;
   dataImage?: imageTypes[][] | string[];
   dataImageGallery?: photos[] | Image[];
-  type: string;
+  type?: string;
   removePhoto?: (id: number) => void;
 }
 
