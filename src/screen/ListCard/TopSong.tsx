@@ -8,12 +8,11 @@ import {useSongHook} from '../../hooks/use-song.hook';
 import {SongList} from '../../interface/song.interface';
 import {elipsisText, heightResponsive} from '../../utils';
 import {usePlayerHook} from '../../hooks/use-player.hook';
-import {ListDataSearchSongs} from '../../interface/search.interface';
 
 interface TopSongPropsScreen {
   type?: string;
   onPress: (param: any) => void;
-  dataSong?: SongList[] | ListDataSearchSongs[];
+  dataSong: SongList[];
   scrollable?: boolean;
   hideDropdownMore?: boolean;
   rightIcon?: boolean;
@@ -22,7 +21,7 @@ interface TopSongPropsScreen {
   activeOpacity?: number;
   loveIcon?: boolean;
   newDataMore?: DataDropDownType[];
-  newOnPressMore?: (data: DataDropDownType) => void;
+  newOnPressMore?: (data: DataDropDownType, item: SongList) => void;
 }
 
 const TopSong: FC<TopSongPropsScreen> = (props: TopSongPropsScreen) => {
@@ -66,18 +65,18 @@ const TopSong: FC<TopSongPropsScreen> = (props: TopSongPropsScreen) => {
 
   const newListSong =
     type === 'defaultPlaylist'
-      ? listSong?.filter((val: {isLiked: string}) => val.isLiked)
+      ? listSong?.filter(val => val.isLiked)
       : listSong;
 
   return (
-    <FlashList<SongList | ListDataSearchSongs>
+    <FlashList
       data={newListSong}
       showsVerticalScrollIndicator={false}
       scrollEnabled={scrollable}
       keyExtractor={item => item.id.toString()}
       renderItem={({item, index}) => (
         <MusicSection
-          imgUri={item.imageUrl[0]?.image ?? ''}
+          imgUri={(item.imageUrl && item.imageUrl[0]?.image) ?? ''}
           musicNum={index + 1}
           musicTitle={elipsisText(item.title, 22)}
           singerName={item.musicianName}
@@ -106,7 +105,7 @@ const TopSong: FC<TopSongPropsScreen> = (props: TopSongPropsScreen) => {
           onPressAddToQueue={() => addSong(item)}
           songId={item.id}
           newDataMore={newDataMore}
-          newOnPressMore={newOnPressMore}
+          newOnPressMore={data => newOnPressMore && newOnPressMore(data, item)}
         />
       )}
       estimatedItemSize={heightResponsive(500)}

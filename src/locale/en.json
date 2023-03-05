@@ -90,6 +90,7 @@
     "Cancel": "Cancel",
     "Purchase": "Purchase",
     "Save": "Save",
+    "Close": "Close",
     "Edit": "Edit",
     "VerificationCode": "Send Verification Code",
     "TurnOff": "Turn Off",
@@ -530,7 +531,8 @@
       "Delete": "Delete Playlist",
       "Share": "Share Playlist",
       "Success": "Song have been added to playlist!",
-      "Remove": "Remove from Playlist"
+      "Remove": "Remove from Playlist",
+      "ViewAlbum": "View Album"
     },
     "Credit": {
       "Title": "Show Credit",
@@ -571,6 +573,11 @@
     "Title": "Notification"
   },
   "Modal": {
+    "Limit": {
+      "Title": "Limit Reached",
+      "Subtitle1": "You have reached the limit of uploading 10 photos, please delete some of your photos to upload new ones.",
+      "Subtitle2": "Some of your photos cannot be uploaded because you have reached your limit. You can only upload up to 10 photos in your profile. Delete some photos to upload the new ones."
+    },
     "EditProfile": {
       "Title": "Edit Profile",
       "Subtitle": "Are you sure to finish edit profile?"

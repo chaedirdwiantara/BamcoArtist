@@ -17,6 +17,9 @@ export type SongList = {
   transcodedSongUrl: TranscodedSongType[];
   originalSongUrl: string;
   isLiked: boolean;
+  album: {
+    id: number;
+  };
 };
 
 export type TranscodedSongType = {
@@ -110,6 +113,7 @@ export type Featuring = {
 };
 
 export type SongAlbum = {
+  releaseDate: any;
   id: number;
   musicianId: string;
   title: string;
@@ -141,6 +145,7 @@ export type TranscodedSongUrl = {
 };
 
 export type DataDetailSong = {
+  featuring: any;
   id: number;
   musicianUUID: string;
   musicianName: string;

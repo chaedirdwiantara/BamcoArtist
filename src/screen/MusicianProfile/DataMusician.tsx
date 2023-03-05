@@ -1,4 +1,4 @@
-import {StyleSheet, View} from 'react-native';
+import {View} from 'react-native';
 import React, {FC} from 'react';
 import {Gap} from '../../components';
 import ProfileComponent from './ProfileComponent';
@@ -20,8 +20,6 @@ interface DataMusicianProps {
 
 const DataMusician: FC<DataMusicianProps> = (props: DataMusicianProps) => {
   const {profile, dataAlbum} = props;
-  console.log('profile', profile);
-  
   const {t} = useTranslation();
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
@@ -108,5 +106,3 @@ const DataMusician: FC<DataMusicianProps> = (props: DataMusicianProps) => {
 };
 
 export default DataMusician;
-
-const styles = StyleSheet.create({});

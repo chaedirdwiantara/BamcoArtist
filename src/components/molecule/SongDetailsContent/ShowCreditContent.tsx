@@ -7,38 +7,45 @@ import Color from '../../../theme/Color';
 import {TopNavigation} from '../TopNavigation';
 import {ArrowLeftIcon} from '../../../assets/icon';
 import {color, font, typography} from '../../../theme';
+import {ShowCreditType} from '../../../data/showCredit';
+import {dateLongMonth} from '../../../utils/date-format';
 import {DataDetailSong} from '../../../interface/song.interface';
-import {dataShowCredit, ShowCreditType} from '../../../data/showCredit';
 import {heightPercentage, normalize, widthPercentage} from '../../../utils';
 
 interface ShowCreditProps {
-  dataDetail: DataDetailSong | null;
+  dataDetail: DataDetailSong;
   onPressGoBack: () => void;
 }
 
 const Content: React.FC<ShowCreditType> = ({title, content}) => {
-  return (
-    <View>
-      <Text style={styles.title}>{title}</Text>
-      <Gap height={heightPercentage(15)} />
-      {content.map((val, i) => {
-        const lastIndex = i === content.length - 1;
-        const newGapHeight = lastIndex ? 30 : 10;
-        return (
-          <View key={i}>
-            <Text
-              style={[
-                typography.Subtitle2,
-                {color: color.Neutral[10], fontFamily: font.InterRegular},
-              ]}>
-              {val}
-            </Text>
-            <Gap height={heightPercentage(newGapHeight)} />
-          </View>
-        );
-      })}
-    </View>
-  );
+  if (content.length > 0) {
+    return (
+      <View>
+        <Text style={styles.title}>{title}</Text>
+        <Gap height={heightPercentage(15)} />
+        {content.map((val, i) => {
+          const lastIndex = i === content.length - 1;
+          const newGapHeight = lastIndex ? 30 : 10;
+          if (val === null) {
+            return <Text>-</Text>;
+          } else {
+            return (
+              <View key={i}>
+                <Text
+                  style={[
+                    typography.Subtitle2,
+                    {color: color.Neutral[10], fontFamily: font.InterRegular},
+                  ]}>
+                  {val}
+                </Text>
+                <Gap height={heightPercentage(newGapHeight)} />
+              </View>
+            );
+          }
+        })}
+      </View>
+    );
+  }
 };
 
 export const ShowCreditContent: React.FC<ShowCreditProps> = ({
@@ -46,10 +53,45 @@ export const ShowCreditContent: React.FC<ShowCreditProps> = ({
   onPressGoBack,
 }) => {
   const {t} = useTranslation();
+  const dataShowCredit = [
+    {
+      title: t('Music.Credit.SingBy'),
+      content: [dataDetail.musicianName],
+    },
+    {
+      title: t('Music.Credit.Featuring'),
+      content: dataDetail.album.featuringArtist.map(v => v.fullname),
+    },
+    {
+      title: t('Music.Credit.Format'),
+      content: ['Album'],
+    },
+    {
+      title: t('Music.Credit.Label'),
+      content: dataDetail.album.label,
+    },
+    {
+      title: t('Music.Credit.Genre'),
+      content: [dataDetail.album.genre],
+    },
+    {
+      title: t('Music.Credit.Release'),
+      content: [dateLongMonth(dataDetail.album.releaseDate)],
+    },
+    {
+      title: t('Music.Credit.Copyright'),
+      content: [
+        `© ${dataDetail.album.copyrightVisual.join(', ')}`,
+        `℗ ${dataDetail.album.copyrightProducer.join(', ')}`,
+        `® ${dataDetail.album.copyrightFans.join(', ')}`,
+      ],
+    },
+  ];
+
   return (
     <View style={styles.root}>
       <TopNavigation.Type1
-        title="Thunder"
+        title={dataDetail.title}
         leftIcon={<ArrowLeftIcon />}
         itemStrokeColor={Color.Neutral[10]}
         leftIconAction={onPressGoBack}

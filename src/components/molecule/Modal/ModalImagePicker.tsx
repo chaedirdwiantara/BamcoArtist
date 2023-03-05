@@ -26,6 +26,7 @@ interface ModalImagePickerProps {
   onDeleteImage: () => void;
   hideMenuDelete?: boolean;
   multiple?: boolean;
+  maxFiles?: number;
 }
 
 export const ModalImagePicker: React.FC<ModalImagePickerProps> = ({
@@ -37,6 +38,7 @@ export const ModalImagePicker: React.FC<ModalImagePickerProps> = ({
   onDeleteImage,
   hideMenuDelete,
   multiple,
+  maxFiles,
 }) => {
   const {t} = useTranslation();
 
@@ -60,6 +62,7 @@ export const ModalImagePicker: React.FC<ModalImagePickerProps> = ({
       cropping: true,
       multiple: true,
       mediaType: 'photo',
+      maxFiles,
     }).then(image => {
       sendUriMultiple(image);
       onPressClose();

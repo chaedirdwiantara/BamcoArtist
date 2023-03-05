@@ -1,22 +1,21 @@
 import React, {useEffect, useState} from 'react';
+import {StyleSheet, Text, View, ViewStyle} from 'react-native';
+import {useTranslation} from 'react-i18next';
 import {ms, mvs} from 'react-native-size-matters';
 import {useNavigation} from '@react-navigation/native';
-import {StyleSheet, Text, View, ViewStyle} from 'react-native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
 import {ListCard} from '../ListCard';
 import {Gap, SsuToast} from '../../atom';
 import {color, font} from '../../../theme';
-import {RootStackParams} from '../../../navigations';
 import {ModalShare} from '../Modal/ModalShare';
 import {ModalDonate} from '../Modal/ModalDonate';
+import {RootStackParams} from '../../../navigations';
 import {CheckCircle2Icon} from '../../../assets/icon';
-import {storage} from '../../../hooks/use-storage.hook';
-import {ModalSuccessDonate} from '../Modal/ModalSuccessDonate';
-import {heightPercentage, normalize, widthResponsive} from '../../../utils';
-import {BottomSheetGuest} from '../GuestComponent/BottomSheetGuest';
-import {useTranslation} from 'react-i18next';
 import {useCreditHook} from '../../../hooks/use-credit.hook';
+import {ModalSuccessDonate} from '../Modal/ModalSuccessDonate';
+import {BottomSheetGuest} from '../GuestComponent/BottomSheetGuest';
+import {heightPercentage, normalize, widthResponsive} from '../../../utils';
 
 interface DataMore {
   label: string;
@@ -50,7 +49,6 @@ export const MusicSection: React.FC<ListProps> = (props: ListProps) => {
   const {t} = useTranslation();
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
-  const isLogin = storage.getString('profile');
   const {creditCount, getCreditCount} = useCreditHook();
 
   const dataMore = [
@@ -101,25 +99,21 @@ export const MusicSection: React.FC<ListProps> = (props: ListProps) => {
   };
 
   const resultDataMore = (dataResult: DataMore) => {
-    if (isLogin || dataResult.value === '5') {
-      if (dataResult.value === '1') {
-        navigation.navigate('AddToPlaylist', {
-          id: [props.songId],
-          type: 'song',
-        });
-      } else if (dataResult.value === '2') {
-        setModalDonate(true);
-      } else if (dataResult.value === '3') {
-        props.onPressAddToQueue() !== undefined && props.onPressAddToQueue();
-        setToastVisible(true);
-        setTextToast('Song added to queue!');
-      } else if (dataResult.value === '4') {
-        setModalShare(true);
-      } else {
-        navigation.navigate('ShowCredit', {songId: props.songId});
-      }
+    if (dataResult.value === '1') {
+      navigation.navigate('AddToPlaylist', {
+        id: [props.songId],
+        type: 'song',
+      });
+    } else if (dataResult.value === '2') {
+      setModalDonate(true);
+    } else if (dataResult.value === '3') {
+      props.onPressAddToQueue() !== undefined && props.onPressAddToQueue();
+      setToastVisible(true);
+      setTextToast('Song added to queue!');
+    } else if (dataResult.value === '4') {
+      setModalShare(true);
     } else {
-      setModalGuestVisible(true);
+      navigation.navigate('ShowCredit', {songId: props.songId});
     }
   };
 
@@ -127,7 +121,7 @@ export const MusicSection: React.FC<ListProps> = (props: ListProps) => {
     <>
       <ListCard.MusicList
         dataFilter={newDataMore ? newDataMore : dataMore}
-        onPressMore={newOnPressMore ? newOnPressMore : resultDataMore}
+        onPressMore={newDataMore ? newOnPressMore : resultDataMore}
         {...props}
       />
 
