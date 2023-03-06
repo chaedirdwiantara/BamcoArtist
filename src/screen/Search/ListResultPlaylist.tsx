@@ -38,7 +38,7 @@ const ListResultPlaylists: FC<KeywordProps> = ({keyword}: KeywordProps) => {
   };
 
   const cardOnPress = (id: number) => {
-    navigation.navigate('Playlist', {id, name: ''});
+    navigation.navigate('Playlist', {id, name: '', from: 'other'});
   };
 
   return (

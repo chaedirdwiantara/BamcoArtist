@@ -133,7 +133,7 @@ const MusicianProfile: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   };
 
   const goToPlaylist = (id: number) => {
-    navigation.navigate('Playlist', {id});
+    navigation.navigate('Playlist', {id, from: 'other'});
   };
 
   const musicianPlaylist =
