@@ -518,7 +518,7 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
     ) {
       // * delete/edit comment lvl1
       if (selectedLvlComment === 1 && commentLvl1) {
-        if (selectedMenu.label === 'Delete Reply') {
+        if (t(selectedMenu.label) === 'Delete Reply') {
           setCommentLvl1(
             commentLvl1.filter((x: CommentList) => !idComment.includes(x.id)),
           );
@@ -527,7 +527,7 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
             setCommmentCountLvl1(commentCountLvl1 - 1);
           }
         }
-        if (selectedMenu.label === 'Edit Reply') {
+        if (t(selectedMenu.label) === 'Edit Reply') {
           let commentNow = commentLvl1.filter((x: CommentList) =>
             idComment.includes(x.id),
           )[0];
@@ -544,13 +544,13 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
       }
       // * delete/edit comment lvl2
       if (selectedLvlComment === 2 && commentLvl2) {
-        if (selectedMenu.label === 'Delete Reply') {
+        if (t(selectedMenu.label) === 'Delete Reply') {
           setCommentLvl2(
             commentLvl2.filter((x: CommentList2) => !idComment.includes(x.id)),
           );
           setCommentDelete({id: idComment});
         }
-        if (selectedMenu.label === 'Edit Reply') {
+        if (t(selectedMenu.label) === 'Edit Reply') {
           let commentNow = commentLvl2.filter((x: CommentList2) =>
             idComment.includes(x.id),
           )[0];
@@ -567,13 +567,13 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
       }
       // * delete/edit comment lvl3
       if (selectedLvlComment === 3 && commentLvl3) {
-        if (selectedMenu.label === 'Delete Reply') {
+        if (t(selectedMenu.label) === 'Delete Reply') {
           setCommentLvl3(
             commentLvl3.filter((x: CommentList3) => !idComment.includes(x.id)),
           );
           setCommentDelete({id: idComment});
         }
-        if (selectedMenu.label === 'Edit Reply') {
+        if (t(selectedMenu.label) === 'Edit Reply') {
           let commentNow = commentLvl3.filter((x: CommentList3) =>
             idComment.includes(x.id),
           )[0];

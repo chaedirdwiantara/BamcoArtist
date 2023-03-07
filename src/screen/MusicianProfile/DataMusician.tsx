@@ -45,10 +45,10 @@ const DataMusician: FC<DataMusicianProps> = (props: DataMusicianProps) => {
         gap={16}
       />
 
-      {profile.favoriteGenres.length > 0 && (
+      {profile.genres.length > 0 && (
         <>
           <Gap height={8} />
-          <FavoriteGenres favGenres={profile.favoriteGenres} />
+          <FavoriteGenres favGenres={profile.genres} />
         </>
       )}
 

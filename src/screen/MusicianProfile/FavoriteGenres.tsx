@@ -1,12 +1,12 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React, {FC} from 'react';
-import {FavoriteGenresType} from '../../interface/musician.interface';
+import {TheGenre} from '../../interface/musician.interface';
 import {widthResponsive} from '../../utils';
 import {ms} from 'react-native-size-matters';
 import {color, font} from '../../theme';
 
 interface FavoriteGenresProps {
-  favGenres: FavoriteGenresType[];
+  favGenres: TheGenre[];
 }
 
 export const FavoriteGenres: FC<FavoriteGenresProps> = (

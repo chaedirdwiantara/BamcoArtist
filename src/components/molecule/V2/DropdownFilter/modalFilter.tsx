@@ -1,7 +1,6 @@
 import {
   Dimensions,
   FlatList,
-  Platform,
   StyleSheet,
   Text,
   TextStyle,
@@ -12,14 +11,8 @@ import {
 import React, {FC} from 'react';
 import Modal from 'react-native-modal';
 import {color, font} from '../../../../theme';
-import {
-  heightPercentage,
-  heightResponsive,
-  widthResponsive,
-} from '../../../../utils';
 import {DataDropDownType} from '../../../../data/dropdown';
 import {ms, mvs} from 'react-native-size-matters';
-import {heightPercentageToDP} from 'react-native-responsive-screen';
 import {useTranslation} from 'react-i18next';
 import {Gift2Icon, GlobalIcon} from '../../../../assets/icon';
 import {Gap} from '../../../atom';
@@ -30,7 +23,7 @@ interface ModalFilterProps {
   toggleModal: () => void;
   modalVisible: boolean;
   dataFilter: DataDropDownType[];
-  filterOnPress: (label: string) => void;
+  filterOnPress?: (label: string) => void;
   sendCategory: (value: string) => void;
   translation?: boolean;
   xPosition: number;
@@ -40,6 +33,7 @@ interface ModalFilterProps {
   icon?: boolean;
   buttonContainerStyle?: ViewStyle;
   onModalHide?: () => void;
+  selectedMenu?: (label: DataDropDownType) => void;
 }
 
 const FilterModal: FC<ModalFilterProps> = (props: ModalFilterProps) => {
@@ -58,12 +52,14 @@ const FilterModal: FC<ModalFilterProps> = (props: ModalFilterProps) => {
     icon,
     buttonContainerStyle,
     onModalHide,
+    selectedMenu,
   } = props;
 
   const filterButtonHandler = (data: DataDropDownType) => {
     toggleModal();
     filterOnPress?.(data.label);
     sendCategory?.(data.value);
+    selectedMenu?.(data);
   };
 
   return (
