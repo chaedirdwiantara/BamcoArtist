@@ -124,7 +124,11 @@ export const PlaylistScreen: React.FC<PlaylistProps> = ({
       {dataDetailPlaylist && playlistName !== 'Default Playlist' && (
         <PlaylistContent
           goToEditPlaylist={goToEditPlaylist}
-          goBackProfile={goBackProfile}
+          goBackProfile={val =>
+            route.params.from === 'other'
+              ? navigation.goBack()
+              : goBackProfile(val)
+          }
           goToAddSong={goToAddSong}
           dataDetail={dataDetailPlaylist}
           listSongs={dataSongsPlaylist}
