@@ -1,4 +1,4 @@
-import React, {FC, useState} from 'react';
+import React, {FC} from 'react';
 import {RefreshControl, StyleSheet, Text, View} from 'react-native';
 import {heightPercentage, heightResponsive, widthResponsive} from '../../utils';
 import {FlashList} from '@shopify/flash-list';
@@ -13,28 +13,21 @@ import {useTranslation} from 'react-i18next';
 
 const MerchList: FC = () => {
   const {t} = useTranslation();
-  const [refreshing, setRefreshing] = useState<boolean>(false);
   const {getListDataMerch} = useEventHook();
 
   const {
     data: dataMerchList,
     isLoading,
     refetch,
+    isRefetching,
   } = useQuery(['/merch'], () => getListDataMerch());
-
-  const onRefresh = async () => {
-    setRefreshing(true);
-    await refetch();
-    setRefreshing(false);
-  };
-
   const filterList: MerchData | undefined = dataMerchList?.data.find(merch => {
     return merch.name === 'product_latest';
   });
 
   return (
     <>
-      {(isLoading || refreshing) && (
+      {(isLoading || isRefetching) && (
         <View style={styles.loadingContainer}>
           <Text style={styles.loading}>Loading...</Text>
         </View>
@@ -45,7 +38,7 @@ const MerchList: FC = () => {
         contentContainerStyle={styles.ListContainer}
         keyExtractor={item => item?.id.toString()}
         ListEmptyComponent={
-          !isLoading && !refreshing ? (
+          !isLoading && !isRefetching ? (
             <EmptyState
               icon={
                 <BoxStore
@@ -79,7 +72,7 @@ const MerchList: FC = () => {
         estimatedItemSize={150}
         numColumns={2}
         refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          <RefreshControl refreshing={isRefetching} onRefresh={refetch} />
         }
       />
     </>

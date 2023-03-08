@@ -1,4 +1,4 @@
-import React, {FC, useState} from 'react';
+import React, {FC} from 'react';
 import {RefreshControl, StyleSheet, Text, View} from 'react-native';
 import {TicketIcon} from '../../assets/icon';
 import Color from '../../theme/Color';
@@ -13,20 +13,14 @@ import {useTranslation} from 'react-i18next';
 
 const ConcertList: FC = () => {
   const {t} = useTranslation();
-  const [refreshing, setRefreshing] = useState<boolean>(false);
   const {getListDataConcert} = useEventHook();
 
   const {
     data: dataConcertList,
     isLoading,
     refetch,
+    isRefetching,
   } = useQuery(['/concert'], () => getListDataConcert());
-
-  const onRefresh = async () => {
-    setRefreshing(true);
-    await refetch();
-    setRefreshing(false);
-  };
 
   const filterList: MerchData | undefined = dataConcertList?.data.find(
     concert => {
@@ -36,7 +30,7 @@ const ConcertList: FC = () => {
 
   return (
     <>
-      {(isLoading || refreshing) && (
+      {(isLoading || isRefetching) && (
         <View style={styles.loadingContainer}>
           <Text style={styles.loading}>Loading...</Text>
         </View>
@@ -48,7 +42,7 @@ const ConcertList: FC = () => {
         contentContainerStyle={styles.ListContainer}
         // keyExtractor={item => item.id.toString()}
         ListEmptyComponent={
-          !isLoading && !refreshing ? (
+          !isLoading && !isRefetching ? (
             <EmptyState
               icon={
                 <TicketIcon
@@ -82,7 +76,7 @@ const ConcertList: FC = () => {
         estimatedItemSize={150}
         numColumns={2}
         refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          <RefreshControl refreshing={isRefetching} onRefresh={refetch} />
         }
       />
     </>

@@ -1,4 +1,4 @@
-import {FlatList, StyleSheet, Text, View} from 'react-native';
+import {FlatList, RefreshControl, StyleSheet, Text, View} from 'react-native';
 import React, {FC, useEffect} from 'react';
 import MusicianSection from '../../components/molecule/MusicianSection/MusicianSection';
 import {mvs} from 'react-native-size-matters';
@@ -18,7 +18,6 @@ const ListResultFans: FC<KeywordProps> = ({keyword}: KeywordProps) => {
     data: dataSearchFans,
     refetch,
     isRefetching,
-    isFetched,
     isLoading,
   } = useQuery(['/search-fans'], () => getSearchFans({keyword: keyword}));
 
@@ -29,43 +28,45 @@ const ListResultFans: FC<KeywordProps> = ({keyword}: KeywordProps) => {
 
   return (
     <View style={styles.container}>
-      {isFetched && !isRefetching && (
-        <FlatList
-          contentContainerStyle={styles.ListContainer}
-          showsVerticalScrollIndicator={false}
-          data={dataSearchFans?.data}
-          renderItem={({item, index}) => (
-            <MusicianSection
-              musicianNum={(index + 1).toLocaleString('en-US', {
-                minimumIntegerDigits: 2,
-                useGrouping: false,
-              })}
-              musicianName={item.fullname}
-              imgUri={
-                item.imageProfileUrls.length > 0
-                  ? item.imageProfileUrls[0].image
-                  : ''
-              }
-              containerStyles={{marginTop: mvs(20)}}
-              userId={item.uuid}
-              activeMore={false}
-              type="fans"
-            />
-          )}
-          ListEmptyComponent={
-            <EmptyState
-              text={t('EmptyState.Search.Fans') || ''}
-              containerStyle={styles.containerEmpty}
-            />
-          }
-        />
-      )}
-
       {(isRefetching || isLoading) && (
         <View style={styles.loadingContainer}>
           <Text style={styles.loading}>Loading...</Text>
         </View>
       )}
+      <FlatList
+        contentContainerStyle={styles.ListContainer}
+        showsVerticalScrollIndicator={false}
+        data={dataSearchFans?.data}
+        renderItem={({item, index}) => (
+          <MusicianSection
+            musicianNum={(index + 1).toLocaleString('en-US', {
+              minimumIntegerDigits: 2,
+              useGrouping: false,
+            })}
+            musicianName={item.fullname}
+            imgUri={
+              item.imageProfileUrls.length > 0
+                ? item.imageProfileUrls[0].image
+                : ''
+            }
+            containerStyles={{marginTop: mvs(20)}}
+            userId={item.uuid}
+            activeMore={false}
+            type="fans"
+          />
+        )}
+        ListEmptyComponent={
+          !isLoading && !isRefetching ? (
+            <EmptyState
+              text={t('EmptyState.Search.Fans') || ''}
+              containerStyle={styles.containerEmpty}
+            />
+          ) : null
+        }
+        refreshControl={
+          <RefreshControl refreshing={isRefetching} onRefresh={refetch} />
+        }
+      />
     </View>
   );
 };
@@ -85,9 +86,8 @@ const styles = StyleSheet.create({
     color: Color.Neutral[10],
   },
   loadingContainer: {
-    flex: 1,
     alignItems: 'center',
-    paddingTop: heightPercentage(50),
+    paddingVertical: heightPercentage(50),
   },
   containerEmpty: {
     flex: 0,

@@ -1,4 +1,11 @@
-import {FlatList, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {
+  FlatList,
+  RefreshControl,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import React, {FC, useEffect} from 'react';
 import MusicianSection from '../../components/molecule/MusicianSection/MusicianSection';
 import {mvs} from 'react-native-size-matters';
@@ -28,7 +35,6 @@ const ListResultMusician: FC<KeywordProps> = ({keyword}: KeywordProps) => {
     data: dataSearchMusicians,
     refetch,
     isRefetching,
-    isFetched,
     isLoading,
   } = useQuery(['/search-musician'], () =>
     getSearchMusicians({keyword: keyword}),
@@ -41,46 +47,48 @@ const ListResultMusician: FC<KeywordProps> = ({keyword}: KeywordProps) => {
 
   return (
     <View style={styles.container}>
-      {isFetched && !isRefetching && (
-        <FlatList
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={styles.ListContainer}
-          data={dataSearchMusicians?.data}
-          renderItem={({item, index}) => (
-            <TouchableOpacity onPress={() => handleOnPress(item.uuid)}>
-              <MusicianSection
-                musicianNum={(index + 1).toLocaleString('en-US', {
-                  minimumIntegerDigits: 2,
-                  useGrouping: false,
-                })}
-                musicianName={item?.fullname}
-                imgUri={
-                  item.imageProfileUrls.length > 0
-                    ? item.imageProfileUrls[0].image
-                    : ''
-                }
-                containerStyles={{marginTop: mvs(20)}}
-                userId={item?.uuid}
-                followerMode
-                followersCount={item?.followers}
-                activeMore={false}
-              />
-            </TouchableOpacity>
-          )}
-          ListEmptyComponent={
-            <EmptyState
-              text={t('EmptyState.Search.Musician') || ''}
-              containerStyle={styles.containerEmpty}
-            />
-          }
-        />
-      )}
-
       {(isRefetching || isLoading) && (
         <View style={styles.loadingContainer}>
           <Text style={styles.loading}>Loading...</Text>
         </View>
       )}
+      <FlatList
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.ListContainer}
+        data={dataSearchMusicians?.data}
+        renderItem={({item, index}) => (
+          <TouchableOpacity onPress={() => handleOnPress(item.uuid)}>
+            <MusicianSection
+              musicianNum={(index + 1).toLocaleString('en-US', {
+                minimumIntegerDigits: 2,
+                useGrouping: false,
+              })}
+              musicianName={item?.fullname}
+              imgUri={
+                item.imageProfileUrls.length > 0
+                  ? item.imageProfileUrls[0].image
+                  : ''
+              }
+              containerStyles={{marginTop: mvs(20)}}
+              userId={item?.uuid}
+              followerMode
+              followersCount={item?.followers}
+              activeMore={false}
+            />
+          </TouchableOpacity>
+        )}
+        ListEmptyComponent={
+          !isLoading && !isRefetching ? (
+            <EmptyState
+              text={t('EmptyState.Search.Musician') || ''}
+              containerStyle={styles.containerEmpty}
+            />
+          ) : null
+        }
+        refreshControl={
+          <RefreshControl refreshing={isRefetching} onRefresh={refetch} />
+        }
+      />
     </View>
   );
 };
@@ -100,9 +108,8 @@ const styles = StyleSheet.create({
     color: Color.Neutral[10],
   },
   loadingContainer: {
-    flex: 1,
     alignItems: 'center',
-    paddingTop: heightPercentage(50),
+    paddingVertical: heightPercentage(50),
   },
   containerEmpty: {
     flex: 0,
