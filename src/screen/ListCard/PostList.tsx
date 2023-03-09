@@ -497,7 +497,7 @@ const PostListHome: FC<PostListProps> = (props: PostListProps) => {
                       </Text>
                       {item.images !== null ? (
                         <>
-                          <Gap height={4} />
+                          <Gap height={6} />
                           <View
                             style={{
                               flexDirection: 'row',
