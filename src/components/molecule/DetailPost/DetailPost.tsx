@@ -13,6 +13,8 @@ import {heightPercentage, normalize, widthResponsive} from '../../../utils';
 import {color, font} from '../../../theme';
 import {CommentIcon, LoveIcon, ShareIcon} from '../../../assets/icon';
 import CoinB from '../../../assets/icon/CoinB.icon';
+import DropdownMore from '../V2/DropdownFilter/DropdownMore';
+import {DataDropDownType, dataUpdatePost} from '../../../data/dropdown';
 
 interface ListProps extends TouchableOpacityProps {
   imgUri: string;
@@ -30,6 +32,10 @@ interface ListProps extends TouchableOpacityProps {
   containerStyles?: ViewStyle;
   category: string;
   toDetailOnPress: () => void;
+  myPost: boolean;
+  selectedMenu: (value: DataDropDownType) => void;
+  idPost: string;
+  selectedIdPost: (id: string) => void;
 }
 
 const DetailPost: React.FC<ListProps> = (props: ListProps) => {
@@ -49,6 +55,10 @@ const DetailPost: React.FC<ListProps> = (props: ListProps) => {
     containerStyles,
     category,
     toDetailOnPress,
+    myPost,
+    selectedMenu,
+    idPost,
+    selectedIdPost,
   } = props;
   return (
     <>
@@ -113,17 +123,34 @@ const DetailPost: React.FC<ListProps> = (props: ListProps) => {
           <Gap width={15} />
           {/* token section */}
           <View>
-            <TouchableOpacity onPress={tokenOnPress} style={styles.socialIcon}>
-              <CoinB fill={color.Dark[100]} />
-            </TouchableOpacity>
+            {!myPost ? (
+              <TouchableOpacity
+                onPress={tokenOnPress}
+                style={styles.socialIcon}>
+                <CoinB fill={color.Dark[100]} />
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity onPress={shareOnPress}>
+                <ShareIcon fill={color.Dark[100]} />
+              </TouchableOpacity>
+            )}
           </View>
           <Gap width={15} />
 
           {/* share section */}
           <View>
-            <TouchableOpacity onPress={shareOnPress}>
-              <ShareIcon fill={color.Dark[100]} />
-            </TouchableOpacity>
+            {!myPost ? (
+              <TouchableOpacity onPress={shareOnPress}>
+                <ShareIcon fill={color.Dark[100]} />
+              </TouchableOpacity>
+            ) : (
+              <DropdownMore
+                id={idPost}
+                selectedid={selectedIdPost}
+                selectedMenu={selectedMenu}
+                dataFilter={dataUpdatePost}
+              />
+            )}
           </View>
         </View>
       </View>

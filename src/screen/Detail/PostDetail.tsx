@@ -68,6 +68,7 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
     dataLoadMore,
     feedIsLoading,
     dataComment,
+    dataDeletePost,
     setDataLoadMore,
     setDataComment,
     setLikePost,
@@ -80,6 +81,7 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
     setUnlikeComment,
     setCommentDelete,
     setCommentUpdate,
+    setDeletePost,
   } = useFeedHook();
 
   const {
@@ -154,6 +156,10 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   const [selectedLvlComment, setSelectedLvlComment] = useState<number>();
   const [updateComment, setUpdateComment] = useState<boolean>(false);
   const [temporaryIds, setTemporaryIds] = useState<string>();
+
+  // * UPDATE HOOKS POST
+  const [selectedIdPost, setSelectedIdPost] = useState<string>();
+  const [selectedMenuPost, setSelectedMenuPost] = useState<DataDropDownType>();
 
   //* MUSIC HOOKS
   const [pauseModeOn, setPauseModeOn] = useState<boolean>(false);
@@ -693,6 +699,27 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   }, [unlikeCommentId]);
   // ! End Of LIKE AREA
 
+  // ! UPDATE POST AREA
+  useEffect(() => {
+    if (selectedIdPost !== undefined && selectedMenuPost !== undefined) {
+      if (t(selectedMenuPost.label) === 'Delete Post') {
+        setDeletePost({id: selectedIdPost});
+        setSelectedMenuPost(undefined);
+      }
+      if (t(selectedMenuPost.label) === 'Edit Post') {
+        navigation.navigate('CreatePost', {postData: dataPostDetail});
+        setSelectedMenuPost(undefined);
+      }
+    }
+  }, [selectedIdPost, selectedMenuPost]);
+
+  useEffect(() => {
+    if (dataDeletePost) {
+      navigation.goBack();
+    }
+  }, [dataDeletePost]);
+  // ! END OF UPDATE POST AREA
+
   // ! MUSIC AREA
   const onPressPlaySong = (val: PostList) => {
     let data = [val];
@@ -828,6 +855,10 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
               }}
               commentCount={commentCountLvl1}
               disabled={true}
+              myPost={dataPostDetail.musician.uuid === dataProfile?.data.uuid}
+              selectedMenu={setSelectedMenuPost}
+              idPost={dataPostDetail.id}
+              selectedIdPost={setSelectedIdPost}
               children={
                 <View style={{width: '100%'}}>
                   {dataPostDetail ? (
