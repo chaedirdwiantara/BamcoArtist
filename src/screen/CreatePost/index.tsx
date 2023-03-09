@@ -485,9 +485,8 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
                 onChangeText={(newText: string) => setInputText(newText)}
                 placeholder={`${t('Post.Create.Write')}...`}
                 containerStyles={{
-                  width: widthResponsive(290),
                   backgroundColor: 'transparent',
-                  paddingLeft: 0,
+                  paddingHorizontal: 0,
                 }}
                 multiline={true}
                 maxLength={400}
