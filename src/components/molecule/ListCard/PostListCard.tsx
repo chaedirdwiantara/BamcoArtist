@@ -21,6 +21,7 @@ import {CommentIcon, LoveIcon, ShareIcon} from '../../../assets/icon';
 import CoinB from '../../../assets/icon/CoinB.icon';
 import {Dropdown} from '../DropDown';
 import {DataDropDownType, dataUpdatePost} from '../../../data/dropdown';
+import DropdownMore from '../V2/DropdownFilter/DropdownMore';
 
 interface ListProps extends TouchableOpacityProps {
   imgUri: string;
@@ -143,18 +144,24 @@ const PostListCard: React.FC<ListProps> = (props: ListProps) => {
                     <ShareIcon fill={color.Dark[100]} />
                   </TouchableOpacity>
                 ) : (
-                  <Dropdown.More
-                    data={dataUpdatePost}
-                    idComment={idPost}
-                    selectedIdComment={selectedIdPost}
+                  // <Dropdown.More
+                  //   data={dataUpdatePost}
+                  //   idComment={idPost}
+                  //   selectedIdComment={selectedIdPost}
+                  //   selectedMenu={selectedMenu}
+                  //   iconFill={color.Dark[100]}
+                  //   containerStyle={{
+                  //     width: widthResponsive(110),
+                  //     marginLeft: widthResponsive(-97),
+                  //     marginTop: Platform.OS === 'android' ? ms(-35) : ms(-10),
+                  //   }}
+                  //   translation={true}
+                  // />
+                  <DropdownMore
+                    id={idPost}
+                    selectedid={selectedIdPost}
                     selectedMenu={selectedMenu}
-                    iconFill={color.Dark[100]}
-                    containerStyle={{
-                      width: widthResponsive(110),
-                      marginLeft: widthResponsive(-97),
-                      marginTop: Platform.OS === 'android' ? ms(-35) : ms(-10),
-                    }}
-                    translation={true}
+                    dataFilter={dataUpdatePost}
                   />
                 )}
               </View>

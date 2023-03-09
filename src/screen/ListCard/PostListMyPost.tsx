@@ -337,12 +337,12 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
       selectedMenu !== undefined &&
       dataMain
     ) {
-      if (selectedMenu.label === 'Delete Post') {
+      if (t(selectedMenu.label) === 'Delete Post') {
         setDeletePost({id: selectedIdPost});
         setDataMain(dataMain.filter(data => data.id !== selectedIdPost));
         setSelectedMenu(undefined);
       }
-      if (selectedMenu.label === 'Edit Post') {
+      if (t(selectedMenu.label) === 'Edit Post') {
         let dataSelected = dataMain.filter(data => data.id === selectedIdPost);
         navigation.navigate('CreatePost', {postData: dataSelected[0]});
         setSelectedMenu(undefined);
