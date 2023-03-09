@@ -885,9 +885,12 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
                       </Text>
                     )
                   ) : null}
-                  <Gap height={4} />
+                  {data.images.length > 0 ||
+                  data.quoteToPost.encodeHlsUrl !== null ? (
+                    <Gap height={6} />
+                  ) : null}
                   <View>
-                    {data.images !== null ? (
+                    {data.images.length > 0 ? (
                       <ImageList
                         imgData={data.images}
                         disabled={false}
@@ -897,7 +900,7 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
                       />
                     ) : null}
                     {data.images.length === 0 &&
-                    data.quoteToPost.encodeHlsUrl ? (
+                    data.quoteToPost.encodeHlsUrl !== null ? (
                       <MusicListPreview
                         hideClose
                         targetId={dataPostDetail.quoteToPost.targetId}
@@ -931,7 +934,7 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
             />
           ) : null}
         </View>
-        <Gap height={12} />
+        <Gap height={6} />
         <SsuDivider />
         <Gap height={20} />
 

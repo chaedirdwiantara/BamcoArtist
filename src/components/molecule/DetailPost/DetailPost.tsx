@@ -149,6 +149,7 @@ const DetailPost: React.FC<ListProps> = (props: ListProps) => {
                 selectedid={selectedIdPost}
                 selectedMenu={selectedMenu}
                 dataFilter={dataUpdatePost}
+                iconContainerStyle={{marginRight: widthResponsive(-2)}}
               />
             )}
           </View>
@@ -203,8 +204,8 @@ const styles = StyleSheet.create({
   bodyContainer: {
     width: '100%',
     flexDirection: 'row',
-    marginTop: heightPercentage(8),
-    marginBottom: heightPercentage(12),
+    marginTop: ms(10),
+    marginBottom: ms(8),
   },
   category: {
     backgroundColor: color.Pink[100],

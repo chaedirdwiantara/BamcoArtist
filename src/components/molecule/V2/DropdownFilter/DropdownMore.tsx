@@ -5,12 +5,13 @@ import {
   Text,
   TouchableOpacity,
   View,
+  ViewStyle,
 } from 'react-native';
 import React, {useState} from 'react';
 import {IconMore} from '../../../atom';
 import {widthResponsive} from '../../../../utils';
 import FilterModal from './modalFilter';
-import {DataDropDownType, dataUpdateComment} from '../../../../data/dropdown';
+import {DataDropDownType} from '../../../../data/dropdown';
 import {ms, mvs} from 'react-native-size-matters';
 
 const {StatusBarManager} = NativeModules;
@@ -21,10 +22,11 @@ interface DropdownV2Props {
   selectedid?: (id: string) => void;
   selectedMenu: (data: DataDropDownType) => void;
   dataFilter: DataDropDownType[];
+  iconContainerStyle?: ViewStyle;
 }
 
 const DropdownMore: React.FC<DropdownV2Props> = (props: DropdownV2Props) => {
-  const {id, selectedid, selectedMenu, dataFilter} = props;
+  const {id, selectedid, selectedMenu, dataFilter, iconContainerStyle} = props;
   const [offsetSortFilter, setOffsetSortFilter] = useState<{
     px: number;
     py: number;
@@ -62,7 +64,7 @@ const DropdownMore: React.FC<DropdownV2Props> = (props: DropdownV2Props) => {
         });
       }}>
       <TouchableOpacity
-        style={styles.iconContainer}
+        style={[styles.iconContainer, iconContainerStyle]}
         onPress={() => setIsModalVisible(true)}>
         <IconMore />
       </TouchableOpacity>
