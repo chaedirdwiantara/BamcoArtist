@@ -45,18 +45,25 @@ const DropdownMore: React.FC<DropdownV2Props> = (props: DropdownV2Props) => {
   };
 
   return (
-    <View style={styles.dropdownContainer}>
+    <View
+      style={styles.dropdownContainer}
+      onLayout={event => {
+        event.target.measure(() => {});
+      }}
+      ref={event => {
+        event?.measure((fx, fy, width, height, px, py) => {
+          let peye = Platform.OS === 'android' ? py - barHeight : py;
+          offsetSortFilter?.py !== peye
+            ? setOffsetSortFilter({
+                px: px + width,
+                py: Platform.OS === 'android' ? py - barHeight : py,
+              })
+            : null;
+        });
+      }}>
       <TouchableOpacity
         style={styles.iconContainer}
-        onPress={() => setIsModalVisible(true)}
-        onLayout={event => {
-          event.target.measure((x, y, width, height, pageX, pageY) => {
-            setOffsetSortFilter({
-              px: pageX + width,
-              py: Platform.OS === 'android' ? pageY - barHeight : pageY,
-            });
-          });
-        }}>
+        onPress={() => setIsModalVisible(true)}>
         <IconMore />
       </TouchableOpacity>
       {offsetSortFilter !== undefined && (
