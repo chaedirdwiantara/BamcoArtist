@@ -91,7 +91,6 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   } = usePlayerHook();
   const {dataProfile, getProfileUser} = useProfileHook();
   const [label, setLabel] = useState<string>();
-  // const [labelAudience, setLabelAudience] = useState<string>();
   const [valueFilter, setValueFilter] = useState<string>();
   const [dataAudience, setDataAudience] = useState<string>('');
   const [dataResponseImg, setDataResponseImg] = useState<string[]>([]);
@@ -113,6 +112,12 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
       setDataAudience(dataAudienceChoosen);
     }
   }, [dataAudienceChoosen]);
+
+  useEffect(() => {
+    if (!label) {
+      setLabel('Home.Tab.TopPost.Category.Highlight');
+    }
+  }, [label]);
 
   // ! EDIT POST AREA
   useEffect(() => {
@@ -454,9 +459,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
       setAllowOffset(false);
     }
   }, [offset]);
-
   // ? END OF OFFSET AREA
-
   return (
     <KeyboardAvoidingView
       style={{flex: 1}}
@@ -586,7 +589,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
                     })
                   }
                   containerStyles={{
-                    width: widthResponsive(147),
+                    width: widthResponsive(140),
                     alignItems: 'flex-start',
                   }}
                   gradientStyles={{
