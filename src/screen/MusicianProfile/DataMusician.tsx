@@ -61,10 +61,10 @@ const DataMusician: FC<DataMusicianProps> = (props: DataMusicianProps) => {
       />
       <Gap height={24} />
       <ProfileComponent
-        title={t('Musician.Label.Origin')}
+        title={t('Setting.Account.Label.Location')}
         content={
-          profile.originCity && profile.originCountry
-            ? `${profile.originCity}, ${profile.originCountry}`
+          profile.locationCity && profile.locationCountry
+            ? `${profile.locationCity}, ${profile.locationCountry}`
             : noDataText
         }
       />
@@ -86,7 +86,8 @@ const DataMusician: FC<DataMusicianProps> = (props: DataMusicianProps) => {
       <Gap height={24} />
       <ProfileComponent
         title={t('Musician.Label.Website')}
-        content={profile.website}
+        websiteSection
+        content={profile.website ? profile.website : noDataText}
       />
       <Gap height={24} />
       <Photo
@@ -114,5 +115,3 @@ const DataMusician: FC<DataMusicianProps> = (props: DataMusicianProps) => {
 };
 
 export default DataMusician;
-
-const styles = StyleSheet.create({});

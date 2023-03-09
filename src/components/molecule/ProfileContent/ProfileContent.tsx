@@ -8,6 +8,7 @@ import {
   NativeSyntheticEvent,
   Text,
 } from 'react-native';
+import {useTranslation} from 'react-i18next';
 
 import {
   width,
@@ -19,25 +20,27 @@ import {
 import {font} from '../../../theme';
 import {TabFilter} from '../TabFilter';
 import Color from '../../../theme/Color';
-import {SettingIcon} from '../../../assets/icon';
-import {ProfileHeader} from './components/Header';
-import {EmptyState} from '../EmptyState/EmptyState';
-import {TopSongListData} from '../../../data/topSong';
-import {UserInfoCard} from '../UserInfoCard/UserInfoCard';
-import {CreateNewCard} from '../CreateNewCard/CreateNewCard';
-import {Playlist} from '../../../interface/playlist.interface';
-import ListPlaylist from '../../../screen/ListCard/ListPlaylist';
 import {
   AlbumData,
   DataDetailMusician,
 } from '../../../interface/musician.interface';
-import DataMusician from '../../../screen/MusicianProfile/DataMusician';
+import {SettingIcon} from '../../../assets/icon';
+import {ProfileHeader} from './components/Header';
+import {EmptyState} from '../EmptyState/EmptyState';
+import {UserInfoCard} from '../UserInfoCard/UserInfoCard';
+import {CreateNewCard} from '../CreateNewCard/CreateNewCard';
+import {Playlist} from '../../../interface/playlist.interface';
+import ListPlaylist from '../../../screen/ListCard/ListPlaylist';
 import PostListPublic from '../../../screen/ListCard/PostListPublic';
+import DataMusician from '../../../screen/MusicianProfile/DataMusician';
 import PostListExclusive from '../../../screen/ListCard/PostListExclusive';
-import {dropDownDataCategory, dropDownDataSort} from '../../../data/dropdown';
 import {ProfileFansResponseType} from '../../../interface/profile.interface';
-import {useTranslation} from 'react-i18next';
 import PostListMyPost from '../../../screen/ListCard/PostListMyPost';
+import {dropDownDataCategory, dropDownDataSort} from '../../../data/dropdown';
+import ImageModal from '../../../screen/Detail/ImageModal';
+import ExclusiveDailyContent from '../../../screen/MusicianProfile/ExclusiveDailyContent';
+import {Gap} from '../../atom';
+import {DataExclusiveResponse} from '../../../interface/setting.interface';
 
 type OnScrollEventHandler = (
   event: NativeSyntheticEvent<NativeScrollEvent>,
@@ -57,6 +60,8 @@ interface ProfileContentProps {
   selfProfile?: ProfileFansResponseType;
   ownProfile?: boolean;
   totalCountlikedSong?: number;
+  goToFollowers: () => void;
+  exclusiveContent?: DataExclusiveResponse;
 }
 
 export const ProfileContent: React.FC<ProfileContentProps> = ({
@@ -71,6 +76,8 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
   selfProfile,
   totalCountlikedSong,
   ownProfile = false,
+  goToFollowers,
+  exclusiveContent,
 }) => {
   const {t} = useTranslation();
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -88,6 +95,13 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
     {filterName: 'Musician.Tab.Music'},
     {filterName: 'Musician.Tab.Fans'},
   ]);
+  const [isModalVisible, setModalVisible] = useState<boolean>(false);
+  const [zoomImage, setZoomImage] = useState<string[]>([]);
+
+  const showImage = (uri: string) => {
+    setModalVisible(!isModalVisible);
+    setZoomImage([uri]);
+  };
 
   const filterData = (item: any, index: any) => {
     setSelectedIndex(index);
@@ -124,16 +138,28 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
           scrollEffect={scrollEffect}
           noEdit={!ownProfile}
           backIcon={!ownProfile}
+          onPressImage={showImage}
         />
         <UserInfoCard
           profile={profile}
           type={ownProfile ? '' : 'self'}
           containerStyles={styles.infoCard}
-          totalFollowing={profile.totalFollowers}
-          onPress={() => onPressGoTo('Following')}
+          totalFollowing={profile.totalFollowing}
+          onPress={goToFollowers}
           selfProfile={selfProfile?.data}
           totalCountlikedSong={totalCountlikedSong}
+          followersCount={profile.totalFollowers}
         />
+        {exclusiveContent ? (
+          <>
+            <Gap height={heightPercentage(50)} />
+            <ExclusiveDailyContent {...exclusiveContent} edit={true} />
+            <Gap height={heightPercentage(20)} />
+          </>
+        ) : (
+          <Gap height={heightPercentage(70)} />
+        )}
+
         <View style={styles.containerContent}>
           <TabFilter.Type1
             filterData={ownProfile ? filter2 : filter}
@@ -144,21 +170,13 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
           {!ownProfile &&
           dataPlaylist !== null &&
           filter[selectedIndex].filterName === 'Profile.Tab.Playlist' ? (
-            TopSongListData.length > 0 ? (
-              <View>
-                <ListPlaylist
-                  data={dataPlaylist}
-                  onPress={goToPlaylist}
-                  scrollable={false}
-                />
-              </View>
-            ) : (
-              <CreateNewCard
-                num="01"
-                text="Default Playlist"
-                onPress={() => onPressGoTo('CreateNewPlaylist')}
+            <View>
+              <ListPlaylist
+                data={dataPlaylist}
+                onPress={goToPlaylist}
+                scrollable={false}
               />
-            )
+            </View>
           ) : !ownProfile &&
             filter[selectedIndex].filterName ===
               t('Profile.Tab.TopMusician') ? (
@@ -230,6 +248,14 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
           )}
         </View>
       </ScrollView>
+
+      <ImageModal
+        toggleModal={() => setModalVisible(!isModalVisible)}
+        modalVisible={isModalVisible}
+        imageIdx={0}
+        dataImage={zoomImage}
+        type={'zoomProfile'}
+      />
     </View>
   );
 };
@@ -245,7 +271,7 @@ const styles = StyleSheet.create({
   },
   containerContent: {
     flex: 1,
-    marginTop: heightPercentage(70),
+    // marginTop: heightPercentage(70),
     paddingHorizontal: widthPercentage(20),
     marginBottom: heightPercentage(20),
     width: '100%',

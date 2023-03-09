@@ -1,11 +1,11 @@
-import {StyleSheet, Text, View, ViewStyle} from 'react-native';
 import React, {FC} from 'react';
-import {color, font} from '../../../theme';
+import {StyleSheet, Text, TextStyle} from 'react-native';
 import {mvs} from 'react-native-size-matters';
+import {color, font} from '../../../theme';
 
 interface TitleProps {
   text: string;
-  textStyle?: ViewStyle;
+  textStyle?: TextStyle;
 }
 
 const Title: FC<TitleProps> = (props: TitleProps) => {

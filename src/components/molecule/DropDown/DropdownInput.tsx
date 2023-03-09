@@ -1,12 +1,13 @@
 import React, {useEffect, useState} from 'react';
-import {Platform, StyleSheet, Text, View, ViewStyle} from 'react-native';
+import {StyleSheet, Text, View, ViewStyle} from 'react-native';
+import {useTranslation} from 'react-i18next';
 import {ms, mvs} from 'react-native-size-matters';
 import {Dropdown} from 'react-native-element-dropdown';
+
 import {Gap} from '../../atom';
-import {color, font} from '../../../theme';
 import {ErrorIcon} from '../../../assets/icon';
+import {color, font, typography} from '../../../theme';
 import {heightPercentage, normalize, widthPercentage} from '../../../utils';
-import {useTranslation} from 'react-i18next';
 
 interface dataProps {
   label: string;
@@ -70,7 +71,11 @@ const InputDropdown: React.FC<InputDropdownProps> = (
   }, []);
 
   const renderLabel = () => {
-    return <Text style={[styles.label]}>{dropdownLabel}</Text>;
+    return (
+      <Text style={[typography.Overline, {color: color.Neutral[50]}]}>
+        {dropdownLabel}
+      </Text>
+    );
   };
 
   return (
@@ -142,20 +147,16 @@ const styles = StyleSheet.create({
     borderWidth: 0,
     backgroundColor: itemBg,
   },
-  label: {
-    color: color.Neutral[50],
-    fontSize: normalize(10),
-  },
   placeholderStyle: {
-    fontSize: Platform.OS === 'ios' ? mvs(12) : mvs(13),
+    fontSize: mvs(15),
     color: color.Dark[300],
   },
   selectedTextStyle: {
-    fontSize: Platform.OS === 'ios' ? mvs(12) : mvs(13),
+    fontSize: mvs(15),
     color: fontColorMain,
   },
   itemTextStyle: {
-    fontSize: Platform.OS === 'ios' ? mvs(12) : mvs(13),
+    fontSize: mvs(15),
     color: fontColorMain,
   },
   iconStyle: {

@@ -1,4 +1,5 @@
 import {
+  FollowersProps,
   ListSearchAlbumsResponseType,
   ListSearchFansResponseType,
   ListSearchMusicianResponseType,
@@ -62,6 +63,18 @@ export const playlistSearch = async (
 ): Promise<ListSearchPlaylistsResponseType> => {
   const {data} = await SsuAPISemeru().request<ListSearchPlaylistsResponseType>({
     url: '/playlists',
+    method: 'GET',
+    params: props,
+  });
+
+  return data;
+};
+
+export const listFollowers = async (
+  props: FollowersProps,
+): Promise<ListSearchFansResponseType> => {
+  const {data} = await SsuAPI().request<ListSearchFansResponseType>({
+    url: `/musicians/${props.uuid}/followers`,
     method: 'GET',
     params: props,
   });

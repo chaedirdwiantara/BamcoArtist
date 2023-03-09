@@ -31,23 +31,31 @@ import {ModalConfirm} from '../Modal/ModalConfirm';
 import {dateFormat} from '../../../utils/date-format';
 import TopSong from '../../../screen/ListCard/TopSong';
 import {color, font, typography} from '../../../theme';
-import {deletePlaylist} from '../../../api/playlist.api';
+import {
+  deletePlaylist,
+  removeSongFromPlaylist,
+} from '../../../api/playlist.api';
 import {SongList} from '../../../interface/song.interface';
 import {SongTitlePlay} from '../SongTitlePlay/SongTitlePlay';
 import {Playlist} from '../../../interface/playlist.interface';
 import {useTranslation} from 'react-i18next';
 import {ModalShare} from '../Modal/ModalShare';
+import {usePlayerHook} from '../../../hooks/use-player.hook';
 
 interface Props {
   goBackProfile: (showToast: boolean) => void;
   goToEditPlaylist: () => void;
   goToAddSong: () => void;
   dataDetail: Playlist;
-  listSongs: SongList[] | undefined;
+  listSongs: SongList[];
   onPressSong: (param: SongList | null) => void;
   playerVisible: boolean;
   isPlaying: boolean;
   handlePlayPaused: () => void;
+  playlistId: number;
+  setFetchListSong: () => void;
+  goToAlbum: (id: number) => void;
+  goToDetailSong: (id: number) => void;
 }
 
 export const PlaylistContent: React.FC<Props> = ({
@@ -60,12 +68,18 @@ export const PlaylistContent: React.FC<Props> = ({
   playerVisible,
   isPlaying,
   handlePlayPaused,
+  playlistId,
+  setFetchListSong,
+  goToAlbum,
+  goToDetailSong,
 }) => {
   const {t} = useTranslation();
+  const {addSong} = usePlayerHook();
   const [isModalVisible, setModalVisible] = useState<boolean>(false);
   const [toastVisible, setToastVisible] = useState<boolean>(false);
   const [toastText, setToastText] = useState<string>('');
   const [modalShare, setModalShare] = useState<boolean>(false);
+  const [modalShareTitle, setModalShareTitle] = useState<string>('');
 
   useEffect(() => {
     toastVisible &&
@@ -83,6 +97,7 @@ export const PlaylistContent: React.FC<Props> = ({
 
   const songDataMore = [
     {label: t('Home.Tab.TopSong.Queue'), value: 'AddToQueue'},
+    {label: t('Music.Playlist.ViewAlbum'), value: 'ViewAlbum'},
     {label: t('Music.Playlist.Remove'), value: 'RemoveFromPlaylist'},
     {label: t('Home.Tab.TopSong.Share'), value: 'ShareSong'},
     {label: t('Home.Tab.TopSong.Details'), value: 'ShowDetails'},
@@ -107,19 +122,39 @@ export const PlaylistContent: React.FC<Props> = ({
       setToastText('Playlist added to queue!');
     } else {
       setModalShare(true);
+      setModalShareTitle(t('General.Share.Playlist') || '');
     }
   };
 
-  const pressSongDataMore = (dataResult: any) => {
-    if (dataResult?.value === 'DeletePlaylist') {
-      setModalVisible(true);
-    } else if (dataResult?.value === 'EditPlaylist') {
-      goToEditPlaylist();
+  const pressSongDataMore = (dataResult: any, item: SongList) => {
+    if (dataResult?.value === 'RemoveFromPlaylist') {
+      onPressRemoveSong(item.id, item.title);
+    } else if (dataResult?.value === 'ShowDetails') {
+      goToDetailSong(item.id);
     } else if (dataResult?.value === 'AddToQueue') {
+      // addSong(item);
       setToastVisible(true);
       setToastText('Song added to queue!');
+    } else if (dataResult?.value === 'ViewAlbum') {
+      goToAlbum(item.album.id);
     } else {
       setModalShare(true);
+      setModalShareTitle(t('Home.Tab.TopSong.Share') || '');
+    }
+  };
+
+  const onPressRemoveSong = async (songId: number, songName: string) => {
+    try {
+      const payload = {
+        playlistId,
+        songId,
+      };
+      await removeSongFromPlaylist(payload);
+      setFetchListSong();
+      setToastVisible(true);
+      setToastText(songName + ' have been removed!');
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -203,7 +238,6 @@ export const PlaylistContent: React.FC<Props> = ({
             ) : (
               <TopSong
                 dataSong={listSongs}
-                hideDropdownMore={true}
                 type={'home'}
                 onPress={onPressSong}
                 loveIcon={true}
@@ -240,11 +274,12 @@ export const PlaylistContent: React.FC<Props> = ({
 
       <ModalShare
         url={
-          'https://open.ssu.io/track/19AiJfAtRiccvSU1EWcttT?si=36b9a686dad44ae0'
+          'https://open.ssu.io/track19AiJfAtRiccvSU1EWcttTsi=36b9a686dad44ae0'
         }
         modalVisible={modalShare}
         onPressClose={() => setModalShare(false)}
-        titleModal={t('General.Share.Playlist')}
+        titleModal={modalShareTitle}
+        hideMusic={modalShareTitle === t('Home.Tab.TopSong.Share')}
         imgUri={dataDetail?.thumbnailUrl}
         type={'Playlist'}
         titleSong={dataDetail?.name}

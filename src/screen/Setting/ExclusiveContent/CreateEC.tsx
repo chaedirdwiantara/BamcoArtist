@@ -9,7 +9,12 @@ import {
 } from '../../../interface/setting.interface';
 import {color, font, typography} from '../../../theme';
 import {uploadImage} from '../../../api/uploadImage.api';
-import {Button, ModalImagePicker, SsuInput} from '../../../components';
+import {
+  Button,
+  Dropdown,
+  ModalImagePicker,
+  SsuInput,
+} from '../../../components';
 import {heightPercentage, width, widthPercentage} from '../../../utils';
 import {PhotoPlaylist} from '../../../components/molecule/PlaylistContent/PhotoPlaylist';
 import {useTranslation} from 'react-i18next';
@@ -21,41 +26,36 @@ interface CreateProps {
 
 export const CreateEC: React.FC<CreateProps> = ({data, onPress}) => {
   const {t} = useTranslation();
-  const priceWeekly = data?.pricingPlans.filter(
-    val => val.durationUnit === 'weekly',
-  )[0];
-  const weekly = priceWeekly === undefined ? '' : priceWeekly?.price;
-
-  const priceMonthly = data?.pricingPlans.filter(
-    val => val.durationUnit === 'monthly',
-  )[0];
-  const monthly = priceMonthly === undefined ? '' : priceMonthly?.price;
-
-  const priceYearly = data?.pricingPlans.filter(
-    val => val.durationUnit === 'yearly',
-  )[0];
-  const yearly = priceYearly === undefined ? '' : priceYearly?.price;
 
   const [title, setTitle] = useState<string>(data?.title || '');
   const [description, setDescription] = useState<string>(
     data?.description || '',
   );
-  const [price, setPrice] = useState({
-    weekly: weekly,
-    monthly: monthly,
-    yearly: yearly,
-  });
   const [coverImage, setCoverImage] = useState<string>(data?.coverImage || '');
   const [firstUri, setFirstUri] = useState<string | undefined>(
     data?.coverImage || undefined,
   );
   const [modalVisible, setModalVisible] = useState<boolean>(false);
-  const onChangePrice = (key: string, value: string) => {
-    setPrice({
-      ...price,
-      [key]: value,
-    });
-  };
+  const [durationUnit, setDurationUnit] = useState<string>('');
+  const [price, setPrice] = useState<string>(
+    data?.pricingPlans[0].price.toString() ?? '',
+  );
+
+  const initialDuration = data?.pricingPlans[0].durationUnit;
+  const duration = [
+    {
+      label: t('ExclusiveContent.Weekly'),
+      value: 'weekly',
+    },
+    {
+      label: t('ExclusiveContent.Monthly'),
+      value: 'monthly',
+    },
+    {
+      label: t('ExclusiveContent.Yearly'),
+      value: 'yearly',
+    },
+  ];
 
   const sendUri = async (val: Image) => {
     setFirstUri(val.path);
@@ -79,19 +79,15 @@ export const CreateEC: React.FC<CreateProps> = ({data, onPress}) => {
       durationUnit: string;
       price: number;
     }[] = [];
-    const durationUnit: string[] = ['weekly', 'monthly', 'yearly'];
 
-    durationUnit.map(item => {
-      if (price[item] !== '') {
-        pricingPlans.push({
-          durationInDays: item === 'weekly' ? 7 : item === 'monthly' ? 30 : 365,
-          durationUnit: item,
-          price: Number(price[item]),
-        });
-      }
+    pricingPlans.push({
+      durationInDays:
+        durationUnit === 'weekly' ? 7 : durationUnit === 'monthly' ? 30 : 365,
+      durationUnit: durationUnit,
+      price: Number(price),
     });
 
-    const payload = {
+    const payload: DataExclusiveProps = {
       title,
       description,
       coverImage,
@@ -170,10 +166,30 @@ export const CreateEC: React.FC<CreateProps> = ({data, onPress}) => {
           typography.Button2,
           {color: color.Neutral[50], marginTop: heightPercentage(25)},
         ]}>
-        Pricing Plan
+        {t('Setting.Exclusive.Label.Pricing')}
       </Text>
 
       <SsuInput.InputLabel
+        label={t('Setting.Exclusive.Label.Price') || ''}
+        placeholder={t('Setting.Exclusive.Placeholder.Price') || ''}
+        value={price}
+        multiline
+        maxLength={200}
+        onChangeText={(value: string) => setPrice(value)}
+        containerStyles={{marginTop: heightPercentage(15)}}
+        keyboardType="number-pad"
+      />
+
+      <Dropdown.Input
+        data={duration}
+        initialValue={initialDuration ?? ''}
+        dropdownLabel={t('Setting.Tips.Filter.Duration')}
+        placeHolder={t('Setting.Exclusive.Placeholder.Duration')}
+        textTyped={val => setDurationUnit(val.value)}
+        containerStyles={{marginTop: heightPercentage(15)}}
+      />
+
+      {/* <SsuInput.InputLabel
         label={t('ExclusiveContent.Weekly') || ''}
         placeholder={t('Setting.Exclusive.Placeholder.Price') || ''}
         value={price.weekly.toString()}
@@ -195,7 +211,7 @@ export const CreateEC: React.FC<CreateProps> = ({data, onPress}) => {
         // inputStyles={{marginLeft: widthPercentage(22)}}
       />
 
-      <SsuInput.InputLabel
+       <SsuInput.InputLabel
         label={t('ExclusiveContent.Monthly') || ''}
         placeholder={t('Setting.Exclusive.Placeholder.Price') || ''}
         value={price.monthly.toString()}
@@ -215,7 +231,7 @@ export const CreateEC: React.FC<CreateProps> = ({data, onPress}) => {
         onChangeText={(newText: string) => onChangePrice('yearly', newText)}
         containerStyles={{marginTop: heightPercentage(15)}}
         keyboardType="number-pad"
-      />
+      /> */}
 
       <Button
         label={t('Btn.Save')}

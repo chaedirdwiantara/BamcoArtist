@@ -227,13 +227,17 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
     isLogin ? goToScreen('TopupCoin') : setModalGuestVisible(true);
   };
 
+  if (dataProfile?.data === undefined) {
+    return <View style={styles.root} />;
+  }
+
   return (
     <View style={styles.root}>
       <SsuStatusBar type="black" />
       <TopNavigation.Type5
         name={dataProfile?.data?.fullname ?? ''}
         profileUri={dataProfile?.data?.imageProfileUrls[1]?.image || ''}
-        leftIconAction={() => console.log('Left Icon Pressed')}
+        leftIconAction={() => null}
         rightIcon={rightIconComp()}
         rightIconAction={onPressNotif}
         maxLengthTitle={20}

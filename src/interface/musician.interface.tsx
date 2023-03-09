@@ -77,6 +77,9 @@ export type DataDetailMusician = {
   albums: [];
   merchs: [];
   favoriteGenres: TheGenre[];
+  countAlbumReleased?: number;
+  countPlaylist?: number;
+  countSong?: number;
 };
 
 export type DetailMusicianResponseType = {

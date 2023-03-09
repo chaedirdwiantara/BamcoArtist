@@ -7,6 +7,7 @@ import {
   ViewStyle,
   Platform,
   ImageBackground,
+  TouchableOpacity,
 } from 'react-native';
 
 import {mvs} from 'react-native-size-matters';
@@ -30,6 +31,7 @@ export interface ProfileHeaderProps {
   followOnPress?: () => void;
   unfollowOnPress?: () => void;
   donateOnPress?: () => void;
+  onPressImage?: (uri: string) => void;
 }
 
 export const ProfileHeader: React.FC<ProfileHeaderProps> = (
@@ -43,18 +45,13 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = (
     username,
     bio,
     type = '',
-    onPress,
-    iconPress,
     isFollowed,
     containerStyles,
     followOnPress,
     unfollowOnPress,
     donateOnPress,
+    onPressImage,
   } = props;
-
-  const viewMoreOnPress = (params: string) => {
-    onPress?.(params);
-  };
 
   const followOnPressed = () => {
     followOnPress?.();
@@ -68,64 +65,78 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = (
     donateOnPress?.();
   };
 
+  const avatarPress = avatarUri === '' || avatarUri === null;
+  const backgroundPress = backgroundUri === '' || backgroundUri === null;
+
   return (
     <View style={[styles.root, containerStyles]}>
-      <ImageBackground
-        source={{uri: backgroundUri}}
-        resizeMode="cover"
-        style={styles.image}>
-        <View style={styles.bgChild}>
-          <AvatarProfile
-            initialName={initialname(fullname)}
-            imgUri={avatarUri}
-            type={type}
-            showIcon={type === 'edit'}
-            icon={<CameraIcon />}
-            // onPress={() => iconPress('avatarUri')}
-          />
-          <Gap height={12} />
-          <Text style={styles.fullname}>{fullname}</Text>
-          <Text style={styles.username}>{username}</Text>
-          <Gap height={19} />
-          {type === '' && (
-            <View style={styles.containerFooter}>
-              <Text style={styles.description}>{bio}</Text>
-              <Gap height={16} />
-              <View style={styles.buttonContainer}>
-                {isFollowed ? (
-                  <>
-                    <ButtonGradient
-                      label={t('Preference.Following')}
-                      gradientStyles={styles.btnContainer}
-                      onPress={unFollowOnPressed}
-                    />
-                    <Gap width={11} />
-                    <Button
-                      label={t('Musician.Label.Tip')}
-                      containerStyles={styles.btnContainer2}
-                      onPress={donate}
-                    />
-                  </>
-                ) : (
-                  <>
-                    <ButtonGradient
-                      label={t('Preference.Follow')}
-                      gradientStyles={styles.btnContainer}
-                      onPress={followOnPressed}
-                    />
-                    <Gap width={11} />
-                    <Button
-                      label={t('Musician.Label.Tip')}
-                      containerStyles={styles.btnContainer2}
-                      onPress={donate}
-                    />
-                  </>
-                )}
+      <TouchableOpacity
+        activeOpacity={backgroundPress ? 1 : 0.7}
+        onPress={() =>
+          backgroundPress ? null : onPressImage && onPressImage(backgroundUri)
+        }>
+        <ImageBackground
+          source={{uri: backgroundUri}}
+          resizeMode="cover"
+          style={styles.image}>
+          <View style={styles.bgChild}>
+            <TouchableOpacity
+              activeOpacity={avatarPress ? 1 : 0.5}
+              onPress={() =>
+                avatarPress ? null : onPressImage && onPressImage(avatarUri)
+              }>
+              <AvatarProfile
+                initialName={initialname(fullname)}
+                imgUri={avatarUri}
+                type={type}
+                showIcon={false}
+                icon={<CameraIcon />}
+              />
+            </TouchableOpacity>
+            <Gap height={12} />
+            <Text style={styles.fullname}>{fullname}</Text>
+            <Text style={styles.username}>{username}</Text>
+            <Gap height={19} />
+            {type === '' && (
+              <View style={styles.containerFooter}>
+                <Text style={styles.description}>{bio}</Text>
+                <Gap height={16} />
+                <View style={styles.buttonContainer}>
+                  {isFollowed ? (
+                    <>
+                      <ButtonGradient
+                        label={t('Preference.Following')}
+                        gradientStyles={styles.btnContainer}
+                        onPress={unFollowOnPressed}
+                      />
+                      <Gap width={11} />
+                      <Button
+                        label={t('Musician.Label.Tip')}
+                        containerStyles={styles.btnContainer2}
+                        onPress={donate}
+                      />
+                    </>
+                  ) : (
+                    <>
+                      <ButtonGradient
+                        label={t('Preference.Follow')}
+                        gradientStyles={styles.btnContainer}
+                        onPress={followOnPressed}
+                      />
+                      <Gap width={11} />
+                      <Button
+                        label={t('Musician.Label.Tip')}
+                        containerStyles={styles.btnContainer2}
+                        onPress={donate}
+                      />
+                    </>
+                  )}
+                </View>
               </View>
-            </View>
-          )}
-        </View>
-      </ImageBackground>
+            )}
+          </View>
+        </ImageBackground>
+      </TouchableOpacity>
     </View>
   );
 };

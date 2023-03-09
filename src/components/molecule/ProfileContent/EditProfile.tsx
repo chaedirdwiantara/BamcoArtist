@@ -7,6 +7,7 @@ import {
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
+import {useTranslation} from 'react-i18next';
 import {mvs} from 'react-native-size-matters';
 import {Image} from 'react-native-image-crop-picker';
 
@@ -15,6 +16,7 @@ import ListPhotos from './ListPhotos';
 import Font from '../../../theme/Font';
 import {Gap, SsuInput} from '../../atom';
 import Color from '../../../theme/Color';
+import {ModalLimit} from '../Modal/ModalLimit';
 import {TopNavigation} from '../TopNavigation';
 import {ModalSocMed} from '../Modal/ModalSocMed';
 import {ProfileHeader} from './components/Header';
@@ -26,7 +28,6 @@ import {useProfileHook} from '../../../hooks/use-profile.hook';
 import {heightPercentage, widthPercentage} from '../../../utils';
 import {useUploadImageHook} from '../../../hooks/use-uploadImage.hook';
 import ProfileComponent from '../../../screen/MusicianProfile/ProfileComponent';
-import {useTranslation} from 'react-i18next';
 
 interface EditProfileProps {
   profile: any;
@@ -65,6 +66,7 @@ export const EditProfile: React.FC<EditProfileProps> = ({
     modalConfirm: false,
     modalImage: false,
     modalSocMed: false,
+    modalLimit: false,
   });
   const [uriType, setUriType] = useState('');
   const [uri, setUri] = useState({
@@ -76,6 +78,7 @@ export const EditProfile: React.FC<EditProfileProps> = ({
   const [dataResponseImg, setDataResponseImg] = useState<string[]>([]);
   const [active, setActive] = useState<boolean>(false);
   const [savedPhotos, setSavedPhotos] = useState<number>(0);
+  const [modalLimitType, setModalLimitType] = useState<string>('');
 
   useEffect(() => {
     if (profile?.photos.length > 0) {
@@ -83,7 +86,7 @@ export const EditProfile: React.FC<EditProfileProps> = ({
       let newDataResponseImg: string[] = [];
       profile.photos.map((val: {images: {image: string}[]}, i: number) => {
         if (val.images.length > 0) {
-          const newPath = val.images[2]?.image;
+          const newPath = val.images[0]?.image;
           newPhotos.push({
             path: newPath,
             size: i,
@@ -120,6 +123,7 @@ export const EditProfile: React.FC<EditProfileProps> = ({
       modalConfirm: true,
       modalSocMed: false,
       modalImage: false,
+      modalLimit: false,
     });
   };
 
@@ -128,6 +132,7 @@ export const EditProfile: React.FC<EditProfileProps> = ({
       modalImage: true,
       modalSocMed: false,
       modalConfirm: false,
+      modalLimit: false,
     });
     setUriType(newType);
   };
@@ -137,6 +142,7 @@ export const EditProfile: React.FC<EditProfileProps> = ({
       modalSocMed: true,
       modalConfirm: false,
       modalImage: false,
+      modalLimit: false,
     });
   };
 
@@ -157,6 +163,7 @@ export const EditProfile: React.FC<EditProfileProps> = ({
       modalConfirm: false,
       modalImage: false,
       modalSocMed: false,
+      modalLimit: false,
     });
     getProfileUser();
   };
@@ -179,9 +186,15 @@ export const EditProfile: React.FC<EditProfileProps> = ({
   };
 
   const sendMultipleUri = (val: Image[]) => {
+    const allLength = photos.length + val.length;
+    let newVal: Image[] = [];
+    if (allLength > 10) {
+      newVal = val.slice(0, 10 - photos.length);
+    }
+
     setActive(true);
     let newUniqueImageVal: Image[] = [];
-    val.map(res => {
+    newVal.map(res => {
       // check if new image is not include in photos, compare using filename / size
       const propertyToCompare = Platform.OS === 'ios' ? 'filename' : 'size';
       if (
@@ -194,8 +207,13 @@ export const EditProfile: React.FC<EditProfileProps> = ({
     });
     setUnUploadedPhotos(newUniqueImageVal);
 
-    const allPhotos = unique([...photos, ...val]);
+    const allPhotos = unique([...photos, ...newVal]);
     setPhotos(allPhotos);
+    if (allLength > 10) {
+      setTimeout(() => {
+        showModalLimit('onUpload');
+      }, 500);
+    }
   };
 
   const removePhoto = (id: number) => {
@@ -204,6 +222,20 @@ export const EditProfile: React.FC<EditProfileProps> = ({
     setPhotos(photos.filter((x: Image) => x.path !== photos[id].path));
     setDataResponseImg(dataResponseImg.filter((val, index) => index !== id));
     id < savedPhotos && setSavedPhotos(savedPhotos - 1);
+  };
+
+  const showModalLimit = (newType: string) => {
+    setModalVisible({
+      modalLimit: true,
+      modalSocMed: false,
+      modalConfirm: false,
+      modalImage: false,
+    });
+    setModalLimitType(newType);
+  };
+
+  const onPressAddPhotos = () => {
+    photos.length < 10 ? openModalImage('photos') : showModalLimit('');
   };
 
   const titleModalPicker =
@@ -282,8 +314,8 @@ export const EditProfile: React.FC<EditProfileProps> = ({
 
         <View style={styles.textAreaContainer}>
           <SsuInput.InputLabel
-            label={t('Musician.Label.Website')}
-            placeholder={t('Profile.Edit.Website')}
+            label={t('Musician.Label.Website') || ''}
+            placeholder={t('Profile.Edit.Website') || ''}
             value={website}
             onChangeText={(newText: string) => setWebsite(newText)}
             containerStyles={{marginTop: heightPercentage(15)}}
@@ -317,7 +349,7 @@ export const EditProfile: React.FC<EditProfileProps> = ({
             {marginBottom: heightPercentage(30)},
           ]}>
           <Text style={styles.title}>{t('Musician.Label.Photos')}</Text>
-          <TouchableOpacity onPress={() => openModalImage('photos')}>
+          <TouchableOpacity onPress={onPressAddPhotos}>
             <Text style={styles.addText}>{`+ ${t(
               'Profile.Edit.Photos',
             )}`}</Text>
@@ -341,12 +373,19 @@ export const EditProfile: React.FC<EditProfileProps> = ({
         onPressClose={closeModal}
         hideMenuDelete={hideMenuDelete && uriType !== 'photos'}
         multiple={uriType === 'photos'}
+        maxFiles={10 - photos.length}
       />
 
       <ModalSocMed
+        titleModal={t('Musician.Label.Social')}
         modalVisible={isModalVisible.modalSocMed}
         onPressClose={closeModal}
-        titleModal={t('Musician.Label.Social')}
+      />
+
+      <ModalLimit
+        type={modalLimitType}
+        onPressClose={closeModal}
+        modalVisible={isModalVisible.modalLimit}
       />
 
       <ModalConfirm
@@ -403,7 +442,7 @@ const styles = StyleSheet.create({
     marginTop: heightPercentage(20),
   },
   addText: {
-    fontSize: mvs(12),
+    fontSize: mvs(13),
     color: Color.Pink[2],
     fontFamily: Font.InterRegular,
     marginTop: heightPercentage(10),

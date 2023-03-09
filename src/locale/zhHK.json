@@ -9,6 +9,7 @@
     "Thanks": "謝謝你！",
     "LinkCopied": "Link have been copied to clipboard!",
     "Followers": "追蹤者",
+    "FollowYou": "Follow you",
     "Listeners": "人聽過",
     "Share": {
       "Feed": "Share Feed",
@@ -89,6 +90,7 @@
     "Cancel": "取消",
     "Purchase": "購買",
     "Save": "保存",
+    "Close": "Close",
     "Edit": "編輯",
     "VerificationCode": "發送驗證碼",
     "TurnOff": "關閉",
@@ -212,7 +214,7 @@
   },
   "Profile": {
     "Label": {
-      "Description": "我是來支持音樂人的",
+      "Description": "I'm here to share my music career and connect further with my fans!",
       "Following": "追蹤中",
       "Liked": "喜歡的歌曲",
       "Point": "積分",
@@ -288,7 +290,8 @@
     "Optional": "支援（可選）",
     "InputBonus": "Input Bonus",
     "ErrorCoinBonus": "Insufficient coin, add more coin to give bonus",
-    "ErrorCoinSubs": "Insufficient coin, add more coin to subscribe"
+    "ErrorCoinSubs": "Insufficient coin, add more coin to subscribe",
+    "Edit": "Edit My Exclusive Content"
   },
   "Setting": {
     "Title": "設定",
@@ -314,7 +317,8 @@
         "Country": "Select Country",
         "City": "Select City",
         "Member": "Add Member",
-        "Active": "Select Year"
+        "Active": "Select Year",
+        "Label": "Add Label Name"
       }
     },
     "Password": {
@@ -488,12 +492,14 @@
         "Cover": "Exclusive Content Cover",
         "Title": "Title",
         "Description": "描述",
-        "Pricing": "Pricing Plan"
+        "Pricing": "Pricing Plan",
+        "Price": "Exclusive Content Price"
       },
       "Placeholder": {
         "Title": "Add Title",
         "Description": "Add Description about your content",
-        "Price": "Input Price (In Credit)"
+        "Price": "Input Price (In Credit)",
+        "Duration": "Select Duration"
       }
     }
   },
@@ -529,7 +535,8 @@
       "Delete": "Delete Playlist",
       "Share": "Share Playlist",
       "Success": "Song have been added to playlist!",
-      "Remove": "Remove from Playlist"
+      "Remove": "Remove from Playlist",
+      "ViewAlbum": "View Album"
     },
     "Credit": {
       "Title": "顯示製作人",
@@ -571,6 +578,11 @@
     "Title": "通知"
   },
   "Modal": {
+    "Limit": {
+      "Title": "Limit Reached",
+      "Subtitle1": "You have reached the limit of uploading 10 photos, please delete some of your photos to upload new ones.",
+      "Subtitle2": "Some of your photos cannot be uploaded because you have reached your limit. You can only upload up to 10 photos in your profile. Delete some photos to upload the new ones."
+    },
     "EditProfile": {
       "Title": "編輯個人資料",
       "Subtitle": "Are you sure to finish edit profile?"
@@ -627,10 +639,12 @@
       "Song": "Song not found",
       "Fans": "Fans not found"
     },
-    "NoAlbum": "No Album Available",
+    "NoAlbum": "No Album Available.",
     "NoMerch": "未有產品",
     "NoInfo": "No Information Given.",
-    "NoPhoto": "No Photos Available"
+    "NoPhoto": "No Photos Available.",
+    "NoECSetting": "You have not set your exclusive content yet, let’s try to make one",
+    "NoECData": "You don’t have any exclusive content, try to make a new one!"
   },
   "Guest": {
     "Title": "立即註冊與音樂人互動",

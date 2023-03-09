@@ -1,10 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, View, ViewStyle} from 'react-native';
-import {MultiSelect} from 'react-native-element-dropdown';
 import {ms, mvs} from 'react-native-size-matters';
-import {color, font} from '../../../theme';
-import {heightPercentage, normalize, widthPercentage} from '../../../utils';
+import {MultiSelect} from 'react-native-element-dropdown';
+
 import {CheckBox} from '../../atom';
+import {color, font, typography} from '../../../theme';
+import {heightPercentage, normalize, widthPercentage} from '../../../utils';
 
 export interface dataProps {
   label: string;
@@ -47,7 +48,11 @@ const MultiDropdown: React.FC<InputDropdownProps> = (
   };
 
   const renderLabel = () => {
-    return <Text style={[styles.label]}>{dropdownLabel}</Text>;
+    return (
+      <Text style={[typography.Overline, {color: color.Neutral[50]}]}>
+        {dropdownLabel}
+      </Text>
+    );
   };
 
   const renderItem = (item: any) => {
@@ -83,6 +88,9 @@ const MultiDropdown: React.FC<InputDropdownProps> = (
     }
   }, [initialValue]);
 
+  const placeholderColor =
+    value.length > 0 ? color.Neutral[10] : color.Dark[300];
+
   return (
     <View style={[styles.container, containerStyles]}>
       {renderLabel()}
@@ -91,8 +99,11 @@ const MultiDropdown: React.FC<InputDropdownProps> = (
         searchPlaceholder="Search..."
         style={[styles.dropdown]}
         containerStyle={styles.containerStyle}
-        placeholderStyle={styles.placeholderStyle}
-        inputSearchStyle={styles.placeholderStyle}
+        placeholderStyle={{
+          fontSize: mvs(15),
+          color: placeholderColor,
+        }}
+        inputSearchStyle={styles.inputSearchStyle}
         iconStyle={styles.iconStyle}
         data={data}
         maxHeight={mvs(300)}
@@ -124,7 +135,6 @@ export default MultiDropdown;
 const styles = StyleSheet.create({
   container: {
     width: '100%',
-    paddingHorizontal: ms(3),
   },
   // Dropdown first view
   dropdown: {
@@ -143,20 +153,16 @@ const styles = StyleSheet.create({
     borderWidth: 0,
     backgroundColor: itemBg,
   },
-  label: {
-    color: color.Neutral[50],
-    fontSize: normalize(10),
-  },
   placeholderStyle: {
-    fontSize: normalize(13),
+    fontSize: mvs(15),
     color: color.Neutral[10],
   },
   selectedTextStyle: {
-    fontSize: normalize(13),
+    fontSize: mvs(15),
     color: fontColorMain,
   },
   itemTextStyle: {
-    fontSize: normalize(13),
+    fontSize: mvs(15),
     color: fontColorMain,
   },
   iconStyle: {
@@ -169,5 +175,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     paddingHorizontal: widthPercentage(15),
     paddingVertical: heightPercentage(18),
+  },
+  inputSearchStyle: {
+    fontSize: normalize(13),
+    color: color.Neutral[10],
+    borderColor: 'transparent',
+    borderBottomColor: color.Pink[200],
   },
 });

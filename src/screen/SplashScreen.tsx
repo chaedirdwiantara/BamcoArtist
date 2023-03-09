@@ -1,15 +1,13 @@
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import AnimatedLottieView from 'lottie-react-native';
 import React, {useEffect, useState} from 'react';
-import {View, StyleSheet} from 'react-native';
-import {
-  heightPercentageToDP,
-  widthPercentageToDP,
-} from 'react-native-responsive-screen';
-import {ModalUpdate} from '../components/molecule/Modal/ModalUpdate';
-import {storage} from '../hooks/use-storage.hook';
-import {RootStackParams} from '../navigations';
+import {View, StyleSheet, Platform} from 'react-native';
+import {ms, mvs} from 'react-native-size-matters';
+import AnimatedLottieView from 'lottie-react-native';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+
 import Color from '../theme/Color';
+import {RootStackParams} from '../navigations';
+import {storage} from '../hooks/use-storage.hook';
+import {ModalUpdate} from '../components/molecule/Modal/ModalUpdate';
 
 type SplashScrennProps = NativeStackScreenProps<
   RootStackParams,
@@ -64,8 +62,8 @@ export const SplashScreen: React.FC<SplashScrennProps> = ({
         style={{
           padding: 0,
           margin: 0,
-          width: widthPercentageToDP(40),
-          height: heightPercentageToDP(40),
+          width: ms(300),
+          height: mvs(300),
           aspectRatio: 1 / 1,
         }}
       />
@@ -82,7 +80,8 @@ const styles = StyleSheet.create({
   root: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: Platform.OS === 'ios' ? 'center' : 'flex-start',
     backgroundColor: Color.Dark[800],
+    margin: 0,
   },
 });

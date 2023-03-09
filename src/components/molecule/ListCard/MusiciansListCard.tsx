@@ -15,7 +15,7 @@ import {
   widthPercentage,
   widthResponsive,
 } from '../../../utils';
-import {color, font} from '../../../theme';
+import {color, font, typography} from '../../../theme';
 import {Dropdown} from '../DropDown';
 import {DefaultAvatar} from '../../../assets/icon';
 import {useTranslation} from 'react-i18next';
@@ -32,6 +32,7 @@ export interface ListProps {
   followerMode?: boolean;
   followersCount?: number;
   activeMore?: boolean;
+  self?: boolean;
 }
 
 const MusiciansListCard: React.FC<ListProps> = (props: ListProps) => {
@@ -48,6 +49,7 @@ const MusiciansListCard: React.FC<ListProps> = (props: ListProps) => {
     followersCount,
     followerMode,
     activeMore = true,
+    self,
   } = props;
 
   // ? Dropdown Menu Example
@@ -73,7 +75,13 @@ const MusiciansListCard: React.FC<ListProps> = (props: ListProps) => {
 
   return (
     <View style={[styles.container, containerStyles]}>
-      <Text style={styles.rankStyle}>
+      <Text
+        style={[
+          styles.rankStyle,
+          {
+            color: self ? color.Pink[2] : color.Dark[100],
+          },
+        ]}>
         {musicianNum?.toLocaleString('en-US', {
           minimumIntegerDigits: 2,
           useGrouping: false,
@@ -114,6 +122,15 @@ const MusiciansListCard: React.FC<ListProps> = (props: ListProps) => {
       <View style={styles.rightContainer}>
         {point ? <Text style={styles.pointStyle}>{`${point} pts`}</Text> : null}
         {activeMore && moreMenu()}
+        {self && (
+          <Text
+            style={[
+              typography.Subtitle1,
+              {color: color.Pink[2], marginRight: widthPercentage(5)},
+            ]}>
+            You
+          </Text>
+        )}
       </View>
     </View>
   );

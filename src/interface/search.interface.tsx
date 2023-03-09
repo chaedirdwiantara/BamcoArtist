@@ -1,5 +1,4 @@
 import {imageTypes} from './base.interface';
-import {PostList} from './feed.interface';
 
 export type SearchProps = {
   keyword?: string;
@@ -12,6 +11,12 @@ export type ListDataSearchFans = {
   fullname: string;
   email: string;
   imageProfileUrls: imageTypes[];
+  followersType: 'fans' | 'musician';
+};
+
+export type FollowersProps = {
+  keyword?: string;
+  uuid: string;
 };
 
 export type ListSearchFansResponseType = {

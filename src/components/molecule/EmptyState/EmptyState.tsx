@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
     color: Color.Neutral[10],
     textAlign: 'center',
     maxWidth: width * 0.8,
-    fontSize: normalize(15),
+    fontSize: normalize(13),
     fontFamily: 'Inter-Medium',
   },
 });

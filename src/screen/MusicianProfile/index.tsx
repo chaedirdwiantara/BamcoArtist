@@ -7,7 +7,6 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParams} from '../../navigations';
 import {useMusicianHook} from '../../hooks/use-musician.hook';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {AlbumData} from '../../interface/musician.interface';
 import {ModalLoading} from '../../components/molecule/ModalLoading/ModalLoading';
 import {
   BottomSheetGuest,
@@ -16,6 +15,9 @@ import {
 } from '../../components';
 import {storage} from '../../hooks/use-storage.hook';
 import {useCreditHook} from '../../hooks/use-credit.hook';
+import {useProfileHook} from '../../hooks/use-profile.hook';
+import {usePlaylistHook} from '../../hooks/use-playlist.hook';
+import {useSettingHook} from '../../hooks/use-setting.hook';
 
 type PostDetailProps = NativeStackScreenProps<
   RootStackParams,
@@ -29,6 +31,9 @@ const MusicianProfile: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   const uuid = route.params.id;
 
   const isLogin = storage.getString('profile');
+
+  const {dataCountProfile, getTotalCountProfile} = useProfileHook();
+  const {dataPlaylist, getPlaylist} = usePlaylistHook();
 
   const {
     isLoading,
@@ -44,6 +49,7 @@ const MusicianProfile: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   } = useMusicianHook();
 
   const {creditCount, getCreditCount} = useCreditHook();
+  const {dataExclusiveContent, getExclusiveContent} = useSettingHook();
 
   const [modalDonate, setModalDonate] = useState<boolean>(false);
   const [modalSuccessDonate, setModalSuccessDonate] = useState<boolean>(false);
@@ -57,22 +63,25 @@ const MusicianProfile: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   //  ? Get Detail Musician
   useFocusEffect(
     useCallback(() => {
+      getTotalCountProfile({uuid});
       getDetailMusician({id: uuid});
-    }, []),
+      getPlaylist({uuid});
+      getExclusiveContent({uuid: uuid});
+    }, [uuid]),
   );
 
   //  ? Get Album Musician
   useFocusEffect(
     useCallback(() => {
       getAlbum({uuid: uuid});
-    }, []),
+    }, [uuid]),
   );
 
   useEffect(() => {
     if (dataFollow !== null) {
       getDetailMusician({id: uuid}), setDataFollow(null);
     }
-  }, [dataFollow]);
+  }, [dataFollow, uuid]);
 
   const [followersCount, setFollowersCount] = useState<number>(0);
 
@@ -80,7 +89,7 @@ const MusicianProfile: FC<PostDetailProps> = ({route}: PostDetailProps) => {
     if (dataDetailMusician !== undefined && dataDetailMusician.followers) {
       setFollowersCount(dataDetailMusician.followers);
     }
-  }, [dataDetailMusician]);
+  }, [dataDetailMusician, uuid]);
 
   const followOnPress = () => {
     if (isLogin) {
@@ -123,17 +132,29 @@ const MusicianProfile: FC<PostDetailProps> = ({route}: PostDetailProps) => {
     setTrigger2ndModal(false);
   };
 
+  const goToPlaylist = (id: number) => {
+    navigation.navigate('Playlist', {id, from: 'other'});
+  };
+
+  const musicianPlaylist =
+    dataPlaylist !== undefined && dataPlaylist !== null
+      ? dataPlaylist?.filter(val => !val.isDefaultPlaylist && val.isPublic)
+      : [];
+
   return (
     <View style={styles.root}>
       {dataDetailMusician && (
         <MusicianDetail
-          profile={dataDetailMusician}
+          profile={{...dataDetailMusician, ...dataCountProfile}}
           uuid={uuid}
           dataAlbum={dataAlbum}
+          dataPlaylist={musicianPlaylist}
           followOnPress={followOnPress}
           unfollowOnPress={unFollowOnPress}
           donateOnPress={donateOnPress}
           followersCount={followersCount}
+          goToPlaylist={goToPlaylist}
+          exclusiveContent={dataExclusiveContent ?? undefined}
         />
       )}
       <ModalLoading visible={isLoading} />

@@ -1,8 +1,9 @@
 import React from 'react';
-import {StyleSheet} from 'react-native';
+import {Platform, StyleSheet} from 'react-native';
 import Modal from 'react-native-modal';
 import Lottie from 'lottie-react-native';
 import {ms, mvs} from 'react-native-size-matters';
+import {height} from '../../../utils';
 
 interface ModalLoadingProps {
   visible: boolean;
@@ -12,7 +13,11 @@ export const ModalLoading = (props: ModalLoadingProps) => {
   const {visible} = props;
 
   return (
-    <Modal statusBarTranslucent isVisible={visible} style={styles.root}>
+    <Modal
+      deviceHeight={height}
+      statusBarTranslucent
+      isVisible={visible}
+      style={styles.root}>
       <Lottie
         source={require('../../../assets/animation/ssu-logo-loop.json')}
         autoPlay
@@ -34,7 +39,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'rgba(0,0,0,0.3)',
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: Platform.OS === 'ios' ? 'center' : 'flex-start',
     margin: 0,
   },
 });

@@ -9,6 +9,9 @@ import {SSULogo} from '../../assets/logo';
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParams} from '../../navigations';
+import {DataExclusiveResponse} from '../../interface/setting.interface';
+import SquareComp from './SquareComp';
+import {useTranslation} from 'react-i18next';
 
 const dummy = {
   imgUri:
@@ -17,7 +20,13 @@ const dummy = {
     `,
 };
 
-const ExclusiveDailyContent = () => {
+interface ECProps extends DataExclusiveResponse {
+  edit?: boolean;
+}
+
+const ExclusiveDailyContent = (props: ECProps) => {
+  const {t} = useTranslation();
+  const {coverImage, title, description, edit = false} = props;
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
 
@@ -34,23 +43,34 @@ const ExclusiveDailyContent = () => {
       {isShowComponent ? (
         <View style={styles.mainStyle}>
           <View style={styles.topBody}>
-            <View style={styles.logoContainer}>
-              <SSULogo />
-            </View>
+            {coverImage ? (
+              <SquareComp imgUri={coverImage} size={mvs(82)} radius={4} />
+            ) : (
+              <View style={styles.logoContainer}>
+                <SSULogo />
+              </View>
+            )}
+
             <Gap width={8} />
             <View style={{justifyContent: 'space-evenly'}}>
               <Text numberOfLines={2} style={styles.titleTopBody}>
-                Subscribe Exclusive Content
+                {title ?? 'Subscribe Exclusive Content'}
               </Text>
               <Text numberOfLines={6} style={styles.textTopBody}>
-                {dummy.textBody}
+                {description ?? dummy.textBody}
               </Text>
             </View>
           </View>
           <TouchableOpacity
             style={styles.bottomBody}
-            onPress={() => navigation.navigate('ExclusiveContent')}>
-            <Text style={styles.bottomBodyText}>Get Exclusive Content</Text>
+            onPress={() =>
+              edit
+                ? navigation.navigate('ExclusiveContentSetting')
+                : navigation.navigate('ExclusiveContent', {data: props})
+            }>
+            <Text style={styles.bottomBodyText}>
+              {edit ? t('ExclusiveContent.Edit') : t('Guest.GetExclusive')}
+            </Text>
           </TouchableOpacity>
         </View>
       ) : (
@@ -79,6 +99,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   topBody: {
+    alignItems: 'flex-start',
     flexDirection: 'row',
     padding: ms(8),
     borderBottomWidth: 1,
@@ -97,6 +118,7 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     fontSize: mvs(10),
     color: color.Neutral[10],
+    paddingTop: heightResponsive(8),
   },
   bottomBody: {
     paddingVertical: heightResponsive(12),

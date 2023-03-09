@@ -7,9 +7,11 @@ import {
   ProfileResponseType,
   UpdateProfileResponseType,
   CollectPhotoRemoveProps,
+  ProfileCountResponseType,
 } from '../interface/profile.interface';
 import SsuAPI from './baseMusician';
 import SsuAPIPublicRinjani from './basePublic';
+import SsuAPISemeru from './baseSemeruMusician';
 import BaseSemeruPublic from './baseSemeruPublic';
 import {ParamsProps} from '../interface/base.interface';
 
@@ -110,6 +112,18 @@ export const deleteProfile = async (
     url: '/profile',
     method: 'DELETE',
     data: props,
+  });
+
+  return data;
+};
+
+export const getTotalCount = async (
+  props?: ParamsProps,
+): Promise<ProfileCountResponseType> => {
+  const {data} = await SsuAPISemeru().request<ProfileCountResponseType>({
+    url: '/profile',
+    method: 'GET',
+    params: props,
   });
 
   return data;

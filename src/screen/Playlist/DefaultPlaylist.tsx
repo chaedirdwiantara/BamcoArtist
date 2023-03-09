@@ -9,7 +9,7 @@ import {EmptyState, TopNavigation} from '../../components';
 import {heightPercentage, widthPercentage} from '../../utils';
 
 interface Props {
-  listSong: SongList[] | undefined;
+  listSong: SongList[];
   onPressSong: (param: SongList | null) => void;
   playerVisible: boolean;
   onPressGoBack: () => void;
