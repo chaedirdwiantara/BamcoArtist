@@ -7,6 +7,7 @@ import {
   NativeSyntheticEvent,
 } from 'react-native';
 import {
+  EmptyState,
   Gap,
   SsuStatusBar,
   TabFilter,
@@ -62,6 +63,7 @@ export const MusicianDetail: React.FC<MusicianDetailProps> = ({
   goToPlaylist,
   exclusiveContent,
 }) => {
+  const {t} = useTranslation();
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -189,13 +191,23 @@ export const MusicianDetail: React.FC<MusicianDetailProps> = ({
                 />
               </View>
             ) : filter[selectedIndex].filterName === 'Musician.Tab.Music' ? (
-              <View style={{paddingHorizontal: widthResponsive(30)}}>
-                <ListPlaylist
-                  data={dataPlaylist}
-                  onPress={goToPlaylist}
-                  scrollable={false}
+              dataPlaylist.length > 0 ? (
+                <View style={{paddingHorizontal: widthResponsive(30)}}>
+                  <ListPlaylist
+                    data={dataPlaylist}
+                    onPress={goToPlaylist}
+                    scrollable={false}
+                  />
+                </View>
+              ) : (
+                <EmptyState
+                  text={t('Profile.Label.NoPlaylist') || ''}
+                  containerStyle={{
+                    alignSelf: 'center',
+                    marginTop: heightPercentage(30),
+                  }}
                 />
-              </View>
+              )
             ) : null}
           </View>
         </View>
