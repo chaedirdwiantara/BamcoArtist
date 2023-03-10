@@ -32,7 +32,9 @@ import {dateFormat} from '../../../utils/date-format';
 import TopSong from '../../../screen/ListCard/TopSong';
 import {color, font, typography} from '../../../theme';
 import {
+  addOtherPlaylist,
   deletePlaylist,
+  removeOtherPlaylist,
   removeSongFromPlaylist,
 } from '../../../api/playlist.api';
 import {SongList} from '../../../interface/song.interface';
@@ -56,6 +58,8 @@ interface Props {
   setFetchListSong: () => void;
   goToAlbum: (id: number) => void;
   goToDetailSong: (id: number) => void;
+  otherPlaylist: boolean;
+  goToAddToPlaylist: (id: number) => void;
 }
 
 export const PlaylistContent: React.FC<Props> = ({
@@ -72,6 +76,8 @@ export const PlaylistContent: React.FC<Props> = ({
   setFetchListSong,
   goToAlbum,
   goToDetailSong,
+  goToAddToPlaylist,
+  otherPlaylist,
 }) => {
   const {t} = useTranslation();
   const {addSong} = usePlayerHook();
@@ -80,6 +86,15 @@ export const PlaylistContent: React.FC<Props> = ({
   const [toastText, setToastText] = useState<string>('');
   const [modalShare, setModalShare] = useState<boolean>(false);
   const [modalShareTitle, setModalShareTitle] = useState<string>('');
+  const [isAdded, setIsAdded] = useState<boolean>(
+    dataDetail.isAddedToMyPlaylist,
+  );
+  console.log('dataDetail', dataDetail);
+  
+
+  const textAddToPlaylist = isAdded
+    ? 'Remove from My Playlist'
+    : 'Add to My Playlist';
 
   useEffect(() => {
     toastVisible &&
@@ -95,10 +110,24 @@ export const PlaylistContent: React.FC<Props> = ({
     {label: t('Music.Playlist.Delete'), value: 'DeletePlaylist'},
   ];
 
+  const dataMoreOther = [
+    {label: t('Home.Tab.TopSong.Queue'), value: 'AddToQueue'},
+    {label: t('Music.Playlist.Share'), value: 'SharePlaylist'},
+    {label: textAddToPlaylist, value: textAddToPlaylist},
+  ];
+
   const songDataMore = [
     {label: t('Home.Tab.TopSong.Queue'), value: 'AddToQueue'},
     {label: t('Music.Playlist.ViewAlbum'), value: 'ViewAlbum'},
     {label: t('Music.Playlist.Remove'), value: 'RemoveFromPlaylist'},
+    {label: t('Home.Tab.TopSong.Share'), value: 'ShareSong'},
+    {label: t('Home.Tab.TopSong.Details'), value: 'ShowDetails'},
+  ];
+
+  const songDataMoreOther = [
+    {label: t('Home.Tab.TopSong.Playlist'), value: 'AddToPlaylist'},
+    {label: t('Home.Tab.TopSong.Queue'), value: 'AddToQueue'},
+    {label: t('Music.Playlist.ViewAlbum'), value: 'ViewAlbum'},
     {label: t('Home.Tab.TopSong.Share'), value: 'ShareSong'},
     {label: t('Home.Tab.TopSong.Details'), value: 'ShowDetails'},
   ];
@@ -112,6 +141,24 @@ export const PlaylistContent: React.FC<Props> = ({
     }
   };
 
+  const addToMyPlaylist = async () => {
+    try {
+      if (textAddToPlaylist === 'Add to My Playlist') {
+        await addOtherPlaylist({playlistReferenceId: dataDetail.id});
+        setToastVisible(true);
+        setToastText('Playlist have been added to My Playlist!');
+        setIsAdded(true);
+      } else {
+        await removeOtherPlaylist({playlistReferenceId: dataDetail.id});
+        setToastVisible(true);
+        setToastText('Playlist have been remove from My Playlist!');
+        setIsAdded(false);
+      }
+    } catch (error) {
+      console.log('error', error);
+    }
+  };
+
   const resultDataMore = (dataResult: any) => {
     if (dataResult?.value === 'DeletePlaylist') {
       setModalVisible(true);
@@ -120,6 +167,9 @@ export const PlaylistContent: React.FC<Props> = ({
     } else if (dataResult?.value === 'AddToQueue') {
       setToastVisible(true);
       setToastText('Playlist added to queue!');
+    } else if (dataResult?.value === textAddToPlaylist) {
+      // wiring add to playlist
+      addToMyPlaylist();
     } else {
       setModalShare(true);
       setModalShareTitle(t('General.Share.Playlist') || '');
@@ -137,6 +187,8 @@ export const PlaylistContent: React.FC<Props> = ({
       setToastText('Song added to queue!');
     } else if (dataResult?.value === 'ViewAlbum') {
       goToAlbum(item.album.id);
+    } else if (dataResult?.value === 'AddToPlaylist') {
+      goToAddToPlaylist(item.id);
     } else {
       setModalShare(true);
       setModalShareTitle(t('Home.Tab.TopSong.Share') || '');
@@ -160,6 +212,7 @@ export const PlaylistContent: React.FC<Props> = ({
 
   const songIsExist = listSongs !== null && listSongs !== undefined;
   const firstSong = songIsExist ? listSongs[0] : null;
+  const othersPlaylist = dataDetail.isOtherOwnerPlaylist;
 
   return (
     <View style={styles.root}>
@@ -167,7 +220,7 @@ export const PlaylistContent: React.FC<Props> = ({
         title={t('Home.Topbar.Search.Playlist')}
         rightIcon={
           <Dropdown.More
-            data={dataMore}
+            data={othersPlaylist ? dataMoreOther : dataMore}
             selectedMenu={resultDataMore}
             containerStyle={styles.dropdownMore}
           />
@@ -202,7 +255,10 @@ export const PlaylistContent: React.FC<Props> = ({
             createdDate={dateFormat(dataDetail?.createdAt)}
             createdBy={dataDetail?.playlistOwner?.fullname}
             avatarUri={dataDetail?.playlistOwner?.image}
-            showIconPlay={songIsExist && listSongs?.length > 0}
+            showIconPlay={
+              (songIsExist && listSongs?.length > 0 && !otherPlaylist) ||
+              isAdded
+            }
             isPlaying={isPlaying}
             handlePlayPaused={handlePlayPaused}
             onPressSong={() => onPressSong(firstSong)}
@@ -210,24 +266,28 @@ export const PlaylistContent: React.FC<Props> = ({
 
           <TouchableOpacity
             style={styles.containerAddSong}
-            onPress={goToAddSong}>
+            onPress={othersPlaylist ? addToMyPlaylist : goToAddSong}>
             <MusicSquareAddIcon />
             <Gap width={widthPercentage(10)} />
-            <Text style={styles.textAddSong}>{t('Music.Label.AddSong')}</Text>
+            <Text style={styles.textAddSong}>
+              {othersPlaylist ? textAddToPlaylist : t('Music.Label.AddSong')}
+            </Text>
           </TouchableOpacity>
         </View>
 
         <View style={styles.separator} />
 
         <View style={styles.containerContent}>
-          {dataDetail?.description && (
-            <View style={{marginBottom: heightPercentage(15)}}>
-              <Text style={[typography.Subtitle1, {color: color.Success[500]}]}>
-                Description
-              </Text>
-              <Text style={styles.description}>{dataDetail.description}</Text>
-            </View>
-          )}
+          <View style={{marginBottom: heightPercentage(25)}}>
+            <Text style={[typography.Subtitle1, {color: color.Success[500]}]}>
+              Description
+            </Text>
+            <Text style={styles.description}>
+              {dataDetail?.description
+                ? dataDetail.description
+                : 'No Description Given'}
+            </Text>
+          </View>
 
           <Text style={[typography.Subtitle1, {color: color.Success[500]}]}>
             {t('Music.Label.SongList')}
@@ -241,7 +301,7 @@ export const PlaylistContent: React.FC<Props> = ({
                 type={'home'}
                 onPress={onPressSong}
                 loveIcon={true}
-                newDataMore={songDataMore}
+                newDataMore={othersPlaylist ? songDataMoreOther : songDataMore}
                 newOnPressMore={pressSongDataMore}
               />
             )}
@@ -324,7 +384,7 @@ const styles = StyleSheet.create({
   containerContent: {
     flex: 1,
     paddingHorizontal: widthPercentage(20),
-    paddingTop: heightPercentage(15),
+    paddingTop: heightPercentage(20),
     marginBottom: heightPercentage(30),
   },
   description: {
