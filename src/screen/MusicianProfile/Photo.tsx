@@ -137,6 +137,6 @@ const styles = StyleSheet.create({
     color: color.Neutral[10],
     fontFamily: font.InterRegular,
     fontWeight: '500',
-    fontSize: ms(14),
+    fontSize: ms(13),
   },
 });
