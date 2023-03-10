@@ -37,7 +37,7 @@ const topNavstyles = StyleSheet.create({
     alignItems: 'center',
   },
   centerTitle: {
-    fontSize: mvs(16),
+    fontSize: mvs(15),
     fontFamily: font.InterSemiBold,
     letterSpacing: 0.15,
     textAlign: 'center',

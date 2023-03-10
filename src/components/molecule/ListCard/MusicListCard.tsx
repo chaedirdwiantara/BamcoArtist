@@ -177,7 +177,7 @@ const styles = StyleSheet.create({
   },
   songTitle: {
     fontFamily: font.InterRegular,
-    fontSize: normalize(14),
+    fontSize: mvs(14),
     fontWeight: '500',
     color: color.Neutral[10],
   },
