@@ -443,8 +443,8 @@ export const AccountContent: React.FC<AccountProps> = ({
 
           <ModalConfirm
             modalVisible={showModal}
-            title="Account"
-            subtitle="Are you sure you want to update your account?"
+            title={t('Setting.Account.Title') || ''}
+            subtitle={t('Setting.Account.Confirm') || ''}
             onPressClose={() => setShowModal(false)}
             onPressOk={onPressConfirm}
           />
