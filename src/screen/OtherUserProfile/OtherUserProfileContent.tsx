@@ -63,6 +63,8 @@ interface ProfileContentProps {
   selfProfile?: ProfileFansResponseType;
   ownProfile?: boolean;
   totalCountlikedSong?: number;
+  playerVisible?: boolean;
+  otherUserProfile?: boolean;
 }
 
 export const OtherUserProfileContent: React.FC<ProfileContentProps> = ({
@@ -71,9 +73,6 @@ export const OtherUserProfileContent: React.FC<ProfileContentProps> = ({
   goToPlaylist,
   onPressGoTo,
   dataPlaylist,
-  uuid,
-  dataAlbum,
-  dataDetailMusician,
   selfProfile,
   totalCountlikedSong,
   ownProfile = false,
@@ -139,32 +138,32 @@ export const OtherUserProfileContent: React.FC<ProfileContentProps> = ({
             selectedIndex={selectedIndex}
             translation={true}
           />
-          {!ownProfile &&
-          dataPlaylist !== null &&
-          filter[selectedIndex].filterName === 'Profile.Tab.Playlist' ? (
-            TopSongListData.length > 0 ? (
+          {filter[selectedIndex].filterName === 'Profile.Tab.Playlist' ? (
+            dataPlaylist !== undefined && dataPlaylist?.length > 0 ? (
               <View>
                 <ListPlaylist
-                  data={dataPlaylist}
+                  data={dataPlaylist === null ? [] : dataPlaylist}
                   onPress={goToPlaylist}
                   scrollable={false}
                 />
               </View>
             ) : (
-              <CreateNewCard
-                num="01"
-                text="Default Playlist"
-                onPress={() => onPressGoTo('CreateNewPlaylist')}
+              <EmptyState
+                text={t('Profile.Label.NoPlaylist') || ''}
+                containerStyle={{marginTop: heightPercentage(30)}}
               />
             )
-          ) : !ownProfile &&
-            filter[selectedIndex].filterName ===
-              t('Profile.Tab.TopMusician') ? (
+          ) : filter[selectedIndex].filterName === 'Profile.Tab.TopMusician' ? (
             <EmptyState
-              text={t('Profile.Label.NoMusician') || ''}
+              text={t('Profile.Label.NoMusicianOther') || ''}
               containerStyle={{marginTop: heightPercentage(30)}}
             />
-          ) : null}
+          ) : (
+            <EmptyState
+              text={t('Profile.Label.NoBadgeOther') || ''}
+              containerStyle={{marginTop: heightPercentage(30)}}
+            />
+          )}
         </View>
       </ScrollView>
     </View>
