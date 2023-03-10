@@ -4,12 +4,14 @@ import {UploadImageResponseType} from '../interface/uploadImage.interface';
 
 export const uploadImage = async (
   image: Image,
+  syncUpload?: string,
 ): Promise<UploadImageResponseType> => {
   let formData = new FormData();
   formData.append('image', {
     uri: image.path,
     name: `${Date.now()}.jpg`,
     type: image.mime,
+    syncUpload: syncUpload ? syncUpload : undefined,
   });
 
   const {data} = await SsuAPI().request<UploadImageResponseType>({

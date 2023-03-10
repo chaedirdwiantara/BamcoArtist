@@ -229,7 +229,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
 
     if (active == true && uri.length !== 0) {
       for (let i = 0; i < uri.length; i++) {
-        setUploadImage(uri[i]);
+        setUploadImage(uri[i], 'medium');
       }
     }
 
