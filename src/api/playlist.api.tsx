@@ -109,12 +109,24 @@ export const removeSongFromPlaylist = async (
   return data;
 };
 
-export const addSongToPlaylist = async (
+export const addOtherPlaylist = async (
   props?: AddSongPropsTypeB,
 ): Promise<PlaylistResponseTypeC> => {
   const {data} = await SsuAPI().request<PlaylistResponseTypeC>({
     url: '/playlists/add-to-my-playlist',
     method: 'POST',
+    data: props,
+  });
+
+  return data;
+};
+
+export const removeOtherPlaylist = async (
+  props?: AddSongPropsTypeB,
+): Promise<PlaylistResponseTypeC> => {
+  const {data} = await SsuAPI().request<PlaylistResponseTypeC>({
+    url: '/playlists/remove-from-my-playlist',
+    method: 'DELETE',
     data: props,
   });
 
