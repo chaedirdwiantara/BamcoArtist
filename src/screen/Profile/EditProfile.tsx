@@ -126,7 +126,7 @@ export const EditProfileScreen: React.FC<EditProfileProps> = ({
         goToGallery={goToGallery}
         deleteValueProfile={deleteValueProfile}
       />
-      <ModalLoading visible={isLoading || loadingUpload} />
+      <ModalLoading visible={loadingUpload} />
     </View>
   );
 };
