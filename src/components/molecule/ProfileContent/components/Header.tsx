@@ -214,6 +214,8 @@ const styles = StyleSheet.create({
   },
   settingIcon: {
     marginTop: heightPercentage(25),
+    width: widthPercentage(26),
+    height: widthPercentage(26),
   },
   initialName: {
     color: color.Neutral[10],
