@@ -97,6 +97,7 @@ const styles = StyleSheet.create({
   },
   text: {
     color: Color.Neutral[10],
+    fontSize: mvs(13),
   },
   text2: {
     fontSize: normalize(16),
@@ -114,5 +115,6 @@ const styles = StyleSheet.create({
   },
   textDisable: {
     color: Color.Neutral[50],
+    fontSize: mvs(13),
   },
 });
