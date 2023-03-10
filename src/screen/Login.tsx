@@ -28,7 +28,7 @@ import {
 } from '../components';
 import {LockIcon, UserIcon} from '../assets/icon';
 import {countryData} from '../data/dropdown';
-import {AppleLogo, FacebookLogo, GoogleLogo, SSULogo} from '../assets/logo';
+import {AppleLogo, GoogleLogo, SSULogo} from '../assets/logo';
 import type {RegistrationType} from '../interface/profile.interface';
 import {ModalLoading} from '../components/molecule/ModalLoading/ModalLoading';
 import {storage} from '../hooks/use-storage.hook';
@@ -72,7 +72,7 @@ export const LoginScreen: React.FC = () => {
   const {
     onLoginUser,
     onLoginGoogle,
-    onLoginFacebook,
+    // onLoginFacebook,
     onLoginApple,
     isLoading,
     isError,
@@ -263,10 +263,10 @@ export const LoginScreen: React.FC = () => {
           <TouchableOpacity onPress={onLoginGoogle}>
             <GoogleLogo />
           </TouchableOpacity>
-          <Gap width={24} />
+          {/* <Gap width={24} />
           <TouchableOpacity onPress={onLoginFacebook}>
             <FacebookLogo />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
           {Platform.OS === 'ios' ? <Gap width={24} /> : null}
           {Platform.OS === 'ios' ? (
             <TouchableOpacity onPress={onLoginApple}>

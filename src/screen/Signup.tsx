@@ -21,7 +21,7 @@ import {color, font} from '../theme';
 import {Dropdown, SsuStatusBar, TermAndConditions} from '../components';
 import {countryData} from '../data/dropdown';
 import {heightResponsive, normalize, widthResponsive} from '../utils';
-import {AppleLogo, FacebookLogo, GoogleLogo} from '../assets/logo';
+import {AppleLogo, GoogleLogo} from '../assets/logo';
 import {ms, mvs} from 'react-native-size-matters';
 import {ModalLoading} from '../components/molecule/ModalLoading/ModalLoading';
 import {storage} from '../hooks/use-storage.hook';
@@ -260,8 +260,8 @@ export const SignupScreen: React.FC = () => {
               <TouchableOpacity onPress={onLoginGoogle}>
                 <GoogleLogo />
               </TouchableOpacity>
-              <Gap width={24} />
-              <FacebookLogo />
+              {/* <Gap width={24} />
+              <FacebookLogo /> */}
               {Platform.OS === 'ios' ? <Gap width={24} /> : null}
               {Platform.OS === 'ios' ? (
                 <TouchableOpacity onPress={onLoginApple}>
