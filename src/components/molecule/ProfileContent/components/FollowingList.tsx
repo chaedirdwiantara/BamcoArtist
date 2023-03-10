@@ -1,26 +1,65 @@
-import React, {useState} from 'react';
-import {StyleSheet, View} from 'react-native';
-import {ArrowLeftIcon} from '../../../../assets/icon';
+import React, {useEffect, useState} from 'react';
+import {ScrollView, StyleSheet, View} from 'react-native';
 
+import {
+  heightPercentage,
+  heightResponsive,
+  width,
+  widthPercentage,
+} from '../../../../utils';
 import {SearchBar} from '../../../atom';
 import {ListCard} from '../../ListCard';
 import Color from '../../../../theme/Color';
+import {
+  FollowMusicianPropsType,
+  MusicianList,
+} from '../../../../interface/musician.interface';
 import {TopNavigation} from '../../TopNavigation';
-import {dataRecommendedArtist} from '../../../../data/following';
-import {heightPercentage, width, widthPercentage} from '../../../../utils';
+import {ArrowLeftIcon} from '../../../../assets/icon';
 import {useTranslation} from 'react-i18next';
 
 interface FollowingListProps {
   onPressGoBack: () => void;
+  setFollowMusician: (props?: FollowMusicianPropsType) => void;
+  setUnfollowMusician: (props?: FollowMusicianPropsType) => void;
+  dataList?: MusicianList[];
+  search: string;
+  setSearch: (value: string) => void;
+  goToMusician: (value: string) => void;
 }
 
 export const FollowingList: React.FC<FollowingListProps> = ({
+  dataList,
+  setFollowMusician,
+  setUnfollowMusician,
   onPressGoBack,
+  search,
+  setSearch,
+  goToMusician,
 }) => {
   const {t} = useTranslation();
-  const [search, setSearch] = useState('');
+  const [listFollowing, setListFollowing] = useState(dataList);
 
-  const followOnPress = () => {};
+  useEffect(() => {
+    if (dataList !== undefined) {
+      setListFollowing(dataList);
+    }
+  }, [dataList]);
+
+  const followOnPress = (index: string, isFollowed: boolean) => {
+    if (listFollowing !== undefined) {
+      const newList = listFollowing.map(val => ({
+        ...val,
+        isFollowed: val.uuid === index ? !val.isFollowed : val.isFollowed,
+      }));
+
+      setListFollowing(newList);
+    }
+
+    isFollowed
+      ? setUnfollowMusician({musicianID: index})
+      : setFollowMusician({musicianID: index});
+  };
 
   return (
     <View style={styles.root}>
@@ -39,18 +78,29 @@ export const FollowingList: React.FC<FollowingListProps> = ({
           paddingVertical: heightPercentage(20),
         }}
       />
-      {dataRecommendedArtist.map((val, i) => (
-        <View key={i} style={{width, paddingHorizontal: widthPercentage(20)}}>
-          <ListCard.FollowMusician
-            musicianName={val.fullname}
-            imgUri={val.imageProfileUrl || ''}
-            containerStyles={{marginTop: heightPercentage(10)}}
-            followerCount={val.followers}
-            followOnPress={() => followOnPress()}
-            stateButton={val.isFollowed}
-          />
-        </View>
-      ))}
+
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        style={{marginBottom: heightResponsive(25)}}>
+        {listFollowing
+          ?.sort((a, b) => (a.isFollowed > b.isFollowed ? -1 : 1))
+          .map((val, i) => (
+            <View
+              key={i}
+              style={{width, paddingHorizontal: widthPercentage(20)}}>
+              <ListCard.FollowMusician
+                musicianName={val.fullname}
+                imgUri={val.imageProfileUrls}
+                containerStyles={{marginTop: heightPercentage(15)}}
+                followerCount={val.followers}
+                followOnPress={() => followOnPress(val.uuid, val.isFollowed)}
+                stateButton={val.isFollowed}
+                toDetailOnPress={() => goToMusician(val.uuid)}
+                hideFollowButton={true}
+              />
+            </View>
+          ))}
+      </ScrollView>
     </View>
   );
 };
