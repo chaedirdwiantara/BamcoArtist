@@ -345,17 +345,21 @@ const PostListHome: FC<PostListProps> = (props: PostListProps) => {
       <View style={styles.container}>
         <View
           style={styles.dropdownContainer}
-          ref={event => {
-            event?.measure((fx, fy, width, height, px, py) => {
-              let peye = Platform.OS === 'android' ? py - barHeight : py;
-              offsetSortFilter?.py !== peye
-                ? setOffsetSortFilter({
-                    px: px + width,
-                    py: Platform.OS === 'android' ? py - barHeight : py,
-                  })
-                : null;
-            });
-          }}
+          ref={
+            isModalVisible.modalSortBy === false
+              ? undefined
+              : event => {
+                  event?.measure((fx, fy, width, height, px, py) => {
+                    let peye = Platform.OS === 'android' ? py - barHeight : py;
+                    offsetSortFilter?.py !== peye
+                      ? setOffsetSortFilter({
+                          px: px + width,
+                          py: Platform.OS === 'android' ? py - barHeight : py,
+                        })
+                      : null;
+                  });
+                }
+          }
           onLayout={event => {
             event.target.measure(() => {});
           }}>
@@ -380,17 +384,21 @@ const PostListHome: FC<PostListProps> = (props: PostListProps) => {
         </View>
         <View
           style={styles.dropdownContainer}
-          ref={event => {
-            event?.measure((fx, fy, width, height, px, py) => {
-              let peye = Platform.OS === 'android' ? py - barHeight : py;
-              offsetSortFilter?.py !== peye
-                ? setOffsetCategoryFilter({
-                    px: px + width,
-                    py: Platform.OS === 'android' ? py - barHeight : py,
-                  })
-                : null;
-            });
-          }}
+          ref={
+            isModalVisible.modalCategory === false
+              ? undefined
+              : event => {
+                  event?.measure((fx, fy, width, height, px, py) => {
+                    let peye = Platform.OS === 'android' ? py - barHeight : py;
+                    offsetSortFilter?.py !== peye
+                      ? setOffsetCategoryFilter({
+                          px: px + width,
+                          py: Platform.OS === 'android' ? py - barHeight : py,
+                        })
+                      : null;
+                  });
+                }
+          }
           onLayout={event => {
             event.target.measure(() => {});
           }}>

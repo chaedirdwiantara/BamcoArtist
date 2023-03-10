@@ -144,19 +144,6 @@ const PostListCard: React.FC<ListProps> = (props: ListProps) => {
                     <ShareIcon fill={color.Dark[100]} />
                   </TouchableOpacity>
                 ) : (
-                  // <Dropdown.More
-                  //   data={dataUpdatePost}
-                  //   idComment={idPost}
-                  //   selectedIdComment={selectedIdPost}
-                  //   selectedMenu={selectedMenu}
-                  //   iconFill={color.Dark[100]}
-                  //   containerStyle={{
-                  //     width: widthResponsive(110),
-                  //     marginLeft: widthResponsive(-97),
-                  //     marginTop: Platform.OS === 'android' ? ms(-35) : ms(-10),
-                  //   }}
-                  //   translation={true}
-                  // />
                   <DropdownMore
                     id={idPost}
                     selectedid={selectedIdPost}

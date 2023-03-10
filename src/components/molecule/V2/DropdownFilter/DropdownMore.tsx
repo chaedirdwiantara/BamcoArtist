@@ -52,17 +52,21 @@ const DropdownMore: React.FC<DropdownV2Props> = (props: DropdownV2Props) => {
       onLayout={event => {
         event.target.measure(() => {});
       }}
-      ref={event => {
-        event?.measure((fx, fy, width, height, px, py) => {
-          let peye = Platform.OS === 'android' ? py - barHeight : py;
-          offsetSortFilter?.py !== peye
-            ? setOffsetSortFilter({
-                px: px + width,
-                py: Platform.OS === 'android' ? py - barHeight : py,
-              })
-            : null;
-        });
-      }}>
+      ref={
+        !isModalVisible
+          ? undefined
+          : event => {
+              event?.measure((fx, fy, width, height, px, py) => {
+                let peye = Platform.OS === 'android' ? py - barHeight : py;
+                offsetSortFilter?.py !== peye
+                  ? setOffsetSortFilter({
+                      px: px + width,
+                      py: Platform.OS === 'android' ? py - barHeight : py,
+                    })
+                  : null;
+              });
+            }
+      }>
       <TouchableOpacity
         style={[styles.iconContainer, iconContainerStyle]}
         onPress={() => setIsModalVisible(true)}>
