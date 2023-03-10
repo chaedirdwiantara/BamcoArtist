@@ -68,6 +68,7 @@ const PostListHome: FC<PostListProps> = (props: PostListProps) => {
   }, []);
 
   const {
+    feedIsLoading,
     dataTopPost,
     setLikePost,
     setUnlikePost,
@@ -476,7 +477,7 @@ const PostListHome: FC<PostListProps> = (props: PostListProps) => {
             )}
           />
         </View>
-      ) : dataMain?.length === 0 ? (
+      ) : feedIsLoading === false && dataTopPost?.length === 0 ? (
         <EmptyState
           text={'No data available'}
           containerStyle={{

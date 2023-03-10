@@ -585,15 +585,7 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
             paddingTop: heightPercentage(24),
           }}
         />
-      ) : (
-        <EmptyState
-          text={t('EmptyState.NoData') || ''}
-          containerStyle={{
-            justifyContent: 'flex-start',
-            paddingTop: heightPercentage(24),
-          }}
-        />
-      )}
+      ) : null}
       <ModalShare
         url={
           'https://open.ssu.io/track/19AiJfAtRiccvSU1EWcttT?si=36b9a686dad44ae0'

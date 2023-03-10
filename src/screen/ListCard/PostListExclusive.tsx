@@ -649,26 +649,7 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
             </View>
           </>
         )
-      ) : (
-        <>
-          <EmptyState
-            text={t('EmptyState.NoECSetting') || ''}
-            containerStyle={{
-              justifyContent: 'flex-start',
-              paddingTop: heightPercentage(24),
-            }}
-            icon={<FriedEggIcon />}
-          />
-          <View style={styles.btnECContainer}>
-            <ButtonGradient
-              label={t('Btn.Create')}
-              onPress={() => navigation.navigate('ExclusiveContentSetting')}
-              containerStyles={{paddingTop: heightPercentage(20)}}
-              gradientStyles={styles.btnEC}
-            />
-          </View>
-        </>
-      )}
+      ) : null}
       <ModalShare
         url={
           'https://open.ssu.io/track/19AiJfAtRiccvSU1EWcttT?si=36b9a686dad44ae0'
