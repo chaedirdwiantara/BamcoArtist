@@ -18,11 +18,20 @@ export const AddSongScreen: React.FC<AddSongProps> = ({
 }: AddSongProps) => {
   const [search, setSearch] = useState<string>('');
   const [trigger, setTrigger] = useState<boolean>(false);
-  const {dataSong, getListDataSong} = useSongHook();
+  const {dataSong, metaSong, getListDataSong} = useSongHook();
   const {setAddSongToPlaylist} = usePlaylistHook();
+  const [meta, setMeta] = useState<{page: number; perPage: number}>({
+    page: 1,
+    perPage: 15,
+  });
 
   useEffect(() => {
-    getListDataSong({playlistID: route.params.id, keyword: search});
+    getListDataSong({
+      playlistID: route.params.id,
+      keyword: search,
+      page: meta.page,
+      perPage: meta.perPage,
+    });
   }, [trigger, search]);
 
   const onPressGoBack = () => {
@@ -39,6 +48,19 @@ export const AddSongScreen: React.FC<AddSongProps> = ({
     setTrigger(!trigger);
   };
 
+  const nextPage = () => {
+    getListDataSong({
+      playlistID: route.params.id,
+      keyword: search,
+      page: meta.page,
+      perPage: meta.perPage + 15,
+    });
+    setMeta({
+      ...meta,
+      perPage: meta.perPage + 15,
+    });
+  };
+
   return (
     <View style={styles.root}>
       <AddSongContent
@@ -48,6 +70,8 @@ export const AddSongScreen: React.FC<AddSongProps> = ({
         listSongs={dataSong.filter(val => !val.isAddedToThisPlaylist)}
         onPressGoBack={onPressGoBack}
         setAddSongToPlaylist={onPressAddSong}
+        meta={metaSong || {page: 1, perPage: 15, total: 0}}
+        nextPage={nextPage}
       />
     </View>
   );
