@@ -2,7 +2,6 @@ import {
   FlatList,
   RefreshControl,
   StyleSheet,
-  Text,
   TouchableOpacity,
   View,
 } from 'react-native';
@@ -19,6 +18,7 @@ import Color from '../../theme/Color';
 import {heightPercentage, heightResponsive} from '../../utils';
 import {EmptyState} from '../../components';
 import {useTranslation} from 'react-i18next';
+import LoadingSpinner from '../../components/atom/Loading/LoadingSpinner';
 
 const ListResultMusician: FC<KeywordProps> = ({keyword}: KeywordProps) => {
   const {t} = useTranslation();
@@ -49,7 +49,7 @@ const ListResultMusician: FC<KeywordProps> = ({keyword}: KeywordProps) => {
     <View style={styles.container}>
       {(isRefetching || isLoading) && (
         <View style={styles.loadingContainer}>
-          <Text style={styles.loading}>Loading...</Text>
+          <LoadingSpinner />
         </View>
       )}
       <FlatList
@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
   },
   loadingContainer: {
     alignItems: 'center',
-    paddingVertical: heightPercentage(50),
+    paddingVertical: heightPercentage(20),
   },
   containerEmpty: {
     flex: 0,

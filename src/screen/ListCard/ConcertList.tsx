@@ -1,5 +1,5 @@
 import React, {FC} from 'react';
-import {RefreshControl, StyleSheet, Text, View} from 'react-native';
+import {RefreshControl, StyleSheet, View} from 'react-native';
 import {TicketIcon} from '../../assets/icon';
 import Color from '../../theme/Color';
 import {heightPercentage, heightResponsive, widthResponsive} from '../../utils';
@@ -10,6 +10,7 @@ import {useEventHook} from '../../hooks/use-event.hook';
 import {MerchData} from '../../interface/event.interface';
 import {useQuery} from 'react-query';
 import {useTranslation} from 'react-i18next';
+import LoadingSpinner from '../../components/atom/Loading/LoadingSpinner';
 
 const ConcertList: FC = () => {
   const {t} = useTranslation();
@@ -32,7 +33,7 @@ const ConcertList: FC = () => {
     <>
       {(isLoading || isRefetching) && (
         <View style={styles.loadingContainer}>
-          <Text style={styles.loading}>Loading...</Text>
+          <LoadingSpinner />
         </View>
       )}
 
@@ -102,6 +103,6 @@ const styles = StyleSheet.create({
   },
   loadingContainer: {
     alignItems: 'center',
-    paddingTop: heightPercentage(50),
+    paddingTop: heightPercentage(20),
   },
 });

@@ -1,5 +1,5 @@
 import React, {FC, useEffect} from 'react';
-import {RefreshControl, StyleSheet, Text, View} from 'react-native';
+import {RefreshControl, StyleSheet, View} from 'react-native';
 import {heightPercentage, heightResponsive} from '../../utils';
 import {FlashList} from '@shopify/flash-list';
 import MerchListCard from '../../components/molecule/ListCard/MerchListCard';
@@ -8,6 +8,7 @@ import Color from '../../theme/Color';
 import {useQuery} from 'react-query';
 import {useSearchHook} from '../../hooks/use-search.hook';
 import {useTranslation} from 'react-i18next';
+import LoadingSpinner from '../../components/atom/Loading/LoadingSpinner';
 
 interface Props {
   keyword: string;
@@ -33,7 +34,7 @@ const ListResultEvent: FC<Props> = ({keyword}: Props) => {
     <View style={styles.container}>
       {(isRefetching || isLoading) && (
         <View style={styles.loadingContainer}>
-          <Text style={styles.loading}>Loading...</Text>
+          <LoadingSpinner />
         </View>
       )}
       <FlashList
@@ -100,6 +101,6 @@ const styles = StyleSheet.create({
   },
   loadingContainer: {
     alignItems: 'center',
-    paddingVertical: heightPercentage(50),
+    paddingVertical: heightPercentage(20),
   },
 });

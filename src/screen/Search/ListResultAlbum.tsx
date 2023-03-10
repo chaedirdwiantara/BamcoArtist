@@ -1,4 +1,4 @@
-import {FlatList, RefreshControl, StyleSheet, Text, View} from 'react-native';
+import {FlatList, RefreshControl, StyleSheet, View} from 'react-native';
 import React, {FC, useEffect} from 'react';
 import {EmptyState, ListCard} from '../../components';
 import {KeywordProps} from '../../interface/search.interface';
@@ -11,6 +11,7 @@ import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParams} from '../../navigations';
 import {useTranslation} from 'react-i18next';
+import LoadingSpinner from '../../components/atom/Loading/LoadingSpinner';
 
 const ListResultAlbum: FC<KeywordProps> = ({keyword}: KeywordProps) => {
   const navigation =
@@ -41,7 +42,7 @@ const ListResultAlbum: FC<KeywordProps> = ({keyword}: KeywordProps) => {
     <View style={styles.container}>
       {(isRefetching || isLoading) && (
         <View style={styles.loadingContainer}>
-          <Text style={styles.loading}>Loading...</Text>
+          <LoadingSpinner />
         </View>
       )}
       <FlatList
@@ -97,7 +98,7 @@ const styles = StyleSheet.create({
   },
   loadingContainer: {
     alignItems: 'center',
-    paddingVertical: heightPercentage(50),
+    paddingVertical: heightPercentage(20),
   },
   containerEmpty: {
     flex: 0,
