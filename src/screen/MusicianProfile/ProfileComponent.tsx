@@ -90,9 +90,9 @@ const ProfileComponent: FC<ProfileProps> = (props: ProfileProps) => {
           </Text>
         </TouchableOpacity>
       )}
-      {memberSection && (
+      {memberSection && members !== undefined && (
         <View>
-          {members ? (
+          {members?.length > 0 ? (
             <FlatList
               horizontal
               data={members}
