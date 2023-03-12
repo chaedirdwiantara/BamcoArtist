@@ -89,8 +89,6 @@ export const PlaylistContent: React.FC<Props> = ({
   const [isAdded, setIsAdded] = useState<boolean>(
     dataDetail.isAddedToMyPlaylist,
   );
-  console.log('dataDetail', dataDetail);
-  
 
   const textAddToPlaylist = isAdded
     ? 'Remove from My Playlist'

@@ -53,7 +53,11 @@ export const SettingContent: React.FC<SettingProps> = ({
         modalReport: true,
         modalConfirm: false,
       });
-    } else if (val === 'Terms and Conditions' || val === 'Privacy Policy') {
+    } else if (
+      val === 'Terms and Conditions' ||
+      val === 'Privacy Policy' ||
+      val === 'Helps'
+    ) {
       const path = val === 'Terms and Conditions' ? 'tos' : 'privacy-policy';
       handleWebview(val, `https://sunnysideup.io/marketplace/${path}`);
     } else if (val === 'Exclusive Content') {

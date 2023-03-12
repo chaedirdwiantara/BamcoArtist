@@ -244,7 +244,6 @@ export const ShippingInformationContent: React.FC<ShippingInformationProps> = ({
               onChangeText={(newText: string) =>
                 onChangeText('postalCode', newText)
               }
-              inputStyles={{minHeight: ms(56)}}
               containerStyles={{marginTop: heightPercentage(15), width: '45%'}}
             />
           </View>
