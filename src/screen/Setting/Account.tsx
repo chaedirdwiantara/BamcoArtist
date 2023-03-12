@@ -18,34 +18,20 @@ export const AccountScreen: React.FC<AccountProps> = ({
   const {
     dataAllCountry,
     dataCitiesOfCountry,
-    dataCitiesOfOrigin,
     getDataAllCountry,
     getCitiesOfCountry,
   } = useLocationHook();
-  const [selectedOrigin, setSelectedOrigin] = useState<string>(
-    data?.data.originCountry || '',
-  );
   const [selectedCountry, setSelectedCountry] = useState<string>(
     data?.data.locationCountry || '',
   );
-  const [inputType, setInputType] = useState<string>('location');
-  const [firstFetch, setFirstFetch] = useState<boolean>(true);
 
   useEffect(() => {
     getDataAllCountry();
   }, []);
 
   useEffect(() => {
-    if (firstFetch) {
-      getCitiesOfCountry({country: selectedOrigin}, {type: 'origin'});
-      getCitiesOfCountry({country: selectedCountry}, {type: 'location'});
-      setFirstFetch(false);
-    } else {
-      const country =
-        inputType === 'location' ? selectedCountry : selectedOrigin;
-      getCitiesOfCountry({country}, {type: inputType});
-    }
-  }, [selectedCountry, selectedOrigin]);
+    getCitiesOfCountry({country: selectedCountry});
+  }, [selectedCountry]);
 
   const onPressGoBack = () => {
     navigation.goBack();
@@ -59,13 +45,8 @@ export const AccountScreen: React.FC<AccountProps> = ({
           dataCitiesOfCountry={
             dataCitiesOfCountry !== undefined ? dataCitiesOfCountry : []
           }
-          dataCitiesOfOrigin={
-            dataCitiesOfOrigin !== undefined ? dataCitiesOfOrigin : []
-          }
           profile={data}
           onPressGoBack={onPressGoBack}
-          setInputType={setInputType}
-          setSelectedOrigin={setSelectedOrigin}
           setSelectedCountry={setSelectedCountry}
         />
       )}

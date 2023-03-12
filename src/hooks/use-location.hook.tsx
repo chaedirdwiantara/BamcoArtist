@@ -22,8 +22,6 @@ export const useLocationHook = () => {
     useState<DataDropDownType[]>();
   const [dataCitiesOfCountry, setDataCitiesOfCountry] =
     useState<DataDropDownType[]>();
-  const [dataCitiesOfOrigin, setDataCitiesOfOrigin] =
-    useState<DataDropDownType[]>();
   const [isError, setIsError] = useState(false);
 
   const getDataAllCountry = async () => {
@@ -73,10 +71,7 @@ export const useLocationHook = () => {
     }
   };
 
-  const getCitiesOfCountry = async (
-    props: DataStateProps,
-    params: {type: string},
-  ) => {
+  const getCitiesOfCountry = async (props: DataStateProps) => {
     setIsLoading(true);
     try {
       const response = await getCityOfCountry(props);
@@ -84,11 +79,7 @@ export const useLocationHook = () => {
       newResp.sort((a, b) =>
         a.value > b.value ? 1 : b.value > a.value ? -1 : 0,
       );
-      if (params.type === 'origin') {
-        setDataCitiesOfOrigin(newResp);
-      } else {
-        setDataCitiesOfCountry(newResp);
-      }
+      setDataCitiesOfCountry(newResp);
     } catch (error) {
       setIsError(true);
       setDataCitiesOfCountry([]);
@@ -104,7 +95,6 @@ export const useLocationHook = () => {
     dataStateInCountry,
     dataCitiesInState,
     dataCitiesOfCountry,
-    dataCitiesOfOrigin,
     getDataAllCountry,
     getStateInCountry,
     getCitiesInState,
