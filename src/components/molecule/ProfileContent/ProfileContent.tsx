@@ -7,6 +7,8 @@ import {
   NativeScrollEvent,
   NativeSyntheticEvent,
   Text,
+  RefreshControl,
+  Platform,
 } from 'react-native';
 import {useTranslation} from 'react-i18next';
 
@@ -24,7 +26,7 @@ import {
   AlbumData,
   DataDetailMusician,
 } from '../../../interface/musician.interface';
-import {SettingIcon} from '../../../assets/icon';
+import {CheckCircle2Icon, SettingIcon} from '../../../assets/icon';
 import {ProfileHeader} from './components/Header';
 import {EmptyState} from '../EmptyState/EmptyState';
 import {UserInfoCard} from '../UserInfoCard/UserInfoCard';
@@ -39,8 +41,9 @@ import PostListMyPost from '../../../screen/ListCard/PostListMyPost';
 import {dropDownDataCategory, dropDownDataSort} from '../../../data/dropdown';
 import ImageModal from '../../../screen/Detail/ImageModal';
 import ExclusiveDailyContent from '../../../screen/MusicianProfile/ExclusiveDailyContent';
-import {Gap} from '../../atom';
+import {Gap, SsuToast} from '../../atom';
 import {DataExclusiveResponse} from '../../../interface/setting.interface';
+import LoadingSpinner from '../../atom/Loading/LoadingSpinner';
 
 type OnScrollEventHandler = (
   event: NativeSyntheticEvent<NativeScrollEvent>,
@@ -62,6 +65,12 @@ interface ProfileContentProps {
   totalCountlikedSong?: number;
   goToFollowers: () => void;
   exclusiveContent?: DataExclusiveResponse;
+  toastVisible: boolean;
+  setToastVisible: (param: boolean) => void;
+  toastText: string;
+  refreshing: boolean;
+  setRefreshing: () => void;
+  isLoading: boolean;
 }
 
 export const ProfileContent: React.FC<ProfileContentProps> = ({
@@ -78,6 +87,12 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
   ownProfile = false,
   goToFollowers,
   exclusiveContent,
+  toastVisible,
+  setToastVisible,
+  toastText,
+  refreshing,
+  setRefreshing,
+  isLoading,
 }) => {
   const {t} = useTranslation();
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -123,9 +138,18 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
           </TouchableOpacity>
         </View>
       )}
+      {Platform.OS === 'ios' && (isLoading || refreshing) && (
+        <View style={styles.loadingContainer}>
+          <LoadingSpinner />
+        </View>
+      )}
+
       <ScrollView
         showsVerticalScrollIndicator={false}
         scrollEventThrottle={16}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={setRefreshing} />
+        }
         onScroll={handleScroll}>
         <ProfileHeader
           avatarUri={profile.avatarUri}
@@ -249,6 +273,20 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
         </View>
       </ScrollView>
 
+      <SsuToast
+        modalVisible={toastVisible}
+        onBackPressed={() => setToastVisible(false)}
+        children={
+          <View style={[styles.modalContainer]}>
+            <CheckCircle2Icon />
+            <Gap width={4} />
+            <Text style={[styles.textStyle]} numberOfLines={2}>
+              {toastText}
+            </Text>
+          </View>
+        }
+      />
+
       <ImageModal
         toggleModal={() => setModalVisible(!isModalVisible)}
         modalVisible={isModalVisible}
@@ -299,5 +337,23 @@ const styles = StyleSheet.create({
   },
   topIos: {
     top: heightPercentage(15),
+  },
+  modalContainer: {
+    width: '100%',
+    position: 'absolute',
+    bottom: heightPercentage(22),
+    height: heightPercentage(36),
+    backgroundColor: Color.Success[400],
+    paddingHorizontal: widthPercentage(12),
+    borderRadius: 4,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  textStyle: {
+    color: Color.Neutral[10],
+  },
+  loadingContainer: {
+    alignItems: 'center',
+    paddingVertical: heightPercentage(20),
   },
 });

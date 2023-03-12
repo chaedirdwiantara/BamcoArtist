@@ -1,32 +1,27 @@
-import React, {useCallback, useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, StyleSheet} from 'react-native';
-import {
-  useFocusEffect,
-  useIsFocused,
-  useNavigation,
-} from '@react-navigation/native';
 import {
   NativeStackNavigationProp,
   NativeStackScreenProps,
 } from '@react-navigation/native-stack';
 import {useTranslation} from 'react-i18next';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
 
 import Color from '../../theme/Color';
-import {MainTabParams, RootStackParams} from '../../navigations';
 import {ProfileContent} from '../../components';
 import {usePlayerHook} from '../../hooks/use-player.hook';
 import {useProfileHook} from '../../hooks/use-profile.hook';
+import {useSettingHook} from '../../hooks/use-setting.hook';
 import {usePlaylistHook} from '../../hooks/use-playlist.hook';
 import {useMusicianHook} from '../../hooks/use-musician.hook';
-import {ModalLoading} from '../../components/molecule/ModalLoading/ModalLoading';
-import {useSettingHook} from '../../hooks/use-setting.hook';
+import {MainTabParams, RootStackParams} from '../../navigations';
 
 type ProfileProps = NativeStackScreenProps<MainTabParams, 'Profile'>;
 
 export const ProfileScreen: React.FC<ProfileProps> = ({
   route,
 }: ProfileProps) => {
-  // const {showToast, deletePlaylist} = route.params;
+  const {showToast, deletePlaylist} = route.params;
 
   const {t} = useTranslation();
   const navigation =
@@ -42,9 +37,43 @@ export const ProfileScreen: React.FC<ProfileProps> = ({
   const isFocused = useIsFocused();
   const {isPlaying, showPlayer, hidePlayer} = usePlayerHook();
   const {dataExclusiveContent, getExclusiveContent} = useSettingHook();
-
   const {dataDetailMusician, dataAlbum, getDetailMusician, getAlbum} =
     useMusicianHook();
+
+  const [refreshing, setRefreshing] = useState<boolean>(false);
+  const [toastText, setToastText] = useState<string>('');
+  const [toastVisible, setToastVisible] = useState<boolean>(false);
+
+  const uuid = dataProfile?.data.uuid;
+
+  useEffect(() => {
+    getProfileUser();
+    if (uuid) {
+      getTotalCountProfile({uuid});
+      getDetailMusician({id: uuid});
+      getAlbum({uuid});
+      getPlaylist({uuid});
+      getExclusiveContent({uuid});
+    }
+    setRefreshing(false);
+  }, [uuid, refreshing, showToast, deletePlaylist]);
+
+  useEffect(() => {
+    if (showToast && !deletePlaylist) {
+      setToastVisible(showToast);
+      setToastText('Your Profile have been updated!');
+    } else if (deletePlaylist) {
+      setToastVisible(deletePlaylist);
+      setToastText('Playlist have been deleted!');
+    }
+  }, [route.params]);
+
+  useEffect(() => {
+    toastVisible &&
+      setTimeout(() => {
+        setToastVisible(false);
+      }, 3000);
+  }, [toastVisible]);
 
   useEffect(() => {
     if (isFocused && isPlaying) {
@@ -53,22 +82,6 @@ export const ProfileScreen: React.FC<ProfileProps> = ({
       hidePlayer();
     }
   }, [isFocused, isPlaying]);
-
-  const uuid = dataProfile?.data.uuid;
-
-  //  ? Get Detail Musician
-  useFocusEffect(
-    useCallback(() => {
-      getProfileUser();
-      if (uuid) {
-        getTotalCountProfile({uuid});
-        getDetailMusician({id: uuid});
-        getAlbum({uuid});
-        getPlaylist({uuid});
-        getExclusiveContent({uuid});
-      }
-    }, [uuid]),
-  );
 
   const onPressGoTo = (
     screenName: 'Setting' | 'Following' | 'CreateNewPlaylist',
@@ -117,21 +130,27 @@ export const ProfileScreen: React.FC<ProfileProps> = ({
 
   return (
     <View style={styles.root}>
-      <ProfileContent
-        profile={profile}
-        goToPlaylist={goToPlaylist}
-        dataPlaylist={dataPlaylist}
-        goToEditProfile={goToEditProfile}
-        onPressGoTo={screenName => onPressGoTo(screenName)}
-        uuid={uuid}
-        dataAlbum={dataAlbum}
-        dataDetailMusician={dataDetailMusician}
-        ownProfile
-        goToFollowers={goToFollowers}
-        exclusiveContent={dataExclusiveContent ?? undefined}
-      />
-
-      <ModalLoading visible={isLoading || playlistLoading} />
+      {dataProfile?.data && (
+        <ProfileContent
+          profile={profile}
+          goToPlaylist={goToPlaylist}
+          dataPlaylist={dataPlaylist}
+          goToEditProfile={goToEditProfile}
+          onPressGoTo={screenName => onPressGoTo(screenName)}
+          uuid={uuid}
+          dataAlbum={dataAlbum}
+          dataDetailMusician={dataDetailMusician}
+          ownProfile
+          goToFollowers={goToFollowers}
+          exclusiveContent={dataExclusiveContent ?? undefined}
+          toastVisible={toastVisible}
+          setToastVisible={setToastVisible}
+          toastText={toastText}
+          refreshing={refreshing}
+          setRefreshing={() => setRefreshing(true)}
+          isLoading={isLoading}
+        />
+      )}
     </View>
   );
 };
