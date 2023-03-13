@@ -50,6 +50,7 @@ import {usePlayerHook} from '../../hooks/use-player.hook';
 import MusicListPreview from '../../components/molecule/MusicPreview/MusicListPreview';
 import {useTranslation} from 'react-i18next';
 import {useCreditHook} from '../../hooks/use-credit.hook';
+import ChildrenCard from './ChildrenCard';
 
 const {height} = Dimensions.get('screen');
 
@@ -514,60 +515,17 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
                   idPost={item.id}
                   selectedIdPost={setSelectedIdPost}
                   children={
-                    <View style={{width: '100%'}}>
-                      <Text style={styles.childrenPostTitle}>
-                        {elipsisText(item.caption, 600)}
-                      </Text>
-                      {item.images !== null ? (
-                        <>
-                          <Gap height={6} />
-                          <View
-                            style={{
-                              flexDirection: 'row',
-                            }}>
-                            <View style={{height: '100%', width: '100%'}}>
-                              <ImageList
-                                imgData={item.images}
-                                width={143}
-                                height={69.5}
-                                heightType2={142}
-                                widthType2={289}
-                                onPress={() => {}}
-                              />
-                              {item.images.length === 0 &&
-                              item.quoteToPost.encodeHlsUrl ? (
-                                <MusicListPreview
-                                  hideClose
-                                  targetId={item.quoteToPost.targetId}
-                                  targetType={item.quoteToPost.targetType}
-                                  title={item.quoteToPost.title}
-                                  musician={item.quoteToPost.musician}
-                                  coverImage={
-                                    item.quoteToPost.coverImage[1]?.image !==
-                                    undefined
-                                      ? item.quoteToPost.coverImage[1].image
-                                      : ''
-                                  }
-                                  encodeDashUrl={item.quoteToPost.encodeDashUrl}
-                                  encodeHlsUrl={item.quoteToPost.encodeHlsUrl}
-                                  startAt={item.quoteToPost.startAt}
-                                  endAt={item.quoteToPost.endAt}
-                                  postList={item}
-                                  onPress={onPressPlaySong}
-                                  isPlay={isPlaying}
-                                  playOrPause={handlePausePlay}
-                                  pauseModeOn={pauseModeOn}
-                                  currentProgress={playerProgress.position}
-                                  duration={playerProgress.duration}
-                                  seekPlayer={seekPlayer}
-                                  isIdNowPlaying={item.id === idNowPlaying}
-                                />
-                              ) : null}
-                            </View>
-                          </View>
-                        </>
-                      ) : null}
-                    </View>
+                    <ChildrenCard
+                      data={item}
+                      onPress={onPressPlaySong}
+                      isPlay={isPlaying}
+                      playOrPause={handlePausePlay}
+                      pauseModeOn={pauseModeOn}
+                      currentProgress={playerProgress.position}
+                      duration={playerProgress.duration}
+                      seekPlayer={seekPlayer}
+                      isIdNowPlaying={item.id === idNowPlaying}
+                    />
                   }
                 />
                 <Gap height={16} />
