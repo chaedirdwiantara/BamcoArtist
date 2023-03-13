@@ -179,7 +179,9 @@ export const FeedScreen: React.FC = () => {
               xPosition={offsetCategoryFilter?.px}
               yPosition={offsetCategoryFilter?.py}
               containerStyle={{
-                top: offsetCategoryFilter?.py - widthResponsive(93),
+                top: !isPlaying
+                  ? offsetCategoryFilter?.py - widthResponsive(93)
+                  : offsetCategoryFilter?.py - widthResponsive(47),
                 left: offsetCategoryFilter?.px - widthResponsive(125),
                 width: widthResponsive(125),
               }}
