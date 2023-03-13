@@ -147,7 +147,10 @@ export const FeedScreen: React.FC = () => {
             )}
           </View>
           <TouchableOpacity
-            style={styles.buttonStyle}
+            style={[
+              styles.buttonStyle,
+              {height: isPlaying ? widthResponsive(184) : widthResponsive(94)},
+            ]}
             onPress={handleFloatingIcon}
             onLayout={event => {
               event.target.measure((x, y, width, height, pageX, pageY) => {
@@ -212,7 +215,6 @@ const styles = StyleSheet.create({
   },
   buttonStyle: {
     position: 'absolute',
-    height: widthResponsive(94),
     width: widthResponsive(50),
     justifyContent: 'center',
     alignItems: 'center',
