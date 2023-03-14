@@ -95,7 +95,7 @@ const Typography = {
   },
   Overline: {
     fontFamily: Font.InterRegular,
-    fontSize: mvs(11),
+    fontSize: mvs(10),
     lineHeight: mvs(12),
     letterSpacing: 0.5,
   },

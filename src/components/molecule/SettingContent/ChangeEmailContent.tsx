@@ -152,7 +152,6 @@ export const ChangeEmailContent: React.FC<ChangeEmailProps> = ({
 
       {type === 'Change' && (
         <>
-          <Gap height={10} />
           <SsuInput.InputLabel
             label={t('Setting.Email.Label.Old') || ''}
             value={oldEmail}

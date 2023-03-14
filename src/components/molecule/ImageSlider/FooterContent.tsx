@@ -98,11 +98,10 @@ export const FooterContent: React.FC<FooterContentProps> = ({
           />
           <Button
             type="border"
-            label={t('Btn.Finish')}
+            label={t('Btn.Skip')}
             borderColor="transparent"
             textStyles={{color: Color.Pink.linear}}
             onPress={onPressGoTo}
-            containerStyles={styles.btnContainer}
           />
         </View>
       )}

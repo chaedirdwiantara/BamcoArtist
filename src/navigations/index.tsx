@@ -139,7 +139,9 @@ export type RootStackParams = {
     data?: DataExclusiveResponse;
   };
   ExclusiveContentSetting: {type?: string} | undefined;
-  Following: undefined;
+  Following: {
+    uuid?: string;
+  };
   Followers: {
     uuid: string;
   };

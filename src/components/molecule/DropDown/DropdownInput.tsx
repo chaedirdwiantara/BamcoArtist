@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, Text, View, ViewStyle} from 'react-native';
+import {Platform, StyleSheet, Text, View, ViewStyle} from 'react-native';
 import {useTranslation} from 'react-i18next';
 import {ms, mvs} from 'react-native-size-matters';
 import {Dropdown} from 'react-native-element-dropdown';
@@ -109,7 +109,7 @@ const InputDropdown: React.FC<InputDropdownProps> = (
         selectedTextStyle={styles.selectedTextStyle}
         search={showSearch || type === 'location'}
         searchPlaceholder="Search..."
-        inputSearchStyle={styles.selectedTextStyle}
+        inputSearchStyle={styles.inputSearchStyle}
         dropdownPosition={dropdownPosition}
       />
       {isError ? (
@@ -134,7 +134,8 @@ const styles = StyleSheet.create({
   dropdown: {
     borderBottomWidth: 1,
     borderBottomColor: borderColor,
-    paddingVertical: heightPercentage(12),
+    paddingVertical:
+      Platform.OS === 'ios' ? heightPercentage(4) : heightPercentage(8),
   },
   // Dropdown modal container
   containerStyle: {
@@ -148,15 +149,15 @@ const styles = StyleSheet.create({
     backgroundColor: itemBg,
   },
   placeholderStyle: {
-    fontSize: mvs(15),
+    fontSize: mvs(14),
     color: color.Dark[300],
   },
   selectedTextStyle: {
-    fontSize: mvs(15),
+    fontSize: mvs(14),
     color: fontColorMain,
   },
   itemTextStyle: {
-    fontSize: mvs(15),
+    fontSize: mvs(14),
     color: fontColorMain,
   },
   iconStyle: {
@@ -181,5 +182,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     paddingHorizontal: widthPercentage(15),
     paddingVertical: heightPercentage(20),
+  },
+  inputSearchStyle: {
+    fontSize: mvs(14),
+    color: color.Neutral[10],
+    borderColor: 'transparent',
+    borderBottomColor: color.Pink[200],
   },
 });

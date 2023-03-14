@@ -23,6 +23,7 @@ interface ListProps {
   stateButton: boolean;
   containerStyles?: ViewStyle;
   toDetailOnPress: () => void;
+  hideFollowButton?: boolean;
 }
 
 const FollowMusicianCard: React.FC<ListProps> = (props: ListProps) => {
@@ -36,6 +37,7 @@ const FollowMusicianCard: React.FC<ListProps> = (props: ListProps) => {
     stateButton,
     containerStyles,
     toDetailOnPress,
+    hideFollowButton,
   } = props;
 
   const follow = stateButton
@@ -103,7 +105,9 @@ const FollowMusicianCard: React.FC<ListProps> = (props: ListProps) => {
           {countFollower + ' ' + t('General.Followers')}
         </Text>
       </View>
-      <View style={styles.rightContainer}>{followMenu()}</View>
+      <View style={styles.rightContainer}>
+        {!hideFollowButton && followMenu()}
+      </View>
     </View>
   );
 };

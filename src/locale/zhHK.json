@@ -219,8 +219,11 @@
       "Liked": "喜歡的歌曲",
       "Point": "積分",
       "CreatedBy": "製作的",
+      "NoPlaylist": "No Playlist have been made",
       "NoMusician": "您尚未對任何音樂人作出貢獻",
-      "NoBadge": "你尚未有任何徽章"
+      "NoMusicianOther": "This user don’t have contributions to any musicians",
+      "NoBadge": "你尚未有任何徽章",
+      "NoBadgeOther": "This user don’t have any badges"
     },
     "Button": {
       "Edit": "編輯個人資料",
@@ -298,6 +301,7 @@
     "EnterVerifCode": "輸入驗證碼",
     "Account": {
       "Title": "帳戶",
+      "Confirm": "Are you sure you want to update your account?",
       "Label": {
         "Username": "用戶名",
         "Fullname": "Musician Name",
@@ -331,6 +335,9 @@
     },
     "Email": {
       "Title": "電郵",
+      "Toast": {
+        "Success": "Your email have been updated!"
+      },
       "Label": {
         "Add": "添加電子郵件",
         "Change": "更改電郵",

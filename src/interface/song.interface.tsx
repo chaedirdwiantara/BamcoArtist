@@ -1,7 +1,13 @@
-import {imageTypes, PaginationType} from './base.interface';
+import {imageTypes} from './base.interface';
 
 export type SongPropsTypeA = {
   id: number;
+};
+
+export type PaginationType = {
+  page: number;
+  perPage: number;
+  total: number;
 };
 
 export type SongList = {

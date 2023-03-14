@@ -1,5 +1,4 @@
 export type Playlist = {
-  isDefaultPlaylist: boolean;
   id: number;
   name: string;
   description: string;
@@ -16,6 +15,9 @@ export type Playlist = {
     image: string | null;
     username: string;
   };
+  isDefaultPlaylist: boolean;
+  isAddedToMyPlaylist: boolean;
+  isOtherOwnerPlaylist: boolean;
 };
 
 export type PlaylistPropsTypeA = {

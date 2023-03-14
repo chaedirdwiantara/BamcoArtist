@@ -23,6 +23,7 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {height, heightPercentage, width, widthPercentage} from '../../../utils';
 import {ModalConfirm} from '../Modal/ModalConfirm';
 import {useTranslation} from 'react-i18next';
+import {mvs} from 'react-native-size-matters';
 
 interface SettingProps {
   onPressGoBack: () => void;
@@ -52,7 +53,11 @@ export const SettingContent: React.FC<SettingProps> = ({
         modalReport: true,
         modalConfirm: false,
       });
-    } else if (val === 'Terms and Conditions' || val === 'Privacy Policy') {
+    } else if (
+      val === 'Terms and Conditions' ||
+      val === 'Privacy Policy' ||
+      val === 'Helps'
+    ) {
       const path = val === 'Terms and Conditions' ? 'tos' : 'privacy-policy';
       handleWebview(val, `https://sunnysideup.io/marketplace/${path}`);
     } else if (val === 'Exclusive Content') {
@@ -186,6 +191,7 @@ const styles = StyleSheet.create({
   },
   textVersion: {
     color: color.Neutral[10],
+    fontSize: mvs(13),
     paddingTop: heightPercentage(15),
     alignSelf: 'center',
   },

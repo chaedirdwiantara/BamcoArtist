@@ -1,22 +1,23 @@
 import React, {useEffect, useState} from 'react';
 import {InteractionManager, StyleSheet, Text, View} from 'react-native';
 import * as yup from 'yup';
+import {useTranslation} from 'react-i18next';
 import {Controller, useForm} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
 
-import {Button, Gap, SsuInput, SsuToast} from '../../atom';
-import {TopNavigation} from '../TopNavigation';
-import {ArrowLeftIcon, ErrorIcon, TickCircleIcon} from '../../../assets/icon';
 import {
   heightPercentage,
   normalize,
   widthPercentage,
   widthResponsive,
 } from '../../../utils';
-import {useSettingHook} from '../../../hooks/use-setting.hook';
+import {TopNavigation} from '../TopNavigation';
 import {ms, mvs} from 'react-native-size-matters';
+import {ModalConfirm} from '../Modal/ModalConfirm';
 import {color, font, typography} from '../../../theme';
-import {useTranslation} from 'react-i18next';
+import {Button, Gap, SsuInput, SsuToast} from '../../atom';
+import {useSettingHook} from '../../../hooks/use-setting.hook';
+import {ArrowLeftIcon, ErrorIcon, TickCircleIcon} from '../../../assets/icon';
 
 interface ChangePasswordProps {
   onPressGoBack: () => void;
@@ -50,12 +51,12 @@ export const ChangePasswordContent: React.FC<ChangePasswordProps> = ({
   const [disabledButton, setDisabledButton] = useState<boolean>(true);
   const [toastVisible, setToastVisible] = useState<boolean>(false);
   const [isSubmit, setIsSubmit] = useState<boolean>(false);
+  const [showModal, setShowModal] = useState<boolean>(false);
   const {changePassword, isError, isLoading, errorMsg, setIsError} =
     useSettingHook();
 
   const {
     control,
-    handleSubmit,
     formState: {errors, isValid, isValidating},
     getValues,
   } = useForm<InputProps>({
@@ -84,7 +85,7 @@ export const ChangePasswordContent: React.FC<ChangePasswordProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isValidating]);
 
-  const onPressSave = async () => {
+  const onPressConfirm = async () => {
     await changePassword({
       password: getValues('password'),
       newPassword: getValues('newPassword'),
@@ -92,6 +93,7 @@ export const ChangePasswordContent: React.FC<ChangePasswordProps> = ({
     });
 
     setIsSubmit(true);
+    setShowModal(false);
   };
 
   useEffect(() => {
@@ -191,13 +193,21 @@ export const ChangePasswordContent: React.FC<ChangePasswordProps> = ({
 
         <Button
           label={t('Setting.Password.Title')}
-          onPress={handleSubmit(onPressSave)}
+          onPress={() => setShowModal(true)}
           containerStyles={
             disabledButton ? styles.buttonDisabled : styles.button
           }
           disabled={disabledButton}
         />
       </View>
+
+      <ModalConfirm
+        modalVisible={showModal}
+        title={t('Setting.Password.Title') || ''}
+        subtitle={t('Setting.Password.Confirm') || ''}
+        onPressClose={() => setShowModal(false)}
+        onPressOk={onPressConfirm}
+      />
 
       <SsuToast
         modalVisible={toastVisible}

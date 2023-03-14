@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   StyleSheet,
@@ -7,16 +7,15 @@ import {
   NativeScrollEvent,
   NativeSyntheticEvent,
   Text,
+  RefreshControl,
+  Platform,
 } from 'react-native';
-import {
-  useNavigation,
-  useIsFocused,
-  useFocusEffect,
-} from '@react-navigation/native';
 import {
   NativeStackNavigationProp,
   NativeStackScreenProps,
 } from '@react-navigation/native-stack';
+import {useTranslation} from 'react-i18next';
+import {useNavigation, useIsFocused} from '@react-navigation/native';
 
 import {
   TopNavigation,
@@ -31,30 +30,30 @@ import {
 } from '../components';
 import Color from '../theme/Color';
 import TopSong from './ListCard/TopSong';
-import {CheckCircle2Icon, SearchIcon} from '../assets/icon';
 import PostList from './ListCard/PostList';
 import {defaultBanner} from '../data/home';
 import {PostlistData} from '../data/postlist';
-import {MainTabParams, RootStackParams} from '../navigations';
 import TopMusician from './ListCard/TopMusician';
 import {useFcmHook} from '../hooks/use-fcm.hook';
 import {storage} from '../hooks/use-storage.hook';
 import {useSongHook} from '../hooks/use-song.hook';
 import {SongList} from '../interface/song.interface';
 import * as FCMService from '../service/notification';
+import {useCreditHook} from '../hooks/use-credit.hook';
 import {usePlayerHook} from '../hooks/use-player.hook';
 import {useBannerHook} from '../hooks/use-banner.hook';
 import {ParamsProps} from '../interface/base.interface';
 import {useProfileHook} from '../hooks/use-profile.hook';
 import {useMusicianHook} from '../hooks/use-musician.hook';
+import {CheckCircle2Icon, SearchIcon} from '../assets/icon';
+import {MainTabParams, RootStackParams} from '../navigations';
+import {useNotificationHook} from '../hooks/use-notification.hook';
 import {FollowMusicianPropsType} from '../interface/musician.interface';
 import {FirebaseMessagingTypes} from '@react-native-firebase/messaging';
 import {dropDownDataCategory, dropDownDataFilter} from '../data/dropdown';
 import {ModalPlayMusic} from '../components/molecule/Modal/ModalPlayMusic';
 import {heightPercentage, widthPercentage, widthResponsive} from '../utils';
-import {useNotificationHook} from '../hooks/use-notification.hook';
-import {useCreditHook} from '../hooks/use-credit.hook';
-import {useTranslation} from 'react-i18next';
+import LoadingSpinner from '../components/atom/Loading/LoadingSpinner';
 
 type OnScrollEventHandler = (
   event: NativeSyntheticEvent<NativeScrollEvent>,
@@ -70,7 +69,7 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
   const currentLanguage = i18n.language;
 
   const {dataBanner, getListDataBanner} = useBannerHook();
-  const {dataProfile, getProfileUser} = useProfileHook();
+  const {isLoading, dataProfile, getProfileUser} = useProfileHook();
   const {addFcmToken} = useFcmHook();
   const {
     isPlaying,
@@ -92,21 +91,17 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
   const isLogin = storage.getBoolean('isLogin');
   const isFocused = useIsFocused();
   const [selectedIndex, setSelectedIndex] = useState<number>(-0);
+  const [refreshing, setRefreshing] = useState<boolean>(false);
 
   useEffect(() => {
     getListDataBanner();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useFocusEffect(
-    useCallback(() => {
-      getProfileUser();
-      getListDataMusician();
-      getListDataTopSong();
-      getCountNotification();
-      getCreditCount();
-    }, [selectedIndex]),
-  );
+    getProfileUser();
+    getListDataMusician();
+    getListDataTopSong();
+    getCountNotification();
+    getCreditCount();
+    setRefreshing(false);
+  }, [selectedIndex, refreshing]);
 
   useEffect(() => {
     if (isFocused && isPlaying) {
@@ -248,9 +243,21 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
         guest={!isLogin}
       />
 
+      {Platform.OS === 'ios' && (isLoading || refreshing) && (
+        <View style={styles.loadingContainer}>
+          <LoadingSpinner />
+        </View>
+      )}
+
       <ScrollView
         showsVerticalScrollIndicator={false}
         scrollEventThrottle={16}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={() => setRefreshing(true)}
+          />
+        }
         onScroll={handleScroll}>
         <TouchableOpacity onPress={handleSearchButton}>
           <SearchBar
@@ -362,5 +369,9 @@ const styles = StyleSheet.create({
   },
   textStyle: {
     color: Color.Neutral[10],
+  },
+  loadingContainer: {
+    alignItems: 'center',
+    paddingVertical: heightPercentage(20),
   },
 });

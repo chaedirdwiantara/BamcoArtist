@@ -10,10 +10,17 @@ import {
   InteractionManager,
 } from 'react-native';
 import * as yup from 'yup';
+import {useTranslation} from 'react-i18next';
 import {ms, mvs} from 'react-native-size-matters';
 import {yupResolver} from '@hookform/resolvers/yup';
 import {Controller, useForm} from 'react-hook-form';
 
+import {
+  ArrowLeftIcon,
+  CloseCircleIcon,
+  ErrorIcon,
+  TickCircleIcon,
+} from '../../../assets/icon';
 import {
   heightPercentage,
   normalize,
@@ -38,8 +45,6 @@ import {Button, Gap, SsuInput, SsuToast} from '../../atom';
 import {useProfileHook} from '../../../hooks/use-profile.hook';
 import {ProfileResponseType} from '../../../interface/profile.interface';
 import {dataYearsFrom, dataYearsTo} from '../../../data/Settings/account';
-import {ArrowLeftIcon, ErrorIcon, TickCircleIcon} from '../../../assets/icon';
-import {useTranslation} from 'react-i18next';
 
 interface AccountProps {
   profile: ProfileResponseType;
@@ -47,7 +52,6 @@ interface AccountProps {
   dataAllCountry: DataDropDownType[];
   dataCitiesOfCountry: DataDropDownType[];
   setSelectedCountry: (value: string) => void;
-  setInputType: (value: string) => void;
 }
 
 interface InputProps {
@@ -87,16 +91,15 @@ export const AccountContent: React.FC<AccountProps> = ({
   dataAllCountry,
   dataCitiesOfCountry,
   setSelectedCountry,
-  setInputType,
 }) => {
   const {t} = useTranslation();
+  const member =
+    profile?.data.members?.length > 0 ? profile?.data.members : [''];
   const [userGenres, setUserGenres] = useState<(string | number | undefined)[]>(
     [],
   );
   const [valueGenres, setValueGenres] = useState<(number | undefined)[]>([]);
-  const [members, setMembers] = useState<string[]>(
-    profile?.data.members || [''],
-  );
+  const [members, setMembers] = useState<string[]>(member);
   const [changes, setChanges] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [disabledButton, setDisabledButton] = useState<boolean>(true);
@@ -169,7 +172,7 @@ export const AccountContent: React.FC<AccountProps> = ({
       yearsActiveTo: getValues('yearsActiveTo'),
       locationCountry: getValues('locationCountry'),
       locationCity: getValues('locationCity'),
-      members: members,
+      members: members.filter(val => val !== ''),
       favoriteGeneres: valueGenres as number[],
     });
 
@@ -179,7 +182,27 @@ export const AccountContent: React.FC<AccountProps> = ({
   };
 
   const onPressAddMember = () => {
-    setMembers([...members, '']);
+    if (members[members.length - 1] !== '') {
+      setMembers([...members, '']);
+      setChanges(true);
+    }
+  };
+
+  const addMemberOnChange = (text: string, index: number) => {
+    let temp = [...members];
+    temp[index] = text;
+    setMembers(temp);
+    setChanges(true);
+  };
+
+  const removeMember = (index: number) => {
+    if (members.length === 1) {
+      setMembers(['']);
+    } else {
+      let temp = [...members];
+      temp.splice(index, 1);
+      setMembers(temp);
+    }
     setChanges(true);
   };
 
@@ -204,7 +227,7 @@ export const AccountContent: React.FC<AccountProps> = ({
           itemStrokeColor={Color.Neutral[10]}
           leftIconAction={onPressGoBack}
           containerStyles={{
-            marginBottom: heightPercentage(15),
+            marginBottom: heightPercentage(10),
             paddingHorizontal: widthResponsive(15),
           }}
         />
@@ -291,7 +314,7 @@ export const AccountContent: React.FC<AccountProps> = ({
             style={{
               flexDirection: 'row',
               justifyContent: 'space-between',
-              marginTop: heightPercentage(10),
+              marginTop: heightPercentage(4),
             }}>
             <Controller
               name="locationCountry"
@@ -306,11 +329,10 @@ export const AccountContent: React.FC<AccountProps> = ({
                   textTyped={(newText: {label: string; value: string}) => {
                     onChange(newText.value);
                     setSelectedCountry(newText.value);
-                    setInputType('location');
                     setChanges(true);
                   }}
                   containerStyles={{
-                    marginTop: heightPercentage(15),
+                    marginTop: heightPercentage(16),
                     width: '49%',
                   }}
                   isError={errors?.locationCountry ? true : false}
@@ -397,16 +419,21 @@ export const AccountContent: React.FC<AccountProps> = ({
               key={index}
               label={index === 0 ? t('Setting.Account.Label.Member') || '' : ''}
               value={val}
-              onChangeText={text => {
-                let temp = [...members];
-                temp[index] = text;
-                setMembers(temp);
-                setChanges(true);
-              }}
+              onChangeText={text => addMemberOnChange(text, index)}
               placeholder={t('Setting.Account.Placeholder.Member') || ''}
               containerStyles={{
                 marginTop: index === 0 ? heightPercentage(15) : 0,
               }}
+              rightIcon={
+                <TouchableOpacity onPress={() => removeMember(index)}>
+                  <CloseCircleIcon
+                    style={{
+                      width: widthPercentage(22),
+                      height: widthPercentage(22),
+                    }}
+                  />
+                </TouchableOpacity>
+              }
             />
           ))}
           <TouchableOpacity onPress={onPressAddMember}>
@@ -434,7 +461,7 @@ export const AccountContent: React.FC<AccountProps> = ({
           <Button
             label={t('Btn.Save') || ''}
             onPress={onPressSave}
-            textStyles={{fontSize: mvs(15)}}
+            textStyles={{fontSize: mvs(14)}}
             containerStyles={
               disabledButton ? styles.buttonDisabled : styles.button
             }
@@ -443,8 +470,8 @@ export const AccountContent: React.FC<AccountProps> = ({
 
           <ModalConfirm
             modalVisible={showModal}
-            title="Account"
-            subtitle="Are you sure you want to update your account?"
+            title={t('Setting.Account.Title') || ''}
+            subtitle={t('Setting.Account.Confirm') || ''}
             onPressClose={() => setShowModal(false)}
             onPressOk={onPressConfirm}
           />

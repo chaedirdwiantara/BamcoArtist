@@ -8,7 +8,8 @@ import {
   Text,
   InteractionManager,
 } from 'react-native';
-import {ms} from 'react-native-size-matters';
+import {useTranslation} from 'react-i18next';
+import {ms, mvs} from 'react-native-size-matters';
 
 import {
   heightPercentage,
@@ -25,11 +26,11 @@ import {Dropdown} from '../DropDown';
 import Color from '../../../theme/Color';
 import {typography} from '../../../theme';
 import {TopNavigation} from '../TopNavigation';
+import {ModalConfirm} from '../Modal/ModalConfirm';
 import {updateShipping} from '../../../api/setting.api';
 import {Button, Gap, SsuInput, SsuToast} from '../../atom';
 import {DataDropDownType, countryData} from '../../../data/dropdown';
 import {DataShippingProps} from '../../../interface/setting.interface';
-import {useTranslation} from 'react-i18next';
 
 interface ShippingInformationProps {
   dataShipping: DataShippingProps | null;
@@ -66,6 +67,7 @@ export const ShippingInformationContent: React.FC<ShippingInformationProps> = ({
   const [focusInput, setFocusInput] = useState<string | null>(null);
   const [toastVisible, setToastVisible] = useState<boolean>(false);
   const [toastError, setToastError] = useState<boolean>(false);
+  const [showModal, setShowModal] = useState<boolean>(false);
 
   useEffect(() => {
     toastVisible &&
@@ -96,7 +98,7 @@ export const ShippingInformationContent: React.FC<ShippingInformationProps> = ({
     return false;
   };
 
-  const onPressSave = async () => {
+  const onPressConfirm = async () => {
     try {
       const payload = {
         ...state,
@@ -104,9 +106,11 @@ export const ShippingInformationContent: React.FC<ShippingInformationProps> = ({
         postalCode: Number(state.postalCode),
       };
       await updateShipping(payload);
+      setShowModal(false);
       setToastError(false);
       InteractionManager.runAfterInteractions(() => setToastVisible(true));
     } catch (error) {
+      setShowModal(false);
       setToastError(true);
       InteractionManager.runAfterInteractions(() => setToastVisible(true));
     }
@@ -240,7 +244,6 @@ export const ShippingInformationContent: React.FC<ShippingInformationProps> = ({
               onChangeText={(newText: string) =>
                 onChangeText('postalCode', newText)
               }
-              inputStyles={{minHeight: ms(56)}}
               containerStyles={{marginTop: heightPercentage(15), width: '45%'}}
             />
           </View>
@@ -255,7 +258,7 @@ export const ShippingInformationContent: React.FC<ShippingInformationProps> = ({
 
           <Button
             label={t('Btn.Save')}
-            onPress={onPressSave}
+            onPress={() => setShowModal(true)}
             disabled={disabledButton}
             containerStyles={{
               width: width * 0.9,
@@ -264,9 +267,18 @@ export const ShippingInformationContent: React.FC<ShippingInformationProps> = ({
               alignSelf: 'center',
               backgroundColor: disabledBg,
             }}
+            textStyles={{fontSize: mvs(14)}}
           />
         </ScrollView>
       </View>
+
+      <ModalConfirm
+        modalVisible={showModal}
+        title={t('Setting.Shipping.Title') || ''}
+        subtitle={t('Setting.Shipping.Confirm') || ''}
+        onPressClose={() => setShowModal(false)}
+        onPressOk={onPressConfirm}
+      />
 
       <SsuToast
         modalVisible={toastVisible}

@@ -1,17 +1,23 @@
 import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
+import {useTranslation} from 'react-i18next';
+import {mvs} from 'react-native-size-matters';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 
+import {
+  heightPercentage,
+  normalize,
+  widthPercentage,
+  widthResponsive,
+} from '../../../utils';
 import Color from '../../../theme/Color';
-import {RootStackParams} from '../../../navigations';
-import {EmailContent} from '../../../components/molecule/SettingContent/EmailContent';
-import {Gap, SsuToast} from '../../../components';
-import {ms, mvs} from 'react-native-size-matters';
 import {color, font} from '../../../theme';
-import {heightPercentage, normalize, widthResponsive} from '../../../utils';
+import {Gap, SsuToast} from '../../../components';
+import {TickCircleIcon} from '../../../assets/icon';
+import {RootStackParams} from '../../../navigations';
 import {useProfileHook} from '../../../hooks/use-profile.hook';
 import {ModalLoading} from '../../../components/molecule/ModalLoading/ModalLoading';
-import {TickCircleIcon} from '../../../assets/icon';
+import {EmailContent} from '../../../components/molecule/SettingContent/EmailContent';
 
 type EmailProps = NativeStackScreenProps<RootStackParams, 'Email'>;
 
@@ -19,7 +25,8 @@ export const EmailScreen: React.FC<EmailProps> = ({
   navigation,
   route,
 }: EmailProps) => {
-  const {info, message} = route.params;
+  const {t} = useTranslation();
+  const {info} = route.params;
   const {dataProfile, getProfileUser} = useProfileHook();
   const [isFetching, setIsFetching] = useState<boolean>(true);
   const [visibleModal, setVisibleModal] = useState<boolean>(false);
@@ -46,6 +53,13 @@ export const EmailScreen: React.FC<EmailProps> = ({
   };
 
   useEffect(() => {
+    visibleModal &&
+      setTimeout(() => {
+        setVisibleModal(false);
+      }, 3000);
+  }, [visibleModal]);
+
+  useEffect(() => {
     fetchUser();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -65,15 +79,17 @@ export const EmailScreen: React.FC<EmailProps> = ({
         children={
           <View style={[styles.modalContainer]}>
             <TickCircleIcon
-              width={widthResponsive(30)}
-              height={heightPercentage(30)}
+              width={widthPercentage(21)}
+              height={heightPercentage(20)}
               stroke={color.Neutral[10]}
             />
             <Gap width={widthResponsive(7)} />
-            <Text style={[styles.modalText]}>{message}</Text>
+            <Text style={[styles.modalText]}>
+              {t('Setting.Email.Toast.Success')}
+            </Text>
           </View>
         }
-        modalStyle={{marginHorizontal: ms(24)}}
+        modalStyle={{marginHorizontal: widthPercentage(24)}}
       />
     </View>
   );
@@ -85,16 +101,15 @@ const styles = StyleSheet.create({
     backgroundColor: Color.Dark[800],
   },
   modalContainer: {
-    flexDirection: 'row',
-    backgroundColor: color.Success[400],
-    paddingVertical: mvs(16),
-    paddingHorizontal: ms(12),
-    borderRadius: 4,
-    height: mvs(48),
     width: '100%',
-    alignItems: 'center',
     position: 'absolute',
-    bottom: mvs(22),
+    bottom: heightPercentage(22),
+    height: heightPercentage(36),
+    backgroundColor: color.Success[400],
+    paddingHorizontal: widthPercentage(12),
+    borderRadius: 4,
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   modalText: {
     color: color.Neutral[10],

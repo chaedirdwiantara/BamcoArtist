@@ -44,6 +44,7 @@ interface InputLabelProps extends TextInputProps {
   leftIconStyle?: ViewStyle;
   listImage?: Image[];
   onPressDeleteImage?: (id: number) => void;
+  rightIcon?: React.ReactNode;
 }
 
 const InputLabel: React.FC<InputLabelProps> = (props: InputLabelProps) => {
@@ -64,6 +65,7 @@ const InputLabel: React.FC<InputLabelProps> = (props: InputLabelProps) => {
     leftIconStyle,
     listImage,
     onPressDeleteImage,
+    rightIcon,
   } = props;
 
   const [state, setState] = useState<boolean>(false);
@@ -168,6 +170,7 @@ const InputLabel: React.FC<InputLabelProps> = (props: InputLabelProps) => {
         />
         <View style={{position: 'absolute', right: 0}}>
           {password ? passwordComp() : null}
+          {rightIcon ? rightIcon : null}
         </View>
       </View>
       {showImage ? iconCameraComp() : null}
@@ -199,7 +202,7 @@ const styles = StyleSheet.create({
     color: Color.Neutral[10],
     paddingVertical: heightPercentage(12),
     paddingRight: mvs(40),
-    fontSize: mvs(15),
+    fontSize: mvs(14),
     // lineHeight: Platform.OS === 'ios' ? mvs(20) : undefined,
   },
   containerErrorMsg: {

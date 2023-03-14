@@ -126,7 +126,11 @@ const MusiciansListCard: React.FC<ListProps> = (props: ListProps) => {
           <Text
             style={[
               typography.Subtitle1,
-              {color: color.Pink[2], marginRight: widthPercentage(5)},
+              {
+                color: color.Pink[2],
+                marginRight: widthPercentage(5),
+                fontSize: mvs(13),
+              },
             ]}>
             You
           </Text>
@@ -161,7 +165,7 @@ const styles = StyleSheet.create({
   },
   musicianName: {
     fontFamily: font.InterRegular,
-    fontSize: normalize(14),
+    fontSize: mvs(14),
     fontWeight: '500',
     color: color.Neutral[10],
   },

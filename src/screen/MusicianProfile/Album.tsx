@@ -37,6 +37,7 @@ const Album: FC<AlbumProps> = (props: AlbumProps) => {
         <View>
           {data.map((item, i) => (
             <TouchableOpacity
+              key={i}
               style={styles.container}
               onPress={() => handleToDetail(item)}
               testID={`album${i}`}>
@@ -107,6 +108,6 @@ const styles = StyleSheet.create({
     color: color.Neutral[10],
     fontFamily: font.InterRegular,
     fontWeight: '500',
-    fontSize: ms(14),
+    fontSize: ms(13),
   },
 });

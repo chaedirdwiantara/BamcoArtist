@@ -15,10 +15,9 @@ import {RootStackParams} from '../../navigations';
 import {storage} from '../../hooks/use-storage.hook';
 import {usePlayerHook} from '../../hooks/use-player.hook';
 import {useProfileHook} from '../../hooks/use-profile.hook';
-import {GuestContent, ProfileContent} from '../../components';
 import {usePlaylistHook} from '../../hooks/use-playlist.hook';
-import {ModalLoading} from '../../components/molecule/ModalLoading/ModalLoading';
 import {OtherUserProfileContent} from './OtherUserProfileContent';
+import {ModalLoading} from '../../components/molecule/ModalLoading/ModalLoading';
 
 type OtherProfileProps = NativeStackScreenProps<
   RootStackParams,
@@ -50,7 +49,12 @@ export const OtherUserProfile: FC<OtherProfileProps> = ({
   const {dataPlaylist, getPlaylist} = usePlaylistHook();
   const isLogin = storage.getString('profile');
   const isFocused = useIsFocused();
-  const {isPlaying, showPlayer, hidePlayer} = usePlayerHook();
+  const {
+    isPlaying,
+    visible: playerVisible,
+    showPlayer,
+    hidePlayer,
+  } = usePlayerHook();
 
   useEffect(() => {
     if (isFocused && isPlaying) {
@@ -89,23 +93,30 @@ export const OtherUserProfile: FC<OtherProfileProps> = ({
         : 0,
   };
 
+  const goToPlaylist = (id: number, name: string) => {
+    navigation.navigate('Playlist', {id, name, from: 'other'});
+  };
+
+  const goToFollowing = () => {
+    navigation.navigate('Following', {uuid: data.id});
+  };
+
   return (
     <View style={styles.root}>
-      {isLogin ? (
+      {isLogin && (
         <OtherUserProfileContent
           profile={profile}
           selfProfile={dataFansProfile}
-          goToPlaylist={() => {}}
+          goToPlaylist={goToPlaylist}
           dataPlaylist={dataPlaylist}
           goToEditProfile={() => {}}
-          onPressGoTo={() => {}}
+          onPressGoTo={goToFollowing}
           totalCountlikedSong={dataCountLiked?.countLikedSong}
+          playerVisible={playerVisible}
+          otherUserProfile={true}
         />
-      ) : isLogin && isLoading ? (
-        <ModalLoading visible={isLoading} />
-      ) : (
-        <GuestContent />
       )}
+      <ModalLoading visible={isLoading} />
     </View>
   );
 };

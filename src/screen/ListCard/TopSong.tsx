@@ -22,6 +22,8 @@ interface TopSongPropsScreen {
   loveIcon?: boolean;
   newDataMore?: DataDropDownType[];
   newOnPressMore?: (data: DataDropDownType, item: SongList) => void;
+  onEndReached?: () => void;
+  onEndReachedThreshold?: number;
 }
 
 const TopSong: FC<TopSongPropsScreen> = (props: TopSongPropsScreen) => {
@@ -38,6 +40,8 @@ const TopSong: FC<TopSongPropsScreen> = (props: TopSongPropsScreen) => {
     loveIcon,
     newDataMore,
     newOnPressMore,
+    onEndReached,
+    onEndReachedThreshold,
   } = props;
   const {currentTrack, isPlaying, addSong} = usePlayerHook();
   const {setLikeSong, setUnlikeSong} = useSongHook();
@@ -110,6 +114,8 @@ const TopSong: FC<TopSongPropsScreen> = (props: TopSongPropsScreen) => {
       )}
       estimatedItemSize={heightResponsive(500)}
       extraData={[currentTrack, isPlaying]}
+      onEndReached={onEndReached}
+      onEndReachedThreshold={onEndReachedThreshold}
     />
   );
 };

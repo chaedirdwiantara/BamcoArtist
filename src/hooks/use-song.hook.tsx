@@ -12,6 +12,7 @@ import {
 import {
   DataDetailAlbum,
   DataDetailSong,
+  PaginationType,
   SongList,
   SongPropsTypeA,
 } from '../interface/song.interface';
@@ -22,6 +23,7 @@ export const useSongHook = () => {
   const [isErrorSong, setIsErrorSong] = useState(false);
   const [dataSong, setDataSong] = useState<SongList[]>([]);
   const [dataTopSong, setDataTopSong] = useState<SongList[]>([]);
+  const [metaSong, setMetaSong] = useState<PaginationType>();
   const [dataDetailSong, setDataDetailSong] = useState<DataDetailSong | null>(
     null,
   );
@@ -32,6 +34,7 @@ export const useSongHook = () => {
     try {
       const response = await listSong(props);
       setDataSong(response.data);
+      setMetaSong(response.meta);
     } catch (error) {
       console.log(error);
       setIsErrorSong(true);
@@ -80,7 +83,7 @@ export const useSongHook = () => {
       setAlbumLoading(false);
     }
   };
-  
+
   const setLikeSong = async (props?: SongPropsTypeA) => {
     setIsLoadingSong(true);
     try {
@@ -111,6 +114,7 @@ export const useSongHook = () => {
     dataDetailSong,
     albumLoading,
     dataDetailAlbum,
+    metaSong,
     getListDataSong,
     getListDataTopSong,
     getDetailSong,

@@ -219,8 +219,11 @@
       "Liked": "LIKED SONGS",
       "Point": "POINTS",
       "CreatedBy": "Created by",
+      "NoPlaylist": "No Playlist have been made",
       "NoMusician": "You don’t have contributions to any musicians",
-      "NoBadge": "You don’t have any badges"
+      "NoMusicianOther": "This user don’t have contributions to any musicians",
+      "NoBadge": "You don’t have any badges",
+      "NoBadgeOther": "This user don’t have any badges"
     },
     "Button": {
       "Edit": "Edit Profile",
@@ -298,6 +301,7 @@
     "EnterVerifCode": "Enter Verification Code",
     "Account": {
       "Title": "Account",
+      "Confirm": "Are you sure you want to update your account?",
       "Label": {
         "Username": "Username",
         "Fullname": "Musician Name",
@@ -323,6 +327,7 @@
     },
     "Password": {
       "Title": "Change Password",
+      "Confirm": "Are you sure you want to change your password?",
       "Label": {
         "Old": "Input Old Password",
         "New": "New Password",
@@ -331,6 +336,9 @@
     },
     "Email": {
       "Title": "Email",
+      "Toast": {
+        "Success": "Your email have been updated!"
+      },
       "Label": {
         "Add": "Add Email",
         "Change": "Change Email",
@@ -355,6 +363,7 @@
     },
     "Shipping": {
       "Title": "Shipping Information",
+      "Confirm": "Are you sure you want to save your shipping information?",
       "Label": {
         "Email": "Email",
         "Phone": "Phone Number",

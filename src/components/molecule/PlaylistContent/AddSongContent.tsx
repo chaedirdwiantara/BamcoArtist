@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {StyleSheet, View, Text, ScrollView} from 'react-native';
+import {useTranslation} from 'react-i18next';
 
 import {
   AddCircleIcon,
@@ -15,9 +16,8 @@ import {TopNavigation} from '../TopNavigation';
 import {color, typography} from '../../../theme';
 import {Gap, SearchBar, SsuToast} from '../../atom';
 import TopSong from '../../../screen/ListCard/TopSong';
-import {SongList} from '../../../interface/song.interface';
+import {PaginationType, SongList} from '../../../interface/song.interface';
 import {heightPercentage, widthPercentage} from '../../../utils';
-import {useTranslation} from 'react-i18next';
 
 interface AddSongProps {
   search: string;
@@ -26,6 +26,8 @@ interface AddSongProps {
   listSongs: SongList[];
   onPressGoBack: () => void;
   setAddSongToPlaylist: (props?: AddSongPropsType) => void;
+  meta: PaginationType;
+  nextPage: () => void;
 }
 
 export const AddSongContent: React.FC<AddSongProps> = ({
@@ -35,6 +37,8 @@ export const AddSongContent: React.FC<AddSongProps> = ({
   listSongs,
   onPressGoBack,
   setAddSongToPlaylist,
+  meta,
+  nextPage,
 }) => {
   const {t} = useTranslation();
   const [toastVisible, setToastVisible] = useState(false);
@@ -49,6 +53,12 @@ export const AddSongContent: React.FC<AddSongProps> = ({
   const onPressIcon = (songId: number) => {
     setAddSongToPlaylist({playlistId: playlist.id, songId: songId});
     setToastVisible(true);
+  };
+
+  const handleEndScroll = () => {
+    if (listSongs.length < meta.total) {
+      nextPage();
+    }
   };
 
   return (
@@ -80,6 +90,8 @@ export const AddSongContent: React.FC<AddSongProps> = ({
             rightIconComponent={<AddCircleIcon />}
             onPressIcon={onPressIcon}
             activeOpacity={1}
+            // onEndReached={handleEndScroll}
+            // onEndReachedThreshold={0.1}
           />
         </View>
       </ScrollView>

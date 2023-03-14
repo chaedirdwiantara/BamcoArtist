@@ -1,15 +1,16 @@
 import React, {useCallback, useState} from 'react';
 import {View, StyleSheet} from 'react-native';
-import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import {
   NativeStackNavigationProp,
   NativeStackScreenProps,
 } from '@react-navigation/native-stack';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
 
 import Color from '../../../theme/Color';
 import {FollowersList} from './ListFollowers';
-import {RootStackParams} from '../../../navigations';
 import {useSearchHook} from '../../../hooks/use-search.hook';
+import {MainTabParams, RootStackParams} from '../../../navigations';
+import {profileStorage} from '../../../hooks/use-storage.hook';
 
 type FollowersProps = NativeStackScreenProps<RootStackParams, 'Followers'>;
 
@@ -19,6 +20,7 @@ export const FollowersScreen: React.FC<FollowersProps> = ({
   const {uuid} = route.params;
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
+  const navigation2 = useNavigation<NativeStackNavigationProp<MainTabParams>>();
   const {dataFollowers, getListFollowers} = useSearchHook();
   const [search, setSearch] = useState<string>('');
 
@@ -33,10 +35,14 @@ export const FollowersScreen: React.FC<FollowersProps> = ({
   };
 
   const goToDetail = (type: 'fans' | 'musician', id: string) => {
-    if (type === 'fans') {
-      navigation.navigate('OtherUserProfile', {id});
+    if (id === profileStorage()?.uuid) {
+      navigation2.navigate('Profile', {});
     } else {
-      navigation.navigate('MusicianProfile', {id});
+      if (type === 'fans') {
+        navigation.navigate('OtherUserProfile', {id});
+      } else {
+        navigation.navigate('MusicianProfile', {id});
+      }
     }
   };
 
