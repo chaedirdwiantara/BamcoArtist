@@ -35,7 +35,6 @@ import ListToFollowMusician from './ListToFollowMusician';
 import {useFeedHook} from '../../hooks/use-feed.hook';
 import {PostList} from '../../interface/feed.interface';
 import {dateFormat} from '../../utils/date-format';
-import {useProfileHook} from '../../hooks/use-profile.hook';
 import categoryNormalize from '../../utils/categoryNormalize';
 import {ModalLoading} from '../../components/molecule/ModalLoading/ModalLoading';
 import {usePlayerHook} from '../../hooks/use-player.hook';
@@ -43,6 +42,7 @@ import {useTranslation} from 'react-i18next';
 import {useCreditHook} from '../../hooks/use-credit.hook';
 import FilterModal from '../../components/molecule/V2/DropdownFilter/modalFilter';
 import ChildrenCard from './ChildrenCard';
+import {profileStorage} from '../../hooks/use-storage.hook';
 const {height} = Dimensions.get('screen');
 
 interface PostListProps {
@@ -113,13 +113,8 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
     addPlaylistFeed,
   } = usePlayerHook();
 
-  const {dataProfile, getProfileUser} = useProfileHook();
-
   const {creditCount, getCreditCount} = useCreditHook();
-
-  useEffect(() => {
-    getProfileUser();
-  }, []);
+  const uuid = profileStorage()?.uuid;
 
   useEffect(() => {
     getCreditCount();
@@ -504,7 +499,7 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
                   tokenOnPress={tokenOnPress}
                   shareOnPress={shareOnPress}
                   commentCount={item.commentsCount}
-                  myPost={item.musician.uuid === dataProfile?.data.uuid}
+                  myPost={item.musician.uuid === uuid}
                   selectedMenu={setSelectedMenu}
                   idPost={item.id}
                   selectedIdPost={setSelectedIdPost}
