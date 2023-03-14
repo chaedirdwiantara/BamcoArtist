@@ -5,6 +5,7 @@ import {Avatar, Gap} from '../../atom';
 import {color, typography} from '../../../theme';
 import {dropDownSubscription} from '../../../data/dropdown';
 import {heightPercentage, widthPercentage} from '../../../utils';
+import DropdownMore from '../V2/DropdownFilter/DropdownMore';
 
 interface DonateCardProps {
   avatarUri: string;
@@ -37,11 +38,9 @@ export const DonateCardContent: React.FC<DonateCardProps> = ({
             </Text>
           </View>
         </View>
-        <Dropdown.More
-          data={dropDownSubscription}
+        <DropdownMore
+          dataFilter={dropDownSubscription}
           selectedMenu={onPressMore}
-          containerStyle={styles.dropdown}
-          translation={true}
         />
       </View>
 
