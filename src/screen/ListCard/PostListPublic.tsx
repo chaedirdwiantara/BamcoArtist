@@ -5,6 +5,7 @@ import {
   InteractionManager,
   NativeModules,
   Platform,
+  RefreshControl,
   StyleSheet,
   Text,
   View,
@@ -43,6 +44,7 @@ import {useTranslation} from 'react-i18next';
 import {useCreditHook} from '../../hooks/use-credit.hook';
 import ChildrenCard from './ChildrenCard';
 import {profileStorage} from '../../hooks/use-storage.hook';
+import LoadingSpinner from '../../components/atom/Loading/LoadingSpinner';
 
 const {height} = Dimensions.get('screen');
 
@@ -61,7 +63,6 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
   const {dataRightDropdown, dataLeftDropdown, uuidMusician = ''} = props;
 
-  const [dataProfileImg, setDataProfileImg] = useState<string>('');
   const [recorder, setRecorder] = useState<string[]>([]);
   const [selectedId, setSelectedId] = useState<string[]>();
   const [modalShare, setModalShare] = useState<boolean>(false);
@@ -84,6 +85,7 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
     modalSortBy: false,
     modalCategory: false,
   });
+  const [refreshing, setRefreshing] = useState<boolean>(false);
 
   // * UPDATE HOOKS
   const [selectedIdPost, setSelectedIdPost] = useState<string>();
@@ -133,6 +135,25 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
       setPage(1);
     }, [uuidMusician]),
   );
+
+  //* call when refreshing
+  useEffect(() => {
+    if (refreshing) {
+      getListDataPost({
+        page: 1,
+        perPage: perPage,
+        sortBy: filterByValue,
+        category: categoryValue,
+      });
+      getCreditCount();
+    }
+  }, [refreshing]);
+
+  useEffect(() => {
+    if (!feedIsLoading) {
+      setRefreshing(false);
+    }
+  }, [feedIsLoading]);
 
   //* set response data list post to main data
   useEffect(() => {
@@ -419,6 +440,11 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
       </View>
       {dataMain !== null && dataMain.length !== 0 ? (
         <View style={{flex: 1, marginHorizontal: widthResponsive(-24)}}>
+          {refreshing && (
+            <View style={styles.loadingContainer}>
+              <LoadingSpinner />
+            </View>
+          )}
           <FlatList
             data={dataMain}
             showsVerticalScrollIndicator={false}
@@ -432,6 +458,12 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
                   ? heightResponsive(220)
                   : heightResponsive(160),
             }}
+            refreshControl={
+              <RefreshControl
+                refreshing={refreshing}
+                onRefresh={() => setRefreshing(true)}
+              />
+            }
             onEndReached={handleEndScroll}
             renderItem={({item}) => (
               <>
@@ -609,7 +641,7 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
           textStyle={{fontSize: mvs(10)}}
         />
       )}
-      <ModalLoading visible={feedIsLoading} />
+      {!refreshing && <ModalLoading visible={feedIsLoading} />}
     </>
   );
 };
@@ -661,5 +693,9 @@ const styles = StyleSheet.create({
     fontSize: mvs(10),
     fontWeight: '500',
     color: color.Dark[50],
+  },
+  loadingContainer: {
+    alignItems: 'center',
+    paddingVertical: heightPercentage(20),
   },
 });

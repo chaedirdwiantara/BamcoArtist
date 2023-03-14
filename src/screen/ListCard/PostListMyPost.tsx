@@ -5,6 +5,7 @@ import {
   InteractionManager,
   NativeModules,
   Platform,
+  RefreshControl,
   StyleSheet,
   Text,
   View,
@@ -43,6 +44,7 @@ import {useCreditHook} from '../../hooks/use-credit.hook';
 import FilterModal from '../../components/molecule/V2/DropdownFilter/modalFilter';
 import ChildrenCard from './ChildrenCard';
 import {profileStorage} from '../../hooks/use-storage.hook';
+import LoadingSpinner from '../../components/atom/Loading/LoadingSpinner';
 const {height} = Dimensions.get('screen');
 
 interface PostListProps {
@@ -83,6 +85,7 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
     modalSortBy: false,
     modalCategory: false,
   });
+  const [refreshing, setRefreshing] = useState<boolean>(false);
 
   // * UPDATE HOOKS
   const [selectedIdPost, setSelectedIdPost] = useState<string>();
@@ -126,6 +129,25 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
       setPage(1);
     }, []),
   );
+
+  //* call when refreshing
+  useEffect(() => {
+    if (refreshing) {
+      getListDataMyPost({
+        page: 1,
+        perPage: perPage,
+        sortBy: filterByValue,
+        category: categoryValue,
+      });
+      getCreditCount();
+    }
+  }, [refreshing]);
+
+  useEffect(() => {
+    if (!feedIsLoading) {
+      setRefreshing(false);
+    }
+  }, [feedIsLoading]);
 
   //* set response data list post to main data
   useEffect(() => {
@@ -428,6 +450,11 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
             flex: 1,
             marginHorizontal: widthResponsive(-24),
           }}>
+          {refreshing && (
+            <View style={styles.loadingContainer}>
+              <LoadingSpinner />
+            </View>
+          )}
           <FlatList
             data={
               filterActive
@@ -445,6 +472,12 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
               paddingBottom:
                 height >= 800 ? heightResponsive(220) : heightResponsive(160),
             }}
+            refreshControl={
+              <RefreshControl
+                refreshing={refreshing}
+                onRefresh={() => setRefreshing(true)}
+              />
+            }
             onEndReached={handleEndScroll}
             renderItem={({item}) => (
               <>
@@ -587,7 +620,7 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
         modalVisible={modalSuccessDonate && trigger2ndModal ? true : false}
         toggleModal={onPressSuccess}
       />
-      <ModalLoading visible={feedIsLoading} />
+      {!refreshing && <ModalLoading visible={feedIsLoading} />}
       {offsetCategoryFilter !== undefined && (
         <FilterModal
           toggleModal={() =>
@@ -685,5 +718,9 @@ const styles = StyleSheet.create({
     fontSize: mvs(10),
     fontWeight: '500',
     color: color.Dark[50],
+  },
+  loadingContainer: {
+    alignItems: 'center',
+    paddingVertical: heightPercentage(20),
   },
 });
