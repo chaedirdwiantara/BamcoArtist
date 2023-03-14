@@ -67,10 +67,10 @@ export const MusicianDetail: React.FC<MusicianDetailProps> = ({
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [scrolEffect, setScrollEffect] = useState(false);
   const [filter] = useState([
-    {filterName: 'Musician.Tab.Profile'},
     {filterName: 'Musician.Tab.Post'},
     {filterName: 'Musician.Tab.Music'},
     {filterName: 'Musician.Tab.Fans'},
+    {filterName: 'Musician.Tab.Profile'},
   ]);
   const [isModalVisible, setModalVisible] = useState<boolean>(false);
   const [zoomImage, setZoomImage] = useState<string[]>([]);
