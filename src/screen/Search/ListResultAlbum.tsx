@@ -1,4 +1,4 @@
-import {FlatList, StyleSheet, Text, View} from 'react-native';
+import {FlatList, RefreshControl, StyleSheet, View} from 'react-native';
 import React, {FC, useEffect} from 'react';
 import {EmptyState, ListCard} from '../../components';
 import {KeywordProps} from '../../interface/search.interface';
@@ -11,6 +11,7 @@ import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParams} from '../../navigations';
 import {useTranslation} from 'react-i18next';
+import LoadingSpinner from '../../components/atom/Loading/LoadingSpinner';
 
 const ListResultAlbum: FC<KeywordProps> = ({keyword}: KeywordProps) => {
   const navigation =
@@ -21,7 +22,6 @@ const ListResultAlbum: FC<KeywordProps> = ({keyword}: KeywordProps) => {
     data: dataSearchAlbums,
     refetch,
     isRefetching,
-    isFetched,
     isLoading,
   } = useQuery(['/search-albums'], () => getSearchAlbums({keyword: keyword}));
 
@@ -40,42 +40,44 @@ const ListResultAlbum: FC<KeywordProps> = ({keyword}: KeywordProps) => {
 
   return (
     <View style={styles.container}>
-      {isFetched && !isRefetching && (
-        <FlatList
-          contentContainerStyle={styles.ListContainer}
-          showsVerticalScrollIndicator={false}
-          data={dataSearchAlbums?.data}
-          renderItem={({item, index}) => (
-            <ListCard.MusicList
-              imgUri={item.imageUrl[0]?.image ?? null}
-              musicNum={(index + 1).toLocaleString('en-US', {
-                minimumIntegerDigits: 2,
-                useGrouping: false,
-              })}
-              musicTitle={item.title}
-              singerName={item.title}
-              onPressMore={resultDataMore}
-              containerStyles={{marginTop: mvs(20)}}
-              onPressCard={() => {
-                cardOnPress(item.id);
-              }}
-              hideDropdownMore
-            />
-          )}
-          ListEmptyComponent={
+      {(isRefetching || isLoading) && (
+        <View style={styles.loadingContainer}>
+          <LoadingSpinner />
+        </View>
+      )}
+      <FlatList
+        contentContainerStyle={styles.ListContainer}
+        showsVerticalScrollIndicator={false}
+        data={dataSearchAlbums?.data}
+        renderItem={({item, index}) => (
+          <ListCard.MusicList
+            imgUri={item.imageUrl[0]?.image ?? null}
+            musicNum={(index + 1).toLocaleString('en-US', {
+              minimumIntegerDigits: 2,
+              useGrouping: false,
+            })}
+            musicTitle={item.title}
+            singerName={item.title}
+            onPressMore={resultDataMore}
+            containerStyles={{marginTop: mvs(20)}}
+            onPressCard={() => {
+              cardOnPress(item.id);
+            }}
+            hideDropdownMore
+          />
+        )}
+        ListEmptyComponent={
+          !isLoading && !isRefetching ? (
             <EmptyState
               text={t('EmptyState.Search.Album') || ''}
               containerStyle={styles.containerEmpty}
             />
-          }
-        />
-      )}
-
-      {(isRefetching || isLoading) && (
-        <View style={styles.loadingContainer}>
-          <Text style={styles.loading}>Loading...</Text>
-        </View>
-      )}
+          ) : null
+        }
+        refreshControl={
+          <RefreshControl refreshing={isRefetching} onRefresh={refetch} />
+        }
+      />
     </View>
   );
 };
@@ -95,9 +97,8 @@ const styles = StyleSheet.create({
     color: Color.Neutral[10],
   },
   loadingContainer: {
-    flex: 1,
     alignItems: 'center',
-    paddingTop: heightPercentage(50),
+    paddingVertical: heightPercentage(20),
   },
   containerEmpty: {
     flex: 0,

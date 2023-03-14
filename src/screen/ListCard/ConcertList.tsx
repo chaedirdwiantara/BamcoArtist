@@ -1,5 +1,5 @@
 import React, {FC} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {RefreshControl, StyleSheet, View} from 'react-native';
 import {TicketIcon} from '../../assets/icon';
 import Color from '../../theme/Color';
 import {heightPercentage, heightResponsive, widthResponsive} from '../../utils';
@@ -7,18 +7,21 @@ import {EmptyState} from '../../components';
 import {FlashList} from '@shopify/flash-list';
 import MerchListCard from '../../components/molecule/ListCard/MerchListCard';
 import {useEventHook} from '../../hooks/use-event.hook';
-import {ModalLoading} from '../../components/molecule/ModalLoading/ModalLoading';
 import {MerchData} from '../../interface/event.interface';
 import {useQuery} from 'react-query';
 import {useTranslation} from 'react-i18next';
+import LoadingSpinner from '../../components/atom/Loading/LoadingSpinner';
 
 const ConcertList: FC = () => {
   const {t} = useTranslation();
   const {getListDataConcert} = useEventHook();
 
-  const {data: dataConcertList, isLoading} = useQuery(['/concert'], () =>
-    getListDataConcert(),
-  );
+  const {
+    data: dataConcertList,
+    isLoading,
+    refetch,
+    isRefetching,
+  } = useQuery(['/concert'], () => getListDataConcert());
 
   const filterList: MerchData | undefined = dataConcertList?.data.find(
     concert => {
@@ -28,17 +31,19 @@ const ConcertList: FC = () => {
 
   return (
     <>
-      {isLoading ? (
+      {(isLoading || isRefetching) && (
         <View style={styles.loadingContainer}>
-          <Text style={styles.loading}>Loading...</Text>
+          <LoadingSpinner />
         </View>
-      ) : (
-        <FlashList
-          data={filterList?.data}
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={styles.ListContainer}
-          // keyExtractor={item => item.id.toString()}
-          ListEmptyComponent={
+      )}
+
+      <FlashList
+        data={filterList?.data}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.ListContainer}
+        // keyExtractor={item => item.id.toString()}
+        ListEmptyComponent={
+          !isLoading && !isRefetching ? (
             <EmptyState
               icon={
                 <TicketIcon
@@ -51,27 +56,30 @@ const ConcertList: FC = () => {
               text={t('Event.Concert.NoConcert') || ''}
               containerStyle={styles.containerEmpty}
             />
-          }
-          renderItem={({item, index}: any) => (
-            <MerchListCard
-              id={item.id}
-              containerStyles={
-                index % 2 == 0 ? {marginRight: 10} : {marginLeft: 10}
-              }
-              image={item.pic}
-              title={item.name}
-              owner={item.organizer?.name}
-              ownerImage={item.organizer?.pic}
-              price={item.price}
-              desc={item.content}
-              currency={item.currencyCode}
-              type={'concert'}
-            />
-          )}
-          estimatedItemSize={150}
-          numColumns={2}
-        />
-      )}
+          ) : null
+        }
+        renderItem={({item, index}: any) => (
+          <MerchListCard
+            id={item.id}
+            containerStyles={
+              index % 2 == 0 ? {marginRight: 10} : {marginLeft: 10}
+            }
+            image={item.pic}
+            title={item.name}
+            owner={item.organizer?.name}
+            ownerImage={item.organizer?.pic}
+            price={item.price}
+            desc={item.content}
+            currency={item.currencyCode}
+            type={'concert'}
+          />
+        )}
+        estimatedItemSize={150}
+        numColumns={2}
+        refreshControl={
+          <RefreshControl refreshing={isRefetching} onRefresh={refetch} />
+        }
+      />
     </>
   );
 };
@@ -94,8 +102,7 @@ const styles = StyleSheet.create({
     color: Color.Neutral[10],
   },
   loadingContainer: {
-    flex: 1,
     alignItems: 'center',
-    paddingTop: heightPercentage(50),
+    paddingTop: heightPercentage(20),
   },
 });
