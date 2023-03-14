@@ -35,7 +35,7 @@ import {
 } from '../interface/feed.interface';
 
 export const useFeedHook = () => {
-  const [feedIsLoading, setFeedIsLoading] = useState(false);
+  const [feedIsLoading, setFeedIsLoading] = useState(true);
   const [dataPostList, setDataPostList] = useState<PostList[]>([]);
   const [dataPostDetail, setDataPostDetail] = useState<DetailPostData>();
   const [dataTopPost, setDataTopPost] = useState<PostList[]>([]);

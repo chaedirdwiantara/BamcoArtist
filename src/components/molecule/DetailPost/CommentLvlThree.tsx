@@ -16,6 +16,7 @@ import {ms} from 'react-native-size-matters';
 import {DataDropDownType, dataUpdateComment} from '../../../data/dropdown';
 import {Dropdown} from '../DropDown';
 import {useTranslation} from 'react-i18next';
+import DropdownMore from '../V2/DropdownFilter/DropdownMore';
 
 interface ListProps extends TouchableOpacityProps {
   imgUriLvl3: string;
@@ -87,18 +88,11 @@ const CommentLvlThree: React.FC<ListProps> = (props: ListProps) => {
               {elipsisText(postDateLvl3, 10)}
             </Text>
             {showEdit ? (
-              <Dropdown.More
-                data={dataUpdateComment}
-                idComment={idComment}
-                selectedIdComment={selectedIdComment}
+              <DropdownMore
+                id={idComment}
+                selectedid={selectedIdComment}
                 selectedMenu={selectedMenu}
-                iconFill={color.Dark[50]}
-                containerStyle={{
-                  width: widthResponsive(110),
-                  marginLeft: widthResponsive(-97),
-                  marginTop: Platform.OS === 'android' ? ms(-35) : ms(-10),
-                }}
-                translation={true}
+                dataFilter={dataUpdateComment}
               />
             ) : null}
           </View>

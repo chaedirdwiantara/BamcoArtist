@@ -17,6 +17,7 @@ import {Dropdown} from '../DropDown';
 import {dataUpdateComment} from '../../../data/dropdown';
 import {DataDropDownType} from '../../../data/dropdown';
 import {useTranslation} from 'react-i18next';
+import DropdownMore from '../V2/DropdownFilter/DropdownMore';
 
 interface ListProps extends TouchableOpacityProps {
   imgUri: string;
@@ -85,18 +86,11 @@ const PostComment: React.FC<ListProps> = (props: ListProps) => {
             }}>
             <Text style={styles.postDateStyle}>{postDate}</Text>
             {showEdit ? (
-              <Dropdown.More
-                data={dataUpdateComment}
-                idComment={idComment}
-                selectedIdComment={selectedIdComment}
+              <DropdownMore
+                id={idComment}
+                selectedid={selectedIdComment}
                 selectedMenu={selectedMenu}
-                iconFill={color.Dark[50]}
-                containerStyle={{
-                  width: widthResponsive(110),
-                  marginLeft: widthResponsive(-97),
-                  marginTop: Platform.OS === 'android' ? ms(-35) : ms(-10),
-                }}
-                translation={true}
+                dataFilter={dataUpdateComment}
               />
             ) : null}
           </View>

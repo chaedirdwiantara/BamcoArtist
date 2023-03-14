@@ -1,4 +1,4 @@
-import {View} from 'react-native';
+import {StyleSheet, Text, View} from 'react-native';
 import React, {FC} from 'react';
 import {Gap} from '../../components';
 import ProfileComponent from './ProfileComponent';
@@ -12,6 +12,7 @@ import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParams} from '../../navigations';
 import {useTranslation} from 'react-i18next';
+import {FavoriteGenres} from './FavoriteGenres';
 
 interface DataMusicianProps {
   profile: DataDetailMusician;
@@ -43,6 +44,14 @@ const DataMusician: FC<DataMusicianProps> = (props: DataMusicianProps) => {
         content={profile.about ? profile.about : noDataText}
         gap={16}
       />
+
+      {profile.genres.length > 0 && (
+        <>
+          <Gap height={8} />
+          <FavoriteGenres favGenres={profile.genres} />
+        </>
+      )}
+
       <Gap height={24} />
       <ProfileComponent
         title={t('Musician.Label.Social')}

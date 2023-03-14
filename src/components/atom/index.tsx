@@ -13,6 +13,7 @@ import {SelectBox} from './SelectBox/SelectBox';
 import SquareImage from './SquareImage/SquareImage';
 import SsuStatusBar from './StatusBar';
 import SsuToast from './Toast';
+import IconMore from './IconMore';
 
 export {
   Avatar,
@@ -30,4 +31,5 @@ export {
   SquareImage,
   SsuStatusBar,
   SsuToast,
+  IconMore,
 };

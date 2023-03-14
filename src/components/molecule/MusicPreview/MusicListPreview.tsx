@@ -4,7 +4,7 @@ import {color, font} from '../../../theme';
 import {Gap, SquareImage} from '../../atom';
 import {CloseCircleIcon, PauseIcon, PlayIcon} from '../../../assets/icon';
 import {ms, mvs} from 'react-native-size-matters';
-import {heightResponsive, widthResponsive} from '../../../utils';
+import {heightResponsive} from '../../../utils';
 import {Slider} from '@miblanchard/react-native-slider';
 import {PostList} from '../../../interface/feed.interface';
 
