@@ -466,7 +466,7 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
           />
         </View>
       </View>
-      {dataExclusiveContent ? (
+      {dataExclusiveContent && feedIsLoading === false ? (
         dataMain !== null && dataMain.length !== 0 ? (
           <View style={{flex: 1, marginHorizontal: widthResponsive(-24)}}>
             <FlatList
@@ -605,6 +605,25 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
             </View>
           </>
         )
+      ) : !dataExclusiveContent && feedIsLoading === false ? (
+        <>
+          <EmptyState
+            text={t('EmptyState.NoECData') || ''}
+            containerStyle={{
+              justifyContent: 'flex-start',
+              paddingTop: heightPercentage(24),
+            }}
+            icon={<FriedEggIcon />}
+          />
+          <View style={styles.btnECContainer}>
+            <ButtonGradient
+              label={t('Btn.Create')}
+              onPress={() => navigation.navigate('CreatePost')}
+              containerStyles={{paddingTop: heightPercentage(20)}}
+              gradientStyles={styles.btnEC}
+            />
+          </View>
+        </>
       ) : null}
       <ModalShare
         url={

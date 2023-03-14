@@ -25,17 +25,10 @@ import {
   DropDownSortType,
 } from '../../data/dropdown';
 import {color, font, typography} from '../../theme';
-import {
-  elipsisText,
-  heightPercentage,
-  heightResponsive,
-  widthPercentage,
-  widthResponsive,
-} from '../../utils';
+import {heightPercentage, heightResponsive, widthResponsive} from '../../utils';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {MainTabParams, RootStackParams} from '../../navigations';
-import ImageList from './ImageList';
 import {EmptyState} from '../../components/molecule/EmptyState/EmptyState';
 import {FriedEggIcon, TickCircleIcon} from '../../assets/icon';
 import ListToFollowMusician from './ListToFollowMusician';
@@ -46,7 +39,6 @@ import {useProfileHook} from '../../hooks/use-profile.hook';
 import categoryNormalize from '../../utils/categoryNormalize';
 import {ModalLoading} from '../../components/molecule/ModalLoading/ModalLoading';
 import {usePlayerHook} from '../../hooks/use-player.hook';
-import MusicListPreview from '../../components/molecule/MusicPreview/MusicListPreview';
 import {useTranslation} from 'react-i18next';
 import {useCreditHook} from '../../hooks/use-credit.hook';
 import FilterModal from '../../components/molecule/V2/DropdownFilter/modalFilter';
@@ -70,8 +62,6 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
     useNavigation<NativeStackNavigationProp<MainTabParams>>();
   const {dataRightDropdown, dataLeftDropdown, uuidMusician} = props;
 
-  const [commentType, setCommentType] = useState<string>('');
-  const [dataProfileImg, setDataProfileImg] = useState<string>('');
   const [recorder, setRecorder] = useState<string[]>([]);
   const [selectedId, setSelectedId] = useState<string[]>();
   const [modalShare, setModalShare] = useState<boolean>(false);
@@ -110,7 +100,6 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
     getListDataMyPost,
     setLikePost,
     setUnlikePost,
-    setCommentToPost,
     setDeletePost,
   } = useFeedHook();
 
@@ -135,13 +124,6 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
   useEffect(() => {
     getCreditCount();
   }, [modalDonate]);
-
-  useEffect(() => {
-    dataProfile?.data.imageProfileUrls.length !== 0 &&
-    dataProfile?.data.imageProfileUrls !== undefined
-      ? setDataProfileImg(dataProfile?.data.imageProfileUrls[0].image)
-      : '';
-  }, [dataProfile]);
 
   useFocusEffect(
     useCallback(() => {
