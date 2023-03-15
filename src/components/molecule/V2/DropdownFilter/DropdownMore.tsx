@@ -18,7 +18,7 @@ const {StatusBarManager} = NativeModules;
 const barHeight = StatusBarManager.HEIGHT;
 
 interface DropdownV2Props {
-  id: string;
+  id?: string;
   selectedid?: (id: string) => void;
   selectedMenu: (data: DataDropDownType) => void;
   dataFilter: DataDropDownType[];
@@ -37,8 +37,10 @@ const DropdownMore: React.FC<DropdownV2Props> = (props: DropdownV2Props) => {
   const handleOnClose = () => {
     if (menuSelected !== undefined) {
       selectedMenu?.(menuSelected);
-      selectedid?.(id);
       setMenuSelected(undefined);
+      if (id !== undefined) {
+        selectedid?.(id);
+      }
     }
   };
 

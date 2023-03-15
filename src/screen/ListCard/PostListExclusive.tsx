@@ -28,7 +28,6 @@ import {
 } from '../../data/dropdown';
 import {color, font, typography} from '../../theme';
 import {
-  elipsisText,
   heightPercentage,
   heightResponsive,
   widthPercentage,
@@ -37,18 +36,15 @@ import {
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParams} from '../../navigations';
-import ImageList from './ImageList';
 import {EmptyState} from '../../components/molecule/EmptyState/EmptyState';
 import {FriedEggIcon, TickCircleIcon} from '../../assets/icon';
 import ListToFollowMusician from './ListToFollowMusician';
 import {useFeedHook} from '../../hooks/use-feed.hook';
 import {PostList} from '../../interface/feed.interface';
 import {dateFormat} from '../../utils/date-format';
-import {useProfileHook} from '../../hooks/use-profile.hook';
 import categoryNormalize from '../../utils/categoryNormalize';
 import {ModalLoading} from '../../components/molecule/ModalLoading/ModalLoading';
 import {usePlayerHook} from '../../hooks/use-player.hook';
-import MusicListPreview from '../../components/molecule/MusicPreview/MusicListPreview';
 import {useTranslation} from 'react-i18next';
 import {useCreditHook} from '../../hooks/use-credit.hook';
 import {useSettingHook} from '../../hooks/use-setting.hook';
@@ -127,29 +123,19 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
   } = usePlayerHook();
 
   const {creditCount, getCreditCount} = useCreditHook();
-
-  const {dataProfile, getProfileUser} = useProfileHook();
+  const MyUuid = profileStorage()?.uuid;
 
   useEffect(() => {
     getCreditCount();
   }, [modalDonate]);
 
   const fetchExclusiveContent = () => {
-    const id = profileStorage()?.uuid;
-    getExclusiveContent({uuid: id});
+    getExclusiveContent({uuid: MyUuid});
   };
 
   useEffect(() => {
-    getProfileUser();
     fetchExclusiveContent();
   }, []);
-
-  useEffect(() => {
-    dataProfile?.data.imageProfileUrls.length !== 0 &&
-    dataProfile?.data.imageProfileUrls !== undefined
-      ? setDataProfileImg(dataProfile?.data.imageProfileUrls[0].image)
-      : '';
-  }, [dataProfile]);
 
   useFocusEffect(
     useCallback(() => {
@@ -466,7 +452,7 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
           />
         </View>
       </View>
-      {dataExclusiveContent ? (
+      {dataExclusiveContent && feedIsLoading === false ? (
         dataMain !== null && dataMain.length !== 0 ? (
           <View style={{flex: 1, marginHorizontal: widthResponsive(-24)}}>
             <FlatList
@@ -538,7 +524,7 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
                     tokenOnPress={tokenOnPress}
                     shareOnPress={shareOnPress}
                     commentCount={item.commentsCount}
-                    myPost={item.musician.uuid === dataProfile?.data.uuid}
+                    myPost={item.musician.uuid === MyUuid}
                     selectedMenu={setSelectedMenu}
                     idPost={item.id}
                     selectedIdPost={setSelectedIdPost}
@@ -605,6 +591,25 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
             </View>
           </>
         )
+      ) : !dataExclusiveContent && feedIsLoading === false ? (
+        <>
+          <EmptyState
+            text={t('EmptyState.NoECData') || ''}
+            containerStyle={{
+              justifyContent: 'flex-start',
+              paddingTop: heightPercentage(24),
+            }}
+            icon={<FriedEggIcon />}
+          />
+          <View style={styles.btnECContainer}>
+            <ButtonGradient
+              label={t('Btn.Create')}
+              onPress={() => navigation.navigate('CreatePost')}
+              containerStyles={{paddingTop: heightPercentage(20)}}
+              gradientStyles={styles.btnEC}
+            />
+          </View>
+        </>
       ) : null}
       <ModalShare
         url={

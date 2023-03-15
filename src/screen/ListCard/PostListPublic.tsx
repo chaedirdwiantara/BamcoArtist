@@ -5,6 +5,7 @@ import {
   InteractionManager,
   NativeModules,
   Platform,
+  RefreshControl,
   StyleSheet,
   Text,
   View,
@@ -26,31 +27,24 @@ import {
   DropDownSortType,
 } from '../../data/dropdown';
 import {color, font, typography} from '../../theme';
-import {
-  elipsisText,
-  heightPercentage,
-  heightResponsive,
-  widthPercentage,
-  widthResponsive,
-} from '../../utils';
+import {heightPercentage, heightResponsive, widthResponsive} from '../../utils';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParams} from '../../navigations';
 import {EmptyState} from '../../components/molecule/EmptyState/EmptyState';
 import ListToFollowMusician from './ListToFollowMusician';
-import ImageList from './ImageList';
 import {useFeedHook} from '../../hooks/use-feed.hook';
 import {PostList} from '../../interface/feed.interface';
 import {dateFormat} from '../../utils/date-format';
-import {useProfileHook} from '../../hooks/use-profile.hook';
 import {TickCircleIcon} from '../../assets/icon';
 import categoryNormalize from '../../utils/categoryNormalize';
 import {ModalLoading} from '../../components/molecule/ModalLoading/ModalLoading';
 import {usePlayerHook} from '../../hooks/use-player.hook';
-import MusicListPreview from '../../components/molecule/MusicPreview/MusicListPreview';
 import {useTranslation} from 'react-i18next';
 import {useCreditHook} from '../../hooks/use-credit.hook';
 import ChildrenCard from './ChildrenCard';
+import {profileStorage} from '../../hooks/use-storage.hook';
+import LoadingSpinner from '../../components/atom/Loading/LoadingSpinner';
 
 const {height} = Dimensions.get('screen');
 
@@ -69,7 +63,6 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
   const {dataRightDropdown, dataLeftDropdown, uuidMusician = ''} = props;
 
-  const [dataProfileImg, setDataProfileImg] = useState<string>('');
   const [recorder, setRecorder] = useState<string[]>([]);
   const [selectedId, setSelectedId] = useState<string[]>();
   const [modalShare, setModalShare] = useState<boolean>(false);
@@ -92,6 +85,7 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
     modalSortBy: false,
     modalCategory: false,
   });
+  const [refreshing, setRefreshing] = useState<boolean>(false);
 
   // * UPDATE HOOKS
   const [selectedIdPost, setSelectedIdPost] = useState<string>();
@@ -109,7 +103,6 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
     getListDataPost,
     setLikePost,
     setUnlikePost,
-    setCommentToPost,
   } = useFeedHook();
 
   const {
@@ -122,25 +115,12 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
     addPlaylistFeed,
   } = usePlayerHook();
 
-  const {dataProfile, getProfileUser} = useProfileHook();
-
   const {creditCount, getCreditCount} = useCreditHook();
-
-  useEffect(() => {
-    getProfileUser();
-  }, []);
+  const MyUuid = profileStorage()?.uuid;
 
   useEffect(() => {
     getCreditCount();
   }, [modalDonate]);
-
-  useEffect(() => {
-    dataProfile?.data.imageProfileUrls !== null &&
-    dataProfile?.data.imageProfileUrls !== undefined &&
-    dataProfile?.data.imageProfileUrls.length !== 0
-      ? setDataProfileImg(dataProfile?.data.imageProfileUrls[0].image)
-      : '';
-  }, [dataProfile]);
 
   useFocusEffect(
     useCallback(() => {
@@ -155,6 +135,25 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
       setPage(1);
     }, [uuidMusician]),
   );
+
+  //* call when refreshing
+  useEffect(() => {
+    if (refreshing) {
+      getListDataPost({
+        page: 1,
+        perPage: perPage,
+        sortBy: filterByValue,
+        category: categoryValue,
+      });
+      getCreditCount();
+    }
+  }, [refreshing]);
+
+  useEffect(() => {
+    if (!feedIsLoading) {
+      setRefreshing(false);
+    }
+  }, [feedIsLoading]);
 
   //* set response data list post to main data
   useEffect(() => {
@@ -441,6 +440,11 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
       </View>
       {dataMain !== null && dataMain.length !== 0 ? (
         <View style={{flex: 1, marginHorizontal: widthResponsive(-24)}}>
+          {refreshing && (
+            <View style={styles.loadingContainer}>
+              <LoadingSpinner />
+            </View>
+          )}
           <FlatList
             data={dataMain}
             showsVerticalScrollIndicator={false}
@@ -454,6 +458,12 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
                   ? heightResponsive(220)
                   : heightResponsive(160),
             }}
+            refreshControl={
+              <RefreshControl
+                refreshing={refreshing}
+                onRefresh={() => setRefreshing(true)}
+              />
+            }
             onEndReached={handleEndScroll}
             renderItem={({item}) => (
               <>
@@ -510,7 +520,7 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
                   tokenOnPress={tokenOnPress}
                   shareOnPress={shareOnPress}
                   commentCount={item.commentsCount}
-                  myPost={item.musician.uuid === dataProfile?.data.uuid}
+                  myPost={item.musician.uuid === MyUuid}
                   selectedMenu={setSelectedMenu}
                   idPost={item.id}
                   selectedIdPost={setSelectedIdPost}
@@ -631,7 +641,7 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
           textStyle={{fontSize: mvs(10)}}
         />
       )}
-      <ModalLoading visible={feedIsLoading} />
+      {!refreshing && <ModalLoading visible={feedIsLoading} />}
     </>
   );
 };
@@ -683,5 +693,9 @@ const styles = StyleSheet.create({
     fontSize: mvs(10),
     fontWeight: '500',
     color: color.Dark[50],
+  },
+  loadingContainer: {
+    alignItems: 'center',
+    paddingVertical: heightPercentage(20),
   },
 });
