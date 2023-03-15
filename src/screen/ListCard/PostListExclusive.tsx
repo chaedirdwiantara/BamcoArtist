@@ -584,7 +584,11 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
             <View style={styles.btnECContainer}>
               <ButtonGradient
                 label={t('Btn.Create')}
-                onPress={() => navigation.navigate('CreatePost')}
+                onPress={() =>
+                  navigation.navigate('CreatePost', {
+                    audience: 'Feed.Exclusive',
+                  })
+                }
                 containerStyles={{paddingTop: heightPercentage(20)}}
                 gradientStyles={styles.btnEC}
               />

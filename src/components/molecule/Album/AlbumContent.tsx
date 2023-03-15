@@ -37,6 +37,7 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParams} from '../../../navigations';
 import {useCreditHook} from '../../../hooks/use-credit.hook';
 import {usePlayerHook} from '../../../hooks/use-player.hook';
+import DropdownMore from '../V2/DropdownFilter/DropdownMore';
 
 interface Props {
   dataSong: SongList[] | null;
@@ -138,11 +139,9 @@ export const AlbumContent: React.FC<Props> = ({
       <TopNavigation.Type4
         title={t('Musician.Label.Album')}
         rightIcon={
-          <Dropdown.More
-            data={dropDownHeaderAlbum}
+          <DropdownMore
+            dataFilter={dropDownHeaderAlbum}
             selectedMenu={resultDataMore}
-            containerStyle={styles.dropDownMore}
-            translation={true}
           />
         }
         leftIcon={<ArrowLeftIcon />}
