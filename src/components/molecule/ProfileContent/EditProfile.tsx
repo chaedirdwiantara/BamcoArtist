@@ -80,6 +80,7 @@ export const EditProfile: React.FC<EditProfileProps> = ({
   const [savedPhotos, setSavedPhotos] = useState<number>(0);
   const [modalLimitType, setModalLimitType] = useState<string>('');
 
+  // handle if user already have photos
   useEffect(() => {
     if (profile?.photos.length > 0) {
       let newPhotos: {path: string; size: number; filename: string}[] = [];
@@ -102,6 +103,7 @@ export const EditProfile: React.FC<EditProfileProps> = ({
     }
   }, []);
 
+  // call EP setUploadImage for images that have not been added
   useEffect(() => {
     if (unUploadedPhotos.length > 0 && active) {
       for (let i = 0; i < unUploadedPhotos.length; i++) {
@@ -110,6 +112,7 @@ export const EditProfile: React.FC<EditProfileProps> = ({
     }
   }, [unUploadedPhotos]);
 
+  // only active when uploading, not removing
   useEffect(() => {
     if (active) {
       dataImage?.data !== undefined && !dataResponseImg.includes(dataImage.data)
@@ -186,15 +189,11 @@ export const EditProfile: React.FC<EditProfileProps> = ({
   };
 
   const sendMultipleUri = (val: Image[]) => {
-    const allLength = photos.length + val.length;
-    let newVal: Image[] = [];
-    if (allLength > 10) {
-      newVal = val.slice(0, 10 - photos.length);
-    }
-
     setActive(true);
+    let newVal: Image[] = [];
     let newUniqueImageVal: Image[] = [];
-    newVal.map(res => {
+    const allLength = photos.length + val.length;
+    val.map(res => {
       // check if new image is not include in photos, compare using filename / size
       const propertyToCompare = Platform.OS === 'ios' ? 'filename' : 'size';
       if (
@@ -207,6 +206,10 @@ export const EditProfile: React.FC<EditProfileProps> = ({
     });
     setUnUploadedPhotos(newUniqueImageVal);
 
+    newVal =
+      allLength > 10
+        ? newUniqueImageVal.slice(0, 10 - photos.length)
+        : newUniqueImageVal;
     const allPhotos = unique([...photos, ...newVal]);
     setPhotos(allPhotos);
     if (allLength > 10) {
@@ -241,7 +244,10 @@ export const EditProfile: React.FC<EditProfileProps> = ({
   const titleModalPicker =
     uriType === 'avatarUri'
       ? t('Profile.Edit.ProfilePicture')
-      : t('Profile.Edit.HeaderPicture');
+      : uriType === 'backgroundUri'
+      ? t('Profile.Edit.HeaderPicture')
+      : t('Profile.Edit.Photos');
+
   const hideMenuDelete =
     uriType === 'avatarUri'
       ? uri.avatarUri !== null && uri.avatarUri?.path !== null
@@ -383,7 +389,11 @@ export const EditProfile: React.FC<EditProfileProps> = ({
       />
 
       <ModalLimit
-        type={modalLimitType}
+        text={
+          modalLimitType === 'onUpload'
+            ? t('Modal.Limit.Subtitle2')
+            : t('Modal.Limit.Subtitle1')
+        }
         onPressClose={closeModal}
         modalVisible={isModalVisible.modalLimit}
       />
