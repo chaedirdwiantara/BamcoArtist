@@ -43,7 +43,6 @@ import ImageModal from '../../../screen/Detail/ImageModal';
 import ExclusiveDailyContent from '../../../screen/MusicianProfile/ExclusiveDailyContent';
 import {Gap, SsuToast} from '../../atom';
 import {DataExclusiveResponse} from '../../../interface/setting.interface';
-import LoadingSpinner from '../../atom/Loading/LoadingSpinner';
 
 type OnScrollEventHandler = (
   event: NativeSyntheticEvent<NativeScrollEvent>,
@@ -70,7 +69,6 @@ interface ProfileContentProps {
   toastText: string;
   refreshing: boolean;
   setRefreshing: () => void;
-  isLoading: boolean;
 }
 
 export const ProfileContent: React.FC<ProfileContentProps> = ({
@@ -92,7 +90,6 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
   toastText,
   refreshing,
   setRefreshing,
-  isLoading,
 }) => {
   const {t} = useTranslation();
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -128,6 +125,11 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
     setScrollEffect(scrolled);
   };
 
+  const topPosition =
+    Platform.OS === 'ios' && refreshing
+      ? heightPercentage(360)
+      : heightPercentage(310);
+
   return (
     <View style={{flex: 1}}>
       {scrollEffect && (
@@ -136,11 +138,6 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
           <TouchableOpacity onPress={() => onPressGoTo('Setting')}>
             <SettingIcon style={styles.topIos} />
           </TouchableOpacity>
-        </View>
-      )}
-      {Platform.OS === 'ios' && (isLoading || refreshing) && (
-        <View style={styles.loadingContainer}>
-          <LoadingSpinner />
         </View>
       )}
 
@@ -163,11 +160,16 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
           noEdit={!ownProfile}
           backIcon={!ownProfile}
           onPressImage={showImage}
+          refreshing={refreshing}
         />
         <UserInfoCard
           profile={profile}
           type={ownProfile ? '' : 'self'}
-          containerStyles={styles.infoCard}
+          containerStyles={{
+            position: 'absolute',
+            left: widthPercentage(20),
+            top: topPosition,
+          }}
           totalFollowing={profile.totalFollowing}
           onPress={goToFollowers}
           selfProfile={selfProfile?.data}
@@ -301,11 +303,6 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
 const styles = StyleSheet.create({
   root: {
     backgroundColor: Color.Dark[50],
-  },
-  infoCard: {
-    position: 'absolute',
-    top: heightPercentage(310),
-    left: widthPercentage(20),
   },
   containerContent: {
     flex: 1,

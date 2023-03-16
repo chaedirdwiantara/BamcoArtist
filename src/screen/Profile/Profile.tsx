@@ -26,14 +26,9 @@ export const ProfileScreen: React.FC<ProfileProps> = ({
   const {t} = useTranslation();
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
-  const {
-    isLoading,
-    dataProfile,
-    dataCountProfile,
-    getProfileUser,
-    getTotalCountProfile,
-  } = useProfileHook();
-  const {playlistLoading, dataPlaylist, getPlaylist} = usePlaylistHook();
+  const {dataProfile, dataCountProfile, getProfileUser, getTotalCountProfile} =
+    useProfileHook();
+  const {dataPlaylist, getPlaylist} = usePlaylistHook();
   const isFocused = useIsFocused();
   const {isPlaying, showPlayer, hidePlayer} = usePlayerHook();
   const {dataExclusiveContent, getExclusiveContent} = useSettingHook();
@@ -55,7 +50,9 @@ export const ProfileScreen: React.FC<ProfileProps> = ({
       getPlaylist({uuid});
       getExclusiveContent({uuid});
     }
-    setRefreshing(false);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 1000);
   }, [uuid, refreshing, showToast, deletePlaylist]);
 
   useEffect(() => {
@@ -125,7 +122,7 @@ export const ProfileScreen: React.FC<ProfileProps> = ({
     totalFans: dataProfile?.data.fans,
     totalRelease: dataCountProfile?.countAlbumReleased,
     totalPlaylist: dataCountProfile?.countPlaylist,
-    rank: 0,
+    rank: dataProfile?.data.rank || 0,
   };
 
   return (
@@ -148,7 +145,6 @@ export const ProfileScreen: React.FC<ProfileProps> = ({
           toastText={toastText}
           refreshing={refreshing}
           setRefreshing={() => setRefreshing(true)}
-          isLoading={isLoading}
         />
       )}
     </View>
