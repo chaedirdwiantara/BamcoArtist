@@ -110,7 +110,7 @@ export const MusicianDetail: React.FC<MusicianDetailProps> = ({
     totalFans: profile.fans,
     totalRelease: profile.countAlbumReleased,
     totalPlaylist: profile.countPlaylist,
-    rank: 0,
+    rank: profile.rank,
   };
 
   return (
