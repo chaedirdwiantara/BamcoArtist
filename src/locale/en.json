@@ -589,7 +589,9 @@
     "Limit": {
       "Title": "Limit Reached",
       "Subtitle1": "You have reached the limit of uploading 10 photos, please delete some of your photos to upload new ones.",
-      "Subtitle2": "Some of your photos cannot be uploaded because you have reached your limit. You can only upload up to 10 photos in your profile. Delete some photos to upload the new ones."
+      "Subtitle2": "Some of your photos cannot be uploaded because you have reached your limit. You can only upload up to 10 photos in your profile. Delete some photos to upload the new ones.",
+      "SubtitleSR1": "You have reached the limit of uploading 4 photos, please delete some of your photos to upload new ones.",
+      "SubtitleSR2": "Some of your photos cannot be uploaded because you have reached your limit. You can only upload up to 4 photos. Delete some photos to upload the new ones."
     },
     "EditProfile": {
       "Title": "Edit Profile",

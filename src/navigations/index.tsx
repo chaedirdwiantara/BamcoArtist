@@ -28,6 +28,7 @@ import {WebviewPage} from '../screen/Webview';
 import {MusicPlayer} from '../screen/Music';
 import CreatePost from '../screen/CreatePost';
 import {OtherUserProfile} from '../screen/OtherUserProfile/OtherUserProfile';
+import {FollowingScreen} from '../screen/OtherUserProfile/FollowingScreen';
 import QuoteMusic from '../screen/CreatePost/MusicPost/QuoteMusic';
 import AddPreview from '../screen/CreatePost/MusicPost/AddPreview';
 
@@ -50,7 +51,6 @@ import {ExclusiveContentSetting} from '../screen/Setting/ExclusiveContent';
 // Profile
 import {ProfileScreen} from '../screen/Profile/Profile';
 import {EditProfileScreen} from '../screen/Profile/EditProfile';
-import {FollowingScreen} from '../screen/Profile/FollowingScreen';
 import {ExclusiveContentScreen} from '../screen/ExclusiveContent';
 import {FollowersScreen} from '../screen/Profile/ListFollowers';
 

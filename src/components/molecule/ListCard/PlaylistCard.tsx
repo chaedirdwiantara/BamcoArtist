@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+  Platform,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -60,7 +61,7 @@ const PlaylistCard: React.FC<ListProps> = ({
             {musicTitle}
           </Text>
         </View>
-        <View style={{height: '50%'}}>
+        <View style={{height: '42%'}}>
           <Text style={styles.songDesc} numberOfLines={1}>
             {singerName}
           </Text>
@@ -96,13 +97,13 @@ const styles = StyleSheet.create({
     marginLeft: ms(12),
   },
   songTitle: {
+    fontSize: Platform.OS === 'ios' ? mvs(15) : mvs(14),
     fontFamily: font.InterMedium,
-    fontSize: normalize(15),
     color: color.Neutral[10],
   },
   songDesc: {
     fontFamily: font.InterMedium,
-    fontSize: normalize(12),
+    fontSize: mvs(12),
     color: color.Dark[50],
   },
 });

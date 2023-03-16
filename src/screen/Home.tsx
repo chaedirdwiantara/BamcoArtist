@@ -69,7 +69,7 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
   const currentLanguage = i18n.language;
 
   const {dataBanner, getListDataBanner} = useBannerHook();
-  const {isLoading, dataProfile, getProfileUser} = useProfileHook();
+  const {dataProfile, getProfileUser} = useProfileHook();
   const {addFcmToken} = useFcmHook();
   const {
     isPlaying,
@@ -100,7 +100,9 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
     getListDataTopSong();
     getCountNotification();
     getCreditCount();
-    setRefreshing(false);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 1000);
   }, [selectedIndex, refreshing]);
 
   useEffect(() => {
@@ -243,7 +245,7 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
         guest={!isLogin}
       />
 
-      {Platform.OS === 'ios' && (isLoading || refreshing) && (
+      {Platform.OS === 'ios' && refreshing && (
         <View style={styles.loadingContainer}>
           <LoadingSpinner />
         </View>
@@ -372,6 +374,6 @@ const styles = StyleSheet.create({
   },
   loadingContainer: {
     alignItems: 'center',
-    paddingVertical: heightPercentage(20),
+    paddingVertical: heightPercentage(10),
   },
 });

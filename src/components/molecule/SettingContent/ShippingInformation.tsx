@@ -9,7 +9,7 @@ import {
   InteractionManager,
 } from 'react-native';
 import {useTranslation} from 'react-i18next';
-import {ms, mvs} from 'react-native-size-matters';
+import {mvs} from 'react-native-size-matters';
 
 import {
   heightPercentage,
@@ -134,10 +134,16 @@ export const ShippingInformationContent: React.FC<ShippingInformationProps> = ({
           leftIcon={<ArrowLeftIcon />}
           itemStrokeColor={Color.Neutral[10]}
           leftIconAction={onPressGoBack}
-          containerStyles={{marginBottom: heightPercentage(15)}}
+          containerStyles={{
+            marginBottom: heightPercentage(10),
+            paddingHorizontal: widthResponsive(15),
+          }}
         />
 
-        <ScrollView>
+        <ScrollView
+          style={{
+            paddingHorizontal: widthResponsive(20),
+          }}>
           <SsuInput.InputLabel
             label={t('Setting.Shipping.Label.Email') || ''}
             placeholder={t('Setting.Shipping.Placeholder.Email') || ''}
@@ -267,7 +273,7 @@ export const ShippingInformationContent: React.FC<ShippingInformationProps> = ({
               alignSelf: 'center',
               backgroundColor: disabledBg,
             }}
-            textStyles={{fontSize: mvs(14)}}
+            textStyles={{fontSize: mvs(13)}}
           />
         </ScrollView>
       </View>
@@ -314,7 +320,6 @@ const styles = StyleSheet.create({
   root: {
     flex: 1,
     backgroundColor: Color.Dark[800],
-    paddingHorizontal: widthPercentage(12),
   },
   modalContainer: {
     width: '100%',

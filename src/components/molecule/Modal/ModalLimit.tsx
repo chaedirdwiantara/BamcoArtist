@@ -11,13 +11,13 @@ import SsuSheet from '../../atom/SsuSheet';
 import {heightPercentage, normalize, width} from '../../../utils';
 
 interface ModalLimitProps {
-  type: string;
+  text: string;
   modalVisible: boolean;
   onPressClose: () => void;
 }
 
 export const ModalLimit: React.FC<ModalLimitProps> = ({
-  type,
+  text,
   modalVisible,
   onPressClose,
 }) => {
@@ -33,11 +33,7 @@ export const ModalLimit: React.FC<ModalLimitProps> = ({
             width: width * 0.9,
             marginBottom: heightPercentage(20),
           }}>
-          <Text style={styles.subtitle1}>
-            {type === 'onUpload'
-              ? t('Modal.Limit.Subtitle2')
-              : t('Modal.Limit.Subtitle1')}
-          </Text>
+          <Text style={styles.subtitle1}>{text}</Text>
         </View>
         <Button
           type="border"
