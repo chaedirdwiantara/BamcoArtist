@@ -9,7 +9,6 @@ import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import Color from '../../theme/Color';
 import {FollowingList} from '../../components';
 import {RootStackParams} from '../../navigations';
-import {profileStorage} from '../../hooks/use-storage.hook';
 import {useMusicianHook} from '../../hooks/use-musician.hook';
 import {FollowMusicianPropsType} from '../../interface/musician.interface';
 
@@ -24,18 +23,16 @@ export const FollowingScreen: React.FC<FollowingProps> = ({
   const [search, setSearch] = useState<string>('');
 
   const {
-    dataMusician,
-    getListDataMusician,
+    listFollowingMusician,
     setFollowMusician,
     setUnfollowMusician,
+    getListFollowingMusician,
   } = useMusicianHook();
-
-  const fansUUID = uuid ? uuid : profileStorage()?.uuid;
 
   useFocusEffect(
     useCallback(() => {
-      getListDataMusician({
-        fansUUID,
+      getListFollowingMusician({
+        uuid,
         keyword: search,
       });
     }, [search]),
@@ -60,7 +57,7 @@ export const FollowingScreen: React.FC<FollowingProps> = ({
         setUnfollowMusician={(props?: FollowMusicianPropsType) =>
           setUnfollowMusician(props, {keyword: search}, true)
         }
-        dataList={dataMusician}
+        dataList={listFollowingMusician}
         onPressGoBack={onPressGoBack}
         goToMusician={goToMusician}
       />

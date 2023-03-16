@@ -70,3 +70,14 @@ export const unfollowMusician = async (
 
   return data;
 };
+
+export const listFollowing = async (
+  props?: ParamsProps,
+): Promise<ListMusicianResponseType> => {
+  const {data} = await SsuPublicRinjani().request<ListMusicianResponseType>({
+    url: `fans/${props?.uuid}/following`,
+    method: 'GET',
+  });
+
+  return data;
+};
