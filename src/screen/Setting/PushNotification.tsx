@@ -1,5 +1,7 @@
 import React from 'react';
 import {Linking, StyleSheet, Text, View} from 'react-native';
+import {useTranslation} from 'react-i18next';
+import {mvs} from 'react-native-size-matters';
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
@@ -8,7 +10,6 @@ import {ArrowLeftIcon} from '../../assets/icon';
 import {RootStackParams} from '../../navigations';
 import {Button, Gap, TopNavigation} from '../../components';
 import {heightPercentage, width, widthPercentage} from '../../utils';
-import {useTranslation} from 'react-i18next';
 
 export const PushNotificationScreen: React.FC = () => {
   const {t} = useTranslation();
@@ -30,13 +31,19 @@ export const PushNotificationScreen: React.FC = () => {
         leftIconAction={onPressGoBack}
         containerStyles={{marginBottom: heightPercentage(15)}}
       />
-      <Text style={[typography.Subtitle1, {color: color.Neutral[10]}]}>
-        {t('Setting.Notification.Label.Title')}
-      </Text>
-      <Gap height={heightPercentage(10)} />
-      <Text style={[typography.Subtitle2, {color: color.Neutral[10]}]}>
-        {t('Setting.Notification.Label.Subtitle')}
-      </Text>
+      <View style={styles.containerText}>
+        <Text style={[typography.Subtitle1, {color: color.Neutral[10]}]}>
+          {t('Setting.Notification.Label.Title')}
+        </Text>
+        <Gap height={heightPercentage(10)} />
+        <Text
+          style={[
+            typography.Subtitle2,
+            {color: color.Neutral[10], fontSize: mvs(13)},
+          ]}>
+          {t('Setting.Notification.Label.Subtitle')}
+        </Text>
+      </View>
       <Button
         label={t('Btn.TurnOff')}
         onPress={openPhoneSettings}
@@ -51,6 +58,10 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: color.Dark[800],
     paddingHorizontal: widthPercentage(15),
+  },
+  containerText: {
+    width: width * 0.9,
+    alignSelf: 'center',
   },
   button: {
     width: width * 0.9,

@@ -461,7 +461,7 @@ export const AccountContent: React.FC<AccountProps> = ({
           <Button
             label={t('Btn.Save') || ''}
             onPress={onPressSave}
-            textStyles={{fontSize: mvs(14)}}
+            textStyles={{fontSize: mvs(13)}}
             containerStyles={
               disabledButton ? styles.buttonDisabled : styles.button
             }
