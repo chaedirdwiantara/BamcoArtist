@@ -2,10 +2,15 @@ import React from 'react';
 import Lottie from 'lottie-react-native';
 import {ms, mvs} from 'react-native-size-matters';
 
-const LoadingSpinner = () => {
+const LoadingSpinner = ({type}: {type?: string}) => {
+  const src =
+    type === 'profile'
+      ? require('../../../assets/animation/loading-spinner-white.json')
+      : require('../../../assets/animation/loading-spinner.json');
+
   return (
     <Lottie
-      source={require('../../../assets/animation/loading-spinner.json')}
+      source={src}
       autoPlay
       loop
       style={{
