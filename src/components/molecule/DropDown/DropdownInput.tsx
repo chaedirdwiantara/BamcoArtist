@@ -149,15 +149,15 @@ const styles = StyleSheet.create({
     backgroundColor: itemBg,
   },
   placeholderStyle: {
-    fontSize: mvs(14),
+    fontSize: mvs(13),
     color: color.Dark[300],
   },
   selectedTextStyle: {
-    fontSize: mvs(14),
+    fontSize: mvs(13),
     color: fontColorMain,
   },
   itemTextStyle: {
-    fontSize: mvs(14),
+    fontSize: mvs(13),
     color: fontColorMain,
   },
   iconStyle: {
@@ -184,7 +184,7 @@ const styles = StyleSheet.create({
     paddingVertical: heightPercentage(20),
   },
   inputSearchStyle: {
-    fontSize: mvs(14),
+    fontSize: mvs(13),
     color: color.Neutral[10],
     borderColor: 'transparent',
     borderBottomColor: color.Pink[200],
