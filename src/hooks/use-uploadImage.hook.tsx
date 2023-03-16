@@ -9,10 +9,13 @@ export const useUploadImageHook = () => {
   const [dataImage, setDataImage] = useState<UploadImageResponseType>();
   const [isErrorImage, setIsErrorImage] = useState(false);
 
-  const setUploadImage = async (image: Image) => {
+  const setUploadImage = async (image: Image, syncUpload?: string) => {
     InteractionManager.runAfterInteractions(() => setIsLoadingImage(true));
     try {
-      const response = await uploadImage(image);
+      const response = await uploadImage(
+        image,
+        syncUpload ? syncUpload : undefined,
+      );
       setDataImage(response);
     } catch (error) {
       setIsErrorImage(true);

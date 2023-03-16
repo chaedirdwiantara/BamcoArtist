@@ -38,6 +38,11 @@ export type photos = {
   images: imageTypes[];
 };
 
+export type TheGenre = {
+  id: number;
+  name: string;
+};
+
 export type DataDetailMusician = {
   uuid: string;
   username: string;
@@ -46,7 +51,7 @@ export type DataDetailMusician = {
   email: string;
   registrationType: string;
   phoneNumber: number;
-  genre: string[];
+  genres: TheGenre[];
   labels: string;
   bio: string;
   about: string;
@@ -71,6 +76,7 @@ export type DataDetailMusician = {
   photos: photos[];
   albums: [];
   merchs: [];
+  favoriteGenres: TheGenre[];
   countAlbumReleased?: number;
   countPlaylist?: number;
   countSong?: number;

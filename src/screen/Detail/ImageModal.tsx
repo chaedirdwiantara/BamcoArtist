@@ -131,6 +131,7 @@ const ImageModal: FC<ModalImageProps> = (props: ModalImageProps) => {
               keyExtractor={(_, index) => index.toString()}
               horizontal
               pagingEnabled
+              initialScrollIndex={type === 'zoomProfile' ? undefined : imageIdx}
               showsHorizontalScrollIndicator={false}
               scrollEventThrottle={16}
               onScroll={Animated.event(

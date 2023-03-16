@@ -1,42 +1,45 @@
 import React, {FC} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {RefreshControl, StyleSheet, View} from 'react-native';
 import {heightPercentage, heightResponsive, widthResponsive} from '../../utils';
 import {FlashList} from '@shopify/flash-list';
 import MerchListCard from '../../components/molecule/ListCard/MerchListCard';
 import {useEventHook} from '../../hooks/use-event.hook';
-import {ModalLoading} from '../../components/molecule/ModalLoading/ModalLoading';
 import {EmptyState} from '../../components';
 import {BoxStore} from '../../assets/icon';
 import Color from '../../theme/Color';
 import {useQuery} from 'react-query';
 import {MerchData} from '../../interface/event.interface';
 import {useTranslation} from 'react-i18next';
+import LoadingSpinner from '../../components/atom/Loading/LoadingSpinner';
 
 const MerchList: FC = () => {
   const {t} = useTranslation();
   const {getListDataMerch} = useEventHook();
 
-  const {data: dataMerchList, isLoading} = useQuery(['/merch'], () =>
-    getListDataMerch(),
-  );
-
+  const {
+    data: dataMerchList,
+    isLoading,
+    refetch,
+    isRefetching,
+  } = useQuery(['/merch'], () => getListDataMerch());
   const filterList: MerchData | undefined = dataMerchList?.data.find(merch => {
     return merch.name === 'product_latest';
   });
 
   return (
     <>
-      {isLoading ? (
+      {(isLoading || isRefetching) && (
         <View style={styles.loadingContainer}>
-          <Text style={styles.loading}>Loading...</Text>
+          <LoadingSpinner />
         </View>
-      ) : (
-        <FlashList
-          data={filterList?.data}
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={styles.ListContainer}
-          keyExtractor={item => item?.id.toString()}
-          ListEmptyComponent={
+      )}
+      <FlashList
+        data={filterList?.data}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.ListContainer}
+        keyExtractor={item => item?.id.toString()}
+        ListEmptyComponent={
+          !isLoading && !isRefetching ? (
             <EmptyState
               icon={
                 <BoxStore
@@ -49,27 +52,30 @@ const MerchList: FC = () => {
               text={t('Event.Merch.NoMerch') || ''}
               containerStyle={styles.containerEmpty}
             />
-          }
-          renderItem={({item, index}: any) => (
-            <MerchListCard
-              id={item.id}
-              containerStyles={
-                index % 2 == 0 ? {marginRight: 10} : {marginLeft: 10}
-              }
-              image={item.pic}
-              title={item.name}
-              owner={item.organizer?.name}
-              ownerImage={item.organizer?.pic}
-              price={item.price}
-              desc={item.content}
-              currency={item.currencyCode}
-              type={'merch'}
-            />
-          )}
-          estimatedItemSize={150}
-          numColumns={2}
-        />
-      )}
+          ) : null
+        }
+        renderItem={({item, index}: any) => (
+          <MerchListCard
+            id={item.id}
+            containerStyles={
+              index % 2 == 0 ? {marginRight: 10} : {marginLeft: 10}
+            }
+            image={item.pic}
+            title={item.name}
+            owner={item.organizer?.name}
+            ownerImage={item.organizer?.pic}
+            price={item.price}
+            desc={item.content}
+            currency={item.currencyCode}
+            type={'merch'}
+          />
+        )}
+        estimatedItemSize={150}
+        numColumns={2}
+        refreshControl={
+          <RefreshControl refreshing={isRefetching} onRefresh={refetch} />
+        }
+      />
     </>
   );
 };
@@ -92,8 +98,7 @@ const styles = StyleSheet.create({
     color: Color.Neutral[10],
   },
   loadingContainer: {
-    flex: 1,
     alignItems: 'center',
-    paddingTop: heightPercentage(50),
+    paddingTop: heightPercentage(20),
   },
 });

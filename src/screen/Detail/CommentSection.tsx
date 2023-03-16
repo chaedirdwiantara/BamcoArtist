@@ -41,6 +41,8 @@ interface CommentSectionType {
   selectedIdComment: (idComment: string) => void;
   selectedLvlComment: (lvl: number) => void;
   profileUUID: string;
+  deletedCommentParentId: string[];
+  addCommentParentId: string[];
 }
 
 const CommentSection: FC<CommentSectionType> = (props: CommentSectionType) => {
@@ -61,6 +63,8 @@ const CommentSection: FC<CommentSectionType> = (props: CommentSectionType) => {
     selectedIdComment,
     selectedLvlComment,
     profileUUID,
+    deletedCommentParentId,
+    addCommentParentId,
   } = props;
   const [recorder, setRecorder] = useState<string[]>([]);
   const [selectedId, setSelectedId] = useState<string[]>();
@@ -176,6 +180,7 @@ const CommentSection: FC<CommentSectionType> = (props: CommentSectionType) => {
     selectedLvlComment?.(3);
   };
 
+  // ! LVL 3 AREA
   const CommentChildrenLvl3 = (props: CommentList3) => {
     const {
       id,
@@ -243,6 +248,7 @@ const CommentSection: FC<CommentSectionType> = (props: CommentSectionType) => {
     );
   };
 
+  // ! LVL 2 AREA
   const CommentChildrenLvl2 = (props: CommentList2) => {
     const {
       id,
@@ -302,7 +308,11 @@ const CommentSection: FC<CommentSectionType> = (props: CommentSectionType) => {
             ? likesCount
             : likesCount
         }
-        commentCountLvl2={commentsCount}
+        commentCountLvl2={
+          commentsCount -
+          deletedCommentParentId.filter(x => x == id).length +
+          addCommentParentId.filter(x => x == id).length
+        }
         selectedMenu={handleSelectedLvl2}
         idComment={id}
         selectedIdComment={selectedIdComment}
@@ -363,6 +373,7 @@ const CommentSection: FC<CommentSectionType> = (props: CommentSectionType) => {
     );
   };
 
+  // ! LVL 1 START AREA
   return (
     <View style={styles.commentContainer}>
       <FlatList
@@ -439,7 +450,11 @@ const CommentSection: FC<CommentSectionType> = (props: CommentSectionType) => {
                 item?.parentID,
               )
             }
-            commentCount={item.commentsCount}
+            commentCount={
+              item.commentsCount -
+              deletedCommentParentId.filter(x => x == item.id).length +
+              addCommentParentId.filter(x => x == item.id).length
+            }
             selectedMenu={handleSelectedLvl1}
             idComment={item.id}
             selectedIdComment={selectedIdComment}
@@ -484,7 +499,10 @@ const CommentSection: FC<CommentSectionType> = (props: CommentSectionType) => {
                     </TouchableOpacity>
                   ) : dataLvl2 !== undefined &&
                     filterParentID(dataLvl2, item.id).length !=
-                      item.commentsCount ? (
+                      item.commentsCount -
+                        deletedCommentParentId.filter(x => x == item.id)
+                          .length +
+                        addCommentParentId.filter(x => x == item.id).length ? (
                     <TouchableOpacity
                       onPress={() => viewMoreOnPress(item.id, 2)}>
                       <Text style={styles.viewMore}>

@@ -32,10 +32,12 @@ import {
 import {useTranslation} from 'react-i18next';
 import {DataDetailAlbum, SongList} from '../../../interface/song.interface';
 import {dateFormat} from '../../../utils/date-format';
-import {useNavigation} from '@react-navigation/native';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParams} from '../../../navigations';
 import {useCreditHook} from '../../../hooks/use-credit.hook';
+import {usePlayerHook} from '../../../hooks/use-player.hook';
+import DropdownMore from '../V2/DropdownFilter/DropdownMore';
 
 interface Props {
   dataSong: SongList[] | null;
@@ -51,7 +53,16 @@ export const AlbumContent: React.FC<Props> = ({
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
 
+  const {
+    isPlaying,
+    visible: playerVisible,
+    showPlayer,
+    hidePlayer,
+    addPlaylist,
+  } = usePlayerHook();
+
   const {t} = useTranslation();
+  const isFocused = useIsFocused();
   const {creditCount, getCreditCount} = useCreditHook();
   const [toastVisible, setToastVisible] = useState(false);
   const [modalDonate, setModalDonate] = useState<boolean>(false);
@@ -59,6 +70,14 @@ export const AlbumContent: React.FC<Props> = ({
   const [modalSuccessDonate, setModalSuccessDonate] = useState<boolean>(false);
   const [trigger2ndModal, setTrigger2ndModal] = useState<boolean>(false);
   const [songIdList, setSongIdList] = useState<number[]>([]);
+
+  useEffect(() => {
+    if (isFocused && isPlaying) {
+      showPlayer();
+    } else if (!isFocused) {
+      hidePlayer();
+    }
+  }, [isFocused, isPlaying]);
 
   useEffect(() => {
     getCreditCount();
@@ -106,16 +125,23 @@ export const AlbumContent: React.FC<Props> = ({
     setModalSuccessDonate(false);
   };
 
+  const onPressSong = (val: SongList) => {
+    addPlaylist({
+      dataSong: dataSong ? dataSong : [],
+      playSongId: val?.id,
+      isPlay: true,
+    });
+    showPlayer();
+  };
+
   return (
     <View style={styles.root}>
       <TopNavigation.Type4
         title={t('Musician.Label.Album')}
         rightIcon={
-          <Dropdown.More
-            data={dropDownHeaderAlbum}
+          <DropdownMore
+            dataFilter={dropDownHeaderAlbum}
             selectedMenu={resultDataMore}
-            containerStyle={styles.dropDownMore}
-            translation={true}
           />
         }
         leftIcon={<ArrowLeftIcon />}
@@ -181,9 +207,10 @@ export const AlbumContent: React.FC<Props> = ({
           <View style={{marginBottom: heightPercentage(30)}}>
             {dataSong !== null && (
               <TopSong
-                onPress={() => null}
+                onPress={onPressSong}
                 hideDropdownMore={true}
                 dataSong={dataSong}
+                type="home"
               />
             )}
           </View>

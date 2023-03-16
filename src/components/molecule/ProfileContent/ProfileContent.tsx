@@ -101,11 +101,11 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
   ]);
 
   const [filter2] = useState([
-    {filterName: 'Musician.Tab.Profile'},
     {filterName: 'Musician.Tab.Post'},
     {filterName: 'Musician.Tab.Exclusive'},
     {filterName: 'Musician.Tab.Music'},
     {filterName: 'Musician.Tab.Fans'},
+    {filterName: 'Musician.Tab.Profile'},
   ]);
   const [isModalVisible, setModalVisible] = useState<boolean>(false);
   const [zoomImage, setZoomImage] = useState<string[]>([]);

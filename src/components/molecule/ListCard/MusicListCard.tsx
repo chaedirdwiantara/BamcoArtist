@@ -19,6 +19,7 @@ import {color, font} from '../../../theme';
 import {Gap, SquareImage} from '../../atom';
 import {DefaultImage, LoveIcon, SoundIcon} from '../../../assets/icon';
 import {useTranslation} from 'react-i18next';
+import DropdownMore from '../V2/DropdownFilter/DropdownMore';
 
 interface ListProps {
   imgUri: string | null;
@@ -133,17 +134,11 @@ const MusicListCard: React.FC<ListProps> = ({
           </TouchableOpacity>
         ) : (
           !hideDropdownMore && (
-            <Dropdown.More
-              data={dataFilter ? dataFilter : dataMore}
+            <DropdownMore
+              dataFilter={dataFilter ? dataFilter : dataMore}
               selectedMenu={(data: any) => {
                 onPressMore && onPressMore(data);
               }}
-              containerStyle={{
-                width: widthPercentage(122),
-                marginLeft: widthPercentage(-110),
-                marginTop: heightPercentage(-8),
-              }}
-              sizeIcon={widthPercentage(3)}
             />
           )
         )}

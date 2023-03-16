@@ -19,6 +19,7 @@ import {color, font, typography} from '../../../theme';
 import {Dropdown} from '../DropDown';
 import {DefaultAvatar} from '../../../assets/icon';
 import {useTranslation} from 'react-i18next';
+import DropdownMore from '../V2/DropdownFilter/DropdownMore';
 
 export interface ListProps {
   musicianNum?: number | string;
@@ -61,14 +62,9 @@ const MusiciansListCard: React.FC<ListProps> = (props: ListProps) => {
 
   const moreMenu = () => {
     return (
-      <Dropdown.More
-        data={dataFilter ? dataFilter : dataMore}
+      <DropdownMore
+        dataFilter={dataFilter ? dataFilter : dataMore}
         selectedMenu={onPressMore}
-        containerStyle={{
-          width: widthResponsive(123),
-          marginLeft: widthPercentage(-113),
-          marginTop: heightPercentage(-8),
-        }}
       />
     );
   };

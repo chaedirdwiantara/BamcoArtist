@@ -91,7 +91,6 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   } = usePlayerHook();
   const {dataProfile, getProfileUser} = useProfileHook();
   const [label, setLabel] = useState<string>();
-  // const [labelAudience, setLabelAudience] = useState<string>();
   const [valueFilter, setValueFilter] = useState<string>();
   const [dataAudience, setDataAudience] = useState<string>('');
   const [dataResponseImg, setDataResponseImg] = useState<string[]>([]);
@@ -113,6 +112,12 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
       setDataAudience(dataAudienceChoosen);
     }
   }, [dataAudienceChoosen]);
+
+  useEffect(() => {
+    if (!label) {
+      setLabel('Home.Tab.TopPost.Category.Highlight');
+    }
+  }, [label]);
 
   // ! EDIT POST AREA
   useEffect(() => {
@@ -224,7 +229,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
 
     if (active == true && uri.length !== 0) {
       for (let i = 0; i < uri.length; i++) {
-        setUploadImage(uri[i]);
+        setUploadImage(uri[i], 'medium');
       }
     }
 
@@ -454,9 +459,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
       setAllowOffset(false);
     }
   }, [offset]);
-
   // ? END OF OFFSET AREA
-
   return (
     <KeyboardAvoidingView
       style={{flex: 1}}
@@ -482,9 +485,8 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
                 onChangeText={(newText: string) => setInputText(newText)}
                 placeholder={`${t('Post.Create.Write')}...`}
                 containerStyles={{
-                  width: widthResponsive(290),
                   backgroundColor: 'transparent',
-                  paddingLeft: 0,
+                  paddingHorizontal: 0,
                 }}
                 multiline={true}
                 maxLength={400}
@@ -586,7 +588,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
                     })
                   }
                   containerStyles={{
-                    width: widthResponsive(147),
+                    width: widthResponsive(140),
                     alignItems: 'flex-start',
                   }}
                   gradientStyles={{

@@ -68,6 +68,7 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
     dataLoadMore,
     feedIsLoading,
     dataComment,
+    dataDeletePost,
     setDataLoadMore,
     setDataComment,
     setLikePost,
@@ -80,6 +81,7 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
     setUnlikeComment,
     setCommentDelete,
     setCommentUpdate,
+    setDeletePost,
   } = useFeedHook();
 
   const {
@@ -154,6 +156,14 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   const [selectedLvlComment, setSelectedLvlComment] = useState<number>();
   const [updateComment, setUpdateComment] = useState<boolean>(false);
   const [temporaryIds, setTemporaryIds] = useState<string>();
+  const [parentIdDeletedComment, setParentIdDeletedComment] = useState<
+    string[]
+  >([]);
+  const [parentIdAddComment, setParentIdAddComment] = useState<string[]>([]);
+
+  // * UPDATE HOOKS POST
+  const [selectedIdPost, setSelectedIdPost] = useState<string>();
+  const [selectedMenuPost, setSelectedMenuPost] = useState<DataDropDownType>();
 
   //* MUSIC HOOKS
   const [pauseModeOn, setPauseModeOn] = useState<boolean>(false);
@@ -365,7 +375,8 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
           id: cmntToCmnt.id,
           content: {content: commentCaption},
         }),
-          setCommentCaption('');
+          setCommentCaption(''),
+          setParentIdAddComment([...parentIdAddComment, cmntToCmnt.id]);
     } else if (commentCaption.length > 0 && cmntToCmnt === undefined) {
       setCommentToPost({
         postId: musicianId,
@@ -518,7 +529,7 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
     ) {
       // * delete/edit comment lvl1
       if (selectedLvlComment === 1 && commentLvl1) {
-        if (selectedMenu.label === 'Delete Reply') {
+        if (t(selectedMenu.label) === 'Delete Reply') {
           setCommentLvl1(
             commentLvl1.filter((x: CommentList) => !idComment.includes(x.id)),
           );
@@ -527,7 +538,7 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
             setCommmentCountLvl1(commentCountLvl1 - 1);
           }
         }
-        if (selectedMenu.label === 'Edit Reply') {
+        if (t(selectedMenu.label) === 'Edit Reply') {
           let commentNow = commentLvl1.filter((x: CommentList) =>
             idComment.includes(x.id),
           )[0];
@@ -544,16 +555,20 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
       }
       // * delete/edit comment lvl2
       if (selectedLvlComment === 2 && commentLvl2) {
-        if (selectedMenu.label === 'Delete Reply') {
+        let commentNow = commentLvl2.filter((x: CommentList2) =>
+          idComment.includes(x.id),
+        )[0];
+        if (t(selectedMenu.label) === 'Delete Reply') {
           setCommentLvl2(
             commentLvl2.filter((x: CommentList2) => !idComment.includes(x.id)),
           );
           setCommentDelete({id: idComment});
+          setParentIdDeletedComment([
+            ...parentIdDeletedComment,
+            commentNow.parentID,
+          ]);
         }
-        if (selectedMenu.label === 'Edit Reply') {
-          let commentNow = commentLvl2.filter((x: CommentList2) =>
-            idComment.includes(x.id),
-          )[0];
+        if (t(selectedMenu.label) === 'Edit Reply') {
           setCmntToCmnt({
             id: commentNow.id,
             userName: commentNow.commentOwner.username,
@@ -567,16 +582,20 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
       }
       // * delete/edit comment lvl3
       if (selectedLvlComment === 3 && commentLvl3) {
-        if (selectedMenu.label === 'Delete Reply') {
+        let commentNow = commentLvl3.filter((x: CommentList3) =>
+          idComment.includes(x.id),
+        )[0];
+        if (t(selectedMenu.label) === 'Delete Reply') {
           setCommentLvl3(
             commentLvl3.filter((x: CommentList3) => !idComment.includes(x.id)),
           );
           setCommentDelete({id: idComment});
+          setParentIdDeletedComment([
+            ...parentIdDeletedComment,
+            commentNow.parentID,
+          ]);
         }
-        if (selectedMenu.label === 'Edit Reply') {
-          let commentNow = commentLvl3.filter((x: CommentList3) =>
-            idComment.includes(x.id),
-          )[0];
+        if (t(selectedMenu.label) === 'Edit Reply') {
           setCmntToCmnt({
             id: commentNow.id,
             userName: commentNow.commentOwner.username,
@@ -692,6 +711,27 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
     unlikeCommentId !== '' && setUnlikeComment({id: unlikeCommentId});
   }, [unlikeCommentId]);
   // ! End Of LIKE AREA
+
+  // ! UPDATE POST AREA
+  useEffect(() => {
+    if (selectedIdPost !== undefined && selectedMenuPost !== undefined) {
+      if (t(selectedMenuPost.label) === 'Delete Post') {
+        setDeletePost({id: selectedIdPost});
+        setSelectedMenuPost(undefined);
+      }
+      if (t(selectedMenuPost.label) === 'Edit Post') {
+        navigation.navigate('CreatePost', {postData: dataPostDetail});
+        setSelectedMenuPost(undefined);
+      }
+    }
+  }, [selectedIdPost, selectedMenuPost]);
+
+  useEffect(() => {
+    if (dataDeletePost) {
+      navigation.goBack();
+    }
+  }, [dataDeletePost]);
+  // ! END OF UPDATE POST AREA
 
   // ! MUSIC AREA
   const onPressPlaySong = (val: PostList) => {
@@ -828,6 +868,10 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
               }}
               commentCount={commentCountLvl1}
               disabled={true}
+              myPost={dataPostDetail.musician.uuid === dataProfile?.data.uuid}
+              selectedMenu={setSelectedMenuPost}
+              idPost={dataPostDetail.id}
+              selectedIdPost={setSelectedIdPost}
               children={
                 <View style={{width: '100%'}}>
                   {dataPostDetail ? (
@@ -854,9 +898,12 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
                       </Text>
                     )
                   ) : null}
-                  <Gap height={4} />
+                  {data.images.length > 0 ||
+                  data.quoteToPost.encodeHlsUrl !== null ? (
+                    <Gap height={6} />
+                  ) : null}
                   <View>
-                    {data.images !== null ? (
+                    {data.images.length > 0 ? (
                       <ImageList
                         imgData={data.images}
                         disabled={false}
@@ -866,7 +913,7 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
                       />
                     ) : null}
                     {data.images.length === 0 &&
-                    data.quoteToPost.encodeHlsUrl ? (
+                    data.quoteToPost.encodeHlsUrl !== null ? (
                       <MusicListPreview
                         hideClose
                         targetId={dataPostDetail.quoteToPost.targetId}
@@ -900,7 +947,7 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
             />
           ) : null}
         </View>
-        <Gap height={12} />
+        <Gap height={6} />
         <SsuDivider />
         <Gap height={20} />
 
@@ -922,6 +969,8 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
             selectedIdComment={setIdComment}
             selectedLvlComment={setSelectedLvlComment}
             profileUUID={dataProfile?.data.uuid ? dataProfile.data.uuid : ''}
+            deletedCommentParentId={parentIdDeletedComment}
+            addCommentParentId={parentIdAddComment}
           />
         ) : null}
         <ImageModal

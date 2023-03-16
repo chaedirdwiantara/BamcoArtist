@@ -5,6 +5,7 @@ import {
   InteractionManager,
   NativeModules,
   Platform,
+  RefreshControl,
   StyleSheet,
   Text,
   View,
@@ -25,31 +26,25 @@ import {
   DropDownSortType,
 } from '../../data/dropdown';
 import {color, font, typography} from '../../theme';
-import {
-  elipsisText,
-  heightPercentage,
-  heightResponsive,
-  widthPercentage,
-  widthResponsive,
-} from '../../utils';
+import {heightPercentage, heightResponsive, widthResponsive} from '../../utils';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {MainTabParams, RootStackParams} from '../../navigations';
-import ImageList from './ImageList';
 import {EmptyState} from '../../components/molecule/EmptyState/EmptyState';
 import {FriedEggIcon, TickCircleIcon} from '../../assets/icon';
 import ListToFollowMusician from './ListToFollowMusician';
 import {useFeedHook} from '../../hooks/use-feed.hook';
 import {PostList} from '../../interface/feed.interface';
 import {dateFormat} from '../../utils/date-format';
-import {useProfileHook} from '../../hooks/use-profile.hook';
 import categoryNormalize from '../../utils/categoryNormalize';
 import {ModalLoading} from '../../components/molecule/ModalLoading/ModalLoading';
 import {usePlayerHook} from '../../hooks/use-player.hook';
-import MusicListPreview from '../../components/molecule/MusicPreview/MusicListPreview';
 import {useTranslation} from 'react-i18next';
 import {useCreditHook} from '../../hooks/use-credit.hook';
 import FilterModal from '../../components/molecule/V2/DropdownFilter/modalFilter';
+import ChildrenCard from './ChildrenCard';
+import {profileStorage} from '../../hooks/use-storage.hook';
+import LoadingSpinner from '../../components/atom/Loading/LoadingSpinner';
 const {height} = Dimensions.get('screen');
 
 interface PostListProps {
@@ -69,8 +64,6 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
     useNavigation<NativeStackNavigationProp<MainTabParams>>();
   const {dataRightDropdown, dataLeftDropdown, uuidMusician} = props;
 
-  const [commentType, setCommentType] = useState<string>('');
-  const [dataProfileImg, setDataProfileImg] = useState<string>('');
   const [recorder, setRecorder] = useState<string[]>([]);
   const [selectedId, setSelectedId] = useState<string[]>();
   const [modalShare, setModalShare] = useState<boolean>(false);
@@ -92,6 +85,7 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
     modalSortBy: false,
     modalCategory: false,
   });
+  const [refreshing, setRefreshing] = useState<boolean>(false);
 
   // * UPDATE HOOKS
   const [selectedIdPost, setSelectedIdPost] = useState<string>();
@@ -109,7 +103,6 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
     getListDataMyPost,
     setLikePost,
     setUnlikePost,
-    setCommentToPost,
     setDeletePost,
   } = useFeedHook();
 
@@ -123,24 +116,12 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
     addPlaylistFeed,
   } = usePlayerHook();
 
-  const {dataProfile, getProfileUser} = useProfileHook();
-
   const {creditCount, getCreditCount} = useCreditHook();
-
-  useEffect(() => {
-    getProfileUser();
-  }, []);
+  const uuid = profileStorage()?.uuid;
 
   useEffect(() => {
     getCreditCount();
   }, [modalDonate]);
-
-  useEffect(() => {
-    dataProfile?.data.imageProfileUrls.length !== 0 &&
-    dataProfile?.data.imageProfileUrls !== undefined
-      ? setDataProfileImg(dataProfile?.data.imageProfileUrls[0].image)
-      : '';
-  }, [dataProfile]);
 
   useFocusEffect(
     useCallback(() => {
@@ -148,6 +129,25 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
       setPage(1);
     }, []),
   );
+
+  //* call when refreshing
+  useEffect(() => {
+    if (refreshing) {
+      getListDataMyPost({
+        page: 1,
+        perPage: perPage,
+        sortBy: filterByValue,
+        category: categoryValue,
+      });
+      getCreditCount();
+    }
+  }, [refreshing]);
+
+  useEffect(() => {
+    if (!feedIsLoading) {
+      setRefreshing(false);
+    }
+  }, [feedIsLoading]);
 
   //* set response data list post to main data
   useEffect(() => {
@@ -337,12 +337,12 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
       selectedMenu !== undefined &&
       dataMain
     ) {
-      if (selectedMenu.label === 'Delete Post') {
+      if (t(selectedMenu.label) === 'Delete Post') {
         setDeletePost({id: selectedIdPost});
         setDataMain(dataMain.filter(data => data.id !== selectedIdPost));
         setSelectedMenu(undefined);
       }
-      if (selectedMenu.label === 'Edit Post') {
+      if (t(selectedMenu.label) === 'Edit Post') {
         let dataSelected = dataMain.filter(data => data.id === selectedIdPost);
         navigation.navigate('CreatePost', {postData: dataSelected[0]});
         setSelectedMenu(undefined);
@@ -450,6 +450,11 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
             flex: 1,
             marginHorizontal: widthResponsive(-24),
           }}>
+          {refreshing && (
+            <View style={styles.loadingContainer}>
+              <LoadingSpinner />
+            </View>
+          )}
           <FlatList
             data={
               filterActive
@@ -467,6 +472,12 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
               paddingBottom:
                 height >= 800 ? heightResponsive(220) : heightResponsive(160),
             }}
+            refreshControl={
+              <RefreshControl
+                refreshing={refreshing}
+                onRefresh={() => setRefreshing(true)}
+              />
+            }
             onEndReached={handleEndScroll}
             renderItem={({item}) => (
               <>
@@ -521,65 +532,22 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
                   tokenOnPress={tokenOnPress}
                   shareOnPress={shareOnPress}
                   commentCount={item.commentsCount}
-                  myPost={item.musician.uuid === dataProfile?.data.uuid}
+                  myPost={item.musician.uuid === uuid}
                   selectedMenu={setSelectedMenu}
                   idPost={item.id}
                   selectedIdPost={setSelectedIdPost}
                   children={
-                    <View style={{width: '100%'}}>
-                      <Text style={styles.childrenPostTitle}>
-                        {elipsisText(item.caption, 600)}
-                      </Text>
-                      {item.images !== null ? (
-                        <>
-                          <Gap height={4} />
-                          <View
-                            style={{
-                              flexDirection: 'row',
-                            }}>
-                            <View style={{height: '100%', width: '100%'}}>
-                              <ImageList
-                                imgData={item.images}
-                                width={143}
-                                height={69.5}
-                                heightType2={142}
-                                widthType2={289}
-                                onPress={() => {}}
-                              />
-                              {item.images.length === 0 &&
-                              item.quoteToPost.encodeHlsUrl ? (
-                                <MusicListPreview
-                                  hideClose
-                                  targetId={item.quoteToPost.targetId}
-                                  targetType={item.quoteToPost.targetType}
-                                  title={item.quoteToPost.title}
-                                  musician={item.quoteToPost.musician}
-                                  coverImage={
-                                    item.quoteToPost.coverImage[1]?.image !==
-                                    undefined
-                                      ? item.quoteToPost.coverImage[1].image
-                                      : ''
-                                  }
-                                  encodeDashUrl={item.quoteToPost.encodeDashUrl}
-                                  encodeHlsUrl={item.quoteToPost.encodeHlsUrl}
-                                  startAt={item.quoteToPost.startAt}
-                                  endAt={item.quoteToPost.endAt}
-                                  postList={item}
-                                  onPress={onPressPlaySong}
-                                  isPlay={isPlaying}
-                                  playOrPause={handlePausePlay}
-                                  pauseModeOn={pauseModeOn}
-                                  currentProgress={playerProgress.position}
-                                  duration={playerProgress.duration}
-                                  seekPlayer={seekPlayer}
-                                  isIdNowPlaying={item.id === idNowPlaying}
-                                />
-                              ) : null}
-                            </View>
-                          </View>
-                        </>
-                      ) : null}
-                    </View>
+                    <ChildrenCard
+                      data={item}
+                      onPress={onPressPlaySong}
+                      isPlay={isPlaying}
+                      playOrPause={handlePausePlay}
+                      pauseModeOn={pauseModeOn}
+                      currentProgress={playerProgress.position}
+                      duration={playerProgress.duration}
+                      seekPlayer={seekPlayer}
+                      isIdNowPlaying={item.id === idNowPlaying}
+                    />
                   }
                 />
                 <Gap height={16} />
@@ -610,15 +578,7 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
           }}
           icon={<FriedEggIcon />}
         />
-      ) : (
-        <EmptyState
-          text={t('EmptyState.NoData') || ''}
-          containerStyle={{
-            justifyContent: 'flex-start',
-            paddingTop: heightPercentage(24),
-          }}
-        />
-      )}
+      ) : null}
       <ModalShare
         url={
           'https://open.ssu.io/track/19AiJfAtRiccvSU1EWcttT?si=36b9a686dad44ae0'
@@ -660,7 +620,7 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
         modalVisible={modalSuccessDonate && trigger2ndModal ? true : false}
         toggleModal={onPressSuccess}
       />
-      <ModalLoading visible={feedIsLoading} />
+      {!refreshing && <ModalLoading visible={feedIsLoading} />}
       {offsetCategoryFilter !== undefined && (
         <FilterModal
           toggleModal={() =>
@@ -758,5 +718,9 @@ const styles = StyleSheet.create({
     fontSize: mvs(10),
     fontWeight: '500',
     color: color.Dark[50],
+  },
+  loadingContainer: {
+    alignItems: 'center',
+    paddingVertical: heightPercentage(20),
   },
 });

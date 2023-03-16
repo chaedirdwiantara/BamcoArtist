@@ -1,5 +1,5 @@
 import React, {FC, useEffect} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {RefreshControl, StyleSheet, View} from 'react-native';
 import {heightPercentage, heightResponsive} from '../../utils';
 import {FlashList} from '@shopify/flash-list';
 import MerchListCard from '../../components/molecule/ListCard/MerchListCard';
@@ -8,6 +8,7 @@ import Color from '../../theme/Color';
 import {useQuery} from 'react-query';
 import {useSearchHook} from '../../hooks/use-search.hook';
 import {useTranslation} from 'react-i18next';
+import LoadingSpinner from '../../components/atom/Loading/LoadingSpinner';
 
 interface Props {
   keyword: string;
@@ -21,7 +22,6 @@ const ListResultEvent: FC<Props> = ({keyword}: Props) => {
     data: dataEventList,
     refetch,
     isRefetching,
-    isFetched,
     isLoading,
   } = useQuery(['/search-event'], () => getSearchEvents({keyword: keyword}));
 
@@ -32,44 +32,46 @@ const ListResultEvent: FC<Props> = ({keyword}: Props) => {
 
   return (
     <View style={styles.container}>
-      {isFetched && !isRefetching && (
-        <FlashList
-          data={dataEventList?.data}
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={styles.ListContainer}
-          keyExtractor={item => item?.id.toString()}
-          ListEmptyComponent={
+      {(isRefetching || isLoading) && (
+        <View style={styles.loadingContainer}>
+          <LoadingSpinner />
+        </View>
+      )}
+      <FlashList
+        data={dataEventList?.data}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.ListContainer}
+        keyExtractor={item => item?.id.toString()}
+        renderItem={({item, index}: any) => (
+          <MerchListCard
+            id={item.id}
+            containerStyles={
+              index % 2 == 0 ? {marginRight: 10} : {marginLeft: 10}
+            }
+            image={item.pic}
+            title={item.name}
+            owner={item.organizer?.name}
+            ownerImage={item.organizer?.pic}
+            price={item.price}
+            desc={item.content}
+            currency={item.currencyCode}
+            type={'concert'}
+          />
+        )}
+        estimatedItemSize={200}
+        numColumns={2}
+        ListEmptyComponent={
+          !isLoading && !isRefetching ? (
             <EmptyState
               text={t('EmptyState.Search.Event') || ''}
               containerStyle={styles.containerEmpty}
             />
-          }
-          renderItem={({item, index}: any) => (
-            <MerchListCard
-              id={item.id}
-              containerStyles={
-                index % 2 == 0 ? {marginRight: 10} : {marginLeft: 10}
-              }
-              image={item.pic}
-              title={item.name}
-              owner={item.organizer?.name}
-              ownerImage={item.organizer?.pic}
-              price={item.price}
-              desc={item.content}
-              currency={item.currencyCode}
-              type={'concert'}
-            />
-          )}
-          estimatedItemSize={200}
-          numColumns={2}
-        />
-      )}
-
-      {(isRefetching || isLoading) && (
-        <View style={styles.loadingContainer}>
-          <Text style={styles.loading}>Loading...</Text>
-        </View>
-      )}
+          ) : null
+        }
+        refreshControl={
+          <RefreshControl refreshing={isRefetching} onRefresh={refetch} />
+        }
+      />
     </View>
   );
 };
@@ -98,8 +100,7 @@ const styles = StyleSheet.create({
     color: Color.Neutral[10],
   },
   loadingContainer: {
-    flex: 1,
     alignItems: 'center',
-    paddingTop: heightPercentage(50),
+    paddingVertical: heightPercentage(20),
   },
 });
