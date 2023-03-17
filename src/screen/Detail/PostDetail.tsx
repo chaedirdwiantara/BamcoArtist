@@ -462,7 +462,7 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
     if (dataComment === null) {
       if (cmntToCmntLvl0?.commentLvl === 0 && commentLvl1 !== undefined) {
         return (
-          setCommentLvl1([...commentLvl1, ...comment]),
+          setCommentLvl1([...comment, ...commentLvl1]),
           setCmntToCmntLvl0(undefined),
           setStaticId([...staticId, comment[0].id])
         );
@@ -477,7 +477,7 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
         );
       } else if (cmntToCmnt?.commentLvl === 1 && commentLvl2 !== undefined) {
         return (
-          setCommentLvl2([...commentLvl2, ...comment]),
+          setCommentLvl2([...comment, ...commentLvl2]),
           setStaticId([...staticId, comment[0].id])
         );
       } else if (cmntToCmnt?.commentLvl === 1 && commentLvl2 === undefined) {
@@ -486,7 +486,7 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
         );
       } else if (cmntToCmnt?.commentLvl === 2 && commentLvl3 !== undefined) {
         return (
-          setCommentLvl3([...commentLvl3, ...comment]),
+          setCommentLvl3([...comment, ...commentLvl3]),
           setStaticId([...staticId, comment[0].id])
         );
       } else if (cmntToCmnt?.commentLvl === 2 && commentLvl3 === undefined) {
@@ -495,7 +495,7 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
         );
       } else if (cmntToCmnt?.commentLvl === 3 && commentLvl3 !== undefined) {
         return (
-          setCommentLvl3([...commentLvl3, ...comment]),
+          setCommentLvl3([...comment, ...commentLvl3]),
           setStaticId([...staticId, comment[0].id])
         );
       } else if (cmntToCmnt?.commentLvl === 3 && commentLvl3 === undefined) {
@@ -517,7 +517,7 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
         theIndex !== -1 && theComment?.splice(theIndex, 1, dataComment);
         theIndex !== -1
           ? setCommentLvl1(theComment)
-          : setCommentLvl1([...commentLvl1, dataComment]);
+          : setCommentLvl1([dataComment, ...commentLvl1]);
         setDataComment(null);
         setTemporaryIds(undefined);
       }
@@ -529,7 +529,7 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
         theIndex !== -1 && theComment?.splice(theIndex, 1, dataComment);
         theIndex !== -1
           ? setCommentLvl2(theComment)
-          : setCommentLvl2([...commentLvl2, dataComment]);
+          : setCommentLvl2([dataComment, ...commentLvl2]);
         setDataComment(null);
         setTemporaryIds(undefined);
       }
@@ -541,7 +541,7 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
         theIndex !== -1 && theComment?.splice(theIndex, 1, dataComment);
         theIndex !== -1
           ? setCommentLvl3(theComment)
-          : setCommentLvl3([...commentLvl3, dataComment]);
+          : setCommentLvl3([dataComment, ...commentLvl3]);
         setDataComment(null);
         setTemporaryIds(undefined);
         setDisallowStatic(true);
