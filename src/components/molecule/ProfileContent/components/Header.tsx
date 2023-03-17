@@ -6,6 +6,7 @@ import {
   ViewStyle,
   TouchableOpacity,
   ImageBackground,
+  Platform,
 } from 'react-native';
 
 import {
@@ -30,6 +31,7 @@ import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParams} from '../../../../navigations';
 import {useTranslation} from 'react-i18next';
+import LoadingSpinner from '../../../atom/Loading/LoadingSpinner';
 
 export interface ProfileHeaderProps {
   avatarUri?: string;
@@ -45,6 +47,7 @@ export interface ProfileHeaderProps {
   noEdit?: boolean;
   backIcon?: boolean;
   onPressImage?: (uri: string) => void;
+  refreshing?: boolean;
 }
 
 export const ProfileHeader: React.FC<ProfileHeaderProps> = (
@@ -64,6 +67,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = (
     noEdit,
     backIcon,
     onPressImage,
+    refreshing,
   } = props;
 
   const {t} = useTranslation();
@@ -98,8 +102,11 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = (
   const backgroundPress =
     type === 'edit' || backgroundUri === '' || backgroundUri === null;
 
+  const showLoading = Platform.OS === 'ios' && refreshing;
+  const newHeight = showLoading ? heightPercentage(390) : heightPercentage(350);
+
   return (
-    <View style={[styles.root, containerStyles]}>
+    <View style={[styles.root, {height: newHeight}, containerStyles]}>
       <TouchableOpacity
         activeOpacity={backgroundPress ? 1 : 0.7}
         onPress={() =>
@@ -110,6 +117,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = (
           resizeMode="cover"
           style={styles.image}>
           <View style={styles.bgChild}>
+            {showLoading && <LoadingSpinner type={'profile'} />}
             <TouchableOpacity
               activeOpacity={avatarPress ? 1 : 0.5}
               onPress={() =>
@@ -156,7 +164,6 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = (
 const styles = StyleSheet.create({
   root: {
     width,
-    height: heightPercentage(350),
     backgroundColor: color.Dark[500],
     justifyContent: 'center',
     alignItems: 'center',

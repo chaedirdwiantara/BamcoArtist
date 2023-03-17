@@ -80,6 +80,7 @@ export type ProfileResponseData = {
   yearsActiveTo: string;
   members: string[];
   socialMedia: null | nameValue[];
+  rank: string;
 };
 
 export type ProfileResponseType = {

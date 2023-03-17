@@ -1,17 +1,18 @@
 import React, {useEffect, useState} from 'react';
-import {View, StyleSheet} from 'react-native';
+import {View, StyleSheet, Platform} from 'react-native';
+import {useTranslation} from 'react-i18next';
 import ImagePicker, {Image} from 'react-native-image-crop-picker';
 
-import {Button, SsuInput} from '../../atom';
 import {color} from '../../../theme';
+import {Button, SsuInput} from '../../atom';
+import {ModalLimit} from '../Modal/ModalLimit';
 import {TopNavigation} from '../TopNavigation';
 import {ArrowLeftIcon} from '../../../assets/icon';
+import {sendReport} from '../../../api/setting.api';
 import {ModalLoading} from '../ModalLoading/ModalLoading';
+import {ModalSuccessDonate} from '../Modal/ModalSuccessDonate';
 import {useUploadImageHook} from '../../../hooks/use-uploadImage.hook';
 import {heightPercentage, width, widthPercentage} from '../../../utils';
-import {sendReport} from '../../../api/setting.api';
-import {ModalSuccessDonate} from '../Modal/ModalSuccessDonate';
-import {useTranslation} from 'react-i18next';
 
 interface SendReportProps {
   title: string;
@@ -31,19 +32,25 @@ export const SendReportContent: React.FC<SendReportProps> = ({
   const [dataResponseImg, setDataResponseImg] = useState<string[]>([]);
   const {isLoadingImage, dataImage, setUploadImage} = useUploadImageHook();
   const [showModalSuccess, setShowModalSuccess] = useState<boolean>(false);
+  const [showModalLimit, setShowModalLimit] = useState<boolean>(false);
+  const [modalLimitType, setModalLimitType] = useState<string>('');
+  const [active, setActive] = useState<boolean>(false);
+  const [unUploadedPhotos, setUnUploadedPhotos] = useState<Image[]>([]);
 
   useEffect(() => {
-    if (listImage.length > 0) {
-      for (let i = 0; i < listImage.length; i++) {
-        setUploadImage(listImage[i]);
+    if (unUploadedPhotos.length > 0 && active) {
+      for (let i = 0; i < unUploadedPhotos.length; i++) {
+        setUploadImage(unUploadedPhotos[i]);
       }
     }
-  }, [listImage]);
+  }, [unUploadedPhotos]);
 
   useEffect(() => {
-    dataImage?.data !== undefined && !dataResponseImg.includes(dataImage.data)
-      ? setDataResponseImg([...dataResponseImg, dataImage?.data])
-      : null;
+    if (active) {
+      dataImage?.data !== undefined && !dataResponseImg.includes(dataImage.data)
+        ? setDataResponseImg([...dataResponseImg, dataImage?.data])
+        : null;
+    }
   }, [dataImage]);
 
   const onChangeText = (key: string, value: string) => {
@@ -64,35 +71,80 @@ export const SendReportContent: React.FC<SendReportProps> = ({
     } catch (error) {}
   };
 
-  const onCameraPress = () => {
-    ImagePicker.openCamera({
-      compressImageMaxWidth: 1024,
-      compressImageMaxHeight: 1024,
-      compressImageQuality: 0.9,
-      cropping: true,
-      multiple: true,
-      maxFiles: 4,
-    }).then(image => {
-      listImage.length + image.length <= 4 &&
-        setListImage([...listImage, ...image]);
+  const sendSingleUri = (val: Image) => {
+    const allPhotos = [...listImage, val];
+    setUnUploadedPhotos([val]);
+    setListImage(allPhotos);
+  };
+
+  const sendMultipleUri = (val: Image[]) => {
+    setActive(true);
+    let newVal: Image[] = [];
+    let newUniqueImageVal: Image[] = [];
+    const allLength = listImage.length + val.length;
+    val.map(res => {
+      // check if new image is not include in listImage, compare using filename / size
+      const propertyToCompare = Platform.OS === 'ios' ? 'filename' : 'size';
+      if (
+        listImage.length === 0 ||
+        listImage.filter(v => v[propertyToCompare] === res[propertyToCompare])
+          .length === 0
+      ) {
+        newUniqueImageVal.push(res);
+      }
     });
+
+    newVal =
+      allLength > 4
+        ? newUniqueImageVal.slice(0, 4 - listImage.length)
+        : newUniqueImageVal;
+
+    const allPhotos = [...listImage, ...newVal];
+    setUnUploadedPhotos(newVal);
+    setListImage(allPhotos);
+
+    if (allLength > 4) {
+      setShowModalLimit(true);
+      setModalLimitType('onUpload');
+    }
+  };
+
+  const onCameraPress = () => {
+    if (listImage.length >= 4) {
+      setShowModalLimit(true);
+      setModalLimitType('');
+    } else {
+      ImagePicker.openCamera({
+        compressImageMaxWidth: 1024,
+        compressImageMaxHeight: 1024,
+        compressImageQuality: 0.9,
+        cropping: true,
+      }).then(image => {
+        sendSingleUri(image);
+      });
+    }
   };
 
   const onImageLibraryPress = () => {
-    ImagePicker.openPicker({
-      compressImageMaxWidth: 1024,
-      compressImageMaxHeight: 1024,
-      compressImageQuality: 0.9,
-      cropping: true,
-      multiple: true,
-      maxFiles: 4,
-    }).then(image => {
-      listImage.length + image.length <= 4 &&
-        setListImage([...listImage, ...image]);
-    });
+    if (listImage.length >= 4) {
+      setShowModalLimit(true);
+      setModalLimitType('');
+    } else {
+      ImagePicker.openPicker({
+        compressImageMaxWidth: 1024,
+        compressImageMaxHeight: 1024,
+        compressImageQuality: 0.9,
+        cropping: true,
+        multiple: true,
+        maxFiles: 4 - listImage.length,
+      }).then(image => {
+        sendMultipleUri(image);
+      });
+    }
   };
 
   const removeImage = (id: number) => {
+    setActive(false);
     setListImage(listImage.filter((x: Image) => x.path !== listImage[id].path));
   };
 
@@ -138,6 +190,16 @@ export const SendReportContent: React.FC<SendReportProps> = ({
         buttonText={t('Modal.Report.Back') || ''}
         modalVisible={showModalSuccess}
         toggleModal={onPressGoBack}
+      />
+
+      <ModalLimit
+        text={
+          modalLimitType === 'onUpload'
+            ? t('Modal.Limit.SubtitleSR2')
+            : t('Modal.Limit.SubtitleSR1')
+        }
+        modalVisible={showModalLimit}
+        onPressClose={() => setShowModalLimit(false)}
       />
 
       <Button

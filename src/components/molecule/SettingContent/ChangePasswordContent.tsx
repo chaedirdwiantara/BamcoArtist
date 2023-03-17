@@ -114,7 +114,7 @@ export const ChangePasswordContent: React.FC<ChangePasswordProps> = ({
         itemStrokeColor={color.Neutral[10]}
         leftIconAction={onPressGoBack}
         containerStyles={{
-          marginBottom: heightPercentage(15),
+          marginBottom: heightPercentage(10),
           paddingHorizontal: widthResponsive(15),
         }}
       />

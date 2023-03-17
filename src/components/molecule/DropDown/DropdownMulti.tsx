@@ -107,7 +107,7 @@ const MultiDropdown: React.FC<InputDropdownProps> = (
         style={[styles.dropdown]}
         containerStyle={styles.containerStyle}
         placeholderStyle={{
-          fontSize: mvs(14),
+          fontSize: mvs(13),
           color: placeholderColor,
         }}
         inputSearchStyle={styles.inputSearchStyle}
@@ -162,15 +162,15 @@ const styles = StyleSheet.create({
     backgroundColor: itemBg,
   },
   placeholderStyle: {
-    fontSize: mvs(14),
+    fontSize: mvs(13),
     color: color.Neutral[10],
   },
   selectedTextStyle: {
-    fontSize: mvs(14),
+    fontSize: mvs(13),
     color: fontColorMain,
   },
   itemTextStyle: {
-    fontSize: mvs(14),
+    fontSize: mvs(13),
     color: fontColorMain,
   },
   iconStyle: {
@@ -185,7 +185,7 @@ const styles = StyleSheet.create({
     paddingVertical: heightPercentage(18),
   },
   inputSearchStyle: {
-    fontSize: mvs(14),
+    fontSize: mvs(13),
     color: color.Neutral[10],
     borderColor: 'transparent',
     borderBottomColor: color.Pink[200],

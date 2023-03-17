@@ -43,6 +43,7 @@ import {Playlist} from '../../../interface/playlist.interface';
 import {useTranslation} from 'react-i18next';
 import {ModalShare} from '../Modal/ModalShare';
 import {usePlayerHook} from '../../../hooks/use-player.hook';
+import DropdownMore from '../V2/DropdownFilter/DropdownMore';
 
 interface Props {
   goBackProfile: (showToast: boolean) => void;
@@ -217,10 +218,9 @@ export const PlaylistContent: React.FC<Props> = ({
       <TopNavigation.Type4
         title={t('Home.Topbar.Search.Playlist')}
         rightIcon={
-          <Dropdown.More
-            data={othersPlaylist ? dataMoreOther : dataMore}
+          <DropdownMore
+            dataFilter={othersPlaylist ? dataMoreOther : dataMore}
             selectedMenu={resultDataMore}
-            containerStyle={styles.dropdownMore}
           />
         }
         leftIcon={<ArrowLeftIcon />}

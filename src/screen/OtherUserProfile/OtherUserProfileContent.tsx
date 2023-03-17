@@ -8,33 +8,26 @@ import {
   NativeSyntheticEvent,
   Text,
 } from 'react-native';
+import {useTranslation} from 'react-i18next';
 
-import {
-  width,
-  normalize,
-  widthPercentage,
-  heightPercentage,
-  widthResponsive,
-} from '../../utils';
-import {font} from '../../theme';
 import {
   TabFilter,
   ProfileHeader,
   EmptyState,
   UserInfoCard,
-  CreateNewCard,
 } from '../../components';
+import {font} from '../../theme';
 import Color from '../../theme/Color';
-import {SettingIcon} from '../../assets/icon';
-import {TopSongListData} from '../../data/topSong';
-import {Playlist} from '../../interface/playlist.interface';
-import ListPlaylist from '../../screen/ListCard/ListPlaylist';
 import {
   AlbumData,
   DataDetailMusician,
 } from '../../interface/musician.interface';
+import {SettingIcon} from '../../assets/icon';
+import ImageModal from '../Detail/ImageModal';
+import {Playlist} from '../../interface/playlist.interface';
+import ListPlaylist from '../../screen/ListCard/ListPlaylist';
 import {ProfileFansResponseType} from '../../interface/profile.interface';
-import {useTranslation} from 'react-i18next';
+import {width, normalize, widthPercentage, heightPercentage} from '../../utils';
 
 type OnScrollEventHandler = (
   event: NativeSyntheticEvent<NativeScrollEvent>,
@@ -85,6 +78,8 @@ export const OtherUserProfileContent: React.FC<ProfileContentProps> = ({
     {filterName: 'Profile.Tab.TopMusician'},
     {filterName: 'Profile.Tab.Badge'},
   ]);
+  const [isModalVisible, setModalVisible] = useState<boolean>(false);
+  const [zoomImage, setZoomImage] = useState<string[]>([]);
 
   const filterData = (item: string, index: number) => {
     setSelectedIndex(index);
@@ -94,6 +89,11 @@ export const OtherUserProfileContent: React.FC<ProfileContentProps> = ({
     let offsetY = event.nativeEvent.contentOffset.y;
     const scrolled = offsetY > 10;
     setScrollEffect(scrolled);
+  };
+
+  const showImage = (uri: string) => {
+    setModalVisible(!isModalVisible);
+    setZoomImage([uri]);
   };
 
   return (
@@ -121,6 +121,7 @@ export const OtherUserProfileContent: React.FC<ProfileContentProps> = ({
           scrollEffect={scrollEffect}
           noEdit={!ownProfile}
           backIcon={!ownProfile}
+          onPressImage={showImage}
         />
         <UserInfoCard
           profile={profile}
@@ -166,6 +167,14 @@ export const OtherUserProfileContent: React.FC<ProfileContentProps> = ({
           )}
         </View>
       </ScrollView>
+
+      <ImageModal
+        toggleModal={() => setModalVisible(!isModalVisible)}
+        modalVisible={isModalVisible}
+        imageIdx={0}
+        dataImage={zoomImage}
+        type={'zoomProfile'}
+      />
     </View>
   );
 };

@@ -1,5 +1,11 @@
 import React from 'react';
-import {StyleSheet, Text, TouchableOpacity, ViewStyle} from 'react-native';
+import {
+  Platform,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  ViewStyle,
+} from 'react-native';
 import {mvs} from 'react-native-size-matters';
 
 import {SquareImage} from '../../atom';
@@ -25,7 +31,7 @@ export const CreateNewCard: React.FC<ListProps> = ({
       style={[styles.container, containerStyles]}
       onPress={onPress}>
       {num ? <Text style={styles.numStyle}>{num}</Text> : null}
-      <SquareImage type="add" size={widthPercentage(44)} />
+      <SquareImage type="add" size={widthResponsive(44)} />
       <Text style={[Typography.Subtitle1, styles.labelStyle]}>{text}</Text>
     </TouchableOpacity>
   );
@@ -48,9 +54,8 @@ const styles = StyleSheet.create({
     color: color.Dark[100],
   },
   labelStyle: {
-    fontFamily: font.InterSemiBold,
-    fontSize: normalize(14),
+    fontSize: Platform.OS === 'ios' ? mvs(15) : mvs(14),
     color: color.Neutral[10],
-    marginLeft: widthPercentage(10),
+    marginLeft: widthPercentage(12),
   },
 });
