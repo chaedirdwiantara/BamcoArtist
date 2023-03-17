@@ -396,7 +396,12 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
           content: {content: commentCaption},
         }),
           setCommentCaption(''),
-          setParentIdAddComment([...parentIdAddComment, cmntToCmnt.id]);
+          cmntToCmnt.commentLvl !== 3
+            ? setParentIdAddComment([...parentIdAddComment, cmntToCmnt.id])
+            : setParentIdAddComment([
+                ...parentIdAddComment,
+                cmntToCmnt.parentID,
+              ]);
     } else if (commentCaption.length > 0 && cmntToCmnt === undefined) {
       setCommentToPost({
         postId: musicianId,
@@ -426,13 +431,18 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
         caption: commentCaption,
         likesCount: 0,
         repliedTo: cmntToCmnt?.userName ? cmntToCmnt?.userName : '',
-        parentID: cmntToCmnt?.id ? cmntToCmnt?.id : '',
+        parentID:
+          cmntToCmnt?.id && cmntToCmnt?.commentLvl !== 3
+            ? cmntToCmnt?.id
+            : cmntToCmnt?.id && cmntToCmnt?.commentLvl === 3
+            ? cmntToCmnt.parentID
+            : '',
         commentsCount: 0,
         commentLevel: cmntToCmnt?.commentLvl,
         createdAt: '',
         comments: [],
         isLiked: false,
-        timeAgo: 'just now',
+        timeAgo: 'posting...',
         commentOwner: {
           UUID: dataProfile?.data.uuid ? dataProfile?.data.uuid : '',
           fullname: dataProfile?.data.fullname
@@ -659,7 +669,7 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
         createdAt: '',
         comments: [],
         isLiked: false,
-        timeAgo: 'just now',
+        timeAgo: 'posting...',
         commentOwner: {
           UUID: dataProfile?.data.uuid ? dataProfile?.data.uuid : '',
           fullname: dataProfile?.data.fullname
