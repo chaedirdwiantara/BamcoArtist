@@ -322,6 +322,21 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
           onPressImage={name => goToListMusic(name, 'song')}
         />
 
+        <ListMoodGenre
+          title="Genre"
+          data={listGenre}
+          containerStyle={{
+            marginTop: heightPercentage(10),
+            paddingHorizontal: widthResponsive(24),
+          }}
+          imageStyle={{
+            width: widthPercentage(90),
+            height: heightPercentage(80),
+          }}
+          onPress={() => onPressMoodGenre('Genre', listGenre)}
+          onPressImage={name => goToListMusic(name, 'song')}
+        />
+
         <View
           style={{
             marginTop: heightPercentage(20),
@@ -357,21 +372,6 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
           }}
           onPress={() => goToListMusic('Album', 'album')}
           onPressImage={goToDetailAlbum}
-        />
-
-        <ListMoodGenre
-          title="Genre"
-          data={listGenre}
-          containerStyle={{
-            marginTop: heightPercentage(10),
-            paddingHorizontal: widthResponsive(24),
-          }}
-          imageStyle={{
-            width: widthPercentage(90),
-            height: heightPercentage(80),
-          }}
-          onPress={() => onPressMoodGenre('Genre', listGenre)}
-          onPressImage={name => goToListMusic(name, 'song')}
         />
 
         <View
