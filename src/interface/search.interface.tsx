@@ -130,6 +130,7 @@ export type ListDataSearchAlbums = {
   language: string;
   label: string[];
   createdAt: string;
+  name?: string;
 };
 
 export type ListSearchAlbumsResponseType = {
