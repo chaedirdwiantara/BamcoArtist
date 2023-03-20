@@ -358,7 +358,10 @@ const CommentSection: FC<CommentSectionType> = (props: CommentSectionType) => {
                   </Text>
                 </TouchableOpacity>
               ) : dataLvl3 !== undefined &&
-                filterParentID(dataLvl3, id).length !== commentsCount ? (
+                filterParentID(dataLvl3, id).length !==
+                  commentsCount -
+                    deletedCommentParentId.filter(x => x == id).length +
+                    addCommentParentId.filter(x => x == id).length ? (
                 <TouchableOpacity>
                   <Text
                     style={styles.viewMore}
@@ -515,7 +518,11 @@ const CommentSection: FC<CommentSectionType> = (props: CommentSectionType) => {
           />
         )}
       />
-      {postCommentCount >= 10 && dataLvl1?.length != postCommentCount ? (
+      {postCommentCount > 10 &&
+      dataLvl1?.length !=
+        postCommentCount -
+          deletedCommentParentId.filter(x => x == postId).length +
+          addCommentParentId.filter(x => x == postId).length ? (
         <TouchableOpacity onPress={() => viewMoreOnPress(postId, 1)}>
           <Text
             style={[
