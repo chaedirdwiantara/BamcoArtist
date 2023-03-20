@@ -119,6 +119,7 @@ import {
 import {OtpEmailScreen} from '../screen/Setting/Email/OTP';
 import {SplashScreen} from '../screen/SplashScreen';
 import {SongAlbum} from '../interface/song.interface';
+import ListPlaylist from '../screen/Playlist/ListPlaylist';
 
 export type RootStackParams = {
   Account: {
@@ -242,6 +243,7 @@ export type RootStackParams = {
     | {songData?: ListDataSearchSongs; postData?: PostList; audience?: string}
     | undefined;
   SplashScreen: undefined;
+  ListPlaylist: undefined;
 };
 
 export type MainTabParams = {
@@ -427,6 +429,7 @@ export const RootStackScreen = () => (
     <RootStack.Screen name="ListMusic" component={ListMusicScreen} />
     <RootStack.Screen name="ListPost" component={ListPostScreen} />
     <RootStack.Screen name="SplashScreen" component={SplashScreen} />
+    <RootStack.Screen name="ListPlaylist" component={ListPlaylist} />
   </RootStack.Navigator>
 );
 

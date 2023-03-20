@@ -63,6 +63,12 @@ import {FirebaseMessagingTypes} from '@react-native-firebase/messaging';
 import {dropDownDataCategory, dropDownDataFilter} from '../data/dropdown';
 import {ModalPlayMusic} from '../components/molecule/Modal/ModalPlayMusic';
 import {heightPercentage, widthPercentage, widthResponsive} from '../utils';
+import FavoriteMusician from './ListCard/FavoriteMusician';
+import RecomendedMusician from './ListCard/RecomendedMusician';
+import NewSong from './ListCard/NewSong';
+import PlaylistHome from './ListCard/PlaylistHome';
+import ListPlaylistHome from '../components/molecule/ListCard/ListPlaylistHome';
+import {usePlaylistHook} from '../hooks/use-playlist.hook';
 
 type OnScrollEventHandler = (
   event: NativeSyntheticEvent<NativeScrollEvent>,
@@ -89,20 +95,32 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
   } = usePlayerHook();
   const {
     dataMusician,
+    dataFavoriteMusician,
     getListDataMusician,
+    getListDataFavoriteMusician,
     setFollowMusician,
     setUnfollowMusician,
   } = useMusicianHook();
-  const {dataTopSong, getListDataTopSong} = useSongHook();
+  const {dataTopSong, dataNewSong, getListDataTopSong, getListDataNewSong} =
+    useSongHook();
   const {counter, getCountNotification} = useNotificationHook();
   const {creditCount, getCreditCount} = useCreditHook();
   const {listGenre, listMood, getListMoodGenre} = useSettingHook();
   const {getSearchAlbums} = useSearchHook();
+  const {dataPlaylist, getPlaylist} = usePlaylistHook();
 
   const isLogin = storage.getBoolean('isLogin');
   const isFocused = useIsFocused();
-  const [selectedIndex, setSelectedIndex] = useState<number>(-0);
+  const [selectedIndexMusician, setSelectedIndexMusician] = useState(-0);
+  const [selectedIndexSong, setSelectedIndexSong] = useState(-0);
   const [refreshing, setRefreshing] = useState<boolean>(false);
+
+  const JSONProfile = storage.getString('profile');
+  let uuid: string = '';
+  if (JSONProfile) {
+    const profileObject = JSON.parse(JSONProfile);
+    uuid = profileObject.uuid;
+  }
 
   // dummy coming soon
   const {data: dataSearchAlbums, refetch} = useQuery(['/search-albums'], () =>
@@ -118,10 +136,13 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
     getCreditCount();
     getListMoodGenre();
     refetch();
+    getListDataFavoriteMusician();
+    getListDataNewSong();
+    getPlaylist();
     setTimeout(() => {
       setRefreshing(false);
     }, 1000);
-  }, [selectedIndex, refreshing]);
+  }, [refreshing]);
 
   useEffect(() => {
     if (isFocused && isPlaying) {
@@ -184,14 +205,30 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
     addFcmToken(token);
   };
 
-  const [filter] = useState([
+  const [filterMusician] = useState([
     {filterName: 'Home.Tab.TopMusician.Title'},
-    {filterName: 'Home.Tab.TopSong.Title'},
-    {filterName: 'Home.Tab.TopPost.Title'},
+    {filterName: 'Home.Tab.Recomended.Title'},
+    {filterName: 'Home.Tab.Favorite.Title'},
   ]);
-  const filterData = (item: any, index: any) => {
-    setSelectedIndex(index);
+
+  const [filterMusicianGuest] = useState([
+    {filterName: 'Home.Tab.TopMusician.Title'},
+    {filterName: 'Home.Tab.Recomended.Title'},
+  ]);
+
+  const [filterSong] = useState([
+    {filterName: 'Home.Tab.TopSong.Title'},
+    {filterName: 'Home.Tab.NewSong.Title'},
+  ]);
+
+  const filterDataMusician = (item: any, index: any) => {
+    setSelectedIndexMusician(index);
   };
+
+  const filterDataSong = (item: any, index: any) => {
+    setSelectedIndexSong(index);
+  };
+
   const handleSearchButton = () => {
     navigation.navigate('SearchScreen');
   };
@@ -227,6 +264,11 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
 
   const onPressTopSong = (val: SongList) => {
     addPlaylist({dataSong: dataTopSong, playSongId: val.id, isPlay: true});
+    showPlayer();
+  };
+
+  const onPressNewSong = (val: SongList) => {
+    addPlaylist({dataSong: dataNewSong, playSongId: val.id, isPlay: true});
     showPlayer();
   };
 
@@ -357,30 +399,42 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
           onPressImage={goToMusicianPost}
         />
 
-        <ListImageDesc
-          title="Coming Soon"
-          data={dataSearchAlbums?.data}
-          containerStyle={styles.containerList}
-          onPress={() => goToListMusic('Album', 'album')}
-          onPressImage={goToDetailAlbum}
-        />
-
-        <View
-          style={[
-            styles.containerContent,
-            {
-              marginBottom: playerVisible
-                ? heightPercentage(90)
-                : heightPercentage(25),
-            },
-          ]}>
-          <TabFilter.Type1
-            filterData={filter}
-            onPress={filterData}
-            selectedIndex={selectedIndex}
+        {/* Tab Song */}
+        <View style={[styles.containerContent]}>
+          <TabFilter.Type3
+            filterData={filterSong}
+            onPress={filterDataSong}
+            selectedIndex={selectedIndexSong}
             translation={true}
           />
-          {filter[selectedIndex].filterName === 'Home.Tab.TopMusician.Title' ? (
+          {filterSong[selectedIndexSong].filterName ===
+          'Home.Tab.TopSong.Title' ? (
+            <TopSong
+              dataSong={dataTopSong}
+              onPress={onPressTopSong}
+              type={'home'}
+              loveIcon={isLogin}
+            />
+          ) : (
+            <NewSong
+              dataSong={dataNewSong}
+              onPress={onPressNewSong}
+              type={'home'}
+              loveIcon={isLogin}
+            />
+          )}
+        </View>
+        {/* End of Tab Song */}
+        {/* Tab Musician */}
+        <View style={[styles.containerContent]}>
+          <TabFilter.Type3
+            filterData={!isLogin ? filterMusicianGuest : filterMusician}
+            onPress={filterDataMusician}
+            selectedIndex={selectedIndexMusician}
+            translation={true}
+          />
+          {filterMusician[selectedIndexMusician].filterName ===
+          'Home.Tab.TopMusician.Title' ? (
             <TopMusician
               dataMusician={dataMusician}
               setFollowMusician={(
@@ -392,24 +446,50 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
                 params?: ParamsProps,
               ) => setUnfollowMusician(props, params)}
             />
-          ) : filter[selectedIndex].filterName === 'Home.Tab.TopSong.Title' ? (
-            <TopSong
-              dataSong={dataTopSong}
-              onPress={onPressTopSong}
-              type={'home'}
-              loveIcon={true}
+          ) : filterMusician[selectedIndexMusician].filterName ===
+            'Home.Tab.Recomended.Title' ? (
+            <RecomendedMusician
+              dataMusician={dataMusician}
+              setFollowMusician={(
+                props?: FollowMusicianPropsType,
+                params?: ParamsProps,
+              ) => setFollowMusician(props, params)}
+              setUnfollowMusician={(
+                props?: FollowMusicianPropsType,
+                params?: ParamsProps,
+              ) => setUnfollowMusician(props, params)}
             />
           ) : (
-            <PostList
-              dataRightDropdown={dropDownDataCategory}
-              dataLeftDropdown={dropDownDataFilter}
-              data={PostlistData}
-              dataProfileImg={
-                dataProfile?.data?.imageProfileUrls[1]?.image || ''
-              }
+            <FavoriteMusician
+              dataMusician={dataFavoriteMusician}
+              setFollowMusician={(
+                props?: FollowMusicianPropsType,
+                params?: ParamsProps,
+              ) => setFollowMusician(props, params)}
+              setUnfollowMusician={(
+                props?: FollowMusicianPropsType,
+                params?: ParamsProps,
+              ) => setUnfollowMusician(props, params)}
             />
           )}
         </View>
+        {/* End of Tab Musician */}
+        {/* Playlist */}
+        <ListPlaylistHome
+          title={'Playlist'}
+          data={dataPlaylist}
+          containerStyle={styles.containerList}
+          onPress={() => navigation.navigate('ListPlaylist')}
+        />
+        {/* End of Playlist */}
+
+        <ListImageDesc
+          title="Coming Soon"
+          data={dataSearchAlbums?.data}
+          containerStyle={styles.containerList}
+          onPress={() => goToListMusic('Album', 'album')}
+          onPressImage={goToDetailAlbum}
+        />
       </ScrollView>
 
       <BottomSheetGuest
@@ -443,9 +523,8 @@ const styles = StyleSheet.create({
   },
   containerContent: {
     marginTop: heightPercentage(10),
-    paddingHorizontal: widthResponsive(24),
+    marginBottom: heightPercentage(22),
     width: '100%',
-    height: '100%',
   },
   containerIcon: {
     flexDirection: 'row',

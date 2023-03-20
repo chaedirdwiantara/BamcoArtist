@@ -7,10 +7,10 @@ import {
 import {widthResponsive} from '../../utils';
 import {ParamsProps} from '../../interface/base.interface';
 import {ListDataSearchMusician} from '../../interface/search.interface';
-import MusicianSection from '../../components/molecule/MusicianSection/MusicianSection';
 import {ScrollView, View} from 'react-native';
+import {ListCard} from '../../components';
 
-interface TopMusicianProps {
+interface RecomendedMusicianProps {
   type?: string;
   scrollable?: boolean;
   dataMusician?: MusicianList[] | ListDataSearchMusician[];
@@ -25,8 +25,7 @@ interface TopMusicianProps {
   emptyState?: React.ComponentType;
 }
 
-const TopMusician: FC<TopMusicianProps> = ({
-  type,
+const RecomendedMusician: FC<RecomendedMusicianProps> = ({
   dataMusician,
   setFollowMusician,
   setUnfollowMusician,
@@ -72,21 +71,18 @@ const TopMusician: FC<TopMusicianProps> = ({
         {listMusician?.map((item, index) => {
           if (index <= 4) {
             return (
-              <MusicianSection
+              <ListCard.FollowMusician
                 key={item.uuid}
-                userId={item.uuid}
                 musicianNum={(index + 1).toLocaleString('en-US', {
                   minimumIntegerDigits: 2,
                   useGrouping: false,
                 })}
                 musicianName={item.fullname}
-                imgUri={item.imageProfileUrls[1]?.image || ''}
-                containerStyles={{
-                  marginTop: mvs(20),
-                }}
-                point={type === 'profile' ? item.point || 0 : null}
-                isFollowed={item.isFollowed}
+                imgUri={item.imageProfileUrls}
+                containerStyles={{marginTop: mvs(20)}}
                 followOnPress={() => followOnPress(item.uuid, item.isFollowed)}
+                stateButton={item.isFollowed ?? false}
+                toDetailOnPress={() => null}
               />
             );
           }
@@ -97,23 +93,20 @@ const TopMusician: FC<TopMusicianProps> = ({
           {listMusician?.map((item, index) => {
             if (index > 4 && index < 10) {
               return (
-                <MusicianSection
+                <ListCard.FollowMusician
                   key={item.uuid}
-                  userId={item.uuid}
                   musicianNum={(index + 1).toLocaleString('en-US', {
                     minimumIntegerDigits: 2,
                     useGrouping: false,
                   })}
                   musicianName={item.fullname}
-                  imgUri={item.imageProfileUrls[1]?.image || ''}
-                  containerStyles={{
-                    marginTop: mvs(20),
-                  }}
-                  point={type === 'profile' ? item.point || 0 : null}
-                  isFollowed={item.isFollowed}
+                  imgUri={item.imageProfileUrls}
+                  containerStyles={{marginTop: mvs(20)}}
                   followOnPress={() =>
                     followOnPress(item.uuid, item.isFollowed)
                   }
+                  stateButton={item.isFollowed ?? false}
+                  toDetailOnPress={() => null}
                 />
               );
             }
@@ -125,4 +118,4 @@ const TopMusician: FC<TopMusicianProps> = ({
   null;
 };
 
-export default TopMusician;
+export default RecomendedMusician;

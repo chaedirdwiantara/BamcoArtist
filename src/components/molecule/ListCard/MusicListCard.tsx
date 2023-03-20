@@ -95,7 +95,7 @@ const MusicListCard: React.FC<ListProps> = ({
         </Text>
       )}
       {imgUri ? (
-        <SquareImage imgUri={imgUri} size={44} />
+        <SquareImage imgUri={imgUri} size={44} borderRadius={8} />
       ) : (
         <DefaultImage.SongCover width={44} height={44} />
       )}

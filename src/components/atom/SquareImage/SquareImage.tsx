@@ -15,11 +15,12 @@ const {width} = Dimensions.get('screen');
 
 export interface SquareImageProps extends TouchableOpacityProps {
   imgUri?: string;
-  size?: number;
+  size?: number | string;
   height?: number;
   id?: number;
   type?: string;
   containerStyle?: ViewStyle;
+  borderRadius?: number;
 }
 
 const SquareImage: React.FC<SquareImageProps> = (props: SquareImageProps) => {
@@ -30,6 +31,7 @@ const SquareImage: React.FC<SquareImageProps> = (props: SquareImageProps) => {
     id,
     type,
     containerStyle,
+    borderRadius,
   } = props;
 
   if (type === 'add') {
@@ -50,6 +52,7 @@ const SquareImage: React.FC<SquareImageProps> = (props: SquareImageProps) => {
                 width: size,
                 height: height,
                 aspectRatio: !height ? 1 / 1 : undefined,
+                borderRadius: borderRadius ?? 0,
               },
             ]}
             testID={`Image ${id}`}

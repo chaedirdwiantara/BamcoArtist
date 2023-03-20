@@ -146,14 +146,14 @@
     },
     "Tab": {
       "TopMusician": {
-        "Title": "TOP MUSICIAN",
+        "Title": "Top Musician",
         "Follow": "追蹤",
         "Unfollow": "取消关注",
         "Tip": "捐贈",
         "Profile": "進入音樂人頁面"
       },
       "TopSong": {
-        "Title": "TOP SONG",
+        "Title": "Top Songs",
         "Playlist": "儲存至播放清單",
         "Tip": "捐贈",
         "Queue": "加入序列",
@@ -161,7 +161,7 @@
         "Details": "顯示積分"
       },
       "TopPost": {
-        "Title": "TOP POST",
+        "Title": "Top Post",
         "Filter": {
           "Title": "篩選",
           "Today": "今天",
@@ -178,6 +178,15 @@
           "Backstage": "後台",
           "Highlight": "突出显示帖子"
         }
+      },
+      "Recomended": {
+        "Title": "Recomended"
+      },
+      "Favorite": {
+        "Title": "Favorite"
+      },
+      "NewSong": {
+        "Title": "New Songs"
       }
     }
   },
@@ -628,7 +637,7 @@
     },
     "ExclusiveContentConfirm": {
       "Title": "Exclusive Content",
-      "Body":"To Create Exclusive content, you need to set up your exclusive content pricing and duration, do you want to continue?",
+      "Body": "To Create Exclusive content, you need to set up your exclusive content pricing and duration, do you want to continue?",
       "ButtonOk": "Yes",
       "ButtonCancel": "Maybe Later"
     }
