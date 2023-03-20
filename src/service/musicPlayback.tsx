@@ -1,5 +1,6 @@
 import TrackPlayer, {Event, RepeatMode, State} from 'react-native-track-player';
 import {listenerLogSong} from '../api/playlist.api';
+import {storage} from '../hooks/use-storage.hook';
 import {ListenerLogPropsType} from '../interface/playlist.interface';
 import {usePlayerStore} from '../store/player.store';
 
@@ -70,14 +71,19 @@ export async function PlaybackService() {
 
   TrackPlayer.addEventListener(Event.PlaybackTrackChanged, async event => {
     const currentIndex = await TrackPlayer.getCurrentTrack();
-    if (currentIndex) {
+    if (currentIndex === 0) {
       const track = await TrackPlayer.getTrack(currentIndex);
-      let payload: ListenerLogPropsType = {
-        songId: track?.id,
-        start: '0',
-        end: Math.round(event.position).toString(),
-      };
-      await listenerLogSong(payload);
+      storage.set('currentSongPlayId', track?.id);
+    } else if (currentIndex === null) {
+      let trackId = storage.getNumber('currentSongPlayId');
+      if (trackId) {
+        let payload: ListenerLogPropsType = {
+          songId: trackId,
+          start: '0',
+          end: Math.round(event.position).toString(),
+        };
+        await listenerLogSong(payload);
+      }
     }
   });
 
