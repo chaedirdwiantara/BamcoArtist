@@ -39,11 +39,15 @@ const ListImageDesc: React.FC<ListImageDescProps> = (
         horizontal
         showsHorizontalScrollIndicator={false}
         keyExtractor={item => item.id.toString()}
+        style={{paddingLeft: widthPercentage(24)}}
         renderItem={({item, index}) => {
           const style = {
             width: widthPercentage(100),
             height: widthPercentage(100),
-            marginRight: index === data.length - 1 ? 0 : widthPercentage(20),
+            marginRight:
+              index === data.length - 1
+                ? widthPercentage(50)
+                : widthPercentage(15),
             ...imageStyle,
           };
 

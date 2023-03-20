@@ -314,10 +314,7 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
         <ListMoodGenre
           title="Mood"
           data={listMood}
-          containerStyle={{
-            marginTop: heightPercentage(10),
-            paddingHorizontal: widthResponsive(24),
-          }}
+          containerStyle={styles.containerList}
           onPress={() => onPressMoodGenre('Moods', listMood)}
           onPressImage={name => goToListMusic(name, 'song')}
         />
@@ -325,10 +322,7 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
         <ListMoodGenre
           title="Genre"
           data={listGenre}
-          containerStyle={{
-            marginTop: heightPercentage(10),
-            paddingHorizontal: widthResponsive(24),
-          }}
+          containerStyle={styles.containerList}
           imageStyle={{
             width: widthPercentage(90),
             height: heightPercentage(80),
@@ -341,7 +335,7 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
           style={{
             marginTop: heightPercentage(20),
             marginBottom: heightPercentage(10),
-            paddingHorizontal: widthResponsive(24),
+            paddingLeft: widthResponsive(24),
           }}>
           <Text style={styles.diveInText}>Dive In</Text>
           <Text style={styles.diveInDesc}>Based on your preferences</Text>
@@ -353,7 +347,7 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
           data={ListDiveIn}
           containerStyle={{
             marginTop: heightPercentage(10),
-            paddingHorizontal: widthResponsive(24),
+            marginBottom: heightPercentage(20),
           }}
           imageStyle={{
             width: widthPercentage(115),
@@ -366,10 +360,7 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
         <ListImageDesc
           title="Coming Soon"
           data={dataSearchAlbums?.data}
-          containerStyle={{
-            marginTop: heightPercentage(10),
-            paddingHorizontal: widthResponsive(24),
-          }}
+          containerStyle={styles.containerList}
           onPress={() => goToListMusic('Album', 'album')}
           onPressImage={goToDetailAlbum}
         />
@@ -487,5 +478,8 @@ const styles = StyleSheet.create({
     color: Color.Dark[50],
     fontFamily: font.InterMedium,
     fontSize: mvs(13),
+  },
+  containerList: {
+    marginTop: heightPercentage(10),
   },
 });

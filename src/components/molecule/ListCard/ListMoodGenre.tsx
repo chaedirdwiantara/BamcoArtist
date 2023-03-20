@@ -28,11 +28,15 @@ const ListMoodGenre: React.FC<ListMoodGenreProps> = (
         horizontal
         showsHorizontalScrollIndicator={false}
         keyExtractor={item => item.id.toString()}
+        style={{paddingLeft: widthPercentage(24)}}
         renderItem={({item, index}) => {
           const style = {
             width: widthPercentage(120),
             height: heightPercentage(40),
-            marginRight: index === data.length - 1 ? 0 : widthPercentage(10),
+            marginRight:
+              index === data.length - 1
+                ? widthPercentage(50)
+                : widthPercentage(15),
             ...imageStyle,
           };
 

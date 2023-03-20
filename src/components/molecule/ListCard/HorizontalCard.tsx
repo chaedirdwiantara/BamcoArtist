@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {mvs} from 'react-native-size-matters';
-import {height} from '../../../utils';
+import {height, widthPercentage} from '../../../utils';
 import {color, font} from '../../../theme';
 import {ArrowRightIcon} from '../../../assets/icon';
 
@@ -29,7 +29,13 @@ const HorizontalCard: React.FC<HorizontalCardProps> = (
       {!hideArrow && (
         <TouchableOpacity style={styles.containerContent} onPress={onPress}>
           <Text style={styles.title}>{title}</Text>
-          <ArrowRightIcon stroke={color.Pink[100]} />
+          <ArrowRightIcon
+            stroke={color.Success[400]}
+            style={{
+              width: widthPercentage(22),
+              height: widthPercentage(22),
+            }}
+          />
         </TouchableOpacity>
       )}
       {children}
@@ -45,6 +51,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+    paddingHorizontal: widthPercentage(24),
   },
   title: {
     fontSize: mvs(15),
