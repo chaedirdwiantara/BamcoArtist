@@ -1,5 +1,12 @@
 import React from 'react';
-import {View, Text, StyleSheet, Platform, TouchableOpacity} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Platform,
+  TouchableOpacity,
+  ViewStyle,
+} from 'react-native';
 import {
   createNativeStackNavigator,
   NativeStackNavigationOptions,
@@ -11,7 +18,6 @@ import {Image} from 'react-native-image-crop-picker';
 import {EventScreen} from '../screen/Event';
 import {FeedScreen} from '../screen/Feed';
 import {ForgotPassword} from '../screen/ForgotPassword';
-import {HomeScreen} from '../screen/Home';
 import {LoginScreen} from '../screen/Login';
 import {OnboardScreen} from '../screen/Onboard';
 import {Otp} from '../screen/Otp';
@@ -31,6 +37,12 @@ import {OtherUserProfile} from '../screen/OtherUserProfile/OtherUserProfile';
 import {FollowingScreen} from '../screen/OtherUserProfile/FollowingScreen';
 import QuoteMusic from '../screen/CreatePost/MusicPost/QuoteMusic';
 import AddPreview from '../screen/CreatePost/MusicPost/AddPreview';
+
+// Home
+import {HomeScreen} from '../screen/Home';
+import {ListImageScreen} from '../screen/ListItem/ListImage';
+import {ListMusicScreen} from '../screen/ListItem/ListMusic';
+import {ListPostScreen} from '../screen/ListItem/ListPost';
 
 // Setting
 import {SettingScreen} from '../screen/Setting/Setting';
@@ -102,6 +114,7 @@ import {
   DataShippingProps,
   OtpEmailScreen as OtpEmailProps,
   OtpPhoneScreen,
+  PreferenceList,
 } from '../interface/setting.interface';
 import {OtpEmailScreen} from '../screen/Setting/Email/OTP';
 import {SplashScreen} from '../screen/SplashScreen';
@@ -147,6 +160,20 @@ export type RootStackParams = {
   };
   ForgotPassword: undefined;
   Language: undefined;
+  ListImage: {
+    title: string;
+    data: PreferenceList[];
+    containerStyle?: ViewStyle;
+  };
+  ListMusic: {
+    id: number;
+    title: string;
+    type: string;
+  };
+  ListPost: {
+    id: number;
+    title: string;
+  };
   Login: undefined;
   MainTab: undefined;
   QuoteMusic: undefined;
@@ -396,6 +423,9 @@ export const RootStackScreen = () => (
     <RootStack.Screen name="OtherUserProfile" component={OtherUserProfile} />
     <RootStack.Screen name="QuoteMusic" component={QuoteMusic} />
     <RootStack.Screen name="AddPreview" component={AddPreview} />
+    <RootStack.Screen name="ListImage" component={ListImageScreen} />
+    <RootStack.Screen name="ListMusic" component={ListMusicScreen} />
+    <RootStack.Screen name="ListPost" component={ListPostScreen} />
     <RootStack.Screen name="SplashScreen" component={SplashScreen} />
   </RootStack.Navigator>
 );
