@@ -14,7 +14,9 @@ import {
   NativeStackNavigationProp,
   NativeStackScreenProps,
 } from '@react-navigation/native-stack';
+import {useQuery} from 'react-query';
 import {useTranslation} from 'react-i18next';
+import {mvs} from 'react-native-size-matters';
 import {useNavigation, useIsFocused} from '@react-navigation/native';
 
 import {
@@ -27,12 +29,16 @@ import {
   BottomSheetGuest,
   SsuToast,
   Gap,
+  ListMoodGenre,
+  ListImageDesc,
 } from '../components';
+import {font} from '../theme';
 import Color from '../theme/Color';
 import TopSong from './ListCard/TopSong';
 import PostList from './ListCard/PostList';
 import {defaultBanner} from '../data/home';
 import {PostlistData} from '../data/postlist';
+import {ListDiveIn} from '../data/diveInList';
 import TopMusician from './ListCard/TopMusician';
 import {useFcmHook} from '../hooks/use-fcm.hook';
 import {storage} from '../hooks/use-storage.hook';
@@ -40,20 +46,23 @@ import {useSongHook} from '../hooks/use-song.hook';
 import {SongList} from '../interface/song.interface';
 import * as FCMService from '../service/notification';
 import {useCreditHook} from '../hooks/use-credit.hook';
+import {useSearchHook} from '../hooks/use-search.hook';
 import {usePlayerHook} from '../hooks/use-player.hook';
 import {useBannerHook} from '../hooks/use-banner.hook';
 import {ParamsProps} from '../interface/base.interface';
 import {useProfileHook} from '../hooks/use-profile.hook';
+import {useSettingHook} from '../hooks/use-setting.hook';
 import {useMusicianHook} from '../hooks/use-musician.hook';
 import {CheckCircle2Icon, SearchIcon} from '../assets/icon';
 import {MainTabParams, RootStackParams} from '../navigations';
+import {PreferenceList} from '../interface/setting.interface';
 import {useNotificationHook} from '../hooks/use-notification.hook';
+import LoadingSpinner from '../components/atom/Loading/LoadingSpinner';
 import {FollowMusicianPropsType} from '../interface/musician.interface';
 import {FirebaseMessagingTypes} from '@react-native-firebase/messaging';
 import {dropDownDataCategory, dropDownDataFilter} from '../data/dropdown';
 import {ModalPlayMusic} from '../components/molecule/Modal/ModalPlayMusic';
 import {heightPercentage, widthPercentage, widthResponsive} from '../utils';
-import LoadingSpinner from '../components/atom/Loading/LoadingSpinner';
 
 type OnScrollEventHandler = (
   event: NativeSyntheticEvent<NativeScrollEvent>,
@@ -87,11 +96,18 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
   const {dataTopSong, getListDataTopSong} = useSongHook();
   const {counter, getCountNotification} = useNotificationHook();
   const {creditCount, getCreditCount} = useCreditHook();
+  const {listGenre, listMood, getListMoodGenre} = useSettingHook();
+  const {getSearchAlbums} = useSearchHook();
 
   const isLogin = storage.getBoolean('isLogin');
   const isFocused = useIsFocused();
   const [selectedIndex, setSelectedIndex] = useState<number>(-0);
   const [refreshing, setRefreshing] = useState<boolean>(false);
+
+  // dummy coming soon
+  const {data: dataSearchAlbums, refetch} = useQuery(['/search-albums'], () =>
+    getSearchAlbums({keyword: ''}),
+  );
 
   useEffect(() => {
     getListDataBanner();
@@ -100,6 +116,8 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
     getListDataTopSong();
     getCountNotification();
     getCreditCount();
+    getListMoodGenre();
+    refetch();
     setTimeout(() => {
       setRefreshing(false);
     }, 1000);
@@ -166,10 +184,6 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
     addFcmToken(token);
   };
 
-  const goToScreen = (screen: 'MusicPlayer' | 'TopupCoin') => {
-    navigation.navigate(screen);
-  };
-
   const [filter] = useState([
     {filterName: 'Home.Tab.TopMusician.Title'},
     {filterName: 'Home.Tab.TopSong.Title'},
@@ -216,12 +230,36 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
     showPlayer();
   };
 
+  const goToScreen = (screen: 'MusicPlayer' | 'TopupCoin' | 'Notification') => {
+    navigation.navigate(screen);
+  };
+
   const onPressNotif = () => {
-    isLogin ? navigation.navigate('Notification') : setModalGuestVisible(true);
+    isLogin ? goToScreen('Notification') : setModalGuestVisible(true);
   };
 
   const onPressCoin = () => {
     isLogin ? goToScreen('TopupCoin') : setModalGuestVisible(true);
+  };
+
+  const onPressMoodGenre = (title: string, data: PreferenceList[]) => {
+    isLogin
+      ? navigation.navigate('ListImage', {title, data})
+      : setModalGuestVisible(true);
+  };
+
+  const goToListMusic = (name: string, type: string) => {
+    navigation.navigate('ListMusic', {title: name, id: 1, type});
+  };
+
+  const goToDetailAlbum = () => {
+    navigation.navigate('Album', {id: 35});
+  };
+
+  const goToMusicianPost = (name: string) => {
+    isLogin || name === 'Trending'
+      ? navigation.navigate('ListPost', {title: name, id: 1})
+      : setModalGuestVisible(true);
   };
 
   if (dataProfile?.data === undefined) {
@@ -272,6 +310,70 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
           data={dataBanner?.length > 0 ? dataBanner : defaultBanner}
           onPressBanner={handleWebview}
         />
+
+        <ListMoodGenre
+          title="Mood"
+          data={listMood}
+          containerStyle={{
+            marginTop: heightPercentage(10),
+            paddingHorizontal: widthResponsive(24),
+          }}
+          onPress={() => onPressMoodGenre('Moods', listMood)}
+          onPressImage={name => goToListMusic(name, 'song')}
+        />
+
+        <View
+          style={{
+            marginTop: heightPercentage(20),
+            marginBottom: heightPercentage(10),
+            paddingHorizontal: widthResponsive(24),
+          }}>
+          <Text style={styles.diveInText}>Dive In</Text>
+          <Text style={styles.diveInDesc}>Based on your preferences</Text>
+        </View>
+
+        <ListImageDesc
+          title=""
+          hideArrow={true}
+          data={ListDiveIn}
+          containerStyle={{
+            marginTop: heightPercentage(10),
+            paddingHorizontal: widthResponsive(24),
+          }}
+          imageStyle={{
+            width: widthPercentage(115),
+            height: widthPercentage(115),
+          }}
+          onPress={() => null}
+          onPressImage={goToMusicianPost}
+        />
+
+        <ListImageDesc
+          title="Coming Soon"
+          data={dataSearchAlbums?.data}
+          containerStyle={{
+            marginTop: heightPercentage(10),
+            paddingHorizontal: widthResponsive(24),
+          }}
+          onPress={() => goToListMusic('Album', 'album')}
+          onPressImage={goToDetailAlbum}
+        />
+
+        <ListMoodGenre
+          title="Genre"
+          data={listGenre}
+          containerStyle={{
+            marginTop: heightPercentage(10),
+            paddingHorizontal: widthResponsive(24),
+          }}
+          imageStyle={{
+            width: widthPercentage(90),
+            height: heightPercentage(80),
+          }}
+          onPress={() => onPressMoodGenre('Genre', listGenre)}
+          onPressImage={name => goToListMusic(name, 'song')}
+        />
+
         <View
           style={[
             styles.containerContent,
@@ -375,5 +477,15 @@ const styles = StyleSheet.create({
   loadingContainer: {
     alignItems: 'center',
     paddingVertical: heightPercentage(10),
+  },
+  diveInText: {
+    color: Color.Neutral[10],
+    fontFamily: font.InterSemiBold,
+    fontSize: mvs(15),
+  },
+  diveInDesc: {
+    color: Color.Dark[50],
+    fontFamily: font.InterMedium,
+    fontSize: mvs(13),
   },
 });
