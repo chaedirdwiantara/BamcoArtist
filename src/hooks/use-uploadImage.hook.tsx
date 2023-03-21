@@ -1,13 +1,19 @@
 import {useState} from 'react';
 import {InteractionManager} from 'react-native';
 import {Image} from 'react-native-image-crop-picker';
-import {uploadImage} from '../api/uploadImage.api';
-import {UploadImageResponseType} from '../interface/uploadImage.interface';
+import {uploadImage, uploadVideo} from '../api/uploadImage.api';
+import {
+  UploadImageResponseType,
+  UploadVideoDataResponseType,
+} from '../interface/uploadImage.interface';
 
 export const useUploadImageHook = () => {
   const [isLoadingImage, setIsLoadingImage] = useState(false);
+  const [isLoadingVideo, setIsLoadingVideo] = useState(false);
   const [dataImage, setDataImage] = useState<UploadImageResponseType>();
+  const [dataVideo, setDataVideo] = useState<UploadVideoDataResponseType>();
   const [isErrorImage, setIsErrorImage] = useState(false);
+  const [isErrorVideo, setIsErrorVideo] = useState(false);
 
   const setUploadImage = async (image: Image, syncUpload?: string) => {
     InteractionManager.runAfterInteractions(() => setIsLoadingImage(true));
@@ -24,10 +30,27 @@ export const useUploadImageHook = () => {
     }
   };
 
+  const setUploadVideo = async (video: Image) => {
+    InteractionManager.runAfterInteractions(() => setIsLoadingVideo(true));
+    try {
+      const response = await uploadVideo(video);
+      console.log(response);
+      setDataVideo(response.data);
+    } catch (error) {
+      setIsErrorVideo(true);
+    } finally {
+      setIsLoadingVideo(false);
+    }
+  };
+
   return {
     isLoadingImage,
+    isLoadingVideo,
     isErrorImage,
+    isErrorVideo,
     dataImage,
+    dataVideo,
     setUploadImage,
+    setUploadVideo,
   };
 };
