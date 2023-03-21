@@ -1,5 +1,5 @@
-import {StyleSheet, Text, View} from 'react-native';
-import React, {FC} from 'react';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import React, {createRef, FC} from 'react';
 import {elipsisText, widthResponsive} from '../../utils';
 import {Gap} from '../../components';
 import ImageList from './ImageList';
@@ -7,6 +7,7 @@ import MusicListPreview from '../../components/molecule/MusicPreview/MusicListPr
 import {PostList} from '../../interface/feed.interface';
 import {color, font} from '../../theme';
 import {mvs} from 'react-native-size-matters';
+import Video from 'react-native-video';
 
 interface ChildrenCardProps {
   data: PostList;
@@ -85,6 +86,25 @@ const ChildrenCard: FC<ChildrenCardProps> = (props: ChildrenCardProps) => {
                   isIdNowPlaying={isIdNowPlaying}
                 />
               ) : null}
+              {data.video.encodeHlsUrl !== null && (
+                <TouchableOpacity style={{backgroundColor: 'yellow'}}>
+                  <Video
+                    source={{
+                      uri: data.video.encodeHlsUrl,
+                    }}
+                    style={styles.videoStyle}
+                    controls={true}
+                    ref={createRef<any>()}
+                    volume={10}
+                    fullscreenAutorotate={true}
+                    playInBackground={false}
+                    poster={data.video.coverImage[0]?.image}
+                    posterResizeMode={'cover'}
+                    paused={true}
+                    resizeMode={'cover'}
+                  />
+                </TouchableOpacity>
+              )}
             </View>
           </View>
         </>
@@ -103,5 +123,9 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     fontSize: mvs(13),
     color: color.Neutral[10],
+  },
+  videoStyle: {
+    width: '100%',
+    height: 300,
   },
 });

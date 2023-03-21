@@ -1,6 +1,10 @@
 import SsuAPI from './baseMusician';
+import SsuAPI2 from './baseRinjaniNew';
 import {Image} from 'react-native-image-crop-picker';
-import {UploadImageResponseType} from '../interface/uploadImage.interface';
+import {
+  UploadImageResponseType,
+  UploadVideoResponseType,
+} from '../interface/uploadImage.interface';
 
 export const uploadImage = async (
   image: Image,
@@ -16,6 +20,31 @@ export const uploadImage = async (
 
   const {data} = await SsuAPI().request<UploadImageResponseType>({
     url: '/upload-image',
+    method: 'POST',
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+    transformRequest: (data, header) => {
+      return formData;
+    },
+    data: formData,
+  });
+
+  return data;
+};
+
+export const uploadVideo = async (
+  video: Image,
+): Promise<UploadVideoResponseType> => {
+  let formData = new FormData();
+  formData.append('file', {
+    uri: video.path,
+    name: `${Date.now()}.mp4`,
+    type: video.mime,
+  });
+
+  const {data} = await SsuAPI2().request<UploadVideoResponseType>({
+    url: '/upload-video',
     method: 'POST',
     headers: {
       'Content-Type': 'multipart/form-data',
