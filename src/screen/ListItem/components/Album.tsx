@@ -6,6 +6,7 @@ import {ListItem} from './ListItem';
 import TopSong from '../../ListCard/TopSong';
 import {widthPercentage} from '../../../utils';
 import {useSearchHook} from '../../../hooks/use-search.hook';
+import ListSongs from '../../ListCard/ListSongs';
 
 interface ListAlbumProps {
   title: string;
@@ -28,7 +29,7 @@ export const ListAlbum: React.FC<ListAlbumProps> = ({
     return (
       <ScrollView>
         <View style={{paddingHorizontal: widthPercentage(20)}}>
-          <TopSong
+          <ListSongs
             dataSong={dataSearchAlbums?.data}
             hideDropdownMore={true}
             type="home"

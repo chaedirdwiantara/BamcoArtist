@@ -5,6 +5,7 @@ import {ListItem} from './ListItem';
 import TopSong from '../../ListCard/TopSong';
 import {widthPercentage} from '../../../utils';
 import {useSongHook} from '../../../hooks/use-song.hook';
+import ListSongs from '../../ListCard/ListSongs';
 
 interface ListSongProps {
   title: string;
@@ -24,7 +25,7 @@ export const ListSong: React.FC<ListSongProps> = ({title}) => {
     return (
       <ScrollView>
         <View style={{paddingHorizontal: widthPercentage(20)}}>
-          <TopSong dataSong={dataSong} onPress={() => null} loveIcon={true} />
+          <ListSongs dataSong={dataSong} onPress={() => null} loveIcon={true} />
         </View>
       </ScrollView>
     );
