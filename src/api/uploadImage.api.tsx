@@ -52,6 +52,8 @@ export const uploadVideo = async (
     transformRequest: (data, header) => {
       return formData;
     },
+    timeout: 60000,
+    maxContentLength: 1000000000000,
     data: formData,
   });
 

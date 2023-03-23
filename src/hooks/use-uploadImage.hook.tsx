@@ -34,7 +34,6 @@ export const useUploadImageHook = () => {
     InteractionManager.runAfterInteractions(() => setIsLoadingVideo(true));
     try {
       const response = await uploadVideo(video);
-      console.log(response);
       setDataVideo(response.data);
     } catch (error) {
       setIsErrorVideo(true);
@@ -52,5 +51,8 @@ export const useUploadImageHook = () => {
     dataVideo,
     setUploadImage,
     setUploadVideo,
+    setIsLoadingVideo,
+    setDataVideo,
+    setIsErrorVideo,
   };
 };
