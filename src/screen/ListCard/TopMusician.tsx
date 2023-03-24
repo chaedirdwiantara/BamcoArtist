@@ -82,7 +82,7 @@ const TopMusician: FC<TopMusicianProps> = ({
                 musicianName={item.fullname}
                 imgUri={item.imageProfileUrls[1]?.image || ''}
                 containerStyles={{
-                  marginTop: mvs(20),
+                  marginTop: mvs(12),
                 }}
                 point={type === 'profile' ? item.point || 0 : null}
                 isFollowed={item.isFollowed}
@@ -107,7 +107,7 @@ const TopMusician: FC<TopMusicianProps> = ({
                   musicianName={item.fullname}
                   imgUri={item.imageProfileUrls[1]?.image || ''}
                   containerStyles={{
-                    marginTop: mvs(20),
+                    marginTop: mvs(12),
                   }}
                   point={type === 'profile' ? item.point || 0 : null}
                   isFollowed={item.isFollowed}

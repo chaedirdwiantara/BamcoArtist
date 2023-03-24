@@ -35,9 +35,8 @@ import {
 import {font} from '../theme';
 import Color from '../theme/Color';
 import TopSong from './ListCard/TopSong';
-import PostList from './ListCard/PostList';
+import NewSong from './ListCard/NewSong';
 import {defaultBanner} from '../data/home';
-import {PostlistData} from '../data/postlist';
 import {ListDiveIn} from '../data/diveInList';
 import TopMusician from './ListCard/TopMusician';
 import {useFcmHook} from '../hooks/use-fcm.hook';
@@ -53,22 +52,19 @@ import {ParamsProps} from '../interface/base.interface';
 import {useProfileHook} from '../hooks/use-profile.hook';
 import {useSettingHook} from '../hooks/use-setting.hook';
 import {useMusicianHook} from '../hooks/use-musician.hook';
+import FavoriteMusician from './ListCard/FavoriteMusician';
+import {usePlaylistHook} from '../hooks/use-playlist.hook';
 import {CheckCircle2Icon, SearchIcon} from '../assets/icon';
 import {MainTabParams, RootStackParams} from '../navigations';
 import {PreferenceList} from '../interface/setting.interface';
+import RecomendedMusician from './ListCard/RecomendedMusician';
 import {useNotificationHook} from '../hooks/use-notification.hook';
 import LoadingSpinner from '../components/atom/Loading/LoadingSpinner';
 import {FollowMusicianPropsType} from '../interface/musician.interface';
 import {FirebaseMessagingTypes} from '@react-native-firebase/messaging';
-import {dropDownDataCategory, dropDownDataFilter} from '../data/dropdown';
 import {ModalPlayMusic} from '../components/molecule/Modal/ModalPlayMusic';
 import {heightPercentage, widthPercentage, widthResponsive} from '../utils';
-import FavoriteMusician from './ListCard/FavoriteMusician';
-import RecomendedMusician from './ListCard/RecomendedMusician';
-import NewSong from './ListCard/NewSong';
-import PlaylistHome from './ListCard/PlaylistHome';
 import ListPlaylistHome from '../components/molecule/ListCard/ListPlaylistHome';
-import {usePlaylistHook} from '../hooks/use-playlist.hook';
 
 type OnScrollEventHandler = (
   event: NativeSyntheticEvent<NativeScrollEvent>,
@@ -86,13 +82,7 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
   const {dataBanner, getListDataBanner} = useBannerHook();
   const {dataProfile, getProfileUser} = useProfileHook();
   const {addFcmToken} = useFcmHook();
-  const {
-    isPlaying,
-    visible: playerVisible,
-    showPlayer,
-    hidePlayer,
-    addPlaylist,
-  } = usePlayerHook();
+  const {isPlaying, showPlayer, hidePlayer, addPlaylist} = usePlayerHook();
   const {
     dataMusician,
     dataFavoriteMusician,
@@ -353,6 +343,7 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
           onPressBanner={handleWebview}
         />
 
+        {/* Mood */}
         <ListMoodGenre
           title="Mood"
           data={listMood}
@@ -360,7 +351,8 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
           onPress={() => onPressMoodGenre('Moods', listMood)}
           onPressImage={name => goToListMusic(name, 'song')}
         />
-
+        {/* End Of Mood */}
+        {/* Genre */}
         <ListMoodGenre
           title="Genre"
           data={listGenre}
@@ -372,7 +364,9 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
           onPress={() => onPressMoodGenre('Genre', listGenre)}
           onPressImage={name => goToListMusic(name, 'song')}
         />
-
+        {/* End Of Genre */}
+        {/* Dive In */}
+        {/* TODO: need to be wired with API Dive In */}
         <View
           style={{
             marginTop: heightPercentage(20),
@@ -398,7 +392,7 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
           onPress={() => null}
           onPressImage={goToMusicianPost}
         />
-
+        {/* End Of Dive In */}
         {/* Tab Song */}
         <View style={[styles.containerContent]}>
           <TabFilter.Type3
@@ -478,11 +472,11 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
         <ListPlaylistHome
           title={'Playlist'}
           data={dataPlaylist}
-          containerStyle={styles.containerList}
           onPress={() => navigation.navigate('ListPlaylist')}
         />
         {/* End of Playlist */}
-
+        {/* Coming Soon */}
+        {/* TODO: Need to be wired with API unreleased album */}
         <ListImageDesc
           title="Coming Soon"
           data={dataSearchAlbums?.data}
@@ -491,7 +485,7 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
           onPressImage={goToDetailAlbum}
         />
       </ScrollView>
-
+      {/* End Of Coming Soon */}
       <BottomSheetGuest
         modalVisible={modalGuestVisible}
         onPressClose={() => setModalGuestVisible(false)}
@@ -522,7 +516,6 @@ const styles = StyleSheet.create({
     backgroundColor: Color.Dark[800],
   },
   containerContent: {
-    marginTop: heightPercentage(10),
     marginBottom: heightPercentage(22),
     width: '100%',
   },

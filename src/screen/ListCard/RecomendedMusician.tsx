@@ -79,7 +79,7 @@ const RecomendedMusician: FC<RecomendedMusicianProps> = ({
                 })}
                 musicianName={item.fullname}
                 imgUri={item.imageProfileUrls}
-                containerStyles={{marginTop: mvs(20)}}
+                containerStyles={{marginTop: mvs(12)}}
                 followOnPress={() => followOnPress(item.uuid, item.isFollowed)}
                 stateButton={item.isFollowed ?? false}
                 toDetailOnPress={() => null}
@@ -101,7 +101,7 @@ const RecomendedMusician: FC<RecomendedMusicianProps> = ({
                   })}
                   musicianName={item.fullname}
                   imgUri={item.imageProfileUrls}
-                  containerStyles={{marginTop: mvs(20)}}
+                  containerStyles={{marginTop: mvs(12)}}
                   followOnPress={() =>
                     followOnPress(item.uuid, item.isFollowed)
                   }
