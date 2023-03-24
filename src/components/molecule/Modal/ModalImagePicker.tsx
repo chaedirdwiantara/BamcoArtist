@@ -69,6 +69,15 @@ export const ModalImagePicker: React.FC<ModalImagePickerProps> = ({
     });
   };
 
+  const onSelectVideo = () => {
+    ImagePicker.openPicker({
+      mediaType: 'video',
+    }).then(image => {
+      sendUri(image);
+      onPressClose();
+    });
+  };
+
   const onCameraPress = () => {
     ImagePicker.openCamera({
       compressImageMaxWidth: 1024,
@@ -94,6 +103,9 @@ export const ModalImagePicker: React.FC<ModalImagePickerProps> = ({
             style={{width: '100%', marginVertical: 10}}
             onPress={multiple ? onSelectMultiple : onImageLibraryPress}>
             <Text style={styles.textMenu}>{t('Profile.Edit.Add')}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={{width: '100%'}} onPress={onSelectVideo}>
+            <Text style={styles.textMenu}>{t('Profile.Edit.AddVideo')}</Text>
           </TouchableOpacity>
           {hideMenuDelete && (
             <TouchableOpacity style={{width: '100%'}} onPress={onDeleteImage}>

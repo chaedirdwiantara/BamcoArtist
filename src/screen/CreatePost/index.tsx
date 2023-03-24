@@ -7,14 +7,12 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {FC, useEffect, useState} from 'react';
+import React, {createRef, FC, useEffect, useState} from 'react';
 import {color, font} from '../../theme';
 import {
-  Avatar,
   Button,
   ButtonGradient,
   ButtonGradientwithIcon,
-  Dropdown,
   Gap,
   ModalImagePicker,
   SsuInput,
@@ -28,11 +26,7 @@ import {
 import {RootStackParams} from '../../navigations';
 import {heightResponsive, widthResponsive} from '../../utils';
 import {ms, mvs} from 'react-native-size-matters';
-import {
-  ImportMusicIcon,
-  ImportPhotoIcon,
-  OpenCameraIcon,
-} from '../../assets/icon';
+import {ImportMusicIcon, ImportPhotoIcon} from '../../assets/icon';
 import {
   DataDropDownType,
   dropdownCategoryMusician,
@@ -49,8 +43,8 @@ import {ListDataSearchSongs, Transcode} from '../../interface/search.interface';
 import {usePlayerHook} from '../../hooks/use-player.hook';
 import {dummySongImg} from '../../data/image';
 import {SongList, TranscodedSongType} from '../../interface/song.interface';
-import {useProfileHook} from '../../hooks/use-profile.hook';
 import {useTranslation} from 'react-i18next';
+import Video from 'react-native-video';
 
 type PostDetailProps = NativeStackScreenProps<RootStackParams, 'CreatePost'>;
 
@@ -80,7 +74,8 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
     setCreatePost,
     setUpdatePost,
   } = useFeedHook();
-  const {isLoadingImage, dataImage, setUploadImage} = useUploadImageHook();
+  const {isLoadingImage, dataImage, dataVideo, setUploadImage, setUploadVideo} =
+    useUploadImageHook();
   const {
     isPlaying,
     seekPlayer,
@@ -89,7 +84,6 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
     playerProgress,
     addPlaylist,
   } = usePlayerHook();
-  const {dataProfile, getProfileUser} = useProfileHook();
   const [label, setLabel] = useState<string>();
   const [valueFilter, setValueFilter] = useState<string>();
   const [dataAudience, setDataAudience] = useState<string>('');
@@ -104,10 +98,6 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   const [active, setActive] = useState<boolean>(false);
 
   useEffect(() => {
-    getProfileUser();
-  }, []);
-
-  useEffect(() => {
     if (dataAudienceChoosen) {
       setDataAudience(dataAudienceChoosen);
     }
@@ -118,6 +108,40 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
       setLabel('Home.Tab.TopPost.Category.Highlight');
     }
   }, [label]);
+
+  // ! UPLOAD VIDEO AREA
+  useEffect(() => {
+    if (uri.length > 0) {
+      if ((uri[0].mime = 'video/mp4')) {
+        setUploadVideo(uri[0]);
+      }
+    }
+  }, [uri]);
+
+  //* Create post video
+  useEffect(() => {
+    if (dataVideo) {
+      if (
+        active &&
+        musicData === undefined &&
+        dataUpdatePostProps === undefined
+      ) {
+        setCreatePost({
+          caption: inputText,
+          category: valueFilter ? valueFilter : 'highlight',
+          isPremium: dataAudience === 'Feed.Exclusive' ? true : false,
+          video: {
+            targetType: 'video',
+            coverImage: dataVideo.coverImage,
+            encodeDashUrl: dataVideo.encodeDashUrl,
+            encodeHlsUrl: dataVideo.encodeHlsUrl,
+          },
+        });
+      }
+    }
+  }, [dataVideo, active, musicData, dataUpdatePostProps]);
+
+  // ! END OF UPLOAD VIDEO AREA
 
   // ! EDIT POST AREA
   useEffect(() => {
@@ -203,7 +227,8 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
       active == true &&
       uri.length == 0 &&
       musicData == undefined &&
-      dataUpdatePostProps === undefined
+      dataUpdatePostProps === undefined &&
+      dataVideo === undefined
     ) {
       setCreatePost({
         caption: inputText,
@@ -237,7 +262,8 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
       active == true &&
       uri.length == 0 &&
       musicData !== undefined &&
-      updateOn === false
+      updateOn === false &&
+      dataVideo === undefined
     ) {
       setCreatePost({
         caption: inputText,
@@ -304,7 +330,8 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
     active &&
     uri.length !== 0 &&
     dataResponseImg.length === uri.length &&
-    dataUpdatePostProps === undefined
+    dataUpdatePostProps === undefined &&
+    dataVideo === undefined
       ? (setCreatePost({
           caption: inputText,
           category: valueFilter ? valueFilter : 'highlight',
@@ -392,6 +419,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
       originalSongUrl: dataMusic[0] ? dataMusic[0].originalSongUrl : '',
       isLiked:
         dataMusic[0]?.isLiked !== undefined ? dataMusic[0].isLiked : false,
+      album: {id: -1},
     };
 
     addPlaylist({
@@ -460,13 +488,15 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
     }
   }, [offset]);
   // ? END OF OFFSET AREA
+
+  const videoRef = createRef<any>();
+
   return (
     <KeyboardAvoidingView
       style={{flex: 1}}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
       <View style={styles.container}>
         <TopNavigation.Type1
-          // TODO: change text into Public / Exclusive Content
           title={
             dataAudience === 'Feed.Exclusive'
               ? t('Post.Create.ExclusiveTitle')
@@ -491,13 +521,15 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
                 multiline={true}
                 maxLength={400}
               />
-              <ImageList
-                imgData={uri}
-                disabled={true}
-                width={162}
-                height={79}
-                onPress={closeImage}
-              />
+              {uri[0]?.mime !== 'video/mp4' && (
+                <ImageList
+                  imgData={uri}
+                  disabled={true}
+                  width={162}
+                  height={79}
+                  onPress={closeImage}
+                />
+              )}
               {musicData !== undefined &&
               musicData.transcodedSongUrl !== undefined ? (
                 <MusicPreview
@@ -523,6 +555,19 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
                 />
               ) : null}
             </View>
+            {uri[0]?.mime === 'video/mp4' && (
+              <Video
+                source={{
+                  uri: uri[0]?.path,
+                }}
+                style={styles.videoStyle}
+                controls={true}
+                ref={videoRef}
+                volume={10}
+                fullscreenAutorotate={true}
+                playInBackground={false}
+              />
+            )}
           </View>
           {/* //! END OF TOP AREA */}
 
@@ -761,5 +806,9 @@ const styles = StyleSheet.create({
     fontFamily: font.InterMedium,
     fontWeight: '500',
     fontSize: mvs(12),
+  },
+  videoStyle: {
+    width: '100%',
+    height: 300,
   },
 });

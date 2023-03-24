@@ -39,6 +39,12 @@ export type CreatePostProps = {
     startAt?: string;
     endAt?: string;
   };
+  video?: {
+    targetType: string;
+    coverImage: string;
+    encodeDashUrl: string;
+    encodeHlsUrl: string;
+  };
 };
 
 export type DataComment = {
@@ -92,6 +98,12 @@ export type QuoteToPost = {
   originalSongUrl: string;
 };
 
+export type VideoResponseType = {
+  coverImage: imageTypes[];
+  encodeDashUrl: string;
+  encodeHlsUrl: string;
+};
+
 export type PostList = {
   id: string;
   caption: string;
@@ -105,6 +117,7 @@ export type PostList = {
   musician: MusicianData;
   isLiked: boolean;
   quoteToPost: QuoteToPost;
+  video: VideoResponseType;
 };
 
 export type ListPostResponseType = {
