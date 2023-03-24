@@ -17,7 +17,6 @@ import {Dropdown} from '../DropDown';
 import Color from '../../../theme/Color';
 import {Gap, SsuToast} from '../../atom';
 import {TopNavigation} from '../TopNavigation';
-import TopSong from '../../../screen/ListCard/TopSong';
 import {color, font, typography} from '../../../theme';
 import {dropDownHeaderAlbum} from '../../../data/dropdown';
 import {PhotoPlaylist} from '../PlaylistContent/PhotoPlaylist';

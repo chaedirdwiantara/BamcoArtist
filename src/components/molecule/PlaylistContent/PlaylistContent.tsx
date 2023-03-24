@@ -23,13 +23,11 @@ import {
   MusicSquareAddIcon,
 } from '../../../assets/icon';
 import {Gap, SsuToast} from '../../atom';
-import {Dropdown} from '../DropDown';
 import Color from '../../../theme/Color';
 import {PhotoPlaylist} from './PhotoPlaylist';
 import {TopNavigation} from '../TopNavigation';
 import {ModalConfirm} from '../Modal/ModalConfirm';
 import {dateFormat} from '../../../utils/date-format';
-import TopSong from '../../../screen/ListCard/TopSong';
 import {color, font, typography} from '../../../theme';
 import {
   addOtherPlaylist,

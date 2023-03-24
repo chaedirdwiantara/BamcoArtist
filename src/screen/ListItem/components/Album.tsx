@@ -3,7 +3,6 @@ import {ScrollView, View} from 'react-native';
 import {useQuery} from 'react-query';
 
 import {ListItem} from './ListItem';
-import TopSong from '../../ListCard/TopSong';
 import {widthPercentage} from '../../../utils';
 import {useSearchHook} from '../../../hooks/use-search.hook';
 import ListSongs from '../../ListCard/ListSongs';

@@ -2,13 +2,13 @@ import React, {useEffect} from 'react';
 import {ScrollView, View} from 'react-native';
 
 import {ListItem} from './ListItem';
-import TopSong from '../../ListCard/TopSong';
 import {widthPercentage} from '../../../utils';
 import {useIsFocused} from '@react-navigation/native';
 import {storage} from '../../../hooks/use-storage.hook';
 import {useSongHook} from '../../../hooks/use-song.hook';
 import {SongList} from '../../../interface/song.interface';
 import {usePlayerHook} from '../../../hooks/use-player.hook';
+import ListSongs from '../../ListCard/ListSongs';
 
 interface ListSongProps {
   title: string;
@@ -55,7 +55,7 @@ export const ListSong: React.FC<ListSongProps> = ({
     return (
       <ScrollView>
         <View style={{paddingHorizontal: widthPercentage(20)}}>
-          <TopSong
+          <ListSongs
             dataSong={dataSong}
             type="home"
             onPress={onPressSong}
