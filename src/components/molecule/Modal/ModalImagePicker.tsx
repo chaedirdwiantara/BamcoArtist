@@ -27,6 +27,7 @@ interface ModalImagePickerProps {
   hideMenuDelete?: boolean;
   multiple?: boolean;
   maxFiles?: number;
+  showVideo?: boolean;
 }
 
 export const ModalImagePicker: React.FC<ModalImagePickerProps> = ({
@@ -39,6 +40,7 @@ export const ModalImagePicker: React.FC<ModalImagePickerProps> = ({
   hideMenuDelete,
   multiple,
   maxFiles,
+  showVideo,
 }) => {
   const {t} = useTranslation();
 
@@ -78,6 +80,15 @@ export const ModalImagePicker: React.FC<ModalImagePickerProps> = ({
     });
   };
 
+  const onSelectVideoCamera = () => {
+    ImagePicker.openCamera({
+      mediaType: 'video',
+    }).then(image => {
+      sendUri(image);
+      onPressClose();
+    });
+  };
+
   const onCameraPress = () => {
     ImagePicker.openCamera({
       compressImageMaxWidth: 1024,
@@ -96,7 +107,9 @@ export const ModalImagePicker: React.FC<ModalImagePickerProps> = ({
         <Text style={styles.titleStyle}>{title}</Text>
         <View style={styles.separator} />
         <View style={styles.containerMenu}>
-          <TouchableOpacity style={{width: '100%'}} onPress={onCameraPress}>
+          <TouchableOpacity
+            style={{width: '100%', marginVertical: 10}}
+            onPress={onCameraPress}>
             <Text style={styles.textMenu}>{t('Profile.Edit.Take')}</Text>
           </TouchableOpacity>
           <TouchableOpacity
@@ -104,11 +117,26 @@ export const ModalImagePicker: React.FC<ModalImagePickerProps> = ({
             onPress={multiple ? onSelectMultiple : onImageLibraryPress}>
             <Text style={styles.textMenu}>{t('Profile.Edit.Add')}</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={{width: '100%'}} onPress={onSelectVideo}>
-            <Text style={styles.textMenu}>{t('Profile.Edit.AddVideo')}</Text>
-          </TouchableOpacity>
+          {showVideo && (
+            <TouchableOpacity
+              style={{width: '100%', marginVertical: 10}}
+              onPress={onSelectVideo}>
+              <Text style={styles.textMenu}>{t('Profile.Edit.AddVideo')}</Text>
+            </TouchableOpacity>
+          )}
+          {showVideo && (
+            <TouchableOpacity
+              style={{width: '100%', marginVertical: 10}}
+              onPress={onSelectVideoCamera}>
+              <Text style={styles.textMenu}>
+                {t('Profile.Edit.AddVideoCamera')}
+              </Text>
+            </TouchableOpacity>
+          )}
           {hideMenuDelete && (
-            <TouchableOpacity style={{width: '100%'}} onPress={onDeleteImage}>
+            <TouchableOpacity
+              style={{width: '100%', marginVertical: 10}}
+              onPress={onDeleteImage}>
               <Text style={styles.textMenu}>{t('Profile.Edit.Delete')}</Text>
             </TouchableOpacity>
           )}

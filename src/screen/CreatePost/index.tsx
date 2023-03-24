@@ -833,6 +833,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
           onDeleteImage={resetImage}
           onPressClose={closeModal}
           multiple
+          showVideo
         />
         <ModalLoading visible={isLoadingImage} />
         <ModalLoading visible={createPostLoading} />
