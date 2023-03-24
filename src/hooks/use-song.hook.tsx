@@ -22,8 +22,10 @@ export const useSongHook = () => {
   const [albumLoading, setAlbumLoading] = useState(false);
   const [isErrorSong, setIsErrorSong] = useState(false);
   const [dataSong, setDataSong] = useState<SongList[]>([]);
+  const [dataNewSong, setDataNewSong] = useState<SongList[]>([]);
   const [dataTopSong, setDataTopSong] = useState<SongList[]>([]);
   const [metaSong, setMetaSong] = useState<PaginationType>();
+  const [metaNewSong, setMetaNewSong] = useState<PaginationType>();
   const [dataDetailSong, setDataDetailSong] = useState<DataDetailSong | null>(
     null,
   );
@@ -39,6 +41,20 @@ export const useSongHook = () => {
       console.log(error);
       setIsErrorSong(true);
       setDataSong([]);
+    } finally {
+      setIsLoadingSong(false);
+    }
+  };
+
+  const getListDataNewSong = async (props?: ParamsProps) => {
+    try {
+      const response = await listSong(props);
+      setDataNewSong(response.data);
+      setMetaNewSong(response.meta);
+    } catch (error) {
+      console.log(error);
+      setIsErrorSong(true);
+      setDataNewSong([]);
     } finally {
       setIsLoadingSong(false);
     }
@@ -110,11 +126,13 @@ export const useSongHook = () => {
     isLoadingSong,
     isErrorSong,
     dataSong,
+    dataNewSong,
     dataTopSong,
     dataDetailSong,
     albumLoading,
     dataDetailAlbum,
     metaSong,
+    metaNewSong,
     getListDataSong,
     getListDataTopSong,
     getDetailSong,
@@ -122,5 +140,6 @@ export const useSongHook = () => {
     setDataDetailAlbum,
     setLikeSong,
     setUnlikeSong,
+    getListDataNewSong,
   };
 };

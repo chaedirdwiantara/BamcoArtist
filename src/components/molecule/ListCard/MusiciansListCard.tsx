@@ -83,15 +83,17 @@ const MusiciansListCard: React.FC<ListProps> = (props: ListProps) => {
           useGrouping: false,
         })}
       </Text>
-      {imgUri ? (
-        <TouchableOpacity onPress={onPressImage}>
-          <Avatar imgUri={imgUri} size={widthResponsive(44)} />
-        </TouchableOpacity>
-      ) : (
-        <TouchableOpacity onPress={onPressImage}>
-          <DefaultAvatar.MusicianIcon />
-        </TouchableOpacity>
-      )}
+      <TouchableOpacity activeOpacity={1} onPress={onPressImage}>
+        {imgUri ? (
+          <TouchableOpacity onPress={onPressImage}>
+            <Avatar imgUri={imgUri} size={widthResponsive(44)} />
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity onPress={onPressImage}>
+            <DefaultAvatar.MusicianIcon />
+          </TouchableOpacity>
+        )}
+      </TouchableOpacity>
       <Gap width={8} />
       <View style={styles.textContainer}>
         <TouchableOpacity activeOpacity={1} onPress={onPressImage}>

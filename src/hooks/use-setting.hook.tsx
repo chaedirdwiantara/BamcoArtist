@@ -332,6 +332,37 @@ export const useSettingHook = () => {
     }
   };
 
+  const getListMoodGenre = async () => {
+    setIsError(false);
+    setIsLoading(true);
+    try {
+      const genre = await getListGenre();
+      const mood = await getListMood();
+
+      setListMood(mood.data);
+      setListGenre(genre.data);
+
+      setListPreference({
+        mood: mood.data,
+        genre: genre.data,
+        expectation: [],
+      });
+    } catch (error) {
+      console.log({error});
+      setListMood([]);
+      setListGenre([]);
+      setListExpectation([]);
+      setListPreference({
+        mood: [],
+        genre: [],
+        expectation: [],
+      });
+      setIsError(true);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return {
     isLoading,
     isError,
@@ -356,5 +387,6 @@ export const useSettingHook = () => {
     getExclusiveContent,
     addNewEmail,
     getListPreference,
+    getListMoodGenre,
   };
 };

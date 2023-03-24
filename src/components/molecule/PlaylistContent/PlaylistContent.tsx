@@ -44,6 +44,7 @@ import {useTranslation} from 'react-i18next';
 import {ModalShare} from '../Modal/ModalShare';
 import {usePlayerHook} from '../../../hooks/use-player.hook';
 import DropdownMore from '../V2/DropdownFilter/DropdownMore';
+import ListSongs from '../../../screen/ListCard/ListSongs';
 
 interface Props {
   goBackProfile: (showToast: boolean) => void;
@@ -294,7 +295,7 @@ export const PlaylistContent: React.FC<Props> = ({
             {listSongs === null || listSongs?.length === 0 ? (
               <Text style={styles.description}>{t('Music.Label.NoSong')}</Text>
             ) : (
-              <TopSong
+              <ListSongs
                 dataSong={listSongs}
                 type={'home'}
                 onPress={onPressSong}

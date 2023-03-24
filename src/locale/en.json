@@ -146,14 +146,14 @@
     },
     "Tab": {
       "TopMusician": {
-        "Title": "TOP MUSICIAN",
+        "Title": "Top Musician",
         "Follow": "Follow",
         "Unfollow": "Unfollow",
         "Tip": "Tip",
-        "Profile": "Go to Profile"
+        "Profile": "Go to Musician"
       },
       "TopSong": {
-        "Title": "TOP SONG",
+        "Title": "Top Songs",
         "Playlist": "Add to Playlist",
         "Tip": "Send Tip",
         "Queue": "Add to Queue",
@@ -161,7 +161,7 @@
         "Details": "Show Details"
       },
       "TopPost": {
-        "Title": "TOP POST",
+        "Title": "Top Post",
         "Filter": {
           "Title": "Filter by",
           "Today": "Today",
@@ -178,6 +178,15 @@
           "Backstage": "Backstage",
           "Highlight": "Highlight"
         }
+      },
+      "Recomended": {
+        "Title": "Recomended"
+      },
+      "Favorite": {
+        "Title": "Favorite"
+      },
+      "NewSong": {
+        "Title": "New Songs"
       }
     }
   },
@@ -630,7 +639,7 @@
     },
     "ExclusiveContentConfirm": {
       "Title": "Exclusive Content",
-      "Body":"To Create Exclusive content, you need to set up your exclusive content pricing and duration, do you want to continue?",
+      "Body": "To Create Exclusive content, you need to set up your exclusive content pricing and duration, do you want to continue?",
       "ButtonOk": "Yes",
       "ButtonCancel": "Maybe Later"
     }

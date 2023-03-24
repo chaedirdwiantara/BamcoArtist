@@ -10,7 +10,7 @@ import {ListDataSearchMusician} from '../../interface/search.interface';
 import MusicianSection from '../../components/molecule/MusicianSection/MusicianSection';
 import {ScrollView, View} from 'react-native';
 
-interface TopMusicianProps {
+interface FavoriteMusicianProps {
   type?: string;
   scrollable?: boolean;
   dataMusician?: MusicianList[] | ListDataSearchMusician[];
@@ -25,7 +25,7 @@ interface TopMusicianProps {
   emptyState?: React.ComponentType;
 }
 
-const TopMusician: FC<TopMusicianProps> = ({
+const FavoriteMusician: FC<FavoriteMusicianProps> = ({
   type,
   dataMusician,
   setFollowMusician,
@@ -125,4 +125,4 @@ const TopMusician: FC<TopMusicianProps> = ({
   null;
 };
 
-export default TopMusician;
+export default FavoriteMusician;

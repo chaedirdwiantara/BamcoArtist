@@ -6,7 +6,7 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
-import {ms} from 'react-native-size-matters';
+import {ms, mvs} from 'react-native-size-matters';
 import {Avatar, Gap} from '../../atom';
 import {color, font} from '../../../theme';
 import {DefaultAvatar} from '../../../assets/icon';
@@ -15,10 +15,10 @@ import {imageTypes} from '../../../interface/base.interface';
 import {useTranslation} from 'react-i18next';
 
 interface ListProps {
-  musicianNum?: number;
+  musicianNum?: number | string;
   musicianName: string;
   imgUri: imageTypes[];
-  followerCount: number;
+  followerCount?: number;
   followOnPress: () => void;
   stateButton: boolean;
   containerStyles?: ViewStyle;
@@ -44,7 +44,7 @@ const FollowMusicianCard: React.FC<ListProps> = (props: ListProps) => {
     ? t('Preference.Following')
     : t('Preference.Follow');
   const [textFollow, setTextFollow] = useState(follow);
-  const [countFollower, setCountFollower] = useState(followerCount);
+  const [countFollower, setCountFollower] = useState(followerCount ?? 0);
 
   const onPressFollow = () => {
     const followers = stateButton ? countFollower - 1 : countFollower + 1;
@@ -63,12 +63,16 @@ const FollowMusicianCard: React.FC<ListProps> = (props: ListProps) => {
           {
             backgroundColor:
               textFollow === t('Preference.Following')
-                ? undefined
+                ? color.Dark[300]
                 : color.Pink[200],
           },
         ]}
         onPress={onPressFollow}>
-        <Text style={styles.followText}>{textFollow}</Text>
+        <Text style={styles.followText}>
+          {textFollow === t('Preference.Following')
+            ? textFollow
+            : `+ ${textFollow}`}
+        </Text>
       </TouchableOpacity>
     );
   };
@@ -100,10 +104,11 @@ const FollowMusicianCard: React.FC<ListProps> = (props: ListProps) => {
           onPress={toDetailOnPress}>
           {musicianName}
         </Text>
-
-        <Text style={styles.followerCount} numberOfLines={1}>
-          {countFollower + ' ' + t('General.Followers')}
-        </Text>
+        {followerCount && (
+          <Text style={styles.followerCount} numberOfLines={1}>
+            {countFollower + ' ' + t('General.Followers')}
+          </Text>
+        )}
       </View>
       <View style={styles.rightContainer}>
         {!hideFollowButton && followMenu()}
@@ -126,7 +131,7 @@ const styles = StyleSheet.create({
     fontFamily: font.InterMedium,
     fontSize: normalize(10),
     fontWeight: '600',
-    marginRight: widthResponsive(10),
+    marginRight: widthResponsive(15),
     marginTop: ms(2),
     color: color.Dark[100],
   },
@@ -137,9 +142,10 @@ const styles = StyleSheet.create({
   },
   musicianName: {
     fontFamily: font.InterRegular,
-    fontSize: normalize(14),
+    fontSize: mvs(14),
     fontWeight: '500',
     color: color.Neutral[10],
+    paddingRight: widthResponsive(10),
   },
   followerCount: {
     fontFamily: font.InterRegular,
@@ -152,12 +158,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   followButton: {
-    paddingVertical: widthResponsive(6),
-    width: widthResponsive(68),
+    paddingVertical: widthResponsive(7),
+    width: widthResponsive(80),
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: color.Pink[200],
-    borderRadius: 4,
+    borderRadius: 20,
   },
   followText: {
     fontFamily: font.InterRegular,

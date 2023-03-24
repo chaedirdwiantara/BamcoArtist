@@ -38,6 +38,7 @@ import {RootStackParams} from '../../../navigations';
 import {useCreditHook} from '../../../hooks/use-credit.hook';
 import {usePlayerHook} from '../../../hooks/use-player.hook';
 import DropdownMore from '../V2/DropdownFilter/DropdownMore';
+import ListSongs from '../../../screen/ListCard/ListSongs';
 
 interface Props {
   dataSong: SongList[] | null;
@@ -206,7 +207,7 @@ export const AlbumContent: React.FC<Props> = ({
           </Text>
           <View style={{marginBottom: heightPercentage(30)}}>
             {dataSong !== null && (
-              <TopSong
+              <ListSongs
                 onPress={onPressSong}
                 hideDropdownMore={true}
                 dataSong={dataSong}
