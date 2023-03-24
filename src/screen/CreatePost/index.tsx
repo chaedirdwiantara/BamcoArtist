@@ -50,6 +50,7 @@ import Video from 'react-native-video';
 import SsuAPI2 from '../../api/baseRinjaniNew';
 import {UploadVideoResponseType} from '../../interface/uploadImage.interface';
 import * as Progress from 'react-native-progress';
+import VideoComp from '../../components/molecule/VideoPlayer/videoComp';
 
 type PostDetailProps = NativeStackScreenProps<RootStackParams, 'CreatePost'>;
 
@@ -114,6 +115,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   // * video hooks
   const [progress, setProgress] = useState<number>();
   const [preventPost, setPreventPost] = useState<boolean>(false);
+  const [deleteDataVideo, setDeleteDataVideo] = useState<boolean>(false);
 
   useEffect(() => {
     if (dataAudienceChoosen) {
@@ -126,6 +128,12 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
       setLabel('Home.Tab.TopPost.Category.Highlight');
     }
   }, [label]);
+
+  useEffect(() => {
+    if (uri) {
+      console.log('uri', uri);
+    }
+  }, [uri]);
 
   // ! UPLOAD VIDEO AREA
 
@@ -207,6 +215,14 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
       }
     }
   }, [dataVideo, active, musicData, dataUpdatePostProps]);
+
+  useEffect(() => {
+    if (deleteDataVideo && dataVideo) {
+      setDataVideo(undefined),
+        setProgress(undefined),
+        setDeleteDataVideo(false);
+    }
+  }, [dataVideo, deleteDataVideo]);
 
   // ! END OF UPLOAD VIDEO AREA
 
@@ -534,6 +550,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
 
   const closeImage = (id: number) => {
     setUri(uri.filter((x: Image) => x.path !== uri[id].path));
+    setDeleteDataVideo(true);
   };
 
   // ? OFFSET AREA
@@ -622,31 +639,25 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
                 />
               ) : null}
             </View>
-            {progress && (
+            {/* // ! VIDEO AREA */}
+            {progress && !dataVideo ? (
               <Progress.Bar
                 progress={progress}
                 width={widthResponsive(375 - 48)}
-                animated={true}
+                // animated={true}
                 borderWidth={0}
                 color={color.Pink[200]}
                 unfilledColor={color.Dark[300]}
                 borderRadius={0}
               />
-            )}
+            ) : null}
+
             {uri[0]?.mime === 'video/mp4' && (
-              <Video
-                source={{
-                  uri: uri[0]?.path,
-                }}
-                style={styles.videoStyle}
-                controls={true}
-                ref={videoRef}
-                volume={10}
-                fullscreenAutorotate={true}
-                playInBackground={false}
-                paused={true}
-                resizeMode={'cover'}
-                poster={uri[0]?.path}
+              <VideoComp
+                sourceUri={uri[0]?.path}
+                withCloseIcon
+                onPress={closeImage}
+                dontShowText={progress && !dataVideo ? true : false}
               />
             )}
           </View>
@@ -734,20 +745,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
               </View>
             </View>
             <View style={styles.textCounter}>
-              {inputText.length === 0 && !preventPost ? (
-                <Button
-                  label={t('Post.Title')}
-                  containerStyles={{
-                    width: '100%',
-                    height: heightResponsive(36),
-                    aspectRatio: undefined,
-                    backgroundColor: color.Dark[50],
-                  }}
-                  textStyles={{}}
-                  // onPress={handlePostOnPress}
-                  disabled
-                />
-              ) : (
+              {inputText.length > 0 && preventPost === false ? (
                 <ButtonGradient
                   label={t('Post.Title')}
                   containerStyles={{
@@ -762,6 +760,19 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
                   }}
                   textStyles={{}}
                   onPress={handlePostOnPress}
+                />
+              ) : (
+                <Button
+                  label={t('Post.Title')}
+                  containerStyles={{
+                    width: '100%',
+                    height: heightResponsive(36),
+                    aspectRatio: undefined,
+                    backgroundColor: color.Dark[50],
+                  }}
+                  textStyles={{}}
+                  // onPress={handlePostOnPress}
+                  disabled
                 />
               )}
             </View>
@@ -843,7 +854,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   topBody: {
-    // paddingTop: widthResponsive(16),
     paddingHorizontal: widthResponsive(24),
   },
   footerBody: {

@@ -26,4 +26,11 @@ const dateLongMonth = (ISOStringDate: string) => {
   return today;
 };
 
-export {dateFormat, dateFormatFullYear, dateLongMonth};
+const timeToString = (totalSeconds: number) => {
+  const totalMs = totalSeconds * 1000;
+  const result = new Date(totalMs).toISOString().slice(14, 19);
+
+  return result;
+};
+
+export {dateFormat, dateFormatFullYear, dateLongMonth, timeToString};
