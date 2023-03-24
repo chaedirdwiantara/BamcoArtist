@@ -170,6 +170,7 @@ export type RootStackParams = {
     id: number;
     title: string;
     type: string;
+    fromMainTab: boolean;
   };
   ListPost: {
     id: number;

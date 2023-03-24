@@ -12,12 +12,14 @@ import {heightPercentage, widthPercentage} from '../../../utils';
 export interface ListItemProps {
   title: string;
   children: React.ReactNode;
+  onPressBack?: () => void;
   containerStyle?: ViewStyle;
 }
 
 export const ListItem: React.FC<ListItemProps> = ({
   title,
   children,
+  onPressBack,
   containerStyle,
 }) => {
   const navigation =
@@ -33,7 +35,7 @@ export const ListItem: React.FC<ListItemProps> = ({
         title={title}
         leftIcon={<ArrowLeftIcon />}
         itemStrokeColor={color.Neutral[10]}
-        leftIconAction={onPressGoBack}
+        leftIconAction={onPressBack ? onPressBack : onPressGoBack}
         containerStyles={{
           marginBottom: heightPercentage(10),
           paddingHorizontal: widthPercentage(15),
