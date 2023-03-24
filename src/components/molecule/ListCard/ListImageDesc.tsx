@@ -5,13 +5,13 @@ import {mvs} from 'react-native-size-matters';
 import {SquareImageText} from '../../atom';
 import {color, font} from '../../../theme';
 import HorizontalCard from './HorizontalCard';
-import {DiveInType} from '../../../data/diveInList';
-import {elipsisText, heightPercentage, widthPercentage} from '../../../utils';
+import {DiveIn} from '../../../interface/home.interface';
 import {ListDataSearchAlbums} from '../../../interface/search.interface';
+import {elipsisText, heightPercentage, widthPercentage} from '../../../utils';
 
 export interface ListImageDescProps {
   title: string;
-  data: ListDataSearchAlbums[] | DiveInType[] | undefined;
+  data: ListDataSearchAlbums[] | DiveIn[];
   onPress: () => void;
   onPressImage: (name: string) => void;
   hideArrow?: boolean;
@@ -38,7 +38,7 @@ const ListImageDesc: React.FC<ListImageDescProps> = (
         data={data ?? []}
         horizontal
         showsHorizontalScrollIndicator={false}
-        keyExtractor={item => item.id.toString()}
+        keyExtractor={item => item.title}
         style={{paddingLeft: widthPercentage(24)}}
         renderItem={({item, index}) => {
           const style = {

@@ -37,7 +37,6 @@ import Color from '../theme/Color';
 import TopSong from './ListCard/TopSong';
 import NewSong from './ListCard/NewSong';
 import {defaultBanner} from '../data/home';
-import {ListDiveIn} from '../data/diveInList';
 import TopMusician from './ListCard/TopMusician';
 import {useFcmHook} from '../hooks/use-fcm.hook';
 import {storage} from '../hooks/use-storage.hook';
@@ -65,6 +64,7 @@ import {FirebaseMessagingTypes} from '@react-native-firebase/messaging';
 import {ModalPlayMusic} from '../components/molecule/Modal/ModalPlayMusic';
 import {heightPercentage, widthPercentage, widthResponsive} from '../utils';
 import ListPlaylistHome from '../components/molecule/ListCard/ListPlaylistHome';
+import {useHomeHook} from '../hooks/use-home.hook';
 
 type OnScrollEventHandler = (
   event: NativeSyntheticEvent<NativeScrollEvent>,
@@ -78,7 +78,7 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
   const {i18n} = useTranslation();
   const currentLanguage = i18n.language;
-
+  const {dataDiveIn, getListDiveIn} = useHomeHook();
   const {dataBanner, getListDataBanner} = useBannerHook();
   const {dataProfile, getProfileUser} = useProfileHook();
   const {addFcmToken} = useFcmHook();
@@ -129,6 +129,7 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
     getListDataFavoriteMusician();
     getListDataNewSong();
     getPlaylist();
+    getListDiveIn();
     setTimeout(() => {
       setRefreshing(false);
     }, 1000);
@@ -281,7 +282,12 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
   };
 
   const goToListMusic = (name: string, type: string) => {
-    navigation.navigate('ListMusic', {title: name, id: 1, type});
+    navigation.navigate('ListMusic', {
+      title: name,
+      id: 1,
+      type,
+      fromMainTab: true,
+    });
   };
 
   const goToDetailAlbum = () => {
@@ -380,7 +386,7 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
         <ListImageDesc
           title=""
           hideArrow={true}
-          data={ListDiveIn}
+          data={dataDiveIn}
           containerStyle={{
             marginTop: heightPercentage(10),
             marginBottom: heightPercentage(20),
