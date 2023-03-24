@@ -1,4 +1,6 @@
 import {
+  Dimensions,
+  InteractionManager,
   KeyboardAvoidingView,
   NativeModules,
   Platform,
@@ -45,11 +47,16 @@ import {dummySongImg} from '../../data/image';
 import {SongList, TranscodedSongType} from '../../interface/song.interface';
 import {useTranslation} from 'react-i18next';
 import Video from 'react-native-video';
+import SsuAPI2 from '../../api/baseRinjaniNew';
+import {UploadVideoResponseType} from '../../interface/uploadImage.interface';
+import * as Progress from 'react-native-progress';
+import VideoComp from '../../components/molecule/VideoPlayer/videoComp';
 
 type PostDetailProps = NativeStackScreenProps<RootStackParams, 'CreatePost'>;
 
 const {StatusBarManager} = NativeModules;
 const barHeight = StatusBarManager.HEIGHT;
+export const {width} = Dimensions.get('screen');
 
 const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   const {t} = useTranslation();
@@ -74,8 +81,15 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
     setCreatePost,
     setUpdatePost,
   } = useFeedHook();
-  const {isLoadingImage, dataImage, dataVideo, setUploadImage, setUploadVideo} =
-    useUploadImageHook();
+  const {
+    isLoadingImage,
+    dataImage,
+    dataVideo,
+    setUploadImage,
+    setIsLoadingVideo,
+    setDataVideo,
+    setIsErrorVideo,
+  } = useUploadImageHook();
   const {
     isPlaying,
     seekPlayer,
@@ -84,6 +98,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
     playerProgress,
     addPlaylist,
   } = usePlayerHook();
+
   const [label, setLabel] = useState<string>();
   const [valueFilter, setValueFilter] = useState<string>();
   const [dataAudience, setDataAudience] = useState<string>('');
@@ -97,6 +112,11 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   const [uri, setUri] = useState<Image[]>([]);
   const [active, setActive] = useState<boolean>(false);
 
+  // * video hooks
+  const [progress, setProgress] = useState<number>();
+  const [preventPost, setPreventPost] = useState<boolean>(false);
+  const [deleteDataVideo, setDeleteDataVideo] = useState<boolean>(false);
+
   useEffect(() => {
     if (dataAudienceChoosen) {
       setDataAudience(dataAudienceChoosen);
@@ -109,14 +129,69 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
     }
   }, [label]);
 
+  useEffect(() => {
+    if (uri) {
+      console.log('uri', uri);
+    }
+  }, [uri]);
+
   // ! UPLOAD VIDEO AREA
+
+  const uploadVideo = async (
+    video: Image,
+  ): Promise<UploadVideoResponseType> => {
+    let formData = new FormData();
+    formData.append('file', {
+      uri: video.path,
+      name: `${Date.now()}.mp4`,
+      type: video.mime,
+    });
+
+    const {data} = await SsuAPI2().request<UploadVideoResponseType>({
+      url: '/upload-video',
+      method: 'POST',
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+      transformRequest: (data, header) => {
+        return formData;
+      },
+      timeout: 60000,
+      onUploadProgress: ({loaded, total}) => {
+        setProgress(loaded / total);
+      },
+      data: formData,
+    });
+
+    return data;
+  };
+
+  const setUploadVideo = async (video: Image) => {
+    InteractionManager.runAfterInteractions(() => setIsLoadingVideo(true));
+    try {
+      const response = await uploadVideo(video);
+      setDataVideo(response.data);
+    } catch (error) {
+      setIsErrorVideo(true);
+    } finally {
+      setIsLoadingVideo(false);
+    }
+  };
+
   useEffect(() => {
     if (uri.length > 0) {
-      if ((uri[0].mime = 'video/mp4')) {
+      if (uri[0].mime === 'video/mp4') {
         setUploadVideo(uri[0]);
+        setPreventPost(true);
       }
     }
   }, [uri]);
+
+  useEffect(() => {
+    if (dataVideo) {
+      setPreventPost(false);
+    }
+  }, [dataVideo]);
 
   //* Create post video
   useEffect(() => {
@@ -140,6 +215,14 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
       }
     }
   }, [dataVideo, active, musicData, dataUpdatePostProps]);
+
+  useEffect(() => {
+    if (deleteDataVideo && dataVideo) {
+      setDataVideo(undefined),
+        setProgress(undefined),
+        setDeleteDataVideo(false);
+    }
+  }, [dataVideo, deleteDataVideo]);
 
   // ! END OF UPLOAD VIDEO AREA
 
@@ -252,7 +335,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
       });
     }
 
-    if (active == true && uri.length !== 0) {
+    if (active == true && uri.length !== 0 && uri[0]?.mime !== 'video/mp4') {
       for (let i = 0; i < uri.length; i++) {
         setUploadImage(uri[i], 'medium');
       }
@@ -467,6 +550,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
 
   const closeImage = (id: number) => {
     setUri(uri.filter((x: Image) => x.path !== uri[id].path));
+    setDeleteDataVideo(true);
   };
 
   // ? OFFSET AREA
@@ -555,17 +639,25 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
                 />
               ) : null}
             </View>
+            {/* // ! VIDEO AREA */}
+            {progress && !dataVideo ? (
+              <Progress.Bar
+                progress={progress}
+                width={widthResponsive(375 - 48)}
+                // animated={true}
+                borderWidth={0}
+                color={color.Pink[200]}
+                unfilledColor={color.Dark[300]}
+                borderRadius={0}
+              />
+            ) : null}
+
             {uri[0]?.mime === 'video/mp4' && (
-              <Video
-                source={{
-                  uri: uri[0]?.path,
-                }}
-                style={styles.videoStyle}
-                controls={true}
-                ref={videoRef}
-                volume={10}
-                fullscreenAutorotate={true}
-                playInBackground={false}
+              <VideoComp
+                sourceUri={uri[0]?.path}
+                withCloseIcon
+                onPress={closeImage}
+                dontShowText={progress && !dataVideo ? true : false}
               />
             )}
           </View>
@@ -653,20 +745,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
               </View>
             </View>
             <View style={styles.textCounter}>
-              {inputText.length === 0 ? (
-                <Button
-                  label={t('Post.Title')}
-                  containerStyles={{
-                    width: '100%',
-                    height: heightResponsive(36),
-                    aspectRatio: undefined,
-                    backgroundColor: color.Dark[50],
-                  }}
-                  textStyles={{}}
-                  // onPress={handlePostOnPress}
-                  disabled
-                />
-              ) : (
+              {inputText.length > 0 && preventPost === false ? (
                 <ButtonGradient
                   label={t('Post.Title')}
                   containerStyles={{
@@ -681,6 +760,19 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
                   }}
                   textStyles={{}}
                   onPress={handlePostOnPress}
+                />
+              ) : (
+                <Button
+                  label={t('Post.Title')}
+                  containerStyles={{
+                    width: '100%',
+                    height: heightResponsive(36),
+                    aspectRatio: undefined,
+                    backgroundColor: color.Dark[50],
+                  }}
+                  textStyles={{}}
+                  // onPress={handlePostOnPress}
+                  disabled
                 />
               )}
             </View>
@@ -762,7 +854,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   topBody: {
-    // paddingTop: widthResponsive(16),
     paddingHorizontal: widthResponsive(24),
   },
   footerBody: {
@@ -809,6 +900,6 @@ const styles = StyleSheet.create({
   },
   videoStyle: {
     width: '100%',
-    height: 300,
+    height: width - widthResponsive(48),
   },
 });

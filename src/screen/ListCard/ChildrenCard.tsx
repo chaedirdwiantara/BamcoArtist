@@ -86,8 +86,8 @@ const ChildrenCard: FC<ChildrenCardProps> = (props: ChildrenCardProps) => {
                   isIdNowPlaying={isIdNowPlaying}
                 />
               ) : null}
-              {data.video.encodeHlsUrl !== null && (
-                <TouchableOpacity style={{backgroundColor: 'yellow'}}>
+              {data.video.encodeHlsUrl !== '' && (
+                <TouchableOpacity>
                   <Video
                     source={{
                       uri: data.video.encodeHlsUrl,
