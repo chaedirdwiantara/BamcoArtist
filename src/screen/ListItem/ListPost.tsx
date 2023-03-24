@@ -14,6 +14,7 @@ type ListPostProps = NativeStackScreenProps<RootStackParams, 'ListPost'>;
 export const ListPostScreen: React.FC<ListPostProps> = ({
   route,
 }: ListPostProps) => {
+  // TODO: Need to be wired with API Post
   const {title} = route.params;
   const children = () => {
     return (
