@@ -43,9 +43,7 @@ const ListMoodGenre: React.FC<ListMoodGenreProps> = (
           return (
             <SquareImageText
               key={index}
-              imgUri={
-                'https://media.istockphoto.com/id/510463404/id/foto/sungai-bow-yang-tenang.jpg?s=612x612&w=0&k=20&c=MzqOzZHf5mG7ZtfLdWCdv-DbVSMPApNecPUT3Tr4QCU='
-              }
+              imgUri={item.imageUrls[1].image}
               text={item.name}
               containerStyle={style}
               onPress={() => onPressImage(item.name)}

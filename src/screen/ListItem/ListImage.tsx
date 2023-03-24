@@ -5,6 +5,8 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {ListItem} from './components/ListItem';
 import {SquareImageText} from '../../components';
 import {RootStackParams} from '../../navigations';
+import {storage} from '../../hooks/use-storage.hook';
+import {useBackHandler} from '../../utils/useBackHandler';
 import {heightPercentage, widthPercentage} from '../../utils';
 
 type ListImageProps = NativeStackScreenProps<RootStackParams, 'ListImage'>;
@@ -16,7 +18,12 @@ export const ListImageScreen: React.FC<ListImageProps> = ({
   const {title, data, containerStyle} = route.params;
 
   const goToListSong = (name: string) => {
-    navigation.navigate('ListMusic', {title: name, id: 1, type: 'song'});
+    navigation.navigate('ListMusic', {
+      title: name,
+      id: 1,
+      type: 'song',
+      fromMainTab: false,
+    });
   };
 
   const children = () => {
@@ -30,9 +37,7 @@ export const ListImageScreen: React.FC<ListImageProps> = ({
         renderItem={({item, index}) => (
           <SquareImageText
             key={index}
-            imgUri={
-              'https://media.istockphoto.com/id/510463404/id/foto/sungai-bow-yang-tenang.jpg?s=612x612&w=0&k=20&c=MzqOzZHf5mG7ZtfLdWCdv-DbVSMPApNecPUT3Tr4QCU='
-            }
+            imgUri={item.imageUrls[2].image}
             text={item.name}
             containerStyle={styles.containerImage}
             onPress={() => goToListSong(item.name)}
@@ -42,11 +47,22 @@ export const ListImageScreen: React.FC<ListImageProps> = ({
     );
   };
 
+  const onPressHidePlayer = () => {
+    storage.set('withoutBottomTab', false);
+    navigation.goBack();
+  };
+
+  useBackHandler(() => {
+    onPressHidePlayer();
+    return true;
+  });
+
   return (
     <ListItem
       title={title}
       children={children()}
       containerStyle={containerStyle}
+      onPressBack={onPressHidePlayer}
     />
   );
 };
