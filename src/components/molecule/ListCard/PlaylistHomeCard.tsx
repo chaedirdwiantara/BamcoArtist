@@ -1,10 +1,10 @@
 import React from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import {ms, mvs} from 'react-native-size-matters';
+import {mvs} from 'react-native-size-matters';
 
 import {SquareImage} from '../../atom';
 import {color, font} from '../../../theme';
-import {heightResponsive, normalize, widthResponsive} from '../../../utils';
+import {heightPercentage, normalize, widthResponsive} from '../../../utils';
 import {DefaultImage} from '../../../assets/icon';
 import Color from '../../../theme/Color';
 
@@ -26,7 +26,10 @@ const PlaylistHomeCard: React.FC<ListProps> = ({
       {imgUri ? (
         <SquareImage imgUri={imgUri} size={'100%'} />
       ) : (
-        <DefaultImage.PlaylistHomeCover width={142} height={142} />
+        <DefaultImage.PlaylistHomeCover
+          width={widthResponsive(138)}
+          height={widthResponsive(138)}
+        />
       )}
 
       <View style={styles.textContainer}>
@@ -49,8 +52,8 @@ export default PlaylistHomeCard;
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     width: widthResponsive(138),
-    height: heightResponsive(205),
     borderColor: Color.Dark[400],
     borderWidth: mvs(0.5),
     borderRadius: 6,
@@ -69,7 +72,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'flex-start',
-    padding: ms(8),
+    padding: heightPercentage(12),
   },
   songTitle: {
     fontFamily: font.InterMedium,
@@ -80,5 +83,6 @@ const styles = StyleSheet.create({
     fontFamily: font.InterMedium,
     fontSize: mvs(14),
     color: color.Dark[50],
+    paddingTop: mvs(4),
   },
 });
