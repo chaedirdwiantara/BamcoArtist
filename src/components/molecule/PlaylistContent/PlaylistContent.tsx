@@ -167,8 +167,8 @@ export const PlaylistContent: React.FC<Props> = ({
     } else if (dataResult?.value === 'AddToQueue') {
       setToastVisible(true);
       setToastText('Playlist added to queue!');
+      addSong(listSongs);
     } else if (dataResult?.value === textAddToPlaylist) {
-      // wiring add to playlist
       addToMyPlaylist();
     } else {
       setModalShare(true);
@@ -182,7 +182,7 @@ export const PlaylistContent: React.FC<Props> = ({
     } else if (dataResult?.value === 'ShowDetails') {
       goToDetailSong(item.id);
     } else if (dataResult?.value === 'AddToQueue') {
-      // addSong(item);
+      addSong(item);
       setToastVisible(true);
       setToastText('Song added to queue!');
     } else if (dataResult?.value === 'ViewAlbum') {
