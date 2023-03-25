@@ -10,7 +10,7 @@ import {ms, mvs} from 'react-native-size-matters';
 import {Avatar, Gap} from '../../atom';
 import {color, font} from '../../../theme';
 import {DefaultAvatar} from '../../../assets/icon';
-import {normalize, widthResponsive} from '../../../utils';
+import {normalize, widthPercentage, widthResponsive} from '../../../utils';
 import {imageTypes} from '../../../interface/base.interface';
 import {useTranslation} from 'react-i18next';
 
@@ -93,7 +93,7 @@ const FollowMusicianCard: React.FC<ListProps> = (props: ListProps) => {
         </TouchableOpacity>
       ) : (
         <TouchableOpacity onPress={toDetailOnPress}>
-          <Avatar imgUri={imgUri[0].image} size={widthResponsive(44)} />
+          <Avatar imgUri={imgUri[0].image} size={widthPercentage(44)} />
         </TouchableOpacity>
       )}
       <Gap width={8} />
