@@ -86,8 +86,10 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
   const {
     dataMusician,
     dataFavoriteMusician,
+    dataRecommendedMusician,
     getListDataMusician,
     getListDataFavoriteMusician,
+    getListDataRecommendedMusician,
     setFollowMusician,
     setUnfollowMusician,
   } = useMusicianHook();
@@ -130,6 +132,7 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
     getListDataNewSong();
     getPlaylist();
     getListDiveIn();
+    getListDataRecommendedMusician();
     setTimeout(() => {
       setRefreshing(false);
     }, 1000);
@@ -213,7 +216,11 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
   ]);
 
   const filterDataMusician = (item: any, index: any) => {
-    setSelectedIndexMusician(index);
+    if (!isLogin && index === 1) {
+      setModalGuestVisible(true);
+    } else {
+      setSelectedIndexMusician(index);
+    }
   };
 
   const filterDataSong = (item: any, index: any) => {
@@ -449,7 +456,7 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
           ) : filterMusician[selectedIndexMusician].filterName ===
             'Home.Tab.Recomended.Title' ? (
             <RecomendedMusician
-              dataMusician={dataMusician}
+              dataMusician={dataRecommendedMusician}
               setFollowMusician={(
                 props?: FollowMusicianPropsType,
                 params?: ParamsProps,
@@ -522,7 +529,7 @@ const styles = StyleSheet.create({
     backgroundColor: Color.Dark[800],
   },
   containerContent: {
-    marginBottom: heightPercentage(22),
+    marginBottom: heightPercentage(26),
     width: '100%',
   },
   containerIcon: {

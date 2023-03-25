@@ -5,6 +5,7 @@ import {
   getAlbumById,
   listFollowing,
   listMusician,
+  recommendedMusician,
   unfollowMusician,
 } from '../api/musician.api';
 import {
@@ -21,6 +22,9 @@ export const useMusicianHook = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [dataMusician, setDataMusician] = useState<MusicianList[]>([]);
   const [dataFavoriteMusician, setDataFavoriteMusician] = useState<
+    MusicianList[]
+  >([]);
+  const [dataRecommendedMusician, setDataRecommendedMusician] = useState<
     MusicianList[]
   >([]);
   const [listFollowingMusician, setListFollowingMusician] = useState<
@@ -53,6 +57,19 @@ export const useMusicianHook = () => {
       console.log(error);
       setIsError(true);
       setDataFavoriteMusician([]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const getListDataRecommendedMusician = async (props?: ParamsProps) => {
+    try {
+      const response = await recommendedMusician(props);
+      setDataRecommendedMusician(response.data);
+    } catch (error) {
+      console.log(error, 'recommended');
+      setIsError(true);
+      setDataRecommendedMusician([]);
     } finally {
       setIsLoading(false);
     }
@@ -148,6 +165,7 @@ export const useMusicianHook = () => {
     dataAlbum,
     listFollowingMusician,
     dataFavoriteMusician,
+    dataRecommendedMusician,
     getListDataMusician,
     setFollowMusician,
     setUnfollowMusician,
@@ -156,5 +174,6 @@ export const useMusicianHook = () => {
     setDataFollow,
     getListFollowingMusician,
     getListDataFavoriteMusician,
+    getListDataRecommendedMusician,
   };
 };
