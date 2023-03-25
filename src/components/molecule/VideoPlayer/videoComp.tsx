@@ -4,20 +4,23 @@ import {
   Text,
   TouchableOpacity,
   View,
+  ViewStyle,
 } from 'react-native';
-import React, {createRef, FC, useEffect, useState} from 'react';
+import React, {createRef, FC, useState} from 'react';
 import Video, {OnLoadData, OnProgressData} from 'react-native-video';
-import {heightResponsive, widthResponsive} from '../../../utils';
+import {widthResponsive} from '../../../utils';
 import {Slider} from '@miblanchard/react-native-slider';
 import {color, font} from '../../../theme';
 import {timeToString} from '../../../utils/date-format';
 import {
   CloseIcon,
-  PauseVideoIcon,
-  PlayIcon,
+  FullScreenIcon,
+  PauseIcon2,
   PlayVideoIcon,
+  VolumeIcon,
 } from '../../../assets/icon';
-import {ms, mvs} from 'react-native-size-matters';
+import {ms} from 'react-native-size-matters';
+import {Gap} from '../../atom';
 
 export const {width} = Dimensions.get('screen');
 
@@ -26,16 +29,27 @@ interface VideoProps {
   withCloseIcon?: boolean;
   onPress: (uri: number) => void;
   dontShowText?: boolean;
+  buttonIconsStyle?: ViewStyle;
+  videoContainer?: ViewStyle;
 }
 
 const VideoComp: FC<VideoProps> = (props: VideoProps) => {
-  const {sourceUri, onPress, withCloseIcon, dontShowText} = props;
+  const {
+    sourceUri,
+    onPress,
+    withCloseIcon,
+    dontShowText,
+    buttonIconsStyle,
+    videoContainer,
+  } = props;
 
   const [duration, setDuration] = useState(0);
 
   const [currentTime, setCurrentTime] = useState<number>(0);
   const [paused, setPaused] = useState<boolean>(true);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
+  const [fullScreen, setFullScreen] = useState<boolean>(false);
+  const [mute, setMute] = useState<boolean>(false);
 
   const videoRef = createRef<any>();
 
@@ -57,6 +71,12 @@ const VideoComp: FC<VideoProps> = (props: VideoProps) => {
     setPaused(false), setIsPlaying(true);
   };
 
+  const onEnd = () => {
+    setCurrentTime(0);
+    setPaused(true);
+    setIsPlaying(false);
+  };
+
   return (
     <View>
       <View>
@@ -75,8 +95,7 @@ const VideoComp: FC<VideoProps> = (props: VideoProps) => {
           source={{
             uri: sourceUri,
           }}
-          style={styles.videoStyle}
-          // controls={true}
+          style={[styles.videoStyle, videoContainer]}
           ref={videoRef}
           volume={10}
           fullscreenAutorotate={true}
@@ -86,6 +105,10 @@ const VideoComp: FC<VideoProps> = (props: VideoProps) => {
           poster={sourceUri}
           onProgress={onProgress}
           onLoad={onLoadEnd}
+          onEnd={onEnd}
+          repeat={true}
+          muted={mute}
+          // fullscreen={fullScreen}
         />
 
         {!isPlaying && (
@@ -97,11 +120,6 @@ const VideoComp: FC<VideoProps> = (props: VideoProps) => {
           {paused && (
             <TouchableOpacity onPress={handlePlaying}>
               <PlayVideoIcon />
-            </TouchableOpacity>
-          )}
-          {!paused && (
-            <TouchableOpacity onPress={() => setPaused(true)}>
-              <PauseVideoIcon />
             </TouchableOpacity>
           )}
         </View>
@@ -124,7 +142,7 @@ const VideoComp: FC<VideoProps> = (props: VideoProps) => {
             }}
             thumbStyle={{width: 8, height: 8}}
             containerStyle={{
-              marginTop: widthResponsive(-45),
+              marginTop: widthResponsive(-50),
             }}
           />
           <View
@@ -133,12 +151,31 @@ const VideoComp: FC<VideoProps> = (props: VideoProps) => {
               width: '100%',
               justifyContent: 'space-between',
             }}>
-            <View style={styles.durationTimeTextPlaying}>
-              <Text style={styles.durationText}>
-                {timeToString(duration - currentTime)}
-              </Text>
+            <View style={[styles.durationTimeTextPlaying, buttonIconsStyle]}>
+              <TouchableOpacity
+                onPress={() => setPaused(true)}
+                style={{marginHorizontal: widthResponsive(10)}}>
+                {!paused && <PauseIcon2 width={10} height={13} />}
+              </TouchableOpacity>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  marginRight: widthResponsive(10),
+                }}>
+                <TouchableOpacity onPress={() => setMute(!mute)}>
+                  <VolumeIcon />
+                </TouchableOpacity>
+
+                <Gap width={8} />
+                <Text style={styles.durationText}>
+                  {timeToString(duration - currentTime)}
+                </Text>
+                <Gap width={10} />
+                <TouchableOpacity onPress={() => {}}>
+                  <FullScreenIcon />
+                </TouchableOpacity>
+              </View>
             </View>
-            {/* <Text style={{color: 'white'}}>{timeToString(currentTime)}</Text> */}
           </View>
         </View>
       )}
@@ -185,8 +222,11 @@ const styles = StyleSheet.create({
   },
   durationTimeTextPlaying: {
     position: 'absolute',
-    bottom: widthResponsive(0),
-    right: widthResponsive(8),
+    bottom: widthResponsive(-5),
+    width: width - widthResponsive(48),
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
   durationText: {
     fontFamily: font.InterRegular,
