@@ -212,7 +212,11 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
   ]);
 
   const filterDataMusician = (item: any, index: any) => {
-    setSelectedIndexMusician(index);
+    if (!isLogin && index === 1) {
+      setModalGuestVisible(true);
+    } else {
+      setSelectedIndexMusician(index);
+    }
   };
 
   const filterDataSong = (item: any, index: any) => {
