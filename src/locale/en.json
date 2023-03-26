@@ -275,8 +275,8 @@
     },
     "Tab": {
       "Profile": "PROFILE",
-      "Post": "POST",
-      "Exclusive": "EXCLUSIVE",
+      "Main": "MAIN",
+      "Musician": "MUSICIAN",
       "Music": "MUSIC",
       "Fans": "FANS"
     }

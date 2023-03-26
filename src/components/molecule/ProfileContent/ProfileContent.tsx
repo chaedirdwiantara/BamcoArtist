@@ -43,6 +43,7 @@ import ImageModal from '../../../screen/Detail/ImageModal';
 import ExclusiveDailyContent from '../../../screen/MusicianProfile/ExclusiveDailyContent';
 import {Gap, SsuToast} from '../../atom';
 import {DataExclusiveResponse} from '../../../interface/setting.interface';
+import PostListProfile from '../../../screen/ListCard/PostListProfile';
 
 type OnScrollEventHandler = (
   event: NativeSyntheticEvent<NativeScrollEvent>,
@@ -101,8 +102,8 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
   ]);
 
   const [filter2] = useState([
-    {filterName: 'Musician.Tab.Post'},
-    {filterName: 'Musician.Tab.Exclusive'},
+    {filterName: 'Musician.Tab.Main'},
+    {filterName: 'Musician.Tab.Musician'},
     {filterName: 'Musician.Tab.Music'},
     {filterName: 'Musician.Tab.Fans'},
     {filterName: 'Musician.Tab.Profile'},
@@ -221,13 +222,18 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
                 dataAlbum={dataAlbum}
               />
             </View>
-          ) : filter2[selectedIndex].filterName === 'Musician.Tab.Post' ? (
+          ) : filter2[selectedIndex].filterName === 'Musician.Tab.Musician' ? (
             <View
               style={{
                 width: '100%',
               }}>
               {ownProfile ? (
-                <PostListMyPost
+                // <PostListMyPost
+                //   uuidMusician={uuid}
+                //   dataRightDropdown={dropDownDataCategory}
+                //   dataLeftDropdown={dropDownDataSort}
+                // />
+                <PostListProfile
                   uuidMusician={uuid}
                   dataRightDropdown={dropDownDataCategory}
                   dataLeftDropdown={dropDownDataSort}
@@ -239,17 +245,6 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
                   dataLeftDropdown={dropDownDataSort}
                 />
               )}
-            </View>
-          ) : filter2[selectedIndex].filterName === 'Musician.Tab.Exclusive' ? (
-            <View
-              style={{
-                width: '100%',
-              }}>
-              <PostListExclusive
-                uuidMusician={uuid}
-                dataRightDropdown={dropDownDataCategory}
-                dataLeftDropdown={dropDownDataSort}
-              />
             </View>
           ) : filter2[selectedIndex].filterName === 'Musician.Tab.Music' ? (
             <View>

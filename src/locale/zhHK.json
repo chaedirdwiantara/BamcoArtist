@@ -275,8 +275,8 @@
     },
     "Tab": {
       "Profile": "人資料",
-      "Post": "POST",
-      "Exclusive": "專屬內容",
+      "Main": "MAIN",
+      "Musician": "MUSICIAN",
       "Music": "MUSIC",
       "Fans": "樂迷"
     }
