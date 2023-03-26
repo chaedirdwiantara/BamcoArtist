@@ -71,6 +71,7 @@ export const MusicianDetail: React.FC<MusicianDetailProps> = ({
   const [filter] = useState([
     {filterName: 'Musician.Tab.Main'},
     {filterName: 'Musician.Tab.Musician'},
+    {filterName: 'Musician.Tab.Music'},
     {filterName: 'Musician.Tab.Fans'},
     {filterName: 'Musician.Tab.Profile'},
   ]);
