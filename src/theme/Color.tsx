@@ -97,6 +97,12 @@ const Color = {
   Green: {
     100: '#43A671',
   },
+  DarkBlue: {
+    100: '#15233A',
+  },
+  RedVelvet: {
+    100: '#541947',
+  },
 };
 
 export default Color;

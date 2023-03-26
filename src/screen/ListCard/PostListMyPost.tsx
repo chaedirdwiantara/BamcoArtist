@@ -490,7 +490,10 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
                       ? item.musician.imageProfileUrls[0]?.image
                       : ''
                   }
-                  postDate={dateFormat(item.createdAt)}
+                  postDate={
+                    item?.timeAgo ? item.timeAgo : dateFormat(item.createdAt)
+                  }
+                  postDate2={item.createdAt}
                   category={categoryNormalize(item.category)}
                   onPress={() => cardOnPress(item)}
                   likeOnPress={() => likeOnPress(item.id, item.isLiked)}
@@ -536,6 +539,7 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
                   selectedMenu={setSelectedMenu}
                   idPost={item.id}
                   selectedIdPost={setSelectedIdPost}
+                  isPremium={item.isPremiumPost}
                   children={
                     <ChildrenCard
                       data={item}

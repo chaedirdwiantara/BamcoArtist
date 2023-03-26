@@ -65,7 +65,7 @@ const ChildrenCard: FC<ChildrenCardProps> = (props: ChildrenCardProps) => {
                 width={143}
                 height={69.5}
                 heightType2={142}
-                widthType2={289}
+                widthType2={269}
                 onPress={() => {}}
               />
               {data.images.length === 0 && data.quoteToPost.encodeHlsUrl ? (
@@ -103,14 +103,14 @@ const ChildrenCard: FC<ChildrenCardProps> = (props: ChildrenCardProps) => {
                     buttonIconsStyle={{
                       position: 'absolute',
                       bottom: widthResponsive(-5),
-                      width: width - widthResponsive(84),
+                      width: width - widthResponsive(104),
                       flexDirection: 'row',
                       alignItems: 'center',
                       justifyContent: 'space-between',
                     }}
                     videoContainer={{
                       width: '100%',
-                      height: width - widthResponsive(84),
+                      height: width - widthResponsive(104),
                     }}
                   />
                 </TouchableOpacity>

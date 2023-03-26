@@ -48,6 +48,7 @@ import Gift2Icon from './Gift2.icon';
 import GlobalIcon from './Global.icon';
 import HeartIcon from './Heart.icon';
 import HomeIcon from './Home.icon';
+import HornChatIcon from './hornChat.icon';
 import InfoCircleIcon from './InfoCircle.icon';
 import InstagramIcon from './Instagram.icon';
 import ImportPhotoIcon from './ImportPhoto.icon';
@@ -151,6 +152,7 @@ export {
   GlobalIcon,
   HeartIcon,
   HomeIcon,
+  HornChatIcon,
   InfoCircleIcon,
   InstagramIcon,
   ImportMusicIcon,

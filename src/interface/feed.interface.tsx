@@ -113,11 +113,12 @@ export type PostList = {
   images: imageTypes[][];
   createdAt: string;
   updatedAt: string;
-  isPremium: boolean;
+  isPremiumPost: boolean;
   musician: MusicianData;
   isLiked: boolean;
   quoteToPost: QuoteToPost;
   video: VideoResponseType;
+  timeAgo: string;
 };
 
 export type ListPostResponseType = {
