@@ -1,3 +1,3 @@
 export * from './atom';
 export * from './molecule';
-export * from './molecule/V2'
+export * from './molecule/V2';
