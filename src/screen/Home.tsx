@@ -287,9 +287,7 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
     data: PreferenceList[],
     filterBy: string,
   ) => {
-    isLogin
-      ? navigation.navigate('ListImage', {title, data, filterBy})
-      : setModalGuestVisible(true);
+    navigation.navigate('ListImage', {title, data, filterBy});
   };
 
   const goToListMusic = (
