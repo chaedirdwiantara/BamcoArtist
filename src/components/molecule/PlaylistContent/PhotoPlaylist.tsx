@@ -4,6 +4,7 @@ import {
   TouchableOpacity,
   ImageBackground,
   ViewStyle,
+  View,
 } from 'react-native';
 import {color} from '../../../theme';
 import {GalleryAddIcon} from '../../../assets/icon';
@@ -15,6 +16,7 @@ interface Props {
   onPress?: () => void;
   containerStyles?: ViewStyle;
   iconStyles?: ViewStyle;
+  dark?: boolean;
 }
 
 export const PhotoPlaylist: React.FC<Props> = ({
@@ -23,6 +25,7 @@ export const PhotoPlaylist: React.FC<Props> = ({
   onPress,
   containerStyles,
   iconStyles,
+  dark,
 }) => {
   return (
     <TouchableOpacity
@@ -34,6 +37,7 @@ export const PhotoPlaylist: React.FC<Props> = ({
         resizeMode="cover"
         imageStyle={{borderRadius: 8}}
         style={styles.image}>
+        {dark && <View style={styles.darkBackground} />}
         {showIcon && <GalleryAddIcon style={iconStyles} />}
       </ImageBackground>
     </TouchableOpacity>
@@ -58,5 +62,10 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  darkBackground: {
+    backgroundColor: 'rgba(0,0,0,0.4)',
+    width: '100%',
+    height: '100%',
   },
 });
