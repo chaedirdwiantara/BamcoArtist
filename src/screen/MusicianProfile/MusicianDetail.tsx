@@ -34,6 +34,7 @@ import ImageModal from '../Detail/ImageModal';
 import {useTranslation} from 'react-i18next';
 import {DataExclusiveResponse} from '../../interface/setting.interface';
 import PostListProfile from '../ListCard/PostListProfile';
+import MainTab from '../../components/molecule/ProfileContent/MainTab/MainTab';
 
 type OnScrollEventHandler = (
   event: NativeSyntheticEvent<NativeScrollEvent>,
@@ -196,6 +197,10 @@ export const MusicianDetail: React.FC<MusicianDetailProps> = ({
                   }}
                 />
               )
+            ) : filter[selectedIndex].filterName === 'Musician.Tab.Main' ? (
+              <View style={{paddingHorizontal: widthResponsive(20)}}>
+                <MainTab />
+              </View>
             ) : null}
           </View>
         </View>

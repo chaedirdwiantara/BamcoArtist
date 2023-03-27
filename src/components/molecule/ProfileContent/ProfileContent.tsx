@@ -44,6 +44,7 @@ import ExclusiveDailyContent from '../../../screen/MusicianProfile/ExclusiveDail
 import {Gap, SsuToast} from '../../atom';
 import {DataExclusiveResponse} from '../../../interface/setting.interface';
 import PostListProfile from '../../../screen/ListCard/PostListProfile';
+import MainTab from './MainTab/MainTab';
 
 type OnScrollEventHandler = (
   event: NativeSyntheticEvent<NativeScrollEvent>,
@@ -261,6 +262,8 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
                 scrollable={false}
               />
             </View>
+          ) : filter2[selectedIndex].filterName === 'Musician.Tab.Main' ? (
+            <MainTab />
           ) : (
             <EmptyState
               text={t('EmptyState.NoData') || ''}
