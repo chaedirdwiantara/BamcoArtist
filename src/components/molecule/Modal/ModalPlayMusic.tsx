@@ -64,17 +64,27 @@ export const ModalPlayMusic: React.FC<ModalPlayMusicProps> = ({
         }}>
         <TouchableOpacity onPress={handlePlayPaused}>
           {isPlaying ? (
-            <PauseIcon fill={'#FFFFFF'} stroke={'#FFFFFF'} />
+            <PauseIcon
+              fill={'#FFFFFF'}
+              stroke={'#FFFFFF'}
+              width={23}
+              height={25}
+            />
           ) : (
-            <PlayIcon fill={'#FFFFFF'} stroke={'#FFFFFF'} />
+            <PlayIcon
+              fill={'#FFFFFF'}
+              stroke={'#FFFFFF'}
+              width={23}
+              height={25}
+            />
           )}
         </TouchableOpacity>
         <TouchableOpacity
           style={{marginLeft: 30, marginRight: 20}}
           onPress={handleClose}>
           <CloseIcon
-            width={widthPercentage(25)}
-            height={widthPercentage(25)}
+            width={widthPercentage(15)}
+            height={widthPercentage(15)}
             fill={'#FFFFFF'}
             stroke={'#FFFFFF'}
           />

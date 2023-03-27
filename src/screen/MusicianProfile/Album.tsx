@@ -17,10 +17,11 @@ interface AlbumProps {
   data: AlbumData[];
   errorText: string;
   artistName: string;
+  noTitle?: boolean;
 }
 
 const Album: FC<AlbumProps> = (props: AlbumProps) => {
-  const {title, data, errorText, artistName} = props;
+  const {title, data, errorText, artistName, noTitle} = props;
 
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
@@ -31,7 +32,7 @@ const Album: FC<AlbumProps> = (props: AlbumProps) => {
 
   return (
     <View style={{marginHorizontal: widthResponsive(24)}}>
-      <Title textStyle={{fontSize: mvs(13)}} text={title} />
+      {noTitle ? null : <Title textStyle={{fontSize: mvs(13)}} text={title} />}
       <Gap height={12} />
       {data?.length > 0 ? (
         <View>

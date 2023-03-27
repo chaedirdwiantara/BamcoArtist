@@ -140,7 +140,7 @@ export default MusicListPreview;
 const styles = StyleSheet.create({
   container: {
     width: '100%',
-    backgroundColor: color.Dark[500],
+    backgroundColor: color.RedVelvet[100],
     flexDirection: 'row',
     borderRadius: 4,
     padding: ms(7),

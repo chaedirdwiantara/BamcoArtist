@@ -4,10 +4,11 @@ import {ViewStyle} from 'react-native';
 import HorizontalCard from './HorizontalCard';
 import PlaylistHome from '../../../screen/ListCard/PlaylistHome';
 import {Playlist} from '../../../interface/playlist.interface';
+import {ListDataSearchPlaylist} from '../../../interface/search.interface';
 
 export interface ListPlaylistHomeProps {
   title: string;
-  data: Playlist[];
+  data: Playlist[] | ListDataSearchPlaylist[] | undefined;
   onPress: () => void;
   containerStyle?: ViewStyle;
 }
@@ -18,7 +19,7 @@ const ListPlaylistHome: React.FC<ListPlaylistHomeProps> = (
   const {title, data, onPress, containerStyle} = props;
 
   const children = () => {
-    return <PlaylistHome dataPlaylist={data} />;
+    return <PlaylistHome dataPlaylist={data ?? []} />;
   };
 
   return (

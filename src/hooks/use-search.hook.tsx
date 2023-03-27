@@ -75,6 +75,7 @@ export const useSearchHook = () => {
       const response = await playlistSearch(props);
       return {
         data: response?.data,
+        meta: response?.meta,
       };
     } catch (error) {
       console.log(error);

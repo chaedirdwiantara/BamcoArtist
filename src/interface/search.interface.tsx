@@ -155,13 +155,23 @@ export type ListDataSearchPlaylist = {
   totalSongs: number;
   CreatedAt: string;
   UpdatedAt: string;
+  playlistOwner: {
+    UUID: string;
+    fullname: string;
+    image: string | null;
+    username: string;
+  };
 };
 
 export type ListSearchPlaylistsResponseType = {
   code: number;
   data: ListDataSearchPlaylist[];
   message: string;
-  meta: [];
+  meta: {
+    page: number;
+    perPage: number;
+    total: number;
+  };
   status: number;
 };
 

@@ -272,6 +272,7 @@
       "Take": "Take Photo",
       "Add": "Add Photo From Gallery",
       "AddVideo": "Add Video From Gallery",
+      "AddVideoCamera": "Add Video From Camera",
       "Delete": "Delete Photo",
       "Social": "Social Media Settings",
       "About": "Tell us about yourself",
@@ -303,8 +304,8 @@
     },
     "Tab": {
       "Profile": "PROFILE",
-      "Post": "POST",
-      "Exclusive": "EXCLUSIVE",
+      "Main": "MAIN",
+      "Musician": "MUSICIAN",
       "Music": "MUSIC",
       "Fans": "FANS"
     }

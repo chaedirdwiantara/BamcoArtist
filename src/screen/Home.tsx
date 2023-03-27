@@ -10,6 +10,7 @@ import {
   RefreshControl,
   Platform,
 } from 'react-native';
+import {useQuery} from 'react-query';
 import {
   NativeStackNavigationProp,
   NativeStackScreenProps,
@@ -40,8 +41,10 @@ import TopMusician from './ListCard/TopMusician';
 import {useFcmHook} from '../hooks/use-fcm.hook';
 import {storage} from '../hooks/use-storage.hook';
 import {useSongHook} from '../hooks/use-song.hook';
+import {useHomeHook} from '../hooks/use-home.hook';
 import {SongList} from '../interface/song.interface';
 import * as FCMService from '../service/notification';
+import {useSearchHook} from '../hooks/use-search.hook';
 import {useCreditHook} from '../hooks/use-credit.hook';
 import {usePlayerHook} from '../hooks/use-player.hook';
 import {useBannerHook} from '../hooks/use-banner.hook';
@@ -50,7 +53,6 @@ import {useProfileHook} from '../hooks/use-profile.hook';
 import {useSettingHook} from '../hooks/use-setting.hook';
 import {useMusicianHook} from '../hooks/use-musician.hook';
 import FavoriteMusician from './ListCard/FavoriteMusician';
-import {usePlaylistHook} from '../hooks/use-playlist.hook';
 import {CheckCircle2Icon, SearchIcon} from '../assets/icon';
 import {MainTabParams, RootStackParams} from '../navigations';
 import {PreferenceList} from '../interface/setting.interface';
@@ -61,9 +63,8 @@ import {FollowMusicianPropsType} from '../interface/musician.interface';
 import {FirebaseMessagingTypes} from '@react-native-firebase/messaging';
 import {ModalPlayMusic} from '../components/molecule/Modal/ModalPlayMusic';
 import {heightPercentage, widthPercentage, widthResponsive} from '../utils';
-import ListPlaylistHome from '../components/molecule/ListCard/ListPlaylistHome';
-import {useHomeHook} from '../hooks/use-home.hook';
 import EmptyStateHome from '../components/molecule/EmptyState/EmptyStateHome';
+import ListPlaylistHome from '../components/molecule/ListCard/ListPlaylistHome';
 
 type OnScrollEventHandler = (
   event: NativeSyntheticEvent<NativeScrollEvent>,
@@ -98,7 +99,7 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
   const {counter, getCountNotification} = useNotificationHook();
   const {creditCount, getCreditCount} = useCreditHook();
   const {listGenre, listMood, getListMoodGenre} = useSettingHook();
-  const {dataPlaylist, getPlaylist} = usePlaylistHook();
+  const {getSearchPlaylists} = useSearchHook();
 
   const isLogin = storage.getBoolean('isLogin');
   const isFocused = useIsFocused();
@@ -113,6 +114,11 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
     uuid = profileObject.uuid;
   }
 
+  const {data: dataPlaylist, refetch: refetchPlaylist} = useQuery(
+    ['/search-playlist'],
+    () => getSearchPlaylists({keyword: ''}),
+  );
+
   useEffect(() => {
     getListDataBanner();
     getProfileUser();
@@ -123,8 +129,8 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
     getListMoodGenre();
     getListDataFavoriteMusician();
     getListDataNewSong();
-    getPlaylist();
     getListDiveIn();
+    refetchPlaylist();
     getListDataRecommendedMusician();
     getListComingSoon();
     setTimeout(() => {
@@ -487,7 +493,7 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
         {/* Playlist */}
         <ListPlaylistHome
           title={'Playlist'}
-          data={dataPlaylist}
+          data={dataPlaylist?.data}
           onPress={() => navigation.navigate('ListPlaylist')}
         />
         {/* End of Playlist */}
