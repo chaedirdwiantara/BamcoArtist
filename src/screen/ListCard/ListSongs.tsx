@@ -85,9 +85,13 @@ const ListSongs: FC<ListSongsPropsScreen> = (props: ListSongsPropsScreen) => {
           imgUri={(item.imageUrl && item.imageUrl[0]?.image) ?? ''}
           musicNum={index + 1}
           musicTitle={elipsisText(item.title, 22)}
-          singerName={item.musicianName}
+          singerName={
+            type === 'coming_soon' ? item.musician.name : item.musicianName
+          }
           onPressCard={
-            type === 'home' || type === 'defaultPlaylist'
+            type === 'home' ||
+            type === 'coming_soon' ||
+            type === 'defaultPlaylist'
               ? () => onPress(item)
               : undefined
           }

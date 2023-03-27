@@ -54,7 +54,7 @@ export const ListSong: React.FC<ListSongProps> = ({
       hidePlayer();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isFocused]);
+  }, [isFocused, isPlaying]);
 
   const onPressSong = (val: SongList | null) => {
     addPlaylist({
