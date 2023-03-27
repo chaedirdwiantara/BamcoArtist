@@ -23,6 +23,8 @@ export type ParamsProps = {
   context?: string;
   listType?: string;
   isPremium?: boolean;
+  mood?: string;
+  genre?: string;
 };
 
 export type imageTypes = {

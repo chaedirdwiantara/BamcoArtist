@@ -136,6 +136,7 @@ export type SongAlbum = {
   productionYear: string;
   publishedDate: string;
   label: string[];
+  type?: string;
 };
 
 export type TranscodedSongUrl = {
@@ -216,6 +217,7 @@ export type DataDetailAlbum = {
   updatedAt: string;
   status: string;
   totalCountListener: number;
+  releaseDateScheduled: string;
 };
 
 export type DetailAlbumResponseType = {

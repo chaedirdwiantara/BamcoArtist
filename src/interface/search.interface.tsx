@@ -4,6 +4,10 @@ export type SearchProps = {
   keyword?: string;
   filterBy?: string;
   uuid?: string;
+  genre?: number;
+  mood?: number;
+  page?: number;
+  perPage?: number;
 };
 export type ListDataSearchFans = {
   uuid: string;

@@ -4,9 +4,9 @@ import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
 import {color} from '../../../theme';
+import {TopNavigation} from '../../../components';
 import {ArrowLeftIcon} from '../../../assets/icon';
 import {RootStackParams} from '../../../navigations';
-import {TopNavigation} from '../../../components';
 import {heightPercentage, widthPercentage} from '../../../utils';
 
 export interface ListItemProps {
