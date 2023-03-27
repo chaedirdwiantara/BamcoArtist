@@ -70,7 +70,7 @@ const ListImageDesc: React.FC<ListImageDescProps> = (
                   ]}>
                   {title === ''
                     ? item.description
-                    : elipsisText(item.description || item.title, 13)}
+                    : elipsisText(item.musician.name, 13)}
                 </Text>
               </View>
             </View>

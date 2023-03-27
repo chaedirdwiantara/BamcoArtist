@@ -16,6 +16,11 @@ export type DiveInResponseType = {
 export type ComingSoon = {
   id: number;
   title: string;
+  musician: {
+    uuid: string;
+    name: string;
+    imageProfile: string;
+  };
   description: string;
   imageUrl: string;
   featuringArtist: string[];
