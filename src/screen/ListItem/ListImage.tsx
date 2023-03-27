@@ -15,14 +15,15 @@ export const ListImageScreen: React.FC<ListImageProps> = ({
   route,
   navigation,
 }: ListImageProps) => {
-  const {title, data, containerStyle} = route.params;
+  const {title, data, containerStyle, filterBy} = route.params;
 
-  const goToListSong = (name: string) => {
+  const goToListSong = (name: string, id: number) => {
     navigation.navigate('ListMusic', {
       title: name,
-      id: 1,
       type: 'song',
       fromMainTab: false,
+      id,
+      filterBy,
     });
   };
 
@@ -40,7 +41,7 @@ export const ListImageScreen: React.FC<ListImageProps> = ({
             imgUri={item.imageUrls[2].image}
             text={item.name}
             containerStyle={styles.containerImage}
-            onPress={() => goToListSong(item.name)}
+            onPress={() => goToListSong(item.name, item.id)}
           />
         )}
       />
