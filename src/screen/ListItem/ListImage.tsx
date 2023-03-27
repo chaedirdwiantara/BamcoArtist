@@ -1,5 +1,5 @@
-import React from 'react';
-import {FlatList, StyleSheet} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {FlatList, RefreshControl, StyleSheet, View} from 'react-native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 
 import {ListItem} from './components/ListItem';
@@ -8,6 +8,7 @@ import {RootStackParams} from '../../navigations';
 import {storage} from '../../hooks/use-storage.hook';
 import {useBackHandler} from '../../utils/useBackHandler';
 import {heightPercentage, widthPercentage} from '../../utils';
+import {useSettingHook} from '../../hooks/use-setting.hook';
 
 type ListImageProps = NativeStackScreenProps<RootStackParams, 'ListImage'>;
 
@@ -15,7 +16,27 @@ export const ListImageScreen: React.FC<ListImageProps> = ({
   route,
   navigation,
 }: ListImageProps) => {
-  const {title, data, containerStyle, filterBy} = route.params;
+  const {title, containerStyle, filterBy} = route.params;
+  const {
+    isLoading,
+    listGenre,
+    listMood,
+    getListMoodPublic,
+    getListGenrePublic,
+  } = useSettingHook();
+  const [refreshing, setRefreshing] = useState<boolean>(false);
+  const listData = filterBy === 'mood' ? listMood : listGenre;
+
+  useEffect(() => {
+    if (filterBy === 'mood') {
+      getListMoodPublic({page: 0, perPage: 30});
+    } else {
+      getListGenrePublic({page: 0, perPage: 30});
+    }
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 1000);
+  }, [refreshing]);
 
   const goToListSong = (name: string, id: number) => {
     navigation.navigate('ListMusic', {
@@ -30,7 +51,7 @@ export const ListImageScreen: React.FC<ListImageProps> = ({
   const children = () => {
     return (
       <FlatList
-        data={data ?? []}
+        data={listData ?? []}
         showsVerticalScrollIndicator={false}
         keyExtractor={item => item.id.toString()}
         numColumns={2}
@@ -44,6 +65,13 @@ export const ListImageScreen: React.FC<ListImageProps> = ({
             onPress={() => goToListSong(item.name, item.id)}
           />
         )}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={() => setRefreshing(true)}
+          />
+        }
+        ListFooterComponent={<View style={{height: heightPercentage(20)}} />}
       />
     );
   };
@@ -64,13 +92,14 @@ export const ListImageScreen: React.FC<ListImageProps> = ({
       children={children()}
       containerStyle={containerStyle}
       onPressBack={onPressHidePlayer}
+      isLoading={isLoading || refreshing}
     />
   );
 };
 
 const styles = StyleSheet.create({
   containerFlatlist: {
-    flex: 1,
+    flexGrow: 1,
     alignItems: 'flex-end',
   },
   image: {

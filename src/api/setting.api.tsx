@@ -235,7 +235,7 @@ export const setLanguageSettings = async (
   return data;
 };
 
-export const getListMoodPublic = async (
+export const listMoodPublic = async (
   props?: PreferenceProps,
 ): Promise<PreferenceResponseType> => {
   const {data} = await SsuAPIPublic().request<PreferenceResponseType>({
@@ -247,7 +247,7 @@ export const getListMoodPublic = async (
   return data;
 };
 
-export const getListGenrePublic = async (
+export const listGenrePublic = async (
   props?: PreferenceProps,
 ): Promise<PreferenceResponseType> => {
   const {data} = await SsuAPIPublic().request<PreferenceResponseType>({

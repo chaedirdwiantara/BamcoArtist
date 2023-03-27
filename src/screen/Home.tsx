@@ -55,7 +55,6 @@ import {useMusicianHook} from '../hooks/use-musician.hook';
 import FavoriteMusician from './ListCard/FavoriteMusician';
 import {CheckCircle2Icon, SearchIcon} from '../assets/icon';
 import {MainTabParams, RootStackParams} from '../navigations';
-import {PreferenceList} from '../interface/setting.interface';
 import RecomendedMusician from './ListCard/RecomendedMusician';
 import {useNotificationHook} from '../hooks/use-notification.hook';
 import LoadingSpinner from '../components/atom/Loading/LoadingSpinner';
@@ -98,7 +97,8 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
     useSongHook();
   const {counter, getCountNotification} = useNotificationHook();
   const {creditCount, getCreditCount} = useCreditHook();
-  const {listGenre, listMood, getListMoodGenre} = useSettingHook();
+  const {listGenre, listMood, getListMoodPublic, getListGenrePublic} =
+    useSettingHook();
   const {getSearchPlaylists} = useSearchHook();
 
   const isLogin = storage.getBoolean('isLogin');
@@ -126,7 +126,8 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
     getListDataTopSong();
     getCountNotification();
     getCreditCount();
-    getListMoodGenre();
+    getListMoodPublic();
+    getListGenrePublic();
     getListDataFavoriteMusician();
     getListDataNewSong();
     getListDiveIn();
@@ -282,12 +283,8 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
     isLogin ? goToScreen('TopupCoin') : setModalGuestVisible(true);
   };
 
-  const onPressMoodGenre = (
-    title: string,
-    data: PreferenceList[],
-    filterBy: string,
-  ) => {
-    navigation.navigate('ListImage', {title, data, filterBy});
+  const onPressMoodGenre = (title: string, filterBy: string) => {
+    navigation.navigate('ListImage', {title, filterBy});
   };
 
   const goToListMusic = (
@@ -369,7 +366,7 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
           title="Mood"
           data={listMood}
           containerStyle={styles.containerList}
-          onPress={() => onPressMoodGenre('Moods', listMood, 'mood')}
+          onPress={() => onPressMoodGenre('Moods', 'mood')}
           onPressImage={(id, name) => goToListMusic(name, 'song', id, 'mood')}
         />
         {/* End Of Mood */}
@@ -382,7 +379,7 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
             width: widthPercentage(90),
             height: heightPercentage(80),
           }}
-          onPress={() => onPressMoodGenre('Genre', listGenre, 'genre')}
+          onPress={() => onPressMoodGenre('Genre', 'genre')}
           onPressImage={(id, name) => goToListMusic(name, 'song', id, 'genre')}
         />
         {/* End Of Genre */}
