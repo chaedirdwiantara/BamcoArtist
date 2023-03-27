@@ -53,6 +53,7 @@ export const ShowCreditContent: React.FC<ShowCreditProps> = ({
   onPressGoBack,
 }) => {
   const {t} = useTranslation();
+  const genre = dataDetail.album.genre ? [dataDetail.album.genre] : [];
   const dataShowCredit = [
     {
       title: t('Music.Credit.SingBy'),
@@ -72,7 +73,7 @@ export const ShowCreditContent: React.FC<ShowCreditProps> = ({
     },
     {
       title: t('Music.Credit.Genre'),
-      content: [dataDetail.album.genre],
+      content: genre,
     },
     {
       title: t('Music.Credit.Release'),
