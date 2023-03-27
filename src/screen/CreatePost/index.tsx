@@ -116,6 +116,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   const [progress, setProgress] = useState<number>();
   const [preventPost, setPreventPost] = useState<boolean>(false);
   const [deleteDataVideo, setDeleteDataVideo] = useState<boolean>(false);
+  const [keyBrdIsActive, setKeybrdIsActive] = useState<boolean>(false);
 
   useEffect(() => {
     if (dataAudienceChoosen) {
@@ -128,12 +129,6 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
       setLabel('Home.Tab.TopPost.Category.Highlight');
     }
   }, [label]);
-
-  useEffect(() => {
-    if (uri) {
-      console.log('uri', uri);
-    }
-  }, [uri]);
 
   // ! UPLOAD VIDEO AREA
 
@@ -235,7 +230,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
       setValueFilter(dataUpdatePostProps.category);
       setInputText(dataUpdatePostProps.caption);
       setDataAudience(
-        (dataUpdatePostProps.isPremium
+        (dataUpdatePostProps.isPremiumPost
           ? t('Feed.Exclusive')
           : t('Feed.Public')) || '',
       );
@@ -595,6 +590,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
           <View style={styles.topBody}>
             <View style={{}}>
               <SsuInput.InputText
+                onFocus={() => setKeybrdIsActive(true)}
                 value={inputText}
                 onChangeText={(newText: string) => setInputText(newText)}
                 placeholder={`${t('Post.Create.Write')}...`}
@@ -658,6 +654,11 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
                 withCloseIcon
                 onPress={closeImage}
                 dontShowText={progress && !dataVideo ? true : false}
+                videoContainer={{
+                  height: keyBrdIsActive
+                    ? widthResponsive(225)
+                    : width - widthResponsive(48),
+                }}
               />
             )}
           </View>
@@ -833,6 +834,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
           onDeleteImage={resetImage}
           onPressClose={closeModal}
           multiple
+          showVideo
         />
         <ModalLoading visible={isLoadingImage} />
         <ModalLoading visible={createPostLoading} />

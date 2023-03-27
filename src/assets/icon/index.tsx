@@ -41,6 +41,7 @@ import Fb2Icon from './Fb2.icon';
 import FeedIcon from './Feed.icon';
 import FriedEggIcon from './FriedEgg.icon';
 import FullNameIcon from './FullName.icon';
+import FullScreenIcon from './Fullscreen.icon';
 import GalleryAddIcon from './GalleryAdd.icon';
 import GalleryEditIcon from './GalleryEdit.icon';
 import GiftIcon from './Gift.icon';
@@ -48,6 +49,7 @@ import Gift2Icon from './Gift2.icon';
 import GlobalIcon from './Global.icon';
 import HeartIcon from './Heart.icon';
 import HomeIcon from './Home.icon';
+import HornChatIcon from './hornChat.icon';
 import InfoCircleIcon from './InfoCircle.icon';
 import InstagramIcon from './Instagram.icon';
 import ImportPhotoIcon from './ImportPhoto.icon';
@@ -64,6 +66,7 @@ import MusicSquareIcon from './MusicSquare.icon';
 import MusicSquareAddIcon from './MusicSquareAdd.icon';
 import NextIcon from './Next.icon';
 import NotificationIcon from './Notification.icon';
+import NormalScreenIcon from './NormalScreen.icon';
 import OpenCameraIcon from './OpenCamera.icon';
 import RepeatIcon from './Repeaticon';
 import RepeatOneIcon from './RepeatOne.icon';
@@ -91,6 +94,7 @@ import TwitterIcon from './Twitter.icon';
 import UserIcon from './User.icon';
 import UserProfileIcon from './UserProfile.icon';
 import VkIcon from './Vk.icon';
+import VolumeIcon from './Volume.icon';
 import WeiboIcon from './Weibo.icon';
 import CartIcon from './Cart.icon';
 import BoxStore from './BoxStore.icon';
@@ -142,6 +146,7 @@ export {
   FeedIcon,
   FriedEggIcon,
   FullNameIcon,
+  FullScreenIcon,
   GalleryAddIcon,
   GalleryEditIcon,
   GiftIcon,
@@ -149,6 +154,7 @@ export {
   GlobalIcon,
   HeartIcon,
   HomeIcon,
+  HornChatIcon,
   InfoCircleIcon,
   InstagramIcon,
   ImportMusicIcon,
@@ -165,6 +171,7 @@ export {
   MusicSquareAddIcon,
   NextIcon,
   NotificationIcon,
+  NormalScreenIcon,
   OpenCameraIcon,
   PauseIcon,
   PauseIcon2,
@@ -192,6 +199,7 @@ export {
   UserIcon,
   UserProfileIcon,
   VkIcon,
+  VolumeIcon,
   WeiboIcon,
   CartIcon,
   BoxStore,

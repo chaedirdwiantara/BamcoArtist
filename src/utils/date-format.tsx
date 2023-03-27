@@ -7,6 +7,20 @@ const dateFormat = (ISOStringDate: string) => {
   return today;
 };
 
+const dateFormatDayOnly = (ISOStringDate: string) => {
+  const today = new Date(ISOStringDate).toLocaleDateString('en-GB', {
+    day: 'numeric',
+  });
+  return today;
+};
+
+const dateFormatMonthOnly = (ISOStringDate: string) => {
+  const today = new Date(ISOStringDate).toLocaleDateString('en-GB', {
+    month: 'short',
+  });
+  return today;
+};
+
 const dateFormatFullYear = (ISOStringDate: string) => {
   const today = new Date(ISOStringDate).toLocaleDateString('en-GB', {
     day: 'numeric',
@@ -33,4 +47,11 @@ const timeToString = (totalSeconds: number) => {
   return result;
 };
 
-export {dateFormat, dateFormatFullYear, dateLongMonth, timeToString};
+export {
+  dateFormat,
+  dateFormatFullYear,
+  dateLongMonth,
+  timeToString,
+  dateFormatDayOnly,
+  dateFormatMonthOnly,
+};

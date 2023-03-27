@@ -46,6 +46,7 @@ import MusicListPreview from '../../components/molecule/MusicPreview/MusicListPr
 import {usePlayerHook} from '../../hooks/use-player.hook';
 import {useTranslation} from 'react-i18next';
 import {useCreditHook} from '../../hooks/use-credit.hook';
+import VideoComp from '../../components/molecule/VideoPlayer/videoComp';
 
 type cmntToCmnt = {
   id: string;
@@ -985,6 +986,14 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
                         isIdNowPlaying={dataPostDetail.id === idNowPlaying}
                       />
                     ) : null}
+                    {data.video.encodeHlsUrl !== '' && (
+                      <View style={{marginTop: ms(6)}}>
+                        <VideoComp
+                          sourceUri={data.video.encodeHlsUrl}
+                          onPress={() => {}}
+                        />
+                      </View>
+                    )}
                   </View>
                 </View>
               }

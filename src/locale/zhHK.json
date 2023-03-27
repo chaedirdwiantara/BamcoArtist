@@ -252,6 +252,7 @@
       "Take": "拍攝照片",
       "Add": "由相簿添加",
       "AddVideo": "Add Video From Gallery",
+      "AddVideoCamera": "Add Video From Camera",
       "Delete": "刪除照片",
       "Social": "Social Media Settings",
       "About": "Tell us about yourself",
@@ -283,8 +284,8 @@
     },
     "Tab": {
       "Profile": "人資料",
-      "Post": "POST",
-      "Exclusive": "專屬內容",
+      "Main": "MAIN",
+      "Musician": "MUSICIAN",
       "Music": "MUSIC",
       "Fans": "樂迷"
     }

@@ -1,4 +1,4 @@
-import {FlatList, StyleSheet, Text} from 'react-native';
+import {Dimensions, FlatList, StyleSheet, Text} from 'react-native';
 import React, {useCallback} from 'react';
 import {ListCard} from '../../components';
 import {mvs} from 'react-native-size-matters';
@@ -9,6 +9,9 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParams} from '../../navigations';
 import {profileStorage} from '../../hooks/use-storage.hook';
 import {useTranslation} from 'react-i18next';
+import {heightResponsive} from '../../utils';
+
+const {height} = Dimensions.get('screen');
 
 const ListToFollowMusician = () => {
   const {t} = useTranslation();
@@ -39,6 +42,11 @@ const ListToFollowMusician = () => {
         data={dataMusician}
         showsVerticalScrollIndicator={false}
         keyExtractor={(_, index) => index.toString()}
+        contentContainerStyle={{
+          flexGrow: 1,
+          paddingBottom:
+            height >= 800 ? heightResponsive(220) : heightResponsive(160),
+        }}
         renderItem={({item}) =>
           item.uuid !== profileStorage()?.uuid ? (
             <ListCard.FollowMusician

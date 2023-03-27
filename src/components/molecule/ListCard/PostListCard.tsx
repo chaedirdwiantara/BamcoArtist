@@ -17,17 +17,27 @@ import {
   widthResponsive,
 } from '../../../utils';
 import {color, font} from '../../../theme';
-import {CommentIcon, LoveIcon, ShareIcon} from '../../../assets/icon';
+import {
+  CommentIcon,
+  HornChatIcon,
+  LoveIcon,
+  ShareIcon,
+} from '../../../assets/icon';
 import CoinB from '../../../assets/icon/CoinB.icon';
 import {Dropdown} from '../DropDown';
 import {DataDropDownType, dataUpdatePost} from '../../../data/dropdown';
 import DropdownMore from '../V2/DropdownFilter/DropdownMore';
+import {
+  dateFormatDayOnly,
+  dateFormatMonthOnly,
+} from '../../../utils/date-format';
 
 interface ListProps extends TouchableOpacityProps {
   imgUri: string;
   musicianName: string;
   musicianId: string;
   postDate: string;
+  postDate2: string;
   children: React.ReactNode;
   likeOnPress: () => void;
   tokenOnPress: () => void;
@@ -42,6 +52,7 @@ interface ListProps extends TouchableOpacityProps {
   selectedMenu: (value: DataDropDownType) => void;
   idPost: string;
   selectedIdPost: (idPost: string) => void;
+  isPremium: boolean;
 }
 
 const PostListCard: React.FC<ListProps> = (props: ListProps) => {
@@ -50,6 +61,7 @@ const PostListCard: React.FC<ListProps> = (props: ListProps) => {
     musicianName,
     musicianId,
     postDate,
+    postDate2,
     children,
     likeOnPress,
     tokenOnPress,
@@ -64,19 +76,43 @@ const PostListCard: React.FC<ListProps> = (props: ListProps) => {
     selectedMenu,
     idPost,
     selectedIdPost,
+    isPremium,
   } = props;
   return (
     <TouchableOpacity {...props}>
       <View style={[styles.topContainer, containerStyles]}>
-        <TouchableOpacity onPress={toDetailOnPress}>
-          <Avatar imgUri={imgUri} size={widthResponsive(32)} />
-        </TouchableOpacity>
+        <View>
+          <TouchableOpacity onPress={toDetailOnPress}>
+            <Avatar imgUri={imgUri} size={widthResponsive(32)} />
+          </TouchableOpacity>
+          <Gap height={2} />
+          <View style={{alignItems: 'center'}}>
+            <Text
+              style={[
+                styles.dateDay,
+                {fontSize: mvs(15), fontFamily: font.InterMedium},
+              ]}>
+              {dateFormatDayOnly(postDate2)}
+            </Text>
+            <Text style={[styles.dateDay, {fontSize: mvs(10)}]}>
+              {dateFormatMonthOnly(postDate2)}
+            </Text>
+          </View>
+        </View>
+
+        <HornChatIcon
+          fill={isPremium ? color.RedVelvet[100] : color.DarkBlue[100]}
+          style={{marginTop: widthResponsive(3)}}
+        />
         <View
-          style={{
-            flex: 1,
-            marginLeft: widthResponsive(6),
-            paddingBottom: heightResponsive(2),
-          }}>
+          style={[
+            styles.cardContainer,
+            {
+              backgroundColor: isPremium
+                ? color.RedVelvet[100]
+                : color.DarkBlue[100],
+            },
+          ]}>
           <View style={styles.topSection}>
             <Text style={styles.songTitle} onPress={toDetailOnPress}>
               {musicianName}
@@ -168,9 +204,9 @@ const styles = StyleSheet.create({
     height: undefined,
     flexDirection: 'row',
     alignItems: 'flex-start',
-    paddingBottom: heightResponsive(5),
+    // paddingBottom: heightResponsive(5),
     paddingHorizontal: widthResponsive(24),
-    borderBottomWidth: mvs(1),
+    // borderBottomWidth: mvs(1),
     borderBottomColor: color.Dark[500],
   },
   rankStyle: {
@@ -245,5 +281,17 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  cardContainer: {
+    flex: 1,
+    paddingBottom: heightResponsive(2),
+    paddingHorizontal: widthResponsive(10),
+    paddingVertical: widthResponsive(12),
+    borderRadius: 4,
+  },
+  dateDay: {
+    color: color.Neutral[10],
+    fontFamily: font.InterRegular,
+    fontWeight: '500',
   },
 });

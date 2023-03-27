@@ -34,9 +34,16 @@ const ExclusiveDailyContent = (props: ECProps) => {
   return (
     <View style={styles.container}>
       <View style={styles.titleStyle}>
-        <Title text={'Exclusive Daily Content'} />
+        <Title
+          text={'Exclusive Daily Content'}
+          textStyle={{color: color.Pink[200]}}
+        />
         <TouchableOpacity onPress={() => setIsShowComponent(!isShowComponent)}>
-          {isShowComponent ? <ChevronUp /> : <ChevronDown2 />}
+          {isShowComponent ? (
+            <ChevronUp fill={color.Pink[200]} />
+          ) : (
+            <ChevronDown2 fill={color.Pink[200]} />
+          )}
         </TouchableOpacity>
       </View>
       <Gap height={4} />
@@ -51,7 +58,7 @@ const ExclusiveDailyContent = (props: ECProps) => {
               </View>
             )}
 
-            <Gap width={8} />
+            <Gap width={12} />
             <View style={{justifyContent: 'space-evenly'}}>
               <Text numberOfLines={2} style={styles.titleTopBody}>
                 {title ?? 'Subscribe Exclusive Content'}
@@ -89,9 +96,8 @@ const styles = StyleSheet.create({
     paddingTop: heightResponsive(12),
   },
   mainStyle: {
-    borderWidth: 1,
     borderRadius: 4,
-    borderColor: color.Dark[300],
+    backgroundColor: color.RedVelvet[100],
   },
   titleStyle: {
     flexDirection: 'row',
@@ -101,9 +107,7 @@ const styles = StyleSheet.create({
   topBody: {
     alignItems: 'flex-start',
     flexDirection: 'row',
-    padding: ms(8),
-    borderBottomWidth: 1,
-    borderColor: color.Dark[300],
+    padding: ms(12),
   },
   titleTopBody: {
     maxWidth: widthResponsive(200),
@@ -123,12 +127,15 @@ const styles = StyleSheet.create({
   bottomBody: {
     paddingVertical: heightResponsive(12),
     alignItems: 'center',
+    backgroundColor: color.Pink[300],
+    borderBottomLeftRadius: 4,
+    borderBottomRightRadius: 4,
   },
   bottomBodyText: {
     fontFamily: font.InterRegular,
     fontSize: mvs(12),
     fontWeight: '600',
-    color: color.Pink[2],
+    color: color.Neutral[10],
   },
   logoContainer: {
     paddingHorizontal: widthResponsive(8),
