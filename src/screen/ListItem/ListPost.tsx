@@ -4,9 +4,10 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 
 import {widthPercentage} from '../../utils';
 import {ListItem} from './components/ListItem';
+import PostListHome from '../ListCard/PostList';
 import {RootStackParams} from '../../navigations';
-import PostListPublic from '../ListCard/PostListPublic';
-import PostListExclusive from '../ListCard/PostListExclusive';
+import PostListSimilar from '../ListCard/PostListSimilar';
+import PostListMyArtist from '../ListCard/PostListMyArtist';
 import {dropDownDataCategory, dropDownDataSort} from '../../data/dropdown';
 
 type ListPostProps = NativeStackScreenProps<RootStackParams, 'ListPost'>;
@@ -14,20 +15,27 @@ type ListPostProps = NativeStackScreenProps<RootStackParams, 'ListPost'>;
 export const ListPostScreen: React.FC<ListPostProps> = ({
   route,
 }: ListPostProps) => {
-  // TODO: Need to be wired with API Post
   const {title} = route.params;
   const children = () => {
     return (
       <View style={{flex: 1, paddingHorizontal: widthPercentage(20)}}>
         {title === 'Trending' ? (
-          <PostListPublic
+          <PostListHome
             dataRightDropdown={dropDownDataCategory}
             dataLeftDropdown={dropDownDataSort}
+            hideDropdown={true}
+          />
+        ) : title === 'My Artists' ? (
+          <PostListMyArtist
+            dataRightDropdown={dropDownDataCategory}
+            dataLeftDropdown={dropDownDataSort}
+            hideDropdown={true}
           />
         ) : (
-          <PostListExclusive
+          <PostListSimilar
             dataRightDropdown={dropDownDataCategory}
             dataLeftDropdown={dropDownDataSort}
+            hideDropdown={true}
           />
         )}
       </View>
