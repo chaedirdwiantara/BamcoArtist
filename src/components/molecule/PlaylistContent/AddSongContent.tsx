@@ -18,6 +18,7 @@ import {Gap, SearchBar, SsuToast} from '../../atom';
 import TopSong from '../../../screen/ListCard/TopSong';
 import {PaginationType, SongList} from '../../../interface/song.interface';
 import {heightPercentage, widthPercentage} from '../../../utils';
+import ListSongs from '../../../screen/ListCard/ListSongs';
 
 interface AddSongProps {
   search: string;
@@ -83,7 +84,7 @@ export const AddSongContent: React.FC<AddSongProps> = ({
           style={{
             paddingHorizontal: widthPercentage(20),
           }}>
-          <TopSong
+          <ListSongs
             dataSong={listSongs}
             onPress={() => null}
             rightIcon={true}

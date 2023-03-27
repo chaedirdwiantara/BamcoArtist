@@ -1,7 +1,7 @@
 import {ViewStyle} from 'react-native';
 export interface SvgProps {
-  width?: number;
-  height?: number;
+  width?: number | string;
+  height?: number | string;
   fill?: string;
   stroke?: string;
   active?: boolean;

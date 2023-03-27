@@ -29,20 +29,33 @@ export const usePlayerHook = () => {
     }
   });
 
-  const addSong = async (val: SongList) => {
-    const track: Track = {
-      url: val.transcodedSongUrl[1].encodedHlsUrl,
-      title: val.title,
-      artist: val.musicianName,
-      type: TrackType.HLS,
-      artwork:
-        val.imageUrl && val.imageUrl.length !== 0
-          ? val.imageUrl[0].image
-          : dummySongImg,
-      id: val.id,
-      musicianId: val.musicianId,
-    };
-    await TrackPlayer.add(track);
+  const addSong = async (val: SongList | SongList[]) => {
+    if (Array.isArray(val)) {
+      val.map(async item => {
+        const track: Track = {
+          url: item.transcodedSongUrl[1].encodedHlsUrl,
+          title: item.title,
+          artist: item.musicianName,
+          type: TrackType.HLS,
+          artwork:
+            item.imageUrl.length !== 0 ? item.imageUrl[0].image : undefined,
+          id: item.id,
+          musicianId: item.musicianId,
+        };
+        await TrackPlayer.add(track);
+      });
+    } else {
+      const track: Track = {
+        url: val.transcodedSongUrl[1].encodedHlsUrl,
+        title: val.title,
+        artist: val.musicianName,
+        type: TrackType.HLS,
+        artwork: val.imageUrl.length !== 0 ? val.imageUrl[0].image : undefined,
+        id: val.id,
+        musicianId: val.musicianId,
+      };
+      await TrackPlayer.add(track);
+    }
   };
 
   const addPlaylist = async ({

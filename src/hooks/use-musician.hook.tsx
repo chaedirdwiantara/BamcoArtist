@@ -5,6 +5,7 @@ import {
   getAlbumById,
   listFollowing,
   listMusician,
+  recommendedMusician,
   unfollowMusician,
 } from '../api/musician.api';
 import {
@@ -20,6 +21,12 @@ import {PostPropsTypeA} from '../interface/feed.interface';
 export const useMusicianHook = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [dataMusician, setDataMusician] = useState<MusicianList[]>([]);
+  const [dataFavoriteMusician, setDataFavoriteMusician] = useState<
+    MusicianList[]
+  >([]);
+  const [dataRecommendedMusician, setDataRecommendedMusician] = useState<
+    MusicianList[]
+  >([]);
   const [listFollowingMusician, setListFollowingMusician] = useState<
     MusicianList[]
   >([]);
@@ -37,6 +44,32 @@ export const useMusicianHook = () => {
       console.log(error);
       setIsError(true);
       setDataMusician([]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const getListDataFavoriteMusician = async (props?: ParamsProps) => {
+    try {
+      const response = await listMusician(props);
+      setDataFavoriteMusician(response.data);
+    } catch (error) {
+      console.log(error);
+      setIsError(true);
+      setDataFavoriteMusician([]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const getListDataRecommendedMusician = async (props?: ParamsProps) => {
+    try {
+      const response = await recommendedMusician(props);
+      setDataRecommendedMusician(response.data);
+    } catch (error) {
+      console.log(error, 'recommended');
+      setIsError(true);
+      setDataRecommendedMusician([]);
     } finally {
       setIsLoading(false);
     }
@@ -131,6 +164,8 @@ export const useMusicianHook = () => {
     dataDetailMusician,
     dataAlbum,
     listFollowingMusician,
+    dataFavoriteMusician,
+    dataRecommendedMusician,
     getListDataMusician,
     setFollowMusician,
     setUnfollowMusician,
@@ -138,5 +173,7 @@ export const useMusicianHook = () => {
     getAlbum,
     setDataFollow,
     getListFollowingMusician,
+    getListDataFavoriteMusician,
+    getListDataRecommendedMusician,
   };
 };

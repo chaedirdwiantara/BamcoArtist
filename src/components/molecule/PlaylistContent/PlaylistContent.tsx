@@ -44,6 +44,7 @@ import {useTranslation} from 'react-i18next';
 import {ModalShare} from '../Modal/ModalShare';
 import {usePlayerHook} from '../../../hooks/use-player.hook';
 import DropdownMore from '../V2/DropdownFilter/DropdownMore';
+import ListSongs from '../../../screen/ListCard/ListSongs';
 
 interface Props {
   goBackProfile: (showToast: boolean) => void;
@@ -166,8 +167,8 @@ export const PlaylistContent: React.FC<Props> = ({
     } else if (dataResult?.value === 'AddToQueue') {
       setToastVisible(true);
       setToastText('Playlist added to queue!');
+      addSong(listSongs);
     } else if (dataResult?.value === textAddToPlaylist) {
-      // wiring add to playlist
       addToMyPlaylist();
     } else {
       setModalShare(true);
@@ -181,7 +182,7 @@ export const PlaylistContent: React.FC<Props> = ({
     } else if (dataResult?.value === 'ShowDetails') {
       goToDetailSong(item.id);
     } else if (dataResult?.value === 'AddToQueue') {
-      // addSong(item);
+      addSong(item);
       setToastVisible(true);
       setToastText('Song added to queue!');
     } else if (dataResult?.value === 'ViewAlbum') {
@@ -294,7 +295,7 @@ export const PlaylistContent: React.FC<Props> = ({
             {listSongs === null || listSongs?.length === 0 ? (
               <Text style={styles.description}>{t('Music.Label.NoSong')}</Text>
             ) : (
-              <TopSong
+              <ListSongs
                 dataSong={listSongs}
                 type={'home'}
                 onPress={onPressSong}
