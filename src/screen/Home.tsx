@@ -98,8 +98,7 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
   const {counter, getCountNotification} = useNotificationHook();
   const {creditCount, getCreditCount} = useCreditHook();
   const {listGenre, listMood, getListMoodGenre} = useSettingHook();
-  const {getSearchAlbums} = useSearchHook();
-  const {dataPlaylist, getPlaylist} = usePlaylistHook();
+  const {getSearchAlbums, getSearchPlaylists} = useSearchHook();
 
   const isLogin = storage.getBoolean('isLogin');
   const isFocused = useIsFocused();
@@ -119,6 +118,11 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
     getSearchAlbums({keyword: ''}),
   );
 
+  const {data: dataPlaylist, refetch: refetchPlaylist} = useQuery(
+    ['/search-playlist'],
+    () => getSearchPlaylists({keyword: ''}),
+  );
+
   useEffect(() => {
     getListDataBanner();
     getProfileUser();
@@ -130,7 +134,7 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
     refetch();
     getListDataFavoriteMusician();
     getListDataNewSong();
-    getPlaylist();
+    refetchPlaylist();
     getListDataRecommendedMusician();
     setTimeout(() => {
       setRefreshing(false);
@@ -478,7 +482,7 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
         {/* Playlist */}
         <ListPlaylistHome
           title={'Playlist'}
-          data={dataPlaylist}
+          data={dataPlaylist?.data}
           onPress={() => navigation.navigate('ListPlaylist')}
         />
         {/* End of Playlist */}
