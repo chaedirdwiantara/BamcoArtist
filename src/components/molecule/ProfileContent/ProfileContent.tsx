@@ -263,7 +263,7 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
               />
             </View>
           ) : filter2[selectedIndex].filterName === 'Musician.Tab.Main' ? (
-            <MainTab />
+            <MainTab uuid={uuid} />
           ) : (
             <EmptyState
               text={t('EmptyState.NoData') || ''}
