@@ -38,7 +38,7 @@ export const ListAlbum: React.FC<ListAlbumProps> = ({
             <ListSongs
               dataSong={dataAlbumComingSoon}
               hideDropdownMore={true}
-              type="home"
+              type="coming_soon"
               onPress={(item: AlbumData) => goToDetailAlbum(item.id)}
             />
           </View>

@@ -24,7 +24,7 @@ import {
 } from '../';
 import {useTranslation} from 'react-i18next';
 import {DataDetailAlbum, SongList} from '../../../interface/song.interface';
-import {dateFormat, dateLongMonth} from '../../../utils/date-format';
+import {dateLongMonth} from '../../../utils/date-format';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParams} from '../../../navigations';
@@ -143,8 +143,8 @@ export const AlbumContent: React.FC<Props> = ({
   };
 
   const createdDate = comingSoon
-    ? dateFormat(detailAlbum.releaseDateScheduled)
-    : dateFormat(detailAlbum.createdAt);
+    ? dateLongMonth(detailAlbum.releaseDateScheduled)
+    : dateLongMonth(detailAlbum.createdAt);
 
   return (
     <View style={styles.root}>
