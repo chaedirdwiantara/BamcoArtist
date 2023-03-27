@@ -1,4 +1,5 @@
 import SsuAPI from './baseMusician';
+import SsuAPIPublic from './basePublic';
 import SsuAPIGeneral from './baseRinjaniNew';
 import {
   EmailPhoneProps,
@@ -229,6 +230,30 @@ export const setLanguageSettings = async (
     data: {
       language: lang,
     },
+  });
+
+  return data;
+};
+
+export const getListMoodPublic = async (
+  props?: PreferenceProps,
+): Promise<PreferenceResponseType> => {
+  const {data} = await SsuAPIPublic().request<PreferenceResponseType>({
+    url: '/moods',
+    method: 'GET',
+    params: props,
+  });
+
+  return data;
+};
+
+export const getListGenrePublic = async (
+  props?: PreferenceProps,
+): Promise<PreferenceResponseType> => {
+  const {data} = await SsuAPIPublic().request<PreferenceResponseType>({
+    url: '/favorite-genres',
+    method: 'GET',
+    params: props,
   });
 
   return data;
