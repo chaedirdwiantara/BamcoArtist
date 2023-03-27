@@ -1,19 +1,18 @@
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import React, {FC} from 'react';
-import {useTranslation} from 'react-i18next';
-import {ScrollView, Text, View} from 'react-native';
+import {ScrollView} from 'react-native';
 import PlaylistHomeCard from '../../components/molecule/ListCard/PlaylistHomeCard';
 import {Playlist} from '../../interface/playlist.interface';
+import {ListDataSearchPlaylist} from '../../interface/search.interface';
 import {RootStackParams} from '../../navigations';
 import {widthResponsive} from '../../utils';
 
 interface PlaylistProps {
-  dataPlaylist: Playlist[];
+  dataPlaylist: Playlist[] | ListDataSearchPlaylist[];
 }
 
 const PlaylistHome: FC<PlaylistProps> = (props: PlaylistProps) => {
-  const {t} = useTranslation();
   const {dataPlaylist} = props;
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();

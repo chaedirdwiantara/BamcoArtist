@@ -1,9 +1,15 @@
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React, {useEffect} from 'react';
 import {useTranslation} from 'react-i18next';
-import {FlatList, RefreshControl, StyleSheet, View} from 'react-native';
+import {
+  FlatList,
+  Platform,
+  RefreshControl,
+  StyleSheet,
+  View,
+} from 'react-native';
 import {mvs} from 'react-native-size-matters';
-import {useQuery} from 'react-query';
+import {useInfiniteQuery} from 'react-query';
 import {EmptyState, ListCard, TopNavigation} from '../../components';
 import LoadingSpinner from '../../components/atom/Loading/LoadingSpinner';
 import {useSearchHook} from '../../hooks/use-search.hook';
@@ -24,10 +30,31 @@ const ListPlaylist: React.FC<PlaylistProps> = ({navigation}: PlaylistProps) => {
     refetch,
     isRefetching,
     isLoading,
-  } = useQuery(['/search-playlist'], () => getSearchPlaylists({keyword: ''}));
+    fetchNextPage,
+    isFetchingNextPage,
+    hasNextPage,
+  } = useInfiniteQuery(
+    ['/list-playlist'],
+    ({pageParam = 1}) => getSearchPlaylists({keyword: '', page: pageParam}),
+    {
+      getNextPageParam: lastPage => {
+        if (lastPage?.meta) {
+          const nextPage = lastPage?.meta?.page + 1;
+          return nextPage;
+        }
+        return null;
+      },
+    },
+  );
 
   const resultDataMore = (dataResult: any) => {
     console.log(dataResult, 'resultDataMenu');
+  };
+
+  const loadMore = () => {
+    if (hasNextPage) {
+      fetchNextPage();
+    }
   };
 
   useEffect(() => {
@@ -47,15 +74,23 @@ const ListPlaylist: React.FC<PlaylistProps> = ({navigation}: PlaylistProps) => {
         itemStrokeColor={color.Neutral[10]}
       />
       <View style={styles.container}>
-        {(isRefetching || isLoading) && (
+        {(isRefetching || isLoading) && !isFetchingNextPage && (
           <View style={styles.loadingContainer}>
             <LoadingSpinner />
           </View>
         )}
         <FlatList
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={styles.ListContainer}
-          data={dataSearchPlaylists?.data}
+          keyExtractor={item => item.id}
+          contentContainerStyle={{
+            paddingBottom: isFetchingNextPage
+              ? heightPercentage(0)
+              : heightPercentage(200),
+          }}
+          data={
+            dataSearchPlaylists?.pages?.map((page: any) => page.data).flat() ??
+            []
+          }
           renderItem={({item, index}) => (
             <ListCard.MusicList
               imgUri={item.thumbnailUrl}
@@ -80,9 +115,19 @@ const ListPlaylist: React.FC<PlaylistProps> = ({navigation}: PlaylistProps) => {
             ) : null
           }
           refreshControl={
-            <RefreshControl refreshing={isRefetching} onRefresh={refetch} />
+            <RefreshControl
+              refreshing={isRefetching && !isFetchingNextPage}
+              onRefresh={refetch}
+            />
           }
+          onEndReached={loadMore}
+          onEndReachedThreshold={Platform.OS === 'ios' ? 0 : 1}
         />
+        {isFetchingNextPage && (
+          <View style={styles.loadingContainer}>
+            <LoadingSpinner />
+          </View>
+        )}
       </View>
     </View>
   );
@@ -97,9 +142,6 @@ const styles = StyleSheet.create({
   },
   container: {
     paddingHorizontal: widthResponsive(24),
-  },
-  ListContainer: {
-    paddingBottom: heightPercentage(200),
   },
   loading: {
     color: color.Neutral[10],
