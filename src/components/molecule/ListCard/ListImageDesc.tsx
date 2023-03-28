@@ -5,15 +5,14 @@ import {mvs} from 'react-native-size-matters';
 import {SquareImageText} from '../../atom';
 import {color, font} from '../../../theme';
 import HorizontalCard from './HorizontalCard';
-import {DiveInType} from '../../../data/diveInList';
+import {ComingSoon, DiveIn} from '../../../interface/home.interface';
 import {elipsisText, heightPercentage, widthPercentage} from '../../../utils';
-import {ListDataSearchAlbums} from '../../../interface/search.interface';
 
 export interface ListImageDescProps {
   title: string;
-  data: ListDataSearchAlbums[] | DiveInType[] | undefined;
+  data: ComingSoon[] | DiveIn[];
   onPress: () => void;
-  onPressImage: (name: string) => void;
+  onPressImage: (name: string, id: number) => void;
   hideArrow?: boolean;
   imageStyle?: ViewStyle;
   containerStyle?: ViewStyle;
@@ -34,11 +33,11 @@ const ListImageDesc: React.FC<ListImageDescProps> = (
 
   const children = () => {
     return (
-      <FlatList
-        data={data ?? []}
+      <FlatList<ComingSoon | DiveIn>
+        data={data}
         horizontal
         showsHorizontalScrollIndicator={false}
-        keyExtractor={item => item.id.toString()}
+        keyExtractor={item => item.title}
         style={{paddingLeft: widthPercentage(24)}}
         renderItem={({item, index}) => {
           const style = {
@@ -54,16 +53,16 @@ const ListImageDesc: React.FC<ListImageDescProps> = (
           return (
             <View key={index}>
               <SquareImageText
-                imgUri={item.imageUrl[2].image}
+                imgUri={item.imageUrl[2]?.image || ''}
                 text={item.title || ''}
                 containerStyle={style}
                 imageStyle={{justifyContent: 'flex-start'}}
                 textStyle={{paddingTop: heightPercentage(15)}}
                 hideText={title === 'Coming Soon'}
-                onPress={() => onPressImage(item.title)}
+                onPress={() => onPressImage(item.title, item.id)}
               />
               <View style={{marginTop: heightPercentage(10)}}>
-                <Text style={styles.title}>{elipsisText(item.title, 15)}</Text>
+                <Text style={styles.title}>{elipsisText(item.title, 13)}</Text>
                 <Text
                   style={[
                     styles.subtitle,
@@ -71,7 +70,7 @@ const ListImageDesc: React.FC<ListImageDescProps> = (
                   ]}>
                   {title === ''
                     ? item.description
-                    : elipsisText(item.description || item.title, 15)}
+                    : elipsisText(item.musician.name, 13)}
                 </Text>
               </View>
             </View>

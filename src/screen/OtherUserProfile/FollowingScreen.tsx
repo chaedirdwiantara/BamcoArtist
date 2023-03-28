@@ -11,12 +11,14 @@ import {FollowingList} from '../../components';
 import {RootStackParams} from '../../navigations';
 import {useMusicianHook} from '../../hooks/use-musician.hook';
 import {FollowMusicianPropsType} from '../../interface/musician.interface';
+import {profileStorage} from '../../hooks/use-storage.hook';
 
 type FollowingProps = NativeStackScreenProps<RootStackParams, 'Following'>;
 
 export const FollowingScreen: React.FC<FollowingProps> = ({
   route,
 }: FollowingProps) => {
+  const selfUUID = profileStorage()?.uuid;
   const {uuid} = route.params;
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
@@ -57,7 +59,7 @@ export const FollowingScreen: React.FC<FollowingProps> = ({
         setUnfollowMusician={(props?: FollowMusicianPropsType) =>
           setUnfollowMusician(props, {keyword: search}, true)
         }
-        dataList={listFollowingMusician}
+        dataList={listFollowingMusician.filter(val => val.uuid !== selfUUID)}
         onPressGoBack={onPressGoBack}
         goToMusician={goToMusician}
       />

@@ -47,7 +47,7 @@ export default HorizontalCard;
 
 const styles = StyleSheet.create({
   containerContent: {
-    height: height * 0.05,
+    height: height * 0.06,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',

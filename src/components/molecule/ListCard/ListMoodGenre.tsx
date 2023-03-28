@@ -10,7 +10,7 @@ export interface ListMoodGenreProps {
   title: string;
   data: PreferenceList[];
   onPress: () => void;
-  onPressImage: (name: string) => void;
+  onPressImage: (id: number, name: string) => void;
   imageStyle?: ViewStyle;
   containerStyle?: ViewStyle;
 }
@@ -46,7 +46,7 @@ const ListMoodGenre: React.FC<ListMoodGenreProps> = (
               imgUri={item.imageUrls[1].image}
               text={item.name}
               containerStyle={style}
-              onPress={() => onPressImage(item.name)}
+              onPress={() => onPressImage(item.id, item.name)}
             />
           );
         }}

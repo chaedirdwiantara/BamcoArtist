@@ -40,6 +40,7 @@ interface ListProps {
   loveIcon?: boolean;
   likeOnPress?: () => void;
   isLiked?: boolean;
+  disabled?: boolean;
 }
 
 const MusicListCard: React.FC<ListProps> = ({
@@ -60,6 +61,7 @@ const MusicListCard: React.FC<ListProps> = ({
   loveIcon,
   likeOnPress,
   isLiked,
+  disabled,
 }) => {
   const {t} = useTranslation();
   // ? Dropdown Menu Example
@@ -71,10 +73,17 @@ const MusicListCard: React.FC<ListProps> = ({
     {label: t('Home.Tab.TopSong.Details'), value: '5'},
   ];
 
-  const titleColor = played ? color.Success[400] : color.Neutral[10];
+  const titleColor = disabled
+    ? color.Neutral[60]
+    : played
+    ? color.Success[400]
+    : color.Neutral[10];
+
+  const descColor = disabled ? color.Dark[50] : color.Dark[100];
 
   return (
     <TouchableOpacity
+      disabled={disabled}
       activeOpacity={activeOpacity}
       style={[styles.container, containerStyles]}
       onPress={onPressCard}>
@@ -99,6 +108,7 @@ const MusicListCard: React.FC<ListProps> = ({
           imgUri={imgUri}
           size={widthPercentage(44)}
           borderRadius={4}
+          darkImage={disabled}
         />
       ) : (
         <DefaultImage.SongCover
@@ -112,7 +122,7 @@ const MusicListCard: React.FC<ListProps> = ({
           {musicTitle}
         </Text>
         <Gap height={2} />
-        <Text style={styles.songDesc} numberOfLines={1}>
+        <Text style={[styles.songDesc, {color: descColor}]} numberOfLines={1}>
           {singerName}
         </Text>
       </View>

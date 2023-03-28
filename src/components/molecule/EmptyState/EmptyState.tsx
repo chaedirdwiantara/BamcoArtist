@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, StyleSheet, ViewStyle} from 'react-native';
+import {View, Text, StyleSheet, ViewStyle, TextStyle} from 'react-native';
 import {mvs} from 'react-native-size-matters';
 import {width} from '../../../utils';
 import Color from '../../../theme/Color';
@@ -7,17 +7,19 @@ import {CrackEggIcon} from '../../../assets/icon';
 import Typography from '../../../theme/Typography';
 
 interface Props {
-  text?: string;
-  containerStyle?: ViewStyle;
+  text: string;
   icon?: React.ReactNode;
+  hideIcon?: boolean;
+  containerStyle?: ViewStyle;
+  textStyle?: TextStyle;
 }
 
 export const EmptyState: React.FC<Props> = (props: Props) => {
-  const {text, containerStyle, icon} = props;
+  const {text, containerStyle, icon, hideIcon, textStyle} = props;
   return (
     <View style={[styles.root, containerStyle]}>
-      {icon ? icon : <CrackEggIcon />}
-      <Text style={[Typography.Button2, styles.text]}>{text}</Text>
+      {hideIcon ? <></> : icon ? icon : <CrackEggIcon />}
+      <Text style={[Typography.Button2, styles.text, textStyle]}>{text}</Text>
     </View>
   );
 };

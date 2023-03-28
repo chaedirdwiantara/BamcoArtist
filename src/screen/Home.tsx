@@ -10,11 +10,11 @@ import {
   RefreshControl,
   Platform,
 } from 'react-native';
+import {useQuery} from 'react-query';
 import {
   NativeStackNavigationProp,
   NativeStackScreenProps,
 } from '@react-navigation/native-stack';
-import {useQuery} from 'react-query';
 import {useTranslation} from 'react-i18next';
 import {mvs} from 'react-native-size-matters';
 import {useNavigation, useIsFocused} from '@react-navigation/native';
@@ -37,15 +37,15 @@ import Color from '../theme/Color';
 import TopSong from './ListCard/TopSong';
 import NewSong from './ListCard/NewSong';
 import {defaultBanner} from '../data/home';
-import {ListDiveIn} from '../data/diveInList';
 import TopMusician from './ListCard/TopMusician';
 import {useFcmHook} from '../hooks/use-fcm.hook';
 import {storage} from '../hooks/use-storage.hook';
 import {useSongHook} from '../hooks/use-song.hook';
+import {useHomeHook} from '../hooks/use-home.hook';
 import {SongList} from '../interface/song.interface';
 import * as FCMService from '../service/notification';
-import {useCreditHook} from '../hooks/use-credit.hook';
 import {useSearchHook} from '../hooks/use-search.hook';
+import {useCreditHook} from '../hooks/use-credit.hook';
 import {usePlayerHook} from '../hooks/use-player.hook';
 import {useBannerHook} from '../hooks/use-banner.hook';
 import {ParamsProps} from '../interface/base.interface';
@@ -53,10 +53,8 @@ import {useProfileHook} from '../hooks/use-profile.hook';
 import {useSettingHook} from '../hooks/use-setting.hook';
 import {useMusicianHook} from '../hooks/use-musician.hook';
 import FavoriteMusician from './ListCard/FavoriteMusician';
-import {usePlaylistHook} from '../hooks/use-playlist.hook';
 import {CheckCircle2Icon, SearchIcon} from '../assets/icon';
 import {MainTabParams, RootStackParams} from '../navigations';
-import {PreferenceList} from '../interface/setting.interface';
 import RecomendedMusician from './ListCard/RecomendedMusician';
 import {useNotificationHook} from '../hooks/use-notification.hook';
 import LoadingSpinner from '../components/atom/Loading/LoadingSpinner';
@@ -64,6 +62,7 @@ import {FollowMusicianPropsType} from '../interface/musician.interface';
 import {FirebaseMessagingTypes} from '@react-native-firebase/messaging';
 import {ModalPlayMusic} from '../components/molecule/Modal/ModalPlayMusic';
 import {heightPercentage, widthPercentage, widthResponsive} from '../utils';
+import EmptyStateHome from '../components/molecule/EmptyState/EmptyStateHome';
 import ListPlaylistHome from '../components/molecule/ListCard/ListPlaylistHome';
 
 type OnScrollEventHandler = (
@@ -78,7 +77,8 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
   const {i18n} = useTranslation();
   const currentLanguage = i18n.language;
-
+  const {dataDiveIn, dataAlbumComingSoon, getListDiveIn, getListComingSoon} =
+    useHomeHook();
   const {dataBanner, getListDataBanner} = useBannerHook();
   const {dataProfile, getProfileUser} = useProfileHook();
   const {addFcmToken} = useFcmHook();
@@ -97,8 +97,9 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
     useSongHook();
   const {counter, getCountNotification} = useNotificationHook();
   const {creditCount, getCreditCount} = useCreditHook();
-  const {listGenre, listMood, getListMoodGenre} = useSettingHook();
-  const {getSearchAlbums, getSearchPlaylists} = useSearchHook();
+  const {listGenre, listMood, getListMoodPublic, getListGenrePublic} =
+    useSettingHook();
+  const {getSearchPlaylists} = useSearchHook();
 
   const isLogin = storage.getBoolean('isLogin');
   const isFocused = useIsFocused();
@@ -113,11 +114,6 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
     uuid = profileObject.uuid;
   }
 
-  // dummy coming soon
-  const {data: dataSearchAlbums, refetch} = useQuery(['/search-albums'], () =>
-    getSearchAlbums({keyword: ''}),
-  );
-
   const {data: dataPlaylist, refetch: refetchPlaylist} = useQuery(
     ['/search-playlist'],
     () => getSearchPlaylists({keyword: ''}),
@@ -130,12 +126,14 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
     getListDataTopSong();
     getCountNotification();
     getCreditCount();
-    getListMoodGenre();
-    refetch();
+    getListMoodPublic();
+    getListGenrePublic();
     getListDataFavoriteMusician();
     getListDataNewSong();
+    getListDiveIn();
     refetchPlaylist();
     getListDataRecommendedMusician();
+    getListComingSoon();
     setTimeout(() => {
       setRefreshing(false);
     }, 1000);
@@ -285,23 +283,32 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
     isLogin ? goToScreen('TopupCoin') : setModalGuestVisible(true);
   };
 
-  const onPressMoodGenre = (title: string, data: PreferenceList[]) => {
-    isLogin
-      ? navigation.navigate('ListImage', {title, data})
-      : setModalGuestVisible(true);
+  const onPressMoodGenre = (title: string, filterBy: string) => {
+    navigation.navigate('ListImage', {title, filterBy});
   };
 
-  const goToListMusic = (name: string, type: string) => {
-    navigation.navigate('ListMusic', {title: name, id: 1, type});
+  const goToListMusic = (
+    name: string,
+    type: string,
+    id?: number,
+    filterBy?: string,
+  ) => {
+    navigation.navigate('ListMusic', {
+      id,
+      type,
+      filterBy,
+      title: name,
+      fromMainTab: true,
+    });
   };
 
-  const goToDetailAlbum = () => {
-    navigation.navigate('Album', {id: 35});
+  const goToDetailAlbum = (name: string, id: number) => {
+    navigation.navigate('Album', {id, type: 'coming_soon'});
   };
 
   const goToMusicianPost = (name: string) => {
     isLogin || name === 'Trending'
-      ? navigation.navigate('ListPost', {title: name, id: 1})
+      ? navigation.navigate('ListPost', {title: name})
       : setModalGuestVisible(true);
   };
 
@@ -359,8 +366,8 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
           title="Mood"
           data={listMood}
           containerStyle={styles.containerList}
-          onPress={() => onPressMoodGenre('Moods', listMood)}
-          onPressImage={name => goToListMusic(name, 'song')}
+          onPress={() => onPressMoodGenre('Moods', 'mood')}
+          onPressImage={(id, name) => goToListMusic(name, 'song', id, 'mood')}
         />
         {/* End Of Mood */}
         {/* Genre */}
@@ -372,12 +379,11 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
             width: widthPercentage(90),
             height: heightPercentage(80),
           }}
-          onPress={() => onPressMoodGenre('Genre', listGenre)}
-          onPressImage={name => goToListMusic(name, 'song')}
+          onPress={() => onPressMoodGenre('Genre', 'genre')}
+          onPressImage={(id, name) => goToListMusic(name, 'song', id, 'genre')}
         />
         {/* End Of Genre */}
         {/* Dive In */}
-        {/* TODO: need to be wired with API Dive In */}
         <View
           style={{
             marginTop: heightPercentage(20),
@@ -391,7 +397,7 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
         <ListImageDesc
           title=""
           hideArrow={true}
-          data={ListDiveIn}
+          data={dataDiveIn}
           containerStyle={{
             marginTop: heightPercentage(10),
             marginBottom: heightPercentage(20),
@@ -487,16 +493,23 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
         />
         {/* End of Playlist */}
         {/* Coming Soon */}
-        {/* TODO: Need to be wired with API unreleased album */}
-        <ListImageDesc
-          title="Coming Soon"
-          data={dataSearchAlbums?.data}
-          containerStyle={styles.containerList}
-          onPress={() => goToListMusic('Album', 'album')}
-          onPressImage={goToDetailAlbum}
-        />
+        {dataAlbumComingSoon.length > 0 ? (
+          <ListImageDesc
+            title="Coming Soon"
+            data={dataAlbumComingSoon}
+            containerStyle={styles.containerList}
+            onPress={() => goToListMusic('Coming Soon', 'album')}
+            onPressImage={(name, id) => goToDetailAlbum(name, id)}
+          />
+        ) : (
+          <EmptyStateHome
+            title="Coming Soon"
+            onPress={() => goToListMusic('Coming Soon', 'album')}
+          />
+        )}
+        <Gap height={heightPercentage(40)} />
+        {/* End Of Coming Soon */}
       </ScrollView>
-      {/* End Of Coming Soon */}
       <BottomSheetGuest
         modalVisible={modalGuestVisible}
         onPressClose={() => setModalGuestVisible(false)}

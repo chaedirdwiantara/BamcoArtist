@@ -45,6 +45,7 @@ export const useSearchHook = () => {
   };
 
   const getSearchSongs = async (props?: SearchProps) => {
+    setSearchLoading(true);
     try {
       const response = await songSearch(props);
       setDataSearchSongs(response.data);
@@ -53,6 +54,8 @@ export const useSearchHook = () => {
       };
     } catch (error) {
       console.log(error);
+    } finally {
+      setSearchLoading(false);
     }
   };
 

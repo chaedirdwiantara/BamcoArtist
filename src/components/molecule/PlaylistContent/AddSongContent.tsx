@@ -15,7 +15,6 @@ import {
 import {TopNavigation} from '../TopNavigation';
 import {color, typography} from '../../../theme';
 import {Gap, SearchBar, SsuToast} from '../../atom';
-import TopSong from '../../../screen/ListCard/TopSong';
 import {PaginationType, SongList} from '../../../interface/song.interface';
 import {heightPercentage, widthPercentage} from '../../../utils';
 import ListSongs from '../../../screen/ListCard/ListSongs';

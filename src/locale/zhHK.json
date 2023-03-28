@@ -188,6 +188,26 @@
       "NewSong": {
         "Title": "New Songs"
       }
+    },
+    "ListMood": {
+      "EmptyState": "Sorry, we don't have any music available for this mood at the moment. Check back soon as we're always adding new music!"
+    },
+    "ListGenre": {
+      "EmptyState": "Sorry, we don't have any music available for this genre at the moment. Check back soon as we're always adding new music!"
+    },
+    "DiveIn": {
+      "Trending": {
+        "EmptyState": "We're sorry! There's no trending feed available right now. Check back soon, as we're always working to bring you the best music social media experience."
+      },
+      "Similar": {
+        "EmptyState": "We're sorry, but there are currently no feeds available from similar artists. Check back soon for new updates!"
+      },
+      "MyArtist": {
+        "EmptyState": "Looks like there are no posts from the musicians you follow. Follow more musicians to see their posts in your feed."
+      }
+    },
+    "ComingSoon": {
+      "EmptyState": "Unfortunately, there are no new albums coming soon from any musicians. We'll let you know as soon as something new is on the horizon."
     }
   },
   "Feed": {
@@ -532,6 +552,7 @@
       "SongList": "歌曲列表",
       "AddSong": "新增歌曲",
       "CreatedOn": "製作於",
+      "ComingSoon": "Coming soon",
       "NoSong": "No Song Added",
       "Songs": "歌曲"
     },
