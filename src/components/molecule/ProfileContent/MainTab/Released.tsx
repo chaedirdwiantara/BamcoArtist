@@ -37,17 +37,21 @@ const Released: FC<ReleasedProps> = (props: ReleasedProps) => {
 
   return (
     <View>
-      <Text style={styles.textComp}>Released This Year</Text>
-      <Gap height={16} />
-      {dataAlbum && dataDetailMusician ? (
-        <ReleasedAlbum
-          title={''}
-          data={dataAlbum}
-          artistName={dataDetailMusician.fullname}
-          errorText={noAlbumText}
-          noTitle
-        />
-      ) : null}
+      {dataAlbum.length > 0 && (
+        <>
+          <Text style={styles.textComp}>Released This Year</Text>
+          <Gap height={16} />
+          {dataDetailMusician ? (
+            <ReleasedAlbum
+              title={''}
+              data={dataAlbum}
+              artistName={dataDetailMusician.fullname}
+              errorText={noAlbumText}
+              noTitle
+            />
+          ) : null}
+        </>
+      )}
     </View>
   );
 };

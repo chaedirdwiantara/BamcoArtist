@@ -227,89 +227,93 @@ const PopularPost: FC<PopularPostProps> = (props: PopularPostProps) => {
 
   return (
     <View>
-      <Text style={styles.textComp}>Popular Post</Text>
-      <Gap height={16} />
       {dataPostList.length > 0 && (
-        <ListCard.PostList
-          containerStyles={{paddingHorizontal: 0}}
-          toDetailOnPress={() => {}}
-          musicianName={dataPostList[0].musician.fullname}
-          musicianId={`@${dataPostList[0].musician.username}`}
-          imgUri={
-            dataPostList[0].musician.imageProfileUrls.length !== 0
-              ? dataPostList[0].musician.imageProfileUrls[0]?.image
-              : ''
-          }
-          postDate={
-            dataPostList[0]?.timeAgo
-              ? dataPostList[0].timeAgo
-              : dateFormat(dataPostList[0].createdAt)
-          }
-          postDate2={dataPostList[0].createdAt}
-          category={categoryNormalize(dataPostList[0].category)}
-          onPress={() => cardOnPress(dataPostList[0])}
-          likeOnPress={() =>
-            likeOnPress(dataPostList[0].id, dataPostList[0].isLiked)
-          }
-          likePressed={
-            selectedId === undefined
-              ? dataPostList[0].isLiked
-              : selectedId.includes(dataPostList[0].id) &&
-                recorder.includes(dataPostList[0].id)
-              ? true
-              : !selectedId.includes(dataPostList[0].id) &&
-                recorder.includes(dataPostList[0].id)
-              ? false
-              : !selectedId.includes(dataPostList[0].id) &&
-                !recorder.includes(dataPostList[0].id)
-              ? dataPostList[0].isLiked
-              : dataPostList[0].isLiked
-          }
-          likeCount={
-            selectedId === undefined
-              ? dataPostList[0].likesCount
-              : selectedId.includes(dataPostList[0].id) &&
-                recorder.includes(dataPostList[0].id) &&
-                dataPostList[0].isLiked === true
-              ? dataPostList[0].likesCount
-              : selectedId.includes(dataPostList[0].id) &&
-                recorder.includes(dataPostList[0].id) &&
-                dataPostList[0].isLiked === false
-              ? dataPostList[0].likesCount + 1
-              : !selectedId.includes(dataPostList[0].id) &&
-                recorder.includes(dataPostList[0].id) &&
-                dataPostList[0].isLiked === true
-              ? dataPostList[0].likesCount - 1
-              : !selectedId.includes(dataPostList[0].id) &&
-                recorder.includes(dataPostList[0].id) &&
-                dataPostList[0].isLiked === false
-              ? dataPostList[0].likesCount
-              : dataPostList[0].likesCount
-          }
-          tokenOnPress={tokenOnPress}
-          shareOnPress={shareOnPress}
-          commentCount={dataPostList[0].commentsCount}
-          myPost={dataPostList[0].musician.uuid === MyUuid}
-          selectedMenu={setSelectedMenu}
-          idPost={dataPostList[0].id}
-          selectedIdPost={setSelectedIdPost}
-          isPremium={dataPostList[0].isPremiumPost}
-          children={
-            <ChildrenCard
-              data={dataPostList[0]}
-              onPress={onPressPlaySong}
-              isPlay={isPlaying}
-              playOrPause={handlePausePlay}
-              pauseModeOn={pauseModeOn}
-              currentProgress={playerProgress.position}
-              duration={playerProgress.duration}
-              seekPlayer={seekPlayer}
-              isIdNowPlaying={dataPostList[0].id === idNowPlaying}
-            />
-          }
-        />
+        <>
+          <Text style={styles.textComp}>Popular Post</Text>
+          <Gap height={16} />
+
+          <ListCard.PostList
+            containerStyles={{paddingHorizontal: 0}}
+            toDetailOnPress={() => {}}
+            musicianName={dataPostList[0].musician.fullname}
+            musicianId={`@${dataPostList[0].musician.username}`}
+            imgUri={
+              dataPostList[0].musician.imageProfileUrls.length !== 0
+                ? dataPostList[0].musician.imageProfileUrls[0]?.image
+                : ''
+            }
+            postDate={
+              dataPostList[0]?.timeAgo
+                ? dataPostList[0].timeAgo
+                : dateFormat(dataPostList[0].createdAt)
+            }
+            postDate2={dataPostList[0].createdAt}
+            category={categoryNormalize(dataPostList[0].category)}
+            onPress={() => cardOnPress(dataPostList[0])}
+            likeOnPress={() =>
+              likeOnPress(dataPostList[0].id, dataPostList[0].isLiked)
+            }
+            likePressed={
+              selectedId === undefined
+                ? dataPostList[0].isLiked
+                : selectedId.includes(dataPostList[0].id) &&
+                  recorder.includes(dataPostList[0].id)
+                ? true
+                : !selectedId.includes(dataPostList[0].id) &&
+                  recorder.includes(dataPostList[0].id)
+                ? false
+                : !selectedId.includes(dataPostList[0].id) &&
+                  !recorder.includes(dataPostList[0].id)
+                ? dataPostList[0].isLiked
+                : dataPostList[0].isLiked
+            }
+            likeCount={
+              selectedId === undefined
+                ? dataPostList[0].likesCount
+                : selectedId.includes(dataPostList[0].id) &&
+                  recorder.includes(dataPostList[0].id) &&
+                  dataPostList[0].isLiked === true
+                ? dataPostList[0].likesCount
+                : selectedId.includes(dataPostList[0].id) &&
+                  recorder.includes(dataPostList[0].id) &&
+                  dataPostList[0].isLiked === false
+                ? dataPostList[0].likesCount + 1
+                : !selectedId.includes(dataPostList[0].id) &&
+                  recorder.includes(dataPostList[0].id) &&
+                  dataPostList[0].isLiked === true
+                ? dataPostList[0].likesCount - 1
+                : !selectedId.includes(dataPostList[0].id) &&
+                  recorder.includes(dataPostList[0].id) &&
+                  dataPostList[0].isLiked === false
+                ? dataPostList[0].likesCount
+                : dataPostList[0].likesCount
+            }
+            tokenOnPress={tokenOnPress}
+            shareOnPress={shareOnPress}
+            commentCount={dataPostList[0].commentsCount}
+            myPost={dataPostList[0].musician.uuid === MyUuid}
+            selectedMenu={setSelectedMenu}
+            idPost={dataPostList[0].id}
+            selectedIdPost={setSelectedIdPost}
+            isPremium={dataPostList[0].isPremiumPost}
+            children={
+              <ChildrenCard
+                data={dataPostList[0]}
+                onPress={onPressPlaySong}
+                isPlay={isPlaying}
+                playOrPause={handlePausePlay}
+                pauseModeOn={pauseModeOn}
+                currentProgress={playerProgress.position}
+                duration={playerProgress.duration}
+                seekPlayer={seekPlayer}
+                isIdNowPlaying={dataPostList[0].id === idNowPlaying}
+              />
+            }
+          />
+
+          <Gap height={16} />
+        </>
       )}
-      <Gap height={16} />
       <ModalDonate
         totalCoin={creditCount}
         onPressDonate={onPressDonate}

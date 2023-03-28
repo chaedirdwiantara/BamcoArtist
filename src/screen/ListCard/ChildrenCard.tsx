@@ -5,7 +5,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {createRef, FC} from 'react';
+import React, {FC} from 'react';
 import {elipsisText, widthResponsive} from '../../utils';
 import {Gap} from '../../components';
 import ImageList from './ImageList';
@@ -46,10 +46,6 @@ const ChildrenCard: FC<ChildrenCardProps> = (props: ChildrenCardProps) => {
 
   const onPressPlaySong = (val: PostList) => {
     onPress?.(val);
-  };
-
-  const handleOnBlur = (val: PostList) => {
-    console.log('premium content');
   };
 
   return (
@@ -97,7 +93,7 @@ const ChildrenCard: FC<ChildrenCardProps> = (props: ChildrenCardProps) => {
                   startAt={data.quoteToPost.startAt}
                   endAt={data.quoteToPost.endAt}
                   postList={data}
-                  onPress={blurModeOn ? handleOnBlur : onPressPlaySong}
+                  onPress={onPressPlaySong}
                   isPlay={isPlay}
                   playOrPause={playOrPause}
                   pauseModeOn={pauseModeOn}

@@ -63,37 +63,41 @@ const MostPlayed: FC<MostPlayedProps> = (props: MostPlayedProps) => {
 
   return (
     <View>
-      <Text style={styles.textComp}>Most Played</Text>
-      <Gap height={16} />
       {dataMostPlayed && (
-        <MusicListPreview
-          hideClose
-          targetId={dataMostPlayed.targetId}
-          targetType={''}
-          title={dataMostPlayed.title}
-          musician={dataMostPlayed.musician}
-          coverImage={
-            dataMostPlayed.coverImage?.length !== null
-              ? dataMostPlayed.coverImage[0]?.image
-              : ''
-          }
-          encodeDashUrl={dataMostPlayed.encodeDashUrl}
-          encodeHlsUrl={dataMostPlayed.encodeHlsUrl}
-          startAt={dataMostPlayed.startAt}
-          endAt={dataMostPlayed.endAt}
-          postList={dataMostPlayed}
-          onPress={onPressPlaySong}
-          isPlay={isPlaying}
-          playOrPause={handlePausePlay}
-          pauseModeOn={pauseModeOn}
-          currentProgress={playerProgress.position}
-          duration={playerProgress.duration}
-          seekPlayer={seekPlayer}
-          isIdNowPlaying={dataMostPlayed.targetId === idNowPlaying}
-          hideSlider
-        />
+        <>
+          <Text style={styles.textComp}>Most Played</Text>
+          <Gap height={16} />
+
+          <MusicListPreview
+            hideClose
+            targetId={dataMostPlayed.targetId}
+            targetType={''}
+            title={dataMostPlayed.title}
+            musician={dataMostPlayed.musician}
+            coverImage={
+              dataMostPlayed.coverImage?.length !== null
+                ? dataMostPlayed.coverImage[0]?.image
+                : ''
+            }
+            encodeDashUrl={dataMostPlayed.encodeDashUrl}
+            encodeHlsUrl={dataMostPlayed.encodeHlsUrl}
+            startAt={dataMostPlayed.startAt}
+            endAt={dataMostPlayed.endAt}
+            postList={dataMostPlayed}
+            onPress={onPressPlaySong}
+            isPlay={isPlaying}
+            playOrPause={handlePausePlay}
+            pauseModeOn={pauseModeOn}
+            currentProgress={playerProgress.position}
+            duration={playerProgress.duration}
+            seekPlayer={seekPlayer}
+            isIdNowPlaying={dataMostPlayed.targetId === idNowPlaying}
+            hideSlider
+          />
+
+          <Gap height={16} />
+        </>
       )}
-      <Gap height={16} />
     </View>
   );
 };

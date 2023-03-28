@@ -120,9 +120,7 @@ const PostListCard: React.FC<ListProps> = (props: ListProps) => {
             },
           ]}>
           <View style={styles.topSection}>
-            <Text
-              style={styles.songTitle}
-              onPress={noNavigate ? undefined : toDetailOnPress}>
+            <Text style={styles.songTitle} onPress={toDetailOnPress}>
               {musicianName}
             </Text>
             <View style={[styles.category]}>

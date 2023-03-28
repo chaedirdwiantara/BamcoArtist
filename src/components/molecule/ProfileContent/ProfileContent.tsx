@@ -238,6 +238,7 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
                   uuidMusician={uuid}
                   dataRightDropdown={dropDownDataCategory}
                   dataLeftDropdown={dropDownDataSort}
+                  {...exclusiveContent}
                 />
               ) : (
                 <PostListPublic
