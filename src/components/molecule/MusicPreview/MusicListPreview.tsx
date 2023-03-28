@@ -114,20 +114,22 @@ const MusicListPreview: FC<MusicPreviewProps> = (props: MusicPreviewProps) => {
               }}
             />
           )}
-          <View style={styles.progresTextContainer}>
-            <Text style={styles.progresText}>
-              {pauseModeOn && isIdNowPlaying
-                ? new Date((currentProgress + 1) * 1000)
-                    .toISOString()
-                    .slice(14, 19)
-                : startAt}
-            </Text>
-            <Text style={styles.progresText}>
-              {pauseModeOn && isIdNowPlaying
-                ? new Date(duration * 1000).toISOString().slice(14, 19)
-                : endAt}
-            </Text>
-          </View>
+          {!hideSlider && (
+            <View style={styles.progresTextContainer}>
+              <Text style={styles.progresText}>
+                {pauseModeOn && isIdNowPlaying
+                  ? new Date((currentProgress + 1) * 1000)
+                      .toISOString()
+                      .slice(14, 19)
+                  : startAt}
+              </Text>
+              <Text style={styles.progresText}>
+                {pauseModeOn && isIdNowPlaying
+                  ? new Date(duration * 1000).toISOString().slice(14, 19)
+                  : endAt}
+              </Text>
+            </View>
+          )}
         </View>
       </View>
       {hideClose ? null : (
