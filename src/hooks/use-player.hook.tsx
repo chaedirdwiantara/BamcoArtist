@@ -155,7 +155,6 @@ export const usePlayerHook = () => {
   }) => {
     try {
       await TrackPlayer.reset();
-      console.log('dataSong', dataSong);
 
       const track: Track[] = dataSong
         .filter(ar => Number(ar.targetId) !== 14)

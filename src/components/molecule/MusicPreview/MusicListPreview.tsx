@@ -29,6 +29,7 @@ interface MusicPreviewProps {
   seekPlayer: (second: number) => void;
   postList: PostList;
   isIdNowPlaying: boolean;
+  hideSlider?: boolean;
 }
 
 const MusicListPreview: FC<MusicPreviewProps> = (props: MusicPreviewProps) => {
@@ -53,6 +54,7 @@ const MusicListPreview: FC<MusicPreviewProps> = (props: MusicPreviewProps) => {
     seekPlayer,
     postList,
     isIdNowPlaying,
+    hideSlider,
   } = props;
 
   return (
@@ -93,23 +95,25 @@ const MusicListPreview: FC<MusicPreviewProps> = (props: MusicPreviewProps) => {
           </Text>
         </View>
         <View style={styles.sliderStyle}>
-          <Slider
-            value={pauseModeOn && isIdNowPlaying ? currentProgress : 0}
-            minimumValue={0}
-            maximumValue={duration}
-            minimumTrackTintColor={color.Success[400]}
-            maximumTrackTintColor={color.Dark[400]}
-            thumbTintColor={color.Success[400]}
-            onSlidingComplete={e => {
-              const seekDuration = e as number[];
-              seekPlayer(seekDuration[0]);
-            }}
-            thumbStyle={{width: 8, height: 8}}
-            containerStyle={{
-              marginBottom: heightResponsive(-12),
-              marginTop: heightResponsive(-25),
-            }}
-          />
+          {!hideSlider && (
+            <Slider
+              value={pauseModeOn && isIdNowPlaying ? currentProgress : 0}
+              minimumValue={0}
+              maximumValue={duration}
+              minimumTrackTintColor={color.Success[400]}
+              maximumTrackTintColor={color.Dark[400]}
+              thumbTintColor={color.Success[400]}
+              onSlidingComplete={e => {
+                const seekDuration = e as number[];
+                seekPlayer(seekDuration[0]);
+              }}
+              thumbStyle={{width: 8, height: 8}}
+              containerStyle={{
+                marginBottom: heightResponsive(-12),
+                marginTop: heightResponsive(-25),
+              }}
+            />
+          )}
           <View style={styles.progresTextContainer}>
             <Text style={styles.progresText}>
               {pauseModeOn && isIdNowPlaying
