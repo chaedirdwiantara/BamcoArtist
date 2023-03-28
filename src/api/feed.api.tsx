@@ -1,5 +1,5 @@
 import SsuAPI from './baseMusician';
-import SsuAPIPublic from './basePublic';
+import SsuSemeruPublic from './baseSemeruPublic';
 import {
   CommentDetailResponseType,
   CommentResponseType,
@@ -12,6 +12,7 @@ import {
   ListCommentResponseType,
   ListPostResponseType,
   LoadMoreProps,
+  MostPlayedSongResponseType,
   PostPropsTypeA,
   PostPropsTypeB,
   PostPropsTypeC,
@@ -238,6 +239,17 @@ export const deletePost = async (
   const {data} = await SsuAPI().request<DeletePostResponseType>({
     url: `/post/delete/${props?.id}`,
     method: 'DELETE',
+  });
+
+  return data;
+};
+
+export const mostPlayedSong = async (
+  props?: PostPropsTypeA,
+): Promise<MostPlayedSongResponseType> => {
+  const {data} = await SsuSemeruPublic().request<MostPlayedSongResponseType>({
+    url: `/songs/most-play-song/${props?.id}`,
+    method: 'GET',
   });
 
   return data;

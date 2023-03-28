@@ -12,6 +12,7 @@ interface ImageListProps {
   heightType2?: number;
   widthType2?: number;
   imgData: imageTypes[][];
+  blurModeOn?: boolean;
 }
 
 const ImageList: FC<ImageListProps> = (props: ImageListProps) => {
@@ -23,6 +24,7 @@ const ImageList: FC<ImageListProps> = (props: ImageListProps) => {
     height = 79,
     heightType2 = 161,
     widthType2 = 327,
+    blurModeOn,
   } = props;
 
   return (
@@ -38,6 +40,8 @@ const ImageList: FC<ImageListProps> = (props: ImageListProps) => {
             }}
             disabled={disabled}
             onPress={() => onPress(0)}
+            blurModeOn={blurModeOn}
+            borderRadius={4}
           />
         </>
       )}
@@ -52,6 +56,9 @@ const ImageList: FC<ImageListProps> = (props: ImageListProps) => {
             }}
             disabled={disabled}
             onPress={() => onPress(0)}
+            blurModeOn={blurModeOn}
+            borderTopLeftRadius={4}
+            borderBottomLeftRadius={4}
           />
           <SquareImage
             imgUri={imgData && imgData[1][1].image}
@@ -62,6 +69,9 @@ const ImageList: FC<ImageListProps> = (props: ImageListProps) => {
             }}
             disabled={disabled}
             onPress={() => onPress(1)}
+            blurModeOn={blurModeOn}
+            borderTopRightRadius={4}
+            borderBottomRightRadius={4}
           />
         </>
       )}
@@ -76,6 +86,9 @@ const ImageList: FC<ImageListProps> = (props: ImageListProps) => {
             }}
             disabled={disabled}
             onPress={() => onPress(0)}
+            blurModeOn={blurModeOn}
+            borderTopLeftRadius={4}
+            borderBottomLeftRadius={4}
           />
           <View>
             <SquareImage
@@ -84,6 +97,8 @@ const ImageList: FC<ImageListProps> = (props: ImageListProps) => {
               height={heightPercentage(height)}
               disabled={disabled}
               onPress={() => onPress(1)}
+              blurModeOn={blurModeOn}
+              borderTopRightRadius={4}
             />
             <Gap height={3} />
             <SquareImage
@@ -92,6 +107,8 @@ const ImageList: FC<ImageListProps> = (props: ImageListProps) => {
               height={heightPercentage(height)}
               disabled={disabled}
               onPress={() => onPress(2)}
+              blurModeOn={blurModeOn}
+              borderBottomRightRadius={4}
             />
           </View>
         </>
@@ -105,6 +122,8 @@ const ImageList: FC<ImageListProps> = (props: ImageListProps) => {
               height={heightPercentage(height)}
               disabled={disabled}
               onPress={() => onPress(0)}
+              blurModeOn={blurModeOn}
+              borderTopLeftRadius={4}
             />
             <Gap height={3} />
             <SquareImage
@@ -113,6 +132,8 @@ const ImageList: FC<ImageListProps> = (props: ImageListProps) => {
               height={heightPercentage(height)}
               disabled={disabled}
               onPress={() => onPress(2)}
+              blurModeOn={blurModeOn}
+              borderBottomLeftRadius={4}
             />
           </View>
           <Gap width={3} />
@@ -123,6 +144,8 @@ const ImageList: FC<ImageListProps> = (props: ImageListProps) => {
               height={heightPercentage(height)}
               disabled={disabled}
               onPress={() => onPress(1)}
+              blurModeOn={blurModeOn}
+              borderTopRightRadius={4}
             />
             <Gap height={3} />
             <SquareImage
@@ -131,6 +154,8 @@ const ImageList: FC<ImageListProps> = (props: ImageListProps) => {
               height={heightPercentage(height)}
               disabled={disabled}
               onPress={() => onPress(3)}
+              blurModeOn={blurModeOn}
+              borderBottomRightRadius={4}
             />
           </View>
         </>

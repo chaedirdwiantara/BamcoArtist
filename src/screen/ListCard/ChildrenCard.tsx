@@ -13,7 +13,6 @@ import MusicListPreview from '../../components/molecule/MusicPreview/MusicListPr
 import {PostList} from '../../interface/feed.interface';
 import {color, font} from '../../theme';
 import {mvs} from 'react-native-size-matters';
-import Video from 'react-native-video';
 import VideoComp from '../../components/molecule/VideoPlayer/videoComp';
 
 export const {width} = Dimensions.get('screen');
@@ -28,6 +27,7 @@ interface ChildrenCardProps {
   duration: number;
   seekPlayer: (second: number) => void;
   isIdNowPlaying: boolean;
+  blurModeOn?: boolean;
 }
 
 const ChildrenCard: FC<ChildrenCardProps> = (props: ChildrenCardProps) => {
@@ -41,16 +41,23 @@ const ChildrenCard: FC<ChildrenCardProps> = (props: ChildrenCardProps) => {
     duration,
     seekPlayer,
     isIdNowPlaying,
+    blurModeOn,
   } = props;
 
   const onPressPlaySong = (val: PostList) => {
     onPress?.(val);
   };
 
+  const handleOnBlur = (val: PostList) => {
+    console.log('premium content');
+  };
+
   return (
     <View style={{width: '100%'}}>
       <Text style={styles.childrenPostTitle}>
-        {elipsisText(data.caption, 600)}
+        {blurModeOn
+          ? '[ You are not eligible to view this content, subscribe to view this content ]'
+          : elipsisText(data.caption, 600)}
       </Text>
       {data.images !== null ? (
         <>
@@ -66,11 +73,12 @@ const ChildrenCard: FC<ChildrenCardProps> = (props: ChildrenCardProps) => {
               }}>
               <ImageList
                 imgData={data.images}
-                width={143}
+                width={132}
                 height={69.5}
                 heightType2={142}
                 widthType2={269}
                 onPress={() => {}}
+                blurModeOn={blurModeOn}
               />
               {data.images.length === 0 && data.quoteToPost.encodeHlsUrl ? (
                 <MusicListPreview
@@ -89,7 +97,7 @@ const ChildrenCard: FC<ChildrenCardProps> = (props: ChildrenCardProps) => {
                   startAt={data.quoteToPost.startAt}
                   endAt={data.quoteToPost.endAt}
                   postList={data}
-                  onPress={onPressPlaySong}
+                  onPress={blurModeOn ? handleOnBlur : onPressPlaySong}
                   isPlay={isPlay}
                   playOrPause={playOrPause}
                   pauseModeOn={pauseModeOn}
@@ -116,6 +124,7 @@ const ChildrenCard: FC<ChildrenCardProps> = (props: ChildrenCardProps) => {
                       width: '100%',
                       height: width - widthResponsive(104),
                     }}
+                    blurModeOn={blurModeOn}
                   />
                 </TouchableOpacity>
               )}

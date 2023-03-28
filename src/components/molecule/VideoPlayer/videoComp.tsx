@@ -31,6 +31,7 @@ interface VideoProps {
   dontShowText?: boolean;
   buttonIconsStyle?: ViewStyle;
   videoContainer?: ViewStyle;
+  blurModeOn?: boolean;
 }
 
 const VideoComp: FC<VideoProps> = (props: VideoProps) => {
@@ -41,6 +42,7 @@ const VideoComp: FC<VideoProps> = (props: VideoProps) => {
     dontShowText,
     buttonIconsStyle,
     videoContainer,
+    blurModeOn,
   } = props;
 
   const [duration, setDuration] = useState(0);
@@ -68,7 +70,9 @@ const VideoComp: FC<VideoProps> = (props: VideoProps) => {
   };
 
   const handlePlaying = () => {
-    setPaused(false), setIsPlaying(true);
+    if (!blurModeOn) {
+      setPaused(false), setIsPlaying(true);
+    }
   };
 
   const onEnd = () => {

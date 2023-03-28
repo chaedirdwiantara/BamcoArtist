@@ -15,7 +15,7 @@ const MainTab: FC<MainTabProps> = (props: MainTabProps) => {
   return (
     <View style={styles.container}>
       {uuid && <PopularPost uuidMusician={uuid} />}
-      <MostPlayed />
+      {uuid && <MostPlayed uuidMusician={uuid} />}
       {/* <Merch /> */}
       {uuid && <Released uuidMusician={uuid} />}
     </View>

@@ -312,6 +312,10 @@ const PostListProfile: FC<PostListProps> = (props: PostListProps) => {
   };
   // ! END OF MUSIC AREA
 
+  const handleOnBlur = () => {
+    console.log('handle on blur');
+  };
+
   return (
     <>
       {dataMain !== null && dataMain.length !== 0 ? (
@@ -349,9 +353,11 @@ const PostListProfile: FC<PostListProps> = (props: PostListProps) => {
             renderItem={({item}) => (
               <>
                 <ListCard.PostList
-                  toDetailOnPress={() =>
-                    handleToDetailMusician(item.musician.uuid)
-                  }
+                  toDetailOnPress={() => {
+                    item.isPremiumPost && item.musician.uuid !== MyUuid
+                      ? {}
+                      : handleToDetailMusician(item.musician.uuid);
+                  }}
                   musicianName={item.musician.fullname}
                   musicianId={`@${item.musician.username}`}
                   imgUri={
@@ -364,7 +370,11 @@ const PostListProfile: FC<PostListProps> = (props: PostListProps) => {
                   }
                   postDate2={item.createdAt}
                   category={categoryNormalize(item.category)}
-                  onPress={() => cardOnPress(item)}
+                  onPress={() => {
+                    item.isPremiumPost && item.musician.uuid !== MyUuid
+                      ? {}
+                      : cardOnPress(item);
+                  }}
                   likeOnPress={() => likeOnPress(item.id, item.isLiked)}
                   likePressed={
                     selectedId === undefined
@@ -409,17 +419,33 @@ const PostListProfile: FC<PostListProps> = (props: PostListProps) => {
                   idPost={item.id}
                   selectedIdPost={setSelectedIdPost}
                   isPremium={item.isPremiumPost}
+                  noNavigate
                   children={
                     <ChildrenCard
                       data={item}
-                      onPress={onPressPlaySong}
+                      onPress={
+                        item.isPremiumPost && item.musician.uuid !== MyUuid
+                          ? handleOnBlur
+                          : onPressPlaySong
+                      }
                       isPlay={isPlaying}
-                      playOrPause={handlePausePlay}
+                      playOrPause={
+                        item.isPremiumPost && item.musician.uuid !== MyUuid
+                          ? handleOnBlur
+                          : handlePausePlay
+                      }
                       pauseModeOn={pauseModeOn}
                       currentProgress={playerProgress.position}
                       duration={playerProgress.duration}
-                      seekPlayer={seekPlayer}
+                      seekPlayer={
+                        item.isPremiumPost && item.musician.uuid !== MyUuid
+                          ? handleOnBlur
+                          : seekPlayer
+                      }
                       isIdNowPlaying={item.id === idNowPlaying}
+                      blurModeOn={
+                        item.isPremiumPost && item.musician.uuid !== MyUuid
+                      }
                     />
                   }
                 />
