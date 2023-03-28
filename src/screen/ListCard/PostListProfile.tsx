@@ -100,9 +100,9 @@ const PostListProfile: FC<PostListProps> = (props: PostListProps) => {
     feedIsError,
     feedMessage,
     dataPostList,
-    getListDataPost,
     setLikePost,
     setUnlikePost,
+    getListProfilePost,
   } = useFeedHook();
 
   const {
@@ -125,13 +125,13 @@ const PostListProfile: FC<PostListProps> = (props: PostListProps) => {
   useFocusEffect(
     useCallback(() => {
       uuidMusician !== ''
-        ? (getListDataPost({
+        ? (getListProfilePost({
             page: 1,
             perPage: perPage,
             musician_uuid: uuidMusician,
           }),
           setUuid(uuidMusician))
-        : getListDataPost({page: 1, perPage: perPage});
+        : getListProfilePost({page: 1, perPage: perPage});
       setPage(1);
     }, [uuidMusician]),
   );
@@ -139,7 +139,7 @@ const PostListProfile: FC<PostListProps> = (props: PostListProps) => {
   //* call when refreshing
   useEffect(() => {
     if (refreshing) {
-      getListDataPost({
+      getListProfilePost({
         page: 1,
         perPage: perPage,
       });
@@ -170,7 +170,7 @@ const PostListProfile: FC<PostListProps> = (props: PostListProps) => {
   //* Handle when end of Scroll
   const handleEndScroll = () => {
     if (dataMain.length >= 15) {
-      getListDataPost({
+      getListProfilePost({
         page: page + 1,
         perPage: perPage,
       });

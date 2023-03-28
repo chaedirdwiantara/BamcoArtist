@@ -18,6 +18,7 @@ import {
   listTopPost,
   updatePost,
   deletePost,
+  listPostProfile,
 } from '../api/feed.api';
 import {ParamsProps} from '../interface/base.interface';
 import {
@@ -50,6 +51,20 @@ export const useFeedHook = () => {
       setDataPostList(response.data);
       setFeedMessage(response.message);
     } catch (error) {
+      setFeedIsError(true);
+    } finally {
+      setFeedIsLoading(false);
+    }
+  };
+
+  const getListProfilePost = async (props?: ParamsProps) => {
+    setFeedIsLoading(true);
+    try {
+      const response = await listPostProfile(props);
+      setDataPostList(response.data);
+      setFeedMessage(response.message);
+    } catch (error) {
+      console.log(error);
       setFeedIsError(true);
     } finally {
       setFeedIsLoading(false);
@@ -359,5 +374,6 @@ export const useFeedHook = () => {
     setCreatePost,
     getListTopPost,
     setUpdatePost,
+    getListProfilePost,
   };
 };

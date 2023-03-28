@@ -59,7 +59,11 @@ const ChildrenCard: FC<ChildrenCardProps> = (props: ChildrenCardProps) => {
             style={{
               flexDirection: 'row',
             }}>
-            <View style={{height: '100%', width: '100%'}}>
+            <View
+              style={{
+                height: '100%',
+                width: '100%',
+              }}>
               <ImageList
                 imgData={data.images}
                 width={143}
