@@ -7,6 +7,7 @@ import {
   likeSong,
   listSong,
   listTopSong,
+  newSong,
   unlikeSong,
 } from '../api/song.api';
 import {
@@ -47,9 +48,9 @@ export const useSongHook = () => {
     }
   };
 
-  const getListDataNewSong = async (props?: ParamsProps) => {
+  const getListDataNewSong = async () => {
     try {
-      const response = await listSong(props);
+      const response = await newSong();
       setDataNewSong(response.data);
       setMetaNewSong(response.meta);
     } catch (error) {
