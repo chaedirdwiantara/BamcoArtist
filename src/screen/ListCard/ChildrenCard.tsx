@@ -106,6 +106,8 @@ const ChildrenCard: FC<ChildrenCardProps> = (props: ChildrenCardProps) => {
               {data.video.encodeHlsUrl !== '' && (
                 <TouchableOpacity>
                   <VideoComp
+                    id={data.id}
+                    dataVideo={data.video}
                     sourceUri={data.video.encodeHlsUrl}
                     onPress={() => {}}
                     buttonIconsStyle={{

@@ -103,6 +103,7 @@ export type VideoResponseType = {
   coverImage: imageTypes[];
   encodeDashUrl: string;
   encodeHlsUrl: string;
+  views: number;
 };
 
 export type PostList = {
@@ -302,6 +303,15 @@ export type DeletePostResponseType = {
 export type MostPlayedSongResponseType = {
   code: number;
   data: QuoteToPost;
+  message: string;
+  status: number;
+};
+
+export type ViewsCount = {};
+
+export type SetViewsCountResponseType = {
+  code: number;
+  data: ViewsCount;
   message: string;
   status: number;
 };
