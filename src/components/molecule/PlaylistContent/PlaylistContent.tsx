@@ -23,13 +23,11 @@ import {
   MusicSquareAddIcon,
 } from '../../../assets/icon';
 import {Gap, SsuToast} from '../../atom';
-import {Dropdown} from '../DropDown';
 import Color from '../../../theme/Color';
 import {PhotoPlaylist} from './PhotoPlaylist';
 import {TopNavigation} from '../TopNavigation';
 import {ModalConfirm} from '../Modal/ModalConfirm';
 import {dateFormat} from '../../../utils/date-format';
-import TopSong from '../../../screen/ListCard/TopSong';
 import {color, font, typography} from '../../../theme';
 import {
   addOtherPlaylist,
@@ -45,6 +43,7 @@ import {ModalShare} from '../Modal/ModalShare';
 import {usePlayerHook} from '../../../hooks/use-player.hook';
 import DropdownMore from '../V2/DropdownFilter/DropdownMore';
 import ListSongs from '../../../screen/ListCard/ListSongs';
+import {mvs} from 'react-native-size-matters';
 
 interface Props {
   goBackProfile: (showToast: boolean) => void;
@@ -79,7 +78,6 @@ export const PlaylistContent: React.FC<Props> = ({
   goToAlbum,
   goToDetailSong,
   goToAddToPlaylist,
-  otherPlaylist,
 }) => {
   const {t} = useTranslation();
   const {addSong} = usePlayerHook();
@@ -254,13 +252,11 @@ export const PlaylistContent: React.FC<Props> = ({
             createdDate={dateFormat(dataDetail?.createdAt)}
             createdBy={dataDetail?.playlistOwner?.fullname}
             avatarUri={dataDetail?.playlistOwner?.image}
-            showIconPlay={
-              (songIsExist && listSongs?.length > 0 && !otherPlaylist) ||
-              isAdded
-            }
+            showIconPlay={true}
             isPlaying={isPlaying}
             handlePlayPaused={handlePlayPaused}
             onPressSong={() => onPressSong(firstSong)}
+            disabled={true}
           />
 
           <TouchableOpacity
@@ -387,10 +383,9 @@ const styles = StyleSheet.create({
     marginBottom: heightPercentage(30),
   },
   description: {
-    fontSize: normalize(12),
+    fontSize: mvs(13),
     color: color.Neutral[10],
     fontFamily: font.InterRegular,
-    lineHeight: heightPercentage(16),
     paddingTop: heightPercentage(8),
   },
   modalContainer: {

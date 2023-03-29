@@ -33,6 +33,7 @@ export const useSongHook = () => {
     useState<DataDetailAlbum | null>(null);
 
   const getListDataSong = async (props?: ParamsProps) => {
+    setIsLoadingSong(true);
     try {
       const response = await listSong(props);
       setDataSong(response.data);

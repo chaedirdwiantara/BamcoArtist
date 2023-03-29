@@ -1,5 +1,6 @@
 import SsuAPI from './baseMusician';
 import SsuSemeruPublic from './baseSemeruPublic';
+import SsuAPINew from './baseRinjaniNew';
 import {
   CommentDetailResponseType,
   CommentResponseType,
@@ -74,6 +75,18 @@ export const listPostExclusive = async (
 ): Promise<ListPostResponseType> => {
   const {data} = await SsuAPI().request<ListPostResponseType>({
     url: '/posts/premium',
+    method: 'GET',
+    params: props,
+  });
+
+  return data;
+};
+
+export const listPostSimilar = async (
+  props?: ParamsProps,
+): Promise<ListPostResponseType> => {
+  const {data} = await SsuAPINew().request<ListPostResponseType>({
+    url: '/posts/similar-post',
     method: 'GET',
     params: props,
   });

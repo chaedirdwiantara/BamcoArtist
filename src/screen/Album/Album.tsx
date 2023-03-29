@@ -1,10 +1,7 @@
 import React, {useCallback} from 'react';
 import {StyleSheet, View} from 'react-native';
-import {useFocusEffect, useNavigation} from '@react-navigation/native';
-import {
-  NativeStackNavigationProp,
-  NativeStackScreenProps,
-} from '@react-navigation/native-stack';
+import {useFocusEffect} from '@react-navigation/native';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
 
 import Color from '../../theme/Color';
 import {RootStackParams} from '../../navigations';
@@ -38,6 +35,7 @@ export const AlbumScreen: React.FC<AlbumProps> = ({
           detailAlbum={dataDetailAlbum}
           dataSong={dataSong}
           onPressGoBack={onPressGoBack}
+          comingSoon={route.params.type === 'coming_soon'}
         />
       )}
     </View>

@@ -42,6 +42,7 @@ interface ListProps {
   songId: number;
   newDataMore?: DataMore[];
   newOnPressMore?: (data: DataMore) => void;
+  disabled?: boolean;
 }
 
 export const MusicSection: React.FC<ListProps> = (props: ListProps) => {

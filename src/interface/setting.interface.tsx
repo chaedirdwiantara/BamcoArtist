@@ -125,6 +125,13 @@ export type PreferenceList = {
 export type PreferenceResponseType = {
   code: number;
   data: PreferenceList[];
+  message: string;
+  status: number;
+  meta: {
+    page: number;
+    perPage: number;
+    total: number;
+  };
 };
 
 export type PreferenceProps = {

@@ -83,6 +83,7 @@ const RecomendedMusician: FC<RecomendedMusicianProps> = ({
                 followOnPress={() => followOnPress(item.uuid, item.isFollowed)}
                 stateButton={item.isFollowed ?? false}
                 toDetailOnPress={() => null}
+                recommended
               />
             );
           }
@@ -107,6 +108,7 @@ const RecomendedMusician: FC<RecomendedMusicianProps> = ({
                   }
                   stateButton={item.isFollowed ?? false}
                   toDetailOnPress={() => null}
+                  recommended
                 />
               );
             }

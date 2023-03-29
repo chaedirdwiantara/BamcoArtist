@@ -12,11 +12,10 @@ export const ListMusicScreen: React.FC<ListMusicProps> = ({
   route,
   navigation,
 }: ListMusicProps) => {
-  // TODO: Need to be wired with API song by mood / genre & unreleased album
-  const {title, type, fromMainTab} = route.params;
+  const {title, type, fromMainTab, id, filterBy} = route.params;
 
-  const goToDetailAlbum = () => {
-    navigation.navigate('Album', {id: 35});
+  const goToDetailAlbum = (idAlbum: number) => {
+    navigation.navigate('Album', {id: idAlbum, type: 'coming_soon'});
   };
 
   const onPressHidePlayer = () => {
@@ -32,7 +31,9 @@ export const ListMusicScreen: React.FC<ListMusicProps> = ({
   if (type === 'song') {
     return (
       <ListSong
+        id={id}
         title={title}
+        filterBy={filterBy}
         fromMainTab={fromMainTab}
         onPressHidePlayer={onPressHidePlayer}
       />

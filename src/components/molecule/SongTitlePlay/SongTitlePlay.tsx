@@ -1,5 +1,7 @@
 import React, {useState} from 'react';
 import {StyleSheet, View, Text, TouchableOpacity} from 'react-native';
+import {useTranslation} from 'react-i18next';
+import {mvs} from 'react-native-size-matters';
 import {
   heightPercentage,
   normalize,
@@ -10,7 +12,6 @@ import {Avatar, Gap} from '../../atom';
 import {color, font} from '../../../theme';
 import {storage} from '../../../hooks/use-storage.hook';
 import {DefaultAvatar, PauseIcon, PlayIcon} from '../../../assets/icon';
-import {useTranslation} from 'react-i18next';
 
 interface SongTitlePlayProps {
   title: string;
@@ -22,6 +23,9 @@ interface SongTitlePlayProps {
   isPlaying: boolean;
   handlePlayPaused: () => void;
   onPressSong: () => void;
+  goToMusicianProfile?: () => void;
+  disabled?: boolean;
+  comingSoon?: boolean;
 }
 
 export const SongTitlePlay: React.FC<SongTitlePlayProps> = ({
@@ -34,6 +38,9 @@ export const SongTitlePlay: React.FC<SongTitlePlayProps> = ({
   isPlaying,
   handlePlayPaused,
   onPressSong,
+  goToMusicianProfile,
+  disabled,
+  comingSoon,
 }) => {
   const {t} = useTranslation();
   const reset = storage.getBoolean('resetPlayer');
@@ -50,6 +57,9 @@ export const SongTitlePlay: React.FC<SongTitlePlayProps> = ({
       storage.set('resetPlayer', false);
     }
   };
+  const createdText = comingSoon
+    ? t('Music.Label.ComingSoon')
+    : t('Music.Label.CreatedOn');
 
   return (
     <View style={styles.root}>
@@ -57,7 +67,7 @@ export const SongTitlePlay: React.FC<SongTitlePlayProps> = ({
         <View>
           <Text style={styles.title}>{title}</Text>
           <Text style={styles.createdOn}>
-            {`${t('Music.Label.CreatedOn')} ${createdDate} · ${totalSong} ${t(
+            {`${createdText} ${createdDate} · ${totalSong} ${t(
               'Music.Label.Songs',
             )}`}
           </Text>
@@ -70,18 +80,26 @@ export const SongTitlePlay: React.FC<SongTitlePlayProps> = ({
       </View>
 
       <View style={styles.containerCreatedBy}>
-        <Text style={styles.by}>by</Text>
+        <Text style={styles.by}>{t('Music.Label.By')}</Text>
         <Gap width={widthPercentage(5)} />
-        {avatarUri ? (
-          <Avatar size={widthPercentage(16)} imgUri={avatarUri} />
-        ) : (
-          <DefaultAvatar.ProfileIcon
-            width={widthPercentage(18)}
-            height={widthPercentage(18)}
-          />
-        )}
-        <Gap width={widthPercentage(5)} />
-        <Text style={styles.createdBy}>{createdBy}</Text>
+        <TouchableOpacity
+          disabled={disabled}
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+          }}
+          onPress={goToMusicianProfile}>
+          {avatarUri ? (
+            <Avatar size={widthPercentage(16)} imgUri={avatarUri} />
+          ) : (
+            <DefaultAvatar.ProfileIcon
+              width={widthPercentage(18)}
+              height={widthPercentage(18)}
+            />
+          )}
+          <Gap width={widthPercentage(5)} />
+          <Text style={styles.createdBy}>{createdBy}</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -97,7 +115,7 @@ const styles = StyleSheet.create({
     marginTop: heightPercentage(10),
   },
   title: {
-    fontSize: normalize(20),
+    fontSize: mvs(20),
     color: color.Neutral[10],
     fontFamily: font.InterSemiBold,
     lineHeight: heightPercentage(28),
@@ -112,7 +130,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: widthPercentage(12),
-    marginVertical: heightPercentage(6),
+    marginVertical: heightPercentage(8),
   },
   by: {
     fontSize: normalize(12),
