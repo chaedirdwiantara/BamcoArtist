@@ -53,6 +53,7 @@ interface ListProps extends TouchableOpacityProps {
   idPost: string;
   selectedIdPost: (idPost: string) => void;
   isPremium: boolean;
+  noNavigate?: boolean;
 }
 
 const PostListCard: React.FC<ListProps> = (props: ListProps) => {
@@ -77,14 +78,19 @@ const PostListCard: React.FC<ListProps> = (props: ListProps) => {
     idPost,
     selectedIdPost,
     isPremium,
+    noNavigate,
   } = props;
   return (
     <TouchableOpacity {...props}>
       <View style={[styles.topContainer, containerStyles]}>
         <View>
-          <TouchableOpacity onPress={toDetailOnPress}>
+          {noNavigate ? (
             <Avatar imgUri={imgUri} size={widthResponsive(32)} />
-          </TouchableOpacity>
+          ) : (
+            <TouchableOpacity onPress={toDetailOnPress}>
+              <Avatar imgUri={imgUri} size={widthResponsive(32)} />
+            </TouchableOpacity>
+          )}
           <Gap height={2} />
           <View style={{alignItems: 'center'}}>
             <Text

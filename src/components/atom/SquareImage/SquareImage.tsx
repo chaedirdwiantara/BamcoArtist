@@ -6,6 +6,8 @@ import {
   View,
   TouchableOpacity,
   TouchableOpacityProps,
+  Image,
+  Platform,
 } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import {AddIcon, DefaultImage} from '../../../assets/icon';
@@ -21,6 +23,11 @@ export interface SquareImageProps extends TouchableOpacityProps {
   type?: string;
   containerStyle?: ViewStyle;
   borderRadius?: number;
+  borderTopLeftRadius?: number;
+  borderTopRightRadius?: number;
+  borderBottomLeftRadius?: number;
+  borderBottomRightRadius?: number;
+  blurModeOn?: boolean;
   darkImage?: boolean;
 }
 
@@ -33,8 +40,15 @@ const SquareImage: React.FC<SquareImageProps> = (props: SquareImageProps) => {
     type,
     containerStyle,
     borderRadius,
+    borderTopLeftRadius,
+    borderTopRightRadius,
+    borderBottomLeftRadius,
+    borderBottomRightRadius,
+    blurModeOn,
     darkImage,
   } = props;
+
+  const blurOp = Platform.OS === 'ios' ? 8 : 3;
 
   if (type === 'add') {
     return (
@@ -46,20 +60,61 @@ const SquareImage: React.FC<SquareImageProps> = (props: SquareImageProps) => {
     return (
       <TouchableOpacity style={containerStyle} disabled={true} {...props}>
         {imgUri && imgUri !== null ? (
-          <FastImage
-            source={{uri: imgUri}}
-            style={[
-              styles.root,
-              {
-                width: size,
-                height: height,
-                aspectRatio: !height ? 1 / 1 : undefined,
-                borderRadius: borderRadius ?? 0,
-              },
-            ]}
-            testID={`Image ${id}`}>
-            {darkImage && <View style={styles.darkImage} />}
-          </FastImage>
+          darkImage ? (
+            <FastImage
+              source={{uri: imgUri}}
+              style={[
+                styles.root,
+                {
+                  width: size,
+                  height: height,
+                  aspectRatio: !height ? 1 / 1 : undefined,
+                  borderRadius: borderRadius ? borderRadius : undefined,
+                  borderTopLeftRadius: borderTopLeftRadius
+                    ? borderTopLeftRadius
+                    : undefined,
+                  borderTopRightRadius: borderTopRightRadius
+                    ? borderTopRightRadius
+                    : undefined,
+                  borderBottomLeftRadius: borderBottomLeftRadius
+                    ? borderBottomLeftRadius
+                    : undefined,
+                  borderBottomRightRadius: borderBottomRightRadius
+                    ? borderBottomRightRadius
+                    : undefined,
+                },
+              ]}
+              testID={`Image ${id}`}>
+              {darkImage && <View style={styles.darkImage} />}
+            </FastImage>
+          ) : (
+            <Image
+              source={{uri: imgUri}}
+              style={[
+                styles.root,
+                {
+                  width: size,
+                  height: height,
+                  aspectRatio: !height ? 1 / 1 : undefined,
+                  borderRadius: borderRadius ? borderRadius : undefined,
+                  borderTopLeftRadius: borderTopLeftRadius
+                    ? borderTopLeftRadius
+                    : undefined,
+                  borderTopRightRadius: borderTopRightRadius
+                    ? borderTopRightRadius
+                    : undefined,
+                  borderBottomLeftRadius: borderBottomLeftRadius
+                    ? borderBottomLeftRadius
+                    : undefined,
+                  borderBottomRightRadius: borderBottomRightRadius
+                    ? borderBottomRightRadius
+                    : undefined,
+                },
+              ]}
+              testID={`Image ${id}`}
+              blurRadius={blurModeOn ? blurOp : undefined}
+            />
+          )
         ) : (
           <DefaultImage.SongCover width={size} height={size} />
         )}

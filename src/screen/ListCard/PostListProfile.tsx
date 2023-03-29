@@ -16,6 +16,7 @@ import {
   FilterModal,
   Gap,
   ListCard,
+  ModalConfirm,
   ModalDonate,
   ModalShare,
   ModalSuccessDonate,
@@ -61,7 +62,7 @@ const PostListProfile: FC<PostListProps> = (props: PostListProps) => {
   const {t} = useTranslation();
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
-  const {dataRightDropdown, dataLeftDropdown, uuidMusician = ''} = props;
+  const {uuidMusician = ''} = props;
 
   const [recorder, setRecorder] = useState<string[]>([]);
   const [selectedId, setSelectedId] = useState<string[]>();
@@ -86,6 +87,7 @@ const PostListProfile: FC<PostListProps> = (props: PostListProps) => {
     modalCategory: false,
   });
   const [refreshing, setRefreshing] = useState<boolean>(false);
+  const [modalConfirm, setModalConfirm] = useState(false);
 
   // * UPDATE HOOKS
   const [selectedIdPost, setSelectedIdPost] = useState<string>();
@@ -100,9 +102,9 @@ const PostListProfile: FC<PostListProps> = (props: PostListProps) => {
     feedIsError,
     feedMessage,
     dataPostList,
-    getListDataPost,
     setLikePost,
     setUnlikePost,
+    getListProfilePost,
   } = useFeedHook();
 
   const {
@@ -125,13 +127,13 @@ const PostListProfile: FC<PostListProps> = (props: PostListProps) => {
   useFocusEffect(
     useCallback(() => {
       uuidMusician !== ''
-        ? (getListDataPost({
+        ? (getListProfilePost({
             page: 1,
             perPage: perPage,
             musician_uuid: uuidMusician,
           }),
           setUuid(uuidMusician))
-        : getListDataPost({page: 1, perPage: perPage});
+        : getListProfilePost({page: 1, perPage: perPage});
       setPage(1);
     }, [uuidMusician]),
   );
@@ -139,7 +141,7 @@ const PostListProfile: FC<PostListProps> = (props: PostListProps) => {
   //* call when refreshing
   useEffect(() => {
     if (refreshing) {
-      getListDataPost({
+      getListProfilePost({
         page: 1,
         perPage: perPage,
       });
@@ -170,7 +172,7 @@ const PostListProfile: FC<PostListProps> = (props: PostListProps) => {
   //* Handle when end of Scroll
   const handleEndScroll = () => {
     if (dataMain.length >= 15) {
-      getListDataPost({
+      getListProfilePost({
         page: page + 1,
         perPage: perPage,
       });
@@ -312,6 +314,19 @@ const PostListProfile: FC<PostListProps> = (props: PostListProps) => {
   };
   // ! END OF MUSIC AREA
 
+  const handleOnBlur = () => {
+    setModalConfirm(true);
+  };
+
+  const handleConfirmModal = () => {
+    setModalConfirm(false);
+    navigation.navigate('ExclusiveContent', {data: props});
+  };
+
+  const handleMaybeLater = () => {
+    setModalConfirm(false);
+  };
+
   return (
     <>
       {dataMain !== null && dataMain.length !== 0 ? (
@@ -349,8 +364,12 @@ const PostListProfile: FC<PostListProps> = (props: PostListProps) => {
             renderItem={({item}) => (
               <>
                 <ListCard.PostList
-                  toDetailOnPress={() =>
-                    handleToDetailMusician(item.musician.uuid)
+                  toDetailOnPress={
+                    item.isPremiumPost && item.musician.uuid !== MyUuid
+                      ? handleOnBlur
+                      : () => {
+                          handleToDetailMusician(item.musician.uuid);
+                        }
                   }
                   musicianName={item.musician.fullname}
                   musicianId={`@${item.musician.username}`}
@@ -364,7 +383,11 @@ const PostListProfile: FC<PostListProps> = (props: PostListProps) => {
                   }
                   postDate2={item.createdAt}
                   category={categoryNormalize(item.category)}
-                  onPress={() => cardOnPress(item)}
+                  onPress={
+                    item.isPremiumPost && item.musician.uuid !== MyUuid
+                      ? handleOnBlur
+                      : () => cardOnPress(item)
+                  }
                   likeOnPress={() => likeOnPress(item.id, item.isLiked)}
                   likePressed={
                     selectedId === undefined
@@ -409,17 +432,33 @@ const PostListProfile: FC<PostListProps> = (props: PostListProps) => {
                   idPost={item.id}
                   selectedIdPost={setSelectedIdPost}
                   isPremium={item.isPremiumPost}
+                  noNavigate
                   children={
                     <ChildrenCard
                       data={item}
-                      onPress={onPressPlaySong}
+                      onPress={
+                        item.isPremiumPost && item.musician.uuid !== MyUuid
+                          ? handleOnBlur
+                          : onPressPlaySong
+                      }
                       isPlay={isPlaying}
-                      playOrPause={handlePausePlay}
+                      playOrPause={
+                        item.isPremiumPost && item.musician.uuid !== MyUuid
+                          ? handleOnBlur
+                          : handlePausePlay
+                      }
                       pauseModeOn={pauseModeOn}
                       currentProgress={playerProgress.position}
                       duration={playerProgress.duration}
-                      seekPlayer={seekPlayer}
+                      seekPlayer={
+                        item.isPremiumPost && item.musician.uuid !== MyUuid
+                          ? handleOnBlur
+                          : seekPlayer
+                      }
                       isIdNowPlaying={item.id === idNowPlaying}
+                      blurModeOn={
+                        item.isPremiumPost && item.musician.uuid !== MyUuid
+                      }
                     />
                   }
                 />
@@ -481,6 +520,17 @@ const PostListProfile: FC<PostListProps> = (props: PostListProps) => {
         toggleModal={onPressSuccess}
       />
       {!refreshing && <ModalLoading visible={feedIsLoading} />}
+      <ModalConfirm
+        modalVisible={modalConfirm}
+        title={'Subscribe to reveal exclusive content'}
+        subtitle={
+          'You need to subscribe exclusive content to unlock current post'
+        }
+        yesText={'Yes'}
+        noText={'No'}
+        onPressClose={handleMaybeLater}
+        onPressOk={handleConfirmModal}
+      />
     </>
   );
 };

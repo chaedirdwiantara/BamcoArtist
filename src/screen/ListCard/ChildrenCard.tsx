@@ -5,7 +5,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {createRef, FC} from 'react';
+import React, {FC} from 'react';
 import {elipsisText, widthResponsive} from '../../utils';
 import {Gap} from '../../components';
 import ImageList from './ImageList';
@@ -13,7 +13,6 @@ import MusicListPreview from '../../components/molecule/MusicPreview/MusicListPr
 import {PostList} from '../../interface/feed.interface';
 import {color, font} from '../../theme';
 import {mvs} from 'react-native-size-matters';
-import Video from 'react-native-video';
 import VideoComp from '../../components/molecule/VideoPlayer/videoComp';
 
 export const {width} = Dimensions.get('screen');
@@ -28,6 +27,7 @@ interface ChildrenCardProps {
   duration: number;
   seekPlayer: (second: number) => void;
   isIdNowPlaying: boolean;
+  blurModeOn?: boolean;
 }
 
 const ChildrenCard: FC<ChildrenCardProps> = (props: ChildrenCardProps) => {
@@ -41,6 +41,7 @@ const ChildrenCard: FC<ChildrenCardProps> = (props: ChildrenCardProps) => {
     duration,
     seekPlayer,
     isIdNowPlaying,
+    blurModeOn,
   } = props;
 
   const onPressPlaySong = (val: PostList) => {
@@ -50,7 +51,9 @@ const ChildrenCard: FC<ChildrenCardProps> = (props: ChildrenCardProps) => {
   return (
     <View style={{width: '100%'}}>
       <Text style={styles.childrenPostTitle}>
-        {elipsisText(data.caption, 600)}
+        {blurModeOn
+          ? '[ You are not eligible to view this content, subscribe to view this content ]'
+          : elipsisText(data.caption, 600)}
       </Text>
       {data.images !== null ? (
         <>
@@ -59,14 +62,19 @@ const ChildrenCard: FC<ChildrenCardProps> = (props: ChildrenCardProps) => {
             style={{
               flexDirection: 'row',
             }}>
-            <View style={{height: '100%', width: '100%'}}>
+            <View
+              style={{
+                height: '100%',
+                width: '100%',
+              }}>
               <ImageList
                 imgData={data.images}
-                width={143}
+                width={132}
                 height={69.5}
                 heightType2={142}
                 widthType2={269}
                 onPress={() => {}}
+                blurModeOn={blurModeOn}
               />
               {data.images.length === 0 && data.quoteToPost.encodeHlsUrl ? (
                 <MusicListPreview
@@ -112,6 +120,7 @@ const ChildrenCard: FC<ChildrenCardProps> = (props: ChildrenCardProps) => {
                       width: '100%',
                       height: width - widthResponsive(104),
                     }}
+                    blurModeOn={blurModeOn}
                   />
                 </TouchableOpacity>
               )}

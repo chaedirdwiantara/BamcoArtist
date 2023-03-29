@@ -205,6 +205,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
             coverImage: dataVideo.coverImage,
             encodeDashUrl: dataVideo.encodeDashUrl,
             encodeHlsUrl: dataVideo.encodeHlsUrl,
+            duration: uri[0]?.duration,
           },
         });
       }
@@ -360,6 +361,8 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
                     : dummySongImg,
                 encodeDashUrl: musicData.transcodedSongUrl[0].encodedDashUrl,
                 encodeHlsUrl: musicData.transcodedSongUrl[0].encodedHlsUrl,
+                startAt: '00:00',
+                endAt: musicData.songDuration.toString(),
               }
             : undefined,
       });

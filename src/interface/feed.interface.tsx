@@ -96,6 +96,7 @@ export type QuoteToPost = {
   endAt: string;
   lyrics: string;
   originalSongUrl: string;
+  musicianId?: string;
 };
 
 export type VideoResponseType = {
@@ -294,6 +295,13 @@ export type CreatePostResponseType = {
 export type DeletePostResponseType = {
   code: number;
   data: string;
+  message: string;
+  status: number;
+};
+
+export type MostPlayedSongResponseType = {
+  code: number;
+  data: QuoteToPost;
   message: string;
   status: number;
 };

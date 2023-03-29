@@ -19,6 +19,8 @@ import {
   listTopPost,
   updatePost,
   deletePost,
+  listPostProfile,
+  mostPlayedSong,
 } from '../api/feed.api';
 import {ParamsProps} from '../interface/base.interface';
 import {
@@ -33,6 +35,7 @@ import {
   PostPropsTypeA,
   PostPropsTypeB,
   PostPropsTypeC,
+  QuoteToPost,
 } from '../interface/feed.interface';
 
 export const useFeedHook = () => {
@@ -51,6 +54,20 @@ export const useFeedHook = () => {
       setDataPostList(response.data);
       setFeedMessage(response.message);
     } catch (error) {
+      setFeedIsError(true);
+    } finally {
+      setFeedIsLoading(false);
+    }
+  };
+
+  const getListProfilePost = async (props?: ParamsProps) => {
+    setFeedIsLoading(true);
+    try {
+      const response = await listPostProfile(props);
+      setDataPostList(response.data);
+      setFeedMessage(response.message);
+    } catch (error) {
+      console.log(error);
       setFeedIsError(true);
     } finally {
       setFeedIsLoading(false);
@@ -328,6 +345,23 @@ export const useFeedHook = () => {
     }
   };
 
+  // GET MOST PLAY MUSIC
+  const [mostPlayedLoading, setMostPlayedLoading] = useState<boolean>(false);
+  const [dataMostPlayed, setDataMostPlayed] = useState<QuoteToPost>();
+  const [mostPlayedError, setMostPlayedError] = useState<boolean>();
+
+  const getMostPlayed = async (props?: PostPropsTypeA) => {
+    setMostPlayedLoading(true);
+    try {
+      const response = await mostPlayedSong(props);
+      setDataMostPlayed(response.data);
+    } catch (error) {
+      setMostPlayedError(true);
+    } finally {
+      setMostPlayedLoading(false);
+    }
+  };
+
   return {
     feedIsLoading,
     likePostLoading,
@@ -354,6 +388,9 @@ export const useFeedHook = () => {
     deletePostLoading,
     dataDeletePost,
     deletePostError,
+    mostPlayedLoading,
+    dataMostPlayed,
+    mostPlayedError,
     setDataLoadMore,
     setDataComment,
     setDeletePost,
@@ -374,6 +411,8 @@ export const useFeedHook = () => {
     setCreatePost,
     getListTopPost,
     setUpdatePost,
+    getListProfilePost,
+    getMostPlayed,
     getListSimilarPost,
   };
 };
