@@ -46,10 +46,11 @@ import {useCreditHook} from '../../hooks/use-credit.hook';
 import ChildrenCard from './ChildrenCard';
 import {profileStorage} from '../../hooks/use-storage.hook';
 import LoadingSpinner from '../../components/atom/Loading/LoadingSpinner';
+import {DataExclusiveResponse} from '../../interface/setting.interface';
 
 const {height} = Dimensions.get('screen');
 
-interface PostListProps {
+interface PostListProps extends DataExclusiveResponse {
   dataRightDropdown: DataDropDownType[];
   dataLeftDropdown: DropDownFilterType[] | DropDownSortType[];
   uuidMusician?: string;
@@ -62,7 +63,9 @@ const PostListProfile: FC<PostListProps> = (props: PostListProps) => {
   const {t} = useTranslation();
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
-  const {uuidMusician = ''} = props;
+  const {coverImage, title, description, uuidMusician = ''} = props;
+
+  const dataToExc = {coverImage, title, description};
 
   const [recorder, setRecorder] = useState<string[]>([]);
   const [selectedId, setSelectedId] = useState<string[]>();
