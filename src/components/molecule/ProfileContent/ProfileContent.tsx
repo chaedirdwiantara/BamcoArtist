@@ -229,11 +229,6 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
                 width: '100%',
               }}>
               {ownProfile ? (
-                // <PostListMyPost
-                //   uuidMusician={uuid}
-                //   dataRightDropdown={dropDownDataCategory}
-                //   dataLeftDropdown={dropDownDataSort}
-                // />
                 <PostListProfile
                   uuidMusician={uuid}
                   dataRightDropdown={dropDownDataCategory}

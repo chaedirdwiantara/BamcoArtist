@@ -15,6 +15,7 @@ interface ModalConfirmProps {
   disabled?: boolean;
   yesText?: string;
   noText?: string;
+  oneButton?: boolean;
 }
 
 export const ModalConfirm: React.FC<ModalConfirmProps> = (
@@ -29,6 +30,7 @@ export const ModalConfirm: React.FC<ModalConfirmProps> = (
     disabled,
     yesText,
     noText,
+    oneButton,
   } = props;
   return (
     <Modal
@@ -44,14 +46,22 @@ export const ModalConfirm: React.FC<ModalConfirmProps> = (
         <View style={styles.card}>
           <Text style={styles.title}>{title}</Text>
           <Text style={styles.subtitle}>{subtitle}</Text>
-          <View style={styles.containerButton}>
-            <TouchableOpacity onPress={onPressClose}>
-              <Text style={styles.option}>{noText ? noText : 'No'}</Text>
-            </TouchableOpacity>
-            <TouchableOpacity disabled={disabled} onPress={onPressOk}>
-              <Text style={styles.option}>{yesText ? yesText : 'Yes'}</Text>
-            </TouchableOpacity>
-          </View>
+          {!oneButton ? (
+            <View style={styles.containerButton}>
+              <TouchableOpacity onPress={onPressClose}>
+                <Text style={styles.option}>{noText ? noText : 'No'}</Text>
+              </TouchableOpacity>
+              <TouchableOpacity disabled={disabled} onPress={onPressOk}>
+                <Text style={styles.option}>{yesText ? yesText : 'Yes'}</Text>
+              </TouchableOpacity>
+            </View>
+          ) : (
+            <View style={styles.containerButton}>
+              <TouchableOpacity onPress={onPressOk}>
+                <Text style={styles.option}>{yesText ? yesText : 'Ok'}</Text>
+              </TouchableOpacity>
+            </View>
+          )}
         </View>
       </View>
     </Modal>

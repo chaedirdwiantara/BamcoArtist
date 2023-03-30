@@ -1,4 +1,5 @@
 import {
+  Dimensions,
   InteractionManager,
   LogBox,
   ScrollView,
@@ -47,6 +48,9 @@ import {usePlayerHook} from '../../hooks/use-player.hook';
 import {useTranslation} from 'react-i18next';
 import {useCreditHook} from '../../hooks/use-credit.hook';
 import VideoComp from '../../components/molecule/VideoPlayer/videoComp';
+import {profileStorage} from '../../hooks/use-storage.hook';
+
+export const {width} = Dimensions.get('screen');
 
 type cmntToCmnt = {
   id: string;
@@ -105,6 +109,8 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   } = useProfileHook();
 
   const {creditCount, getCreditCount} = useCreditHook();
+
+  const MyUuid = profileStorage()?.uuid;
 
   const data = route.params;
   const musicianName = data.musician.fullname;
@@ -879,7 +885,10 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
                   ? data.musician.imageProfileUrls[0]?.image
                   : ''
               }
-              postDate={dateFormat(data.updatedAt)}
+              postDate={
+                data?.timeAgo ? data.timeAgo : dateFormat(data.createdAt)
+              }
+              postDate2={data.createdAt}
               category={categoryNormalize(data.category)}
               likeOnPress={() =>
                 likeOnPress(dataPostDetail.id, dataPostDetail.isLiked)
@@ -909,7 +918,6 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
               shareOnPress={shareOnPress}
               containerStyles={{
                 marginTop: mvs(16),
-                height: heightPercentage(40),
               }}
               commentCount={commentCountLvl1}
               disabled={true}
@@ -917,6 +925,7 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
               selectedMenu={setSelectedMenuPost}
               idPost={dataPostDetail.id}
               selectedIdPost={setSelectedIdPost}
+              isPremium={data.isPremiumPost}
               children={
                 <View style={{width: '100%'}}>
                   {dataPostDetail ? (
@@ -952,8 +961,10 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
                       <ImageList
                         imgData={data.images}
                         disabled={false}
-                        width={162}
-                        height={79}
+                        width={132}
+                        height={69.5}
+                        heightType2={142}
+                        widthType2={269}
                         onPress={toggleModalOnPress}
                       />
                     ) : null}
@@ -989,8 +1000,25 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
                     {data.video.encodeHlsUrl !== '' && (
                       <View style={{marginTop: ms(6)}}>
                         <VideoComp
+                          id={data.id}
+                          dataVideo={data.video}
                           sourceUri={data.video.encodeHlsUrl}
                           onPress={() => {}}
+                          buttonIconsStyle={{
+                            position: 'absolute',
+                            bottom: widthResponsive(-5),
+                            width: width - widthResponsive(104),
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                          }}
+                          videoContainer={{
+                            width: '100%',
+                            height: width - widthResponsive(150),
+                          }}
+                          blurModeOn={
+                            data.isPremiumPost && data.musician.uuid !== MyUuid
+                          }
                         />
                       </View>
                     )}
@@ -1000,8 +1028,6 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
             />
           ) : null}
         </View>
-        <Gap height={6} />
-        <SsuDivider />
         <Gap height={20} />
 
         {/* //! Comment Section Lvl 1 */}

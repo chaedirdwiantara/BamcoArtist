@@ -16,6 +16,7 @@ import {
   ButtonGradient,
   ButtonGradientwithIcon,
   Gap,
+  ModalConfirm,
   ModalImagePicker,
   SsuInput,
   TopNavigation,
@@ -107,6 +108,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   const [pauseModeOn, setPauseModeOn] = useState<boolean>(false);
   const [updateOn, setUpdateOn] = useState<boolean>(false);
   const [userId, setUserId] = useState<string>('');
+  const [modalConfirm, setModalConfirm] = useState<boolean>(false);
 
   // * Hooks for uploading
   const [uri, setUri] = useState<Image[]>([]);
@@ -174,11 +176,13 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   };
 
   useEffect(() => {
-    if (uri.length > 0) {
+    if (uri.length > 0 && uri[0]?.duration <= 15000) {
       if (uri[0].mime === 'video/mp4') {
         setUploadVideo(uri[0]);
         setPreventPost(true);
       }
+    } else if (uri.length > 0 && uri[0]?.duration > 15000) {
+      setModalConfirm(true);
     }
   }, [uri]);
 
@@ -551,6 +555,10 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
     setDeleteDataVideo(true);
   };
 
+  const handleOkConfirm = () => {
+    setModalConfirm(false);
+  };
+
   // ? OFFSET AREA
   const [offset, setOffset] = React.useState<{
     px: number;
@@ -843,6 +851,16 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
         <ModalLoading visible={createPostLoading} />
         {/* //! END OF MODAL AREA */}
       </View>
+      <ModalConfirm
+        modalVisible={modalConfirm}
+        title={'Upload Video'}
+        subtitle={
+          'Oops! Your video is more than 15 sec. To make sure your upload goes through, try cutting it down and then uploading again.'
+        }
+        yesText={'Ok, Got It'}
+        onPressOk={handleOkConfirm}
+        oneButton
+      />
     </KeyboardAvoidingView>
   );
 };

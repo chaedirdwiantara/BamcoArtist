@@ -1,6 +1,7 @@
 import SsuAPI from './baseMusician';
 import SsuSemeruPublic from './baseSemeruPublic';
 import SsuAPINew from './baseRinjaniNew';
+import RinjaniPublic from './baseRinjaniNew';
 import {
   CommentDetailResponseType,
   CommentResponseType,
@@ -17,6 +18,7 @@ import {
   PostPropsTypeA,
   PostPropsTypeB,
   PostPropsTypeC,
+  SetViewsCountResponseType,
   UnlikePostResponseType,
 } from '../interface/feed.interface';
 import {ParamsProps} from '../interface/base.interface';
@@ -263,6 +265,17 @@ export const mostPlayedSong = async (
   const {data} = await SsuSemeruPublic().request<MostPlayedSongResponseType>({
     url: `/songs/most-play-song/${props?.id}`,
     method: 'GET',
+  });
+
+  return data;
+};
+
+export const viewsCount = async (
+  props?: PostPropsTypeA,
+): Promise<SetViewsCountResponseType> => {
+  const {data} = await RinjaniPublic().request<SetViewsCountResponseType>({
+    url: `/posts/${props?.id}/watch-video`,
+    method: 'POST',
   });
 
   return data;

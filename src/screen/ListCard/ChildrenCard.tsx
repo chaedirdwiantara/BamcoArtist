@@ -106,6 +106,8 @@ const ChildrenCard: FC<ChildrenCardProps> = (props: ChildrenCardProps) => {
               {data.video.encodeHlsUrl !== '' && (
                 <TouchableOpacity>
                   <VideoComp
+                    id={data.id}
+                    dataVideo={data.video}
                     sourceUri={data.video.encodeHlsUrl}
                     onPress={() => {}}
                     buttonIconsStyle={{
@@ -118,7 +120,7 @@ const ChildrenCard: FC<ChildrenCardProps> = (props: ChildrenCardProps) => {
                     }}
                     videoContainer={{
                       width: '100%',
-                      height: width - widthResponsive(104),
+                      height: width - widthResponsive(150),
                     }}
                     blurModeOn={blurModeOn}
                   />

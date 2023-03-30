@@ -6,7 +6,7 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
-import React, {createRef, FC, useState} from 'react';
+import React, {createRef, FC, useEffect, useState} from 'react';
 import Video, {OnLoadData, OnProgressData} from 'react-native-video';
 import {widthResponsive} from '../../../utils';
 import {Slider} from '@miblanchard/react-native-slider';
@@ -21,6 +21,9 @@ import {
 } from '../../../assets/icon';
 import {ms} from 'react-native-size-matters';
 import {Gap} from '../../atom';
+import {VideoResponseType} from '../../../interface/feed.interface';
+import {useFeedHook} from '../../../hooks/use-feed.hook';
+import FullScreenVideo from './FullScreenVideo';
 
 export const {width} = Dimensions.get('screen');
 
@@ -32,6 +35,8 @@ interface VideoProps {
   buttonIconsStyle?: ViewStyle;
   videoContainer?: ViewStyle;
   blurModeOn?: boolean;
+  dataVideo?: VideoResponseType;
+  id?: string;
 }
 
 const VideoComp: FC<VideoProps> = (props: VideoProps) => {
@@ -43,17 +48,27 @@ const VideoComp: FC<VideoProps> = (props: VideoProps) => {
     buttonIconsStyle,
     videoContainer,
     blurModeOn,
+    dataVideo,
+    id,
   } = props;
 
   const [duration, setDuration] = useState(0);
-
   const [currentTime, setCurrentTime] = useState<number>(0);
   const [paused, setPaused] = useState<boolean>(true);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [fullScreen, setFullScreen] = useState<boolean>(false);
   const [mute, setMute] = useState<boolean>(false);
+  const [fromModalCurrent, setFromModalCurrent] = useState<number>(0);
 
   const videoRef = createRef<any>();
+
+  const {dataViewsCount, setViewCount} = useFeedHook();
+
+  useEffect(() => {
+    if (fromModalCurrent) {
+      onSeek(fromModalCurrent);
+    }
+  }, [fromModalCurrent]);
 
   const onSeek = (data: number) => {
     videoRef.current.seek(data);
@@ -79,6 +94,14 @@ const VideoComp: FC<VideoProps> = (props: VideoProps) => {
     setCurrentTime(0);
     setPaused(true);
     setIsPlaying(false);
+    if (id) {
+      setViewCount({id: id});
+    }
+  };
+
+  const handleFullScreen = () => {
+    setFullScreen(true);
+    setPaused(true);
   };
 
   return (
@@ -116,8 +139,16 @@ const VideoComp: FC<VideoProps> = (props: VideoProps) => {
         />
 
         {!isPlaying && (
-          <View style={styles.durationTimeText}>
-            <Text style={styles.durationText}>{timeToString(duration)}</Text>
+          <View style={styles.durationTimeTextCotainer}>
+            <View style={styles.durationTimeText}>
+              <Text style={styles.durationText}>{timeToString(duration)}</Text>
+            </View>
+            <Gap width={7} />
+            {dataVideo && (
+              <View style={styles.durationTimeText}>
+                <Text style={styles.durationText}>{dataVideo.views} Views</Text>
+              </View>
+            )}
           </View>
         )}
         <View style={styles.playPausedVideo}>
@@ -175,7 +206,7 @@ const VideoComp: FC<VideoProps> = (props: VideoProps) => {
                   {timeToString(duration - currentTime)}
                 </Text>
                 <Gap width={10} />
-                <TouchableOpacity onPress={() => {}}>
+                <TouchableOpacity onPress={handleFullScreen}>
                   <FullScreenIcon />
                 </TouchableOpacity>
               </View>
@@ -183,6 +214,17 @@ const VideoComp: FC<VideoProps> = (props: VideoProps) => {
           </View>
         </View>
       )}
+      {fullScreen && currentTime ? (
+        <FullScreenVideo
+          modalVisible={fullScreen}
+          toggleModal={() => setFullScreen(false)}
+          id={id}
+          dataVideo={dataVideo}
+          sourceUri={sourceUri}
+          currentTimeProp={currentTime}
+          modalCurrentTime={setFromModalCurrent}
+        />
+      ) : null}
     </View>
   );
 };
@@ -193,6 +235,7 @@ const styles = StyleSheet.create({
   videoStyle: {
     width: '100%',
     height: width - widthResponsive(48),
+    borderRadius: 4,
   },
   closeIcon: {
     position: 'absolute',
@@ -210,10 +253,17 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: color.Neutral[10],
   },
-  durationTimeText: {
+  durationTimeTextCotainer: {
+    flexDirection: 'row',
     position: 'absolute',
-    bottom: widthResponsive(16),
-    left: widthResponsive(20),
+    bottom: widthResponsive(12),
+    left: widthResponsive(12),
+  },
+  durationTimeText: {
+    backgroundColor: 'rgba(0, 0, 0,0.5)',
+    paddingVertical: widthResponsive(4),
+    paddingHorizontal: widthResponsive(2),
+    borderRadius: 4,
   },
   playPausedVideo: {
     position: 'absolute',
