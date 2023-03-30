@@ -529,6 +529,7 @@ const PostListSimilar: FC<PostListProps> = (props: PostListProps) => {
                   selectedMenu={setSelectedMenu}
                   idPost={item.id}
                   selectedIdPost={setSelectedIdPost}
+                  isPremium={item.isPremiumPost}
                   children={
                     <ChildrenCard
                       data={item}
