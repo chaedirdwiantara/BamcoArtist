@@ -6,7 +6,7 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
-import React, {createRef, FC, useState} from 'react';
+import React, {createRef, FC, useEffect, useState} from 'react';
 import Video, {OnLoadData, OnProgressData} from 'react-native-video';
 import {widthResponsive} from '../../../utils';
 import {Slider} from '@miblanchard/react-native-slider';
@@ -23,6 +23,7 @@ import {ms} from 'react-native-size-matters';
 import {Gap} from '../../atom';
 import {VideoResponseType} from '../../../interface/feed.interface';
 import {useFeedHook} from '../../../hooks/use-feed.hook';
+import FullScreenVideo from './FullScreenVideo';
 
 export const {width} = Dimensions.get('screen');
 
@@ -57,10 +58,17 @@ const VideoComp: FC<VideoProps> = (props: VideoProps) => {
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [fullScreen, setFullScreen] = useState<boolean>(false);
   const [mute, setMute] = useState<boolean>(false);
+  const [fromModalCurrent, setFromModalCurrent] = useState<number>(0);
 
   const videoRef = createRef<any>();
 
   const {dataViewsCount, setViewCount} = useFeedHook();
+
+  useEffect(() => {
+    if (fromModalCurrent) {
+      onSeek(fromModalCurrent);
+    }
+  }, [fromModalCurrent]);
 
   const onSeek = (data: number) => {
     videoRef.current.seek(data);
@@ -89,6 +97,11 @@ const VideoComp: FC<VideoProps> = (props: VideoProps) => {
     if (id) {
       setViewCount({id: id});
     }
+  };
+
+  const handleFullScreen = () => {
+    setFullScreen(true);
+    setPaused(true);
   };
 
   return (
@@ -193,7 +206,7 @@ const VideoComp: FC<VideoProps> = (props: VideoProps) => {
                   {timeToString(duration - currentTime)}
                 </Text>
                 <Gap width={10} />
-                <TouchableOpacity onPress={() => {}}>
+                <TouchableOpacity onPress={handleFullScreen}>
                   <FullScreenIcon />
                 </TouchableOpacity>
               </View>
@@ -201,6 +214,17 @@ const VideoComp: FC<VideoProps> = (props: VideoProps) => {
           </View>
         </View>
       )}
+      {fullScreen && currentTime ? (
+        <FullScreenVideo
+          modalVisible={fullScreen}
+          toggleModal={() => setFullScreen(false)}
+          id={id}
+          dataVideo={dataVideo}
+          sourceUri={sourceUri}
+          currentTimeProp={currentTime}
+          modalCurrentTime={setFromModalCurrent}
+        />
+      ) : null}
     </View>
   );
 };
