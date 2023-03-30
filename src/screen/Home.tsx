@@ -325,7 +325,7 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
         leftIconAction={() => null}
         rightIcon={rightIconComp()}
         rightIconAction={onPressNotif}
-        maxLengthTitle={20}
+        maxLengthTitle={14}
         itemStrokeColor={Color.Pink[100]}
         points={isLogin ? creditCount : 0}
         containerStyles={{paddingHorizontal: widthResponsive(24)}}
