@@ -30,6 +30,7 @@ export const AddToPlaylistScreen: React.FC<AddToPlaylistProps> = ({
 
   const [toastVisible, setToastVisible] = useState<boolean>(false);
   const [toastError, setToastError] = useState<boolean>(false);
+  const [search, setSearch] = useState<string>('');
 
   useEffect(() => {
     toastVisible &&
@@ -41,9 +42,9 @@ export const AddToPlaylistScreen: React.FC<AddToPlaylistProps> = ({
   useFocusEffect(
     useCallback(() => {
       if (uuid) {
-        getPlaylist({uuid});
+        getPlaylist({uuid, keyword: search});
       }
-    }, [uuid]),
+    }, [uuid, search]),
   );
 
   const onPressGoBack = () => {
@@ -58,7 +59,7 @@ export const AddToPlaylistScreen: React.FC<AddToPlaylistProps> = ({
   };
 
   const onPressPlaylist = async (id: number) => {
-    storage.set('withoutBottomTab', false);
+    storage.set('withoutBottomTab', !params.fromMainTab);
     try {
       const payload = {
         playlistId: id,
@@ -67,7 +68,11 @@ export const AddToPlaylistScreen: React.FC<AddToPlaylistProps> = ({
       if (params?.type === 'song') {
         await addSong(payload);
       }
-      navigation2.navigate('Home', {showToast: true});
+      if (params.fromMainTab) {
+        navigation2.navigate('Home', {showToast: true});
+      } else {
+        onPressGoBack();
+      }
     } catch (error) {
       setToastVisible(true);
       setToastError(true);
@@ -75,16 +80,23 @@ export const AddToPlaylistScreen: React.FC<AddToPlaylistProps> = ({
     }
   };
 
+  const myPlaylist =
+    dataPlaylist?.length > 0
+      ? dataPlaylist.filter(val => val.playlistOwner.UUID === uuid)
+      : [];
+
   return (
     <View style={styles.root}>
       <AddToPlaylistContent
-        dataPlaylist={dataPlaylist}
+        dataPlaylist={myPlaylist}
         onPressGoBack={onPressGoBack}
         goToCreatePlaylist={goToCreatePlaylist}
         pressAddToPlaylist={onPressPlaylist}
         toastVisible={toastVisible}
         setToastVisible={setToastVisible}
         toastError={toastError}
+        search={search}
+        setSearch={setSearch}
       />
     </View>
   );

@@ -43,6 +43,7 @@ interface ListProps {
   newDataMore?: DataMore[];
   newOnPressMore?: (data: DataMore) => void;
   disabled?: boolean;
+  fromMainTab?: boolean;
 }
 
 export const MusicSection: React.FC<ListProps> = (props: ListProps) => {
@@ -104,6 +105,7 @@ export const MusicSection: React.FC<ListProps> = (props: ListProps) => {
       navigation.navigate('AddToPlaylist', {
         id: [props.songId],
         type: 'song',
+        fromMainTab: props.fromMainTab ? props.fromMainTab : false,
       });
     } else if (dataResult.value === '2') {
       setModalDonate(true);

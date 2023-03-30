@@ -90,7 +90,7 @@ export const SongTitlePlay: React.FC<SongTitlePlayProps> = ({
           }}
           onPress={goToMusicianProfile}>
           {avatarUri ? (
-            <Avatar size={widthPercentage(16)} imgUri={avatarUri} />
+            <Avatar size={widthPercentage(18)} imgUri={avatarUri} />
           ) : (
             <DefaultAvatar.ProfileIcon
               width={widthPercentage(18)}

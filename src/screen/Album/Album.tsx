@@ -14,14 +14,19 @@ export const AlbumScreen: React.FC<AlbumProps> = ({
   navigation,
   route,
 }: AlbumProps) => {
-  const {dataSong, dataDetailAlbum, getListDataSong, getDetailAlbum} =
-    useSongHook();
+  const {
+    albumLoading,
+    dataSong,
+    dataDetailAlbum,
+    getListDataSong,
+    getDetailAlbum,
+  } = useSongHook();
 
   useFocusEffect(
     useCallback(() => {
       getListDataSong({albumID: route.params.id});
       getDetailAlbum({id: route.params.id.toString()});
-    }, []),
+    }, [route.params.id]),
   );
 
   const onPressGoBack = () => {
@@ -30,7 +35,7 @@ export const AlbumScreen: React.FC<AlbumProps> = ({
 
   return (
     <View style={styles.root}>
-      {dataDetailAlbum && (
+      {dataDetailAlbum && !albumLoading && (
         <AlbumContent
           detailAlbum={dataDetailAlbum}
           dataSong={dataSong}

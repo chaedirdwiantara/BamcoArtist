@@ -43,6 +43,8 @@ export type ListDataSearchMusician = {
   email: string;
   imageProfileUrls: imageTypes[];
   followers: number;
+  isFollowed?: boolean;
+  point?: number;
 };
 
 export type ListSearchMusicianResponseType = {

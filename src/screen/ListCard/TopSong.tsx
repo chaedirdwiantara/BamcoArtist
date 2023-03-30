@@ -25,6 +25,7 @@ interface TopSongPropsScreen {
   newOnPressMore?: (data: DataDropDownType, item: SongList) => void;
   onEndReached?: () => void;
   onEndReachedThreshold?: number;
+  fromMainTab?: boolean;
 }
 
 const TopSong: FC<TopSongPropsScreen> = (props: TopSongPropsScreen) => {
@@ -40,6 +41,7 @@ const TopSong: FC<TopSongPropsScreen> = (props: TopSongPropsScreen) => {
     loveIcon,
     newDataMore,
     newOnPressMore,
+    fromMainTab,
   } = props;
   const {currentTrack, isPlaying, addSong} = usePlayerHook();
   const {setLikeSong, setUnlikeSong} = useSongHook();
@@ -122,6 +124,7 @@ const TopSong: FC<TopSongPropsScreen> = (props: TopSongPropsScreen) => {
                 newOnPressMore={data =>
                   newOnPressMore && newOnPressMore(data, item)
                 }
+                fromMainTab={fromMainTab}
               />
             );
           }
@@ -165,6 +168,7 @@ const TopSong: FC<TopSongPropsScreen> = (props: TopSongPropsScreen) => {
                   newOnPressMore={data =>
                     newOnPressMore && newOnPressMore(data, item)
                   }
+                  fromMainTab={fromMainTab}
                 />
               );
             }

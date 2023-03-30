@@ -250,6 +250,7 @@ export const CreateNewPlaylistContent: React.FC<Props> = ({
           onDeleteImage={resetImage}
           onPressClose={closeModal}
           hideMenuDelete={hideMenuDelete}
+          sendUriMultiple={() => null}
         />
 
         <ModalConfirm
