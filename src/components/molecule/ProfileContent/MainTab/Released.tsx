@@ -6,6 +6,7 @@ import {Gap} from '../../../atom';
 import {useMusicianHook} from '../../../../hooks/use-musician.hook';
 import {useTranslation} from 'react-i18next';
 import ReleasedAlbum from '../../../../screen/MusicianProfile/ReleasedAlbum';
+import {heightPercentage} from '../../../../utils';
 
 interface ReleasedProps {
   uuidMusician: string;
