@@ -40,7 +40,7 @@ const Released: FC<ReleasedProps> = (props: ReleasedProps) => {
       {dataAlbum.length > 0 && (
         <>
           <Text style={styles.textComp}>Released This Year</Text>
-          <Gap height={16} />
+          <Gap height={heightPercentage(16)} />
           {dataDetailMusician ? (
             <ReleasedAlbum
               title={''}

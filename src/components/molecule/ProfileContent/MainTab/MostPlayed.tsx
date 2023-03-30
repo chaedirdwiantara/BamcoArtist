@@ -7,6 +7,7 @@ import MusicListPreview from '../../MusicPreview/MusicListPreview';
 import {usePlayerHook} from '../../../../hooks/use-player.hook';
 import {useFeedHook} from '../../../../hooks/use-feed.hook';
 import {QuoteToPost} from '../../../../interface/feed.interface';
+import {heightPercentage} from '../../../../utils';
 
 interface MostPlayedProps {
   uuidMusician: string;
@@ -66,7 +67,7 @@ const MostPlayed: FC<MostPlayedProps> = (props: MostPlayedProps) => {
       {dataMostPlayed && (
         <>
           <Text style={styles.textComp}>Most Played</Text>
-          <Gap height={16} />
+          <Gap height={heightPercentage(16)} />
 
           <MusicListPreview
             hideClose
@@ -95,7 +96,7 @@ const MostPlayed: FC<MostPlayedProps> = (props: MostPlayedProps) => {
             hideSlider
           />
 
-          <Gap height={16} />
+          <Gap height={heightPercentage(24)} />
         </>
       )}
     </View>
