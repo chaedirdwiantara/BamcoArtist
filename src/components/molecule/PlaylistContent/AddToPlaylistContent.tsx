@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {StyleSheet, ScrollView, View, Text} from 'react-native';
 import {useTranslation} from 'react-i18next';
 
@@ -24,6 +24,8 @@ interface AddToPlaylistProps {
   toastVisible: boolean;
   toastError: boolean;
   setToastVisible: (param: boolean) => void;
+  search: string;
+  setSearch: (value: string) => void;
 }
 
 export const AddToPlaylistContent: React.FC<AddToPlaylistProps> = ({
@@ -34,9 +36,10 @@ export const AddToPlaylistContent: React.FC<AddToPlaylistProps> = ({
   toastVisible,
   toastError,
   setToastVisible,
+  search,
+  setSearch,
 }) => {
   const {t} = useTranslation();
-  const [search, setSearch] = useState('');
 
   const toastText = toastError
     ? 'Song has already added'
