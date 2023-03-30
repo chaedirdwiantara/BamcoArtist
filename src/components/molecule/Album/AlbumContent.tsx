@@ -33,6 +33,7 @@ import {usePlayerHook} from '../../../hooks/use-player.hook';
 import ListSongs from '../../../screen/ListCard/ListSongs';
 import {mvs} from 'react-native-size-matters';
 import {heightPercentage, width, widthPercentage} from '../../../utils';
+import DropdownMore from '../V2/DropdownFilter/DropdownMore';
 
 interface Props {
   dataSong: SongList[] | null;
@@ -154,11 +155,9 @@ export const AlbumContent: React.FC<Props> = ({
           comingSoon ? (
             <></>
           ) : (
-            <Dropdown.More
-              data={dropDownHeaderAlbum}
+            <DropdownMore
+              dataFilter={dropDownHeaderAlbum}
               selectedMenu={resultDataMore}
-              containerStyle={styles.dropDownMore}
-              translation={true}
             />
           )
         }

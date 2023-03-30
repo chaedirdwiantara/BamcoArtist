@@ -115,6 +115,10 @@ export const useSearchHook = () => {
     try {
       const response = await listFollowers(props);
       setDataFollowers(response.data);
+      return {
+        data: response.data,
+        meta: response.meta,
+      };
     } catch (error) {
       setDataFollowers([]);
     } finally {

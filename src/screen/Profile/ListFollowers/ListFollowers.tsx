@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {
+  RefreshControl,
   ScrollView,
   StyleSheet,
   Text,
@@ -21,6 +22,7 @@ import Color from '../../../theme/Color';
 import {ArrowLeftIcon, DefaultAvatar} from '../../../assets/icon';
 import {ListDataSearchFans} from '../../../interface/search.interface';
 import {SearchBar, TopNavigation, Avatar, Gap} from '../../../components';
+import LoadingSpinner from '../../../components/atom/Loading/LoadingSpinner';
 
 interface FollowersListProps {
   onPressGoBack: () => void;
@@ -28,6 +30,11 @@ interface FollowersListProps {
   search: string;
   setSearch: (value: string) => void;
   goToDetail: (type: 'fans' | 'musician', value: string) => void;
+  loadMore: () => void;
+  isLoading: boolean;
+  isRefetching: boolean;
+  isFetchingNextPage: boolean;
+  refetch: () => void;
 }
 
 export const FollowersList: React.FC<FollowersListProps> = ({
@@ -36,6 +43,11 @@ export const FollowersList: React.FC<FollowersListProps> = ({
   search,
   setSearch,
   goToDetail,
+  loadMore,
+  isLoading,
+  isRefetching,
+  isFetchingNextPage,
+  refetch,
 }) => {
   const {t} = useTranslation();
   const [listFollowing, setListFollowing] = useState(dataList);
@@ -66,7 +78,24 @@ export const FollowersList: React.FC<FollowersListProps> = ({
 
       <ScrollView
         showsVerticalScrollIndicator={false}
-        style={{marginBottom: heightResponsive(25)}}>
+        style={{marginBottom: heightResponsive(25)}}
+        onTouchEnd={loadMore}
+        refreshControl={
+          <RefreshControl
+            refreshing={isRefetching && !isFetchingNextPage}
+            onRefresh={refetch}
+            onLayout={e => console.log(e.nativeEvent)}
+            tintColor="transparent"
+            colors={['transparent']}
+            style={{backgroundColor: 'transparent'}}
+          />
+        }>
+        {(isRefetching || isLoading) && !isFetchingNextPage && (
+          <View style={styles.loadingContainer}>
+            <LoadingSpinner />
+          </View>
+        )}
+
         {listFollowing?.map((val, i) => (
           <View
             key={i}
@@ -100,6 +129,12 @@ export const FollowersList: React.FC<FollowersListProps> = ({
             </View>
           </View>
         ))}
+
+        {isFetchingNextPage && (
+          <View style={styles.loadingContainer}>
+            <LoadingSpinner />
+          </View>
+        )}
       </ScrollView>
     </View>
   );
@@ -141,5 +176,9 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     fontSize: normalize(10),
     color: Color.Dark[50],
+  },
+  loadingContainer: {
+    flex: 1,
+    alignItems: 'center',
   },
 });

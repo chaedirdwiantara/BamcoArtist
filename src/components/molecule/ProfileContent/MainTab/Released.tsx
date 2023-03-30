@@ -6,6 +6,7 @@ import {Gap} from '../../../atom';
 import {useMusicianHook} from '../../../../hooks/use-musician.hook';
 import {useTranslation} from 'react-i18next';
 import ReleasedAlbum from '../../../../screen/MusicianProfile/ReleasedAlbum';
+import {heightPercentage} from '../../../../utils';
 
 interface ReleasedProps {
   uuidMusician: string;
@@ -40,7 +41,7 @@ const Released: FC<ReleasedProps> = (props: ReleasedProps) => {
       {dataAlbum.length > 0 && (
         <>
           <Text style={styles.textComp}>Released This Year</Text>
-          <Gap height={16} />
+          <Gap height={heightPercentage(16)} />
           {dataDetailMusician ? (
             <ReleasedAlbum
               title={''}

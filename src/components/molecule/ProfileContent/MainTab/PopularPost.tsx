@@ -230,7 +230,7 @@ const PopularPost: FC<PopularPostProps> = (props: PopularPostProps) => {
       {dataPostList.length > 0 && (
         <>
           <Text style={styles.textComp}>Popular Post</Text>
-          <Gap height={16} />
+          <Gap height={heightPercentage(16)} />
 
           <ListCard.PostList
             containerStyles={{paddingHorizontal: 0}}
@@ -311,7 +311,7 @@ const PopularPost: FC<PopularPostProps> = (props: PopularPostProps) => {
             }
           />
 
-          <Gap height={16} />
+          <Gap height={heightPercentage(24)} />
         </>
       )}
       <ModalDonate
