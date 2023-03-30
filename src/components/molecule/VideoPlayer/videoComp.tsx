@@ -211,6 +211,7 @@ const styles = StyleSheet.create({
   videoStyle: {
     width: '100%',
     height: width - widthResponsive(48),
+    borderRadius: 4,
   },
   closeIcon: {
     position: 'absolute',
@@ -232,10 +233,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     position: 'absolute',
     bottom: widthResponsive(12),
-    left: widthResponsive(16),
+    left: widthResponsive(12),
   },
   durationTimeText: {
-    backgroundColor: 'rgba(0, 215, 120,0.5)',
+    backgroundColor: 'rgba(0, 0, 0,0.5)',
     paddingVertical: widthResponsive(4),
     paddingHorizontal: widthResponsive(2),
     borderRadius: 4,
