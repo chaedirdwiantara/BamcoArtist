@@ -128,11 +128,13 @@ export const PlaylistScreen: React.FC<PlaylistProps> = ({
     }
   };
 
-  const playlistName = route.params.name;
+  const listSongPlaylist =
+    dataSongsPlaylist !== undefined ? dataSongsPlaylist : [];
+  const isDefault = dataDetailPlaylist?.isDefaultPlaylist;
 
   return (
     <View style={styles.root}>
-      {dataDetailPlaylist && playlistName !== 'Default Playlist' && (
+      {dataDetailPlaylist && !isDefault && (
         <PlaylistContent
           goToEditPlaylist={goToEditPlaylist}
           goBackProfile={val =>
@@ -142,7 +144,7 @@ export const PlaylistScreen: React.FC<PlaylistProps> = ({
           }
           goToAddSong={goToAddSong}
           dataDetail={dataDetailPlaylist}
-          listSongs={dataSongsPlaylist}
+          listSongs={listSongPlaylist}
           onPressSong={onPressSong}
           playerVisible={playerVisible}
           isPlaying={isPlaying}
@@ -156,9 +158,9 @@ export const PlaylistScreen: React.FC<PlaylistProps> = ({
         />
       )}
 
-      {playlistName === 'Default Playlist' && (
+      {isDefault && (
         <DefaultPlaylist
-          listSong={dataSongsPlaylist}
+          listSong={listSongPlaylist}
           onPressSong={onPressSong}
           playerVisible={playerVisible}
           onPressGoBack={() => goBackProfile(false)}
