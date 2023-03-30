@@ -31,6 +31,7 @@ type profile = {
   backgroundUri: string;
   avatarUri: string;
   totalFollowing: number;
+  totalPoint: number;
 };
 
 export const OtherUserProfile: FC<OtherProfileProps> = ({
@@ -90,6 +91,10 @@ export const OtherUserProfile: FC<OtherProfileProps> = ({
     totalFollowing:
       dataFansProfile && dataFansProfile.data.following
         ? dataFansProfile?.data.following
+        : 0,
+    totalPoint:
+      dataFansProfile && dataFansProfile.data.point.daily
+        ? dataFansProfile.data.point.daily
         : 0,
   };
 

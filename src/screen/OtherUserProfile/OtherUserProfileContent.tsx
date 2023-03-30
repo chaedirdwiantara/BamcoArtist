@@ -40,6 +40,7 @@ type profile = {
   backgroundUri: string;
   avatarUri: string;
   totalFollowing: number;
+  totalPoint: number;
 };
 
 interface ProfileContentProps {
@@ -131,6 +132,7 @@ export const OtherUserProfileContent: React.FC<ProfileContentProps> = ({
           onPress={() => onPressGoTo('Following')}
           selfProfile={selfProfile?.data}
           totalCountlikedSong={totalCountlikedSong}
+          totalPoint={profile.totalPoint}
         />
         <View style={styles.containerContent}>
           <TabFilter.Type1
