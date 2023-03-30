@@ -124,7 +124,7 @@ export type RootStackParams = {
   Account: {
     data: ProfileResponseType;
   };
-  AddToPlaylist: {id: number[]; type?: string};
+  AddToPlaylist: {id: number[]; type?: string; fromMainTab?: boolean};
   AddSong: Playlist;
   AddPreview: ListDataSearchSongs;
   Album: AlbumData | SongAlbum | {id: number; type?: string};

@@ -425,6 +425,7 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
               onPress={onPressTopSong}
               type={'home'}
               loveIcon={isLogin}
+              fromMainTab={true}
             />
           ) : (
             <NewSong

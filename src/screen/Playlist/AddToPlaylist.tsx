@@ -59,7 +59,7 @@ export const AddToPlaylistScreen: React.FC<AddToPlaylistProps> = ({
   };
 
   const onPressPlaylist = async (id: number) => {
-    storage.set('withoutBottomTab', false);
+    storage.set('withoutBottomTab', !params.fromMainTab);
     try {
       const payload = {
         playlistId: id,
@@ -68,7 +68,11 @@ export const AddToPlaylistScreen: React.FC<AddToPlaylistProps> = ({
       if (params?.type === 'song') {
         await addSong(payload);
       }
-      navigation2.navigate('Home', {showToast: true});
+      if (params.fromMainTab) {
+        navigation2.navigate('Home', {showToast: true});
+      } else {
+        onPressGoBack();
+      }
     } catch (error) {
       setToastVisible(true);
       setToastError(true);
