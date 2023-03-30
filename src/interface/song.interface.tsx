@@ -26,6 +26,9 @@ export type SongList = {
   album: {
     id: number;
   };
+  musician: {
+    name: string;
+  };
 };
 
 export type TranscodedSongType = {

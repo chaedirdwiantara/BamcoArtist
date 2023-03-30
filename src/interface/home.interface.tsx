@@ -1,9 +1,15 @@
 export type DiveIn = {
   title: string;
-  imageUrl: string;
+  imageUrl: {
+    image: string;
+    presetName: string;
+  }[];
   description: string;
   type: string;
   id: number;
+  musician: {
+    name: string;
+  };
 };
 
 export type DiveInResponseType = {
@@ -22,7 +28,10 @@ export type ComingSoon = {
     imageProfile: string;
   };
   description: string;
-  imageUrl: string;
+  imageUrl: {
+    image: string;
+    presetName: string;
+  }[];
   featuringArtist: string[];
   genre: {
     id: number;
