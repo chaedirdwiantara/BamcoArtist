@@ -23,7 +23,7 @@ export const LoginDescription: React.FC<LoginDescriptionProps> = ({
     <View style={[styles.root, containerStyle]}>
       <SSULogo />
       <Text style={[Typography.Heading4, styles.title]}>{title}</Text>
-      <Text style={[Typography.Subtitle2, styles.description]}>
+      <Text style={[Typography.Subtitle3, styles.description]}>
         {description}
       </Text>
     </View>

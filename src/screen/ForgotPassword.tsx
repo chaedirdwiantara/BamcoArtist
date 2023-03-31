@@ -400,7 +400,7 @@ export const ForgotPassword: FC = () => {
     <KeyboardShift>
       <View style={styles.root}>
         <Image
-          source={require('../assets/background/signin-guest.png')}
+          source={require('../assets/background/onboard-1.jpg')}
           style={styles.image}
         />
         <SsuSheet

@@ -45,9 +45,9 @@ export const SelectBox: React.FC<SelectBoxProps> = (props: SelectBoxProps) => {
               width: undefined,
               aspectRatio: undefined,
               height: heightPercentage(35),
-              paddingHorizontal: widthPercentage(10),
-              marginVertical: heightPercentage(2),
-              marginHorizontal: widthPercentage(2),
+              paddingHorizontal: widthPercentage(16),
+              marginVertical: heightPercentage(4),
+              marginHorizontal: widthPercentage(4),
             }}
             onPress={() => onPressBox(val.id, checkVal)}
           />
@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: widthPercentage(12),
+    paddingHorizontal: widthPercentage(34),
   },
   title: {
     color: Color.Neutral[10],
