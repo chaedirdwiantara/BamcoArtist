@@ -214,6 +214,9 @@
     },
     "Musician": {
       "EmptyState": "We couldn't find any {{title}} for you. Check back soon as we're always adding new musician!"
+    },
+    "Playlist": {
+      "EmptyState": "Oops! We couldn't find any playlists for you. Create your own & help other discover great music!"
     }
   },
   "Feed": {
