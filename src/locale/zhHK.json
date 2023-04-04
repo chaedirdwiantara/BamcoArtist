@@ -208,6 +208,12 @@
     },
     "ComingSoon": {
       "EmptyState": "Unfortunately, there are no new albums coming soon from any musicians. We'll let you know as soon as something new is on the horizon."
+    },
+    "Song": {
+      "EmptyState": "Oops! We couldn't find any {{title}} for you. Check back soon as we're always adding new music!"
+    },
+    "Musician": {
+      "EmptyState": "We couldn't find any {{title}} for you. Check back soon as we're always adding new musician!"
     }
   },
   "Feed": {
