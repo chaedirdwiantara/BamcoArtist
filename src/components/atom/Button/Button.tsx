@@ -41,7 +41,7 @@ export const Button: React.FC<ButtonProps> = (props: ButtonProps) => {
 
   const withBorder = type === 'border' && {
     borderWidth: ms(1),
-    borderColor: borderColor ? borderColor : Color.Pink.linear,
+    borderColor: borderColor ? borderColor : Color.Success[400],
     backgroundColor: 'transparent',
   };
 
@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: Color.Pink.linear,
+    backgroundColor: Color.Success[400],
   },
   labelStyle: {
     fontSize: normalize(12),

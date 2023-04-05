@@ -182,7 +182,7 @@ export const ModalSocMed: React.FC<ModalSocMedProps> = ({
           type="border"
           label={t('Btn.Finish')}
           containerStyles={styles.btnCancel}
-          textStyles={{color: color.Pink.linear}}
+          textStyles={{color: color.Success[400]}}
           onPress={onPressClose}
         />
 
@@ -236,6 +236,5 @@ const styles = StyleSheet.create({
     width: '25%',
     aspectRatio: heightPercentage(120 / 40),
     alignSelf: 'center',
-    backgroundColor: color.Pink[200],
   },
 });

@@ -67,7 +67,6 @@ const styles = StyleSheet.create({
     width: width * 0.9,
     aspectRatio: widthPercentage(327 / 36),
     marginTop: heightPercentage(25),
-    backgroundColor: color.Pink[200],
     alignSelf: 'center',
   },
 });

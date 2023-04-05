@@ -130,7 +130,7 @@ export const ModalDonate: React.FC<ModalDonateProps> = ({
           type="border"
           label={t('Btn.Cancel')}
           containerStyles={styles.btnCancel}
-          textStyles={{color: Color.Pink.linear}}
+          textStyles={{color: Color.Success[400]}}
           onPress={onPressClose}
         />
       </>
