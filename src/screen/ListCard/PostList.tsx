@@ -100,9 +100,6 @@ const PostListHome: FC<PostListProps> = (props: PostListProps) => {
   const [trigger2ndModal, setTrigger2ndModal] = useState<boolean>(false);
   const [page, setPage] = useState<number>(1);
   const [perPage, setPerPage] = useState<number>(15);
-  const [isModalImage, setModalImage] = useState<boolean>(false);
-  const [imgUrl, setImgUrl] = useState<number>(-1);
-  const [selectedImgIdx, setSelectedImgIdx] = useState<number>();
 
   // * UPDATE HOOKS
   const [selectedIdPost, setSelectedIdPost] = useState<string>();
@@ -320,16 +317,6 @@ const PostListHome: FC<PostListProps> = (props: PostListProps) => {
   };
   // ! END OF MUSIC AREA
 
-  const toggleModalOnPress = (index: number) => {
-    setModalImage(!isModalImage);
-    setImgUrl(index);
-  };
-
-  const toggleImageModal = () => {
-    setSelectedImgIdx(undefined);
-    setModalImage(!isModalImage);
-  };
-
   return (
     <>
       {!hideDropdown && (
@@ -446,9 +433,6 @@ const PostListHome: FC<PostListProps> = (props: PostListProps) => {
                       duration={playerProgress.duration}
                       seekPlayer={seekPlayer}
                       isIdNowPlaying={item.id === idNowPlaying}
-                      onPressImage={toggleModalOnPress}
-                      index={index}
-                      selectedIndex={setSelectedImgIdx}
                     />
                   }
                 />
@@ -510,14 +494,6 @@ const PostListHome: FC<PostListProps> = (props: PostListProps) => {
         modalVisible={modalSuccessDonate && trigger2ndModal ? true : false}
         toggleModal={onPressSuccess}
       />
-      {selectedImgIdx && (
-        <ImageModal
-          toggleModal={toggleImageModal}
-          modalVisible={isModalImage}
-          imageIdx={imgUrl}
-          dataImage={dataMain[selectedImgIdx].images}
-        />
-      )}
     </>
   );
 };

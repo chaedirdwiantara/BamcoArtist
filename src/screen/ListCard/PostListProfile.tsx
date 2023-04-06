@@ -82,9 +82,6 @@ const PostListProfile: FC<PostListProps> = (props: PostListProps) => {
   const [uuid, setUuid] = useState<string>();
   const [refreshing, setRefreshing] = useState<boolean>(false);
   const [modalConfirm, setModalConfirm] = useState(false);
-  const [isModalImage, setModalImage] = useState<boolean>(false);
-  const [imgUrl, setImgUrl] = useState<number>(-1);
-  const [selectedImgIdx, setSelectedImgIdx] = useState<number>();
 
   // * UPDATE HOOKS
   const [selectedIdPost, setSelectedIdPost] = useState<string>();
@@ -324,16 +321,6 @@ const PostListProfile: FC<PostListProps> = (props: PostListProps) => {
     setModalConfirm(false);
   };
 
-  const toggleModalOnPress = (index: number) => {
-    setModalImage(!isModalImage);
-    setImgUrl(index);
-  };
-
-  const toggleImageModal = () => {
-    setSelectedImgIdx(undefined);
-    setModalImage(!isModalImage);
-  };
-
   return (
     <>
       {dataMain !== null && dataMain.length !== 0 ? (
@@ -466,13 +453,6 @@ const PostListProfile: FC<PostListProps> = (props: PostListProps) => {
                       blurModeOn={
                         item.isPremiumPost && item.musician.uuid !== MyUuid
                       }
-                      onPressImage={
-                        item.isPremiumPost && item.musician.uuid !== MyUuid
-                          ? handleOnBlur
-                          : toggleModalOnPress
-                      }
-                      index={index}
-                      selectedIndex={setSelectedImgIdx}
                     />
                   }
                 />
@@ -545,14 +525,6 @@ const PostListProfile: FC<PostListProps> = (props: PostListProps) => {
         onPressClose={handleMaybeLater}
         onPressOk={handleConfirmModal}
       />
-      {selectedImgIdx && (
-        <ImageModal
-          toggleModal={toggleImageModal}
-          modalVisible={isModalImage}
-          imageIdx={imgUrl}
-          dataImage={dataMain[selectedImgIdx].images}
-        />
-      )}
     </>
   );
 };

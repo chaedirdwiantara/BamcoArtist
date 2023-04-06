@@ -10,6 +10,7 @@ import {
   NativeScrollEvent,
   NativeSyntheticEvent,
   StatusBar,
+  LogBox,
 } from 'react-native';
 import Modal from 'react-native-modal';
 import FastImage from 'react-native-fast-image';
@@ -47,6 +48,11 @@ const ImageModal: FC<ModalImageProps> = (props: ModalImageProps) => {
     type,
     removePhoto,
   } = props;
+
+  // ignore warning
+  useEffect(() => {
+    LogBox.ignoreAllLogs();
+  }, []);
 
   const scrollX = useRef(new Animated.Value(0)).current;
   const imageSlider = useRef(null);
