@@ -51,7 +51,7 @@ const ImageModal: FC<ModalImageProps> = (props: ModalImageProps) => {
 
   // ignore warning
   useEffect(() => {
-    LogBox.ignoreAllLogs();
+    LogBox.ignoreLogs(['scrollToIndex should be used in conjunction with']);
   }, []);
 
   const scrollX = useRef(new Animated.Value(0)).current;

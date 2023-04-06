@@ -112,6 +112,9 @@ const DetailPost: React.FC<ListProps> = (props: ListProps) => {
                 backgroundColor: isPremium
                   ? color.RedVelvet[100]
                   : color.DarkBlue[100],
+                paddingBottom: myPost
+                  ? heightResponsive(2)
+                  : heightResponsive(8),
               },
             ]}>
             <View style={styles.topSection}>
