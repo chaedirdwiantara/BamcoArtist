@@ -50,6 +50,7 @@ import {useCreditHook} from '../../hooks/use-credit.hook';
 import {useSettingHook} from '../../hooks/use-setting.hook';
 import {profileStorage} from '../../hooks/use-storage.hook';
 import ChildrenCard from './ChildrenCard';
+import ImageModal from '../Detail/ImageModal';
 
 const {height} = Dimensions.get('screen');
 
@@ -92,6 +93,9 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
     modalSortBy: false,
     modalCategory: false,
   });
+  const [isModalImage, setModalImage] = useState<boolean>(false);
+  const [imgUrl, setImgUrl] = useState<number>(-1);
+  const [selectedImgIdx, setSelectedImgIdx] = useState<number>();
 
   // * UPDATE HOOKS
   const [selectedIdPost, setSelectedIdPost] = useState<string>();
@@ -394,6 +398,16 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
 
   // ? END OF OFFSET AREA
 
+  const toggleModalOnPress = (index: number) => {
+    setModalImage(!isModalImage);
+    setImgUrl(index);
+  };
+
+  const toggleImageModal = () => {
+    setSelectedImgIdx(undefined);
+    setModalImage(!isModalImage);
+  };
+
   return (
     <>
       <View style={styles.container}>
@@ -469,7 +483,7 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
                     : heightResponsive(160),
               }}
               onEndReached={handleEndScroll}
-              renderItem={({item}) => (
+              renderItem={({item, index}) => (
                 <>
                   <ListCard.PostList
                     toDetailOnPress={() =>
@@ -543,6 +557,9 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
                         duration={playerProgress.duration}
                         seekPlayer={seekPlayer}
                         isIdNowPlaying={item.id === idNowPlaying}
+                        onPressImage={toggleModalOnPress}
+                        index={index}
+                        selectedIndex={setSelectedImgIdx}
                       />
                     }
                   />
@@ -707,6 +724,14 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
         />
       )}
       <ModalLoading visible={feedIsLoading} />
+      {selectedImgIdx && (
+        <ImageModal
+          toggleModal={toggleImageModal}
+          modalVisible={isModalImage}
+          imageIdx={imgUrl}
+          dataImage={dataMain[selectedImgIdx].images}
+        />
+      )}
     </>
   );
 };

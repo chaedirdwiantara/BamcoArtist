@@ -45,6 +45,7 @@ import FilterModal from '../../components/molecule/V2/DropdownFilter/modalFilter
 import ChildrenCard from './ChildrenCard';
 import {profileStorage} from '../../hooks/use-storage.hook';
 import LoadingSpinner from '../../components/atom/Loading/LoadingSpinner';
+import ImageModal from '../Detail/ImageModal';
 const {height} = Dimensions.get('screen');
 
 interface PostListProps {
@@ -86,6 +87,9 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
     modalCategory: false,
   });
   const [refreshing, setRefreshing] = useState<boolean>(false);
+  const [isModalImage, setModalImage] = useState<boolean>(false);
+  const [imgUrl, setImgUrl] = useState<number>(-1);
+  const [selectedImgIdx, setSelectedImgIdx] = useState<number>();
 
   // * UPDATE HOOKS
   const [selectedIdPost, setSelectedIdPost] = useState<string>();
@@ -386,6 +390,16 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
 
   // ? END OF OFFSET AREA
 
+  const toggleModalOnPress = (index: number) => {
+    setModalImage(!isModalImage);
+    setImgUrl(index);
+  };
+
+  const toggleImageModal = () => {
+    setSelectedImgIdx(undefined);
+    setModalImage(!isModalImage);
+  };
+
   return (
     <>
       <View style={styles.container}>
@@ -479,7 +493,7 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
               />
             }
             onEndReached={handleEndScroll}
-            renderItem={({item}) => (
+            renderItem={({item, index}) => (
               <>
                 <ListCard.PostList
                   toDetailOnPress={handleToDetailMusician}
@@ -551,6 +565,9 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
                       duration={playerProgress.duration}
                       seekPlayer={seekPlayer}
                       isIdNowPlaying={item.id === idNowPlaying}
+                      onPressImage={toggleModalOnPress}
+                      index={index}
+                      selectedIndex={setSelectedImgIdx}
                     />
                   }
                 />
@@ -669,6 +686,14 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
             width: widthResponsive(125),
           }}
           textStyle={{fontSize: mvs(10)}}
+        />
+      )}
+      {selectedImgIdx && (
+        <ImageModal
+          toggleModal={toggleImageModal}
+          modalVisible={isModalImage}
+          imageIdx={imgUrl}
+          dataImage={dataMain[selectedImgIdx].images}
         />
       )}
     </>
