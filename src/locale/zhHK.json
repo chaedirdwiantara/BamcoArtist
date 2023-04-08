@@ -193,11 +193,11 @@
       }
     },
     "ListMood": {
-      "Title" : "Mood",
+      "Title": "Mood",
       "EmptyState": "Sorry, we don't have any music available for this mood at the moment. Check back soon as we're always adding new music!"
     },
     "ListGenre": {
-      "Title" : "Genre",
+      "Title": "Genre",
       "EmptyState": "Sorry, we don't have any music available for this genre at the moment. Check back soon as we're always adding new music!"
     },
     "DiveIn": {
@@ -214,7 +214,7 @@
       }
     },
     "ComingSoon": {
-      "Title" : "Coming Soon",
+      "Title": "Coming Soon",
       "EmptyState": "Unfortunately, there are no new albums coming soon from any musicians. We'll let you know as soon as something new is on the horizon."
     },
     "Song": {
@@ -224,7 +224,7 @@
       "EmptyState": "We couldn't find any {{title}} for you. Check back soon as we're always adding new musician!"
     },
     "Playlist": {
-      "Title" : "Playlist",
+      "Title": "Playlist",
       "EmptyState": "Oops! We couldn't find any playlists for you. Create your own & help other discover great music!"
     }
   },
@@ -241,7 +241,7 @@
     "NoMore": "No more feeds"
   },
   "Event": {
-    "Title": "活動",
+    "Title": "行動",
     "Quantity": "數量",
     "Description": "描述",
     "Concert": {
@@ -394,12 +394,12 @@
         "ReasonPlaceholder": "Tell us more",
         "PasswordInput": "Input Password"
       },
-       "Reason" : {
-        "First" : "I don’t feel safe on Beamco",
-        "Second" : "I don’t find Beamco useful",
-        "Third" : "I have another Beamco Account",
-        "Fourth" : "I spend too much time using Beamco",
-        "Five" : "I don’t understand how to use Beamco"
+      "Reason": {
+        "First": "I don’t feel safe on Beamco",
+        "Second": "I don’t find Beamco useful",
+        "Third": "I have another Beamco Account",
+        "Fourth": "I spend too much time using Beamco",
+        "Five": "I don’t understand how to use Beamco"
       }
     },
     "TnC&PP": {
@@ -781,5 +781,11 @@
       "Title": "Recover Account",
       "Subtitle": "Are you sure you recover your account?"
     }
+  },
+  "Cart": {
+    "Title": "Cart",
+    "SelectAll": "Select All",
+    "Delete": "Delete",
+    "Checkout": "Checkout"
   }
 }

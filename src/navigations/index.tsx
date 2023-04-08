@@ -91,6 +91,9 @@ import {TopupCoinScreen} from '../screen/TopupCoin';
 // Merch
 import {MerchDetail} from '../screen/MerchDetail';
 
+// Action
+import Cart from '../screen/Action/Cart';
+
 // Icon
 import {CrownIcon, FeedIcon, HomeIcon, UserProfileIcon} from '../assets/icon';
 
@@ -263,6 +266,8 @@ export type RootStackParams = {
     | undefined;
   SplashScreen: undefined;
   ListPlaylist: undefined;
+  Event: undefined;
+  Cart: undefined;
 };
 
 export type MainTabParams = {
@@ -458,6 +463,7 @@ export const RootStackScreen = () => (
     <RootStack.Screen name="ListPost" component={ListPostScreen} />
     <RootStack.Screen name="SplashScreen" component={SplashScreen} />
     <RootStack.Screen name="ListPlaylist" component={ListPlaylist} />
+    <RootStack.Screen name="Cart" component={Cart} />
   </RootStack.Navigator>
 );
 

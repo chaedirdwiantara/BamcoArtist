@@ -9,8 +9,12 @@ import MerchList from './ListCard/MerchList';
 import {BoxStore, CartIcon} from '../assets/icon';
 import ConcertList from './ListCard/ConcertList';
 import {useTranslation} from 'react-i18next';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {RootStackParams} from '../navigations';
 
-export const EventScreen: React.FC = () => {
+type EventProps = NativeStackScreenProps<RootStackParams, 'Event'>;
+
+export const EventScreen: React.FC<EventProps> = ({navigation}: EventProps) => {
   const {t} = useTranslation();
   const [selectedIndex, setSelectedIndex] = useState(-0);
   const [filter] = useState([
@@ -32,7 +36,7 @@ export const EventScreen: React.FC = () => {
             maxLengthTitle={20}
             itemStrokeColor={'white'}
             rightIcon={<CartIcon />}
-            rightIconAction={() => null}
+            rightIconAction={() => navigation.navigate('Cart')}
             leftIcon={<BoxStore />}
             leftIconAction={() => null}
             containerStyles={{paddingHorizontal: widthPercentage(20)}}
