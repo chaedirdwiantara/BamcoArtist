@@ -25,8 +25,12 @@ export const PromoCode: React.FC<PromoCodeProps> = ({
       <ScrollView
         showsVerticalScrollIndicator={false}
         style={{flex: 1, paddingHorizontal: widthPercentage(24)}}>
-        <PromoItem />
-        <PromoItem />
+        <PromoItem
+          onPress={() => navigation.navigate('PromoDetail', {id: 'tes'})}
+        />
+        <PromoItem
+          onPress={() => navigation.navigate('PromoDetail', {id: 'tes'})}
+        />
       </ScrollView>
     </View>
   );

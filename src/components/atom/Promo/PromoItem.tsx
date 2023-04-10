@@ -5,7 +5,7 @@ import Color from '../../../theme/Color';
 import {heightPercentage, widthPercentage} from '../../../utils';
 import Typography from '../../../theme/Typography';
 
-const PromoItem = () => {
+const PromoItem = ({onPress}: {onPress: () => void}) => {
   return (
     <TouchableOpacity style={styles.root}>
       <View style={styles.textContainer}>
@@ -15,7 +15,7 @@ const PromoItem = () => {
         <View style={styles.descContainer}>
           <ClockIcon />
           <Text style={styles.desc}>Ended in 24 march 2023</Text>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={onPress}>
             <Text style={styles.detail}>Details</Text>
           </TouchableOpacity>
         </View>
