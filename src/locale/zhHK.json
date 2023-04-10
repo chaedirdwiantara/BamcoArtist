@@ -356,6 +356,15 @@
         "Label": "Add Label Name"
       }
     },
+    "Security": {
+      "Title": "Security"
+    },
+    "DeleteAccount": {
+      "Title": "Delete Account"
+    },
+    "TnC&PP": {
+      "Title": "TnC & Privacy Policy"
+    },
     "Password": {
       "Title": "更改密碼",
       "Label": {
@@ -418,7 +427,9 @@
       "Title": "偏好",
       "Label": {
         "Genre": "類型",
-        "Mood": "氣氛"
+        "Mood": "氣氛",
+        "GenrePreference": "Genre Preference",
+        "MoodPreference": "Mood Preference"
       },
       "Placeholder": {
         "Genre": "Select Genre",
@@ -505,7 +516,9 @@
         "Bug": "報告錯誤",
         "TextBug": "應用程式中的某些內容已損壞或無法按預期操作",
         "Suggest": "改進建議",
-        "TextSuggest": "此應用程式的新想法或需要加強的功能"
+        "TextSuggest": "此應用程式的新想法或需要加強的功能",
+        "Help": "Help",
+        "TextHelp": "If you want to know more contact us"
       },
       "Placeholder": {
         "Email": "輸入你的電郵",
