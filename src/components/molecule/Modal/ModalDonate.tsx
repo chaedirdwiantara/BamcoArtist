@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Text,
   View,
@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import Modal from 'react-native-modal';
+import {useTranslation} from 'react-i18next';
 import {mvs} from 'react-native-size-matters';
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
@@ -20,16 +21,14 @@ import {
 import Font from '../../../theme/Font';
 import Color from '../../../theme/Color';
 import SsuSheet from '../../atom/SsuSheet';
-import {RootStackParams} from '../../../navigations';
 import {color, typography} from '../../../theme';
-import {Button, Gap, SsuInput} from '../../atom';
-import {listDonate} from '../../../data/listDonate';
-import {RadioButton} from '../RadioButton/RadioButton';
+import {RootStackParams} from '../../../navigations';
 import {CoinIcon, CoinInput} from '../../../assets/icon';
-import {useTranslation} from 'react-i18next';
+import {useCreditHook} from '../../../hooks/use-credit.hook';
+import {Button, Gap, SelectBoxTip, SsuInput} from '../../atom';
+import {creditType, listCredit} from '../../../data/listDonate';
 
 interface ModalDonateProps {
-  totalCoin: number;
   modalVisible: boolean;
   onPressClose: () => void;
   onPressDonate: () => void;
@@ -37,7 +36,6 @@ interface ModalDonateProps {
 }
 
 export const ModalDonate: React.FC<ModalDonateProps> = ({
-  totalCoin,
   modalVisible,
   onPressClose,
   onPressDonate,
@@ -46,18 +44,16 @@ export const ModalDonate: React.FC<ModalDonateProps> = ({
   const {t} = useTranslation();
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
-  const [donate, setDonate] = useState('');
-  const [donateList, setDonateList] = useState(listDonate);
-  const [focusInput, setFocusInput] = useState(false);
+  const {creditCount, getCreditCount} = useCreditHook();
 
-  const onPressSelected = (index: number) => {
-    let newList = [...donateList];
-    // all radio selected => false
-    newList = newList.map(v => ({...v, selected: false}));
-    // change selected value
-    newList[index].selected = true;
-    setDonateList(newList);
-  };
+  useEffect(() => {
+    getCreditCount();
+  }, []);
+
+  const [selectedCredit, setSelectedCredit] = useState<string>('');
+  const [selectedCreditType, setSelectedCreditType] = useState<string>('');
+  const [donate, setDonate] = useState<string>('');
+  const [focusInput, setFocusInput] = useState<boolean>(false);
 
   const goToScreenCoin = () => {
     onPressClose();
@@ -73,35 +69,54 @@ export const ModalDonate: React.FC<ModalDonateProps> = ({
           <Text style={[typography.Subtitle1, {color: color.Neutral[10]}]}>
             {t('Setting.Tips.Label.TipType')}
           </Text>
-          <Gap height={heightPercentage(20)} />
-          {donateList.map((val, i) => (
-            <View key={i}>
-              <RadioButton
-                text={t(val.text)}
-                selected={val.selected}
-                onPress={() => onPressSelected(i)}
-              />
-              <Gap height={heightPercentage(10)} />
-            </View>
-          ))}
+          <Gap height={heightPercentage(10)} />
+          <SelectBoxTip
+            selected={selectedCredit}
+            setSelected={setSelectedCredit}
+            data={listCredit}
+            containerStyle={{width: width * 0.8}}
+          />
         </View>
-        <SsuInput.InputText
-          value={donate}
-          leftIcon={<CoinInput />}
-          onChangeText={(newText: string) => setDonate(newText)}
-          placeholder={t('Setting.Tips.Label.InputDonation') || ''}
-          fontColor={color.Neutral[10]}
-          borderColor={color.Pink.linear}
-          onFocus={() => {
-            setFocusInput(true);
+        {selectedCredit === 'custom' && (
+          <SsuInput.InputText
+            value={donate}
+            leftIcon={<CoinInput />}
+            onChangeText={(newText: string) => setDonate(newText)}
+            placeholder={t('Setting.Tips.Label.InputDonation') || ''}
+            fontColor={color.Neutral[10]}
+            borderColor={color.Pink.linear}
+            onFocus={() => {
+              setFocusInput(true);
+            }}
+            onBlur={() => {
+              setFocusInput(false);
+            }}
+            containerStyles={styles.containerContent}
+            isFocus={focusInput}
+            keyboardType={'number-pad'}
+          />
+        )}
+        <View
+          style={{
+            width,
+            height: mvs(1.5),
+            backgroundColor: color.Dark[500],
+            marginTop: heightPercentage(5),
+            marginBottom: heightPercentage(20),
           }}
-          onBlur={() => {
-            setFocusInput(false);
-          }}
-          containerStyles={styles.containerContent}
-          isFocus={focusInput}
-          keyboardType={'number-pad'}
         />
+        <View style={styles.containerContent}>
+          <Text style={[typography.Subtitle1, {color: color.Neutral[10]}]}>
+            {t('Setting.Tips.Label.ContinueSendTip')}
+          </Text>
+          <Gap height={heightPercentage(10)} />
+          <SelectBoxTip
+            selected={selectedCreditType}
+            setSelected={setSelectedCreditType}
+            data={creditType}
+            containerStyle={{width: width * 0.8}}
+          />
+        </View>
 
         <View style={styles.containerCoin}>
           <View style={{flexDirection: 'row'}}>
@@ -110,7 +125,7 @@ export const ModalDonate: React.FC<ModalDonateProps> = ({
             </Text>
             <CoinIcon style={styles.coinIcon} />
             <Text style={[typography.Button2, {color: color.Pink.linear}]}>
-              {totalCoin}
+              {creditCount}
             </Text>
           </View>
 
@@ -129,8 +144,9 @@ export const ModalDonate: React.FC<ModalDonateProps> = ({
         <Button
           type="border"
           label={t('Btn.Cancel')}
+          borderColor={color.Success[400]}
           containerStyles={styles.btnCancel}
-          textStyles={{color: Color.Pink.linear}}
+          textStyles={{color: Color.Success[400]}}
           onPress={onPressClose}
         />
       </>
@@ -173,13 +189,13 @@ const styles = StyleSheet.create({
     right: 0,
   },
   btnDonate: {
-    width: widthPercentage(327),
+    width: width * 0.9,
     aspectRatio: heightPercentage(327 / 40),
     marginTop: heightPercentage(20),
-    backgroundColor: color.Pink[2],
+    backgroundColor: color.Success[400],
   },
   btnCancel: {
-    width: widthPercentage(327),
+    width: width * 0.9,
     aspectRatio: heightPercentage(327 / 40),
     marginTop: heightPercentage(10),
   },
@@ -190,14 +206,14 @@ const styles = StyleSheet.create({
     fontSize: normalize(14),
   },
   containerContent: {
-    width: widthPercentage(327),
+    width: width * 0.9,
     marginBottom: heightPercentage(15),
   },
   containerCoin: {
     alignItems: 'center',
     justifyContent: 'space-between',
     flexDirection: 'row',
-    width: widthPercentage(327),
+    width: width * 0.9,
   },
   coinIcon: {
     alignSelf: 'center',
