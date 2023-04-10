@@ -1,23 +1,50 @@
 export interface ListDonateType {
   text: string;
-  selected: boolean;
+  value: string;
 }
 
-export const listDonate: ListDonateType[] = [
+export const listCredit: ListDonateType[] = [
   {
-    text: 'Setting.Tips.Filter.OneTime',
-    selected: false,
+    text: '5 credit',
+    value: '5',
   },
   {
-    text: 'Setting.Tips.Filter.Weekly',
-    selected: false,
+    text: '50 credit',
+    value: '50',
   },
   {
-    text: 'Setting.Tips.Filter.Monthly',
-    selected: false,
+    text: '100 credit',
+    value: '100',
   },
   {
-    text: 'Setting.Tips.Filter.Yearly',
-    selected: false,
+    text: '1000 credit',
+    value: '1000',
+  },
+  {
+    text: 'Custom',
+    value: 'custom',
+  },
+];
+
+export const creditType: ListDonateType[] = [
+  {
+    text: 'Only one time',
+    value: 'only_one_time',
+  },
+  {
+    text: 'Daily',
+    value: 'daily',
+  },
+  {
+    text: 'Weekly',
+    value: 'weekly',
+  },
+  {
+    text: 'Monthly',
+    value: 'monthly',
+  },
+  {
+    text: 'Yearly',
+    value: 'yearly',
   },
 ];

@@ -149,7 +149,7 @@
         "Title": "Top Musician",
         "Follow": "追蹤",
         "Unfollow": "取消关注",
-        "Tip": "捐贈",
+        "Tip": "Send Tip",
         "Profile": "進入音樂人頁面"
       },
       "TopSong": {
@@ -442,11 +442,12 @@
       "Label": {
         "Past": "過去",
         "Current": "現有/進行中",
-        "TipType": "單筆",
-        "AddMoreCoin": "Add More Coin",
-        "YourCoin": "Your Coin",
-        "InputDonation": "Input Donation",
-        "Success": "Congratulations! Your Donation have been Sent!"
+        "TipType": "Do you want to send tip the musician?",
+        "ContinueSendTip": "Do you want to keep continue sending tip?",
+        "AddMoreCoin": "Add more credit",
+        "YourCoin": "Your credit",
+        "InputDonation": "Add credit to send tip",
+        "Success": "Congratulations! Your Tip\nhave been Sent!"
       },
       "Menu": {
         "Donation": {
