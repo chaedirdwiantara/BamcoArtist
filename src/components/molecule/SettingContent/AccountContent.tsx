@@ -29,20 +29,17 @@ import {
   widthResponsive,
 } from '../../../utils';
 import {Dropdown} from '../DropDown';
-import {
-  formatValueName,
-  formatValueName2,
-} from '../../../utils/formatValueName';
 import Color from '../../../theme/Color';
 import {TopNavigation} from '../TopNavigation';
 import Typography from '../../../theme/Typography';
 import {ModalConfirm} from '../Modal/ModalConfirm';
 import {dataProps} from '../DropDown/DropdownMulti';
-import {dataFavourites} from '../../../data/following';
 import {color, font, typography} from '../../../theme';
 import {DataDropDownType} from '../../../data/dropdown';
 import {Button, Gap, SsuInput, SsuToast} from '../../atom';
 import {useProfileHook} from '../../../hooks/use-profile.hook';
+import {formatValueName2} from '../../../utils/formatValueName';
+import {PreferenceList} from '../../../interface/setting.interface';
 import {ProfileResponseType} from '../../../interface/profile.interface';
 import {dataYearsFrom, dataYearsTo} from '../../../data/Settings/account';
 
@@ -52,6 +49,8 @@ interface AccountProps {
   dataAllCountry: DataDropDownType[];
   dataCitiesOfCountry: DataDropDownType[];
   setSelectedCountry: (value: string) => void;
+  moods: PreferenceList[];
+  genres: PreferenceList[];
 }
 
 interface InputProps {
@@ -91,20 +90,25 @@ export const AccountContent: React.FC<AccountProps> = ({
   dataAllCountry,
   dataCitiesOfCountry,
   setSelectedCountry,
+  genres,
+  moods,
 }) => {
   const {t} = useTranslation();
   const member =
     profile?.data.members?.length > 0 ? profile?.data.members : [''];
-  const [userGenres, setUserGenres] = useState<(string | number | undefined)[]>(
-    [],
-  );
-  const [valueGenres, setValueGenres] = useState<(number | undefined)[]>([]);
   const [members, setMembers] = useState<string[]>(member);
   const [changes, setChanges] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [disabledButton, setDisabledButton] = useState<boolean>(true);
   const [toastVisible, setToastVisible] = useState<boolean>(false);
   const [isSubmit, setIsSubmit] = useState<boolean>(false);
+  const [valueGenres, setValueGenres] = useState<(number | undefined)[]>([]);
+  const [valueMoodsPreference, setValueMoodsPreference] = useState<
+    (number | undefined)[]
+  >([]);
+  const [valueGenresPreference, setValueGenresPreference] = useState<
+    (number | undefined)[]
+  >([]);
   const {updateProfilePreference, isError, isLoading, errorMsg, setIsError} =
     useProfileHook();
 
@@ -138,8 +142,12 @@ export const AccountContent: React.FC<AccountProps> = ({
 
   useEffect(() => {
     if (profile) {
-      const gr = getValue(formatValueName2(profile?.data.favoriteGenres));
-      setUserGenres(gr);
+      const gr = getValue(formatValueName2(profile.data?.genres));
+      const md = getValue(formatValueName2(profile.data?.moods));
+      const fvgr = getValue(formatValueName2(profile.data?.favoriteGenres));
+      setValueGenres(gr);
+      setValueMoodsPreference(md);
+      setValueGenresPreference(fvgr);
     }
   }, [profile]);
 
@@ -151,13 +159,17 @@ export const AccountContent: React.FC<AccountProps> = ({
   }, [toastVisible]);
 
   useEffect(() => {
-    if (isValid) {
+    if (
+      isValid &&
+      valueMoodsPreference.length > 0 &&
+      valueGenresPreference.length > 0
+    ) {
       setDisabledButton(false);
     } else {
       setDisabledButton(true);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isValidating, isValid]);
+  }, [isValidating, isValid, valueMoodsPreference, valueGenresPreference]);
 
   const onPressSave = () => {
     changes ? setShowModal(true) : onPressConfirm();
@@ -173,7 +185,9 @@ export const AccountContent: React.FC<AccountProps> = ({
       locationCountry: getValues('locationCountry'),
       locationCity: getValues('locationCity'),
       members: members.filter(val => val !== ''),
-      favoriteGeneres: valueGenres as number[],
+      genres: valueGenres as number[],
+      moods: valueMoodsPreference as number[],
+      favoriteGeneres: valueGenresPreference as number[],
     });
 
     setIsSubmit(true);
@@ -278,12 +292,12 @@ export const AccountContent: React.FC<AccountProps> = ({
           />
 
           <Dropdown.Multi
-            data={formatValueName(dataFavourites[0]?.favorites) ?? []}
+            data={formatValueName2(genres) ?? []}
             placeHolder={t('Setting.Account.Placeholder.Genre') || ''}
             dropdownLabel={t('Setting.Account.Label.Genre') || ''}
             textTyped={(_newText: string) => null}
             containerStyles={{marginTop: heightPercentage(15)}}
-            initialValue={userGenres}
+            initialValue={valueGenres}
             setValues={val => {
               setValueGenres(val);
               setChanges(true);
@@ -449,6 +463,32 @@ export const AccountContent: React.FC<AccountProps> = ({
               + Add More
             </Text>
           </TouchableOpacity>
+
+          <Dropdown.Multi
+            data={formatValueName2(genres) ?? []}
+            placeHolder={t('Setting.Preference.Placeholder.Genre')}
+            dropdownLabel={t('Setting.Preference.Label.GenrePreference')}
+            textTyped={(_newText: string) => null}
+            containerStyles={{marginTop: heightPercentage(20)}}
+            initialValue={valueGenresPreference}
+            setValues={val => {
+              setValueGenresPreference(val);
+              setChanges(true);
+            }}
+          />
+
+          <Dropdown.Multi
+            data={formatValueName2(moods) ?? []}
+            placeHolder={t('Setting.Preference.Placeholder.Mood')}
+            dropdownLabel={t('Setting.Preference.Label.MoodPreference')}
+            textTyped={(_newText: string) => null}
+            containerStyles={{marginTop: heightPercentage(15)}}
+            initialValue={valueMoodsPreference}
+            setValues={val => {
+              setValueMoodsPreference(val);
+              setChanges(true);
+            }}
+          />
 
           {isError ? (
             <View style={styles.containerErrorMsg}>
