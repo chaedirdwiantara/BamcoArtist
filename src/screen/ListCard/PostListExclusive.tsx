@@ -651,7 +651,6 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
         modalStyle={{marginHorizontal: widthResponsive(24)}}
       />
       <ModalDonate
-        totalCoin={creditCount}
         onPressDonate={onPressDonate}
         modalVisible={modalDonate}
         onPressClose={onPressCloseModalDonate}

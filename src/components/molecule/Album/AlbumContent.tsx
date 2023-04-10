@@ -245,7 +245,6 @@ export const AlbumContent: React.FC<Props> = ({
       </ScrollView>
 
       <ModalDonate
-        totalCoin={creditCount}
         onPressDonate={onPressDonate}
         modalVisible={modalDonate}
         onModalHide={() => setModalSuccessDonate(true)}
