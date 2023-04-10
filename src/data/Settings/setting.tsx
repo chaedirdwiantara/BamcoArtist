@@ -4,28 +4,16 @@ export const menuSetting: {text: string; value: string}[] = [
     value: 'Account',
   },
   {
-    text: 'Setting.Email.Title',
-    value: 'Email',
-  },
-  {
-    text: 'Setting.Phone.Title',
-    value: 'Phone Number',
-  },
-  {
-    text: 'Setting.Password.Title',
-    value: 'Change Password',
-  },
-  {
     text: 'Setting.Exclusive.Title',
     value: 'Exclusive Content',
   },
   {
-    text: 'Setting.Shipping.Title',
-    value: 'Shipping Information',
+    text: 'Setting.Security.Title',
+    value: 'Security',
   },
   {
-    text: 'Setting.Preference.Title',
-    value: 'Preferences',
+    text: 'Setting.Shipping.Title',
+    value: 'Shipping Information',
   },
   {
     text: 'Setting.Language.Title',
@@ -36,13 +24,16 @@ export const menuSetting: {text: string; value: string}[] = [
     value: 'Push Notification',
   },
   {
-    text: 'Setting.Report.Title',
-    value: 'Send Report',
-  },
-  {
     text: 'Setting.Helps.Title',
     value: 'Helps',
   },
+  {
+    text: 'Setting.TnC&PP.Title',
+    value: 'TnCAndPP',
+  },
+];
+
+export const menuTnCAndPP: {text: string; value: string}[] = [
   {
     text: 'Setting.TnC.Title',
     value: 'Terms and Conditions',
