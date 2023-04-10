@@ -47,6 +47,7 @@ import ChildrenCard from './ChildrenCard';
 import {profileStorage} from '../../hooks/use-storage.hook';
 import LoadingSpinner from '../../components/atom/Loading/LoadingSpinner';
 import {DataExclusiveResponse} from '../../interface/setting.interface';
+import ImageModal from '../Detail/ImageModal';
 
 const {height} = Dimensions.get('screen');
 
@@ -78,17 +79,7 @@ const PostListProfile: FC<PostListProps> = (props: PostListProps) => {
   const [perPage, setPerPage] = useState<number>(15);
   const [dataMain, setDataMain] = useState<PostList[]>([]);
   const [filterActive, setFilterActive] = useState<boolean>(true);
-  const [filterByValue, setFilterByValue] = useState<string>();
-  const [categoryValue, setCategoryValue] = useState<string>();
   const [uuid, setUuid] = useState<string>();
-  const [selectedSort, setSelectedSort] = useState<string>('');
-  const [selectedCategory, setSelectedCategory] = useState<string>('');
-  const [selectedCategoryValue, setSelectedCategoryValue] =
-    useState<string>('');
-  const [isModalVisible, setModalVisible] = useState({
-    modalSortBy: false,
-    modalCategory: false,
-  });
   const [refreshing, setRefreshing] = useState<boolean>(false);
   const [modalConfirm, setModalConfirm] = useState(false);
 
@@ -364,7 +355,7 @@ const PostListProfile: FC<PostListProps> = (props: PostListProps) => {
               />
             }
             onEndReached={handleEndScroll}
-            renderItem={({item}) => (
+            renderItem={({item, index}) => (
               <>
                 <ListCard.PostList
                   toDetailOnPress={

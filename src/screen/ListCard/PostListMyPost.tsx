@@ -45,6 +45,7 @@ import FilterModal from '../../components/molecule/V2/DropdownFilter/modalFilter
 import ChildrenCard from './ChildrenCard';
 import {profileStorage} from '../../hooks/use-storage.hook';
 import LoadingSpinner from '../../components/atom/Loading/LoadingSpinner';
+import ImageModal from '../Detail/ImageModal';
 const {height} = Dimensions.get('screen');
 
 interface PostListProps {
@@ -86,7 +87,6 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
     modalCategory: false,
   });
   const [refreshing, setRefreshing] = useState<boolean>(false);
-
   // * UPDATE HOOKS
   const [selectedIdPost, setSelectedIdPost] = useState<string>();
   const [selectedMenu, setSelectedMenu] = useState<DataDropDownType>();
@@ -479,7 +479,7 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
               />
             }
             onEndReached={handleEndScroll}
-            renderItem={({item}) => (
+            renderItem={({item, index}) => (
               <>
                 <ListCard.PostList
                   toDetailOnPress={handleToDetailMusician}

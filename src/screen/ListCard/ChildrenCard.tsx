@@ -1,11 +1,12 @@
 import {
   Dimensions,
+  LogBox,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {FC} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import {elipsisText, widthResponsive} from '../../utils';
 import {Gap} from '../../components';
 import ImageList from './ImageList';
@@ -14,6 +15,7 @@ import {PostList} from '../../interface/feed.interface';
 import {color, font} from '../../theme';
 import {mvs} from 'react-native-size-matters';
 import VideoComp from '../../components/molecule/VideoPlayer/videoComp';
+import ImageModal from '../Detail/ImageModal';
 
 export const {width} = Dimensions.get('screen');
 
@@ -44,8 +46,26 @@ const ChildrenCard: FC<ChildrenCardProps> = (props: ChildrenCardProps) => {
     blurModeOn,
   } = props;
 
+  const [isModalVisible, setModalVisible] = useState<boolean>(false);
+  const [imgUrl, setImgUrl] = useState<number>(-1);
+
+  // ignore warning
+  useEffect(() => {
+    LogBox.ignoreAllLogs();
+  }, []);
+
   const onPressPlaySong = (val: PostList) => {
     onPress?.(val);
+  };
+
+  const toggleModalOnPress = (index: number) => {
+    setModalVisible(!isModalVisible);
+    setImgUrl(index);
+  };
+
+  const toggleImageModal = () => {
+    setImgUrl(-1);
+    setModalVisible(!isModalVisible);
   };
 
   return (
@@ -73,8 +93,9 @@ const ChildrenCard: FC<ChildrenCardProps> = (props: ChildrenCardProps) => {
                 height={69.5}
                 heightType2={142}
                 widthType2={269}
-                onPress={() => {}}
+                onPress={blurModeOn ? () => {} : toggleModalOnPress}
                 blurModeOn={blurModeOn}
+                disabled={false}
               />
               {data.images.length === 0 && data.quoteToPost.encodeHlsUrl ? (
                 <MusicListPreview
@@ -130,6 +151,12 @@ const ChildrenCard: FC<ChildrenCardProps> = (props: ChildrenCardProps) => {
           </View>
         </>
       ) : null}
+      <ImageModal
+        toggleModal={toggleImageModal}
+        modalVisible={isModalVisible}
+        imageIdx={imgUrl}
+        dataImage={data?.images}
+      />
     </View>
   );
 };

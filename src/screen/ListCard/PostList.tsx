@@ -49,6 +49,7 @@ import MusicListPreview from '../../components/molecule/MusicPreview/MusicListPr
 import {useTranslation} from 'react-i18next';
 import {useCreditHook} from '../../hooks/use-credit.hook';
 import ChildrenCard from './ChildrenCard';
+import ImageModal from '../Detail/ImageModal';
 
 interface PostListProps {
   dataRightDropdown: DataDropDownType[];

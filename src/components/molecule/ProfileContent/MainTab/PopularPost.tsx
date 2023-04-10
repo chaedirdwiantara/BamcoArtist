@@ -22,6 +22,7 @@ import {ModalShare} from '../../Modal/ModalShare';
 import {useTranslation} from 'react-i18next';
 import {TickCircleIcon} from '../../../../assets/icon';
 import {heightPercentage, widthResponsive} from '../../../../utils';
+import ImageModal from '../../../../screen/Detail/ImageModal';
 
 interface PopularPostProps {
   uuidMusician: string;
