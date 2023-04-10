@@ -10,6 +10,7 @@ import SsuDivider from './Divider';
 import {SsuText} from './Text/SsuText';
 import {SsuInput} from './InputText/SsuInput';
 import {SelectBox} from './SelectBox/SelectBox';
+import {SelectBoxTip} from './SelectBox/SelectBoxTip';
 import SquareImage from './SquareImage/SquareImage';
 import SquareImageText from './SquareImage/SquareImageText';
 import SsuStatusBar from './StatusBar';
@@ -29,6 +30,7 @@ export {
   SsuInput,
   SsuText,
   SelectBox,
+  SelectBoxTip,
   SquareImage,
   SquareImageText,
   SsuStatusBar,

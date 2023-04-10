@@ -149,7 +149,7 @@
         "Title": "Top Musician",
         "Follow": "Follow",
         "Unfollow": "Unfollow",
-        "Tip": "Tip",
+        "Tip": "Send Tip",
         "Profile": "Go to Musician"
       },
       "TopSong": {
@@ -444,11 +444,12 @@
       "Label": {
         "Past": "Past",
         "Current": "Current",
-        "TipType": "Tip Type",
-        "AddMoreCoin": "Add More Coin",
-        "YourCoin": "Your Coin",
-        "InputDonation": "Input Donation",
-        "Success": "Congratulations! Your Donation have been Sent!"
+        "TipType": "Do you want to send tip the musician?",
+        "ContinueSendTip": "Do you want to keep continue sending tip?",
+        "AddMoreCoin": "Add more credit",
+        "YourCoin": "Your credit",
+        "InputDonation": "Add credit to send tip",
+        "Success": "Congratulations! Your Tip\nhave been Sent!"
       },
       "Menu": {
         "Donation": {
