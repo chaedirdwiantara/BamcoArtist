@@ -66,7 +66,7 @@ const FollowMusicianCard: React.FC<ListProps> = (props: ListProps) => {
             backgroundColor:
               textFollow === t('Preference.Following')
                 ? color.Dark[300]
-                : color.Pink[200],
+                : color.Success[400],
           },
         ]}
         onPress={onPressFollow}>

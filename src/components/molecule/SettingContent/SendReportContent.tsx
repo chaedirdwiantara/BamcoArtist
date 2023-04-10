@@ -234,6 +234,5 @@ const styles = StyleSheet.create({
     aspectRatio: widthPercentage(327 / 36),
     marginTop: heightPercentage(25),
     alignSelf: 'center',
-    backgroundColor: color.Pink[200],
   },
 });

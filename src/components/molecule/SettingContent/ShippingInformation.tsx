@@ -122,7 +122,7 @@ export const ShippingInformationContent: React.FC<ShippingInformationProps> = ({
 
   const toastBg = toastError ? Color.Error[400] : Color.Success[400];
   const disabledButton = checkEmptyProperties(state);
-  const disabledBg = disabledButton ? Color.Dark[50] : Color.Pink[200];
+  const disabledBg = disabledButton ? Color.Dark[50] : Color.Success[400];
 
   return (
     <KeyboardAvoidingView

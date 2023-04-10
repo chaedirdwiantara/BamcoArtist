@@ -264,7 +264,7 @@ export const ForgotPassword: FC = () => {
           type="border"
           label={t('Btn.Back')}
           borderColor="transparent"
-          textStyles={{fontSize: normalize(14), color: color.Pink.linear}}
+          textStyles={{fontSize: normalize(14), color: color.Success[400]}}
           containerStyles={{width: '100%'}}
           onPress={handleBackButtonClick}
         />
@@ -320,7 +320,7 @@ export const ForgotPassword: FC = () => {
           type="border"
           label={t('Btn.Back')}
           borderColor="transparent"
-          textStyles={{fontSize: normalize(14), color: color.Pink.linear}}
+          textStyles={{fontSize: normalize(14), color: color.Success[400]}}
           containerStyles={{width: '100%'}}
           onPress={handleBackButtonClick}
         />
@@ -400,7 +400,7 @@ export const ForgotPassword: FC = () => {
     <KeyboardShift>
       <View style={styles.root}>
         <Image
-          source={require('../assets/background/signin-guest.png')}
+          source={require('../assets/background/onboard-1.jpg')}
           style={styles.image}
         />
         <SsuSheet

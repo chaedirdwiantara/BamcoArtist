@@ -19,7 +19,10 @@ export const ReferralScreen: React.FC = () => {
   }, [isValidReferral]);
 
   const gotoMainTab = () => {
-    navigation.push('MainTab');
+    navigation.reset({
+      index: 0,
+      routes: [{name: 'MainTab'}],
+    });
   };
 
   const onApplyReferral = (refCode: string) => {
