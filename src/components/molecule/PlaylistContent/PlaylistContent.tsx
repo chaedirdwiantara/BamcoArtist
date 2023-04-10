@@ -220,6 +220,7 @@ export const PlaylistContent: React.FC<Props> = ({
           <DropdownMore
             dataFilter={othersPlaylist ? dataMoreOther : dataMore}
             selectedMenu={resultDataMore}
+            compWitdth={widthResponsive(150)}
           />
         }
         leftIcon={<ArrowLeftIcon />}
