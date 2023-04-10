@@ -4,6 +4,7 @@ import {mvs} from 'react-native-size-matters';
 import Color from '../../../theme/Color';
 import {widthPercentage} from '../../../utils';
 import Typography from '../../../theme/Typography';
+import {font} from '../../../theme';
 
 interface Props {
   title?: string;
@@ -38,5 +39,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: mvs(10),
     marginVertical: mvs(15),
+    fontFamily: font.InterLight,
   },
 });

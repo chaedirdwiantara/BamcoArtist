@@ -306,8 +306,8 @@ export const useSettingHook = () => {
     setIsError(false);
     setIsLoading(true);
     try {
-      const genre = await getListGenre();
-      const mood = await getListMood();
+      const genre = await getListGenre({perPage: 100});
+      const mood = await getListMood({perPage: 100});
       const expectation = await getListExpectations();
 
       setListMood(mood.data);

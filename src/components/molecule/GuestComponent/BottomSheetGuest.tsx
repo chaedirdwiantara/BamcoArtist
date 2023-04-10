@@ -61,7 +61,7 @@ export const BottomSheetGuest: React.FC<BottomSheetGuestProps> = ({
           type="border"
           label={t('Btn.MaybeLater')}
           borderColor="transparent"
-          textStyles={{fontSize: normalize(14), color: color.Pink.linear}}
+          textStyles={{fontSize: normalize(14), color: color.Success[400]}}
           onPress={onPressClose}
         />
       </View>

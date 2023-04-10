@@ -9,6 +9,8 @@ import {ParamsProps} from '../../interface/base.interface';
 import {ListDataSearchMusician} from '../../interface/search.interface';
 import {ScrollView, View} from 'react-native';
 import {ListCard} from '../../components';
+import {useTranslation} from 'react-i18next';
+import {EmptyStateSongMusician} from '../../components/molecule/EmptyState/EmptyStateSongMusician';
 
 interface RecomendedMusicianProps {
   type?: string;
@@ -30,6 +32,7 @@ const RecomendedMusician: FC<RecomendedMusicianProps> = ({
   setFollowMusician,
   setUnfollowMusician,
 }) => {
+  const {t} = useTranslation();
   const [listMusician, setListMusician] = useState(dataMusician);
 
   const followOnPress = (index: string, isFollowed?: boolean) => {
@@ -53,7 +56,7 @@ const RecomendedMusician: FC<RecomendedMusicianProps> = ({
     }
   }, [dataMusician]);
 
-  return listMusician ? (
+  return listMusician && listMusician.length > 0 ? (
     <ScrollView
       horizontal
       showsHorizontalScrollIndicator={false}
@@ -116,8 +119,12 @@ const RecomendedMusician: FC<RecomendedMusicianProps> = ({
         </View>
       )}
     </ScrollView>
-  ) : // TODO: add spinner or skeleton when loading && add empty state if data is empty
-  null;
+  ) : (
+    // TODO: add spinner or skeleton when loading
+    <EmptyStateSongMusician
+      text={t('Home.Musician.EmptyState', {title: 'Recommended Musician'})}
+    />
+  );
 };
 
 export default RecomendedMusician;

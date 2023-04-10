@@ -137,7 +137,7 @@ export const ExclusiveContent: React.FC<ExclusiveProps> = ({
               type="border"
               label={t('Btn.Cancel')}
               containerStyles={styles.btnCancel}
-              textStyles={{color: color.Pink.linear}}
+              textStyles={{color: color.Success[400]}}
               onPress={onPressSave}
             />
           </View>
@@ -167,7 +167,6 @@ const styles = StyleSheet.create({
     width: width * 0.9,
     aspectRatio: heightPercentage(327 / 40),
     marginTop: heightPercentage(25),
-    backgroundColor: color.Pink[200],
   },
   btnCancel: {
     width: width * 0.9,

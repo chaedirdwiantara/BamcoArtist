@@ -51,6 +51,12 @@ const Typography = {
     lineHeight: mvs(16),
     letterSpacing: 0.1,
   },
+  Subtitle3: {
+    fontFamily: Font.InterMedium,
+    fontSize: normalize(12),
+    lineHeight: mvs(16),
+    letterSpacing: 0.1,
+  },
   Body1: {
     fontFamily: Font.InterRegular,
     fontSize: normalize(15),

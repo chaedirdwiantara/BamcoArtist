@@ -29,7 +29,7 @@ export const ButtonGradient: React.FC<ButtonGradientProps> = (
   const {
     label,
     angle = 95.44,
-    colors = ['#F98FD9', '#FF70D4'],
+    colors = [Color.Success[400], Color.Success[400]],
     disabled,
     onPress,
     textStyles,

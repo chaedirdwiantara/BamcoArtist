@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, StyleSheet, ImageBackground} from 'react-native';
+import {View, Text, StyleSheet, ImageBackground, Platform} from 'react-native';
 import {mvs} from 'react-native-size-matters';
 
 import Color from '../../../theme/Color';
@@ -18,10 +18,16 @@ export const SignInGuestContent: React.FC<GuestProps> = ({onPress}) => {
     <View style={styles.root}>
       <View style={styles.containerImage}>
         <ImageBackground
-          source={require('../../../assets/background/signin-guest.png')}
+          source={require('../../../assets/background/onboard-1.jpg')}
           resizeMode="cover"
           style={styles.image}>
-          <LoginDescription containerStyle={{paddingTop: height * 0.2}} />
+          <LoginDescription
+            containerStyle={{
+              flex: 1,
+              backgroundColor: 'rgba(0,0,0,0.5)',
+              paddingBottom: height * 0.2,
+            }}
+          />
         </ImageBackground>
       </View>
       <View style={styles.containerBottom}>
@@ -37,7 +43,10 @@ export const SignInGuestContent: React.FC<GuestProps> = ({onPress}) => {
           type="border"
           label={t('Btn.SignUp')}
           textStyles={{fontSize: normalize(14)}}
-          containerStyles={{marginVertical: mvs(6)}}
+          containerStyles={{
+            marginVertical: mvs(6),
+            borderColor: Color.Success[400],
+          }}
           onPress={() => onPress('Signup')}
         />
       </View>
@@ -56,7 +65,7 @@ const styles = StyleSheet.create({
   },
   image: {
     width,
-    height: '100%',
+    height: Platform.OS === 'ios' ? '130%' : '123%',
   },
   containerBottom: {
     width,
@@ -65,13 +74,13 @@ const styles = StyleSheet.create({
     left: 0,
     justifyContent: 'center',
     alignItems: 'center',
-    height: height * 0.35,
+    height: height * 0.3,
     backgroundColor: Color.Dark[800],
     borderTopStartRadius: 24,
     borderTopEndRadius: 24,
   },
   title: {
-    maxWidth: '77%',
+    maxWidth: '80%',
     textAlign: 'center',
     color: Color.Neutral[10],
     marginVertical: mvs(20),

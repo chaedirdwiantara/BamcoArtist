@@ -70,7 +70,7 @@ const SsuOTPTimer: FC<Props> = props => {
           }}
           type="border"
           containerStyles={{
-            backgroundColor: color.Pink.linear,
+            backgroundColor: color.Success[400],
             width: '100%',
             height: mvs(40),
             aspectRatio: undefined,
