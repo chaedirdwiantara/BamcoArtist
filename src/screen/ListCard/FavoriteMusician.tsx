@@ -9,6 +9,8 @@ import {ParamsProps} from '../../interface/base.interface';
 import {ListDataSearchMusician} from '../../interface/search.interface';
 import MusicianSection from '../../components/molecule/MusicianSection/MusicianSection';
 import {ScrollView, View} from 'react-native';
+import {useTranslation} from 'react-i18next';
+import {EmptyStateSongMusician} from '../../components/molecule/EmptyState/EmptyStateSongMusician';
 
 interface FavoriteMusicianProps {
   type?: string;
@@ -31,6 +33,7 @@ const FavoriteMusician: FC<FavoriteMusicianProps> = ({
   setFollowMusician,
   setUnfollowMusician,
 }) => {
+  const {t} = useTranslation();
   const [listMusician, setListMusician] = useState(dataMusician);
 
   const followOnPress = (index: string, isFollowed?: boolean) => {
@@ -121,8 +124,12 @@ const FavoriteMusician: FC<FavoriteMusicianProps> = ({
         </View>
       )}
     </ScrollView>
-  ) : // TODO: add spinner or skeleton when loading && add empty state if data is empty
-  null;
+  ) : (
+    // TODO: add spinner or skeleton when loading
+    <EmptyStateSongMusician
+      text={t('Home.Musician.EmptyState', {title: 'Favorite Musician'})}
+    />
+  );
 };
 
 export default FavoriteMusician;
