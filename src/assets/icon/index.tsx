@@ -106,6 +106,7 @@ import CheckIcon from './Check.icon';
 import MinusIcon from './Minus.icon';
 import TicketIcon from './Ticket.icon';
 import DiscountIcon from './Discount.icon';
+import ClockIcon from './Clock.icon';
 
 export {
   AddIcon,
@@ -216,4 +217,5 @@ export {
   MinusIcon,
   TicketIcon,
   DiscountIcon,
+  ClockIcon,
 };

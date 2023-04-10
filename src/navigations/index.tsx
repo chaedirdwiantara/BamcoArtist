@@ -93,6 +93,7 @@ import {MerchDetail} from '../screen/MerchDetail';
 
 // Action
 import Cart from '../screen/Action/Cart';
+import PromoCode from '../screen/Action/PromoCode';
 
 // Icon
 import {CrownIcon, FeedIcon, HomeIcon, UserProfileIcon} from '../assets/icon';
@@ -268,6 +269,7 @@ export type RootStackParams = {
   ListPlaylist: undefined;
   Event: undefined;
   Cart: undefined;
+  PromoCode: undefined;
 };
 
 export type MainTabParams = {
@@ -464,6 +466,7 @@ export const RootStackScreen = () => (
     <RootStack.Screen name="SplashScreen" component={SplashScreen} />
     <RootStack.Screen name="ListPlaylist" component={ListPlaylist} />
     <RootStack.Screen name="Cart" component={Cart} />
+    <RootStack.Screen name="PromoCode" component={PromoCode} />
   </RootStack.Navigator>
 );
 

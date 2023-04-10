@@ -788,5 +788,17 @@
     "SelectAll": "Select All",
     "Delete": "Delete",
     "Checkout": "Checkout"
+  },
+  "Promo": {
+    "Code": {
+      "Title": "Promo Code",
+      "Time": "Ended in {{time}}"
+    },
+    "Detail": {
+      "Title": "Promo Detail",
+      "Time": "Ended in",
+      "Minimum": "Minimum Transactions",
+      "TnC": "Terms & Conditions"
+    }
   }
 }

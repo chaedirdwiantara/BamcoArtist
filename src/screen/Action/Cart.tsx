@@ -50,7 +50,9 @@ export const Cart: React.FC<CartProps> = ({navigation}: CartProps) => {
         </CartBox>
       </ScrollView>
       <View style={styles.bottomContainer}>
-        <TouchableOpacity style={[styles.rowCenter, styles.promo]}>
+        <TouchableOpacity
+          style={[styles.rowCenter, styles.promo]}
+          onPress={() => navigation.navigate('PromoCode')}>
           <View style={[styles.rowCenter]}>
             <DiscountIcon
               height={heightPercentage(20)}
