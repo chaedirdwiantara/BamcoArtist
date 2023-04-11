@@ -14,7 +14,12 @@ import {
 import CheckBox from '../CheckBox';
 import Gap from '../Gap/Gap';
 
-const CartItem = () => {
+interface CartItemProps {
+  editable?: boolean;
+}
+
+const CartItem: React.FC<CartItemProps> = props => {
+  const {editable = true} = props;
   return (
     <View
       style={[
@@ -22,8 +27,13 @@ const CartItem = () => {
         styles.alignCenter,
         {paddingBottom: heightPercentage(16)},
       ]}>
-      <CheckBox handleOnPress={() => null} active={false} />
-      <Gap width={widthPercentage(10)} />
+      {editable && (
+        <>
+          <CheckBox handleOnPress={() => null} active={false} />
+          <Gap width={widthPercentage(10)} />
+        </>
+      )}
+
       <View style={[styles.row]}>
         <FastImage
           source={{uri: 'https://picsum.photos/200'}}
@@ -34,11 +44,15 @@ const CartItem = () => {
             },
           ]}
         />
-        <Gap width={widthPercentage(6)} />
-        <View style={styles.text}>
+        <Gap width={widthPercentage(10)} />
+        <View
+          style={[
+            styles.text,
+            {paddingRight: editable ? widthResponsive(24) : 0},
+          ]}>
           <Text
             style={[
-              Typography.Subtitle2,
+              Typography.Subtitle3,
               {color: Color.Neutral[10], fontSize: normalize(12)},
             ]}
             numberOfLines={2}>
@@ -52,28 +66,31 @@ const CartItem = () => {
             ]}>
             <Text
               style={[
-                Typography.Subtitle2,
+                Typography.Subtitle3,
                 {color: Color.Pink.linear, fontSize: normalize(12)},
               ]}
               numberOfLines={1}>
               2,750 Credits
             </Text>
-            <View style={[styles.row, styles.alignCenter]}>
-              <TouchableOpacity>
-                <TrashIcon
-                  width={widthPercentage(18)}
-                  height={widthPercentage(18)}
-                />
-              </TouchableOpacity>
-              <Gap width={widthResponsive(4)} />
-              <TouchableOpacity>
-                <MinusIcon fill={Color.Dark[50]} style={{paddingTop: 4}} />
-              </TouchableOpacity>
-              <Text style={[Typography.Subtitle2, styles.qty]}>1</Text>
-              <TouchableOpacity>
-                <AddIcon stroke={Color.Neutral[10]} />
-              </TouchableOpacity>
-            </View>
+            {editable ? (
+              <View style={[styles.row, styles.alignCenter]}>
+                <TouchableOpacity>
+                  <TrashIcon />
+                </TouchableOpacity>
+                <Gap width={widthResponsive(4)} />
+                <TouchableOpacity>
+                  <MinusIcon fill={Color.Dark[50]} style={{paddingTop: 4}} />
+                </TouchableOpacity>
+                <Text style={[Typography.Subtitle3, styles.qty]}>1</Text>
+                <TouchableOpacity>
+                  <AddIcon stroke={Color.Neutral[10]} />
+                </TouchableOpacity>
+              </View>
+            ) : (
+              <Text style={[Typography.Subtitle3, {color: Color.Neutral[10]}]}>
+                1 Product
+              </Text>
+            )}
           </View>
         </View>
       </View>
@@ -105,7 +122,6 @@ const styles = StyleSheet.create({
   },
   text: {
     flex: 1,
-    paddingRight: widthResponsive(24),
     justifyContent: 'space-between',
     paddingVertical: heightResponsive(1),
   },

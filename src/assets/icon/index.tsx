@@ -108,6 +108,8 @@ import TicketIcon from './Ticket.icon';
 import DiscountIcon from './Discount.icon';
 import ClockIcon from './Clock.icon';
 import WalletIcon from './Wallet.icon';
+import LocationIcon from './Location.icon';
+import TruckIcon from './Truck.icon';
 
 export {
   AddIcon,
@@ -220,4 +222,6 @@ export {
   DiscountIcon,
   ClockIcon,
   WalletIcon,
+  LocationIcon,
+  TruckIcon,
 };

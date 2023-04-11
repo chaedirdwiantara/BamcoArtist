@@ -799,5 +799,11 @@
       "Minimum": "Minimum Transactions",
       "TnC": "Terms & Conditions"
     }
+  },
+  "Checkout": {
+    "Title": "Checkout",
+    "AddShipping": "Add shipping location",
+    "Delivery": "Choose Delivery",
+    "Agent": "Delivery Agent"
   }
 }
