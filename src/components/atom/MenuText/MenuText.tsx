@@ -5,6 +5,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   ViewStyle,
+  TextStyle,
 } from 'react-native';
 import {ms, mvs} from 'react-native-size-matters';
 
@@ -15,11 +16,12 @@ import {ArrowRightIcon} from '../../../assets/icon';
 import {heightPercentage, normalize, width} from '../../../utils';
 
 interface Props {
-  text?: string;
+  text: string;
   subtitle?: string;
   icon?: any;
   onPress?: () => void;
   containerStyles?: ViewStyle;
+  textStyles?: TextStyle;
 }
 
 const LeftIcon: React.FC<Props> = (props: Props) => {
@@ -33,11 +35,17 @@ const LeftIcon: React.FC<Props> = (props: Props) => {
 };
 
 const RightIcon: React.FC<Props> = (props: Props) => {
-  const {icon = <ArrowRightIcon />, text, onPress, containerStyles} = props;
+  const {
+    icon = <ArrowRightIcon />,
+    text,
+    onPress,
+    containerStyles,
+    textStyles,
+  } = props;
 
   return (
     <TouchableOpacity style={[styles.root2, containerStyles]} onPress={onPress}>
-      <Text style={[Typography.Button2, styles.text]}>{text}</Text>
+      <Text style={[Typography.Button2, styles.text, textStyles]}>{text}</Text>
       {icon}
     </TouchableOpacity>
   );

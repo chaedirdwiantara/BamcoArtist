@@ -35,7 +35,7 @@ const Typography = {
   },
   Heading6: {
     fontFamily: Font.InterSemiBold,
-    fontSize: normalize(16),
+    fontSize: mvs(16),
     lineHeight: mvs(20),
     letterSpacing: 0.15,
   },
@@ -65,7 +65,7 @@ const Typography = {
   },
   Body2: {
     fontFamily: Font.InterRegular,
-    fontSize: normalize(13),
+    fontSize: mvs(13),
     lineHeight: mvs(20),
     letterSpacing: 0.25,
   },
@@ -89,7 +89,7 @@ const Typography = {
   },
   Button2: {
     fontFamily: Font.InterMedium,
-    fontSize: normalize(13),
+    fontSize: mvs(13),
     lineHeight: mvs(20),
     letterSpacing: 0.1,
   },
