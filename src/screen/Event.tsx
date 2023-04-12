@@ -38,7 +38,7 @@ export const EventScreen: React.FC<EventProps> = ({navigation}: EventProps) => {
             rightIcon={<CartIcon />}
             rightIconAction={() => navigation.navigate('Cart')}
             leftIcon={<BoxStore />}
-            leftIconAction={() => null}
+            leftIconAction={() => navigation.navigate('Transaction')}
             containerStyles={{paddingHorizontal: widthPercentage(20)}}
           />
           <View style={styles.listContainer}>

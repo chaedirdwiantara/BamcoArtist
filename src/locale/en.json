@@ -819,6 +819,31 @@
       "Shipped": "Shipped",
       "Review": "Review",
       "Estimated": "Estimated arrival"
-    }
+    },
+    "Detail": {
+      "Title": "Details",
+      "Product": "Detail Product",
+      "Total": "Total",
+      "Purchase": {
+        "Title": "Purchase Information",
+        "Date": "Purchasing Date",
+        "Cancel": "Auto Cancel On"
+      },
+      "Shipping": {
+        "Title": "Shipping Information",
+        "Address": "Adress",
+        "Estimation": "Estimation"
+      },
+      "Payment": {
+        "Title": "Payment Details",
+        "Total": "Total Price",
+        "Delivery": "Delivery Price",
+        "Promo": "Promo code",
+        "Tax": "Tax"
+      }
+    },
+    "Finish": "Finish Order",
+    "Track": "Track Status",
+    "Cancel": "Cancel Order"
   }
 }

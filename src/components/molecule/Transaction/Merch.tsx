@@ -11,10 +11,16 @@ import CartItem from '../../atom/Cart/CartItem';
 import {heightPercentage, normalize, widthPercentage} from '../../../utils';
 import Color from '../../../theme/Color';
 import {useTranslation} from 'react-i18next';
+import {useNavigation} from '@react-navigation/native';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {RootStackParams} from '../../../navigations';
 
 const MerchTransaction = () => {
   const {t} = useTranslation();
   const [tabActive, setTabActive] = useState<number>(1);
+
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParams>>();
 
   const tabs = [
     {
@@ -69,14 +75,16 @@ const MerchTransaction = () => {
         <CartBox
           editable={false}
           transaction={getActiveTabTitle()}
-          arrival="22 Feb - 24 Feb">
+          arrival="22 Feb - 24 Feb"
+          onPressDetail={() => navigation.navigate('TransactionDetail')}>
           <CartItem editable={false} />
           <CartItem editable={false} />
         </CartBox>
         <CartBox
           editable={false}
           transaction={getActiveTabTitle()}
-          arrival="22 Feb - 24 Feb">
+          arrival="22 Feb - 24 Feb"
+          onPressDetail={() => navigation.navigate('TransactionDetail')}>
           <CartItem editable={false} />
         </CartBox>
       </ScrollView>

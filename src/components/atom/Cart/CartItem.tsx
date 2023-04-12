@@ -16,10 +16,12 @@ import Gap from '../Gap/Gap';
 
 interface CartItemProps {
   editable?: boolean;
+  detail?: boolean;
+  qty?: number;
 }
 
 const CartItem: React.FC<CartItemProps> = props => {
-  const {editable = true} = props;
+  const {editable = true, detail = false, qty} = props;
   return (
     <View
       style={[
@@ -62,17 +64,23 @@ const CartItem: React.FC<CartItemProps> = props => {
             style={[
               styles.row,
               styles.alignCenter,
-              {justifyContent: 'space-between'},
+              {justifyContent: detail ? 'flex-start' : 'space-between'},
             ]}>
+            {detail && (
+              <Text
+                style={[
+                  Typography.Subtitle3,
+                  {color: Color.Dark[50], marginRight: widthPercentage(4)},
+                ]}>
+                {qty}x
+              </Text>
+            )}
             <Text
-              style={[
-                Typography.Subtitle3,
-                {color: Color.Pink.linear, fontSize: normalize(12)},
-              ]}
+              style={[Typography.Subtitle3, {color: Color.Pink.linear}]}
               numberOfLines={1}>
               2,750 Credits
             </Text>
-            {editable ? (
+            {detail ? null : editable ? (
               <View style={[styles.row, styles.alignCenter]}>
                 <TouchableOpacity>
                   <TrashIcon />
@@ -88,7 +96,7 @@ const CartItem: React.FC<CartItemProps> = props => {
               </View>
             ) : (
               <Text style={[Typography.Subtitle3, {color: Color.Neutral[10]}]}>
-                1 Product
+                {qty} Product
               </Text>
             )}
           </View>

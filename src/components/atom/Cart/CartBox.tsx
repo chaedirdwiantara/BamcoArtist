@@ -17,6 +17,7 @@ interface CartBoxProps {
   delivery?: boolean;
   transaction?: string;
   arrival?: string;
+  onPressDetail?: () => void;
 }
 
 const CartBox: React.FC<CartBoxProps> = props => {
@@ -28,6 +29,7 @@ const CartBox: React.FC<CartBoxProps> = props => {
     delivery = false,
     transaction,
     arrival,
+    onPressDetail,
   } = props;
 
   const {t} = useTranslation();
@@ -51,6 +53,7 @@ const CartBox: React.FC<CartBoxProps> = props => {
         {transaction ? (
           <View style={{flex: 1}}>
             <TouchableOpacity
+              onPress={onPressDetail}
               style={[styles.rowCenter, {justifyContent: 'space-between'}]}>
               <View style={[styles.rowCenter]}>
                 <Avatar imgUri="https://picsum.photos/200" />
