@@ -122,7 +122,10 @@ export const Checkout: React.FC<CheckoutProps> = ({
 
       <ModalSuccessCheckout
         modalVisible={successCheckout}
-        toggleModal={() => setSuccessCheckout(false)}
+        toggleModal={() => {
+          setSuccessCheckout(false);
+          navigation.navigate('Transaction');
+        }}
       />
     </View>
   );

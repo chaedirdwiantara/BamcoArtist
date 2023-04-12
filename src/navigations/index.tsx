@@ -96,6 +96,7 @@ import Cart from '../screen/Action/Cart';
 import PromoCode from '../screen/Action/PromoCode';
 import PromoDetail from '../screen/Action/PromoDetail';
 import Checkout from '../screen/Action/Checkout';
+import Transaction from '../screen/Action/Transaction';
 
 // Icon
 import {CrownIcon, FeedIcon, HomeIcon, UserProfileIcon} from '../assets/icon';
@@ -276,6 +277,7 @@ export type RootStackParams = {
     id: string;
   };
   Checkout: undefined;
+  Transaction: undefined;
 };
 
 export type MainTabParams = {
@@ -475,6 +477,7 @@ export const RootStackScreen = () => (
     <RootStack.Screen name="PromoCode" component={PromoCode} />
     <RootStack.Screen name="PromoDetail" component={PromoDetail} />
     <RootStack.Screen name="Checkout" component={Checkout} />
+    <RootStack.Screen name="Transaction" component={Transaction} />
   </RootStack.Navigator>
 );
 

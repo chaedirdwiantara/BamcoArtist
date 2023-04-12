@@ -810,5 +810,15 @@
       "Title": "Congratulations! You have successfully purchased your product",
       "Btn": "View Transaction"
     }
+  },
+  "Transaction": {
+    "Title": "Transaction",
+    "Merch": {
+      "Unpaid": "Unpaid",
+      "ToShip": "To Ship",
+      "Shipped": "Shipped",
+      "Review": "Review",
+      "Estimated": "Estimated arrival"
+    }
   }
 }
