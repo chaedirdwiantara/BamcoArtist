@@ -218,7 +218,7 @@ export const OtpPhoneNumber: React.FC<OtpPNProps> = ({
           label={t('Btn.Cancel')}
           type="border"
           borderColor="transparent"
-          textStyles={{fontSize: mvs(14), color: color.Pink.linear}}
+          textStyles={{fontSize: mvs(14), color: color.Success[400]}}
           containerStyles={{width: '100%'}}
           onPress={onPressGoBack}
         />
@@ -264,7 +264,6 @@ const styles = StyleSheet.create({
     aspectRatio: widthPercentage(327 / 36),
     marginTop: heightPercentage(25),
     alignSelf: 'center',
-    backgroundColor: Color.Pink[200],
   },
   buttonDisabled: {
     width: '100%',

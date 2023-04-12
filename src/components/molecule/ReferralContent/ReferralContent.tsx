@@ -128,7 +128,7 @@ export const ReferralContent: React.FC<ReferralContentProps> = ({
               type="border"
               label={t('Btn.MaybeLater')}
               containerStyles={styles.btnContainer}
-              textStyles={{color: Color.Pink.linear}}
+              textStyles={{color: Color.Success[400]}}
               onPress={onSkip}
             />
             <Button
@@ -139,7 +139,7 @@ export const ReferralContent: React.FC<ReferralContentProps> = ({
                 aspectRatio: heightPercentage(155 / 46),
                 backgroundColor: emptyString
                   ? Color.Dark[50]
-                  : Color.Pink.linear,
+                  : Color.Success[400],
               }}
               onPress={() => {
                 onPress && onPress(refCode);

@@ -7,6 +7,7 @@ import {
   NativeScrollEvent,
   NativeSyntheticEvent,
   Image,
+  Platform,
 } from 'react-native';
 
 import {heightPercentage, width} from '../../../utils';
@@ -166,7 +167,7 @@ export const ImageSlider: React.FC<ImageSliderProps> = ({
                 : setSelectedExpectations;
 
             return (
-              <View key={index}>
+              <View key={index} style={{paddingTop: heightPercentage(40)}}>
                 <Text style={[Typography.Heading4, styles.title]}>
                   {item.title}
                 </Text>
@@ -233,11 +234,11 @@ const styles = StyleSheet.create({
   },
   image: {
     width,
-    height: '100%',
+    height: Platform.OS === 'ios' ? '95%' : '85%',
   },
   title: {
     textAlign: 'center',
     color: Color.Neutral[10],
-    marginBottom: heightPercentage(20),
+    marginBottom: heightPercentage(32),
   },
 });

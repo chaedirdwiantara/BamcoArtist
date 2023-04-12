@@ -1,7 +1,9 @@
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import React, {FC} from 'react';
+import {useTranslation} from 'react-i18next';
 import {ScrollView} from 'react-native';
+import {EmptyStateSongMusician} from '../../components/molecule/EmptyState/EmptyStateSongMusician';
 import PlaylistHomeCard from '../../components/molecule/ListCard/PlaylistHomeCard';
 import {Playlist} from '../../interface/playlist.interface';
 import {ListDataSearchPlaylist} from '../../interface/search.interface';
@@ -13,6 +15,7 @@ interface PlaylistProps {
 }
 
 const PlaylistHome: FC<PlaylistProps> = (props: PlaylistProps) => {
+  const {t} = useTranslation();
   const {dataPlaylist} = props;
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
@@ -23,7 +26,7 @@ const PlaylistHome: FC<PlaylistProps> = (props: PlaylistProps) => {
       contentContainerStyle={{
         paddingLeft: widthResponsive(24),
       }}>
-      {dataPlaylist.length > 0 &&
+      {dataPlaylist.length > 0 ? (
         dataPlaylist?.map((item, index) => {
           return (
             <PlaylistHomeCard
@@ -36,7 +39,13 @@ const PlaylistHome: FC<PlaylistProps> = (props: PlaylistProps) => {
               }
             />
           );
-        })}
+        })
+      ) : (
+        <EmptyStateSongMusician
+          text={t('Home.Playlist.EmptyState')}
+          height={200}
+        />
+      )}
     </ScrollView>
   );
 };
