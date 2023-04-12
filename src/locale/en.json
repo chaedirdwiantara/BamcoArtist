@@ -805,6 +805,10 @@
     "Title": "Checkout",
     "AddShipping": "Add shipping location",
     "Delivery": "Choose Delivery",
-    "Agent": "Delivery Agent"
+    "Agent": "Delivery Agent",
+    "Modal": {
+      "Title": "Congratulations! You have successfully purchased your product",
+      "Btn": "View Transaction"
+    }
   }
 }

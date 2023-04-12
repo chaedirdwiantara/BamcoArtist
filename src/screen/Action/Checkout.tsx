@@ -21,6 +21,7 @@ import {ModalDelivery} from '../../components/atom/Checkout/ModalDelivery';
 import {useSettingHook} from '../../hooks/use-setting.hook';
 import {useFocusEffect} from '@react-navigation/native';
 import {mvs} from 'react-native-size-matters';
+import {ModalSuccessCheckout} from '../../components/molecule/Modal/ModalSuccessCheckout';
 
 type CheckoutProps = NativeStackScreenProps<RootStackParams, 'Checkout'>;
 
@@ -30,6 +31,7 @@ export const Checkout: React.FC<CheckoutProps> = ({
   const {t} = useTranslation();
   const [showDelivery, setShowDelivery] = useState<boolean>(false);
   const [deliveryType, setDeliveryType] = useState<string>('package');
+  const [successCheckout, setSuccessCheckout] = useState<boolean>(false);
 
   const {dataShippingInfo, getShippingInfo} = useSettingHook();
 
@@ -42,35 +44,6 @@ export const Checkout: React.FC<CheckoutProps> = ({
   const handleShowDelivery = (type: string) => {
     setDeliveryType(type);
     setShowDelivery(!showDelivery);
-  };
-
-  const formatShipping = () => {
-    if (dataShippingInfo) {
-      const {
-        fullname,
-        phoneNumber,
-        address,
-        city,
-        province,
-        postalCode,
-        country,
-      } = dataShippingInfo;
-      return (
-        fullname +
-        ' (' +
-        phoneNumber +
-        ') ' +
-        address +
-        ', ' +
-        city +
-        ', ' +
-        province +
-        ' (' +
-        postalCode +
-        ') ' +
-        country
-      );
-    }
   };
 
   return (
@@ -105,7 +78,7 @@ export const Checkout: React.FC<CheckoutProps> = ({
                 Typography.Subtitle2,
                 {color: Color.Neutral[10], lineHeight: mvs(20)},
               ]}>
-              {/* {formatShipping()} */}
+              {/* {formatShipping(dataShippingInfo)} */}
               Jackson Wong (010 8589 8800) Jianguo Rd, 朝阳区, 北京市 (3208)
               China
             </Text>
@@ -137,7 +110,7 @@ export const Checkout: React.FC<CheckoutProps> = ({
       </ScrollView>
       <BottomPrice
         onPressPromo={() => navigation.navigate('PromoCode')}
-        onPressCheckout={() => navigation.navigate('Checkout')}
+        onPressCheckout={() => setSuccessCheckout(true)}
         summary
       />
 
@@ -145,6 +118,11 @@ export const Checkout: React.FC<CheckoutProps> = ({
         modalVisible={showDelivery}
         onPressClose={() => handleShowDelivery('')}
         type={deliveryType}
+      />
+
+      <ModalSuccessCheckout
+        modalVisible={successCheckout}
+        toggleModal={() => setSuccessCheckout(false)}
       />
     </View>
   );
