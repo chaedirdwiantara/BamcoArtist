@@ -54,6 +54,8 @@ interface ListProps extends TouchableOpacityProps {
   selectedIdPost: (idPost: string) => void;
   isPremium: boolean;
   noNavigate?: boolean;
+  disableComment?: boolean;
+  commentOnPress?: () => void;
 }
 
 const PostListCard: React.FC<ListProps> = (props: ListProps) => {
@@ -79,19 +81,21 @@ const PostListCard: React.FC<ListProps> = (props: ListProps) => {
     selectedIdPost,
     isPremium,
     noNavigate,
+    disableComment = true,
+    commentOnPress,
   } = props;
   return (
     <TouchableOpacity {...props}>
       <View style={[styles.topContainer, containerStyles]}>
         <View>
           {noNavigate ? (
-            <Avatar imgUri={imgUri} size={widthResponsive(32)} />
+            <Avatar imgUri={imgUri} size={widthResponsive(33)} />
           ) : (
             <TouchableOpacity onPress={toDetailOnPress}>
-              <Avatar imgUri={imgUri} size={widthResponsive(32)} />
+              <Avatar imgUri={imgUri} size={widthResponsive(33)} />
             </TouchableOpacity>
           )}
-          <Gap height={2} />
+          <Gap height={5} />
           <View style={{alignItems: 'center'}}>
             <Text
               style={[
@@ -100,7 +104,12 @@ const PostListCard: React.FC<ListProps> = (props: ListProps) => {
               ]}>
               {dateFormatDayOnly(postDate2)}
             </Text>
-            <Text style={[styles.dateDay, {fontSize: mvs(10)}]}>
+            <Gap height={4} />
+            <Text
+              style={[
+                styles.dateDay,
+                {fontSize: mvs(10), color: color.Dark[50]},
+              ]}>
               {dateFormatMonthOnly(postDate2)}
             </Text>
           </View>
@@ -141,8 +150,8 @@ const PostListCard: React.FC<ListProps> = (props: ListProps) => {
             style={[
               styles.bottomContainer,
               {
-                marginTop: !myPost ? 0 : -6.5,
-                marginBottom: !myPost ? 7 : 0,
+                marginTop: !myPost ? 4 : -4.5,
+                marginBottom: !myPost ? 10 : 0,
               },
             ]}>
             <View style={styles.socialContainer}>
@@ -161,11 +170,14 @@ const PostListCard: React.FC<ListProps> = (props: ListProps) => {
               </View>
               {/* comment section */}
               <View>
-                <View style={styles.socialIcon}>
+                <TouchableOpacity
+                  disabled={disableComment}
+                  onPress={commentOnPress}
+                  style={styles.socialIcon}>
                   <CommentIcon stroke={color.Dark[100]} />
                   <Gap width={5.5} />
                   <Text style={styles.regularText}>{commentCount}</Text>
-                </View>
+                </TouchableOpacity>
               </View>
               {/* token section */}
               <View>
@@ -210,9 +222,7 @@ const styles = StyleSheet.create({
     height: undefined,
     flexDirection: 'row',
     alignItems: 'flex-start',
-    // paddingBottom: heightResponsive(5),
     paddingHorizontal: widthResponsive(24),
-    // borderBottomWidth: mvs(1),
     borderBottomColor: color.Dark[500],
   },
   rankStyle: {
@@ -250,7 +260,7 @@ const styles = StyleSheet.create({
   bodyContainer: {
     width: '100%',
     flexDirection: 'row',
-    marginTop: heightResponsive(8),
+    marginTop: widthResponsive(8),
     marginBottom: heightResponsive(10),
   },
   category: {
