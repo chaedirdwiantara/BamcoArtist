@@ -39,7 +39,7 @@ export const ModalLimit: React.FC<ModalLimitProps> = ({
           type="border"
           label={t('Btn.Close')}
           containerStyles={styles.btnCancel}
-          textStyles={{color: color.Pink.linear}}
+          textStyles={{color: color.Success[400]}}
           onPress={onPressClose}
         />
       </>

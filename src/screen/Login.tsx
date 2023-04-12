@@ -387,11 +387,11 @@ export const LoginScreen: React.FC = () => {
           type="border"
           label={t('Btn.Back')}
           borderColor="transparent"
-          textStyles={{fontSize: mvs(14), color: color.Pink.linear}}
+          textStyles={{fontSize: mvs(14), color: color.Success[400]}}
           containerStyles={{width: '100%'}}
           onPress={handleOnPressBack}
         />
-        <Gap height={70} />
+        <Gap height={20} />
         <Text style={styles.forgotPassStyle}>
           {t('Login.DontHaveAccount')}{' '}
           <Text
@@ -443,7 +443,7 @@ export const LoginScreen: React.FC = () => {
     <KeyboardShift>
       <View style={styles.root}>
         <Image
-          source={require('../assets/background/signin-guest.png')}
+          source={require('../assets/background/onboard-1.jpg')}
           style={styles.image}
         />
         <SsuSheet children={children()} topChild={topChild()} />

@@ -10,8 +10,9 @@ import {
 } from 'react-native';
 import {mvs} from 'react-native-size-matters';
 import {useInfiniteQuery} from 'react-query';
-import {EmptyState, ListCard, TopNavigation} from '../../components';
+import {ListCard, TopNavigation} from '../../components';
 import LoadingSpinner from '../../components/atom/Loading/LoadingSpinner';
+import {EmptyStateSongMusician} from '../../components/molecule/EmptyState/EmptyStateSongMusician';
 import {useSearchHook} from '../../hooks/use-search.hook';
 import {RootStackParams} from '../../navigations';
 import {color} from '../../theme';
@@ -108,9 +109,9 @@ const ListPlaylist: React.FC<PlaylistProps> = ({navigation}: PlaylistProps) => {
           )}
           ListEmptyComponent={
             !isLoading && !isRefetching ? (
-              <EmptyState
-                text={t('EmptyState.Search.Playlist') || ''}
-                containerStyle={styles.containerEmpty}
+              <EmptyStateSongMusician
+                text={t('Home.Playlist.EmptyState')}
+                height={500}
               />
             ) : null
           }

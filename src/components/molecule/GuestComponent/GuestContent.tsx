@@ -56,7 +56,7 @@ export const GuestContent: React.FC<GuestProps> = ({containerStyle}) => {
       <Button
         type="border"
         label={t('Btn.SignIn')}
-        textStyles={{fontSize: normalize(14), color: color.Pink.linear}}
+        textStyles={{fontSize: normalize(14), color: color.Success[400]}}
         containerStyles={{marginVertical: heightPercentage(6)}}
         onPress={() => navigation.navigate('Login')}
       />

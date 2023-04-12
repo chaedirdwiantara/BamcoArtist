@@ -264,7 +264,6 @@ const styles = StyleSheet.create({
     aspectRatio: widthPercentage(327 / 36),
     marginTop: heightPercentage(25),
     alignSelf: 'center',
-    backgroundColor: Color.Pink[200],
   },
   buttonDisabled: {
     width: '100%',

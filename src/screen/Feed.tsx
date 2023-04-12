@@ -53,7 +53,7 @@ export const FeedScreen: React.FC = () => {
   const uuid = profileStorage()?.uuid;
 
   const isFocused = useIsFocused();
-  const {isPlaying, showPlayer, hidePlayer} = usePlayerHook();
+  const {isPlaying, visible, showPlayer, hidePlayer} = usePlayerHook();
   const {dataExclusiveContent, getExclusiveContent} = useSettingHook();
   const [selectedCategory, setSelectedCategory] = useState<string>();
   const [offsetCategoryFilter, setOffsetCategoryFilter] = React.useState<{
@@ -149,7 +149,7 @@ export const FeedScreen: React.FC = () => {
           <TouchableOpacity
             style={[
               styles.buttonStyle,
-              {height: isPlaying ? widthResponsive(184) : widthResponsive(94)},
+              {height: visible ? widthResponsive(184) : widthResponsive(94)},
             ]}
             onPress={handleFloatingIcon}
             onLayout={event => {
@@ -179,7 +179,7 @@ export const FeedScreen: React.FC = () => {
               xPosition={offsetCategoryFilter?.px}
               yPosition={offsetCategoryFilter?.py}
               containerStyle={{
-                top: !isPlaying
+                top: !visible
                   ? offsetCategoryFilter?.py - widthResponsive(93)
                   : offsetCategoryFilter?.py - widthResponsive(47),
                 left: offsetCategoryFilter?.px - widthResponsive(125),
