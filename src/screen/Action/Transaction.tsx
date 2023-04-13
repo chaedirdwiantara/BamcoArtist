@@ -8,6 +8,7 @@ import {useTranslation} from 'react-i18next';
 import {heightPercentage, widthPercentage} from '../../utils';
 import Typography from '../../theme/Typography';
 import MerchTransaction from '../../components/molecule/Transaction/Merch';
+import ConcertTransaction from '../../components/molecule/Transaction/Concert';
 
 type TransactionProps = NativeStackScreenProps<RootStackParams, 'Transaction'>;
 
@@ -64,8 +65,7 @@ export const Transaction: React.FC<TransactionProps> = ({
         })}
       </View>
 
-      {/* TODO: create component for concert transaction */}
-      {tabActive === 0 ? null : <MerchTransaction />}
+      {tabActive === 0 ? <ConcertTransaction /> : <MerchTransaction />}
     </View>
   );
 };

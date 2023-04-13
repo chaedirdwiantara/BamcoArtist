@@ -8,8 +8,10 @@ import Gap from '../Gap/Gap';
 import {heightPercentage, normalize, widthPercentage} from '../../../utils';
 import {ArrowRightIcon, TruckIcon} from '../../../assets/icon';
 import {useTranslation} from 'react-i18next';
+import {EventType} from '../../../interface/event.interface';
 
 interface CartBoxProps {
+  type?: EventType;
   children: ReactNode;
   editable?: boolean;
   onPressDelivery?: () => void;
@@ -22,6 +24,7 @@ interface CartBoxProps {
 
 const CartBox: React.FC<CartBoxProps> = props => {
   const {
+    type = EventType.Merch,
     children,
     editable = true,
     onPressDelivery,
@@ -33,6 +36,142 @@ const CartBox: React.FC<CartBoxProps> = props => {
   } = props;
 
   const {t} = useTranslation();
+
+  if (type === EventType.Merch) {
+    return (
+      <View style={styles.root}>
+        <View
+          style={[
+            styles.rowCenter,
+            {
+              marginBottom: 10,
+            },
+          ]}>
+          {editable && (
+            <>
+              <CheckBox handleOnPress={() => null} active={false} />
+              <Gap width={widthPercentage(10)} />
+            </>
+          )}
+
+          {transaction ? (
+            <View style={{flex: 1}}>
+              <TouchableOpacity
+                onPress={onPressDetail}
+                style={[styles.rowCenter, {justifyContent: 'space-between'}]}>
+                <View style={[styles.rowCenter]}>
+                  <Avatar imgUri="https://picsum.photos/200" />
+                  <Gap width={widthPercentage(6)} />
+                  <Text
+                    style={[
+                      Typography.Subtitle3,
+                      {color: Color.Neutral[10], fontSize: normalize(12)},
+                    ]}
+                    numberOfLines={1}>
+                    Blackpink
+                  </Text>
+                  <Gap width={widthPercentage(16)} />
+                  <ArrowRightIcon stroke={Color.Success[400]} />
+                </View>
+                <Text
+                  style={[
+                    Typography.Subtitle3,
+                    {color: Color.Neutral[10], fontSize: normalize(12)},
+                  ]}>
+                  {transaction}
+                </Text>
+              </TouchableOpacity>
+              <View style={[styles.rowCenter, styles.arrival]}>
+                <TruckIcon stroke={Color.Neutral[10]} />
+                <Gap width={widthPercentage(8)} />
+                <Text
+                  style={[
+                    Typography.Caption,
+                    {color: Color.Dark[50], fontSize: normalize(12)},
+                  ]}>
+                  {t('Transaction.Merch.Estimated')} : {arrival}
+                </Text>
+              </View>
+            </View>
+          ) : (
+            <View style={[styles.rowCenter]}>
+              <Avatar imgUri="https://picsum.photos/200" />
+              <Gap width={widthPercentage(6)} />
+              <Text
+                style={[
+                  Typography.Subtitle3,
+                  {color: Color.Neutral[10], fontSize: normalize(12)},
+                ]}
+                numberOfLines={1}>
+                Blackpink
+              </Text>
+            </View>
+          )}
+        </View>
+
+        {children}
+
+        {delivery && (
+          <View style={[styles.box]}>
+            <TouchableOpacity
+              style={[styles.rowCenter, styles.between, {width: '100%'}]}
+              onPress={onPressDelivery}>
+              <View style={[styles.rowCenter]}>
+                {true ? (
+                  <>
+                    <Text
+                      style={[
+                        Typography.Subtitle3,
+                        {color: Color.Neutral[10]},
+                      ]}>
+                      Reguler
+                    </Text>
+                  </>
+                ) : (
+                  <>
+                    <TruckIcon />
+                    <Gap width={widthPercentage(5)} />
+                    <Text
+                      style={[
+                        Typography.Subtitle3,
+                        {color: Color.Neutral[10]},
+                      ]}>
+                      Choose Delivery
+                    </Text>
+                  </>
+                )}
+              </View>
+
+              <ArrowRightIcon />
+            </TouchableOpacity>
+            <View style={styles.border} />
+            <TouchableOpacity
+              style={[
+                styles.rowCenter,
+                styles.between,
+                {
+                  width: '100%',
+                },
+              ]}
+              onPress={onPressAgent}>
+              <View>
+                <Text
+                  style={[Typography.Subtitle3, {color: Color.Neutral[10]}]}>
+                  DHL Express (400)
+                </Text>
+                <Gap height={heightPercentage(4)} />
+                <Text style={[Typography.Subtitle3, {color: Color.Dark[50]}]}>
+                  Estimated time 22-24 Feb
+                </Text>
+              </View>
+
+              <ArrowRightIcon />
+            </TouchableOpacity>
+          </View>
+        )}
+      </View>
+    );
+  }
 
   return (
     <View style={styles.root}>
@@ -50,114 +189,47 @@ const CartBox: React.FC<CartBoxProps> = props => {
           </>
         )}
 
-        {transaction ? (
-          <View style={{flex: 1}}>
-            <TouchableOpacity
-              onPress={onPressDetail}
-              style={[styles.rowCenter, {justifyContent: 'space-between'}]}>
-              <View style={[styles.rowCenter]}>
-                <Avatar imgUri="https://picsum.photos/200" />
-                <Gap width={widthPercentage(6)} />
-                <Text
-                  style={[
-                    Typography.Subtitle3,
-                    {color: Color.Neutral[10], fontSize: normalize(12)},
-                  ]}
-                  numberOfLines={1}>
-                  Blackpink
-                </Text>
-                <Gap width={widthPercentage(16)} />
-                <ArrowRightIcon stroke={Color.Success[400]} />
-              </View>
+        <View style={{flex: 1}}>
+          <TouchableOpacity
+            onPress={onPressDetail}
+            style={[styles.rowCenter, {justifyContent: 'space-between'}]}>
+            <View style={[styles.rowCenter]}>
+              <Avatar imgUri="https://picsum.photos/200" />
+              <Gap width={widthPercentage(6)} />
               <Text
                 style={[
                   Typography.Subtitle3,
                   {color: Color.Neutral[10], fontSize: normalize(12)},
-                ]}>
-                {transaction}
+                ]}
+                numberOfLines={1}>
+                Blackpink
               </Text>
-            </TouchableOpacity>
-            <View style={[styles.rowCenter, styles.arrival]}>
-              <TruckIcon stroke={Color.Neutral[10]} />
-              <Gap width={widthPercentage(8)} />
-              <Text
-                style={[
-                  Typography.Caption,
-                  {color: Color.Dark[50], fontSize: normalize(12)},
-                ]}>
-                {t('Transaction.Merch.Estimated')} : {arrival}
-              </Text>
+              <Gap width={widthPercentage(16)} />
+              <ArrowRightIcon stroke={Color.Success[400]} />
             </View>
-          </View>
-        ) : (
-          <View style={[styles.rowCenter]}>
-            <Avatar imgUri="https://picsum.photos/200" />
-            <Gap width={widthPercentage(6)} />
-            <Text
-              style={[
-                Typography.Subtitle3,
-                {color: Color.Neutral[10], fontSize: normalize(12)},
-              ]}
-              numberOfLines={1}>
-              Blackpink
-            </Text>
-          </View>
-        )}
+          </TouchableOpacity>
+        </View>
       </View>
 
       {children}
 
-      {delivery && (
-        <View style={[styles.box]}>
-          <TouchableOpacity
-            style={[styles.rowCenter, styles.between, {width: '100%'}]}
-            onPress={onPressDelivery}>
-            <View style={[styles.rowCenter]}>
-              {true ? (
-                <>
-                  <Text
-                    style={[Typography.Subtitle3, {color: Color.Neutral[10]}]}>
-                    Reguler
-                  </Text>
-                </>
-              ) : (
-                <>
-                  <TruckIcon />
-                  <Gap width={widthPercentage(5)} />
-                  <Text
-                    style={[Typography.Subtitle3, {color: Color.Neutral[10]}]}>
-                    Choose Delivery
-                  </Text>
-                </>
-              )}
-            </View>
-
-            <ArrowRightIcon />
-          </TouchableOpacity>
-          <View style={styles.border} />
-          <TouchableOpacity
-            style={[
-              styles.rowCenter,
-              styles.between,
-              {
-                width: '100%',
-              },
-            ]}
-            onPress={onPressAgent}>
-            <View>
-              <Text style={[Typography.Subtitle3, {color: Color.Neutral[10]}]}>
-                DHL Express (400)
-              </Text>
-              <Gap height={heightPercentage(4)} />
-              <Text style={[Typography.Subtitle3, {color: Color.Dark[50]}]}>
-                Estimated time 22-24 Feb
-              </Text>
-            </View>
-
-            <ArrowRightIcon />
-          </TouchableOpacity>
-        </View>
-      )}
+      <View style={styles.concertDetail}>
+        <Text style={[Typography.Subtitle3, {color: Color.Neutral[10]}]}>
+          Date
+        </Text>
+        <Text style={[Typography.Subtitle3, {color: Color.Dark[50]}]}>
+          3 March 2023
+        </Text>
+      </View>
+      <View style={styles.concertDetail}>
+        <Text style={[Typography.Subtitle3, {color: Color.Neutral[10]}]}>
+          Ticket Category
+        </Text>
+        <Text style={[Typography.Subtitle3, {color: Color.Dark[50]}]}>
+          Silver
+        </Text>
+      </View>
+      <Gap height={heightPercentage(12)} />
     </View>
   );
 };
@@ -199,5 +271,10 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderBottomWidth: 1,
     borderColor: Color.Dark[500],
+  },
+  concertDetail: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: heightPercentage(4),
   },
 });
