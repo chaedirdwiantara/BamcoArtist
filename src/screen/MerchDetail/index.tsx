@@ -15,11 +15,18 @@ import {
 } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import Swiper from 'react-native-swiper';
-import {ArrowLeftIcon, DefaultAvatar, ThreeDotsIcon} from '../../assets/icon';
+import {
+  ArrowLeftIcon,
+  CoinIcon,
+  DefaultAvatar,
+  StarIcon,
+  ThreeDotsIcon,
+} from '../../assets/icon';
 import {
   Avatar,
   Button,
   ButtonGradient,
+  Gap,
   SsuDivider,
   TopNavigation,
 } from '../../components';
@@ -34,6 +41,7 @@ import {RootStackParams} from '../../navigations';
 import Color from '../../theme/Color';
 import Font from '../../theme/Font';
 import {
+  heightPercentage,
   heightResponsive,
   normalize,
   toCurrency,
@@ -41,6 +49,7 @@ import {
   widthResponsive,
 } from '../../utils';
 import {usePlayerStore} from '../../store/player.store';
+import {mvs} from 'react-native-size-matters';
 
 type MerchDetailProps = NativeStackScreenProps<RootStackParams, 'MerchDetail'>;
 
@@ -67,6 +76,9 @@ export const MerchDetail: React.FC<MerchDetailProps> = ({
   >();
   const [selectedColor, setSelectedColor] = useState<
     SelectColorType | undefined
+  >();
+  const [selectedVariant, setSelectedVariant] = useState<
+    SelectSizeType | undefined
   >();
   const [quantity, setQuantity] = useState<number>(0);
 
@@ -131,6 +143,18 @@ export const MerchDetail: React.FC<MerchDetailProps> = ({
       name: '#FFC0CB',
     },
   ];
+
+  const variant: SelectSizeType[] = [
+    {
+      id: 1,
+      name: 'Long Sleeves',
+    },
+    {
+      id: 2,
+      name: 'Short Sleeves',
+    },
+  ];
+
   return (
     <KeyboardAvoidingView
       style={{flex: 1}}
@@ -167,9 +191,61 @@ export const MerchDetail: React.FC<MerchDetailProps> = ({
 
           <View style={styles.descContainer}>
             <Text style={styles.title}>{data.title}</Text>
+
+            <View style={styles.disc}>
+              <CoinIcon
+                height={widthResponsive(24)}
+                width={widthResponsive(24)}
+              />
+              <Gap width={widthResponsive(4)} />
+              <Text style={styles.price}>
+                {toCurrency(data.price, {withFraction: false})}
+              </Text>
+            </View>
+            <View style={styles.disc}>
+              <View style={styles.discPercContainer}>
+                <Text style={styles.discPerc}>25%</Text>
+              </View>
+              <Gap width={widthResponsive(4)} />
+              <Text style={styles.priceDisc}>
+                {toCurrency(data.price, {withFraction: false})}
+              </Text>
+            </View>
+          </View>
+          <SsuDivider />
+          <View style={[styles.descContainer, {flexDirection: 'row'}]}>
+            <View style={{flexDirection: 'row'}}>
+              <StarIcon />
+              <Gap width={widthPercentage(4)} />
+              <Text style={[styles.subtitle, {marginBottom: 0}]}>4,5</Text>
+              <Gap width={widthPercentage(4)} />
+              <Text
+                style={[
+                  styles.subtitle,
+                  {marginBottom: 0, fontFamily: 'Inter-Regular'},
+                ]}>
+                (1,000)
+              </Text>
+            </View>
+            <Gap width={widthPercentage(24)} />
+            <View style={{flexDirection: 'row'}}>
+              <Text style={[styles.subtitle, {marginBottom: 0}]}>
+                {t('Event.Merch.Sold')}
+              </Text>
+              <Gap width={widthPercentage(4)} />
+              <Text
+                style={[
+                  styles.subtitle,
+                  {marginBottom: 0, fontFamily: 'Inter-Regular'},
+                ]}>
+                (1,000)
+              </Text>
+            </View>
+          </View>
+          <SsuDivider />
+          <View style={styles.descContainer}>
             <View style={styles.owner}>
-              <Text style={styles.ownerLabel}>By</Text>
-              <View style={{marginHorizontal: 5}}>
+              <View style={{marginRight: widthPercentage(6)}}>
                 {data?.ownerImage ? (
                   <Avatar
                     imgUri={data?.ownerImage}
@@ -182,20 +258,22 @@ export const MerchDetail: React.FC<MerchDetailProps> = ({
 
               <Text style={styles.ownerLabel}>{data.owner}</Text>
             </View>
-            <Text style={styles.price}>
-              {data.charge === 'no_tickets'
-                ? ''
-                : data.charge === 'free_event'
-                ? 'Free'
-                : data.currency +
-                  ' ' +
-                  toCurrency(data.price / 100, {withFraction: false})}
-            </Text>
-          </View>
-          <SsuDivider />
-          <View style={styles.descContainer}>
             <Text style={styles.subtitle}>{t('Event.Description')}</Text>
             <Text style={styles.desc}>{data.desc ? data.desc : '-'}</Text>
+          </View>
+          <SsuDivider />
+          <View style={[styles.descContainer, {flexDirection: 'row'}]}>
+            <Text style={[styles.subtitle, {marginBottom: 0}]}>
+              {t('Event.Merch.Condition')} :
+            </Text>
+            <Gap width={widthPercentage(6)} />
+            <Text
+              style={[
+                styles.subtitle,
+                {color: Color.Pink.linear, marginBottom: 0},
+              ]}>
+              New
+            </Text>
           </View>
           <SsuDivider />
           <View style={styles.descContainer}>
@@ -213,6 +291,14 @@ export const MerchDetail: React.FC<MerchDetailProps> = ({
                 selectedColor={selectedColor}
                 colors={colors}
                 onPressColor={color => setSelectedColor(color)}
+              />
+            </View>
+            <View style={styles.attribute}>
+              <Text style={styles.subtitle}>{t('Event.Merch.Variant')}</Text>
+              <SelectSize
+                selectedSize={selectedVariant}
+                sizes={variant}
+                onPressSize={size => setSelectedVariant(size)}
               />
             </View>
             <View>
@@ -283,8 +369,8 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   descContainer: {
-    paddingHorizontal: normalize(24),
-    paddingVertical: normalize(20),
+    paddingHorizontal: widthPercentage(24),
+    paddingVertical: heightPercentage(16),
   },
   desc: {
     color: 'white',
@@ -294,7 +380,7 @@ const styles = StyleSheet.create({
   owner: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 8,
+    marginBottom: heightPercentage(14),
   },
   ownerLabel: {
     color: 'white',
@@ -302,11 +388,29 @@ const styles = StyleSheet.create({
     fontSize: normalize(12),
   },
   price: {
-    color: Color.Pink[2],
+    color: Color.Neutral[10],
     fontSize: normalize(20),
     fontFamily: Font.InterBold,
   },
   attribute: {
-    marginBottom: 20,
+    marginBottom: heightPercentage(24),
+  },
+  disc: {flexDirection: 'row', alignItems: 'center', marginTop: 5},
+  priceDisc: {
+    color: Color.Neutral[50],
+    fontWeight: '500',
+    textDecorationLine: 'line-through',
+  },
+  discPerc: {
+    fontSize: mvs(8),
+    fontFamily: 'Inter-Semibold',
+    color: '#F94D63',
+  },
+  discPercContainer: {
+    backgroundColor: '#FFB8C6',
+    padding: 4,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 4,
   },
 });

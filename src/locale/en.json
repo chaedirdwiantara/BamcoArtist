@@ -255,8 +255,11 @@
       "Title": "Merch",
       "NoMerch": "No Merch Available",
       "Detail": "Merch Details",
-      "Size": "Size",
-      "Color": "Color"
+      "Size": "Select Size",
+      "Color": "Choose Color",
+      "Variant" : "Choose Variant",
+      "Condition" : "Condition",
+      "Sold" : "Sold"
     }
   },
   "Profile": {

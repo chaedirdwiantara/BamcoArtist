@@ -255,8 +255,11 @@
       "Title": "產品",
       "NoMerch": "未有產品",
       "Detail": "產品詳情",
-      "Size": "尺碼",
-      "Color": "顏色"
+      "Size": "Select Size",
+      "Color": "Choose Color",
+      "Variant" : "Choose Variant",
+      "Condition" : "Condition",
+      "Sold" : "Sold"
     }
   },
   "Profile": {
