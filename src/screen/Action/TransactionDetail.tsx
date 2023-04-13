@@ -176,8 +176,7 @@ export const TransactionDetail: React.FC<TransactionDetailProps> = ({
             type={'border'}
             textStyles={{fontSize: mvs(14)}}
             containerStyles={{width: '100%'}}
-            disabled={true}
-            onPress={() => null}
+            onPress={() => navigation.navigate('Track')}
           />
           <Gap height={heightPercentage(8)} />
           <Button

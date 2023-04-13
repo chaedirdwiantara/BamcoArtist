@@ -845,5 +845,8 @@
     "Finish": "Finish Order",
     "Track": "Track Status",
     "Cancel": "Cancel Order"
+  },
+  "Tracking": {
+    "Title": "Track Status"
   }
 }
