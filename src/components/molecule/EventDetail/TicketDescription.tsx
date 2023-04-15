@@ -50,7 +50,7 @@ const TicketDescription: React.FC<TicketDescriptionType> = props => {
         </Text>
         <Text style={[styles.desc, styles.descRight]}>11 AM</Text>
       </View>
-      <Gap height={heightPercentage(16)} />
+      <Gap height={heightPercentage(22)} />
       {/* Duration */}
       {duration && (
         <>
@@ -58,7 +58,7 @@ const TicketDescription: React.FC<TicketDescriptionType> = props => {
           <View style={styles.row}>
             <Text style={[styles.desc, styles.descRight]}>2 Hours</Text>
           </View>
-          <Gap height={heightPercentage(16)} />
+          <Gap height={heightPercentage(22)} />
         </>
       )}
 

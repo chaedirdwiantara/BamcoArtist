@@ -17,7 +17,7 @@ const ConcertTransaction = () => {
         <CartBox
           type={EventType.Concert}
           editable={false}
-          onPressDetail={() => navigation.navigate('TransactionDetail')}>
+          onPressDetail={() => navigation.navigate('TransactionDetailTicket')}>
           <CartItem editable={false} />
         </CartBox>
       </ScrollView>

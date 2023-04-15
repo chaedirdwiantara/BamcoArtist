@@ -16,14 +16,14 @@ import Typography from '../../theme/Typography';
 import CartItem from '../../components/atom/Cart/CartItem';
 import {mvs} from 'react-native-size-matters';
 
-type TransactionDetailProps = NativeStackScreenProps<
+type TransactionDetailMerchProps = NativeStackScreenProps<
   RootStackParams,
-  'TransactionDetail'
+  'TransactionDetailMerch'
 >;
 
-export const TransactionDetail: React.FC<TransactionDetailProps> = ({
+export const TransactionDetailMerch: React.FC<TransactionDetailMerchProps> = ({
   navigation,
-}: TransactionDetailProps) => {
+}: TransactionDetailMerchProps) => {
   const {t} = useTranslation();
 
   return (
@@ -194,7 +194,7 @@ export const TransactionDetail: React.FC<TransactionDetailProps> = ({
   );
 };
 
-export default TransactionDetail;
+export default TransactionDetailMerch;
 
 const styles = StyleSheet.create({
   root: {

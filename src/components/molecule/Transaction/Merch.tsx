@@ -76,7 +76,7 @@ const MerchTransaction = () => {
           editable={false}
           transaction={getActiveTabTitle()}
           arrival="22 Feb - 24 Feb"
-          onPressDetail={() => navigation.navigate('TransactionDetail')}>
+          onPressDetail={() => navigation.navigate('TransactionDetailMerch')}>
           <CartItem editable={false} />
           <CartItem editable={false} />
         </CartBox>
@@ -84,7 +84,7 @@ const MerchTransaction = () => {
           editable={false}
           transaction={getActiveTabTitle()}
           arrival="22 Feb - 24 Feb"
-          onPressDetail={() => navigation.navigate('TransactionDetail')}>
+          onPressDetail={() => navigation.navigate('TransactionDetailMerch')}>
           <CartItem editable={false} />
         </CartBox>
       </ScrollView>
