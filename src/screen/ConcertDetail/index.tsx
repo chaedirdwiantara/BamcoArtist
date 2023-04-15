@@ -50,6 +50,7 @@ import SelectDate from '../../components/molecule/EventDetail/SelectDate';
 import TicketCategory, {
   TicketCategoryType,
 } from '../../components/molecule/EventDetail/TicketCategory';
+import TicketDescription from '../../components/molecule/EventDetail/TicketDescription';
 
 type MerchDetailProps = NativeStackScreenProps<
   RootStackParams,
@@ -240,51 +241,7 @@ export const ConcertDetail: React.FC<MerchDetailProps> = ({
 
           <SsuDivider />
           <View style={styles.descContainer}>
-            {/* Description */}
-            <Text style={styles.subtitle}>{t('Event.Description')}</Text>
-            <View style={styles.row}>
-              <Text style={[styles.desc, styles.descLeft]}>
-                {t('Event.Concert.Date')}
-              </Text>
-              <Text style={[styles.desc, styles.descRight]}>3 March 2023</Text>
-            </View>
-            <Gap height={heightPercentage(6)} />
-            <View style={styles.row}>
-              <Text style={[styles.desc, styles.descLeft]}>
-                {t('Event.Concert.Time')}
-              </Text>
-              <Text style={[styles.desc, styles.descRight]}>02 PM - 03 PM</Text>
-            </View>
-            <Gap height={heightPercentage(6)} />
-            <View style={styles.row}>
-              <Text style={[styles.desc, styles.descLeft]}>
-                {t('Event.Concert.Venue')}
-              </Text>
-              <Text style={[styles.desc, styles.descRight]}>
-                Jakarta Velodrome
-              </Text>
-            </View>
-            <Gap height={heightPercentage(6)} />
-            <View style={styles.row}>
-              <Text style={[styles.desc, styles.descLeft]}>
-                {t('Event.Concert.OpenGate')}
-              </Text>
-              <Text style={[styles.desc, styles.descRight]}>11 AM</Text>
-            </View>
-            <Gap height={heightPercentage(16)} />
-            {/* Duration */}
-            <Text style={styles.subtitle}>{t('Event.Concert.Duration')}</Text>
-            <View style={styles.row}>
-              <Text style={[styles.desc, styles.descRight]}>2 Hours</Text>
-            </View>
-            <Gap height={heightPercentage(16)} />
-            {/* Location */}
-            <Text style={styles.subtitle}>{t('Event.Concert.Location')}</Text>
-            <View style={styles.row}>
-              <Text style={[styles.desc, styles.descRight]}>
-                Jln Kenangan, Gang Rindu, Desa Ingin Bertemu
-              </Text>
-            </View>
+            <TicketDescription />
           </View>
           <SsuDivider />
           <View style={styles.descContainer}>
@@ -322,7 +279,7 @@ export const ConcertDetail: React.FC<MerchDetailProps> = ({
                 selected={selectedTicket}
                 data={tickets}
                 onPressSize={ticket => setSelectedTicket(ticket)}
-                onPressDetail={() => null}
+                onPressDetail={() => navigation.navigate('TicketDetail')}
               />
             </View>
           </View>

@@ -258,7 +258,8 @@
       "Location": "Location",
       "ChooseDate": "Choose Date",
       "Ticket": "Ticket Category",
-      "Total": "Total Price"
+      "Total": "Total Price",
+      "Details": "Details"
     },
     "Merch": {
       "Title": "Merch",

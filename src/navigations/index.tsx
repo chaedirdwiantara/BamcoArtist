@@ -88,9 +88,6 @@ import {AlbumScreen} from '../screen/Album/Album';
 // TopUp
 import {TopupCoinScreen} from '../screen/TopupCoin';
 
-// Merch
-import {MerchDetail} from '../screen/MerchDetail';
-
 // Action
 import Cart from '../screen/Action/Cart';
 import PromoCode from '../screen/Action/PromoCode';
@@ -99,6 +96,9 @@ import Checkout from '../screen/Action/Checkout';
 import Transaction from '../screen/Action/Transaction';
 import TransactionDetail from '../screen/Action/TransactionDetail';
 import Track from '../screen/Action/Track';
+import {MerchDetail} from '../screen/MerchDetail';
+import {ConcertDetail} from '../screen/ConcertDetail';
+import {TicketDetail} from '../screen/ConcertDetail/TicketDetail';
 
 // Icon
 import {CrownIcon, FeedIcon, HomeIcon, UserProfileIcon} from '../assets/icon';
@@ -107,7 +107,7 @@ import Font from '../theme/Font';
 import Color from '../theme/Color';
 import {normalize} from '../utils';
 import {MerchListType} from '../data/merchList';
-import {ConcertDetail} from '../screen/ConcertDetail';
+
 import {SignupSSOScreen} from '../screen/SignupSSO';
 import {
   ProfileResponseData,
@@ -282,6 +282,7 @@ export type RootStackParams = {
   Transaction: undefined;
   TransactionDetail: undefined;
   Track: undefined;
+  TicketDetail: undefined;
 };
 
 export type MainTabParams = {
@@ -484,6 +485,7 @@ export const RootStackScreen = () => (
     <RootStack.Screen name="Transaction" component={Transaction} />
     <RootStack.Screen name="TransactionDetail" component={TransactionDetail} />
     <RootStack.Screen name="Track" component={Track} />
+    <RootStack.Screen name="TicketDetail" component={TicketDetail} />
   </RootStack.Navigator>
 );
 
