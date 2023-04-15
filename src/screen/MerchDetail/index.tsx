@@ -20,7 +20,6 @@ import {
   CoinIcon,
   DefaultAvatar,
   StarIcon,
-  ThreeDotsIcon,
 } from '../../assets/icon';
 import {
   Avatar,
@@ -160,12 +159,10 @@ export const MerchDetail: React.FC<MerchDetailProps> = ({
       style={{flex: 1}}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
       <View style={styles.root}>
-        <TopNavigation.Type4
+        <TopNavigation.Type1
           title={t('Event.Merch.Detail')}
           maxLengthTitle={20}
           itemStrokeColor={'white'}
-          rightIcon={<ThreeDotsIcon fill={Color.Neutral[10]} />}
-          rightIconAction={() => null}
           leftIcon={<ArrowLeftIcon />}
           leftIconAction={handleBackAction}
           containerStyles={{paddingHorizontal: widthPercentage(20)}}

@@ -249,7 +249,16 @@
       "NoConcert": "No Event Available",
       "Detail": "Ticket Details",
       "LineUp": "Line-Up",
-      "Class": "Select Class"
+      "Class": "Select Class",
+      "Date": "Date",
+      "Time": "Time",
+      "Venue": "Venue",
+      "OpenGate": "Open Gate",
+      "Duration": "Duration",
+      "Location": "Location",
+      "ChooseDate": "Choose Date",
+      "Ticket": "Ticket Category",
+      "Total": "Total Price"
     },
     "Merch": {
       "Title": "Merch",
@@ -257,9 +266,9 @@
       "Detail": "Merch Details",
       "Size": "Select Size",
       "Color": "Choose Color",
-      "Variant" : "Choose Variant",
-      "Condition" : "Condition",
-      "Sold" : "Sold"
+      "Variant": "Choose Variant",
+      "Condition": "Condition",
+      "Sold": "Sold"
     }
   },
   "Profile": {

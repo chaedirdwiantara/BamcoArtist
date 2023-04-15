@@ -249,7 +249,16 @@
       "NoConcert": "未有活動",
       "Detail": "門票詳情",
       "LineUp": "排隊",
-      "Class": "選擇等級"
+      "Class": "選擇等級",
+      "Date": "Date",
+      "Time": "Time",
+      "Venue": "Venue",
+      "OpenGate": "Open Gate",
+      "Duration": "Duration",
+      "Location": "Location",
+      "ChooseDate": "Choose Date",
+      "Ticket": "Ticket Category",
+      "Total": "Total Price"
     },
     "Merch": {
       "Title": "產品",
@@ -257,9 +266,9 @@
       "Detail": "產品詳情",
       "Size": "Select Size",
       "Color": "Choose Color",
-      "Variant" : "Choose Variant",
-      "Condition" : "Condition",
-      "Sold" : "Sold"
+      "Variant": "Choose Variant",
+      "Condition": "Condition",
+      "Sold": "Sold"
     }
   },
   "Profile": {
