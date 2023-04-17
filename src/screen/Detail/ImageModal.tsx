@@ -67,6 +67,12 @@ const ImageModal: FC<ModalImageProps> = (props: ModalImageProps) => {
     setActiveIndexSlide(Math.ceil(offsetX / width));
   };
 
+  const getItemLayout = (data: any, index: number) => ({
+    length: width,
+    offset: width * index,
+    index,
+  });
+
   return (
     <Modal
       isVisible={modalVisible}
@@ -96,11 +102,7 @@ const ImageModal: FC<ModalImageProps> = (props: ModalImageProps) => {
               ref={imageSlider}
               data={dataImageGallery}
               initialScrollIndex={imageIdx}
-              getItemLayout={(data, index) => ({
-                length: width,
-                offset: width * index,
-                index,
-              })}
+              getItemLayout={getItemLayout}
               keyExtractor={(_, index) => index.toString()}
               horizontal
               pagingEnabled
@@ -140,6 +142,7 @@ const ImageModal: FC<ModalImageProps> = (props: ModalImageProps) => {
               initialScrollIndex={type === 'zoomProfile' ? undefined : imageIdx}
               showsHorizontalScrollIndicator={false}
               scrollEventThrottle={16}
+              getItemLayout={getItemLayout}
               onScroll={Animated.event(
                 [{nativeEvent: {contentOffset: {x: scrollX}}}],
                 {useNativeDriver: true},
