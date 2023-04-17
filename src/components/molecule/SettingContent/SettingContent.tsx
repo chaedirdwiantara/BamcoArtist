@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import {useTranslation} from 'react-i18next';
 import {mvs} from 'react-native-size-matters';
+import DeviceInfo from 'react-native-device-info';
 import {useNavigation} from '@react-navigation/native';
 
 import {TopNavigation} from '../TopNavigation';
@@ -36,6 +37,7 @@ export const SettingContent: React.FC<SettingProps> = ({
   onPressGoTo,
 }) => {
   const listMenu = menuSetting;
+  const version = DeviceInfo.getVersion();
   const [isVisible, setIsVisible] = useState({
     modalReport: false,
     modalConfirm: false,
@@ -145,7 +147,7 @@ export const SettingContent: React.FC<SettingProps> = ({
         ))}
         <View style={styles.containerText}>
           <Text style={[Typography.Button2, styles.textVersion]}>
-            {`${t('Setting.Version.Title')} 1.0.0`}
+            {`${t('Setting.Version.Title')} ${version}`}
           </Text>
         </View>
       </ScrollView>
