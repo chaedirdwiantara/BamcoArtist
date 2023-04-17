@@ -56,6 +56,7 @@ export const FooterContent: React.FC<FooterContentProps> = ({
             );
           }
         })}
+      <Gap height={heightPercentage(40)} />
       <Indicator
         activeIndex={activeIndexSlide}
         totalIndex={data.length}
@@ -64,7 +65,7 @@ export const FooterContent: React.FC<FooterContentProps> = ({
       />
       {type === 'Preference' ? (
         <>
-          <Gap height={heightPercentage(40)} />
+          <Gap height={heightPercentage(45)} />
           <View style={styles.footer}>
             {activeIndexSlide === 0 ? (
               <ButtonGradient

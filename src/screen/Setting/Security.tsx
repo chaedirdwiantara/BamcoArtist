@@ -7,12 +7,11 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {color, font} from '../../theme';
 import {RootStackParams} from '../../navigations';
 import {useProfileHook} from '../../hooks/use-profile.hook';
-import {ArrowLeftIcon, TickCircleIcon} from '../../assets/icon';
+import {MenuText} from '../../components/atom/MenuText/MenuText';
 import {EmailContent, Gap, SsuToast, TopNavigation} from '../../components';
 import {heightPercentage, widthPercentage, widthResponsive} from '../../utils';
-import {ModalLoading} from '../../components/molecule/ModalLoading/ModalLoading';
+import {ArrowLeftIcon, ArrowRightIcon, TickCircleIcon} from '../../assets/icon';
 import {PhoneNumberContent} from '../../components/molecule/SettingContent/PhoneNumberContent';
-import {MenuText} from '../../components/atom/MenuText/MenuText';
 
 type SecurityProps = NativeStackScreenProps<RootStackParams, 'Security'>;
 
@@ -23,14 +22,13 @@ export const SecurityScreen: React.FC<SecurityProps> = ({
   const {t} = useTranslation();
   const {info} = route.params;
   const {dataProfile, getProfileUser} = useProfileHook();
-  const [isFetching, setIsFetching] = useState<boolean>(true);
   const [visibleModal, setVisibleModal] = useState<boolean>(false);
 
   const onPressGoBack = () => {
     navigation.goBack();
   };
 
-  const onPressGoTo = (screenName: 'ChangePassword') => {
+  const onPressGoTo = (screenName: 'ChangePassword' | 'AboutDeletion') => {
     navigation.navigate(screenName);
   };
 
@@ -50,7 +48,6 @@ export const SecurityScreen: React.FC<SecurityProps> = ({
 
   const fetchUser = async () => {
     await getProfileUser();
-    setIsFetching(false);
     if (info) {
       setTimeout(() => {
         setVisibleModal(true);
@@ -105,8 +102,11 @@ export const SecurityScreen: React.FC<SecurityProps> = ({
       <MenuText.RightIcon
         text={t('Setting.DeleteAccount.Title') || ''}
         containerStyles={{marginTop: heightPercentage(15)}}
+        textStyles={{color: color.Error[400]}}
+        icon={<ArrowRightIcon stroke={color.Error[400]} />}
+        onPress={() => onPressGoTo('AboutDeletion')}
       />
-      <ModalLoading visible={isFetching} />
+
       <SsuToast
         modalVisible={visibleModal}
         onBackPressed={() => setVisibleModal(false)}
