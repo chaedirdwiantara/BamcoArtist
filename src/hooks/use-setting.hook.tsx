@@ -335,12 +335,12 @@ export const useSettingHook = () => {
     }
   };
 
-  const getListMoodGenre = async () => {
+  const getListMoodGenre = async (props?: PreferenceProps) => {
     setIsError(false);
     setIsLoading(true);
     try {
-      const genre = await listGenrePublic();
-      const mood = await listMoodPublic();
+      const genre = await listGenrePublic(props);
+      const mood = await listMoodPublic(props);
 
       setListMood(mood.data);
       setListGenre(genre.data);

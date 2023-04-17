@@ -19,6 +19,7 @@ export type UpdateProfilePropsType = {
   username?: string;
   fullname?: string;
   favoriteGeneres?: number[];
+  genres?: number[];
   moods?: number[];
   expectations?: number[];
   imageProfileUrl?: string;

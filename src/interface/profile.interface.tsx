@@ -48,6 +48,7 @@ export type ProfileResponseData = {
   imageProfileUrls: ListImageType[];
   phoneNumber: string | null;
   registrationType: RegistrationType;
+  genres: PreferenceList[];
   favoriteGenres: PreferenceList[];
   moods: PreferenceList[];
   expectation: ExpectationType[];

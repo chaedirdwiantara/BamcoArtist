@@ -365,6 +365,15 @@
         "Label": "Add Label Name"
       }
     },
+    "Security": {
+      "Title": "Security"
+    },
+    "DeleteAccount": {
+      "Title": "Delete Account"
+    },
+    "TnC&PP": {
+      "Title": "TnC & Privacy Policy"
+    },
     "Password": {
       "Title": "Change Password",
       "Confirm": "Are you sure you want to change your password?",
@@ -429,7 +438,9 @@
       "Title": "Preferences",
       "Label": {
         "Genre": "Genre",
-        "Mood": "Mood"
+        "Mood": "Mood",
+        "GenrePreference": "Genre Preference",
+        "MoodPreference": "Mood Preference"
       },
       "Placeholder": {
         "Genre": "Select Genre",
@@ -516,7 +527,9 @@
         "Bug": "Report a Bug",
         "TextBug": "Something in the app is broken or doesn’t work as expected",
         "Suggest": "Suggest an Improvement",
-        "TextSuggest": "New ideas or desired enhancement for this app"
+        "TextSuggest": "New ideas or desired enhancement for this app",
+        "Help": "Help",
+        "TextHelp": "If you want to know more contact us"
       },
       "Placeholder": {
         "Email": "Enter your email",
@@ -527,7 +540,7 @@
       "Title": "Helps"
     },
     "TnC": {
-      "Title": "Terms and Service"
+      "Title": "Terms and Conditions"
     },
     "Privacy": {
       "Title": "Privacy Policy"

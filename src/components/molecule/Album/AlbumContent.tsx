@@ -7,7 +7,6 @@ import {
   InteractionManager,
 } from 'react-native';
 
-import {Dropdown} from '../DropDown';
 import Color from '../../../theme/Color';
 import {Gap, SsuToast} from '../../atom';
 import {TopNavigation} from '../TopNavigation';
@@ -27,13 +26,14 @@ import {DataDetailAlbum, SongList} from '../../../interface/song.interface';
 import {dateLongMonth} from '../../../utils/date-format';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {RootStackParams} from '../../../navigations';
+import {MainTabParams, RootStackParams} from '../../../navigations';
 import {useCreditHook} from '../../../hooks/use-credit.hook';
 import {usePlayerHook} from '../../../hooks/use-player.hook';
 import ListSongs from '../../../screen/ListCard/ListSongs';
 import {mvs} from 'react-native-size-matters';
 import {heightPercentage, width, widthPercentage} from '../../../utils';
 import DropdownMore from '../V2/DropdownFilter/DropdownMore';
+import {profileStorage} from '../../../hooks/use-storage.hook';
 
 interface Props {
   dataSong: SongList[] | null;
@@ -50,6 +50,7 @@ export const AlbumContent: React.FC<Props> = ({
 }) => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
+  const navigation2 = useNavigation<NativeStackNavigationProp<MainTabParams>>();
 
   const {
     isPlaying,
@@ -140,7 +141,11 @@ export const AlbumContent: React.FC<Props> = ({
   };
 
   const goToMusicianProfile = () => {
-    navigation.navigate('MusicianProfile', {id: detailAlbum.musician.uuid});
+    if (detailAlbum.musician.uuid === profileStorage()?.uuid) {
+      navigation2.navigate('Profile', {});
+    } else {
+      navigation.push('MusicianProfile', {id: detailAlbum.musician.uuid});
+    }
   };
 
   const createdDate = comingSoon

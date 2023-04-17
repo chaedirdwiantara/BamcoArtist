@@ -1,72 +1,66 @@
 import React, {useState} from 'react';
 import {
   View,
+  Text,
+  Linking,
   StyleSheet,
   ScrollView,
-  Text,
   TouchableOpacity,
 } from 'react-native';
+import {useTranslation} from 'react-i18next';
+import {mvs} from 'react-native-size-matters';
 import {useNavigation} from '@react-navigation/native';
-import {menuSetting} from '../../../data/Settings/setting';
-import {ArrowLeftIcon, LogOutIcon} from '../../../assets/icon';
 
 import {TopNavigation} from '../TopNavigation';
 import {color, typography} from '../../../theme';
 import {ModalCustom} from '../Modal/ModalCustom';
 import Typography from '../../../theme/Typography';
-import {MenuText} from '../../atom/MenuText/MenuText';
+import {ModalConfirm} from '../Modal/ModalConfirm';
 import {RootStackParams} from '../../../navigations';
+import {MenuText} from '../../atom/MenuText/MenuText';
 import {useFcmHook} from '../../../hooks/use-fcm.hook';
 import {useAuthHook} from '../../../hooks/use-auth.hook';
+import {menuSetting} from '../../../data/Settings/setting';
 import * as FCMService from '../../../service/notification';
+import {ArrowLeftIcon, LogOutIcon} from '../../../assets/icon';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {height, heightPercentage, width, widthPercentage} from '../../../utils';
-import {ModalConfirm} from '../Modal/ModalConfirm';
-import {useTranslation} from 'react-i18next';
-import {mvs} from 'react-native-size-matters';
 
 interface SettingProps {
   onPressGoBack: () => void;
   onPressGoTo: (screenName: string, params?: any) => void;
-  handleWebview: (title: string, url: string) => void;
 }
 
 export const SettingContent: React.FC<SettingProps> = ({
   onPressGoBack,
   onPressGoTo,
-  handleWebview,
 }) => {
-  const {t} = useTranslation();
   const listMenu = menuSetting;
   const [isVisible, setIsVisible] = useState({
     modalReport: false,
     modalConfirm: false,
   });
+  const {t} = useTranslation();
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
   const {onLogout} = useAuthHook();
   const {removeFcmToken} = useFcmHook();
 
   const onPress = (val: string) => {
-    if (val === 'Send Report') {
+    if (val === 'Helps') {
       setIsVisible({
         modalReport: true,
         modalConfirm: false,
       });
-    } else if (
-      val === 'Terms and Conditions' ||
-      val === 'Privacy Policy' ||
-      val === 'Helps'
-    ) {
-      const path = val === 'Terms and Conditions' ? 'tos' : 'privacy-policy';
-      handleWebview(val, `https://sunnysideup.io/marketplace/${path}`);
-    } else if (val === 'Exclusive Content') {
-      onPressGoTo('ExclusiveContentSetting');
-    } else if (val === 'Preferences') {
-      onPressGoTo('PreferenceSetting');
     } else {
       onPressGoTo(val.replace(/\s/g, ''));
     }
+  };
+
+  const MailTo = () => {
+    return Linking.openURL(
+      'mailto:inquiry@sunnysideup.io?subject=Need Help About Application',
+    );
   };
 
   const ListReport = ({title, subtitle}: {title: string; subtitle: string}) => {
@@ -74,7 +68,9 @@ export const SettingContent: React.FC<SettingProps> = ({
       <TouchableOpacity
         style={{marginTop: heightPercentage(10)}}
         onPress={() => {
-          onPressGoTo('SendReport', {title});
+          title === t('Setting.Report.Modal.Help')
+            ? MailTo()
+            : onPressGoTo('SendReport', {title});
           closeModal();
         }}>
         <Text style={[typography.Subtitle1, {color: color.Neutral[10]}]}>
@@ -101,6 +97,10 @@ export const SettingContent: React.FC<SettingProps> = ({
           title={t('Setting.Report.Modal.Suggest')}
           subtitle={t('Setting.Report.Modal.TextSuggest')}
         />
+        <ListReport
+          title={t('Setting.Report.Modal.Help')}
+          subtitle={t('Setting.Report.Modal.TextHelp')}
+        />
       </View>
     );
   };
@@ -113,7 +113,6 @@ export const SettingContent: React.FC<SettingProps> = ({
   };
 
   const onPressSignout = async () => {
-    closeModal();
     await onLogout();
     FCMService.getTokenFCM({
       onGetToken: token => {
@@ -191,9 +190,9 @@ const styles = StyleSheet.create({
   },
   textVersion: {
     color: color.Neutral[10],
-    fontSize: mvs(13),
     paddingTop: heightPercentage(15),
     alignSelf: 'center',
+    fontSize: mvs(13),
   },
   textSignOut: {
     color: color.Neutral[10],
