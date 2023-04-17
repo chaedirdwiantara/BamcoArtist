@@ -117,13 +117,7 @@ export const FeedScreen: React.FC = () => {
             maxLengthTitle={20}
             itemStrokeColor={'white'}
           />
-          <View
-            style={{
-              marginTop: heightPercentage(8),
-              paddingHorizontal: widthResponsive(24),
-              width: '100%',
-              height: '100%',
-            }}>
+          <View style={styles.feedContainer}>
             <TabFilter.Type1
               filterData={filter}
               onPress={filterData}
@@ -214,6 +208,12 @@ const styles = StyleSheet.create({
   root: {
     flex: 1,
     backgroundColor: color.Dark[800],
+  },
+  feedContainer: {
+    marginTop: widthResponsive(3),
+    paddingHorizontal: widthResponsive(24),
+    width: '100%',
+    height: '100%',
   },
   buttonStyle: {
     position: 'absolute',

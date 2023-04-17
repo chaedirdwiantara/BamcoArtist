@@ -46,6 +46,12 @@ import ChildrenCard from './ChildrenCard';
 import {profileStorage} from '../../hooks/use-storage.hook';
 import LoadingSpinner from '../../components/atom/Loading/LoadingSpinner';
 import ImageModal from '../Detail/ImageModal';
+import {
+  likePressedOnFeed,
+  playSongOnFeed,
+  useRefreshingEffect,
+  useStopRefreshing,
+} from './ListUtils/ListFunction';
 
 const {height} = Dimensions.get('screen');
 
@@ -146,23 +152,16 @@ const PostListMyArtist: FC<PostListProps> = (props: PostListProps) => {
   );
 
   //* call when refreshing
-  useEffect(() => {
-    if (refreshing) {
-      getListDataPost({
-        page: 1,
-        perPage: perPage,
-        sortBy: filterByValue,
-        category: categoryValue,
-      });
-      getCreditCount();
-    }
-  }, [refreshing]);
+  useRefreshingEffect(
+    refreshing,
+    getListDataPost,
+    getCreditCount,
+    perPage,
+    filterByValue,
+    categoryValue,
+  );
 
-  useEffect(() => {
-    if (!feedIsLoading) {
-      setRefreshing(false);
-    }
-  }, [feedIsLoading]);
+  useStopRefreshing(feedIsLoading, setRefreshing);
 
   //* set response data list post to main data
   useEffect(() => {
@@ -241,81 +240,16 @@ const PostListMyArtist: FC<PostListProps> = (props: PostListProps) => {
   };
 
   const likeOnPress = (id: string, isLiked: boolean) => {
-    if (isLiked === true && selectedId === undefined) {
-      setUnlikePost({id});
-      setSelectedId([]);
-      if (!recorder.includes(id)) {
-        setRecorder([...recorder, id]);
-      }
-    }
-    if (!isLiked && selectedId === undefined) {
-      setLikePost({id});
-      setSelectedId([id]);
-      if (!recorder.includes(id)) {
-        setRecorder([...recorder, id]);
-      }
-    }
-    if (
-      isLiked === true &&
-      !selectedId?.includes(id) &&
-      !recorder.includes(id)
-    ) {
-      setUnlikePost({id});
-      if (!recorder.includes(id)) {
-        setRecorder([...recorder, id]);
-      }
-    }
-    if (
-      isLiked === false &&
-      !selectedId?.includes(id) &&
-      !recorder.includes(id)
-    ) {
-      setLikePost({id});
-      setSelectedId(selectedId ? [...selectedId, id] : [id]);
-      if (!recorder.includes(id)) {
-        setRecorder([...recorder, id]);
-      }
-    }
-    if (
-      isLiked === true &&
-      !selectedId?.includes(id) &&
-      recorder.includes(id)
-    ) {
-      setLikePost({id});
-      setSelectedId(selectedId ? [...selectedId, id] : [id]);
-      if (!recorder.includes(id)) {
-        setRecorder([...recorder, id]);
-      }
-    }
-    if (
-      isLiked === false &&
-      !selectedId?.includes(id) &&
-      recorder.includes(id)
-    ) {
-      setLikePost({id});
-      setSelectedId(selectedId ? [...selectedId, id] : [id]);
-      if (!recorder.includes(id)) {
-        setRecorder([...recorder, id]);
-      }
-    }
-    if (isLiked === true && selectedId?.includes(id) && recorder.includes(id)) {
-      setUnlikePost({id});
-      setSelectedId(selectedId.filter((x: string) => x !== id));
-      if (!recorder.includes(id)) {
-        setRecorder([...recorder, id]);
-      }
-    }
-    if (
-      isLiked === false &&
-      selectedId?.includes(id) &&
-      recorder.includes(id)
-    ) {
-      setUnlikePost({id});
-      setSelectedId(selectedId.filter((x: string) => x !== id));
-      if (!recorder.includes(id)) {
-        setRecorder([...recorder, id]);
-      }
-    }
+    likePressedOnFeed(
+      id,
+      isLiked,
+      selectedId,
+      setSelectedId,
+      setUnlikePost,
+      setLikePost,
+      setRecorder,
+      recorder,
+    );
   };
 
   const shareOnPress = () => {
@@ -348,16 +282,14 @@ const PostListMyArtist: FC<PostListProps> = (props: PostListProps) => {
 
   // ! MUSIC AREA
   const onPressPlaySong = (val: PostList) => {
-    let data = [val];
-    addPlaylistFeed({
-      dataSong: data,
-      playSongId: Number(val.quoteToPost.targetId),
-      isPlay: true,
-    });
-    setPlaySong();
-    setPauseModeOn(true);
-    setIdNowPlaing(val.id);
-    hidePlayer();
+    playSongOnFeed(
+      val,
+      addPlaylistFeed,
+      setPauseModeOn,
+      setIdNowPlaing,
+      setPlaySong,
+      hidePlayer,
+    );
   };
 
   const handlePausePlay = () => {
@@ -681,8 +613,8 @@ const styles = StyleSheet.create({
     color: color.Neutral[10],
   },
   dropdownContainer: {
-    marginTop: 7,
-    marginBottom: 9,
+    marginTop: widthResponsive(13),
+    marginBottom: widthResponsive(10),
   },
   categoryContainerStyle: {
     width: undefined,
