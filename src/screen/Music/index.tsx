@@ -154,7 +154,6 @@ export const MusicPlayer: FC<MusicProps> = ({navigation}: MusicProps) => {
 
       {/* modal */}
       <ModalDonate
-        totalCoin={creditCount}
         onPressClose={onPressCloseModalDonate}
         onPressDonate={onPressDonate}
         modalVisible={modalDonate}
