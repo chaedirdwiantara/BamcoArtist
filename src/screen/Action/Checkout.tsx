@@ -11,7 +11,7 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {RootStackParams} from '../../navigations';
 import Color from '../../theme/Color';
 import {useTranslation} from 'react-i18next';
-import {heightPercentage, widthPercentage} from '../../utils';
+import {formatShipping, heightPercentage, widthPercentage} from '../../utils';
 import Typography from '../../theme/Typography';
 import CartItem from '../../components/atom/Cart/CartItem';
 import CartBox from '../../components/atom/Cart/CartBox';
@@ -59,12 +59,14 @@ export const Checkout: React.FC<CheckoutProps> = ({
           width={widthPercentage(20)}
           height={widthPercentage(20)}
           style={{
-            marginTop: true ? heightPercentage(4) : heightPercentage(-1),
+            marginTop: dataShippingInfo
+              ? heightPercentage(4)
+              : heightPercentage(-1),
           }}
         />
         <Gap width={widthPercentage(10)} />
-        {true ? (
-          <Text>
+        {dataShippingInfo ? (
+          <Text style={{flex: 1}}>
             <Text
               style={[
                 Typography.Subtitle2,
@@ -78,13 +80,17 @@ export const Checkout: React.FC<CheckoutProps> = ({
                 Typography.Subtitle2,
                 {color: Color.Neutral[10], lineHeight: mvs(20)},
               ]}>
-              {/* {formatShipping(dataShippingInfo)} */}
-              Jackson Wong (010 8589 8800) Jianguo Rd, 朝阳区, 北京市 (3208)
-              China
+              {formatShipping(dataShippingInfo)}
             </Text>
           </Text>
         ) : (
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate('ShippingInformation', {
+                data: dataShippingInfo,
+                from: 'checkout',
+              })
+            }>
             <Text style={[Typography.Subtitle2, {color: Color.Success[400]}]}>
               {t('Checkout.AddShipping')}
             </Text>

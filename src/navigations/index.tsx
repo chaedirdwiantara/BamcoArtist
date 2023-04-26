@@ -245,6 +245,7 @@ export type RootStackParams = {
   };
   ShippingInformation: {
     data: DataShippingProps | null;
+    from?: string;
   };
   ShowCredit: {
     songId: number;

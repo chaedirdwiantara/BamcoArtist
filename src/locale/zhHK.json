@@ -455,6 +455,8 @@
     },
     "Shipping": {
       "Title": "運送信息",
+      "Confirm": "Are you sure you want to save your shipping information?",
+      "Confirm2": "Are you sure you want to save your shipping information and continue your progress?",
       "Label": {
         "Email": "電子郵件",
         "Phone": "電話號碼",

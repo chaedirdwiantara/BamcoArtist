@@ -457,6 +457,7 @@
     "Shipping": {
       "Title": "Shipping Information",
       "Confirm": "Are you sure you want to save your shipping information?",
+      "Confirm2": "Are you sure you want to save your shipping information and continue your progress?",
       "Label": {
         "Email": "Email",
         "Phone": "Phone Number",

@@ -31,6 +31,9 @@ import {updateShipping} from '../../../api/setting.api';
 import {Button, Gap, SsuInput, SsuToast} from '../../atom';
 import {DataDropDownType, countryData} from '../../../data/dropdown';
 import {DataShippingProps} from '../../../interface/setting.interface';
+import {useNavigation} from '@react-navigation/native';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {RootStackParams} from '../../../navigations';
 
 interface ShippingInformationProps {
   dataShipping: DataShippingProps | null;
@@ -40,6 +43,7 @@ interface ShippingInformationProps {
   dataCities: DataDropDownType[];
   setSelectedCountry: (value: string) => void;
   setSelectedState: (value: string) => void;
+  from?: string;
 }
 
 export const ShippingInformationContent: React.FC<ShippingInformationProps> = ({
@@ -50,6 +54,7 @@ export const ShippingInformationContent: React.FC<ShippingInformationProps> = ({
   dataCities,
   setSelectedCountry,
   setSelectedState,
+  from,
 }) => {
   const {t} = useTranslation();
   const [state, setState] = useState({
@@ -62,6 +67,9 @@ export const ShippingInformationContent: React.FC<ShippingInformationProps> = ({
     postalCode: dataShipping?.postalCode?.toString() || '',
     address: dataShipping?.address || '',
   });
+
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParams>>();
 
   const [countryNumber, setCountryNumber] = useState<string | null>('');
   const [focusInput, setFocusInput] = useState<string | null>(null);
@@ -106,6 +114,7 @@ export const ShippingInformationContent: React.FC<ShippingInformationProps> = ({
         postalCode: Number(state.postalCode),
       };
       await updateShipping(payload);
+      if (from === 'checkout') return navigation.goBack();
       setShowModal(false);
       setToastError(false);
       InteractionManager.runAfterInteractions(() => setToastVisible(true));
@@ -281,7 +290,11 @@ export const ShippingInformationContent: React.FC<ShippingInformationProps> = ({
       <ModalConfirm
         modalVisible={showModal}
         title={t('Setting.Shipping.Title') || ''}
-        subtitle={t('Setting.Shipping.Confirm') || ''}
+        subtitle={
+          from === 'checkout'
+            ? t('Setting.Shipping.Confirm2') || ''
+            : t('Setting.Shipping.Confirm') || ''
+        }
         onPressClose={() => setShowModal(false)}
         onPressOk={onPressConfirm}
       />
