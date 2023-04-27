@@ -11,6 +11,7 @@ import {
   widthPercentage,
 } from '../../../utils';
 import {Gap} from '../../atom';
+import {LocationIcon} from '../../../assets/icon';
 
 interface TicketDescriptionType {
   duration?: boolean;
@@ -67,8 +68,18 @@ const TicketDescription: React.FC<TicketDescriptionType> = props => {
         <>
           <Text style={styles.subtitle}>{t('Event.Concert.Location')}</Text>
           <View style={styles.row}>
-            <Text style={[styles.desc, styles.descRight]}>
-              Jln Kenangan, Gang Rindu, Desa Ingin Bertemu
+            <LocationIcon
+              width={widthPercentage(20)}
+              height={widthPercentage(20)}
+            />
+            <Gap width={widthPercentage(8)} />
+            <Text
+              style={[
+                styles.desc,
+                styles.descRight,
+                {color: Color.Success[400]},
+              ]}>
+              Jln Kenangan, Gang Rindu, Desa Ingin Bertem
             </Text>
           </View>
         </>
