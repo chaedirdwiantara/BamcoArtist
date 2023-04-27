@@ -5,24 +5,28 @@ export interface ListDonateType {
 
 export const listCredit: ListDonateType[] = [
   {
-    text: '5 credit',
+    text: '5 Credit',
     value: '5',
   },
   {
-    text: '50 credit',
-    value: '50',
-  },
-  {
-    text: '100 credit',
+    text: '100 Credit',
     value: '100',
   },
   {
-    text: '1000 credit',
-    value: '1000',
+    text: '10 Credit',
+    value: '10',
   },
   {
-    text: 'Custom',
-    value: 'custom',
+    text: '200 Credit',
+    value: '200',
+  },
+  {
+    text: '50 Credit',
+    value: '50',
+  },
+  {
+    text: '500 Credit',
+    value: '500',
   },
 ];
 
