@@ -1,19 +1,17 @@
-import React, {FC, useCallback, useEffect, useState} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import {
   Dimensions,
   FlatList,
   InteractionManager,
   NativeModules,
-  Platform,
   StyleSheet,
   Text,
   View,
 } from 'react-native';
-import {ms, mvs} from 'react-native-size-matters';
+import {mvs} from 'react-native-size-matters';
 import {
-  Button,
   ButtonGradient,
-  FilterModal,
+  DropDownFilter,
   Gap,
   ListCard,
   ModalDonate,
@@ -33,7 +31,7 @@ import {
   widthPercentage,
   widthResponsive,
 } from '../../utils';
-import {useFocusEffect, useNavigation} from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParams} from '../../navigations';
 import {EmptyState} from '../../components/molecule/EmptyState/EmptyState';
@@ -50,8 +48,19 @@ import {useCreditHook} from '../../hooks/use-credit.hook';
 import {useSettingHook} from '../../hooks/use-setting.hook';
 import {profileStorage} from '../../hooks/use-storage.hook';
 import ChildrenCard from './ChildrenCard';
-import ImageModal from '../Detail/ImageModal';
-import {likePressedOnFeed, playSongOnFeed} from './ListUtils/ListFunction';
+import {
+  handleEndScrollOnFeed,
+  likePressedInFeed,
+  likePressedOnFeed,
+  likesCountInFeed,
+  playSongOnFeed,
+  useCategoryFilter,
+  useGetCreditCount,
+  useGetDataOnMount,
+  useSetDataToMainData,
+  useSortByFilter,
+} from './ListUtils/ListFunction';
+import Clipboard from '@react-native-community/clipboard';
 
 const {height} = Dimensions.get('screen');
 
@@ -61,8 +70,8 @@ interface PostListProps {
   uuidMusician?: string;
 }
 
-const {StatusBarManager} = NativeModules;
-const barHeight = StatusBarManager.HEIGHT;
+const urlText =
+  'https://open.ssu.io/track/19AiJfAtRiccvSU1EWcttT?si=36b9a686dad44ae0';
 
 const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
   const {t} = useTranslation();
@@ -71,10 +80,10 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
   const {dataRightDropdown, dataLeftDropdown, uuidMusician = ''} = props;
 
   const {dataExclusiveContent, getExclusiveContent} = useSettingHook();
-  const [dataProfileImg, setDataProfileImg] = useState<string>('');
   const [recorder, setRecorder] = useState<string[]>([]);
   const [selectedId, setSelectedId] = useState<string[]>();
   const [modalShare, setModalShare] = useState<boolean>(false);
+  const [isCopied, setIsCopied] = useState<boolean>(false);
   const [toastVisible, setToastVisible] = useState(false);
   const [modalDonate, setModalDonate] = useState<boolean>(false);
   const [modalSuccessDonate, setModalSuccessDonate] = useState<boolean>(false);
@@ -86,14 +95,10 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
   const [filterByValue, setFilterByValue] = useState<string>();
   const [categoryValue, setCategoryValue] = useState<string>();
   const [uuid, setUuid] = useState<string>();
-  const [selectedSort, setSelectedSort] = useState<string>('');
-  const [selectedCategory, setSelectedCategory] = useState<string>('');
-  const [selectedCategoryValue, setSelectedCategoryValue] =
-    useState<string>('');
-  const [isModalVisible, setModalVisible] = useState({
-    modalSortBy: false,
-    modalCategory: false,
-  });
+  const [selectedFilterMenu, setSelectedFilterMenu] =
+    useState<DataDropDownType>();
+  const [selectedCategoryMenu, setSelectedCategoryMenu] =
+    useState<DataDropDownType>();
 
   // * UPDATE HOOKS
   const [selectedIdPost, setSelectedIdPost] = useState<string>();
@@ -127,10 +132,6 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
   const {creditCount, getCreditCount} = useCreditHook();
   const MyUuid = profileStorage()?.uuid;
 
-  useEffect(() => {
-    getCreditCount();
-  }, [modalDonate]);
-
   const fetchExclusiveContent = () => {
     getExclusiveContent({uuid: MyUuid});
   };
@@ -139,95 +140,63 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
     fetchExclusiveContent();
   }, []);
 
-  useFocusEffect(
-    useCallback(() => {
-      uuidMusician !== ''
-        ? (getListDataMyPost({
-            page: 1,
-            perPage: perPage,
-            musician_uuid: uuidMusician,
-            isPremium: true,
-          }),
-          setUuid(uuidMusician))
-        : getListDataMyPost({page: 1, perPage: perPage, isPremium: true});
-      setPage(1);
-    }, [uuidMusician]),
+  //* get data on mount this page
+  useGetCreditCount(modalDonate, getCreditCount);
+
+  useGetDataOnMount(
+    uuidMusician,
+    perPage,
+    getListDataMyPost,
+    setUuid,
+    setPage,
+    true,
   );
 
   //* set response data list post to main data
-  useEffect(() => {
-    if (dataPostList && filterActive === false) {
-      let filterDataPost = [...dataMain, ...dataPostList];
-      let filterDuplicate = filterDataPost.filter(
-        (v, i, a) => a.findIndex(v2 => v2.id === v.id) === i,
-      );
-      setDataMain(filterDuplicate);
-    }
-    if (dataPostList && filterActive) {
-      setDataMain(dataPostList);
-    }
-  }, [dataPostList, filterActive]);
+  useSetDataToMainData(dataPostList, filterActive, dataMain, setDataMain);
 
   //* hit sort by endpoint
-  useEffect(() => {
-    if (selectedSort) {
-      const dataSortS =
-        t(selectedSort.toLowerCase()) === 'feed.sort.latest'
-          ? 'latest'
-          : 'popular';
-
-      getListDataMyPost({
-        page: 1,
-        perPage: perPage * page,
-        sortBy: dataSortS,
-        category: categoryValue,
-        isPremium: true,
-        musician_uuid: uuid,
-      });
-      setFilterActive(true);
-      setFilterByValue(dataSortS);
-    }
-  }, [selectedSort]);
+  useSortByFilter(
+    selectedFilterMenu?.label,
+    t,
+    getListDataMyPost,
+    perPage,
+    page,
+    categoryValue,
+    setFilterActive,
+    setFilterByValue,
+    uuid,
+    true,
+  );
 
   //* hit category endpoint
-  useEffect(() => {
-    if (selectedCategory) {
-      selectedCategory === 'Home.Tab.TopPost.Category.All'
-        ? (getListDataMyPost({
-            page: 1,
-            perPage: perPage * page,
-            sortBy: filterByValue,
-            isPremium: true,
-            musician_uuid: uuid,
-          }),
-          setFilterActive(false))
-        : (getListDataMyPost({
-            page: 1,
-            perPage: perPage * page,
-            category: selectedCategoryValue,
-            sortBy: filterByValue,
-            isPremium: true,
-            musician_uuid: uuid,
-          }),
-          setFilterActive(true));
-      setCategoryValue(selectedCategoryValue);
-    }
-  }, [selectedCategory, selectedCategoryValue]);
+  useCategoryFilter(
+    selectedCategoryMenu?.label,
+    getListDataMyPost,
+    perPage,
+    page,
+    filterByValue,
+    selectedCategoryMenu?.value,
+    setFilterActive,
+    setCategoryValue,
+    uuid,
+    true,
+  );
 
   //* Handle when end of Scroll
   const handleEndScroll = () => {
-    if (dataMain.length >= 15) {
-      getListDataMyPost({
-        page: page + 1,
-        perPage: perPage,
-        category: categoryValue,
-        sortBy: filterByValue,
-        isPremium: true,
-        musician_uuid: uuid,
-      });
-      setPage(page + 1);
-      setFilterActive(false);
-    }
+    handleEndScrollOnFeed(
+      dataMain,
+      getListDataMyPost,
+      perPage,
+      page,
+      setPage,
+      setFilterActive,
+      categoryValue,
+      filterByValue,
+      true,
+      uuid,
+    );
   };
 
   const cardOnPress = (data: PostList) => {
@@ -275,6 +244,18 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
     navigation.navigate('MusicianProfile', {id});
   };
 
+  const onModalShareHide = () => {
+    setToastVisible(true);
+    setIsCopied(false);
+  };
+
+  const onPressCopy = () => {
+    setIsCopied(true);
+    if (Clipboard && Clipboard.setString) {
+      Clipboard.setString(urlText);
+    }
+  };
+
   // ! UPDATE COMMENT AREA
   useEffect(() => {
     if (
@@ -317,75 +298,29 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
   };
   // ! END OF MUSIC AREA
 
-  // ? OFFSET AREA
-  const [offsetSortFilter, setOffsetSortFilter] = React.useState<{
-    px: number;
-    py: number;
-  }>();
-  const [offsetCategoryFilter, setOffsetCategoryFilter] = React.useState<{
-    px: number;
-    py: number;
-  }>();
-
-  // ? END OF OFFSET AREA
-
   return (
     <>
       <View style={styles.container}>
-        <View
-          style={styles.dropdownContainer}
-          onLayout={event => {
-            event.target.measure((x, y, width, height, pageX, pageY) => {
-              setOffsetSortFilter({
-                px: pageX + width,
-                py: Platform.OS === 'android' ? pageY - barHeight : pageY,
-              });
-            });
-          }}>
-          <Button
-            label={selectedSort ? t(selectedSort) : t('Feed.Sort.Title')}
-            type="border"
-            containerStyles={styles.categoryContainerStyle}
-            textStyles={styles.categoryTextStyle}
-            borderColor={'transparent'}
-            typeOfButton={'withIcon'}
-            onPress={() =>
-              setModalVisible({
-                modalSortBy: true,
-                modalCategory: false,
-              })
-            }
-          />
-        </View>
-        <View
-          style={styles.dropdownContainer}
-          onLayout={event => {
-            event.target.measure((x, y, width, height, pageX, pageY) => {
-              setOffsetCategoryFilter({
-                px: pageX + width,
-                py: Platform.OS === 'android' ? pageY - barHeight : pageY,
-              });
-            });
-          }}>
-          <Button
-            label={
-              selectedCategory
-                ? t(selectedCategory)
-                : t('Home.Tab.TopPost.Category.Title')
-            }
-            type="border"
-            containerStyles={styles.categoryContainerStyle}
-            textStyles={styles.categoryTextStyle}
-            borderColor={'transparent'}
-            typeOfButton={'withIcon'}
-            onPress={() =>
-              setModalVisible({
-                modalSortBy: false,
-                modalCategory: true,
-              })
-            }
-          />
-        </View>
+        <DropDownFilter
+          labelCaption={
+            selectedFilterMenu
+              ? t(selectedFilterMenu.label)
+              : t('Feed.Sort.Title')
+          }
+          dataFilter={dataLeftDropdown}
+          selectedMenu={setSelectedFilterMenu}
+          leftPosition={widthResponsive(-60)}
+        />
+        <DropDownFilter
+          labelCaption={
+            selectedCategoryMenu
+              ? t(selectedCategoryMenu.label)
+              : t('Home.Tab.TopPost.Category.Title')
+          }
+          dataFilter={dataRightDropdown}
+          selectedMenu={setSelectedCategoryMenu}
+          leftPosition={widthResponsive(-144)}
+        />
       </View>
       {dataExclusiveContent && feedIsLoading === false ? (
         dataMain !== null && dataMain.length !== 0 ? (
@@ -424,41 +359,8 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
                     category={categoryNormalize(item.category)}
                     onPress={() => cardOnPress(item)}
                     likeOnPress={() => likeOnPress(item.id, item.isLiked)}
-                    likePressed={
-                      selectedId === undefined
-                        ? item.isLiked
-                        : selectedId.includes(item.id) &&
-                          recorder.includes(item.id)
-                        ? true
-                        : !selectedId.includes(item.id) &&
-                          recorder.includes(item.id)
-                        ? false
-                        : !selectedId.includes(item.id) &&
-                          !recorder.includes(item.id)
-                        ? item.isLiked
-                        : item.isLiked
-                    }
-                    likeCount={
-                      selectedId === undefined
-                        ? item.likesCount
-                        : selectedId.includes(item.id) &&
-                          recorder.includes(item.id) &&
-                          item.isLiked === true
-                        ? item.likesCount
-                        : selectedId.includes(item.id) &&
-                          recorder.includes(item.id) &&
-                          item.isLiked === false
-                        ? item.likesCount + 1
-                        : !selectedId.includes(item.id) &&
-                          recorder.includes(item.id) &&
-                          item.isLiked === true
-                        ? item.likesCount - 1
-                        : !selectedId.includes(item.id) &&
-                          recorder.includes(item.id) &&
-                          item.isLiked === false
-                        ? item.likesCount
-                        : item.likesCount
-                    }
+                    likePressed={likePressedInFeed(selectedId, item, recorder)}
+                    likeCount={likesCountInFeed(selectedId, item, recorder)}
                     tokenOnPress={tokenOnPress}
                     shareOnPress={shareOnPress}
                     commentCount={item.commentsCount}
@@ -555,15 +457,16 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
         </>
       ) : null}
       <ModalShare
-        url={
-          'https://open.ssu.io/track/19AiJfAtRiccvSU1EWcttT?si=36b9a686dad44ae0'
-        }
+        url={urlText}
         modalVisible={modalShare}
         onPressClose={() => setModalShare(false)}
         titleModal={t('General.Share.Feed')}
         hideMusic
-        onPressCopy={() =>
-          InteractionManager.runAfterInteractions(() => setToastVisible(true))
+        onPressCopy={onPressCopy}
+        onModalHide={
+          isCopied
+            ? onModalShareHide
+            : () => console.log(modalShare, 'modal is hide')
         }
       />
       <SsuToast
@@ -594,52 +497,6 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
         modalVisible={modalSuccessDonate && trigger2ndModal ? true : false}
         toggleModal={onPressSuccess}
       />
-      {offsetCategoryFilter !== undefined && (
-        <FilterModal
-          toggleModal={() =>
-            setModalVisible({
-              modalCategory: false,
-              modalSortBy: false,
-            })
-          }
-          modalVisible={isModalVisible.modalCategory}
-          dataFilter={dataRightDropdown}
-          filterOnPress={setSelectedCategory}
-          sendCategory={setSelectedCategoryValue}
-          translation={true}
-          xPosition={offsetCategoryFilter?.px}
-          yPosition={offsetCategoryFilter?.py}
-          containerStyle={{
-            top: offsetCategoryFilter?.py + ms(2),
-            left: offsetCategoryFilter?.px - widthResponsive(125),
-            width: widthResponsive(125),
-          }}
-          textStyle={{fontSize: mvs(10)}}
-        />
-      )}
-      {offsetSortFilter !== undefined && (
-        <FilterModal
-          toggleModal={() =>
-            setModalVisible({
-              modalCategory: false,
-              modalSortBy: false,
-            })
-          }
-          modalVisible={isModalVisible.modalSortBy}
-          dataFilter={dataLeftDropdown}
-          filterOnPress={setSelectedSort}
-          sendCategory={() => {}}
-          translation={true}
-          xPosition={offsetSortFilter?.px}
-          yPosition={offsetSortFilter?.py}
-          containerStyle={{
-            top: offsetSortFilter?.py + ms(2),
-            left: offsetSortFilter?.px - widthResponsive(58),
-            width: widthResponsive(125),
-          }}
-          textStyle={{fontSize: mvs(10)}}
-        />
-      )}
       <ModalLoading visible={feedIsLoading} />
     </>
   );
@@ -677,10 +534,6 @@ const styles = StyleSheet.create({
   },
   textStyle: {
     color: color.Neutral[10],
-  },
-  dropdownContainer: {
-    marginTop: widthResponsive(13),
-    marginBottom: widthResponsive(10),
   },
   categoryContainerStyle: {
     width: undefined,

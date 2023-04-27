@@ -179,7 +179,7 @@ export type CommentList = {
   repliedTo: string;
   parentID: string;
   commentsCount: number;
-  commentTotal?: number;
+  commentTotal: number;
   commentLevel?: number;
   createdAt?: string;
   comments: CommentList2[];
@@ -200,6 +200,7 @@ export type CommentList2 = {
   repliedTo: string;
   parentID: string;
   commentsCount: number;
+  commentTotal: number;
   commentLevel?: number;
   createdAt?: string;
   comments: CommentList3[];

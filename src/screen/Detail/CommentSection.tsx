@@ -11,7 +11,7 @@ import {
   CommentList3,
 } from '../../interface/feed.interface';
 import {ms, mvs} from 'react-native-size-matters';
-import {filterParentID} from './function';
+import {filterParentIDLvl2, filterParentIDLvl3} from './function';
 import {DataDropDownType} from '../../data/dropdown';
 import {dummyProfile} from '../../data/image';
 import {useTranslation} from 'react-i18next';
@@ -262,6 +262,7 @@ const CommentSection: FC<CommentSectionType> = (props: CommentSectionType) => {
       commentOwner,
       commentLevel,
       parentID,
+      commentTotal,
     } = props;
     return (
       <CommentLvlTwo
@@ -324,7 +325,7 @@ const CommentSection: FC<CommentSectionType> = (props: CommentSectionType) => {
             {dataLvl3 !== undefined ? (
               <>
                 <FlatList
-                  data={filterParentID(dataLvl3, id)}
+                  data={filterParentIDLvl3(dataLvl3, id)}
                   showsVerticalScrollIndicator={false}
                   scrollEnabled={false}
                   keyExtractor={(_, index) => index.toString()}
@@ -348,7 +349,7 @@ const CommentSection: FC<CommentSectionType> = (props: CommentSectionType) => {
                 />
               </>
             ) : null}
-            {commentsCount > 0 &&
+            {commentTotal > 0 &&
               (dataLvl3 === undefined ? (
                 <TouchableOpacity>
                   <Text
@@ -358,8 +359,8 @@ const CommentSection: FC<CommentSectionType> = (props: CommentSectionType) => {
                   </Text>
                 </TouchableOpacity>
               ) : dataLvl3 !== undefined &&
-                filterParentID(dataLvl3, id).length !==
-                  commentsCount -
+                filterParentIDLvl3(dataLvl3, id).length !==
+                  commentTotal -
                     deletedCommentParentId.filter(x => x == id).length +
                     addCommentParentId.filter(x => x == id).length ? (
                 <TouchableOpacity>
@@ -469,17 +470,16 @@ const CommentSection: FC<CommentSectionType> = (props: CommentSectionType) => {
                 {dataLvl2 !== undefined ? (
                   <>
                     <FlatList
-                      data={filterParentID(dataLvl2, item.id)}
+                      data={filterParentIDLvl2(dataLvl2, item.id)}
                       showsVerticalScrollIndicator={false}
                       scrollEnabled={false}
                       keyExtractor={(_, index) => index.toString()}
-                      renderItem={({item}) => (
+                      renderItem={({item}: {item: CommentList2}) => (
                         <CommentChildrenLvl2
                           id={item.id}
                           caption={item.caption}
                           likesCount={item.likesCount}
                           commentsCount={item.commentsCount}
-                          // @ts-ignore
                           comments={item.comments}
                           repliedTo={item.repliedTo}
                           parentID={item?.parentID}
@@ -487,6 +487,7 @@ const CommentSection: FC<CommentSectionType> = (props: CommentSectionType) => {
                           timeAgo={item.timeAgo}
                           commentOwner={item.commentOwner}
                           commentLevel={item.commentLevel}
+                          commentTotal={item.commentTotal}
                         />
                       )}
                     />
@@ -501,7 +502,7 @@ const CommentSection: FC<CommentSectionType> = (props: CommentSectionType) => {
                       </Text>
                     </TouchableOpacity>
                   ) : dataLvl2 !== undefined &&
-                    filterParentID(dataLvl2, item.id).length !=
+                    filterParentIDLvl2(dataLvl2, item.id).length !=
                       item.commentsCount -
                         deletedCommentParentId.filter(x => x == item.id)
                           .length +
