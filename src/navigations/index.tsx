@@ -100,6 +100,7 @@ import Track from '../screen/Action/Track';
 import {MerchDetail} from '../screen/MerchDetail';
 import {ConcertDetail} from '../screen/ConcertDetail';
 import {TicketDetail} from '../screen/ConcertDetail/TicketDetail';
+import Shop from '../screen/Action/Shop';
 
 // Icon
 import {CrownIcon, FeedIcon, HomeIcon, UserProfileIcon} from '../assets/icon';
@@ -286,6 +287,7 @@ export type RootStackParams = {
   TransactionDetailTicket: undefined;
   Track: undefined;
   TicketDetail: undefined;
+  Shop: undefined;
 };
 
 export type MainTabParams = {
@@ -496,6 +498,7 @@ export const RootStackScreen = () => (
     />
     <RootStack.Screen name="Track" component={Track} />
     <RootStack.Screen name="TicketDetail" component={TicketDetail} />
+    <RootStack.Screen name="Shop" component={Shop} />
   </RootStack.Navigator>
 );
 

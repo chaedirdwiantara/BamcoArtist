@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
   },
   tabSpacer: {
     borderWidth: 1,
-    borderColor: Color.Neutral[10],
+    borderColor: Color.Dark[300],
     marginHorizontal: widthPercentage(10),
   },
 });

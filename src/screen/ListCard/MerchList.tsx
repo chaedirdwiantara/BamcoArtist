@@ -12,8 +12,13 @@ import {MerchData} from '../../interface/event.interface';
 import {useTranslation} from 'react-i18next';
 import LoadingSpinner from '../../components/atom/Loading/LoadingSpinner';
 
-const MerchList: FC = () => {
+type MerchListType = {
+  type?: string;
+};
+
+const MerchList: FC<MerchListType> = props => {
   const {t} = useTranslation();
+  const {type = 'action'} = props;
   const {getListDataMerch} = useEventHook();
 
   const {
@@ -21,7 +26,8 @@ const MerchList: FC = () => {
     isLoading,
     refetch,
     isRefetching,
-  } = useQuery(['/merch'], () => getListDataMerch());
+  } = useQuery([`/merch/${type}`], () => getListDataMerch());
+
   const filterList: MerchData | undefined = dataMerchList?.data.find(merch => {
     return merch.name === 'product_latest';
   });
@@ -74,7 +80,7 @@ const MerchList: FC = () => {
         estimatedItemSize={150}
         numColumns={2}
         refreshControl={
-          <RefreshControl refreshing={isRefetching} onRefresh={refetch} />
+          <RefreshControl refreshing={false} onRefresh={refetch} />
         }
       />
     </>

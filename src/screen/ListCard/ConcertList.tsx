@@ -12,8 +12,13 @@ import {useQuery} from 'react-query';
 import {useTranslation} from 'react-i18next';
 import LoadingSpinner from '../../components/atom/Loading/LoadingSpinner';
 
-const ConcertList: FC = () => {
+type ConcertListType = {
+  type?: string;
+};
+
+const ConcertList: FC<ConcertListType> = props => {
   const {t} = useTranslation();
+  const {type = 'action'} = props;
   const {getListDataConcert} = useEventHook();
 
   const {
@@ -21,7 +26,7 @@ const ConcertList: FC = () => {
     isLoading,
     refetch,
     isRefetching,
-  } = useQuery(['/concert'], () => getListDataConcert());
+  } = useQuery([`/concert/${type}`], () => getListDataConcert());
 
   const filterList: MerchData | undefined = dataConcertList?.data.find(
     concert => {

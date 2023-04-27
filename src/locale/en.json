@@ -863,5 +863,8 @@
   },
   "Tracking": {
     "Title": "Track Status"
+  },
+  "Shop": {
+    "Title": "Shop"
   }
 }

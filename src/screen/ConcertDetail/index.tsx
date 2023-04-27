@@ -203,7 +203,9 @@ export const ConcertDetail: React.FC<MerchDetailProps> = ({
             <Text style={styles.title}>{data.title}</Text>
             <Text style={styles.title2}>Jakarta Velodrome</Text>
 
-            <View style={styles.owner}>
+            <TouchableOpacity
+              style={styles.owner}
+              onPress={() => navigation.navigate('Shop')}>
               <View style={{marginHorizontal: 5}}>
                 {data?.ownerImage ? (
                   <Avatar
@@ -216,7 +218,7 @@ export const ConcertDetail: React.FC<MerchDetailProps> = ({
               </View>
 
               <Text style={styles.ownerLabel}>{data.owner}</Text>
-            </View>
+            </TouchableOpacity>
 
             <View style={styles.disc}>
               <CoinIcon
