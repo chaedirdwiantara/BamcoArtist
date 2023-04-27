@@ -7,6 +7,8 @@ import {
   TouchableOpacity,
   InteractionManager,
 } from 'react-native';
+import {useTranslation} from 'react-i18next';
+import {mvs} from 'react-native-size-matters';
 
 import {
   heightPercentage,
@@ -22,28 +24,29 @@ import {
   DefaultImage,
   MusicSquareAddIcon,
 } from '../../../assets/icon';
-import {Gap, SsuToast} from '../../atom';
-import Color from '../../../theme/Color';
-import {PhotoPlaylist} from './PhotoPlaylist';
-import {TopNavigation} from '../TopNavigation';
-import {ModalConfirm} from '../Modal/ModalConfirm';
-import {dateFormat} from '../../../utils/date-format';
-import {color, font, typography} from '../../../theme';
 import {
   addOtherPlaylist,
   deletePlaylist,
   removeOtherPlaylist,
   removeSongFromPlaylist,
 } from '../../../api/playlist.api';
+import {Gap, SsuToast} from '../../atom';
+import Color from '../../../theme/Color';
+import {PhotoPlaylist} from './PhotoPlaylist';
+import {TopNavigation} from '../TopNavigation';
+import {ModalShare} from '../Modal/ModalShare';
+import {ModalConfirm} from '../Modal/ModalConfirm';
+import {dateFormat} from '../../../utils/date-format';
+import {color, font, typography} from '../../../theme';
+import {DataDropDownType} from '../../../data/dropdown';
+import {storage} from '../../../hooks/use-storage.hook';
+import ListSongs from '../../../screen/ListCard/ListSongs';
 import {SongList} from '../../../interface/song.interface';
 import {SongTitlePlay} from '../SongTitlePlay/SongTitlePlay';
-import {Playlist} from '../../../interface/playlist.interface';
-import {useTranslation} from 'react-i18next';
-import {ModalShare} from '../Modal/ModalShare';
 import {usePlayerHook} from '../../../hooks/use-player.hook';
 import DropdownMore from '../V2/DropdownFilter/DropdownMore';
-import ListSongs from '../../../screen/ListCard/ListSongs';
-import {mvs} from 'react-native-size-matters';
+import {Playlist} from '../../../interface/playlist.interface';
+import {ListDataSearchSongs} from '../../../interface/search.interface';
 
 interface Props {
   goBackProfile: (showToast: boolean) => void;
@@ -133,6 +136,7 @@ export const PlaylistContent: React.FC<Props> = ({
   const onPressDelete = async () => {
     try {
       await deletePlaylist(dataDetail);
+      storage.set('fetchingProfile', true);
       goBackProfile(true);
     } catch (error) {
       console.log(error);
@@ -157,7 +161,7 @@ export const PlaylistContent: React.FC<Props> = ({
     }
   };
 
-  const resultDataMore = (dataResult: any) => {
+  const resultDataMore = (dataResult: DataDropDownType) => {
     if (dataResult?.value === 'DeletePlaylist') {
       setModalVisible(true);
     } else if (dataResult?.value === 'EditPlaylist') {
@@ -174,7 +178,10 @@ export const PlaylistContent: React.FC<Props> = ({
     }
   };
 
-  const pressSongDataMore = (dataResult: any, item: SongList) => {
+  const pressSongDataMore = (
+    dataResult: DataDropDownType,
+    item: SongList | ListDataSearchSongs,
+  ) => {
     if (dataResult?.value === 'RemoveFromPlaylist') {
       onPressRemoveSong(item.id, item.title);
     } else if (dataResult?.value === 'ShowDetails') {
@@ -220,6 +227,7 @@ export const PlaylistContent: React.FC<Props> = ({
           <DropdownMore
             dataFilter={othersPlaylist ? dataMoreOther : dataMore}
             selectedMenu={resultDataMore}
+            compWitdth={widthResponsive(150)}
           />
         }
         leftIcon={<ArrowLeftIcon />}
