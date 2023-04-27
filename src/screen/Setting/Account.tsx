@@ -5,6 +5,7 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import Color from '../../theme/Color';
 import {AccountContent} from '../../components';
 import {RootStackParams} from '../../navigations';
+import {useSettingHook} from '../../hooks/use-setting.hook';
 import {useLocationHook} from '../../hooks/use-location.hook';
 import {ModalLoading} from '../../components/molecule/ModalLoading/ModalLoading';
 
@@ -21,12 +22,14 @@ export const AccountScreen: React.FC<AccountProps> = ({
     getDataAllCountry,
     getCitiesOfCountry,
   } = useLocationHook();
+  const {getListMoodGenre, listGenre, listMood} = useSettingHook();
   const [selectedCountry, setSelectedCountry] = useState<string>(
     data?.data.locationCountry || '',
   );
 
   useEffect(() => {
     getDataAllCountry();
+    getListMoodGenre({page: 0, perPage: 30});
   }, []);
 
   useEffect(() => {
@@ -46,6 +49,8 @@ export const AccountScreen: React.FC<AccountProps> = ({
             dataCitiesOfCountry !== undefined ? dataCitiesOfCountry : []
           }
           profile={data}
+          moods={listMood}
+          genres={listGenre}
           onPressGoBack={onPressGoBack}
           setSelectedCountry={setSelectedCountry}
         />

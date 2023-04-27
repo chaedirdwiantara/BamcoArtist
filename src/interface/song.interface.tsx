@@ -189,6 +189,7 @@ export type DetailSongResponseType = {
 };
 
 export type Musician = {
+  imageProfile: string;
   uuid: string;
   name: string;
   image: string;

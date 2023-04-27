@@ -365,6 +365,30 @@
         "Label": "Add Label Name"
       }
     },
+    "Security": {
+      "Title": "Security"
+    },
+    "DeleteAccount": {
+      "Title": "Delete Account",
+      "Subtitle": "Are you sure you want to delete your account?",
+      "ToastDeletion": "Your account is undergoing deletion",
+      "About": {
+        "TitleDeletion": "About Account Deletion",
+        "FirstParagraph": "This means that all of your assets and data associated with your account will be permanently deleted.",
+        "SecondParagraph": "Unfortunately, this action is irreversible and cannot be reversed in the future. We understand that this decision may not be easy for you to make.",
+        "ThirdParagraph": "Therefore, we allow you to have 30 days to log in and cancel your account deletion request. Once this period has passed, your account will be permanently deleted.",
+        "TitleReason": "Reason of Deletion",
+        "FourthParagraph": "If you wish to delete your account, please select a reason from the dropdown menu below : "
+      },
+      "InputDeletion": {
+        "ReasonInput": "Reason",
+        "ReasonPlaceholder": "Tell us more",
+        "PasswordInput": "Input Password"
+      }
+    },
+    "TnC&PP": {
+      "Title": "TnC & Privacy Policy"
+    },
     "Password": {
       "Title": "更改密碼",
       "Label": {
@@ -427,7 +451,9 @@
       "Title": "偏好",
       "Label": {
         "Genre": "類型",
-        "Mood": "氣氛"
+        "Mood": "氣氛",
+        "GenrePreference": "Genre Preference",
+        "MoodPreference": "Mood Preference"
       },
       "Placeholder": {
         "Genre": "Select Genre",
@@ -514,7 +540,9 @@
         "Bug": "報告錯誤",
         "TextBug": "應用程式中的某些內容已損壞或無法按預期操作",
         "Suggest": "改進建議",
-        "TextSuggest": "此應用程式的新想法或需要加強的功能"
+        "TextSuggest": "此應用程式的新想法或需要加強的功能",
+        "Help": "Help",
+        "TextHelp": "If you want to know more contact us"
       },
       "Placeholder": {
         "Email": "輸入你的電郵",

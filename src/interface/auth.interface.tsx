@@ -100,3 +100,16 @@ export interface ResendOTPResponseType {
   message: string;
   status: number;
 }
+
+export interface DeleteAccountPropsType {
+  deleteReasonId: number;
+  deleteReasonText: string;
+  password: string;
+}
+
+export interface DeleteAccountResponseType {
+  code: number;
+  data: string;
+  message: string;
+  status: number;
+}

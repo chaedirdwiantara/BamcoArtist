@@ -59,6 +59,10 @@ import {SendReportScreen} from '../screen/Setting/SendReport';
 import {PushNotificationScreen} from '../screen/Setting/PushNotification';
 import {PreferenceSettingScreen} from '../screen/Setting/Preference';
 import {ExclusiveContentSetting} from '../screen/Setting/ExclusiveContent';
+import {SecurityScreen} from '../screen/Setting/Security';
+import {TnCAndPPScreen} from '../screen/Setting/TnCAndPP';
+import {AboutDeletionScreen} from '../screen/Setting/DeleteAccount/AboutDeletion';
+import {InputDeletionScreen} from '../screen/Setting/DeleteAccount/InputDeletion';
 
 // Profile
 import {ProfileScreen} from '../screen/Profile/Profile';
@@ -121,6 +125,7 @@ import {SongAlbum} from '../interface/song.interface';
 import ListPlaylist from '../screen/Playlist/ListPlaylist';
 
 export type RootStackParams = {
+  AboutDeletion: undefined;
   Account: {
     data: ProfileResponseType;
   };
@@ -159,6 +164,10 @@ export type RootStackParams = {
     uuid: string;
   };
   ForgotPassword: undefined;
+  InputDeletion: {
+    id: number;
+    text: string;
+  };
   Language: undefined;
   ListImage: {
     title: string;
@@ -209,13 +218,19 @@ export type RootStackParams = {
     title: string;
   };
   Setting: undefined;
+  Security: {
+    info?: boolean;
+    message?: string;
+  };
   Signup: undefined;
   SignupSSO: {
     email: string;
     ssoType: RegistrationType;
     ssoId: string;
   };
-  SignInGuest: undefined;
+  SignInGuest: {
+    showToastDelete?: boolean;
+  };
   ShippingInformation: {
     data: DataShippingProps | null;
   };
@@ -228,6 +243,7 @@ export type RootStackParams = {
   Notification: undefined;
   PostDetail: PostList;
   SearchScreen: undefined;
+  TnCAndPP: undefined;
   TopupCoin: undefined;
   MusicianProfile: {
     id: string;
@@ -378,6 +394,10 @@ export const RootStackScreen = () => (
       name="PreferenceSetting"
       component={PreferenceSettingScreen}
     />
+    <RootStack.Screen name="Security" component={SecurityScreen} />
+    <RootStack.Screen name="TnCAndPP" component={TnCAndPPScreen} />
+    <RootStack.Screen name="AboutDeletion" component={AboutDeletionScreen} />
+    <RootStack.Screen name="InputDeletion" component={InputDeletionScreen} />
     <RootStack.Screen
       name="PushNotification"
       component={PushNotificationScreen}
@@ -402,7 +422,11 @@ export const RootStackScreen = () => (
     <RootStack.Screen name="SongDetails" component={SongDetailsScreen} />
     <RootStack.Screen name="ShowCredit" component={ShowCreditScreen} />
     <RootStack.Screen name="Album" component={AlbumScreen} />
-    <RootStack.Screen name="SignInGuest" component={SignInGuestScreen} />
+    <RootStack.Screen
+      name="SignInGuest"
+      component={SignInGuestScreen}
+      initialParams={{showToastDelete: false}}
+    />
     <RootStack.Screen name="Signup" component={SignupScreen} />
     <RootStack.Screen name="SignupSSO" component={SignupSSOScreen} />
     <RootStack.Screen name="MainTab" component={TabScreen} />

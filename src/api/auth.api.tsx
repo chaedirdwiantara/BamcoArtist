@@ -1,9 +1,11 @@
 import {
   ConfirmEmailOTPRegisterResponseType,
   ConfirmSmsOTPLoginResponseType,
+  DeleteAccountResponseType,
+  DeleteAccountPropsType,
   LoginPhonePropsType,
-  LoginPropsType,
   LoginResponseType,
+  LoginPropsType,
   RegisterPropsType,
   RegisterResponseType,
   ResendOTPResponseType,
@@ -187,6 +189,18 @@ export const changePassword = async (
       code: code,
       newPassword: password,
     },
+  });
+
+  return data;
+};
+
+export const deleteAccount = async (
+  params: DeleteAccountPropsType,
+): Promise<DeleteAccountResponseType> => {
+  const {data} = await SsuAPI().request<DeleteAccountResponseType>({
+    url: '/delete',
+    method: 'DELETE',
+    data: params,
   });
 
   return data;

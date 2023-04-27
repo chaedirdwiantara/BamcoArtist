@@ -109,6 +109,7 @@ const MultiDropdown: React.FC<InputDropdownProps> = (
         placeholderStyle={{
           fontSize: mvs(13),
           color: placeholderColor,
+          paddingLeft: Platform.OS === 'ios' ? 0 : mvs(4),
         }}
         inputSearchStyle={styles.inputSearchStyle}
         iconStyle={styles.iconStyle}

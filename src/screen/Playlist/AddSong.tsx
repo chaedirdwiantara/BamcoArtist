@@ -1,5 +1,6 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import {View, StyleSheet} from 'react-native';
+import {useFocusEffect} from '@react-navigation/native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 
 import Color from '../../theme/Color';
@@ -25,14 +26,16 @@ export const AddSongScreen: React.FC<AddSongProps> = ({
     perPage: 15,
   });
 
-  useEffect(() => {
-    getListDataSong({
-      playlistID: route.params.id,
-      keyword: search,
-      page: meta.page,
-      perPage: meta.perPage,
-    });
-  }, [trigger, search]);
+  useFocusEffect(
+    useCallback(() => {
+      getListDataSong({
+        playlistID: route.params.id,
+        keyword: search,
+        page: meta.page,
+        perPage: meta.perPage,
+      });
+    }, [trigger, search]),
+  );
 
   const onPressGoBack = () => {
     navigation.goBack();
@@ -45,7 +48,9 @@ export const AddSongScreen: React.FC<AddSongProps> = ({
 
   const onPressAddSong = (props?: AddSongPropsType) => {
     setAddSongToPlaylist(props);
-    setTrigger(!trigger);
+    setTimeout(() => {
+      setTrigger(!trigger);
+    }, 500);
   };
 
   const nextPage = () => {

@@ -1,13 +1,9 @@
 import React from 'react';
-import {View, StyleSheet} from 'react-native';
-
-import {SsuInput} from '../../atom';
-import Color from '../../../theme/Color';
-import {TopNavigation} from '../TopNavigation';
-import {ArrowLeftIcon} from '../../../assets/icon';
-import {MenuText} from '../../atom/MenuText/MenuText';
-import {heightPercentage, width, widthPercentage} from '../../../utils';
+import {View, StyleSheet, Text} from 'react-native';
 import {useTranslation} from 'react-i18next';
+import {color, typography} from '../../../theme';
+import {MenuText} from '../../atom/MenuText/MenuText';
+import {heightPercentage, width} from '../../../utils';
 
 interface EmailProps {
   email: string | undefined;
@@ -18,7 +14,6 @@ interface EmailProps {
 
 export const EmailContent: React.FC<EmailProps> = ({
   email,
-  onPressGoBack,
   goToChangeEmail,
   registrationType,
 }) => {
@@ -31,31 +26,20 @@ export const EmailContent: React.FC<EmailProps> = ({
     : t('Setting.Email.Label.Add');
 
   return (
-    <View style={styles.root}>
-      <TopNavigation.Type1
-        title={t('Setting.Email.Title')}
-        leftIcon={<ArrowLeftIcon />}
-        itemStrokeColor={Color.Neutral[10]}
-        leftIconAction={onPressGoBack}
-        containerStyles={{paddingHorizontal: widthPercentage(12)}}
-      />
-      <SsuInput.InputLabel
-        label={t('Setting.Email.Title') || ''}
-        value={email ?? '-'}
-        editable={false}
-        containerInputStyles={{borderBottomWidth: 0}}
-        containerStyles={styles.containerInput}
-      />
+    <View style={styles.containerInput}>
+      <Text style={[typography.Overline, styles.label]}>
+        {t('Setting.Email.Label.Old') || ''}
+      </Text>
       {isSSO ? (
         <MenuText.RightIconDisable
-          text={text}
+          text={email ?? '-'}
           containerStyles={{marginTop: heightPercentage(15)}}
           onPress={() => (isSSO ? null : goToChangeEmail())}
         />
       ) : (
         <MenuText.RightIcon
-          text={text}
-          containerStyles={{marginTop: heightPercentage(15)}}
+          text={email ?? '-'}
+          containerStyles={{marginTop: heightPercentage(10)}}
           onPress={() => (isSSO ? null : goToChangeEmail())}
         />
       )}
@@ -64,13 +48,12 @@ export const EmailContent: React.FC<EmailProps> = ({
 };
 
 const styles = StyleSheet.create({
-  root: {
-    flex: 1,
-    backgroundColor: Color.Dark[800],
-  },
   containerInput: {
     width: width * 0.9,
     alignSelf: 'center',
-    marginTop: heightPercentage(15),
+    paddingTop: heightPercentage(15),
+  },
+  label: {
+    color: color.Neutral[50],
   },
 });

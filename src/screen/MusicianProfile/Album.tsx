@@ -27,7 +27,7 @@ const Album: FC<AlbumProps> = (props: AlbumProps) => {
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
 
   const handleToDetail = (dataAlbum: AlbumData) => {
-    navigation.navigate('Album', dataAlbum);
+    navigation.push('Album', dataAlbum);
   };
 
   return (
