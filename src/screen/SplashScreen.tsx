@@ -46,6 +46,8 @@ export const SplashScreen: React.FC<SplashScrennProps> = ({
       navigation.replace(
         storage.getBoolean('isLogin') || storage.getBoolean('isGuest')
           ? 'MainTab'
+          : storage.getBoolean('isDeleted')
+          ? 'RecoverAccount'
           : storage.getBoolean('skipOnboard')
           ? 'SignInGuest'
           : 'Boarding',

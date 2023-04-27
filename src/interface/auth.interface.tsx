@@ -51,6 +51,7 @@ export interface LoginResponseType {
     refreshToken: string;
     refreshTokenExpiresAt: string;
     lastLoginAt: string | null;
+    deletedAt: string | null;
   };
   message: string;
   status: number;
@@ -108,6 +109,13 @@ export interface DeleteAccountPropsType {
 }
 
 export interface DeleteAccountResponseType {
+  code: number;
+  data: string;
+  message: string;
+  status: number;
+}
+
+export interface RestoreAccountResponseType {
   code: number;
   data: string;
   message: string;
