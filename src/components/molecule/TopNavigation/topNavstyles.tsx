@@ -16,7 +16,7 @@ const topNavstyles = StyleSheet.create({
       Platform.OS === 'ios'
         ? heightResponsive(barHeight)
         : heightResponsive(barHeight + 15),
-    paddingBottom: heightResponsive(20),
+    paddingBottom: heightResponsive(25),
   },
   leftContainer: {
     flex: 1,
