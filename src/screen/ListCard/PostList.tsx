@@ -50,6 +50,7 @@ import {useTranslation} from 'react-i18next';
 import {useCreditHook} from '../../hooks/use-credit.hook';
 import ChildrenCard from './ChildrenCard';
 import ImageModal from '../Detail/ImageModal';
+import {likePressedOnFeed, playSongOnFeed} from './ListUtils/ListFunction';
 
 interface PostListProps {
   dataRightDropdown: DataDropDownType[];
@@ -161,81 +162,16 @@ const PostListHome: FC<PostListProps> = (props: PostListProps) => {
   };
 
   const likeOnPress = (id: string, isLiked: boolean) => {
-    if (isLiked === true && selectedId === undefined) {
-      setUnlikePost({id});
-      setSelectedId([]);
-      if (!recorder.includes(id)) {
-        setRecorder([...recorder, id]);
-      }
-    }
-    if (!isLiked && selectedId === undefined) {
-      setLikePost({id});
-      setSelectedId([id]);
-      if (!recorder.includes(id)) {
-        setRecorder([...recorder, id]);
-      }
-    }
-    if (
-      isLiked === true &&
-      !selectedId?.includes(id) &&
-      !recorder.includes(id)
-    ) {
-      setUnlikePost({id});
-      if (!recorder.includes(id)) {
-        setRecorder([...recorder, id]);
-      }
-    }
-    if (
-      isLiked === false &&
-      !selectedId?.includes(id) &&
-      !recorder.includes(id)
-    ) {
-      setLikePost({id});
-      setSelectedId(selectedId ? [...selectedId, id] : [id]);
-      if (!recorder.includes(id)) {
-        setRecorder([...recorder, id]);
-      }
-    }
-    if (
-      isLiked === true &&
-      !selectedId?.includes(id) &&
-      recorder.includes(id)
-    ) {
-      setLikePost({id});
-      setSelectedId(selectedId ? [...selectedId, id] : [id]);
-      if (!recorder.includes(id)) {
-        setRecorder([...recorder, id]);
-      }
-    }
-    if (
-      isLiked === false &&
-      !selectedId?.includes(id) &&
-      recorder.includes(id)
-    ) {
-      setLikePost({id});
-      setSelectedId(selectedId ? [...selectedId, id] : [id]);
-      if (!recorder.includes(id)) {
-        setRecorder([...recorder, id]);
-      }
-    }
-    if (isLiked === true && selectedId?.includes(id) && recorder.includes(id)) {
-      setUnlikePost({id});
-      setSelectedId(selectedId.filter((x: string) => x !== id));
-      if (!recorder.includes(id)) {
-        setRecorder([...recorder, id]);
-      }
-    }
-    if (
-      isLiked === false &&
-      selectedId?.includes(id) &&
-      recorder.includes(id)
-    ) {
-      setUnlikePost({id});
-      setSelectedId(selectedId.filter((x: string) => x !== id));
-      if (!recorder.includes(id)) {
-        setRecorder([...recorder, id]);
-      }
-    }
+    likePressedOnFeed(
+      id,
+      isLiked,
+      selectedId,
+      setSelectedId,
+      setUnlikePost,
+      setLikePost,
+      setRecorder,
+      recorder,
+    );
   };
 
   const shareOnPress = () => {
@@ -296,16 +232,14 @@ const PostListHome: FC<PostListProps> = (props: PostListProps) => {
 
   // ! MUSIC AREA
   const onPressPlaySong = (val: PostList) => {
-    let data = [val];
-    addPlaylistFeed({
-      dataSong: data,
-      playSongId: Number(val.quoteToPost.targetId),
-      isPlay: true,
-    });
-    setPlaySong();
-    setPauseModeOn(true);
-    setIdNowPlaing(val.id);
-    hidePlayer();
+    playSongOnFeed(
+      val,
+      addPlaylistFeed,
+      setPauseModeOn,
+      setIdNowPlaing,
+      setPlaySong,
+      hidePlayer,
+    );
   };
 
   const handlePausePlay = () => {
@@ -484,7 +418,6 @@ const PostListHome: FC<PostListProps> = (props: PostListProps) => {
         modalStyle={{marginHorizontal: widthResponsive(24)}}
       />
       <ModalDonate
-        totalCoin={creditCount}
         onPressDonate={onPressDonate}
         modalVisible={modalDonate}
         onPressClose={onPressCloseModalDonate}
@@ -532,8 +465,8 @@ const styles = StyleSheet.create({
     color: color.Neutral[10],
   },
   dropdownContainer: {
-    marginTop: 7,
-    marginBottom: 9,
+    marginTop: widthResponsive(13),
+    marginBottom: widthResponsive(10),
   },
   categoryContainerStyle: {
     width: undefined,

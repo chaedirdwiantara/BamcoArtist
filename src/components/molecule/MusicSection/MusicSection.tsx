@@ -129,7 +129,6 @@ export const MusicSection: React.FC<ListProps> = (props: ListProps) => {
       />
 
       <ModalDonate
-        totalCoin={creditCount}
         onPressDonate={onPressDonate}
         modalVisible={modalDonate}
         onPressClose={() => setModalDonate(false)}

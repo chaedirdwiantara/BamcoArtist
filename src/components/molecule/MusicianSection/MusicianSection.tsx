@@ -159,7 +159,6 @@ const MusicianSection: React.FC<MusicianProps> = (props: MusicianProps) => {
         {...props}
       />
       <ModalDonate
-        totalCoin={creditCount}
         onPressDonate={onPressDonate}
         modalVisible={modalDonate}
         onPressClose={() => setModalDonate(false)}

@@ -159,7 +159,6 @@ const MusicianProfile: FC<PostDetailProps> = ({route}: PostDetailProps) => {
       )}
       <ModalLoading visible={isLoading} />
       <ModalDonate
-        totalCoin={creditCount}
         onPressDonate={onPressDonate}
         modalVisible={modalDonate}
         onPressClose={onPressCloseModalDonate}

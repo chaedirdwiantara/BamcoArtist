@@ -16,6 +16,7 @@ import {AvatarProfile, Button, ButtonGradient, Gap} from '../../components';
 import {color, font} from '../../theme';
 import {heightPercentage, width, widthResponsive} from '../../utils';
 import initialname from '../../utils/initialname';
+import Color from '../../theme/Color';
 
 export interface ProfileHeaderProps {
   avatarUri?: string;
@@ -106,7 +107,8 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = (
                     <>
                       <ButtonGradient
                         label={t('Preference.Following')}
-                        gradientStyles={styles.btnContainer}
+                        containerStyles={styles.btnContainerFollowed}
+                        textStyles={{color: color.Pink.linear}}
                         onPress={unFollowOnPressed}
                       />
                       <Gap width={11} />
@@ -155,7 +157,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   fullname: {
-    color: color.Neutral[10],
+    color: Color.Neutral[10],
     fontFamily: font.InterRegular,
     fontWeight: 'bold',
     fontSize: mvs(18),
@@ -163,12 +165,12 @@ const styles = StyleSheet.create({
   containerFooter: {},
   username: {
     fontSize: mvs(12),
-    color: color.Neutral[10],
+    color: Color.Neutral[10],
     fontFamily: font.InterRegular,
   },
   description: {
     fontSize: mvs(12),
-    color: color.Neutral[10],
+    color: Color.Neutral[10],
     fontFamily: font.InterRegular,
     maxWidth: width * 0.9,
     textAlign: 'center',
@@ -182,12 +184,20 @@ const styles = StyleSheet.create({
     height: undefined,
     width: widthResponsive(100),
     aspectRatio: heightPercentage(100 / 32),
+    backgroundColor: Color.Pink.linear,
   },
   btnContainer2: {
     height: undefined,
     width: widthResponsive(100),
     aspectRatio: heightPercentage(100 / 32),
-    backgroundColor: color.Success[400],
+    backgroundColor: Color.Success[400],
+  },
+  btnContainerFollowed: {
+    height: undefined,
+    width: widthResponsive(100),
+    aspectRatio: heightPercentage(100 / 32),
+    backgroundColor: 'transparent',
+    borderColor: Color.Pink.linear,
   },
   editIcon: {
     position: 'absolute',
@@ -203,7 +213,7 @@ const styles = StyleSheet.create({
     marginTop: Platform.OS === 'ios' ? heightPercentage(25) : 0,
   },
   initialName: {
-    color: color.Neutral[10],
+    color: Color.Neutral[10],
   },
   bgChild: {
     height: '100%',

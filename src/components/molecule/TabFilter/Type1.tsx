@@ -26,7 +26,7 @@ interface TabFilterProps {
   translation?: boolean;
 }
 
-const SelectedColor = color.Pink[100];
+const SelectedColor = color.Pink[200];
 const UnSelectedColor = color.Dark[50];
 
 const Type1: React.FC<TabFilterProps> = ({
