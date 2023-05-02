@@ -35,6 +35,7 @@ import {useTranslation} from 'react-i18next';
 import {DataExclusiveResponse} from '../../interface/setting.interface';
 import PostListProfile from '../ListCard/PostListProfile';
 import MainTab from '../../components/molecule/ProfileContent/MainTab/MainTab';
+import {FansScreen} from './ListFans';
 
 type OnScrollEventHandler = (
   event: NativeSyntheticEvent<NativeScrollEvent>,
@@ -198,6 +199,10 @@ export const MusicianDetail: React.FC<MusicianDetailProps> = ({
                   }}
                 />
               )
+            ) : filter[selectedIndex].filterName === 'Musician.Tab.Fans' ? (
+              <View style={{paddingHorizontal: widthResponsive(20)}}>
+                <FansScreen uuid={uuid} />
+              </View>
             ) : filter[selectedIndex].filterName === 'Musician.Tab.Main' ? (
               <View style={{paddingHorizontal: widthResponsive(20)}}>
                 <MainTab uuid={uuid} />

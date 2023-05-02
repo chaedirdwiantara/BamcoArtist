@@ -26,7 +26,7 @@ interface MusicianProps {
   musicianName: string;
   imgUri: string;
   containerStyles?: ViewStyle;
-  point?: number | null;
+  point?: string;
   isFollowed?: boolean;
   followerMode?: boolean;
   followersCount?: number;

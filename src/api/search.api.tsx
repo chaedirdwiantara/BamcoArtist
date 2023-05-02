@@ -81,3 +81,15 @@ export const listFollowers = async (
 
   return data;
 };
+
+export const listFanss = async (
+  props: FollowersProps,
+): Promise<ListSearchFansResponseType> => {
+  const {data} = await SsuAPI().request<ListSearchFansResponseType>({
+    url: `/fans/${props.uuid}/following`,
+    method: 'GET',
+    params: props,
+  });
+
+  return data;
+};
