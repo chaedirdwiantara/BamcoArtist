@@ -1,5 +1,4 @@
 import {
-  Platform,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -7,19 +6,13 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {Avatar, Gap} from '../../atom';
-import {
-  elipsisText,
-  heightPercentage,
-  normalize,
-  widthResponsive,
-} from '../../../utils';
+import {elipsisText, heightPercentage, widthResponsive} from '../../../utils';
 import {color, font} from '../../../theme';
 import {CommentIcon, LoveIcon} from '../../../assets/icon';
 import {ms} from 'react-native-size-matters';
 import {DataDropDownType, dataUpdateComment} from '../../../data/dropdown';
-import {Dropdown} from '../DropDown';
 import {useTranslation} from 'react-i18next';
 import DropdownMore from '../V2/DropdownFilter/DropdownMore';
 
@@ -78,13 +71,19 @@ const CommentLvlTwo: React.FC<ListProps> = (props: ListProps) => {
           marginLeft: widthResponsive(6),
         }}>
         <View style={[styles.topSection, {marginTop: showEdit ? ms(-7) : 0}]}>
-          <Text style={styles.userName} onPress={toDetailOnPress}>
-            {elipsisText(userNameLvl2, 21)}
-            <Text style={styles.regularText}>
-              {' '}
-              {elipsisText(userIdLvl2, 10)}
+          {userIdLvl2 !== 'accountdeactivated' ? (
+            <Text style={styles.userName} onPress={toDetailOnPress}>
+              {elipsisText(userNameLvl2, 21)}
+              <Text style={styles.regularText}>
+                {' '}
+                {`@${elipsisText(userIdLvl2, 10)}`}
+              </Text>
             </Text>
-          </Text>
+          ) : (
+            <Text style={styles.regularText}>
+              {`@${elipsisText(userIdLvl2, 10)}`}
+            </Text>
+          )}
           <View
             style={{
               flexDirection: 'row',

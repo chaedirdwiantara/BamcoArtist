@@ -25,8 +25,6 @@ import {
   AlbumData,
   DataDetailMusician,
 } from '../../interface/musician.interface';
-import PostListPublic from '../ListCard/PostListPublic';
-import {dropDownDataCategory, dropDownDataSort} from '../../data/dropdown';
 import DataMusician from './DataMusician';
 import {Playlist} from '../../interface/playlist.interface';
 import ListPlaylist from '../ListCard/ListPlaylist';
@@ -174,12 +172,7 @@ export const MusicianDetail: React.FC<MusicianDetailProps> = ({
                   paddingHorizontal: widthResponsive(24),
                   width: '100%',
                 }}>
-                <PostListProfile
-                  uuidMusician={uuid}
-                  dataRightDropdown={dropDownDataCategory}
-                  dataLeftDropdown={dropDownDataSort}
-                  {...exclusiveContent}
-                />
+                <PostListProfile uuidMusician={uuid} {...exclusiveContent} />
               </View>
             ) : filter[selectedIndex].filterName === 'Musician.Tab.Music' ? (
               dataPlaylist.length > 0 ? (

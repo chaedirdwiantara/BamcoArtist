@@ -1,5 +1,4 @@
 import {
-  Platform,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -9,11 +8,10 @@ import {
 } from 'react-native';
 import React from 'react';
 import {Avatar, Gap} from '../../atom';
-import {heightPercentage, widthResponsive} from '../../../utils';
+import {elipsisText, heightPercentage, widthResponsive} from '../../../utils';
 import {color, font} from '../../../theme';
 import {CommentIcon, LoveIcon} from '../../../assets/icon';
-import {ms, mvs} from 'react-native-size-matters';
-import {Dropdown} from '../DropDown';
+import {ms} from 'react-native-size-matters';
 import {dataUpdateComment} from '../../../data/dropdown';
 import {DataDropDownType} from '../../../data/dropdown';
 import {useTranslation} from 'react-i18next';
@@ -73,10 +71,20 @@ const PostComment: React.FC<ListProps> = (props: ListProps) => {
           marginLeft: widthResponsive(6),
         }}>
         <View style={[styles.topSection, {marginTop: showEdit ? ms(-7) : 0}]}>
-          <Text style={styles.fullname} onPress={toDetailOnPress}>
-            {fullName}
-            <Text style={styles.regularText}> {userName}</Text>
-          </Text>
+          {userName !== 'accountdeactivated' ? (
+            <Text style={styles.fullname} onPress={toDetailOnPress}>
+              {fullName}
+              <Text style={styles.regularText}>
+                {' '}
+                {`@${elipsisText(userName, 10)}`}
+              </Text>
+            </Text>
+          ) : (
+            <Text style={styles.regularText}>{`@${elipsisText(
+              userName,
+              10,
+            )}`}</Text>
+          )}
           <View
             style={{
               flexDirection: 'row',

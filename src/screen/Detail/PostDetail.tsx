@@ -21,7 +21,7 @@ import {
 } from '../../components';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {RootStackParams} from '../../navigations';
+import {MainTabParams, RootStackParams} from '../../navigations';
 import {heightPercentage, widthResponsive} from '../../utils';
 import {ms, mvs} from 'react-native-size-matters';
 import CommentSection from './CommentSection';
@@ -110,9 +110,11 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   const MyUuid = profileStorage()?.uuid;
 
   const data = route.params;
+
   const musicianName = data.musician.fullname;
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
+  const navigation2 = useNavigation<NativeStackNavigationProp<MainTabParams>>();
 
   const [likePressed, setLikePressed] = useState<boolean>();
   const [readMore, setReadMore] = useState<boolean>(false);
@@ -442,6 +444,7 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
             ? cmntToCmnt.parentID
             : '',
         commentsCount: 0,
+        commentTotal: 0,
         commentLevel: cmntToCmnt?.commentLvl,
         createdAt: '',
         comments: [],
@@ -669,6 +672,7 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
         repliedTo: cmntToCmnt?.userName ? cmntToCmnt?.userName : '',
         parentID: cmntToCmnt?.parentID ? cmntToCmnt?.parentID : '',
         commentsCount: 0,
+        commentTotal: 0,
         commentLevel: cmntToCmnt?.commentLvl,
         createdAt: '',
         comments: [],
@@ -863,14 +867,15 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
 
   useEffect(() => {
     if (idUserTonavigate && dataUserCheck !== '') {
-      if (dataUserCheck === 'Musician') {
+      if (idUserTonavigate === MyUuid) {
+        navigation2.navigate('Profile', {});
+      } else if (dataUserCheck === 'Musician') {
         return (
           handleToDetailMusician(idUserTonavigate),
           setDataUserCheck(''),
           setIdUserTonavigate(undefined)
         );
-      }
-      if (dataUserCheck === 'Fans') {
+      } else if (dataUserCheck === 'Fans') {
         return (
           navigation.navigate('OtherUserProfile', {id: idUserTonavigate}),
           setDataUserCheck(''),
