@@ -39,6 +39,7 @@ import {NoMoreFeeds} from './NoMoreFeeds/NoMoreFeeds';
 import {NotificationCard} from './NotificationCard/NotificationCard';
 import {PlaylistContent} from './PlaylistContent/PlaylistContent';
 import PostComment from './DetailPost/PostComment';
+import PopUp from './PopUp/popUp';
 import {ProfileContent} from './ProfileContent/ProfileContent';
 import {ProfileHeader} from './ProfileContent/components/Header';
 import {ReferralContent} from './ReferralContent/ReferralContent';
@@ -103,6 +104,7 @@ export {
   NotificationCard,
   PlaylistContent,
   PostComment,
+  PopUp,
   ProfileContent,
   ProfileHeader,
   RadioButton,
