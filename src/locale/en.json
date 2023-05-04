@@ -866,5 +866,11 @@
   },
   "Shop": {
     "Title": "Shop"
+  },
+  "Review": {
+    "Title": "Review",
+    "Rating": "Take a moment to rate this item",
+    "Input": "Have you satisfied about this product?",
+    "Placeholder": "Ex: I love this product, the finishing is very clean!"
   }
 }

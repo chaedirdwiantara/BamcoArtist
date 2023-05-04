@@ -15,6 +15,7 @@ import {heightPercentage, normalize, widthPercentage} from '../../utils';
 import Typography from '../../theme/Typography';
 import CartItem from '../../components/atom/Cart/CartItem';
 import {mvs} from 'react-native-size-matters';
+import {ModalReview} from '../../components/molecule/Modal/ModalReview';
 
 type TransactionDetailMerchProps = NativeStackScreenProps<
   RootStackParams,
@@ -190,6 +191,8 @@ export const TransactionDetailMerch: React.FC<TransactionDetailMerchProps> = ({
           <Gap height={heightPercentage(20)} />
         </View>
       </ScrollView>
+
+      <ModalReview modalVisible={true} onPressClose={() => null} />
     </View>
   );
 };
