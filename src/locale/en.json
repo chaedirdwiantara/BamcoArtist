@@ -269,7 +269,8 @@
       "Color": "Choose Color",
       "Variant": "Choose Variant",
       "Condition": "Condition",
-      "Sold": "Sold"
+      "Sold": "Sold",
+      "Product": "Product"
     }
   },
   "Profile": {
