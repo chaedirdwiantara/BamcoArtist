@@ -49,6 +49,7 @@ import {
 } from '../../utils';
 import {usePlayerStore} from '../../store/player.store';
 import {mvs} from 'react-native-size-matters';
+import Reviews from './Reviews';
 
 type MerchDetailProps = NativeStackScreenProps<RootStackParams, 'MerchDetail'>;
 
@@ -259,69 +260,72 @@ export const MerchDetail: React.FC<MerchDetailProps> = ({
             <Text style={styles.desc}>{data.desc ? data.desc : '-'}</Text>
           </View>
           <SsuDivider />
-          <View style={[styles.descContainer, {flexDirection: 'row'}]}>
-            <Text style={[styles.subtitle, {marginBottom: 0}]}>
-              {t('Event.Merch.Condition')} :
-            </Text>
-            <Gap width={widthPercentage(6)} />
-            <Text
-              style={[
-                styles.subtitle,
-                {color: Color.Pink.linear, marginBottom: 0},
-              ]}>
-              New
-            </Text>
-          </View>
-          <SsuDivider />
-          <View style={styles.descContainer}>
-            <View style={styles.attribute}>
-              <Text style={styles.subtitle}>{t('Event.Merch.Size')}</Text>
-              <SelectSize
-                selectedSize={selectedSize}
-                sizes={sizes}
-                onPressSize={size => setSelectedSize(size)}
+          <Reviews />
+          <>
+            <View style={[styles.descContainer, {flexDirection: 'row'}]}>
+              <Text style={[styles.subtitle, {marginBottom: 0}]}>
+                {t('Event.Merch.Condition')} :
+              </Text>
+              <Gap width={widthPercentage(6)} />
+              <Text
+                style={[
+                  styles.subtitle,
+                  {color: Color.Pink.linear, marginBottom: 0},
+                ]}>
+                New
+              </Text>
+            </View>
+            <SsuDivider />
+            <View style={styles.descContainer}>
+              <View style={styles.attribute}>
+                <Text style={styles.subtitle}>{t('Event.Merch.Size')}</Text>
+                <SelectSize
+                  selectedSize={selectedSize}
+                  sizes={sizes}
+                  onPressSize={size => setSelectedSize(size)}
+                />
+              </View>
+              <View style={styles.attribute}>
+                <Text style={styles.subtitle}>{t('Event.Merch.Color')}</Text>
+                <SelectColor
+                  selectedColor={selectedColor}
+                  colors={colors}
+                  onPressColor={color => setSelectedColor(color)}
+                />
+              </View>
+              <View style={styles.attribute}>
+                <Text style={styles.subtitle}>{t('Event.Merch.Variant')}</Text>
+                <SelectSize
+                  selectedSize={selectedVariant}
+                  sizes={variant}
+                  onPressSize={size => setSelectedVariant(size)}
+                />
+              </View>
+              <View>
+                <Text style={styles.subtitle}>{t('Event.Quantity')}</Text>
+                <QuantityInput
+                  value={quantity.toString()}
+                  onPress={handleQuantity}
+                  onChangeQuantity={(value: string) =>
+                    handleChangeQuantity(value)
+                  }
+                />
+              </View>
+            </View>
+            <View style={styles.descContainer}>
+              <ButtonGradient
+                label={t('Btn.BuyNow')}
+                gradientStyles={{width: '100%'}}
+                containerStyles={{marginBottom: 8}}
+                onPress={() => null}
+              />
+              <Button
+                label={t('Btn.AddToCart')}
+                type="border"
+                containerStyles={{width: '100%'}}
               />
             </View>
-            <View style={styles.attribute}>
-              <Text style={styles.subtitle}>{t('Event.Merch.Color')}</Text>
-              <SelectColor
-                selectedColor={selectedColor}
-                colors={colors}
-                onPressColor={color => setSelectedColor(color)}
-              />
-            </View>
-            <View style={styles.attribute}>
-              <Text style={styles.subtitle}>{t('Event.Merch.Variant')}</Text>
-              <SelectSize
-                selectedSize={selectedVariant}
-                sizes={variant}
-                onPressSize={size => setSelectedVariant(size)}
-              />
-            </View>
-            <View>
-              <Text style={styles.subtitle}>{t('Event.Quantity')}</Text>
-              <QuantityInput
-                value={quantity.toString()}
-                onPress={handleQuantity}
-                onChangeQuantity={(value: string) =>
-                  handleChangeQuantity(value)
-                }
-              />
-            </View>
-          </View>
-          <View style={styles.descContainer}>
-            <ButtonGradient
-              label={t('Btn.BuyNow')}
-              gradientStyles={{width: '100%'}}
-              containerStyles={{marginBottom: 8}}
-              onPress={() => null}
-            />
-            <Button
-              label={t('Btn.AddToCart')}
-              type="border"
-              containerStyles={{width: '100%'}}
-            />
-          </View>
+          </>
         </ScrollView>
       </View>
     </KeyboardAvoidingView>
