@@ -168,7 +168,13 @@ export const MerchDetail: React.FC<MerchDetailProps> = ({
               <Text style={styles.ownerLabel}>{data.owner}</Text>
             </View>
             <Text style={styles.price}>
-              {data?.currency} {toCurrency(data.price, {withFraction: false})}
+              {data.charge === 'no_tickets'
+                ? ''
+                : data.charge === 'free_event'
+                ? 'Free'
+                : data.currency +
+                  ' ' +
+                  toCurrency(data.price / 100, {withFraction: false})}
             </Text>
           </View>
           <SsuDivider />
