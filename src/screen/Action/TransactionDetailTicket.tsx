@@ -33,7 +33,7 @@ import {mvs} from 'react-native-size-matters';
 import Typography from '../../theme/Typography';
 import LineUp from '../../components/molecule/EventDetail/LineUp';
 import TicketDescription from '../../components/molecule/EventDetail/TicketDescription';
-import {Image} from 'react-native';
+import QRCode from 'react-native-qrcode-svg';
 
 type MerchDetailProps = NativeStackScreenProps<
   RootStackParams,
@@ -101,27 +101,46 @@ const TransactionDetailTicket: React.FC<MerchDetailProps> = ({
             <Text style={styles.title2}>
               3 March 2023, Jakarta Velodrome, Jakarta
             </Text>
-            <Gap height={heightPercentage(8)} />
-            <Image
-              source={require('../../assets/image/barcode.png')}
-              style={{width: '100%'}}
-              resizeMode={'cover'}
-            />
-            <Gap height={heightPercentage(16)} />
-            <View style={{flexDirection: 'row', justifyContent: 'center'}}>
-              <Text style={styles.title2}>Ticket Code</Text>
-              <Gap width={widthPercentage(4)} />
-              <Text style={[styles.title2, {color: Color.Pink.linear}]}>
-                HITCS200
-              </Text>
+          </View>
+          <SsuDivider />
+          <View
+            style={{
+              flexDirection: 'row',
+              padding: widthPercentage(24),
+            }}>
+            <View style={styles.qrContainer}>
+              <QRCode value="HITCS200" size={widthPercentage(120)} />
             </View>
-            <Gap height={heightPercentage(8)} />
-            <Button
-              type="border"
-              label="Send to Email"
-              containerStyles={{width: '100%'}}
-              textStyles={{color: Color.Success[400]}}
-            />
+            <Gap width={widthPercentage(16)} />
+            <View style={{flex: 1}}>
+              <View>
+                <Text style={styles.title2}>Ticket Code</Text>
+                <Gap width={widthPercentage(4)} />
+                <Text
+                  style={[Typography.Subtitle1, {color: Color.Pink.linear}]}>
+                  HITCS200
+                </Text>
+              </View>
+              <Gap height={heightPercentage(8)} />
+              <View>
+                <Text style={styles.title2}>Class</Text>
+                <Gap width={widthPercentage(4)} />
+                <Text
+                  style={[Typography.Subtitle1, {color: Color.Pink.linear}]}>
+                  Silver
+                </Text>
+              </View>
+              <Gap height={heightPercentage(8)} />
+              <Button
+                type="border"
+                label="Send to Email"
+                containerStyles={{
+                  width: '100%',
+                  aspectRatio: heightPercentage(279 / 60),
+                }}
+                textStyles={{color: Color.Success[400]}}
+              />
+            </View>
           </View>
 
           <SsuDivider />
@@ -191,7 +210,6 @@ const styles = StyleSheet.create({
   title2: {
     ...Typography.Subtitle2,
     color: Color.Dark[50],
-    marginBottom: heightPercentage(12),
   },
   subtitle: {
     color: 'white',
@@ -260,5 +278,12 @@ const styles = StyleSheet.create({
     ...Typography.Heading6,
     color: Color.Success[400],
     paddingTop: heightPercentage(6),
+  },
+  qrContainer: {
+    width: widthPercentage(140),
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: Color.Neutral[10],
+    padding: widthPercentage(10),
   },
 });
