@@ -1,6 +1,5 @@
 import {
   Dimensions,
-  InteractionManager,
   KeyboardAvoidingView,
   NativeModules,
   Platform,
@@ -40,16 +39,13 @@ import ImageList from './showImage';
 import {useFeedHook} from '../../hooks/use-feed.hook';
 import {useUploadImageHook} from '../../hooks/use-uploadImage.hook';
 import {ModalLoading} from '../../components/molecule/ModalLoading/ModalLoading';
-import {Image} from 'react-native-image-crop-picker';
+import {Image, Video} from 'react-native-image-crop-picker';
 import MusicPreview from '../../components/molecule/MusicPreview/MusicPreview';
 import {ListDataSearchSongs, Transcode} from '../../interface/search.interface';
 import {usePlayerHook} from '../../hooks/use-player.hook';
 import {dummySongImg} from '../../data/image';
 import {SongList, TranscodedSongType} from '../../interface/song.interface';
 import {useTranslation} from 'react-i18next';
-import Video from 'react-native-video';
-import SsuAPI2 from '../../api/baseRinjaniNew';
-import {UploadVideoResponseType} from '../../interface/uploadImage.interface';
 import * as Progress from 'react-native-progress';
 import VideoComp from '../../components/molecule/VideoPlayer/videoComp';
 
@@ -90,6 +86,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
     setIsLoadingVideo,
     setDataVideo,
     setIsErrorVideo,
+    setUploadVideo,
   } = useUploadImageHook();
   const {
     isPlaying,
@@ -115,6 +112,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   const [active, setActive] = useState<boolean>(false);
 
   // * video hooks
+  const [uriVideo, setUriVideo] = useState<Video[]>([]);
   const [progress, setProgress] = useState<number>();
   const [preventPost, setPreventPost] = useState<boolean>(false);
   const [deleteDataVideo, setDeleteDataVideo] = useState<boolean>(false);
@@ -134,57 +132,28 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
 
   // ! UPLOAD VIDEO AREA
 
-  const uploadVideo = async (
-    video: Image,
-  ): Promise<UploadVideoResponseType> => {
-    let formData = new FormData();
-    formData.append('file', {
-      uri: video.path,
-      name: `${Date.now()}.mp4`,
-      type: video.mime,
-    });
-
-    const {data} = await SsuAPI2().request<UploadVideoResponseType>({
-      url: '/upload-video',
-      method: 'POST',
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-      transformRequest: (data, header) => {
-        return formData;
-      },
-      timeout: 60000,
-      onUploadProgress: ({loaded, total}) => {
-        setProgress(loaded / total);
-      },
-      data: formData,
-    });
-
-    return data;
-  };
-
-  const setUploadVideo = async (video: Image) => {
-    InteractionManager.runAfterInteractions(() => setIsLoadingVideo(true));
-    try {
-      const response = await uploadVideo(video);
-      setDataVideo(response.data);
-    } catch (error) {
-      setIsErrorVideo(true);
-    } finally {
-      setIsLoadingVideo(false);
-    }
+  const sendVideoUri = (val: Video) => {
+    uriVideo.length + 1 <= 4 ? setUriVideo([...uriVideo, val]) : null;
   };
 
   useEffect(() => {
-    if (uri.length > 0 && uri[0]?.duration <= 15000) {
-      if (uri[0].mime === 'video/mp4') {
-        setUploadVideo(uri[0]);
+    if (
+      uriVideo.length > 0 &&
+      uriVideo[0]?.duration != null &&
+      uriVideo[0]?.duration <= 15000
+    ) {
+      if (uriVideo[0].mime === 'video/mp4') {
+        setUploadVideo(uriVideo[0], setProgress);
         setPreventPost(true);
       }
-    } else if (uri.length > 0 && uri[0]?.duration > 15000) {
+    } else if (
+      uriVideo.length > 0 &&
+      uriVideo[0]?.duration != null &&
+      uriVideo[0]?.duration > 15000
+    ) {
       setModalConfirm(true);
     }
-  }, [uri]);
+  }, [uriVideo]);
 
   useEffect(() => {
     if (dataVideo) {
@@ -209,7 +178,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
             coverImage: dataVideo.coverImage,
             encodeDashUrl: dataVideo.encodeDashUrl,
             encodeHlsUrl: dataVideo.encodeHlsUrl,
-            duration: uri[0]?.duration,
+            duration: uriVideo[0]?.duration ?? 0,
           },
         });
       }
@@ -494,7 +463,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
       title: dataMusic[0] ? dataMusic[0].title : '',
       musicianId: dataMusic[0] ? dataMusic[0].musicianUUID : '',
       musicianName: dataMusic[0] ? dataMusic[0].musicianName : '',
-      imageUrl: dataMusic[0] ? dataMusic[0].imageUrl : undefined,
+      imageUrl: dataMusic[0]?.imageUrl ?? [],
       songDuration:
         dataMusic[0] && dataMusic[0].songDuration !== null
           ? dataMusic[0].songDuration
@@ -505,6 +474,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
       isLiked:
         dataMusic[0]?.isLiked !== undefined ? dataMusic[0].isLiked : false,
       album: {id: -1},
+      musician: {name: dataMusic[0] ? dataMusic[0].musicianName : ''},
     };
 
     addPlaylist({
@@ -552,6 +522,10 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
 
   const closeImage = (id: number) => {
     setUri(uri.filter((x: Image) => x.path !== uri[id].path));
+  };
+
+  const closeVideo = (id: number) => {
+    setUriVideo([]);
     setDeleteDataVideo(true);
   };
 
@@ -659,11 +633,11 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
               />
             ) : null}
 
-            {uri[0]?.mime === 'video/mp4' && (
+            {uriVideo[0]?.mime === 'video/mp4' && (
               <VideoComp
-                sourceUri={uri[0]?.path}
+                sourceUri={uriVideo[0]?.path}
                 withCloseIcon
-                onPress={closeImage}
+                onPress={closeVideo}
                 dontShowText={progress && !dataVideo ? true : false}
                 videoContainer={{
                   height: keyBrdIsActive
@@ -841,6 +815,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
           title={t('Post.Create.Media') || ''}
           modalVisible={isModalVisible.modalImagePicker}
           sendUri={sendSingleUri}
+          sendUriVideo={sendVideoUri}
           sendUriMultiple={sendUri}
           onDeleteImage={resetImage}
           onPressClose={closeModal}

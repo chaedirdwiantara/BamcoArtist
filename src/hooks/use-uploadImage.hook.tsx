@@ -30,10 +30,13 @@ export const useUploadImageHook = () => {
     }
   };
 
-  const setUploadVideo = async (video: Image) => {
+  const setUploadVideo = async (
+    video: Image,
+    setProgress: React.Dispatch<React.SetStateAction<number | undefined>>,
+  ) => {
     InteractionManager.runAfterInteractions(() => setIsLoadingVideo(true));
     try {
-      const response = await uploadVideo(video);
+      const response = await uploadVideo(video, setProgress);
       setDataVideo(response.data);
     } catch (error) {
       setIsErrorVideo(true);

@@ -44,6 +44,7 @@ export type CreatePostProps = {
     coverImage: string;
     encodeDashUrl: string;
     encodeHlsUrl: string;
+    duration: number;
   };
 };
 
