@@ -13,13 +13,13 @@ import {
   UsernameAvailabilityResponseType,
 } from '../interface/auth.interface';
 import {RegistrationType} from '../interface/profile.interface';
-import SsuAPI from './baseMusician';
+import SsuAPI from './baseRinjani';
 
 export const registerUser = async (
   registerProps: RegisterPropsType,
 ): Promise<RegisterResponseType> => {
   const {data} = await SsuAPI().request<RegisterResponseType>({
-    url: '/register',
+    url: '/musician-app/register',
     method: 'POST',
     data: registerProps,
   });
@@ -31,7 +31,7 @@ export const loginUser = async (
   loginProps: LoginPropsType | LoginPhonePropsType,
 ): Promise<LoginResponseType> => {
   const {data} = await SsuAPI().request<LoginResponseType>({
-    url: '/login',
+    url: '/musician-app/login',
     method: 'POST',
     data: loginProps,
   });
@@ -44,7 +44,7 @@ export const loginSso = async (
   registrationType: RegistrationType,
 ): Promise<LoginResponseType> => {
   const {data} = await SsuAPI().request<LoginResponseType>({
-    url: '/login-sso',
+    url: '/musician-app/login-sso',
     method: 'POST',
     data: {
       user: user,
@@ -58,7 +58,7 @@ export const loginPhoneNumber = async (
   loginProps: LoginPropsType | LoginPhonePropsType,
 ): Promise<LoginResponseType> => {
   const {data} = await SsuAPI().request<LoginResponseType>({
-    url: '/login-phone-number',
+    url: '/musician-app/login-phone-number',
     method: 'POST',
     data: loginProps,
   });
@@ -70,7 +70,7 @@ export const checkUsername = async (
   username: string,
 ): Promise<UsernameAvailabilityResponseType> => {
   const {data} = await SsuAPI().request<UsernameAvailabilityResponseType>({
-    url: '/username-availability',
+    url: '/musician-app/username-availability',
     method: 'POST',
     data: {
       username: username,
@@ -85,7 +85,7 @@ export const confirmEmailOtpRegister = async (
   code: string,
 ): Promise<ConfirmEmailOTPRegisterResponseType> => {
   const {data} = await SsuAPI().request<ConfirmEmailOTPRegisterResponseType>({
-    url: '/confirm-otp/email/register',
+    url: '/musician-app/confirm-otp/email/register',
     method: 'POST',
     data: {
       email: email,
@@ -103,7 +103,7 @@ export const confirmSmsOtpLogin = async (
   context: string,
 ): Promise<ConfirmSmsOTPLoginResponseType> => {
   const {data} = await SsuAPI().request<ConfirmSmsOTPLoginResponseType>({
-    url: '/confirm-otp/sms',
+    url: '/musician-app/confirm-otp/sms',
     method: 'POST',
     data: {
       phoneNumber: phoneNumber,
@@ -120,7 +120,7 @@ export const resendOtpEmail = async (
   context?: string,
 ): Promise<ResendOTPResponseType> => {
   const {data} = await SsuAPI().request<ResendOTPResponseType>({
-    url: '/resend-otp/email',
+    url: '/musician-app/resend-otp/email',
     method: 'POST',
     data: {
       email: email,
@@ -135,7 +135,7 @@ export const resendOtpSms = async (
   context?: string,
 ): Promise<ResendOTPResponseType> => {
   const {data} = await SsuAPI().request<ResendOTPResponseType>({
-    url: '/resend-otp/sms',
+    url: '/musician-app/resend-otp/sms',
     method: 'POST',
     data: {
       phoneNumber: phoneNumber,
@@ -150,7 +150,7 @@ export const forgotPasswordEmail = async (
   email: string,
 ): Promise<ResendOTPResponseType> => {
   const {data} = await SsuAPI().request<ResendOTPResponseType>({
-    url: '/forgot-password',
+    url: '/musician-app/forgot-password',
     method: 'POST',
     data: {
       identifier: email,
@@ -165,7 +165,7 @@ export const confirmEmailOtpForgotPassword = async (
   code: string,
 ): Promise<ConfirmEmailOTPRegisterResponseType> => {
   const {data} = await SsuAPI().request<ConfirmEmailOTPRegisterResponseType>({
-    url: '/confirm-otp/email/register',
+    url: '/musician-app/confirm-otp/email/register',
     method: 'POST',
     data: {
       email: email,
@@ -183,7 +183,7 @@ export const changePassword = async (
   password: string,
 ): Promise<LoginResponseType> => {
   const {data} = await SsuAPI().request<LoginResponseType>({
-    url: '/confirm-change-password',
+    url: '/musician-app/confirm-change-password',
     method: 'POST',
     data: {
       identifier: email,
@@ -199,7 +199,7 @@ export const deleteAccount = async (
   params: DeleteAccountPropsType,
 ): Promise<DeleteAccountResponseType> => {
   const {data} = await SsuAPI().request<DeleteAccountResponseType>({
-    url: '/delete',
+    url: '/musician-app/delete',
     method: 'DELETE',
     data: params,
   });
@@ -209,7 +209,7 @@ export const deleteAccount = async (
 
 export const restoreAccount = async (): Promise<RestoreAccountResponseType> => {
   const {data} = await SsuAPI().request<RestoreAccountResponseType>({
-    url: '/restore',
+    url: '/musician-app/restore',
     method: 'POST',
   });
 
