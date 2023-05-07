@@ -1,5 +1,6 @@
 import React from 'react';
 import {ViewStyle} from 'react-native';
+import {mvs} from 'react-native-size-matters';
 
 import HorizontalCard from './HorizontalCard';
 import PlaylistHome from '../../../screen/ListCard/PlaylistHome';
@@ -28,6 +29,9 @@ const ListPlaylistHome: React.FC<ListPlaylistHomeProps> = (
       children={children()}
       onPress={onPress}
       containerStyle={containerStyle}
+      containerTitleStyle={{
+        marginBottom: mvs(5),
+      }}
     />
   );
 };
