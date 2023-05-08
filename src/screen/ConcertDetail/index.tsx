@@ -18,15 +18,12 @@ import Swiper from 'react-native-swiper';
 import {ArrowLeftIcon, DefaultAvatar, ThreeDotsIcon} from '../../assets/icon';
 import {
   Avatar,
-  Button,
   ButtonGradient,
   SsuDivider,
   TopNavigation,
 } from '../../components';
 import QuantityInput from '../../components/molecule/EventDetail/QuantityInput';
-import SelectColor, {
-  SelectColorType,
-} from '../../components/molecule/EventDetail/SelectColor';
+import {SelectColorType} from '../../components/molecule/EventDetail/SelectColor';
 import SelectSize, {
   SelectSizeType,
 } from '../../components/molecule/EventDetail/SelectSize';
@@ -172,7 +169,13 @@ export const ConcertDetail: React.FC<MerchDetailProps> = ({
               <Text style={styles.ownerLabel}>{data.owner}</Text>
             </View>
             <Text style={styles.price}>
-              {data?.currency} {toCurrency(data.price, {withFraction: false})}
+              {data.charge === 'no_tickets'
+                ? ''
+                : data.charge === 'free_event'
+                ? 'Free'
+                : data.currency +
+                  ' ' +
+                  toCurrency(data.price / 100, {withFraction: false})}
             </Text>
           </View>
           <SsuDivider />
