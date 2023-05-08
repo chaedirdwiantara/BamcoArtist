@@ -1,6 +1,6 @@
 import {useState} from 'react';
 import {InteractionManager} from 'react-native';
-import {Image} from 'react-native-image-crop-picker';
+import {Image, Video} from 'react-native-image-crop-picker';
 import {uploadImage, uploadVideo} from '../api/uploadImage.api';
 import {
   UploadImageResponseType,
@@ -31,7 +31,7 @@ export const useUploadImageHook = () => {
   };
 
   const setUploadVideo = async (
-    video: Image,
+    video: Video,
     setProgress: React.Dispatch<React.SetStateAction<number | undefined>>,
   ) => {
     InteractionManager.runAfterInteractions(() => setIsLoadingVideo(true));

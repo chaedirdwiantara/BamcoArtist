@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {createRef, FC, useEffect, useState} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import {color, font} from '../../theme';
 import {
   Button,
@@ -48,6 +48,7 @@ import {SongList, TranscodedSongType} from '../../interface/song.interface';
 import {useTranslation} from 'react-i18next';
 import * as Progress from 'react-native-progress';
 import VideoComp from '../../components/molecule/VideoPlayer/videoComp';
+import {useVideoStore} from '../../store/video.store';
 
 type PostDetailProps = NativeStackScreenProps<RootStackParams, 'CreatePost'>;
 
@@ -112,11 +113,12 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   const [active, setActive] = useState<boolean>(false);
 
   // * video hooks
-  const [uriVideo, setUriVideo] = useState<Video[]>([]);
   const [progress, setProgress] = useState<number>();
   const [preventPost, setPreventPost] = useState<boolean>(false);
   const [deleteDataVideo, setDeleteDataVideo] = useState<boolean>(false);
   const [keyBrdIsActive, setKeybrdIsActive] = useState<boolean>(false);
+
+  const {uriVideo, setUriVideo} = useVideoStore();
 
   useEffect(() => {
     if (dataAudienceChoosen) {
@@ -133,27 +135,20 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   // ! UPLOAD VIDEO AREA
 
   const sendVideoUri = (val: Video) => {
-    uriVideo.length + 1 <= 4 ? setUriVideo([...uriVideo, val]) : null;
+    setUriVideo(val);
   };
 
+  //CALL uploadVideo
   useEffect(() => {
-    if (
-      uriVideo.length > 0 &&
-      uriVideo[0]?.duration != null &&
-      uriVideo[0]?.duration <= 15000
-    ) {
-      if (uriVideo[0].mime === 'video/mp4') {
-        setUploadVideo(uriVideo[0], setProgress);
-        setPreventPost(true);
-      }
-    } else if (
-      uriVideo.length > 0 &&
-      uriVideo[0]?.duration != null &&
-      uriVideo[0]?.duration > 15000
-    ) {
+    if (!uriVideo || uriVideo.duration == null) return;
+
+    if (uriVideo.duration <= 15000) {
+      setUploadVideo(uriVideo, setProgress);
+      setPreventPost(true);
+    } else {
       setModalConfirm(true);
     }
-  }, [uriVideo]);
+  }, [uriVideo, setProgress]);
 
   useEffect(() => {
     if (dataVideo) {
@@ -163,27 +158,30 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
 
   //* Create post video
   useEffect(() => {
-    if (dataVideo) {
-      if (
-        active &&
-        musicData === undefined &&
-        dataUpdatePostProps === undefined
-      ) {
-        setCreatePost({
-          caption: inputText,
-          category: valueFilter ? valueFilter : 'highlight',
-          isPremium: dataAudience === 'Feed.Exclusive' ? true : false,
-          video: {
-            targetType: 'video',
-            coverImage: dataVideo.coverImage,
-            encodeDashUrl: dataVideo.encodeDashUrl,
-            encodeHlsUrl: dataVideo.encodeHlsUrl,
-            duration: uriVideo[0]?.duration ?? 0,
-          },
-        });
-      }
+    const shouldCreatePost =
+      dataVideo &&
+      active &&
+      uriVideo &&
+      musicData === undefined &&
+      dataUpdatePostProps === undefined;
+
+    if (shouldCreatePost) {
+      const video = {
+        targetType: 'video',
+        coverImage: dataVideo.coverImage,
+        encodeDashUrl: dataVideo.encodeDashUrl,
+        encodeHlsUrl: dataVideo.encodeHlsUrl,
+        duration: uriVideo.duration ?? 0,
+      };
+
+      setCreatePost({
+        caption: inputText,
+        category: valueFilter ? valueFilter : 'highlight',
+        isPremium: dataAudience === 'Feed.Exclusive' ? true : false,
+        video,
+      });
     }
-  }, [dataVideo, active, musicData, dataUpdatePostProps]);
+  }, [dataVideo, active, musicData, dataUpdatePostProps, uriVideo]);
 
   useEffect(() => {
     if (deleteDataVideo && dataVideo) {
@@ -525,7 +523,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   };
 
   const closeVideo = (id: number) => {
-    setUriVideo([]);
+    setUriVideo(null);
     setDeleteDataVideo(true);
   };
 
@@ -552,8 +550,6 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
     }
   }, [offset]);
   // ? END OF OFFSET AREA
-
-  const videoRef = createRef<any>();
 
   return (
     <KeyboardAvoidingView
@@ -633,9 +629,9 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
               />
             ) : null}
 
-            {uriVideo[0]?.mime === 'video/mp4' && (
+            {uriVideo?.mime === 'video/mp4' && (
               <VideoComp
-                sourceUri={uriVideo[0]?.path}
+                sourceUri={uriVideo?.path}
                 withCloseIcon
                 onPress={closeVideo}
                 dontShowText={progress && !dataVideo ? true : false}
