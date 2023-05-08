@@ -11,8 +11,12 @@ import DetailStatusTrack from '../../components/atom/Tracking/DetailStatus';
 
 type TrackProps = NativeStackScreenProps<RootStackParams, 'Track'>;
 
-export const Track: React.FC<TrackProps> = ({navigation}: TrackProps) => {
+export const Track: React.FC<TrackProps> = ({
+  navigation,
+  route,
+}: TrackProps) => {
   const {t} = useTranslation();
+  const {status} = route.params;
 
   return (
     <View style={styles.root}>
@@ -23,9 +27,9 @@ export const Track: React.FC<TrackProps> = ({navigation}: TrackProps) => {
         itemStrokeColor={Color.Neutral[10]}
       />
       <View>
-        <TrackStatus />
+        <TrackStatus status={status} />
       </View>
-      <DetailStatusTrack />
+      <DetailStatusTrack status={status} />
     </View>
   );
 };

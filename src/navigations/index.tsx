@@ -289,7 +289,9 @@ export type RootStackParams = {
   TransactionDetailTicket: {
     id: string;
   };
-  Track: undefined;
+  Track: {
+    status: number;
+  };
   TicketDetail: undefined;
   Shop: undefined;
 };

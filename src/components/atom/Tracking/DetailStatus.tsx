@@ -10,7 +10,193 @@ import Color from '../../../theme/Color';
 import {CheckCircleIcon} from '../../../assets/icon';
 import Typography from '../../../theme/Typography';
 
-const DetailStatusTrack = () => {
+interface DetailStatusTrackProps {
+  status: number;
+}
+
+const DetailStatusTrack: React.FC<DetailStatusTrackProps> = props => {
+  const {status} = props;
+  if (status === 2) {
+    return (
+      <ScrollView style={styles.root}>
+        <Text style={styles.title}>Payment Status</Text>
+        <View style={styles.container}>
+          <View style={styles.row}>
+            <View style={styles.circle} />
+            <Text style={[styles.text, {color: Color.Success[400]}]}>
+              Courier - 20 Feb 2023, 02:15
+            </Text>
+          </View>
+          <View style={styles.row}>
+            <View style={styles.lineContainer}>
+              <View style={styles.line} />
+            </View>
+            <Text style={[styles.text, styles.desc]}>
+              Your order is being delivered
+            </Text>
+          </View>
+        </View>
+        <View style={styles.container}>
+          <View style={styles.row}>
+            <CheckCircleIcon
+              width={widthPercentage(20)}
+              height={heightPercentage(20)}
+              bg1={Color.Pink.linear}
+              bg2={Color.Pink.linear}
+            />
+            <Text style={[styles.text, {color: Color.Success[400]}]}>
+              Seller - 20 Feb 2023, 02:15
+            </Text>
+          </View>
+          <View style={styles.row}>
+            <View style={styles.lineContainer}>
+              <View style={styles.line} />
+            </View>
+            <Text style={[styles.text, styles.desc]}>
+              Your order have been processed by seller
+            </Text>
+          </View>
+        </View>
+        <View style={styles.container}>
+          <View style={styles.row}>
+            <CheckCircleIcon
+              width={widthPercentage(20)}
+              height={heightPercentage(20)}
+              bg1={Color.Pink.linear}
+              bg2={Color.Pink.linear}
+            />
+            <Text style={[styles.text, {color: Color.Success[400]}]}>
+              Bookyay - 20 Feb 2023, 02:15
+            </Text>
+          </View>
+          <View style={styles.row}>
+            <View style={styles.lineContainer}>
+              {/* <View style={styles.line} /> */}
+            </View>
+            <Text style={[styles.text, styles.desc]}>
+              Your payment have been verified. Your order will be forwarded to
+              seller
+            </Text>
+          </View>
+        </View>
+      </ScrollView>
+    );
+  }
+
+  if (status === 3) {
+    return (
+      <ScrollView style={styles.root}>
+        <Text style={styles.title}>Payment Status</Text>
+        <View style={styles.container}>
+          <View style={styles.row}>
+            <CheckCircleIcon
+              width={widthPercentage(20)}
+              height={heightPercentage(20)}
+              bg1={Color.Pink.linear}
+              bg2={Color.Pink.linear}
+            />
+            <Text style={[styles.text, {color: Color.Success[400]}]}>
+              Finish Order - 22 Feb 2023, 02:15
+            </Text>
+          </View>
+          <View style={styles.row}>
+            <View style={styles.lineContainer}>
+              <View style={styles.line} />
+            </View>
+            <Text style={[styles.text, styles.desc]}>
+              Confirm order finished
+            </Text>
+          </View>
+        </View>
+        <View style={styles.container}>
+          <View style={styles.row}>
+            <CheckCircleIcon
+              width={widthPercentage(20)}
+              height={heightPercentage(20)}
+              bg1={Color.Pink.linear}
+              bg2={Color.Pink.linear}
+            />
+            <Text style={[styles.text, {color: Color.Success[400]}]}>
+              Shiping Destination - 21 Feb 2023, 02:15
+            </Text>
+          </View>
+          <View style={styles.row}>
+            <View style={styles.lineContainer}>
+              <View style={styles.line} />
+            </View>
+            <Text style={[styles.text, styles.desc]}>
+              Your order Arrived at destination
+            </Text>
+          </View>
+        </View>
+        <View style={styles.container}>
+          <View style={styles.row}>
+            <CheckCircleIcon
+              width={widthPercentage(20)}
+              height={heightPercentage(20)}
+              bg1={Color.Pink.linear}
+              bg2={Color.Pink.linear}
+            />
+            <Text style={[styles.text, {color: Color.Success[400]}]}>
+              Courier - 20 Feb 2023, 02:15
+            </Text>
+          </View>
+          <View style={styles.row}>
+            <View style={styles.lineContainer}>
+              <View style={styles.line} />
+            </View>
+            <Text style={[styles.text, styles.desc]}>
+              Your order is being delivered
+            </Text>
+          </View>
+        </View>
+        <View style={styles.container}>
+          <View style={styles.row}>
+            <CheckCircleIcon
+              width={widthPercentage(20)}
+              height={heightPercentage(20)}
+              bg1={Color.Pink.linear}
+              bg2={Color.Pink.linear}
+            />
+            <Text style={[styles.text, {color: Color.Success[400]}]}>
+              Seller - 20 Feb 2023, 02:15
+            </Text>
+          </View>
+          <View style={styles.row}>
+            <View style={styles.lineContainer}>
+              <View style={styles.line} />
+            </View>
+            <Text style={[styles.text, styles.desc]}>
+              Your order have been processed by seller
+            </Text>
+          </View>
+        </View>
+        <View style={styles.container}>
+          <View style={styles.row}>
+            <CheckCircleIcon
+              width={widthPercentage(20)}
+              height={heightPercentage(20)}
+              bg1={Color.Pink.linear}
+              bg2={Color.Pink.linear}
+            />
+            <Text style={[styles.text, {color: Color.Success[400]}]}>
+              Bookyay - 20 Feb 2023, 02:15
+            </Text>
+          </View>
+          <View style={styles.row}>
+            <View style={styles.lineContainer}>
+              {/* <View style={styles.line} /> */}
+            </View>
+            <Text style={[styles.text, styles.desc]}>
+              Your payment have been verified. Your order will be forwarded to
+              seller
+            </Text>
+          </View>
+        </View>
+      </ScrollView>
+    );
+  }
+
   return (
     <ScrollView style={styles.root}>
       <Text style={styles.title}>Payment Status</Text>
@@ -39,7 +225,7 @@ const DetailStatusTrack = () => {
             bg2={Color.Pink.linear}
           />
           <Text style={[styles.text, {color: Color.Success[400]}]}>
-            Seller - 20 Feb 2023, 02:15
+            Bookyay - 20 Feb 2023, 02:15
           </Text>
         </View>
         <View style={styles.row}>

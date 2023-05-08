@@ -219,7 +219,9 @@ export const TransactionDetailMerch: React.FC<TransactionDetailMerchProps> = ({
             type={'border'}
             textStyles={{fontSize: mvs(14), color: Color.Success[400]}}
             containerStyles={{width: '100%'}}
-            onPress={() => navigation.navigate('Track')}
+            onPress={() =>
+              navigation.navigate('Track', {status: detail?.status ?? 0})
+            }
           />
           <Gap height={heightPercentage(8)} />
           {detail?.status === 0 && (

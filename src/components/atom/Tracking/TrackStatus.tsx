@@ -7,7 +7,103 @@ import BagTick from '../../../assets/icon/BagTick.icon';
 import Gap from '../Gap/Gap';
 import Typography from '../../../theme/Typography';
 
-const TrackStatus = () => {
+interface TrackStatusProps {
+  status: number;
+}
+
+const TrackStatus: React.FC<TrackStatusProps> = props => {
+  const {status} = props;
+  if (status === 2) {
+    return (
+      <View style={styles.root}>
+        <View style={styles.container}>
+          <TruckIcon
+            width={widthPercentage(30)}
+            height={heightPercentage(30)}
+            stroke={Color.Neutral[10]}
+          />
+          <BoxStore
+            width={widthPercentage(30)}
+            height={heightPercentage(30)}
+            stroke={Color.Neutral[10]}
+          />
+          <BagTick
+            width={widthPercentage(30)}
+            height={heightPercentage(30)}
+            stroke={Color.Neutral[10]}
+          />
+        </View>
+        <Gap height={heightPercentage(20)} />
+        <View style={styles.container}>
+          <CheckCircleIcon
+            width={widthPercentage(25)}
+            height={heightPercentage(25)}
+            bg1={Color.Success[400]}
+            bg2={Color.Success[400]}
+          />
+          <View style={[styles.line, {backgroundColor: Color.Success[400]}]} />
+          <CheckCircleIcon
+            width={widthPercentage(25)}
+            height={heightPercentage(25)}
+            bg1={Color.Success[400]}
+            bg2={Color.Success[400]}
+          />
+          <View style={styles.line} />
+          <View style={styles.circle} />
+        </View>
+        <Gap height={heightPercentage(24)} />
+        <Text style={styles.status}>To Ship</Text>
+      </View>
+    );
+  }
+  if (status === 3) {
+    return (
+      <View style={styles.root}>
+        <View style={styles.container}>
+          <TruckIcon
+            width={widthPercentage(30)}
+            height={heightPercentage(30)}
+            stroke={Color.Neutral[10]}
+          />
+          <BoxStore
+            width={widthPercentage(30)}
+            height={heightPercentage(30)}
+            stroke={Color.Neutral[10]}
+          />
+          <BagTick
+            width={widthPercentage(30)}
+            height={heightPercentage(30)}
+            stroke={Color.Neutral[10]}
+          />
+        </View>
+        <Gap height={heightPercentage(20)} />
+        <View style={styles.container}>
+          <CheckCircleIcon
+            width={widthPercentage(25)}
+            height={heightPercentage(25)}
+            bg1={Color.Success[400]}
+            bg2={Color.Success[400]}
+          />
+          <View style={[styles.line, {backgroundColor: Color.Success[400]}]} />
+          <CheckCircleIcon
+            width={widthPercentage(25)}
+            height={heightPercentage(25)}
+            bg1={Color.Success[400]}
+            bg2={Color.Success[400]}
+          />
+          <View style={styles.line} />
+          <CheckCircleIcon
+            width={widthPercentage(25)}
+            height={heightPercentage(25)}
+            bg1={Color.Success[400]}
+            bg2={Color.Success[400]}
+          />
+        </View>
+        <Gap height={heightPercentage(24)} />
+        <Text style={styles.status}>To Ship</Text>
+      </View>
+    );
+  }
   return (
     <View style={styles.root}>
       <View style={styles.container}>
