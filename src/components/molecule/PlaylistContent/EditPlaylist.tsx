@@ -9,30 +9,11 @@ import {
   InteractionManager,
   TouchableOpacity,
 } from 'react-native';
+import {useTranslation} from 'react-i18next';
 import {FlashList} from '@shopify/flash-list';
 import {mvs} from 'react-native-size-matters';
 import {Image} from 'react-native-image-crop-picker';
 
-import {Gap, SsuInput, SsuToast} from '../../atom';
-import {Dropdown} from '../DropDown';
-import {color, font, typography} from '../../../theme';
-import {PhotoPlaylist} from './PhotoPlaylist';
-import {TopNavigation} from '../TopNavigation';
-import {ModalConfirm} from '../Modal/ModalConfirm';
-import {dataVisibility} from '../../../data/playlist';
-import {uploadImage} from '../../../api/uploadImage.api';
-import {updatePlaylist} from '../../../api/playlist.api';
-import {ModalLoading} from '../ModalLoading/ModalLoading';
-import {ModalImagePicker} from '../Modal/ModalImagePicker';
-import {SongList} from '../../../interface/song.interface';
-import {
-  ArrowLeftIcon,
-  MenuIcon,
-  MinusCircleIcon,
-  SaveIcon,
-  TickCircleIcon,
-} from '../../../assets/icon';
-import {Playlist} from '../../../interface/playlist.interface';
 import {
   heightPercentage,
   heightResponsive,
@@ -40,7 +21,27 @@ import {
   width,
   widthPercentage,
 } from '../../../utils';
-import {useTranslation} from 'react-i18next';
+import {
+  ArrowLeftIcon,
+  MenuIcon,
+  MinusCircleIcon,
+  SaveIcon,
+  TickCircleIcon,
+} from '../../../assets/icon';
+import {Dropdown} from '../DropDown';
+import {PhotoPlaylist} from './PhotoPlaylist';
+import {TopNavigation} from '../TopNavigation';
+import {Gap, SsuInput, SsuToast} from '../../atom';
+import {ModalConfirm} from '../Modal/ModalConfirm';
+import {dataVisibility} from '../../../data/playlist';
+import {color, font, typography} from '../../../theme';
+import {storage} from '../../../hooks/use-storage.hook';
+import {uploadImage} from '../../../api/uploadImage.api';
+import {updatePlaylist} from '../../../api/playlist.api';
+import {ModalLoading} from '../ModalLoading/ModalLoading';
+import {ModalImagePicker} from '../Modal/ModalImagePicker';
+import {SongList} from '../../../interface/song.interface';
+import {Playlist} from '../../../interface/playlist.interface';
 
 interface EditPlaylistProps {
   playlist: Playlist;
@@ -138,6 +139,7 @@ export const EditPlaylistContent: React.FC<EditPlaylistProps> = ({
       };
       const response = await updatePlaylist(playlist, payload);
       goToPlaylist(response.data.id);
+      storage.set('fetchingProfile', true);
       closeModal();
     } catch (error) {
       console.log(error);

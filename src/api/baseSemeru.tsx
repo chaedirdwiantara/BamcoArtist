@@ -5,7 +5,7 @@ let API: AxiosInstance;
 
 const setupAPIClient = () => {
   API = axios.create({
-    baseURL: 'https://semeru-dev.ssudev.space/api/v1/fans-app',
+    baseURL: 'https://semeru-dev.ssudev.space/api/v1',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
@@ -44,6 +44,7 @@ export const initialize = (): AxiosInstance => {
         ...config.headers,
       };
       config.headers['Authorization'] = `Bearer ${token}`;
+      config.headers['Ssu-Application'] = 'musician';
       return config;
     });
   }

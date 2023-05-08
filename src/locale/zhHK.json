@@ -10,6 +10,7 @@
     "LinkCopied": "Link have been copied to clipboard!",
     "Followers": "追蹤者",
     "FollowYou": "Follow you",
+    "ItsMe": "It's Me",
     "Listeners": "人聽過",
     "Share": {
       "Feed": "Share Feed",
@@ -462,6 +463,8 @@
     },
     "Tips": {
       "Title": "捐贈與訂閱",
+      "AddCustom": "Add custom tip",
+      "CustomTip": "Custom tip",
       "Tab": {
         "Donation": "Donation",
         "Subs": "Subscription"
@@ -723,7 +726,9 @@
     "NoInfo": "No Information Given.",
     "NoPhoto": "No Photos Available.",
     "NoECSetting": "You have not set your exclusive content yet, let’s try to make one",
-    "NoECData": "You don’t have any exclusive content, try to make a new one!"
+    "NoECData": "You don’t have any exclusive content, try to make a new one!",
+    "NoFollowersTitle": "People follow this musician",
+    "NoFollowersSubtitle": "When people follow musician, you'll see them here"
   },
   "Guest": {
     "Title": "立即註冊與音樂人互動",
@@ -742,6 +747,20 @@
     "Filter": {
       "Buy": "Buy Package",
       "Transaction": "Transaction"
+    }
+  },
+  "RecoverAccount": {
+    "Title": "Account Deletion",
+    "FirstParagraph": "You have signed in to your account which is currently undergoing the deletion process.",
+    "SecondParagraph": "Please keep in mind that you can still recover your account within the next 30 days.",
+    "ThirdParagraph": "However, once you delete your account, all of your data, including your saved preferences and settings, will be permanently erased.",
+    "Btn": {
+      "Recover": "Recover My Account",
+      "SignOut": "No, Sign Out"
+    },
+    "Modal": {
+      "Title": "Recover Account",
+      "Subtitle": "Are you sure you recover your account?"
     }
   }
 }

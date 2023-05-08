@@ -40,6 +40,7 @@ import {Button, Gap, SsuInput, SsuToast} from '../../atom';
 import {useProfileHook} from '../../../hooks/use-profile.hook';
 import {formatValueName2} from '../../../utils/formatValueName';
 import {PreferenceList} from '../../../interface/setting.interface';
+import {profileStorage, storage} from '../../../hooks/use-storage.hook';
 import {ProfileResponseType} from '../../../interface/profile.interface';
 import {dataYearsFrom, dataYearsTo} from '../../../data/Settings/account';
 
@@ -176,23 +177,32 @@ export const AccountContent: React.FC<AccountProps> = ({
   };
 
   const onPressConfirm = async () => {
-    await updateProfilePreference({
-      username: getValues('username'),
-      fullname: getValues('fullname'),
-      labels: getValues('labels'),
-      yearsActiveFrom: getValues('yearsActiveFrom'),
-      yearsActiveTo: getValues('yearsActiveTo'),
-      locationCountry: getValues('locationCountry'),
-      locationCity: getValues('locationCity'),
-      members: members.filter(val => val !== ''),
-      genres: valueGenres as number[],
-      moods: valueMoodsPreference as number[],
-      favoriteGeneres: valueGenresPreference as number[],
-    });
-
-    setIsSubmit(true);
     setShowModal(false);
-    setChanges(false);
+    try {
+      await updateProfilePreference({
+        username: getValues('username'),
+        fullname: getValues('fullname'),
+        labels: getValues('labels'),
+        yearsActiveFrom: getValues('yearsActiveFrom'),
+        yearsActiveTo: getValues('yearsActiveTo'),
+        locationCountry: getValues('locationCountry'),
+        locationCity: getValues('locationCity'),
+        members: members.filter(val => val !== ''),
+        genres: valueGenres as number[],
+        moods: valueMoodsPreference as number[],
+        favoriteGeneres: valueGenresPreference as number[],
+      });
+
+      storage.set(
+        'profile',
+        JSON.stringify({...profileStorage(), fullname: getValues('fullname')}),
+      );
+      storage.set('fetchingProfile', true);
+      setIsSubmit(true);
+      setChanges(false);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const onPressAddMember = () => {

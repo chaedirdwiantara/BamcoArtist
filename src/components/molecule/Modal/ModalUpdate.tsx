@@ -11,15 +11,16 @@ import {useTranslation} from 'react-i18next';
 
 interface ModalUpdateProps {
   modalVisible: boolean;
-  onPressClose?: () => void;
-  onPressOk?: () => void;
+  showMaybeLater: boolean;
+  onPressClose: () => void;
+  onPressOk: () => void;
 }
 
 export const ModalUpdate: React.FC<ModalUpdateProps> = (
   props: ModalUpdateProps,
 ) => {
   const {t} = useTranslation();
-  const {modalVisible, onPressClose, onPressOk} = props;
+  const {modalVisible, showMaybeLater, onPressClose, onPressOk} = props;
   return (
     <Modal
       isVisible={modalVisible}
@@ -45,11 +46,11 @@ export const ModalUpdate: React.FC<ModalUpdateProps> = (
               textStyles={{fontSize: mvs(14)}}
               containerStyles={{
                 width: '100%',
-                marginBottom: heightPercentage(10),
+                marginBottom: heightPercentage(5),
               }}
               onPress={onPressOk}
             />
-            {onPressClose && (
+            {showMaybeLater && (
               <Button
                 label={t('Btn.MaybeLater')}
                 type="border"
@@ -73,17 +74,19 @@ const styles = StyleSheet.create({
   },
   card: {
     width: width * 0.9,
-    backgroundColor: Color.Dark[900],
+    backgroundColor: Color.Dark[700],
     justifyContent: 'center',
     borderRadius: 6,
-    paddingHorizontal: widthPercentage(20),
-    paddingVertical: heightPercentage(15),
+    paddingHorizontal: widthPercentage(25),
+    paddingTop: heightPercentage(50),
+    paddingBottom: heightPercentage(25),
   },
   title: {
     fontSize: mvs(16),
     color: Color.Neutral[10],
     fontFamily: Font.InterSemiBold,
     textAlign: 'center',
+    marginTop: heightPercentage(5),
     marginBottom: heightPercentage(15),
   },
   subtitle: {
@@ -95,7 +98,7 @@ const styles = StyleSheet.create({
   },
   containerButton: {
     flexDirection: 'column',
-    marginTop: heightPercentage(25),
+    marginTop: heightPercentage(15),
   },
   option: {
     fontSize: mvs(14),

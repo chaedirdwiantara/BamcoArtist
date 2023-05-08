@@ -48,7 +48,7 @@ import {dummySongImg} from '../../data/image';
 import {SongList, TranscodedSongType} from '../../interface/song.interface';
 import {useTranslation} from 'react-i18next';
 import Video from 'react-native-video';
-import SsuAPI2 from '../../api/baseRinjaniNew';
+import SsuAPI2 from '../../api/baseRinjani';
 import {UploadVideoResponseType} from '../../interface/uploadImage.interface';
 import * as Progress from 'react-native-progress';
 import VideoComp from '../../components/molecule/VideoPlayer/videoComp';

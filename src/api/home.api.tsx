@@ -1,5 +1,5 @@
-import SsuAPI from './basePublic';
-import SsuAPISemeru from './baseSemeruPublic';
+import SsuAPI from './baseRinjani';
+import SsuAPISemeru from './baseSemeru';
 import {
   ComingSoonResponseType,
   DiveInResponseType,
@@ -7,7 +7,7 @@ import {
 
 export const diveInList = async (): Promise<DiveInResponseType> => {
   const {data} = await SsuAPI().request<DiveInResponseType>({
-    url: '/posts/dive-in-list',
+    url: '/public/posts/dive-in-list',
     method: 'GET',
   });
 

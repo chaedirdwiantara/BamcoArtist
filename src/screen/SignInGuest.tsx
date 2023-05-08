@@ -33,7 +33,10 @@ export const SignInGuestScreen: React.FC<SignInGuestProps> = ({
   }, [toastDeleteVisible]);
 
   useEffect(() => {
-    showToastDelete && setToastDeleteVisible(showToastDelete);
+    showToastDelete &&
+      setTimeout(() => {
+        setToastDeleteVisible(showToastDelete);
+      }, 500);
   }, [route.params]);
 
   const goToScreen = (screenName: 'Login' | 'Signup' | 'MainTab') => {

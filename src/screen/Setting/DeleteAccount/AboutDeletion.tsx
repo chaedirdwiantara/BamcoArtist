@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {StyleSheet, View, Text, ScrollView} from 'react-native';
 import {useTranslation} from 'react-i18next';
 import {useNavigation} from '@react-navigation/native';
@@ -7,7 +7,7 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {color, typography} from '../../../theme';
 import {TopNavigation} from '../../../components';
 import {RootStackParams} from '../../../navigations';
-import {listReason} from '../../../data/reasonsDeletion';
+import {useSettingHook} from '../../../hooks/use-setting.hook';
 import {ArrowLeftIcon, ArrowRightIcon} from '../../../assets/icon';
 import {MenuText} from '../../../components/atom/MenuText/MenuText';
 import {widthResponsive, heightPercentage, width} from '../../../utils';
@@ -16,6 +16,11 @@ export const AboutDeletionScreen: React.FC = () => {
   const {t} = useTranslation();
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
+  const {listReasonDelete, getListReasonDelete} = useSettingHook();
+
+  useEffect(() => {
+    getListReasonDelete();
+  }, []);
 
   const onPressGoBack = () => {
     navigation.goBack();
@@ -53,6 +58,7 @@ export const AboutDeletionScreen: React.FC = () => {
         <Text style={[typography.Body2, styles.subtitle]}>
           {t('Setting.DeleteAccount.About.ThirdParagraph')}
         </Text>
+
         <Text style={[typography.Heading6, styles.title]}>
           {t('Setting.DeleteAccount.About.TitleReason')}
         </Text>
@@ -60,14 +66,13 @@ export const AboutDeletionScreen: React.FC = () => {
           {t('Setting.DeleteAccount.About.FourthParagraph')}
         </Text>
 
-        {/* TODO: Need to be wired with API List Reasons */}
-        {listReason.map((val, i) => (
+        {listReasonDelete.map((val, i) => (
           <MenuText.RightIcon
             key={i}
-            text={t(val.text) || ''}
+            text={t(val.Name) || ''}
             containerStyles={{marginTop: heightPercentage(15)}}
             icon={<ArrowRightIcon stroke={color.Success[400]} />}
-            onPress={() => goToInputDeletion(val.id, val.text)}
+            onPress={() => goToInputDeletion(val.ID, val.Name)}
           />
         ))}
       </ScrollView>

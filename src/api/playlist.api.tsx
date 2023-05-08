@@ -1,4 +1,4 @@
-import SsuAPI from './baseSemeruMusician';
+import SsuAPI from './baseSemeru';
 import {
   AddSongPropsType,
   PlaylistResponseTypeB,
@@ -17,7 +17,7 @@ export const getListPlaylist = async (
   props?: ParamsProps,
 ): Promise<PlaylistResponseType> => {
   const {data} = await SsuAPI().request<PlaylistResponseType>({
-    url: '/playlists',
+    url: '/musician-app/playlists',
     method: 'GET',
     params: props,
   });
@@ -29,7 +29,7 @@ export const detailPlaylist = async (
   props?: PlaylistPropsTypeA,
 ): Promise<PlaylistResponseTypeB> => {
   const {data} = await SsuAPI().request<PlaylistResponseTypeB>({
-    url: `/playlists/${props?.id}`,
+    url: `/musician-app/playlists/${props?.id}`,
     method: 'GET',
   });
 
@@ -40,7 +40,7 @@ export const createPlaylist = async (
   props?: PlaylistPropsType,
 ): Promise<PlaylistResponseTypeB> => {
   const {data} = await SsuAPI().request<PlaylistResponseTypeB>({
-    url: '/playlists',
+    url: '/musician-app/playlists',
     method: 'POST',
     data: props,
   });
@@ -53,7 +53,7 @@ export const updatePlaylist = async (
   props?: PlaylistPropsType,
 ): Promise<PlaylistResponseTypeB> => {
   const {data} = await SsuAPI().request<PlaylistResponseTypeB>({
-    url: `/playlists/${params?.id}`,
+    url: `/musician-app/playlists/${params?.id}`,
     method: 'PATCH',
     data: props,
   });
@@ -65,7 +65,7 @@ export const deletePlaylist = async (
   params?: PlaylistPropsTypeA,
 ): Promise<PlaylistResponseTypeB> => {
   const {data} = await SsuAPI().request<PlaylistResponseTypeB>({
-    url: `/playlists/${params?.id}`,
+    url: `/musician-app/playlists/${params?.id}`,
     method: 'DELETE',
   });
 
@@ -77,7 +77,7 @@ export const listSongs = async (
   props?: ParamsProps,
 ): Promise<ListSongResponseType> => {
   const {data} = await SsuAPI().request<ListSongResponseType>({
-    url: `/playlists/${params?.id}/songs`,
+    url: `/musician-app/playlists/${params?.id}/songs`,
     method: 'GET',
     params: props,
   });
@@ -89,7 +89,7 @@ export const addSong = async (
   props?: AddSongPropsType,
 ): Promise<PlaylistResponseType> => {
   const {data} = await SsuAPI().request<PlaylistResponseType>({
-    url: '/playlists/add-song',
+    url: '/musician-app/playlists/add-song',
     method: 'POST',
     data: props,
   });
@@ -101,7 +101,7 @@ export const removeSongFromPlaylist = async (
   props?: AddSongPropsType,
 ): Promise<PlaylistResponseTypeC> => {
   const {data} = await SsuAPI().request<PlaylistResponseTypeC>({
-    url: '/playlists/remove-song',
+    url: '/musician-app/playlists/remove-song',
     method: 'POST',
     data: props,
   });
@@ -113,7 +113,7 @@ export const addOtherPlaylist = async (
   props?: AddSongPropsTypeB,
 ): Promise<PlaylistResponseTypeC> => {
   const {data} = await SsuAPI().request<PlaylistResponseTypeC>({
-    url: '/playlists/add-to-my-playlist',
+    url: '/musician-app/playlists/add-to-my-playlist',
     method: 'POST',
     data: props,
   });
@@ -125,7 +125,7 @@ export const removeOtherPlaylist = async (
   props?: AddSongPropsTypeB,
 ): Promise<PlaylistResponseTypeC> => {
   const {data} = await SsuAPI().request<PlaylistResponseTypeC>({
-    url: '/playlists/remove-from-my-playlist',
+    url: '/musician-app/playlists/remove-from-my-playlist',
     method: 'DELETE',
     data: props,
   });
@@ -137,7 +137,7 @@ export const listenerLogSong = async (
   props: ListenerLogPropsType,
 ): Promise<ListenerLogResponseType> => {
   const {data} = await SsuAPI().request<ListenerLogResponseType>({
-    url: `/songs/${props.songId}/listener-log`,
+    url: `/musician-app/songs/${props.songId}/listener-log`,
     method: 'POST',
     data: {
       startStreamAt: props.start,
