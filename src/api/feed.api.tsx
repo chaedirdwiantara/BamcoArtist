@@ -1,7 +1,5 @@
-import SsuAPI from './baseMusician';
-import SsuSemeruPublic from './baseSemeruPublic';
-import SsuAPINew from './baseRinjaniNew';
-import RinjaniPublic from './baseRinjaniNew';
+import SsuAPI from './baseRinjani';
+import SsuSemeruPublic from './baseSemeru';
 import {
   CommentDetailResponseType,
   CommentResponseType,
@@ -28,7 +26,7 @@ export const listPost = async (
   props?: ParamsProps,
 ): Promise<ListPostResponseType> => {
   const {data} = await SsuAPI().request<ListPostResponseType>({
-    url: '/post/public',
+    url: '/musician-app/post/public',
     method: 'GET',
     params: props,
   });
@@ -40,7 +38,7 @@ export const listTopPost = async (
   props?: ParamsProps,
 ): Promise<ListPostResponseType> => {
   const {data} = await SsuAPI().request<ListPostResponseType>({
-    url: '/post/top-post',
+    url: '/musician-app/post/top-post',
     method: 'GET',
     params: props,
   });
@@ -52,7 +50,7 @@ export const listPostProfile = async (
   props?: ParamsProps,
 ): Promise<ListPostResponseType> => {
   const {data} = await SsuAPI().request<ListPostResponseType>({
-    url: `/post/feeds`,
+    url: '/musician-app/post/feeds',
     method: 'GET',
     params: props,
   });
@@ -64,7 +62,7 @@ export const listMyPost = async (
   props?: ParamsProps,
 ): Promise<ListPostResponseType> => {
   const {data} = await SsuAPI().request<ListPostResponseType>({
-    url: '/post/my-post',
+    url: '/musician-app/post/my-post',
     method: 'GET',
     params: props,
   });
@@ -76,7 +74,7 @@ export const listPostExclusive = async (
   props?: ParamsProps,
 ): Promise<ListPostResponseType> => {
   const {data} = await SsuAPI().request<ListPostResponseType>({
-    url: '/posts/premium',
+    url: '/musician-app/posts/premium',
     method: 'GET',
     params: props,
   });
@@ -87,7 +85,7 @@ export const listPostExclusive = async (
 export const listPostSimilar = async (
   props?: ParamsProps,
 ): Promise<ListPostResponseType> => {
-  const {data} = await SsuAPINew().request<ListPostResponseType>({
+  const {data} = await SsuAPI().request<ListPostResponseType>({
     url: '/posts/similar-post',
     method: 'GET',
     params: props,
@@ -101,7 +99,7 @@ export const detailPost = async (
   props?: PostPropsTypeA,
 ): Promise<DetailPostResponseType> => {
   const {data} = await SsuAPI().request<DetailPostResponseType>({
-    url: `/post/find/${props?.id}`,
+    url: `/musician-app/post/find/${props?.id}`,
     method: 'GET',
   });
 
@@ -113,7 +111,7 @@ export const likePost = async (
   props?: PostPropsTypeA,
 ): Promise<LikePostResponseType> => {
   const {data} = await SsuAPI().request<LikePostResponseType>({
-    url: `/post/like/${props?.id}`,
+    url: `/musician-app/post/like/${props?.id}`,
     method: 'POST',
   });
 
@@ -124,7 +122,7 @@ export const unlikePost = async (
   props?: PostPropsTypeA,
 ): Promise<UnlikePostResponseType> => {
   const {data} = await SsuAPI().request<UnlikePostResponseType>({
-    url: `/post/unlike/${props?.id}`,
+    url: `/musician-app/post/unlike/${props?.id}`,
     method: 'POST',
   });
 
@@ -136,7 +134,7 @@ export const likeComment = async (
   props?: PostPropsTypeA,
 ): Promise<LikePostResponseType> => {
   const {data} = await SsuAPI().request<LikePostResponseType>({
-    url: `/comment/like/${props?.id}`,
+    url: `/musician-app/comment/like/${props?.id}`,
     method: 'POST',
   });
 
@@ -147,7 +145,7 @@ export const unlikeComment = async (
   props?: PostPropsTypeA,
 ): Promise<UnlikePostResponseType> => {
   const {data} = await SsuAPI().request<UnlikePostResponseType>({
-    url: `/comment/unlike/${props?.id}`,
+    url: `/musician-app/comment/unlike/${props?.id}`,
     method: 'POST',
   });
 
@@ -158,7 +156,7 @@ export const loadMore = async (
   props?: LoadMoreProps,
 ): Promise<ListCommentResponseType> => {
   const {data} = await SsuAPI().request<ListCommentResponseType>({
-    url: `/comment/list/${props?.id}`,
+    url: `/musician-app/comment/list/${props?.id}`,
     method: 'GET',
     params: props?.params,
   });
@@ -170,7 +168,7 @@ export const commentDetail = async (
   props?: PostPropsTypeA,
 ): Promise<CommentDetailResponseType> => {
   const {data} = await SsuAPI().request<CommentDetailResponseType>({
-    url: `/comments/${props?.id}`,
+    url: `/musician-app/comments/${props?.id}`,
     method: 'GET',
   });
 
@@ -181,7 +179,7 @@ export const commmentToPost = async (
   props?: PostPropsTypeC,
 ): Promise<CommentResponseType> => {
   const {data} = await SsuAPI().request<CommentResponseType>({
-    url: `/post/comment/create`,
+    url: '/musician-app/post/comment/create',
     method: 'POST',
     data: props,
   });
@@ -193,7 +191,7 @@ export const commmentToComment = async (
   props?: PostPropsTypeB,
 ): Promise<CommentResponseType> => {
   const {data} = await SsuAPI().request<CommentResponseType>({
-    url: `/comment/create/${props?.id}`,
+    url: `/musician-app/comment/create/${props?.id}`,
     method: 'POST',
     data: props?.content,
   });
@@ -205,7 +203,7 @@ export const commmentUpdate = async (
   props?: PostPropsTypeB,
 ): Promise<CommentUpdateResponseType> => {
   const {data} = await SsuAPI().request<CommentUpdateResponseType>({
-    url: `/comment/update/${props?.id}`,
+    url: `/musician-app/comment/update/${props?.id}`,
     method: 'PATCH',
     data: props?.content,
   });
@@ -217,7 +215,7 @@ export const commmentDelete = async (
   props?: PostPropsTypeA,
 ): Promise<CommentResponseType> => {
   const {data} = await SsuAPI().request<CommentResponseType>({
-    url: `/comment/delete/${props?.id}`,
+    url: `/musician-app/comment/delete/${props?.id}`,
     method: 'DELETE',
   });
 
@@ -228,7 +226,7 @@ export const createPost = async (
   props?: CreatePostProps,
 ): Promise<CreatePostResponseType> => {
   const {data} = await SsuAPI().request<CreatePostResponseType>({
-    url: `/post/create`,
+    url: '/musician-app/post/create',
     method: 'POST',
     data: props,
   });
@@ -240,7 +238,7 @@ export const updatePost = async (
   props?: CreatePostProps,
 ): Promise<CreatePostResponseType> => {
   const {data} = await SsuAPI().request<CreatePostResponseType>({
-    url: `/post/update/${props?.id}`,
+    url: `/musician-app/post/update/${props?.id}`,
     method: 'POST',
     data: props,
   });
@@ -252,7 +250,7 @@ export const deletePost = async (
   props?: PostPropsTypeA,
 ): Promise<DeletePostResponseType> => {
   const {data} = await SsuAPI().request<DeletePostResponseType>({
-    url: `/post/delete/${props?.id}`,
+    url: `/musician-app/post/delete/${props?.id}`,
     method: 'DELETE',
   });
 
@@ -273,7 +271,7 @@ export const mostPlayedSong = async (
 export const viewsCount = async (
   props?: PostPropsTypeA,
 ): Promise<SetViewsCountResponseType> => {
-  const {data} = await RinjaniPublic().request<SetViewsCountResponseType>({
+  const {data} = await SsuAPI().request<SetViewsCountResponseType>({
     url: `/posts/${props?.id}/watch-video`,
     method: 'POST',
   });

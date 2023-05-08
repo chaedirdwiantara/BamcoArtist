@@ -9,6 +9,7 @@ import {useIsFocused, useNavigation} from '@react-navigation/native';
 
 import Color from '../../theme/Color';
 import {ProfileContent} from '../../components';
+import {storage} from '../../hooks/use-storage.hook';
 import {usePlayerHook} from '../../hooks/use-player.hook';
 import {useProfileHook} from '../../hooks/use-profile.hook';
 import {useSettingHook} from '../../hooks/use-setting.hook';
@@ -28,6 +29,7 @@ export const ProfileScreen: React.FC<ProfileProps> = ({
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
   const {dataProfile, dataCountProfile, getProfileUser, getTotalCountProfile} =
     useProfileHook();
+  const isFetching = storage.getBoolean('fetchingProfile');
   const {dataPlaylist, getPlaylist} = usePlaylistHook();
   const isFocused = useIsFocused();
   const {isPlaying, showPlayer, hidePlayer} = usePlayerHook();
@@ -53,7 +55,8 @@ export const ProfileScreen: React.FC<ProfileProps> = ({
     setTimeout(() => {
       setRefreshing(false);
     }, 1000);
-  }, [uuid, refreshing, showToast, deletePlaylist]);
+    storage.set('fetchingProfile', false);
+  }, [uuid, refreshing, showToast, deletePlaylist, isFetching]);
 
   useEffect(() => {
     if (showToast && !deletePlaylist) {

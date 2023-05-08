@@ -8,6 +8,7 @@ import {
   Platform,
   InteractionManager,
 } from 'react-native';
+import {useTranslation} from 'react-i18next';
 import {mvs} from 'react-native-size-matters';
 
 import {Dropdown} from '../DropDown';
@@ -18,14 +19,14 @@ import {ArrowLeftIcon} from '../../../assets/icon';
 import {ModalConfirm} from '../Modal/ModalConfirm';
 import {Image} from 'react-native-image-crop-picker';
 import {dataVisibility} from '../../../data/playlist';
+import {storage} from '../../../hooks/use-storage.hook';
 import {uploadImage} from '../../../api/uploadImage.api';
-import {addSong, createPlaylist} from '../../../api/playlist.api';
 import {ModalLoading} from '../ModalLoading/ModalLoading';
 import {ModalImagePicker} from '../Modal/ModalImagePicker';
 import {Button, ButtonGradient, SsuInput} from '../../atom';
+import {addSong, createPlaylist} from '../../../api/playlist.api';
 import checkEmptyProperties from '../../../utils/checkEmptyProperties';
 import {heightPercentage, width, widthPercentage} from '../../../utils';
-import {useTranslation} from 'react-i18next';
 
 interface Props {
   goToPlaylist: (id: number) => void;
@@ -123,6 +124,7 @@ export const CreateNewPlaylistContent: React.FC<Props> = ({
       // to add song to new created playlist
       addSongToPlaylist(response.data.id);
       goToPlaylist(response.data.id);
+      storage.set('fetchingProfile', true);
       closeModal();
     } catch (error) {
       console.log(error);

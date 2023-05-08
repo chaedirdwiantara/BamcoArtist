@@ -57,7 +57,7 @@ const TopMusician: FC<TopMusicianProps> = ({
     }
   }, [dataMusician]);
 
-  return listMusician && listMusician.length > 0 ? (
+  return listMusician && listMusician?.length > 0 ? (
     <ScrollView
       horizontal
       showsHorizontalScrollIndicator={false}
