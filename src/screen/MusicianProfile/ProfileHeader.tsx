@@ -12,7 +12,7 @@ import {
 
 import {mvs} from 'react-native-size-matters';
 import {CameraIcon} from '../../assets/icon';
-import {AvatarProfile, Button, ButtonGradient, Gap} from '../../components';
+import {AvatarProfile, Button, Gap} from '../../components';
 import {color, font} from '../../theme';
 import {heightPercentage, width, widthResponsive} from '../../utils';
 import initialname from '../../utils/initialname';
@@ -105,8 +105,9 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = (
                 <View style={styles.buttonContainer}>
                   {isFollowed ? (
                     <>
-                      <ButtonGradient
-                        label={t('Preference.Following')}
+                      <Button
+                        type="border"
+                        label={t('Musician.Label.Following')}
                         containerStyles={styles.btnContainerFollowed}
                         textStyles={{color: color.Pink.linear}}
                         onPress={unFollowOnPressed}
@@ -120,9 +121,9 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = (
                     </>
                   ) : (
                     <>
-                      <ButtonGradient
-                        label={t('Preference.Follow')}
-                        gradientStyles={styles.btnContainer}
+                      <Button
+                        label={t('Musician.Label.Follow')}
+                        containerStyles={styles.btnContainer}
                         onPress={followOnPressed}
                       />
                       <Gap width={11} />

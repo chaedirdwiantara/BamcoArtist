@@ -80,7 +80,10 @@ const FollowMusicianCard: React.FC<ListProps> = (props: ListProps) => {
   };
 
   return (
-    <View style={[styles.container, containerStyles]}>
+    <TouchableOpacity
+      onPress={toDetailOnPress}
+      activeOpacity={0.5}
+      style={[styles.container, containerStyles]}>
       {musicianNum && (
         <Text style={styles.rankStyle}>
           {musicianNum?.toLocaleString('en-US', {
@@ -90,20 +93,13 @@ const FollowMusicianCard: React.FC<ListProps> = (props: ListProps) => {
         </Text>
       )}
       {imgUri === null || imgUri.length === 0 ? (
-        <TouchableOpacity onPress={toDetailOnPress}>
-          <DefaultAvatar.MusicianIcon />
-        </TouchableOpacity>
+        <DefaultAvatar.MusicianIcon />
       ) : (
-        <TouchableOpacity onPress={toDetailOnPress}>
-          <Avatar imgUri={imgUri[0].image} size={widthPercentage(44)} />
-        </TouchableOpacity>
+        <Avatar imgUri={imgUri[0].image} size={widthPercentage(44)} />
       )}
       <Gap width={8} />
       <View style={styles.textContainer}>
-        <Text
-          style={styles.musicianName}
-          numberOfLines={1}
-          onPress={toDetailOnPress}>
+        <Text style={styles.musicianName} numberOfLines={1}>
           {musicianName}
         </Text>
         {!recommended && (
@@ -115,7 +111,7 @@ const FollowMusicianCard: React.FC<ListProps> = (props: ListProps) => {
       <View style={styles.rightContainer}>
         {!hideFollowButton && followMenu()}
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 

@@ -2,7 +2,7 @@ import {
   GetCountUnreadNotificationResponseType,
   ListNotificationResponseType,
 } from '../interface/notification.interface';
-import SsuAPI from './baseRinjaniNew';
+import SsuAPI from './baseRinjani';
 
 export const getCountUnreadNotification =
   async (): Promise<GetCountUnreadNotificationResponseType> => {

@@ -152,17 +152,25 @@ export const LoginScreen: React.FC = () => {
           ssoRegistered !== null &&
           loginResult !== null)
       ) {
-        storage.set('isLogin', true);
-        if (loginResult === 'preference') {
+        if (loginResult === 'recover') {
+          storage.set('isDeleted', true);
           navigation.reset({
             index: 0,
-            routes: [{name: 'Preference'}],
+            routes: [{name: 'RecoverAccount'}],
           });
         } else {
-          navigation.reset({
-            index: 0,
-            routes: [{name: 'MainTab'}],
-          });
+          storage.set('isLogin', true);
+          if (loginResult === 'preference') {
+            navigation.reset({
+              index: 0,
+              routes: [{name: 'Preference'}],
+            });
+          } else {
+            navigation.reset({
+              index: 0,
+              routes: [{name: 'MainTab'}],
+            });
+          }
         }
       } else if (
         watch('loginType') === 'phoneNumber' &&
