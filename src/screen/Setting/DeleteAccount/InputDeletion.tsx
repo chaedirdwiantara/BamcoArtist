@@ -64,18 +64,23 @@ export const InputDeletionScreen: React.FC<InputDeletionProps> = ({
   };
 
   const onPressDelete = async () => {
-    // InteractionManager.runAfterInteractions(() => setIsLoading(true));
+    InteractionManager.runAfterInteractions(() => setIsLoading(true));
     setIsError(false);
     setShowModal(false);
     try {
-      await deleteAccount(state);
+      const payload = {
+        ...state,
+        deleteReasonText: state.deleteReasonText
+          ? state.deleteReasonText
+          : text,
+      };
+      await deleteAccount(payload);
       await onLogout();
       FCMService.getTokenFCM({
         onGetToken: token => {
           removeFcmToken(token);
         },
       });
-      setIsLoading(false);
       navigation.reset({
         index: 0,
         routes: [{name: 'SignInGuest', params: {showToastDelete: true}}],
@@ -85,7 +90,7 @@ export const InputDeletionScreen: React.FC<InputDeletionProps> = ({
       setShowModal(false);
       setIsLoading(false);
     } finally {
-      setIsLoading(false);
+      InteractionManager.runAfterInteractions(() => setIsLoading(false));
     }
   };
 

@@ -9,12 +9,14 @@ import {
   Text,
 } from 'react-native';
 import {useTranslation} from 'react-i18next';
+import {mvs} from 'react-native-size-matters';
 
 import {
+  Gap,
   TabFilter,
-  ProfileHeader,
   EmptyState,
   UserInfoCard,
+  ProfileHeader,
 } from '../../components';
 import {font} from '../../theme';
 import Color from '../../theme/Color';
@@ -22,12 +24,12 @@ import {
   AlbumData,
   DataDetailMusician,
 } from '../../interface/musician.interface';
-import {SettingIcon} from '../../assets/icon';
 import ImageModal from '../Detail/ImageModal';
+import {ArrowLeftIcon} from '../../assets/icon';
 import {Playlist} from '../../interface/playlist.interface';
 import ListPlaylist from '../../screen/ListCard/ListPlaylist';
+import {width, widthPercentage, heightPercentage} from '../../utils';
 import {ProfileFansResponseType} from '../../interface/profile.interface';
-import {width, normalize, widthPercentage, heightPercentage} from '../../utils';
 
 type OnScrollEventHandler = (
   event: NativeSyntheticEvent<NativeScrollEvent>,
@@ -59,6 +61,7 @@ interface ProfileContentProps {
   totalCountlikedSong?: number;
   playerVisible?: boolean;
   otherUserProfile?: boolean;
+  onPressGoBack: () => void;
 }
 
 export const OtherUserProfileContent: React.FC<ProfileContentProps> = ({
@@ -70,6 +73,7 @@ export const OtherUserProfileContent: React.FC<ProfileContentProps> = ({
   selfProfile,
   totalCountlikedSong,
   ownProfile = false,
+  onPressGoBack,
 }) => {
   const {t} = useTranslation();
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -100,11 +104,17 @@ export const OtherUserProfileContent: React.FC<ProfileContentProps> = ({
   return (
     <View style={{flex: 1}}>
       {scrollEffect && (
-        <View style={styles.containerStickyHeader}>
-          <Text style={[styles.name, styles.topIos]}>{profile.fullname}</Text>
-          <TouchableOpacity onPress={() => onPressGoTo('Setting')}>
-            <SettingIcon style={styles.topIos} />
-          </TouchableOpacity>
+        <View style={styles.containerLeftIcon}>
+          <View style={styles.containerArrowName}>
+            <TouchableOpacity onPress={onPressGoBack}>
+              <ArrowLeftIcon
+                stroke={Color.Neutral[10]}
+                style={{marginLeft: widthPercentage(24)}}
+              />
+            </TouchableOpacity>
+            <Gap width={widthPercentage(20)} />
+            <Text style={styles.name}>{profile.fullname}</Text>
+          </View>
         </View>
       )}
       <ScrollView
@@ -212,9 +222,23 @@ const styles = StyleSheet.create({
     backgroundColor: Color.Dark[800],
     height: heightPercentage(85),
   },
+  containerLeftIcon: {
+    width: width,
+    position: 'absolute',
+    zIndex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: Color.Dark[800],
+    height: heightPercentage(85),
+  },
+  containerArrowName: {
+    paddingTop: heightPercentage(30),
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
   name: {
     fontFamily: font.InterSemiBold,
-    fontSize: normalize(16),
+    fontSize: mvs(16),
     lineHeight: heightPercentage(20),
     color: Color.Neutral[10],
   },

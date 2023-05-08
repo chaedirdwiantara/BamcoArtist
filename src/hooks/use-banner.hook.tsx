@@ -9,6 +9,7 @@ export const useBannerHook = () => {
   const [isErrorBanner, setIsErrorBanner] = useState(false);
 
   const getListDataBanner = async (props?: PaginationType) => {
+    setIsLoadingBanner(true);
     try {
       const response = await listBanner(props);
       setDataBanner(response.data);

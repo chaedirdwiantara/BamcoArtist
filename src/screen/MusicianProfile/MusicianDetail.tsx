@@ -5,6 +5,8 @@ import {
   ScrollView,
   NativeScrollEvent,
   NativeSyntheticEvent,
+  TouchableOpacity,
+  Text,
 } from 'react-native';
 import {
   EmptyState,
@@ -15,12 +17,17 @@ import {
   TopNavigation,
   UserInfoCard,
 } from '../../components';
-import {heightPercentage, heightResponsive, widthResponsive} from '../../utils';
+import {
+  heightPercentage,
+  heightResponsive,
+  widthPercentage,
+  widthResponsive,
+} from '../../utils';
 import {ProfileHeader} from './ProfileHeader';
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParams} from '../../navigations';
-import {color} from '../../theme';
+import {color, font} from '../../theme';
 import ExclusiveDailyContent from './ExclusiveDailyContent';
 import {
   AlbumData,
@@ -36,6 +43,8 @@ import PostListProfile from '../ListCard/PostListProfile';
 import MainTab from '../../components/molecule/ProfileContent/MainTab/MainTab';
 import {FansScreen} from './ListFans';
 import {storage} from '../../hooks/use-storage.hook';
+import {mvs} from 'react-native-size-matters';
+import {ArrowLeftIcon} from '../../assets/icon';
 
 type OnScrollEventHandler = (
   event: NativeSyntheticEvent<NativeScrollEvent>,
@@ -124,6 +133,25 @@ export const MusicianDetail: React.FC<MusicianDetailProps> = ({
     setShowStatePopUp(false);
   };
 
+  const onPressGoBack = () => {
+    navigation.goBack();
+  };
+
+  const leftIconHeader = () => {
+    return (
+      <View style={styles.containerLeftIcon}>
+        <TouchableOpacity onPress={onPressGoBack}>
+          <ArrowLeftIcon
+            stroke={color.Neutral[10]}
+            style={{marginLeft: widthPercentage(24)}}
+          />
+        </TouchableOpacity>
+        <Gap width={widthPercentage(20)} />
+        <Text style={styles.name}>{profile.fullname}</Text>
+      </View>
+    );
+  };
+
   const musicianProfile = {
     fullname: profile.fullname,
     username: '@' + profile.username,
@@ -146,6 +174,7 @@ export const MusicianDetail: React.FC<MusicianDetailProps> = ({
       <SsuStatusBar type={'black'} />
       <TopNavigation.Type1
         title=""
+        leftIcon={scrolEffect && leftIconHeader()}
         leftIconAction={navigation.goBack}
         maxLengthTitle={20}
         itemStrokeColor={'white'}
@@ -277,6 +306,17 @@ const styles = StyleSheet.create({
     left: 0,
     zIndex: 100,
     borderBottomWidth: 0,
-    paddingBottom: heightPercentage(10),
+    paddingBottom: heightPercentage(15),
+  },
+  containerLeftIcon: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  name: {
+    fontFamily: font.InterSemiBold,
+    fontSize: mvs(16),
+    lineHeight: heightPercentage(20),
+    color: color.Neutral[10],
+    paddingLeft: widthPercentage(10),
   },
 });

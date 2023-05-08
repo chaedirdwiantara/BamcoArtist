@@ -9,10 +9,8 @@ import {
   CollectPhotoRemoveProps,
   ProfileCountResponseType,
 } from '../interface/profile.interface';
-import SsuAPI from './baseMusician';
-import SsuAPIPublicRinjani from './basePublic';
-import SsuAPISemeru from './baseSemeruMusician';
-import BaseSemeruPublic from './baseSemeruPublic';
+import SsuAPI from './baseRinjani';
+import SsuAPISemeru from './baseSemeru';
 import {ParamsProps} from '../interface/base.interface';
 
 export type UpdateProfilePropsType = {
@@ -41,7 +39,7 @@ export type UpdateProfilePropsType = {
 
 export const getProfile = async (): Promise<ProfileResponseType> => {
   const {data} = await SsuAPI().request<ProfileResponseType>({
-    url: '/profile',
+    url: '/musician-app/profile',
     method: 'GET',
   });
 
@@ -51,8 +49,8 @@ export const getProfile = async (): Promise<ProfileResponseType> => {
 export const getOtherUserProfile = async (
   props?: PostPropsTypeA,
 ): Promise<ProfileFansResponseType> => {
-  const {data} = await SsuAPIPublicRinjani().request<ProfileFansResponseType>({
-    url: `/fans/${props?.id}`,
+  const {data} = await SsuAPI().request<ProfileFansResponseType>({
+    url: `/public/fans/${props?.id}`,
     method: 'GET',
   });
 
@@ -63,7 +61,7 @@ export const updateProfile = async (
   props?: UpdateProfilePropsType,
 ): Promise<UpdateProfileResponseType> => {
   const {data} = await SsuAPI().request<UpdateProfileResponseType>({
-    url: '/profile/update',
+    url: '/musician-app/profile/update',
     method: 'PATCH',
     data: props,
   });
@@ -75,7 +73,7 @@ export const addPhotos = async (
   props?: CollectPhotosProps,
 ): Promise<CollectPhotosResponseType> => {
   const {data} = await SsuAPI().request<CollectPhotosResponseType>({
-    url: '/profile/collect-photos',
+    url: '/musician-app/profile/collect-photos',
     method: 'POST',
     data: props,
   });
@@ -87,7 +85,7 @@ export const removePhotos = async (
   props?: CollectPhotoRemoveProps,
 ): Promise<CollectPhotosResponseType> => {
   const {data} = await SsuAPI().request<CollectPhotosResponseType>({
-    url: '/profile/collect-photos/delete',
+    url: '/musician-app/profile/collect-photos/delete',
     method: 'POST',
     data: props,
   });
@@ -98,7 +96,7 @@ export const removePhotos = async (
 export const countLikedSong = async (
   props?: ParamsProps,
 ): Promise<CountLikedResponseType> => {
-  const {data} = await BaseSemeruPublic().request<CountLikedResponseType>({
+  const {data} = await SsuAPISemeru().request<CountLikedResponseType>({
     url: `/fans/${props?.uuid}`,
     method: 'GET',
   });
@@ -110,7 +108,7 @@ export const deleteProfile = async (
   props?: ParamsProps,
 ): Promise<CollectPhotosResponseType> => {
   const {data} = await SsuAPI().request<CollectPhotosResponseType>({
-    url: '/profile',
+    url: '/musician-app/profile',
     method: 'DELETE',
     data: props,
   });
@@ -122,7 +120,7 @@ export const getTotalCount = async (
   props?: ParamsProps,
 ): Promise<ProfileCountResponseType> => {
   const {data} = await SsuAPISemeru().request<ProfileCountResponseType>({
-    url: '/profile',
+    url: '/musician-app/profile',
     method: 'GET',
     params: props,
   });

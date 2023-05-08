@@ -89,6 +89,7 @@ export const FollowersScreen: React.FC<FollowersProps> = ({
         isRefetching={isRefetching}
         isFetchingNextPage={isFetchingNextPage}
         refetch={refetch}
+        myUUID={profileStorage()?.uuid}
       />
     </View>
   );

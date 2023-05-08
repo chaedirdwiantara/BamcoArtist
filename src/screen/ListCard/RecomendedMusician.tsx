@@ -56,7 +56,7 @@ const RecomendedMusician: FC<RecomendedMusicianProps> = ({
     }
   }, [dataMusician]);
 
-  return listMusician && listMusician.length > 0 ? (
+  return listMusician && listMusician?.length > 0 ? (
     <ScrollView
       horizontal
       showsHorizontalScrollIndicator={false}
