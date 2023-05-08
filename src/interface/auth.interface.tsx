@@ -10,21 +10,22 @@ export interface RegisterPropsType {
   externalUserID?: string;
 }
 
+export interface AuthType {
+  id: number;
+  uuid: string;
+  username: string;
+  email: string;
+  fullname: string;
+  createdAt: string;
+  updatedAt: string;
+  accessToken: string;
+  accessTokenExpiresAt: string;
+  refreshToken: string;
+  refreshTokenExpiresAt: string;
+}
 export interface RegisterResponseType {
   code: number;
-  data: {
-    id: number;
-    uuid: string;
-    username: string;
-    email: string;
-    fullname: string;
-    createdAt: string;
-    updatedAt: string;
-    accessToken: string;
-    accessTokenExpiresAt: string;
-    refreshToken: string;
-    refreshTokenExpiresAt: string;
-  };
+  data: AuthType;
   message: string;
   status: number;
 }
@@ -120,4 +121,29 @@ export interface RestoreAccountResponseType {
   data: string;
   message: string;
   status: number;
+}
+
+export interface RefreshTokenResponseType {
+  code: number;
+  data: {
+    uuid: string;
+    images: string;
+    accessToken: string;
+    accessTokenExpiresAt: string;
+    refreshToken: string;
+    refreshTokenExpiresAt: string;
+    lastLoginAt: string | null;
+    deletedAt: string | null;
+    fcmToken: string | null;
+  };
+  message: string;
+  status: number;
+}
+
+export interface DecodeTokenType {
+  UUID: string;
+  admin: boolean;
+  exp: number;
+  extra: string;
+  platform: string;
 }
