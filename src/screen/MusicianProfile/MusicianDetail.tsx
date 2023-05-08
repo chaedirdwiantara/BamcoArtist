@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import {
   View,
   StyleSheet,
@@ -11,6 +11,7 @@ import {
 import {
   EmptyState,
   Gap,
+  PopUp,
   SsuStatusBar,
   TabFilter,
   TopNavigation,
@@ -32,7 +33,6 @@ import {
   AlbumData,
   DataDetailMusician,
 } from '../../interface/musician.interface';
-import {dropDownDataCategory, dropDownDataSort} from '../../data/dropdown';
 import DataMusician from './DataMusician';
 import {Playlist} from '../../interface/playlist.interface';
 import ListPlaylist from '../ListCard/ListPlaylist';
@@ -42,8 +42,9 @@ import {DataExclusiveResponse} from '../../interface/setting.interface';
 import PostListProfile from '../ListCard/PostListProfile';
 import MainTab from '../../components/molecule/ProfileContent/MainTab/MainTab';
 import {FansScreen} from './ListFans';
-import {ArrowLeftIcon} from '../../assets/icon';
+import {storage} from '../../hooks/use-storage.hook';
 import {mvs} from 'react-native-size-matters';
+import {ArrowLeftIcon} from '../../assets/icon';
 
 type OnScrollEventHandler = (
   event: NativeSyntheticEvent<NativeScrollEvent>,
@@ -87,6 +88,27 @@ export const MusicianDetail: React.FC<MusicianDetailProps> = ({
   ]);
   const [isModalVisible, setModalVisible] = useState<boolean>(false);
   const [zoomImage, setZoomImage] = useState<string[]>([]);
+  const [showStatePopUp, setShowStatePopUp] = useState<boolean>();
+
+  const showPopUp: boolean | undefined = storage.getBoolean('showPopUp');
+
+  useEffect(() => {
+    if (showStatePopUp === false) {
+      const currentValue = storage.getBoolean('showPopUp');
+      if (currentValue !== false) {
+        storage.set('showPopUp', false);
+      }
+    }
+  }, [showStatePopUp]);
+
+  useMemo(() => {
+    setShowStatePopUp(currentState => {
+      if (currentState !== showPopUp) {
+        return showPopUp;
+      }
+      return currentState;
+    });
+  }, [showPopUp]);
 
   const showImage = (uri: string) => {
     setModalVisible(!isModalVisible);
@@ -105,6 +127,10 @@ export const MusicianDetail: React.FC<MusicianDetailProps> = ({
 
   const goToFollowers = () => {
     navigation.navigate('Followers', {uuid});
+  };
+
+  const closeOnPress = () => {
+    setShowStatePopUp(false);
   };
 
   const onPressGoBack = () => {
@@ -183,6 +209,21 @@ export const MusicianDetail: React.FC<MusicianDetailProps> = ({
             profile={musicianProfile}
             followersCount={followersCount}
           />
+
+          {showStatePopUp !== false && (
+            <View
+              style={{width: '100%', paddingHorizontal: widthResponsive(20)}}>
+              <Gap height={12} />
+              <PopUp
+                title={'Show your appreciation'}
+                subTitle={
+                  'Send tips to support your favorite musician to see them growth'
+                }
+                closeOnPress={closeOnPress}
+              />
+            </View>
+          )}
+
           {exclusiveContent && <ExclusiveDailyContent {...exclusiveContent} />}
 
           <Gap height={10} />
