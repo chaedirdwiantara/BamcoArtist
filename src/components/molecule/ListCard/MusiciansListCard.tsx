@@ -9,14 +9,12 @@ import {
 import {ms, mvs} from 'react-native-size-matters';
 import {Avatar, Gap} from '../../atom';
 import {
-  heightPercentage,
   normalize,
   toCurrency,
   widthPercentage,
   widthResponsive,
 } from '../../../utils';
 import {color, font, typography} from '../../../theme';
-import {Dropdown} from '../DropDown';
 import {DefaultAvatar} from '../../../assets/icon';
 import {useTranslation} from 'react-i18next';
 import DropdownMore from '../V2/DropdownFilter/DropdownMore';
@@ -27,7 +25,7 @@ export interface ListProps {
   onPressImage?: () => void;
   musicianName: string;
   imgUri: string;
-  point?: number | null;
+  point?: string;
   containerStyles?: ViewStyle;
   dataFilter?: {label: string; value: string}[];
   followerMode?: boolean;
@@ -59,6 +57,8 @@ const MusiciansListCard: React.FC<ListProps> = (props: ListProps) => {
     {label: t('Home.Tab.TopMusician.Tip'), value: '2'},
     {label: t('Home.Tab.TopMusician.Profile'), value: '3'},
   ];
+
+  const pointV = point ? point : 0;
 
   const moreMenu = () => {
     return (
@@ -118,7 +118,9 @@ const MusiciansListCard: React.FC<ListProps> = (props: ListProps) => {
         </TouchableOpacity>
       </View>
       <View style={styles.rightContainer}>
-        {point ? <Text style={styles.pointStyle}>{`${point} pts`}</Text> : null}
+        {point ? (
+          <Text style={styles.pointStyle}>{`${pointV} pts`}</Text>
+        ) : null}
         {activeMore && moreMenu()}
         {self && (
           <Text

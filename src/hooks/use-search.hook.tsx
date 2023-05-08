@@ -6,6 +6,7 @@ import {
   musicianSearch,
   playlistSearch,
   listFollowers,
+  listFanss,
 } from '../api/search.api';
 import {
   SearchProps,
@@ -21,6 +22,7 @@ export const useSearchHook = () => {
   );
   const [searchLoading, setSearchLoading] = useState<boolean>(false);
   const [dataFollowers, setDataFollowers] = useState<ListDataSearchFans[]>([]);
+  const [dataFans, setDataFans] = useState<ListDataSearchFans[]>([]);
 
   const getSearchFans = async (props?: SearchProps) => {
     try {
@@ -126,10 +128,27 @@ export const useSearchHook = () => {
     }
   };
 
+  const getListMusiciansFans = async (props: FollowersProps) => {
+    setSearchLoading(true);
+    try {
+      const response = await listFanss(props);
+      setDataFans(response.data);
+      return {
+        data: response.data,
+        meta: response.meta,
+      };
+    } catch (error) {
+      setDataFans([]);
+    } finally {
+      setSearchLoading(false);
+    }
+  };
+
   return {
     searchLoading,
     dataFollowers,
     dataSearchSongs,
+    dataFans,
     getSearchFans,
     getSearchSongs,
     getSearchAlbums,
@@ -138,5 +157,6 @@ export const useSearchHook = () => {
     getListFollowers,
     getSearchMusicians,
     getSearchPlaylists,
+    getListMusiciansFans,
   };
 };
