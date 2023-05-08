@@ -37,9 +37,9 @@ export const useAuthHook = () => {
   const [authResult, setAuthResult] = useState<RegisterResponseType | null>(
     null,
   );
-  const [loginResult, setLoginResult] = useState<null | 'preference' | 'home'>(
-    null,
-  );
+  const [loginResult, setLoginResult] = useState<
+    null | 'preference' | 'home' | 'recover'
+  >(null);
   const [isOtpValid, setIsOtpValid] = useState<boolean | null>(null);
   const [ssoRegistered, setSsoRegistered] = useState<boolean | null>(null);
   const [ssoError, setSsoError] = useState<boolean>(false);
@@ -91,10 +91,14 @@ export const useAuthHook = () => {
       if (response.code === 200 || response.code === 401) {
         if (response.data.accessToken) {
           storage.set('profile', JSON.stringify(response.data));
-          if (response.data.lastLoginAt === null) {
-            setLoginResult('preference');
+          if (response.data.deletedAt === null) {
+            if (response.data.lastLoginAt === null) {
+              setLoginResult('preference');
+            } else {
+              setLoginResult('home');
+            }
           } else {
-            setLoginResult('home');
+            setLoginResult('recover');
           }
         }
       } else if (response.code !== 1010) {
@@ -142,10 +146,14 @@ export const useAuthHook = () => {
         setSsoRegistered(true);
         if (response.data.accessToken) {
           storage.set('profile', JSON.stringify(response.data));
-          if (response.data.lastLoginAt === null) {
-            setLoginResult('preference');
+          if (response.data.deletedAt === null) {
+            if (response.data.lastLoginAt === null) {
+              setLoginResult('preference');
+            } else {
+              setLoginResult('home');
+            }
           } else {
-            setLoginResult('home');
+            setLoginResult('recover');
           }
         }
       } else {
@@ -213,10 +221,14 @@ export const useAuthHook = () => {
           setSsoRegistered(true);
           if (response.data.accessToken) {
             storage.set('profile', JSON.stringify(response.data));
-            if (response.data.lastLoginAt === null) {
-              setLoginResult('preference');
+            if (response.data.deletedAt === null) {
+              if (response.data.lastLoginAt === null) {
+                setLoginResult('preference');
+              } else {
+                setLoginResult('home');
+              }
             } else {
-              setLoginResult('home');
+              setLoginResult('recover');
             }
           }
         } else {

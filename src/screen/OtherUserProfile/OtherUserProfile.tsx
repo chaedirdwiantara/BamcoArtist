@@ -106,6 +106,10 @@ export const OtherUserProfile: FC<OtherProfileProps> = ({
     navigation.navigate('Following', {uuid: data.id});
   };
 
+  const onPressGoBack = () => {
+    navigation.goBack();
+  };
+
   return (
     <View style={styles.root}>
       {isLogin && (
@@ -119,6 +123,7 @@ export const OtherUserProfile: FC<OtherProfileProps> = ({
           totalCountlikedSong={dataCountLiked?.countLikedSong}
           playerVisible={playerVisible}
           otherUserProfile={true}
+          onPressGoBack={onPressGoBack}
         />
       )}
       <ModalLoading visible={isLoading} />

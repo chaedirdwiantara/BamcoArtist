@@ -151,3 +151,22 @@ export type LanguageResponseType = {
   message: string;
   status: number;
 };
+
+export type ListReasonType = {
+  ID: number;
+  Name: string;
+  Description: {
+    ENG: string;
+    IND: string;
+  };
+  ImageURL: string;
+  CreatedAt: string;
+  UpdatedAt: string;
+};
+
+export type ListReasonResponseType = {
+  code: number;
+  data: ListReasonType[];
+  message: string;
+  status: number;
+};

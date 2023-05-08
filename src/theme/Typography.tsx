@@ -95,7 +95,7 @@ const Typography = {
   },
   Caption: {
     fontFamily: Font.InterRegular,
-    fontSize: normalize(12),
+    fontSize: mvs(12),
     lineHeight: mvs(16),
     letterSpacing: 0.4,
   },

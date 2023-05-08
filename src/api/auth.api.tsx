@@ -9,6 +9,7 @@ import {
   RegisterPropsType,
   RegisterResponseType,
   ResendOTPResponseType,
+  RestoreAccountResponseType,
   UsernameAvailabilityResponseType,
 } from '../interface/auth.interface';
 import {RegistrationType} from '../interface/profile.interface';
@@ -201,6 +202,15 @@ export const deleteAccount = async (
     url: '/delete',
     method: 'DELETE',
     data: params,
+  });
+
+  return data;
+};
+
+export const restoreAccount = async (): Promise<RestoreAccountResponseType> => {
+  const {data} = await SsuAPI().request<RestoreAccountResponseType>({
+    url: '/restore',
+    method: 'POST',
   });
 
   return data;

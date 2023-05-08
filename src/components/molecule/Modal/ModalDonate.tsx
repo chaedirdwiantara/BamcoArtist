@@ -2,9 +2,11 @@ import React, {useEffect, useState} from 'react';
 import {
   Text,
   View,
+  Platform,
+  TextInput,
   StyleSheet,
-  TouchableWithoutFeedback,
   TouchableOpacity,
+  TouchableWithoutFeedback,
 } from 'react-native';
 import Modal from 'react-native-modal';
 import {useTranslation} from 'react-i18next';
@@ -13,19 +15,19 @@ import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
 import {
-  heightPercentage,
-  normalize,
   width,
+  normalize,
   widthPercentage,
+  heightPercentage,
 } from '../../../utils';
 import Font from '../../../theme/Font';
 import Color from '../../../theme/Color';
 import SsuSheet from '../../atom/SsuSheet';
+import {CoinIcon} from '../../../assets/icon';
 import {color, typography} from '../../../theme';
 import {RootStackParams} from '../../../navigations';
-import {CoinIcon, CoinInput} from '../../../assets/icon';
+import {Button, Gap, SelectBoxTip} from '../../atom';
 import {useCreditHook} from '../../../hooks/use-credit.hook';
-import {Button, Gap, SelectBoxTip, SsuInput} from '../../atom';
 import {creditType, listCredit} from '../../../data/listDonate';
 
 interface ModalDonateProps {
@@ -54,10 +56,43 @@ export const ModalDonate: React.FC<ModalDonateProps> = ({
   const [selectedCreditType, setSelectedCreditType] = useState<string>('');
   const [donate, setDonate] = useState<string>('');
   const [focusInput, setFocusInput] = useState<boolean>(false);
+  const [showCustomInput, setShowCustomInput] = useState<boolean>(false);
 
   const goToScreenCoin = () => {
     onPressClose();
     navigation.navigate('TopupCoin');
+  };
+
+  const CustomInput = () => {
+    return (
+      <View style={styles.containerCustom}>
+        <Text style={[typography.Subtitle1, {color: color.Neutral[10]}]}>
+          {t('Setting.Tips.CustomTip')}
+        </Text>
+        <View
+          style={[
+            styles.containerInput,
+            {
+              borderBottomWidth: focusInput ? 1 : 0,
+            },
+          ]}>
+          <TextInput
+            // value={donate}
+            // onChangeText={(newText: string) => setDonate(newText)}
+            style={styles.inputStyle}
+            placeholder="0.00"
+            placeholderTextColor={'#ffffff4d'}
+            onFocus={() => {
+              setFocusInput(true);
+            }}
+            onBlur={() => {
+              setFocusInput(false);
+            }}
+            keyboardType={'number-pad'}
+          />
+        </View>
+      </View>
+    );
   };
 
   const children = () => {
@@ -65,46 +100,45 @@ export const ModalDonate: React.FC<ModalDonateProps> = ({
       <>
         <Text style={styles.titleStyle}>{t('Home.Tab.TopMusician.Tip')}</Text>
         <View style={styles.separator} />
-        <View style={styles.containerContent}>
-          <Text style={[typography.Subtitle1, {color: color.Neutral[10]}]}>
-            {t('Setting.Tips.Label.TipType')}
-          </Text>
-          <Gap height={heightPercentage(10)} />
-          <SelectBoxTip
-            selected={selectedCredit}
-            setSelected={setSelectedCredit}
-            data={listCredit}
-            containerStyle={{width: width * 0.8}}
-          />
-        </View>
-        {selectedCredit === 'custom' && (
-          <SsuInput.InputText
-            value={donate}
-            leftIcon={<CoinInput />}
-            onChangeText={(newText: string) => setDonate(newText)}
-            placeholder={t('Setting.Tips.Label.InputDonation') || ''}
-            fontColor={color.Neutral[10]}
-            borderColor={color.Pink.linear}
-            onFocus={() => {
-              setFocusInput(true);
-            }}
-            onBlur={() => {
-              setFocusInput(false);
-            }}
-            containerStyles={styles.containerContent}
-            isFocus={focusInput}
-            keyboardType={'number-pad'}
-          />
+        {showCustomInput ? (
+          <CustomInput />
+        ) : (
+          <View style={styles.containerContent}>
+            <Text style={[typography.Subtitle1, {color: color.Neutral[10]}]}>
+              {t('Setting.Tips.Label.TipType')}
+            </Text>
+            <Gap height={heightPercentage(10)} />
+            <SelectBoxTip
+              selected={selectedCredit}
+              setSelected={setSelectedCredit}
+              data={listCredit}
+              boxStyle={styles.boxStyle1}
+              containerStyle={styles.containerSelected1}
+              activeColor={color.Pink[200]}
+            />
+          </View>
         )}
-        <View
+
+        <TouchableOpacity
           style={{
-            width,
-            height: mvs(1.5),
-            backgroundColor: color.Dark[500],
             marginTop: heightPercentage(5),
             marginBottom: heightPercentage(20),
           }}
-        />
+          onPress={() => {
+            setShowCustomInput(!showCustomInput);
+            setDonate('');
+          }}>
+          {showCustomInput ? (
+            <Text style={[typography.Subtitle1, {color: color.Pink[200]}]}>
+              {t('Btn.Back')}
+            </Text>
+          ) : (
+            <Text style={[typography.Subtitle1, {color: color.Success[400]}]}>
+              {t('Setting.Tips.AddCustom')}
+            </Text>
+          )}
+        </TouchableOpacity>
+
         <View style={styles.containerContent}>
           <Text style={[typography.Subtitle1, {color: color.Neutral[10]}]}>
             {t('Setting.Tips.Label.ContinueSendTip')}
@@ -114,7 +148,9 @@ export const ModalDonate: React.FC<ModalDonateProps> = ({
             selected={selectedCreditType}
             setSelected={setSelectedCreditType}
             data={creditType}
-            containerStyle={{width: width * 0.8}}
+            boxStyle={styles.boxStyle2}
+            containerStyle={styles.containerSelected2}
+            activeColor={color.Pink[200]}
           />
         </View>
 
@@ -218,5 +254,41 @@ const styles = StyleSheet.create({
   coinIcon: {
     alignSelf: 'center',
     marginHorizontal: widthPercentage(5),
+  },
+  containerSelected1: {
+    width,
+    alignSelf: 'center',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  containerSelected2: {
+    width: width * 0.9,
+    alignSelf: 'center',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  boxStyle1: {
+    width: width * 0.4,
+    marginHorizontal: widthPercentage(5),
+  },
+  boxStyle2: {
+    borderRadius: widthPercentage(30),
+    marginHorizontal: widthPercentage(5),
+    paddingHorizontal: widthPercentage(20),
+  },
+  containerCustom: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  containerInput: {
+    borderBottomColor: color.Pink.linear,
+    marginTop: heightPercentage(15),
+    marginBottom: heightPercentage(10),
+    paddingHorizontal: widthPercentage(12),
+  },
+  inputStyle: {
+    fontSize: mvs(40),
+    color: color.Neutral[10],
+    marginVertical: Platform.OS === 'ios' ? mvs(8) : 0,
   },
 });

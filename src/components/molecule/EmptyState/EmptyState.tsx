@@ -1,13 +1,14 @@
 import React from 'react';
 import {View, Text, StyleSheet, ViewStyle, TextStyle} from 'react-native';
 import {mvs} from 'react-native-size-matters';
-import {width} from '../../../utils';
+import {heightPercentage, width} from '../../../utils';
 import Color from '../../../theme/Color';
 import {CrackEggIcon} from '../../../assets/icon';
 import Typography from '../../../theme/Typography';
 
 interface Props {
   text: string;
+  subtitle?: string;
   icon?: React.ReactNode;
   hideIcon?: boolean;
   containerStyle?: ViewStyle;
@@ -15,11 +16,14 @@ interface Props {
 }
 
 export const EmptyState: React.FC<Props> = (props: Props) => {
-  const {text, containerStyle, icon, hideIcon, textStyle} = props;
+  const {text, subtitle, containerStyle, icon, hideIcon, textStyle} = props;
   return (
     <View style={[styles.root, containerStyle]}>
       {hideIcon ? <></> : icon ? icon : <CrackEggIcon />}
       <Text style={[Typography.Button2, styles.text, textStyle]}>{text}</Text>
+      {subtitle && (
+        <Text style={[Typography.Caption, styles.subtitle]}>{subtitle}</Text>
+      )}
     </View>
   );
 };
@@ -37,5 +41,11 @@ const styles = StyleSheet.create({
     maxWidth: width * 0.8,
     fontSize: mvs(15),
     fontFamily: 'Inter-Medium',
+  },
+  subtitle: {
+    color: Color.Neutral[10],
+    maxWidth: width * 0.8,
+    textAlign: 'center',
+    paddingTop: heightPercentage(4),
   },
 });
