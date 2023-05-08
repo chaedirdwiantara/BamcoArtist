@@ -7,9 +7,9 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {mvs} from 'react-native-size-matters';
-import {height, widthPercentage} from '../../../utils';
 import {color, font} from '../../../theme';
 import {ArrowRightIcon} from '../../../assets/icon';
+import {height, widthPercentage} from '../../../utils';
 
 export interface HorizontalCardProps {
   title: string;
@@ -17,17 +17,27 @@ export interface HorizontalCardProps {
   onPress: () => void;
   hideArrow?: boolean;
   containerStyle?: ViewStyle;
+  containerTitleStyle?: ViewStyle;
 }
 
 const HorizontalCard: React.FC<HorizontalCardProps> = (
   props: HorizontalCardProps,
 ) => {
-  const {title, children, onPress, hideArrow, containerStyle} = props;
+  const {
+    title,
+    children,
+    onPress,
+    hideArrow,
+    containerStyle,
+    containerTitleStyle,
+  } = props;
 
   return (
     <View style={containerStyle}>
       {!hideArrow && (
-        <TouchableOpacity style={styles.containerContent} onPress={onPress}>
+        <TouchableOpacity
+          style={[styles.containerContent, containerTitleStyle]}
+          onPress={onPress}>
           <Text style={styles.title}>{title}</Text>
           <ArrowRightIcon
             stroke={color.Success[400]}

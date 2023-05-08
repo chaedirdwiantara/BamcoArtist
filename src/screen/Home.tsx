@@ -79,7 +79,7 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
   const currentLanguage = i18n.language;
   const {dataDiveIn, dataAlbumComingSoon, getListDiveIn, getListComingSoon} =
     useHomeHook();
-  const {dataBanner, getListDataBanner} = useBannerHook();
+  const {dataBanner, getListDataBanner, isLoadingBanner} = useBannerHook();
   const {dataProfile, getProfileUser} = useProfileHook();
   const {addFcmToken} = useFcmHook();
   const {isPlaying, showPlayer, hidePlayer, addPlaylist} = usePlayerHook();
@@ -319,7 +319,9 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
       : setModalGuestVisible(true);
   };
 
-  if (dataProfile?.data === undefined) {
+  const bannerCondition = isLoadingBanner && dataBanner.length === 0;
+
+  if (dataProfile?.data === undefined || bannerCondition) {
     return <View style={styles.root} />;
   }
 
@@ -500,6 +502,7 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
           onPress={() => navigation.navigate('ListPlaylist')}
         />
         {/* End of Playlist */}
+        <Gap height={heightPercentage(10)} />
         {/* Coming Soon */}
         {dataAlbumComingSoon.length > 0 ? (
           <ListImageDesc
