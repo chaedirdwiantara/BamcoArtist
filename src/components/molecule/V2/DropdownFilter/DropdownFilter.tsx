@@ -112,8 +112,8 @@ export default DropDownFilter;
 
 const styles = StyleSheet.create({
   dropdownContainer: {
-    marginTop: 7,
-    marginBottom: 9,
+    marginTop: widthResponsive(13),
+    marginBottom: widthResponsive(10),
   },
   iconContainer: {
     marginRight: widthResponsive(5),

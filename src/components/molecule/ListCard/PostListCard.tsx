@@ -24,7 +24,6 @@ import {
   ShareIcon,
 } from '../../../assets/icon';
 import CoinB from '../../../assets/icon/CoinB.icon';
-import {Dropdown} from '../DropDown';
 import {DataDropDownType, dataUpdatePost} from '../../../data/dropdown';
 import DropdownMore from '../V2/DropdownFilter/DropdownMore';
 import {

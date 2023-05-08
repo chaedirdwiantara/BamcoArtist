@@ -35,6 +35,7 @@ interface ModalShareProps {
   onPressClose: () => void;
   onPressCopy: () => void;
   hideMusic?: boolean;
+  onModalHide?: () => void;
 }
 
 export const ModalShare: React.FC<ModalShareProps> = ({
@@ -49,11 +50,16 @@ export const ModalShare: React.FC<ModalShareProps> = ({
   onPressClose,
   onPressCopy,
   hideMusic,
+  onModalHide,
 }) => {
   const {t} = useTranslation();
   const onPressCopyLink = () => {
     onPressCopy();
     onPressClose();
+  };
+
+  const onPressJustCopy = () => {
+    onPressCopy();
   };
 
   const children = () => {
@@ -82,7 +88,9 @@ export const ModalShare: React.FC<ModalShareProps> = ({
           </View>
         ) : null}
 
-        <TouchableOpacity style={styles.containerSong} onPress={onPressCopy}>
+        <TouchableOpacity
+          style={styles.containerSong}
+          onPress={onPressJustCopy}>
           <Text style={styles.copyLink}>{url}</Text>
           <Gap width={widthPercentage(5)} />
           <CopyIcon />
@@ -105,7 +113,10 @@ export const ModalShare: React.FC<ModalShareProps> = ({
   };
 
   return (
-    <Modal isVisible={modalVisible} style={{margin: 0}}>
+    <Modal
+      isVisible={modalVisible}
+      style={{margin: 0}}
+      onModalHide={onModalHide}>
       <TouchableWithoutFeedback onPress={onPressClose}>
         <View style={styles.modalOverlay} />
       </TouchableWithoutFeedback>
