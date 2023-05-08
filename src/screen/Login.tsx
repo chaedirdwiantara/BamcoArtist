@@ -229,9 +229,11 @@ export const LoginScreen: React.FC = () => {
   };
 
   const handleChangeLoginType = (type: RegistrationType) => {
+    if (watch('loginType') !== type) {
+      handleFocusInput(null);
+      reset();
+    } else null;
     setValue('loginType', type);
-    handleFocusInput(null);
-    watch('loginType') !== type ? reset() : null;
   };
 
   const handleFocusInput = (
