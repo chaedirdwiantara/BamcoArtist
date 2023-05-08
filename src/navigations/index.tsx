@@ -283,8 +283,12 @@ export type RootStackParams = {
   };
   Checkout: undefined;
   Transaction: undefined;
-  TransactionDetailMerch: undefined;
-  TransactionDetailTicket: undefined;
+  TransactionDetailMerch: {
+    id: string;
+  };
+  TransactionDetailTicket: {
+    id: string;
+  };
   Track: undefined;
   TicketDetail: undefined;
   Shop: undefined;

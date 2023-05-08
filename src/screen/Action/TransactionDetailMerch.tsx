@@ -1,10 +1,11 @@
 import {View, Text, StyleSheet, ScrollView} from 'react-native';
-import React from 'react';
+import React, {useState} from 'react';
 import {
   Avatar,
   Button,
   ButtonGradient,
   Gap,
+  ModalConfirm,
   TopNavigation,
 } from '../../components';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
@@ -16,6 +17,8 @@ import Typography from '../../theme/Typography';
 import CartItem from '../../components/atom/Cart/CartItem';
 import {mvs} from 'react-native-size-matters';
 import {ModalReview} from '../../components/molecule/Modal/ModalReview';
+import {dataTransaction} from '../../data/Action/transaction';
+import {ModalSuccessCheckout} from '../../components/molecule/Modal/ModalSuccessCheckout';
 
 type TransactionDetailMerchProps = NativeStackScreenProps<
   RootStackParams,
@@ -24,8 +27,20 @@ type TransactionDetailMerchProps = NativeStackScreenProps<
 
 export const TransactionDetailMerch: React.FC<TransactionDetailMerchProps> = ({
   navigation,
+  route,
 }: TransactionDetailMerchProps) => {
   const {t} = useTranslation();
+  const [createReview, setCreateReview] = useState<boolean>(false);
+  const [finishOrder, setFinishOrder] = useState<boolean>(false);
+  const [isFinish, setIsFinish] = useState<boolean>(false);
+  const detail = dataTransaction.find(data => data.id === route.params.id);
+
+  const handleFinishOrder = () => {
+    setFinishOrder(false);
+    setTimeout(() => {
+      setIsFinish(true);
+    }, 1000);
+  };
 
   return (
     <View style={styles.root}>
@@ -43,19 +58,27 @@ export const TransactionDetailMerch: React.FC<TransactionDetailMerchProps> = ({
               {t('Transaction.Detail.Product')}
             </Text>
             <View style={styles.rowCenterBetween}>
-              <Avatar imgUri="https://picsum.photos/200" />
+              <Avatar imgUri={detail?.sellerImage ?? ''} />
               <Gap width={widthPercentage(6)} />
               <Text
                 style={[Typography.Subtitle3, {color: Color.Neutral[10]}]}
                 numberOfLines={1}>
-                Blackpink
+                {detail?.seller}
               </Text>
             </View>
           </View>
           <Gap height={heightPercentage(16)} />
           <View>
-            <CartItem editable={false} detail qty={1} />
-            <CartItem editable={false} detail qty={1} />
+            {detail?.items.map(item => (
+              <CartItem
+                detail
+                name={item.name}
+                image={item.image}
+                price={item.totalPrice}
+                qty={item.qty}
+                editable={false}
+              />
+            ))}
           </View>
           <Text>
             <Text style={styles.title}>Total</Text>
@@ -164,35 +187,80 @@ export const TransactionDetailMerch: React.FC<TransactionDetailMerchProps> = ({
         {/* Button */}
         <View style={[styles.container, {borderBottomWidth: 0}]}>
           <Gap height={heightPercentage(40)} />
-          <ButtonGradient
-            label={t('Transaction.Finish')}
-            textStyles={{fontSize: mvs(14)}}
-            gradientStyles={{width: '100%'}}
-            disabled={true}
-            onPress={() => null}
-          />
-          <Gap height={heightPercentage(8)} />
+
+          {detail?.status !== 3 && (
+            <>
+              <ButtonGradient
+                label={t('Transaction.Finish')}
+                textStyles={{fontSize: mvs(14)}}
+                gradientStyles={{width: '100%'}}
+                disabled={detail?.status !== 2 ? true : false}
+                onPress={() => setFinishOrder(true)}
+              />
+              <Gap height={heightPercentage(8)} />
+            </>
+          )}
+
+          {detail?.status === 3 && (
+            <>
+              <Button
+                label={t('Review.Title')}
+                type={'contained'}
+                textStyles={{fontSize: mvs(14)}}
+                containerStyles={{width: '100%'}}
+                onPress={() => setCreateReview(true)}
+              />
+              <Gap height={heightPercentage(8)} />
+            </>
+          )}
+
           <Button
             label={t('Transaction.Track')}
             type={'border'}
-            textStyles={{fontSize: mvs(14)}}
+            textStyles={{fontSize: mvs(14), color: Color.Success[400]}}
             containerStyles={{width: '100%'}}
             onPress={() => navigation.navigate('Track')}
           />
           <Gap height={heightPercentage(8)} />
-          <Button
-            label={t('Transaction.Track')}
-            type={'border'}
-            textStyles={{fontSize: mvs(14), color: Color.Error[500]}}
-            containerStyles={{borderColor: 'transparent', width: '100%'}}
-            disabled={true}
-            onPress={() => null}
-          />
+          {detail?.status === 0 && (
+            <>
+              <Button
+                label={t('Transaction.Cancel')}
+                type={'border'}
+                textStyles={{fontSize: mvs(14), color: Color.Error[500]}}
+                containerStyles={{borderColor: 'transparent', width: '100%'}}
+                disabled={true}
+                onPress={() => null}
+              />
+              <Gap height={heightPercentage(8)} />
+            </>
+          )}
+
           <Gap height={heightPercentage(20)} />
         </View>
       </ScrollView>
 
-      <ModalReview modalVisible={true} onPressClose={() => null} />
+      <ModalConfirm
+        modalVisible={finishOrder}
+        title={t('Transaction.Order.Title') || ''}
+        subtitle={t('Transaction.Order.Confirm') || ''}
+        onPressClose={() => setFinishOrder(false)}
+        onPressOk={handleFinishOrder}
+      />
+
+      <ModalSuccessCheckout
+        title={t('Transaction.Order.Finish') || ''}
+        buttonText={t('Btn.Dismiss') || ''}
+        modalVisible={isFinish}
+        toggleModal={() => {
+          setIsFinish(false);
+        }}
+      />
+
+      <ModalReview
+        modalVisible={createReview}
+        onPressClose={() => setCreateReview(false)}
+      />
     </View>
   );
 };

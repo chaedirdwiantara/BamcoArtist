@@ -34,6 +34,7 @@ import Typography from '../../theme/Typography';
 import LineUp from '../../components/molecule/EventDetail/LineUp';
 import TicketDescription from '../../components/molecule/EventDetail/TicketDescription';
 import QRCode from 'react-native-qrcode-svg';
+import {dataConcert} from '../../data/Action/concert';
 
 type MerchDetailProps = NativeStackScreenProps<
   RootStackParams,
@@ -62,6 +63,8 @@ const TransactionDetailTicket: React.FC<MerchDetailProps> = ({
     getListDataMusician({filterBy: 'top'});
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const detail = dataConcert.find(data => data.id === route.params.id);
 
   return (
     <KeyboardAvoidingView
@@ -96,10 +99,12 @@ const TransactionDetailTicket: React.FC<MerchDetailProps> = ({
           </View>
 
           <View style={styles.descContainer}>
-            <Text style={styles.title}>Head In The Cloud 2022 - Silver</Text>
+            <Text style={styles.title}>
+              {detail?.item.name} - {detail?.category}
+            </Text>
             <Gap height={heightPercentage(8)} />
             <Text style={styles.title2}>
-              3 March 2023, Jakarta Velodrome, Jakarta
+              {detail?.date}, Jakarta Velodrome, Jakarta
             </Text>
           </View>
           <SsuDivider />

@@ -61,7 +61,7 @@ export const ModalReview: React.FC<ModalReviewProps> = ({
             label={t('Btn.Cancel')}
             textStyles={{fontSize: mvs(14), color: Color.Success[400]}}
             containerStyles={{width: '100%'}}
-            onPress={() => null}
+            onPress={onPressClose}
           />
         </View>
       </View>

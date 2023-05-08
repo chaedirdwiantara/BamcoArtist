@@ -5,16 +5,23 @@ import Color from '../../../theme/Color';
 import {heightPercentage, widthPercentage} from '../../../utils';
 import Typography from '../../../theme/Typography';
 
-const PromoItem = ({onPress}: {onPress: () => void}) => {
+interface PromoItemProps {
+  title: string;
+  end: string;
+  onPress: () => void;
+}
+
+const PromoItem: React.FC<PromoItemProps> = props => {
+  const {title, end, onPress} = props;
   return (
     <TouchableOpacity style={styles.root}>
       <View style={styles.textContainer}>
         <Text numberOfLines={1} style={[Typography.Subtitle2, styles.title]}>
-          Happy Halloween Cashback 10% Credits asdasd asd
+          {title}
         </Text>
         <View style={styles.descContainer}>
           <ClockIcon />
-          <Text style={styles.desc}>Ended in 24 march 2023</Text>
+          <Text style={styles.desc}>Ended in {end}</Text>
           <TouchableOpacity onPress={onPress}>
             <Text style={styles.detail}>Details</Text>
           </TouchableOpacity>

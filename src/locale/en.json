@@ -860,7 +860,12 @@
     },
     "Finish": "Finish Order",
     "Track": "Track Status",
-    "Cancel": "Cancel Order"
+    "Cancel": "Cancel Order",
+    "Order": {
+      "Title": "Finish Order",
+      "Confirm": "Are you sure to finish this order?",
+      "Finish": "Order Finished!"
+    }
   },
   "Tracking": {
     "Title": "Track Status"

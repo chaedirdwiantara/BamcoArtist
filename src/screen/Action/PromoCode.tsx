@@ -7,6 +7,7 @@ import Color from '../../theme/Color';
 import {useTranslation} from 'react-i18next';
 import {heightPercentage, width, widthPercentage} from '../../utils';
 import PromoItem from '../../components/atom/Promo/PromoItem';
+import {dataPromo} from '../../data/Action/promo';
 
 type PromoCodeProps = NativeStackScreenProps<RootStackParams, 'PromoCode'>;
 
@@ -25,12 +26,15 @@ export const PromoCode: React.FC<PromoCodeProps> = ({
       <ScrollView
         showsVerticalScrollIndicator={false}
         style={{flex: 1, paddingHorizontal: widthPercentage(24)}}>
-        <PromoItem
-          onPress={() => navigation.navigate('PromoDetail', {id: 'tes'})}
-        />
-        <PromoItem
-          onPress={() => navigation.navigate('PromoDetail', {id: 'tes'})}
-        />
+        {dataPromo.map(data => {
+          return (
+            <PromoItem
+              title={data.title}
+              end={data.end}
+              onPress={() => navigation.navigate('PromoDetail', {id: data.id})}
+            />
+          );
+        })}
       </ScrollView>
     </View>
   );

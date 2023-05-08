@@ -14,6 +14,7 @@ import {useTranslation} from 'react-i18next';
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParams} from '../../../navigations';
+import {dataTransaction} from '../../../data/Action/transaction';
 
 const MerchTransaction = () => {
   const {t} = useTranslation();
@@ -72,21 +73,31 @@ const MerchTransaction = () => {
         })}
       </View>
       <ScrollView showsVerticalScrollIndicator={false} style={{flex: 1}}>
-        <CartBox
-          editable={false}
-          transaction={getActiveTabTitle()}
-          arrival="22 Feb - 24 Feb"
-          onPressDetail={() => navigation.navigate('TransactionDetailMerch')}>
-          <CartItem editable={false} />
-          <CartItem editable={false} />
-        </CartBox>
-        <CartBox
-          editable={false}
-          transaction={getActiveTabTitle()}
-          arrival="22 Feb - 24 Feb"
-          onPressDetail={() => navigation.navigate('TransactionDetailMerch')}>
-          <CartItem editable={false} />
-        </CartBox>
+        {dataTransaction.map(data => {
+          if (data.status === tabActive) {
+            return (
+              <CartBox
+                seller={data.seller}
+                sellerImage={data.sellerImage}
+                editable={false}
+                transaction={getActiveTabTitle()}
+                arrival={data.estArrival}
+                onPressDetail={() =>
+                  navigation.navigate('TransactionDetailMerch', {id: data.id})
+                }>
+                {data.items.map(item => (
+                  <CartItem
+                    name={item.name}
+                    image={item.image}
+                    price={item.totalPrice}
+                    qty={item.qty}
+                    editable={false}
+                  />
+                ))}
+              </CartBox>
+            );
+          }
+        })}
       </ScrollView>
     </View>
   );

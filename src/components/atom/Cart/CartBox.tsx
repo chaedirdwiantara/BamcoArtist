@@ -11,6 +11,8 @@ import {useTranslation} from 'react-i18next';
 import {EventType} from '../../../interface/event.interface';
 
 interface CartBoxProps {
+  seller: string;
+  sellerImage: string;
   type?: EventType;
   children: ReactNode;
   editable?: boolean;
@@ -20,10 +22,14 @@ interface CartBoxProps {
   transaction?: string;
   arrival?: string;
   onPressDetail?: () => void;
+  date?: string;
+  category?: string;
 }
 
 const CartBox: React.FC<CartBoxProps> = props => {
   const {
+    seller,
+    sellerImage,
     type = EventType.Merch,
     children,
     editable = true,
@@ -33,6 +39,8 @@ const CartBox: React.FC<CartBoxProps> = props => {
     transaction,
     arrival,
     onPressDetail,
+    date,
+    category,
   } = props;
 
   const {t} = useTranslation();
@@ -60,7 +68,7 @@ const CartBox: React.FC<CartBoxProps> = props => {
                 onPress={onPressDetail}
                 style={[styles.rowCenter, {justifyContent: 'space-between'}]}>
                 <View style={[styles.rowCenter]}>
-                  <Avatar imgUri="https://picsum.photos/200" />
+                  <Avatar imgUri={sellerImage} />
                   <Gap width={widthPercentage(6)} />
                   <Text
                     style={[
@@ -68,7 +76,7 @@ const CartBox: React.FC<CartBoxProps> = props => {
                       {color: Color.Neutral[10], fontSize: normalize(12)},
                     ]}
                     numberOfLines={1}>
-                    Blackpink
+                    {seller}
                   </Text>
                   <Gap width={widthPercentage(16)} />
                   <ArrowRightIcon stroke={Color.Success[400]} />
@@ -103,7 +111,7 @@ const CartBox: React.FC<CartBoxProps> = props => {
                   {color: Color.Neutral[10], fontSize: normalize(12)},
                 ]}
                 numberOfLines={1}>
-                Blackpink
+                {seller}
               </Text>
             </View>
           )}
@@ -194,7 +202,7 @@ const CartBox: React.FC<CartBoxProps> = props => {
             onPress={onPressDetail}
             style={[styles.rowCenter, {justifyContent: 'space-between'}]}>
             <View style={[styles.rowCenter]}>
-              <Avatar imgUri="https://picsum.photos/200" />
+              <Avatar imgUri={sellerImage} />
               <Gap width={widthPercentage(6)} />
               <Text
                 style={[
@@ -202,7 +210,7 @@ const CartBox: React.FC<CartBoxProps> = props => {
                   {color: Color.Neutral[10], fontSize: normalize(12)},
                 ]}
                 numberOfLines={1}>
-                Blackpink
+                {seller}
               </Text>
               <Gap width={widthPercentage(16)} />
               <ArrowRightIcon stroke={Color.Success[400]} />
@@ -218,7 +226,7 @@ const CartBox: React.FC<CartBoxProps> = props => {
           Date
         </Text>
         <Text style={[Typography.Subtitle3, {color: Color.Dark[50]}]}>
-          3 March 2023
+          {date}
         </Text>
       </View>
       <View style={styles.concertDetail}>
@@ -226,7 +234,7 @@ const CartBox: React.FC<CartBoxProps> = props => {
           Ticket Category
         </Text>
         <Text style={[Typography.Subtitle3, {color: Color.Dark[50]}]}>
-          Silver
+          {category}
         </Text>
       </View>
       <Gap height={heightPercentage(12)} />

@@ -10,6 +10,7 @@ import Typography from '../../theme/Typography';
 import CartItem from '../../components/atom/Cart/CartItem';
 import CartBox from '../../components/atom/Cart/CartBox';
 import BottomPrice from '../../components/atom/Cart/BottomPrice';
+import {dataCart} from '../../data/Action/cart';
 
 type CartProps = NativeStackScreenProps<RootStackParams, 'Cart'>;
 
@@ -38,13 +39,20 @@ export const Cart: React.FC<CartProps> = ({navigation}: CartProps) => {
         </View>
       </View>
       <ScrollView showsVerticalScrollIndicator={false} style={{flex: 1}}>
-        <CartBox>
-          <CartItem />
-          <CartItem />
-        </CartBox>
-        <CartBox>
-          <CartItem />
-        </CartBox>
+        {dataCart.map(data => {
+          return (
+            <CartBox seller={data.seller} sellerImage={data.sellerImage}>
+              {data.items.map(item => (
+                <CartItem
+                  name={item.name}
+                  image={item.image}
+                  price={item.totalPrice}
+                  qty={item.qty}
+                />
+              ))}
+            </CartBox>
+          );
+        })}
       </ScrollView>
       <BottomPrice
         onPressPromo={() => navigation.navigate('PromoCode')}

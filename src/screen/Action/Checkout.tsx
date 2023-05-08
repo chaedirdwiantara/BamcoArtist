@@ -22,6 +22,7 @@ import {useSettingHook} from '../../hooks/use-setting.hook';
 import {useFocusEffect} from '@react-navigation/native';
 import {mvs} from 'react-native-size-matters';
 import {ModalSuccessCheckout} from '../../components/molecule/Modal/ModalSuccessCheckout';
+import {dataCart} from '../../data/Action/cart';
 
 type CheckoutProps = NativeStackScreenProps<RootStackParams, 'Checkout'>;
 
@@ -98,21 +99,21 @@ export const Checkout: React.FC<CheckoutProps> = ({
         )}
       </View>
       <ScrollView showsVerticalScrollIndicator={false} style={{flex: 1}}>
-        <CartBox
-          editable={false}
-          onPressDelivery={() => handleShowDelivery('package')}
-          onPressAgent={() => handleShowDelivery('agent')}
-          delivery>
-          <CartItem editable={false} />
-          <CartItem editable={false} />
-        </CartBox>
-        <CartBox
-          editable={false}
-          onPressDelivery={() => handleShowDelivery('package')}
-          onPressAgent={() => handleShowDelivery('agent')}
-          delivery>
-          <CartItem editable={false} />
-        </CartBox>
+        {dataCart.map(data => {
+          return (
+            <CartBox seller={data.seller} sellerImage={data.sellerImage}>
+              {data.items.map(item => (
+                <CartItem
+                  name={item.name}
+                  image={item.image}
+                  price={item.totalPrice}
+                  qty={item.qty}
+                  editable={false}
+                />
+              ))}
+            </CartBox>
+          );
+        })}
       </ScrollView>
       <BottomPrice
         onPressPromo={() => navigation.navigate('PromoCode')}

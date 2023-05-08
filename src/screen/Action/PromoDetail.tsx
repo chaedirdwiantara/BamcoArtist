@@ -8,13 +8,16 @@ import {useTranslation} from 'react-i18next';
 import {heightPercentage, widthPercentage} from '../../utils';
 import {ClockIcon, WalletIcon} from '../../assets/icon';
 import {mvs} from 'react-native-size-matters';
+import {dataPromo} from '../../data/Action/promo';
 
 type PromoDetailProps = NativeStackScreenProps<RootStackParams, 'PromoDetail'>;
 
 export const PromoDetail: React.FC<PromoDetailProps> = ({
   navigation,
+  route,
 }: PromoDetailProps) => {
   const {t} = useTranslation();
+  const promo = dataPromo.find(data => data.id === route.params.id);
   return (
     <View style={styles.root}>
       <TopNavigation.Type1
@@ -25,7 +28,7 @@ export const PromoDetail: React.FC<PromoDetailProps> = ({
       />
       <View>
         <View style={styles.topContainer}>
-          <Text style={styles.title}>Cashback 400 Credits</Text>
+          <Text style={styles.title}>{promo?.title}</Text>
         </View>
         <View style={styles.topContainer}>
           <View
@@ -34,7 +37,7 @@ export const PromoDetail: React.FC<PromoDetailProps> = ({
               <ClockIcon stroke="#FF69D2" />
               <Text style={styles.desc}>{t('Promo.Detail.Time')}</Text>
             </View>
-            <Text style={styles.detail}> 24 march 2023</Text>
+            <Text style={styles.detail}> {promo?.end}</Text>
           </View>
           <Gap height={heightPercentage(10)} />
           <View
@@ -43,7 +46,9 @@ export const PromoDetail: React.FC<PromoDetailProps> = ({
               <WalletIcon />
               <Text style={styles.desc}>{t('Promo.Detail.Minimum')}</Text>
             </View>
-            <Text style={styles.detail}> 2000 Credits</Text>
+            <Text style={styles.detail}>
+              {promo?.minimum !== 0 ? promo?.minimum + ' Credits' : '-'}
+            </Text>
           </View>
         </View>
       </View>
@@ -56,28 +61,15 @@ export const PromoDetail: React.FC<PromoDetailProps> = ({
         }}>
         <Text style={styles.tncTitle}>{t('Promo.Detail.TnC')}</Text>
         <View>
-          <View style={styles.tncDesc}>
-            <Text style={styles.tncText}>1.</Text>
-            <Gap width={widthPercentage(4)} />
-            <Text style={styles.tncText}>
-              This promo is only applicable for purchases made on 24 March 2023
-              at our online store.
-            </Text>
-          </View>
-          <View style={styles.tncDesc}>
-            <Text style={styles.tncText}>2.</Text>
-            <Gap width={widthPercentage(4)} />
-            <Text style={styles.tncText}>
-              The promo is valid for minimum purchase of 2,000 SSU Credits.
-            </Text>
-          </View>
-          <View style={styles.tncDesc}>
-            <Text style={styles.tncText}>3.</Text>
-            <Gap width={widthPercentage(4)} />
-            <Text style={styles.tncText}>
-              The promo is valid for maximum discount of 500 SSU Credits.
-            </Text>
-          </View>
+          {promo?.tnc.map((item, index) => {
+            return (
+              <View style={styles.tncDesc}>
+                <Text style={styles.tncText}>{index + 1}.</Text>
+                <Gap width={widthPercentage(4)} />
+                <Text style={styles.tncText}>{item}</Text>
+              </View>
+            );
+          })}
         </View>
       </ScrollView>
     </View>

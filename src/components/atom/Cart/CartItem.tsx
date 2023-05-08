@@ -10,18 +10,22 @@ import {
   heightResponsive,
   normalize,
   heightPercentage,
+  toCurrency,
 } from '../../../utils';
 import CheckBox from '../CheckBox';
 import Gap from '../Gap/Gap';
 
 interface CartItemProps {
+  name: string;
+  image: string;
+  price: number;
   editable?: boolean;
   detail?: boolean;
   qty?: number;
 }
 
 const CartItem: React.FC<CartItemProps> = props => {
-  const {editable = true, detail = false, qty} = props;
+  const {name, image, price, editable = true, detail = false, qty} = props;
   return (
     <View
       style={[
@@ -38,7 +42,7 @@ const CartItem: React.FC<CartItemProps> = props => {
 
       <View style={[styles.row]}>
         <FastImage
-          source={{uri: 'https://picsum.photos/200'}}
+          source={{uri: image}}
           style={[
             {
               width: widthResponsive(70),
@@ -58,7 +62,7 @@ const CartItem: React.FC<CartItemProps> = props => {
               {color: Color.Neutral[10], fontSize: normalize(12)},
             ]}
             numberOfLines={2}>
-            Blackpink In Your Area 2023 Anniversary World Tour Jacket
+            {name}
           </Text>
           <View
             style={[
@@ -78,7 +82,7 @@ const CartItem: React.FC<CartItemProps> = props => {
             <Text
               style={[Typography.Subtitle3, {color: Color.Pink.linear}]}
               numberOfLines={1}>
-              2,750 Credits
+              {toCurrency(price, {withFraction: false})} Credits
             </Text>
             {detail ? null : editable ? (
               <View style={[styles.row, styles.alignCenter]}>
@@ -89,7 +93,7 @@ const CartItem: React.FC<CartItemProps> = props => {
                 <TouchableOpacity>
                   <MinusIcon fill={Color.Dark[50]} style={{paddingTop: 4}} />
                 </TouchableOpacity>
-                <Text style={[Typography.Subtitle3, styles.qty]}>1</Text>
+                <Text style={[Typography.Subtitle3, styles.qty]}>{qty}</Text>
                 <TouchableOpacity>
                   <AddIcon stroke={Color.Neutral[10]} />
                 </TouchableOpacity>
