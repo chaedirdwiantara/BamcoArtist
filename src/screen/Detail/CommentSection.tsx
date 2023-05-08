@@ -153,11 +153,15 @@ const CommentSection: FC<CommentSectionType> = (props: CommentSectionType) => {
     commentLvl: number,
     parentID: string,
   ) => {
-    onComment?.({id, userName, commentLvl, parentID});
+    userName === 'accountdeactivated'
+      ? console.log('deleted account detected')
+      : onComment?.({id, userName, commentLvl, parentID});
   };
 
-  const handleToDetail = (id: string) => {
-    toDetailOnPress?.(id);
+  const handleToDetail = (id: string, userName: string) => {
+    userName === 'accountdeactivated'
+      ? console.log('deleted account detected')
+      : toDetailOnPress?.(id);
   };
 
   const viewMoreOnPress = (id: string, value: number) => {
@@ -196,7 +200,9 @@ const CommentSection: FC<CommentSectionType> = (props: CommentSectionType) => {
     } = props;
     return (
       <CommentLvlThree
-        toDetailOnPress={() => handleToDetail(commentOwner.UUID)}
+        toDetailOnPress={() =>
+          handleToDetail(commentOwner.UUID, commentOwner.username)
+        }
         imgUriLvl3={commentOwner.image}
         userNameLvl3={commentOwner.fullname}
         userIdLvl3={commentOwner.username}
@@ -206,7 +212,11 @@ const CommentSection: FC<CommentSectionType> = (props: CommentSectionType) => {
         commentOnPressLvl3={() =>
           commentOnPress(id, commentOwner.username, 3, parentID)
         }
-        likeOnPressLvl3={() => likeOnPress(id, isLiked)}
+        likeOnPressLvl3={
+          commentOwner.username !== 'accountdeactivated'
+            ? () => likeOnPress(id, isLiked)
+            : () => {}
+        }
         likePressedLvl3={
           selectedId === undefined
             ? isLiked
@@ -266,7 +276,9 @@ const CommentSection: FC<CommentSectionType> = (props: CommentSectionType) => {
     } = props;
     return (
       <CommentLvlTwo
-        toDetailOnPress={() => handleToDetail(commentOwner.UUID)}
+        toDetailOnPress={() =>
+          handleToDetail(commentOwner.UUID, commentOwner.username)
+        }
         imgUriLvl2={commentOwner.image}
         userNameLvl2={commentOwner.fullname}
         userIdLvl2={commentOwner.username}
@@ -276,7 +288,11 @@ const CommentSection: FC<CommentSectionType> = (props: CommentSectionType) => {
         commentOnPressLvl2={() =>
           commentOnPress(id, commentOwner.username, 2, parentID)
         }
-        likeOnPressLvl2={() => likeOnPress(id, isLiked)}
+        likeOnPressLvl2={
+          commentOwner.username !== 'accountdeactivated'
+            ? () => likeOnPress(id, isLiked)
+            : () => {}
+        }
         likePressedLvl2={
           selectedId === undefined
             ? isLiked
@@ -389,7 +405,11 @@ const CommentSection: FC<CommentSectionType> = (props: CommentSectionType) => {
           <PostComment
             toDetailOnPress={
               item.commentOwner !== null
-                ? () => handleToDetail(item.commentOwner.UUID)
+                ? () =>
+                    handleToDetail(
+                      item.commentOwner.UUID,
+                      item.commentOwner.username,
+                    )
                 : () => {
                     console.log('something error happened');
                   }
@@ -403,14 +423,17 @@ const CommentSection: FC<CommentSectionType> = (props: CommentSectionType) => {
               item.commentOwner !== null ? item.commentOwner.fullname : '',
               21,
             )}
-            userName={`@${elipsisText(
-              item.commentOwner !== null ? item.commentOwner.username : '',
-              10,
-            )}`}
+            userName={
+              item.commentOwner !== null ? item.commentOwner.username : ''
+            }
             postDate={item.timeAgo}
             artistPostId={item.repliedTo}
             commentCaption={item.caption}
-            likeOnPress={() => likeOnPress(item.id, item.isLiked)}
+            likeOnPress={
+              item.commentOwner.username !== 'accountdeactivated'
+                ? () => likeOnPress(item.id, item.isLiked)
+                : () => {}
+            }
             likePressed={
               selectedId === undefined
                 ? item.isLiked
