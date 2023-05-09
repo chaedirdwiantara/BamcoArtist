@@ -11,6 +11,7 @@ import {
   ResendOTPResponseType,
   RestoreAccountResponseType,
   UsernameAvailabilityResponseType,
+  RefreshTokenResponseType,
 } from '../interface/auth.interface';
 import {RegistrationType} from '../interface/profile.interface';
 import SsuAPI from './baseRinjani';
@@ -210,6 +211,15 @@ export const deleteAccount = async (
 export const restoreAccount = async (): Promise<RestoreAccountResponseType> => {
   const {data} = await SsuAPI().request<RestoreAccountResponseType>({
     url: '/musician-app/restore',
+    method: 'POST',
+  });
+
+  return data;
+};
+
+export const refreshToken = async (): Promise<RefreshTokenResponseType> => {
+  const {data} = await SsuAPI().request<RefreshTokenResponseType>({
+    url: '/fans-app/refresh-token',
     method: 'POST',
   });
 

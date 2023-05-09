@@ -1,5 +1,6 @@
 import axios, {AxiosError, AxiosInstance, AxiosRequestConfig} from 'axios';
 import {storage} from '../hooks/use-storage.hook';
+import {getAccessToken} from '../service/refreshToken';
 
 type SsuAPIParams = {
   cookie?: string;
@@ -15,6 +16,22 @@ const setupAPIClient = () => {
       'Content-Type': 'application/json',
       'Accept-Language': storage.getString('lang') ?? 'en',
     },
+  });
+
+  API.interceptors.request.use(async request => {
+    const JSONProfile = storage.getString('profile');
+    if (JSONProfile) {
+      try {
+        const userToken = await getAccessToken();
+        if (userToken) {
+          request.headers!['Authorization'] = `Bearer ${userToken}`;
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    }
+
+    return request;
   });
 
   API.interceptors.response.use(
@@ -40,7 +57,6 @@ export const initialize = (
     setupAPIClient();
   }
 
-  // TODO: add token on interceptor
   const JSONProfile = storage.getString('profile');
   let token: string | null = null;
   if (JSONProfile) {
