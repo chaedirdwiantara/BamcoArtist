@@ -46,9 +46,8 @@ import {usePlayerHook} from '../../hooks/use-player.hook';
 import {dummySongImg} from '../../data/image';
 import {SongList, TranscodedSongType} from '../../interface/song.interface';
 import {useTranslation} from 'react-i18next';
-import * as Progress from 'react-native-progress';
 import VideoComp from '../../components/molecule/VideoPlayer/videoComp';
-import {useVideoStore} from '../../store/video.store';
+import {useDataVideoForPost, useVideoStore} from '../../store/video.store';
 
 type PostDetailProps = NativeStackScreenProps<RootStackParams, 'CreatePost'>;
 
@@ -79,16 +78,8 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
     setCreatePost,
     setUpdatePost,
   } = useFeedHook();
-  const {
-    isLoadingImage,
-    dataImage,
-    dataVideo,
-    setUploadImage,
-    setIsLoadingVideo,
-    setDataVideo,
-    setIsErrorVideo,
-    setUploadVideo,
-  } = useUploadImageHook();
+  const {isLoadingImage, dataImage, dataVideo, setUploadImage} =
+    useUploadImageHook();
   const {
     isPlaying,
     seekPlayer,
@@ -107,18 +98,18 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   const [updateOn, setUpdateOn] = useState<boolean>(false);
   const [userId, setUserId] = useState<string>('');
   const [modalConfirm, setModalConfirm] = useState<boolean>(false);
+  const [allowToBack, setAllowToBack] = useState<boolean>(false);
 
   // * Hooks for uploading
   const [uri, setUri] = useState<Image[]>([]);
   const [active, setActive] = useState<boolean>(false);
 
   // * video hooks
-  const [progress, setProgress] = useState<number>();
-  const [preventPost, setPreventPost] = useState<boolean>(false);
-  const [deleteDataVideo, setDeleteDataVideo] = useState<boolean>(false);
   const [keyBrdIsActive, setKeybrdIsActive] = useState<boolean>(false);
 
-  const {uriVideo, setUriVideo} = useVideoStore();
+  const {uriVideo, setUriVideo, setAllowToUpload} = useVideoStore();
+  const {setStoredInputText, setStoredValueFilter, setStoredDataAudience} =
+    useDataVideoForPost();
 
   useEffect(() => {
     if (dataAudienceChoosen) {
@@ -134,62 +125,20 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
 
   // ! UPLOAD VIDEO AREA
 
+  //! set data video to global state
   const sendVideoUri = (val: Video) => {
     setUriVideo(val);
   };
 
-  //CALL uploadVideo
+  //! save data for upload video to global state
   useEffect(() => {
-    if (!uriVideo || uriVideo.duration == null) return;
-
-    if (uriVideo.duration <= 15000) {
-      setUploadVideo(uriVideo, setProgress);
-      setPreventPost(true);
-    } else {
-      setModalConfirm(true);
+    if (uriVideo && inputText) {
+      setStoredInputText(inputText);
+      setStoredValueFilter(valueFilter ? valueFilter : 'highlight');
+      setStoredDataAudience(dataAudience);
+      setAllowToBack(true);
     }
-  }, [uriVideo, setProgress]);
-
-  useEffect(() => {
-    if (dataVideo) {
-      setPreventPost(false);
-    }
-  }, [dataVideo]);
-
-  //* Create post video
-  useEffect(() => {
-    const shouldCreatePost =
-      dataVideo &&
-      active &&
-      uriVideo &&
-      musicData === undefined &&
-      dataUpdatePostProps === undefined;
-
-    if (shouldCreatePost) {
-      const video = {
-        targetType: 'video',
-        coverImage: dataVideo.coverImage,
-        encodeDashUrl: dataVideo.encodeDashUrl,
-        encodeHlsUrl: dataVideo.encodeHlsUrl,
-        duration: uriVideo.duration ?? 0,
-      };
-
-      setCreatePost({
-        caption: inputText,
-        category: valueFilter ? valueFilter : 'highlight',
-        isPremium: dataAudience === 'Feed.Exclusive' ? true : false,
-        video,
-      });
-    }
-  }, [dataVideo, active, musicData, dataUpdatePostProps, uriVideo]);
-
-  useEffect(() => {
-    if (deleteDataVideo && dataVideo) {
-      setDataVideo(undefined),
-        setProgress(undefined),
-        setDeleteDataVideo(false);
-    }
-  }, [dataVideo, deleteDataVideo]);
+  }, [uriVideo, inputText]);
 
   // ! END OF UPLOAD VIDEO AREA
 
@@ -268,7 +217,13 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
 
   //  * 2. trigger hook state to active when Post Button pressed
   const handlePostOnPress = () => {
-    setActive(true);
+    if (uriVideo && allowToBack) {
+      setAllowToUpload(true);
+      navigation.goBack();
+      setAllowToBack(false);
+    } else {
+      setActive(true);
+    }
   };
 
   //  * 3. trigger hook to hit upload image api
@@ -524,7 +479,6 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
 
   const closeVideo = (id: number) => {
     setUriVideo(null);
-    setDeleteDataVideo(true);
   };
 
   const handleOkConfirm = () => {
@@ -550,6 +504,12 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
     }
   }, [offset]);
   // ? END OF OFFSET AREA
+
+  const setOnHide = () => {
+    if (uriVideo?.duration && uriVideo.duration > 15000) {
+      setModalConfirm(true);
+    }
+  };
 
   return (
     <KeyboardAvoidingView
@@ -616,25 +576,14 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
                 />
               ) : null}
             </View>
-            {/* // ! VIDEO AREA */}
-            {progress && !dataVideo ? (
-              <Progress.Bar
-                progress={progress}
-                width={widthResponsive(375 - 48)}
-                // animated={true}
-                borderWidth={0}
-                color={color.Pink[200]}
-                unfilledColor={color.Dark[300]}
-                borderRadius={0}
-              />
-            ) : null}
 
-            {uriVideo?.mime === 'video/mp4' && (
+            {/* // ! VIDEO AREA */}
+            {uriVideo?.duration && uriVideo?.duration < 15000 && (
               <VideoComp
-                sourceUri={uriVideo?.path}
+                sourceUri={uriVideo.path}
                 withCloseIcon
                 onPress={closeVideo}
-                dontShowText={progress && !dataVideo ? true : false}
+                dontShowText={false}
                 videoContainer={{
                   height: keyBrdIsActive
                     ? widthResponsive(225)
@@ -727,7 +676,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
               </View>
             </View>
             <View style={styles.textCounter}>
-              {inputText.length > 0 && preventPost === false ? (
+              {inputText.length > 0 ? (
                 <ButtonGradient
                   label={t('Post.Title')}
                   containerStyles={{
@@ -817,6 +766,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
           onPressClose={closeModal}
           multiple
           showVideo
+          onModalHide={setOnHide}
         />
         <ModalLoading visible={isLoadingImage} />
         <ModalLoading visible={createPostLoading} />

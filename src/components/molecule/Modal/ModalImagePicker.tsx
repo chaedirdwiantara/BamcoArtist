@@ -29,6 +29,7 @@ interface ModalImagePickerProps {
   multiple?: boolean;
   maxFiles?: number;
   showVideo?: boolean;
+  onModalHide?: () => void;
 }
 
 export const ModalImagePicker: React.FC<ModalImagePickerProps> = ({
@@ -43,6 +44,7 @@ export const ModalImagePicker: React.FC<ModalImagePickerProps> = ({
   multiple,
   maxFiles,
   showVideo,
+  onModalHide,
 }) => {
   const {t} = useTranslation();
 
@@ -155,7 +157,10 @@ export const ModalImagePicker: React.FC<ModalImagePickerProps> = ({
   };
 
   return (
-    <Modal isVisible={modalVisible} style={{margin: 0}}>
+    <Modal
+      isVisible={modalVisible}
+      style={{margin: 0}}
+      onModalHide={onModalHide}>
       <TouchableWithoutFeedback onPress={onPressClose}>
         <View style={styles.modalOverlay} />
       </TouchableWithoutFeedback>
