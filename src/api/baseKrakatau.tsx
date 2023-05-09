@@ -19,11 +19,16 @@ const setupAPIClient = () => {
   });
 
   API.interceptors.request.use(async request => {
-    const userToken = await getAccessToken().catch(e =>
-      console.log('get token error', e),
-    );
-    if (userToken) {
-      request.headers!['Authorization'] = `Bearer ${userToken}`;
+    const JSONProfile = storage.getString('profile');
+    if (JSONProfile) {
+      try {
+        const userToken = await getAccessToken();
+        if (userToken) {
+          request.headers!['Authorization'] = `Bearer ${userToken}`;
+        }
+      } catch (err) {
+        console.log(err);
+      }
     }
 
     return request;
