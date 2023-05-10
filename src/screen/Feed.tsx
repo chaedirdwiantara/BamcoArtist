@@ -59,14 +59,8 @@ export const FeedScreen: React.FC = () => {
   const {dataExclusiveContent, getExclusiveContent} = useSettingHook();
   const {dataVideo, setDataVideo, setUploadVideo} = useUploadImageHook();
   const {dataCreatePost, createPostLoading, setCreatePost} = useFeedHook();
-  const {
-    storedInputText,
-    storedValueFilter,
-    storedDataAudience,
-    setStoredInputText,
-    setStoredValueFilter,
-    setStoredDataAudience,
-  } = useDataVideoForPost();
+  const {storedInputText, storedValueFilter, storedDataAudience} =
+    useDataVideoForPost();
   const {uriVideo, allowToUpload, setUriVideo, setAllowToUpload} =
     useVideoStore();
 

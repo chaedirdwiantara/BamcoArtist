@@ -32,6 +32,8 @@ import {
   ListMoodGenre,
   ListImageDesc,
   CreatePostShortcut,
+  ModalConfirm,
+  ModalCustom,
 } from '../components';
 import {font} from '../theme';
 import Color from '../theme/Color';
@@ -65,12 +67,18 @@ import {ModalPlayMusic} from '../components/molecule/Modal/ModalPlayMusic';
 import {heightPercentage, widthPercentage, widthResponsive} from '../utils';
 import EmptyStateHome from '../components/molecule/EmptyState/EmptyStateHome';
 import ListPlaylistHome from '../components/molecule/ListCard/ListPlaylistHome';
+import {ModalConfirmChoice} from '../components/molecule/Modal/ModalConfirmChoice';
 
 type OnScrollEventHandler = (
   event: NativeSyntheticEvent<NativeScrollEvent>,
 ) => void;
 
 type HomeProps = NativeStackScreenProps<MainTabParams, 'Home'>;
+
+interface ModalPostState {
+  isExclusivePostModal: boolean;
+  isSetExclusiveSetting: boolean;
+}
 
 export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
   const {showToast} = route.params;
@@ -107,6 +115,10 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
   const [selectedIndexMusician, setSelectedIndexMusician] = useState(-0);
   const [selectedIndexSong, setSelectedIndexSong] = useState(-0);
   const [refreshing, setRefreshing] = useState<boolean>(false);
+  const [showModalPost, setShowModalPost] = useState<ModalPostState>({
+    isExclusivePostModal: false,
+    isSetExclusiveSetting: false,
+  });
 
   const JSONProfile = storage.getString('profile');
   let uuid: string = '';
@@ -326,6 +338,37 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
     return <View style={styles.root} />;
   }
 
+  const handleCreatePost = () => {
+    setShowModalPost({
+      isExclusivePostModal: true,
+      isSetExclusiveSetting: false,
+    });
+  };
+
+  const handleCreatePostBackdrop = () => {
+    setShowModalPost({
+      isExclusivePostModal: false,
+      isSetExclusiveSetting: false,
+    });
+  };
+
+  const handleChoiceOnPress = (value: string) => {
+    if (value === 'choiceA') {
+      setShowModalPost({
+        isExclusivePostModal: false,
+        isSetExclusiveSetting: false,
+      });
+      navigation.navigate('CreatePost', {audience: 'Feed.Public'});
+    } else {
+      setShowModalPost({
+        isExclusivePostModal: false,
+        isSetExclusiveSetting: false,
+      });
+
+      //TODO: CHECK IF USER HAS SET THEIR EXCLUSIVE SETTING
+    }
+  };
+
   return (
     <View style={styles.root}>
       <SsuStatusBar type="black" />
@@ -371,11 +414,11 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
           onPressBanner={handleWebview}
         />
 
-        {/* //TODO: ADD ONPRESS EVENT */}
+        {/* Create Post Shortcuts */}
         <CreatePostShortcut
           avatarUri={dataProfile?.data?.imageProfileUrls[1]?.image}
           placeholder={`How's your day...`}
-          compOnPress={() => console.log('ask exclusive or not')}
+          compOnPress={handleCreatePost}
         />
 
         {/* Mood */}
@@ -549,6 +592,14 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
       />
 
       <ModalPlayMusic onPressModal={() => goToScreen('MusicPlayer')} />
+
+      <ModalConfirmChoice
+        modalVisible={showModalPost.isExclusivePostModal}
+        backdropOnPress={handleCreatePostBackdrop}
+        choiceA={'Post as Public Content'}
+        choiceB={'Post as Exclusive Content'}
+        choiceOnPress={handleChoiceOnPress}
+      />
     </View>
   );
 };
