@@ -13,11 +13,12 @@ interface BottomPriceProps {
   onPressPromo?: () => void;
   onPressCheckout: () => void;
   summary?: boolean;
+  promo?: any;
 }
 
 const BottomPrice: React.FC<BottomPriceProps> = props => {
   const {t} = useTranslation();
-  const {onPressPromo, onPressCheckout, summary} = props;
+  const {onPressPromo, onPressCheckout, summary, promo} = props;
   return (
     <View style={styles.bottomContainer}>
       {summary ? (
@@ -58,8 +59,10 @@ const BottomPrice: React.FC<BottomPriceProps> = props => {
               width={widthPercentage(20)}
             />
             <Gap width={widthPercentage(5)} />
-            <Text style={[Typography.Subtitle2, {color: Color.Neutral[10]}]}>
-              Use Promo Code
+            <Text
+              numberOfLines={1}
+              style={[Typography.Subtitle2, {color: Color.Neutral[10]}]}>
+              {promo ? promo.title : 'Use Promo Code'}
             </Text>
           </View>
 

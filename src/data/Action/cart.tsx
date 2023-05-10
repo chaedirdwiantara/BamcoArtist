@@ -1,4 +1,4 @@
-export let dataCart = [
+export const dataCart = [
   {
     id: '1',
     seller: 'Blackpink',

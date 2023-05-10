@@ -101,7 +101,10 @@ export const Checkout: React.FC<CheckoutProps> = ({
       <ScrollView showsVerticalScrollIndicator={false} style={{flex: 1}}>
         {dataCart.map(data => {
           return (
-            <CartBox seller={data.seller} sellerImage={data.sellerImage}>
+            <CartBox
+              seller={data.seller}
+              sellerImage={data.sellerImage}
+              delivery>
               {data.items.map(item => (
                 <CartItem
                   name={item.name}

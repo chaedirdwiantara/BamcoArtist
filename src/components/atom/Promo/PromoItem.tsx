@@ -9,12 +9,13 @@ interface PromoItemProps {
   title: string;
   end: string;
   onPress: () => void;
+  onApply: () => void;
 }
 
 const PromoItem: React.FC<PromoItemProps> = props => {
-  const {title, end, onPress} = props;
+  const {title, end, onPress, onApply} = props;
   return (
-    <TouchableOpacity style={styles.root}>
+    <TouchableOpacity style={styles.root} onPress={onApply}>
       <View style={styles.textContainer}>
         <Text numberOfLines={1} style={[Typography.Subtitle2, styles.title]}>
           {title}

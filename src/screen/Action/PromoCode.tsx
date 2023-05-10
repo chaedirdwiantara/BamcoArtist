@@ -32,6 +32,7 @@ export const PromoCode: React.FC<PromoCodeProps> = ({
               title={data.title}
               end={data.end}
               onPress={() => navigation.navigate('PromoDetail', {id: data.id})}
+              onApply={() => navigation.navigate('Cart', {promoId: data.id})}
             />
           );
         })}

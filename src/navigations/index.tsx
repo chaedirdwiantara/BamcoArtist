@@ -276,7 +276,9 @@ export type RootStackParams = {
   SplashScreen: undefined;
   ListPlaylist: undefined;
   Event: undefined;
-  Cart: undefined;
+  Cart: {
+    promoId?: string;
+  };
   PromoCode: undefined;
   PromoDetail: {
     id: string;

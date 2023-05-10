@@ -1,5 +1,5 @@
 import {View, Text, StyleSheet, ScrollView} from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {CheckBox, Gap, TopNavigation} from '../../components';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {RootStackParams} from '../../navigations';
@@ -11,14 +11,21 @@ import CartItem from '../../components/atom/Cart/CartItem';
 import CartBox from '../../components/atom/Cart/CartBox';
 import BottomPrice from '../../components/atom/Cart/BottomPrice';
 import {dataCart} from '../../data/Action/cart';
+import {dataPromo} from '../../data/Action/promo';
 
 type CartProps = NativeStackScreenProps<RootStackParams, 'Cart'>;
 
-export const Cart: React.FC<CartProps> = ({navigation}: CartProps) => {
+export const Cart: React.FC<CartProps> = ({navigation, route}: CartProps) => {
   const {t} = useTranslation();
 
   const [carts, setCarts] = useState(dataCart);
   const [isSelectedAll, setIsSelectedAll] = useState<boolean>(false);
+  const [promo, setPromo] = useState<any>();
+
+  useEffect(() => {
+    if (route.params)
+      setPromo(dataPromo.find(data => data.id === route.params?.promoId));
+  }, [route]);
 
   const selectItem = (ownerId: string, itemId: string) => {
     const newCart = carts;
@@ -125,6 +132,7 @@ export const Cart: React.FC<CartProps> = ({navigation}: CartProps) => {
       <BottomPrice
         onPressPromo={() => navigation.navigate('PromoCode')}
         onPressCheckout={() => navigation.navigate('Checkout')}
+        promo={promo}
       />
     </View>
   );
