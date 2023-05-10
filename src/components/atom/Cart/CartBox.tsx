@@ -24,6 +24,8 @@ interface CartBoxProps {
   onPressDetail?: () => void;
   date?: string;
   category?: string;
+  isChecked?: boolean;
+  onChecked?: () => void;
 }
 
 const CartBox: React.FC<CartBoxProps> = props => {
@@ -41,6 +43,8 @@ const CartBox: React.FC<CartBoxProps> = props => {
     onPressDetail,
     date,
     category,
+    isChecked = false,
+    onChecked = () => null,
   } = props;
 
   const {t} = useTranslation();
@@ -57,7 +61,7 @@ const CartBox: React.FC<CartBoxProps> = props => {
           ]}>
           {editable && (
             <>
-              <CheckBox handleOnPress={() => null} active={false} />
+              <CheckBox handleOnPress={onChecked} active={isChecked} />
               <Gap width={widthPercentage(10)} />
             </>
           )}

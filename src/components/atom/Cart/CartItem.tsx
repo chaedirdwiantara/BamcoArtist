@@ -22,10 +22,21 @@ interface CartItemProps {
   editable?: boolean;
   detail?: boolean;
   qty?: number;
+  isChecked?: boolean;
+  onChecked?: () => void;
 }
 
 const CartItem: React.FC<CartItemProps> = props => {
-  const {name, image, price, editable = true, detail = false, qty} = props;
+  const {
+    name,
+    image,
+    price,
+    editable = true,
+    detail = false,
+    qty,
+    isChecked = false,
+    onChecked = () => null,
+  } = props;
   return (
     <View
       style={[
@@ -35,7 +46,7 @@ const CartItem: React.FC<CartItemProps> = props => {
       ]}>
       {editable && (
         <>
-          <CheckBox handleOnPress={() => null} active={false} />
+          <CheckBox handleOnPress={onChecked} active={isChecked} />
           <Gap width={widthPercentage(10)} />
         </>
       )}
