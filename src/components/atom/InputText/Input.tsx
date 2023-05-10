@@ -39,6 +39,7 @@ interface InputProps extends TextInputProps {
   containerStyles?: ViewStyle;
   inputStyles?: ViewStyle;
   leftIconContainer?: ViewStyle;
+  placeHoldColor?: string;
 }
 
 interface TextAreaProps extends TextInputProps {
@@ -84,6 +85,7 @@ const InputText: React.FC<InputProps> = props => {
     containerStyles,
     inputStyles,
     leftIconContainer,
+    placeHoldColor,
   } = props;
   const [state, setState] = useState<boolean>(false);
   const [secure, setSecure] = useState<boolean>(true);
@@ -135,7 +137,7 @@ const InputText: React.FC<InputProps> = props => {
           keyboardType={keyboardType}
           onChangeText={onChangeText}
           editable={disabled ? false : true}
-          placeholderTextColor={FontColor}
+          placeholderTextColor={placeHoldColor ?? FontColor}
           onFocus={() => setState(true)}
           onEndEditing={onEndEditing}
           onSubmitEditing={onSubmitEditing}

@@ -31,6 +31,7 @@ import {
   Gap,
   ListMoodGenre,
   ListImageDesc,
+  CreatePostShortcut,
 } from '../components';
 import {font} from '../theme';
 import Color from '../theme/Color';
@@ -368,6 +369,13 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
         <Carousel
           data={dataBanner?.length > 0 ? dataBanner : defaultBanner}
           onPressBanner={handleWebview}
+        />
+
+        {/* //TODO: ADD ONPRESS EVENT */}
+        <CreatePostShortcut
+          avatarUri={dataProfile?.data?.imageProfileUrls[1]?.image}
+          placeholder={`How's your day...`}
+          compOnPress={() => console.log('ask exclusive or not')}
         />
 
         {/* Mood */}
