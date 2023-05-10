@@ -4,6 +4,8 @@ export const dataCart = [
     seller: 'Blackpink',
     sellerImage: 'https://picsum.photos/id/1/200',
     isSelected: false,
+    coDelivery: null,
+    coCourier: null,
     items: [
       {
         id: 'item-1',
@@ -20,6 +22,8 @@ export const dataCart = [
     seller: 'Green Day',
     sellerImage: 'https://picsum.photos/id/3/200',
     isSelected: false,
+    coDelivery: null,
+    coCourier: null,
     items: [
       {
         id: 'item-2',

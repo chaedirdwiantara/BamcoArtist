@@ -23,6 +23,7 @@ import {useFocusEffect} from '@react-navigation/native';
 import {mvs} from 'react-native-size-matters';
 import {ModalSuccessCheckout} from '../../components/molecule/Modal/ModalSuccessCheckout';
 import {dataCart} from '../../data/Action/cart';
+import {dataCourier} from '../../data/Action/delivery';
 
 type CheckoutProps = NativeStackScreenProps<RootStackParams, 'Checkout'>;
 
@@ -30,6 +31,8 @@ export const Checkout: React.FC<CheckoutProps> = ({
   navigation,
 }: CheckoutProps) => {
   const {t} = useTranslation();
+  const [carts, setCarts] = useState(dataCart);
+  const [ownerId, setOwnerId] = useState<string>('');
   const [showDelivery, setShowDelivery] = useState<boolean>(false);
   const [deliveryType, setDeliveryType] = useState<string>('package');
   const [successCheckout, setSuccessCheckout] = useState<boolean>(false);
@@ -42,8 +45,28 @@ export const Checkout: React.FC<CheckoutProps> = ({
     }, []),
   );
 
-  const handleShowDelivery = (type: string) => {
+  const handleShowDelivery = (type: string, id?: string) => {
     setDeliveryType(type);
+    setShowDelivery(!showDelivery);
+    setOwnerId(id ?? '');
+  };
+
+  const handleSelectDelivery = (delivery: any) => {
+    const newCart = carts;
+    const index = newCart.findIndex(data => data.id === ownerId);
+    newCart[index].coDelivery = delivery;
+    newCart[index].coCourier = dataCourier[0] as any;
+
+    setCarts([...newCart]);
+    setShowDelivery(!showDelivery);
+  };
+
+  const handleSelectCourier = (courier: any) => {
+    const newCart = carts;
+    const index = newCart.findIndex(data => data.id === ownerId);
+    newCart[index].coCourier = courier;
+
+    setCarts([...newCart]);
     setShowDelivery(!showDelivery);
   };
 
@@ -99,12 +122,17 @@ export const Checkout: React.FC<CheckoutProps> = ({
         )}
       </View>
       <ScrollView showsVerticalScrollIndicator={false} style={{flex: 1}}>
-        {dataCart.map(data => {
+        {carts.map(data => {
           return (
             <CartBox
               seller={data.seller}
               sellerImage={data.sellerImage}
-              delivery>
+              delivery
+              editable={false}
+              onPressDelivery={() => handleShowDelivery('package', data.id)}
+              onPressAgent={() => handleShowDelivery('agent', data.id)}
+              coDelivery={data.coDelivery}
+              coCourier={data.coCourier}>
               {data.items.map(item => (
                 <CartItem
                   name={item.name}
@@ -128,6 +156,8 @@ export const Checkout: React.FC<CheckoutProps> = ({
         modalVisible={showDelivery}
         onPressClose={() => handleShowDelivery('')}
         type={deliveryType}
+        onSelectDelivery={data => handleSelectDelivery(data)}
+        onSelectCourier={data => handleSelectCourier(data)}
       />
 
       <ModalSuccessCheckout

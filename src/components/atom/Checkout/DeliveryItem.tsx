@@ -9,14 +9,17 @@ interface DeliveryItemProps {
   title: string;
   time: string;
   price: string | number;
+  onPress?: () => void;
 }
 
 const DeliveryItem: React.FC<DeliveryItemProps> = props => {
-  const {title, time, price} = props;
+  const {title, time, price, onPress} = props;
   return (
-    <TouchableOpacity style={styles.root} onPress={() => null}>
+    <TouchableOpacity style={styles.root} onPress={onPress}>
       <View>
-        <Text style={[Typography.Subtitle3, {color: Color.Neutral[10]}]}>
+        <Text
+          numberOfLines={1}
+          style={[Typography.Subtitle3, {color: Color.Neutral[10]}]}>
           {title}
         </Text>
         <Gap height={heightPercentage(4)} />

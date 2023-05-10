@@ -26,6 +26,8 @@ interface CartBoxProps {
   category?: string;
   isChecked?: boolean;
   onChecked?: () => void;
+  coDelivery?: any;
+  coCourier?: any;
 }
 
 const CartBox: React.FC<CartBoxProps> = props => {
@@ -45,6 +47,8 @@ const CartBox: React.FC<CartBoxProps> = props => {
     category,
     isChecked = false,
     onChecked = () => null,
+    coDelivery,
+    coCourier,
   } = props;
 
   const {t} = useTranslation();
@@ -129,14 +133,14 @@ const CartBox: React.FC<CartBoxProps> = props => {
               style={[styles.rowCenter, styles.between, {width: '100%'}]}
               onPress={onPressDelivery}>
               <View style={[styles.rowCenter]}>
-                {true ? (
+                {coDelivery ? (
                   <>
                     <Text
                       style={[
                         Typography.Subtitle3,
                         {color: Color.Neutral[10]},
                       ]}>
-                      Reguler
+                      {coDelivery.name}
                     </Text>
                   </>
                 ) : (
@@ -156,29 +160,37 @@ const CartBox: React.FC<CartBoxProps> = props => {
 
               <ArrowRightIcon />
             </TouchableOpacity>
-            <View style={styles.border} />
-            <TouchableOpacity
-              style={[
-                styles.rowCenter,
-                styles.between,
-                {
-                  width: '100%',
-                },
-              ]}
-              onPress={onPressAgent}>
-              <View>
-                <Text
-                  style={[Typography.Subtitle3, {color: Color.Neutral[10]}]}>
-                  DHL Express (400)
-                </Text>
-                <Gap height={heightPercentage(4)} />
-                <Text style={[Typography.Subtitle3, {color: Color.Dark[50]}]}>
-                  Estimated time 22-24 Feb
-                </Text>
-              </View>
+            {coCourier && (
+              <>
+                <View style={styles.border} />
+                <TouchableOpacity
+                  style={[
+                    styles.rowCenter,
+                    styles.between,
+                    {
+                      width: '100%',
+                    },
+                  ]}
+                  onPress={onPressAgent}>
+                  <View>
+                    <Text
+                      style={[
+                        Typography.Subtitle3,
+                        {color: Color.Neutral[10]},
+                      ]}>
+                      {coCourier.name} ({coCourier.price})
+                    </Text>
+                    <Gap height={heightPercentage(4)} />
+                    <Text
+                      style={[Typography.Subtitle3, {color: Color.Dark[50]}]}>
+                      Estimated time {coCourier.estimated}
+                    </Text>
+                  </View>
 
-              <ArrowRightIcon />
-            </TouchableOpacity>
+                  <ArrowRightIcon />
+                </TouchableOpacity>
+              </>
+            )}
           </View>
         )}
       </View>

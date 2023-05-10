@@ -8,17 +8,22 @@ import {heightPercentage} from '../../../utils';
 import {useTranslation} from 'react-i18next';
 import DeliveryItem from './DeliveryItem';
 import Color from '../../../theme/Color';
+import {dataCourier, dataDelivery} from '../../../data/Action/delivery';
 
 interface ModalDeliveryProps {
   modalVisible: boolean;
   onPressClose: () => void;
   type: string;
+  onSelectDelivery: (data: any) => void;
+  onSelectCourier: (data: any) => void;
 }
 
 export const ModalDelivery: React.FC<ModalDeliveryProps> = ({
   modalVisible,
   onPressClose,
   type,
+  onSelectDelivery,
+  onSelectCourier,
 }) => {
   const {t} = useTranslation();
 
@@ -41,29 +46,35 @@ export const ModalDelivery: React.FC<ModalDeliveryProps> = ({
         <View style={styles.border} />
         {type === 'package' ? (
           <View>
-            <DeliveryItem title={'Regular'} time={'22-24 Feb'} price={'400'} />
-            <View style={styles.border} />
-            <DeliveryItem title={'Economy'} time={'24-25 Feb'} price={'500'} />
-            <View style={styles.border} />
-            <DeliveryItem title={'Express'} time={'21-22 Feb'} price={'600'} />
-            <View style={styles.border} />
+            {dataDelivery.map(data => {
+              return (
+                <>
+                  <DeliveryItem
+                    title={data.name}
+                    time={data.estimated}
+                    price={data.price}
+                    onPress={() => onSelectDelivery(data)}
+                  />
+                  <View style={styles.border} />
+                </>
+              );
+            })}
           </View>
         ) : (
           <View>
-            <DeliveryItem
-              title={'DHL Express'}
-              time={'22-24 Feb'}
-              price={'400'}
-            />
-            <View style={styles.border} />
-            <DeliveryItem
-              title={'United Parcel'}
-              time={'22-24 Feb'}
-              price={'400'}
-            />
-            <View style={styles.border} />
-            <DeliveryItem title={'FedEx'} time={'22-24 Feb'} price={'400'} />
-            <View style={styles.border} />
+            {dataCourier.map(data => {
+              return (
+                <>
+                  <DeliveryItem
+                    title={data.name}
+                    time={data.estimated}
+                    price={data.price}
+                    onPress={() => onSelectCourier(data)}
+                  />
+                  <View style={styles.border} />
+                </>
+              );
+            })}
           </View>
         )}
       </View>
