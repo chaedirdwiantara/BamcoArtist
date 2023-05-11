@@ -13,7 +13,8 @@ interface ModalConfirmProps {
   choiceB: string;
   iconChoiceA?: React.ReactNode | undefined;
   iconChoiceB?: React.ReactNode | undefined;
-  choiceOnPress: (value: string) => void;
+  choiceOnPress: (value: 'choiceA' | 'choiceB') => void;
+  onModalHide?: () => void;
 }
 
 export const ModalConfirmChoice: React.FC<ModalConfirmProps> = (
@@ -27,11 +28,8 @@ export const ModalConfirmChoice: React.FC<ModalConfirmProps> = (
     iconChoiceA,
     iconChoiceB,
     choiceOnPress,
+    onModalHide,
   } = props;
-
-  const choicePressed = (value: string) => {
-    console.log(value);
-  };
 
   return (
     <Modal
@@ -43,7 +41,8 @@ export const ModalConfirmChoice: React.FC<ModalConfirmProps> = (
       animationOutTiming={600}
       backdropTransitionInTiming={600}
       backdropTransitionOutTiming={600}
-      onBackdropPress={backdropOnPress}>
+      onBackdropPress={backdropOnPress}
+      onModalHide={onModalHide}>
       <View style={styles.root}>
         <TouchableOpacity
           style={styles.choiceContainer}

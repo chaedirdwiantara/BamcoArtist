@@ -84,7 +84,7 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
   const {showToast} = route.params;
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
-  const {i18n} = useTranslation();
+  const {i18n, t} = useTranslation();
   const currentLanguage = i18n.language;
   const {dataDiveIn, dataAlbumComingSoon, getListDiveIn, getListComingSoon} =
     useHomeHook();
@@ -106,8 +106,14 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
     useSongHook();
   const {counter, getCountNotification} = useNotificationHook();
   const {creditCount, getCreditCount} = useCreditHook();
-  const {listGenre, listMood, getListMoodPublic, getListGenrePublic} =
-    useSettingHook();
+  const {
+    listGenre,
+    listMood,
+    getListMoodPublic,
+    getListGenrePublic,
+    dataExclusiveContent,
+    getExclusiveContent,
+  } = useSettingHook();
   const {getSearchPlaylists} = useSearchHook();
 
   const isLogin = storage.getBoolean('isLogin');
@@ -119,6 +125,9 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
     isExclusivePostModal: false,
     isSetExclusiveSetting: false,
   });
+  const [postChoice, setPostChoice] = useState<
+    'choiceA' | 'choiceB' | undefined
+  >();
 
   const JSONProfile = storage.getString('profile');
   let uuid: string = '';
@@ -343,6 +352,7 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
       isExclusivePostModal: true,
       isSetExclusiveSetting: false,
     });
+    getExclusiveContent({uuid});
   };
 
   const handleCreatePostBackdrop = () => {
@@ -352,21 +362,45 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
     });
   };
 
-  const handleChoiceOnPress = (value: string) => {
-    if (value === 'choiceA') {
-      setShowModalPost({
-        isExclusivePostModal: false,
-        isSetExclusiveSetting: false,
-      });
-      navigation.navigate('CreatePost', {audience: 'Feed.Public'});
-    } else {
-      setShowModalPost({
-        isExclusivePostModal: false,
-        isSetExclusiveSetting: false,
-      });
+  const handleChoiceOnPress = (value: 'choiceA' | 'choiceB') => {
+    setPostChoice(value);
+    setShowModalPost({
+      isExclusivePostModal: false,
+      isSetExclusiveSetting: false,
+    });
+  };
 
-      //TODO: CHECK IF USER HAS SET THEIR EXCLUSIVE SETTING
+  const handleOnModalHide = () => {
+    if (postChoice === 'choiceA') {
+      setPostChoice(undefined);
+      navigation.navigate('CreatePost', {audience: 'Feed.Public'});
+    } else if (postChoice === 'choiceB') {
+      if (dataExclusiveContent === null) {
+        setPostChoice(undefined);
+        setShowModalPost({
+          isExclusivePostModal: false,
+          isSetExclusiveSetting: true,
+        });
+      } else {
+        setPostChoice(undefined);
+        navigation.navigate('CreatePost', {audience: 'Feed.Exclusive'});
+      }
     }
+  };
+
+  const handleMaybeLater = () => {
+    setShowModalPost({
+      isExclusivePostModal: false,
+      isSetExclusiveSetting: false,
+    });
+  };
+
+  const handleConfirmModal = () => {
+    setShowModalPost({
+      isExclusivePostModal: false,
+      isSetExclusiveSetting: false,
+    });
+    navigation.navigate('ExclusiveContentSetting', {type: 'navToCreatePost'});
   };
 
   return (
@@ -599,6 +633,17 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
         choiceA={'Post as Public Content'}
         choiceB={'Post as Exclusive Content'}
         choiceOnPress={handleChoiceOnPress}
+        onModalHide={handleOnModalHide}
+      />
+
+      <ModalConfirm
+        modalVisible={showModalPost.isSetExclusiveSetting}
+        title={t('Modal.ExclusiveContentConfirm.Title') || ''}
+        subtitle={t('Modal.ExclusiveContentConfirm.Body') || ''}
+        yesText={t('Modal.ExclusiveContentConfirm.ButtonOk') || ''}
+        noText={t('Modal.ExclusiveContentConfirm.ButtonCancel') || ''}
+        onPressClose={handleMaybeLater}
+        onPressOk={handleConfirmModal}
       />
     </View>
   );
