@@ -5,6 +5,7 @@ import {mvs} from 'react-native-size-matters';
 import {widthResponsive} from '../../../utils';
 import {color, font} from '../../../theme';
 import {Gap} from '../../atom';
+import {Gift2Icon, GiftIcon, GlobalIcon} from '../../../assets/icon';
 
 interface ModalConfirmProps {
   modalVisible: boolean;
@@ -47,12 +48,16 @@ export const ModalConfirmChoice: React.FC<ModalConfirmProps> = (
         <TouchableOpacity
           style={styles.choiceContainer}
           onPress={() => choiceOnPress('choiceA')}>
+          {iconChoiceA ?? <GlobalIcon />}
+          <Gap width={9} />
           <Text style={styles.textChoice}>{choiceA}</Text>
         </TouchableOpacity>
         <Gap height={28} />
         <TouchableOpacity
           style={styles.choiceContainer}
           onPress={() => choiceOnPress('choiceB')}>
+          {iconChoiceB ?? <Gift2Icon />}
+          <Gap width={9} />
           <Text style={styles.textChoice}>{choiceB}</Text>
         </TouchableOpacity>
       </View>
@@ -70,6 +75,7 @@ const styles = StyleSheet.create({
   },
   choiceContainer: {
     flexDirection: 'row',
+    alignItems: 'center',
   },
   textChoice: {
     fontFamily: font.InterMedium,
