@@ -142,8 +142,9 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
     () => getSearchPlaylists({keyword: ''}),
   );
 
-  const randomStringPost =
-    dataPlaceHolder[Math.floor(Math.random() * dataPlaceHolder.length)];
+  const [randomPlaceHolder, setRandomPlaceHolder] = useState(
+    dataPlaceHolder[Math.floor(Math.random() * dataPlaceHolder.length)],
+  );
 
   useEffect(() => {
     getListDataBanner();
@@ -455,7 +456,7 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
         {/* Create Post Shortcuts */}
         <CreatePostShortcut
           avatarUri={dataProfile?.data?.imageProfileUrls[1]?.image}
-          placeholder={`${randomStringPost}...`}
+          placeholder={`${randomPlaceHolder}...`}
           compOnPress={handleCreatePost}
         />
 
