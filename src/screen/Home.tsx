@@ -68,6 +68,7 @@ import {heightPercentage, widthPercentage, widthResponsive} from '../utils';
 import EmptyStateHome from '../components/molecule/EmptyState/EmptyStateHome';
 import ListPlaylistHome from '../components/molecule/ListCard/ListPlaylistHome';
 import {ModalConfirmChoice} from '../components/molecule/Modal/ModalConfirmChoice';
+import {dataPlaceHolder} from '../data/placeHolder';
 
 type OnScrollEventHandler = (
   event: NativeSyntheticEvent<NativeScrollEvent>,
@@ -140,6 +141,9 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
     ['/search-playlist'],
     () => getSearchPlaylists({keyword: ''}),
   );
+
+  const randomStringPost =
+    dataPlaceHolder[Math.floor(Math.random() * dataPlaceHolder.length)];
 
   useEffect(() => {
     getListDataBanner();
@@ -451,7 +455,7 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
         {/* Create Post Shortcuts */}
         <CreatePostShortcut
           avatarUri={dataProfile?.data?.imageProfileUrls[1]?.image}
-          placeholder={`How's your day...`}
+          placeholder={`${randomStringPost}...`}
           compOnPress={handleCreatePost}
         />
 
