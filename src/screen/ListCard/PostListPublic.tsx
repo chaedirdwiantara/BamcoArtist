@@ -16,6 +16,7 @@ import {
   ModalDonate,
   ModalShare,
   ModalSuccessDonate,
+  ProgressBar,
   SsuToast,
 } from '../../components';
 import {
@@ -64,6 +65,8 @@ interface PostListProps {
   dataRightDropdown: DataDropDownType[];
   dataLeftDropdown: DropDownFilterType[] | DropDownSortType[];
   uuidMusician?: string;
+  videoUploadProgress?: number;
+  uriVideo?: string;
 }
 
 const urlText =
@@ -73,7 +76,13 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
   const {t} = useTranslation();
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
-  const {dataRightDropdown, dataLeftDropdown, uuidMusician = ''} = props;
+  const {
+    dataRightDropdown,
+    dataLeftDropdown,
+    uuidMusician = '',
+    videoUploadProgress,
+    uriVideo,
+  } = props;
 
   const [recorder, setRecorder] = useState<string[]>([]);
   const [selectedId, setSelectedId] = useState<string[]>();
@@ -285,6 +294,13 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
           leftPosition={widthResponsive(-144)}
         />
       </View>
+      {videoUploadProgress ? (
+        <ProgressBar
+          progress={10}
+          caption={'Uploading is in progress, it will take few second'}
+          uri={uriVideo}
+        />
+      ) : null}
       {dataMain !== null && dataMain?.length !== 0 ? (
         <View style={{flex: 1, marginHorizontal: widthResponsive(-24)}}>
           {refreshing && (

@@ -42,6 +42,7 @@ import PostComment from './DetailPost/PostComment';
 import PopUp from './PopUp/popUp';
 import {ProfileContent} from './ProfileContent/ProfileContent';
 import {ProfileHeader} from './ProfileContent/components/Header';
+import ProgressBar from './ProgressBar/progressBar';
 import {ReferralContent} from './ReferralContent/ReferralContent';
 import {RadioButton} from './RadioButton/RadioButton';
 import {ReferAFriend} from './SettingContent/ReferAFriend';
@@ -107,6 +108,7 @@ export {
   PopUp,
   ProfileContent,
   ProfileHeader,
+  ProgressBar,
   RadioButton,
   ReferralContent,
   ReferAFriend,

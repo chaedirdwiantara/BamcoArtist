@@ -34,6 +34,7 @@ export const uploadImage = async (
 
 export const uploadVideo = async (
   video: Image,
+  setProgress: React.Dispatch<React.SetStateAction<number | undefined>>,
 ): Promise<UploadVideoResponseType> => {
   let formData = new FormData();
   formData.append('file', {
@@ -50,6 +51,9 @@ export const uploadVideo = async (
     },
     transformRequest: (data, header) => {
       return formData;
+    },
+    onUploadProgress: ({loaded, total}) => {
+      setProgress(loaded / total);
     },
     // timeout: 60000,
     // maxContentLength: 1000000000000,
