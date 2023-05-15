@@ -43,9 +43,11 @@ export const SplashScreen: React.FC<SplashScrennProps> = ({
   };
 
   useEffect(() => {
-    getVersionInfo({
-      platform: Platform.OS,
-    });
+    storage.getBoolean('skipOnboard')
+      ? getVersionInfo({
+          platform: Platform.OS,
+        })
+      : navigation.replace('Boarding');
   }, []);
 
   useEffect(() => {
