@@ -10,6 +10,7 @@ import {ChangePasswordContent} from './SettingContent/ChangePasswordContent';
 import CommentInputModal from './CommentInputModal/CommentInputModal';
 import {CreateNewCard} from './CreateNewCard/CreateNewCard';
 import {CreateNewPlaylistContent} from './PlaylistContent/CreateNewPlaylistContent';
+import CreatePostShortcut from './CreatePostShortcut/createPostShortcut';
 import {Dropdown} from './DropDown';
 import DetailPost from './DetailPost/DetailPost';
 import {DASContent} from './SettingContent/DonationAndSubcription';
@@ -76,6 +77,7 @@ export {
   CommentInputModal,
   CreateNewCard,
   CreateNewPlaylistContent,
+  CreatePostShortcut,
   DetailPost,
   DASContent,
   Dropdown,
