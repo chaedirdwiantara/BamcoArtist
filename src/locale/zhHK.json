@@ -12,12 +12,14 @@
     "FollowYou": "Follow you",
     "ItsMe": "It's Me",
     "Listeners": "人聽過",
+    "GotIt": "Ok, I Got It",
     "Share": {
       "Feed": "Share Feed",
       "Album": "Share Album",
       "Music": "分享歌曲",
       "Playlist": "Share Playlist"
-    }
+    },
+    "NoDescription": "No Description Given"
   },
   "Onboarding": {
     "Step1": {
@@ -658,6 +660,10 @@
     "Title": "通知"
   },
   "Modal": {
+    "MusicianNotAvail": {
+      "Title": "Featuring Musician",
+      "Subtitle": "Musician that you’ve looking for is not available in beam platform, we'll let you know as soon as something new is on the horizon."
+    },
     "Limit": {
       "Title": "Limit Reached",
       "Subtitle1": "You have reached the limit of uploading 10 photos, please delete some of your photos to upload new ones.",
