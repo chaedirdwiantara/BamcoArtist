@@ -17,6 +17,7 @@ import {
   ModalDonate,
   ModalShare,
   ModalSuccessDonate,
+  NewPostAvail,
   SsuToast,
 } from '../../components';
 import {
@@ -55,12 +56,15 @@ import {
   likesCountInFeed,
   playSongOnFeed,
   useCategoryFilter,
+  useCheckNewUpdate,
   useGetCreditCount,
   useGetDataOnMount,
+  useSetDataMainQuery,
   useSetDataToMainData,
   useSortByFilter,
 } from './ListUtils/ListFunction';
 import Clipboard from '@react-native-community/clipboard';
+import {useQuery} from 'react-query';
 
 const {height} = Dimensions.get('screen');
 
@@ -117,6 +121,7 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
     setLikePost,
     setUnlikePost,
     setDeletePost,
+    getListDataExclusiveQuery,
   } = useFeedHook();
 
   const {
@@ -131,6 +136,50 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
 
   const {creditCount, getCreditCount} = useCreditHook();
   const MyUuid = profileStorage()?.uuid;
+
+  // TODO: QUERY AREA
+  const [previousData, setPreviousData] = useState<PostList[]>();
+  const [showUpdateNotif, setShowUpdateNotif] = useState(false);
+  const [numberOfNewData, setNumberOfNewData] = useState<number>(0);
+
+  const {
+    data: postData,
+    isLoading,
+    isError,
+    refetch,
+  } = useQuery(
+    'posts-exclusive',
+    () =>
+      getListDataExclusiveQuery({
+        page: 1,
+        perPage: perPage,
+        sortBy: filterByValue,
+        category: categoryValue,
+      }),
+    {
+      staleTime: 300000,
+      refetchInterval: 300000,
+    },
+  );
+
+  //* check if there's new update
+  useCheckNewUpdate(
+    isLoading,
+    postData,
+    previousData,
+    setShowUpdateNotif,
+    setNumberOfNewData,
+    setPreviousData,
+  );
+
+  const handleUpdateClick = () => {
+    setShowUpdateNotif(false);
+    postData?.data && setPreviousData(postData.data);
+  };
+
+  //* set data into main (show data)
+  useSetDataMainQuery(previousData, setDataMain);
+  // TODO: END OF QUERY AREA
 
   const fetchExclusiveContent = () => {
     getExclusiveContent({uuid: MyUuid});
@@ -498,6 +547,13 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
         toggleModal={onPressSuccess}
       />
       <ModalLoading visible={feedIsLoading} />
+
+      {showUpdateNotif && (
+        <NewPostAvail
+          onPress={handleUpdateClick}
+          numberOfNewData={numberOfNewData}
+        />
+      )}
     </>
   );
 };

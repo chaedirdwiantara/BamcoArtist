@@ -36,6 +36,7 @@ import {ModalImagePicker} from './Modal/ModalImagePicker';
 import {ModalShare} from './Modal/ModalShare';
 import {ModalSuccessDonate} from './Modal/ModalSuccessDonate';
 import {MusicSection} from './MusicSection/MusicSection';
+import NewPostAvail from './NewPostAvail/newPostAvail';
 import {NoMoreFeeds} from './NoMoreFeeds/NoMoreFeeds';
 import {NotificationCard} from './NotificationCard/NotificationCard';
 import {PlaylistContent} from './PlaylistContent/PlaylistContent';
@@ -103,6 +104,7 @@ export {
   ModalShare,
   ModalSuccessDonate,
   MusicSection,
+  NewPostAvail,
   NoMoreFeeds,
   NotificationCard,
   PlaylistContent,
