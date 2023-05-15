@@ -240,7 +240,8 @@ export type RootStackParams = {
     songId: number;
   };
   SongDetails: {
-    id: number;
+    songId: number;
+    musicianId: string;
   };
   Notification: undefined;
   PostDetail: PostList;
