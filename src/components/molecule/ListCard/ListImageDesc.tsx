@@ -87,6 +87,9 @@ const ListImageDesc: React.FC<ListImageDescProps> = (
       onPress={onPress}
       hideArrow={hideArrow}
       containerStyle={containerStyle}
+      containerTitleStyle={{
+        marginBottom: mvs(5),
+      }}
     />
   );
 };
