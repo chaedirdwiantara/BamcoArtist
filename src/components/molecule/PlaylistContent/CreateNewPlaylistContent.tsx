@@ -138,7 +138,7 @@ export const CreateNewPlaylistContent: React.FC<Props> = ({
     isPublic: state.isPublic,
   });
   const colorDisabled = [color.Dark[50], color.Dark[50]];
-  const defaultGradient = ['#F98FD9', '#FF70D4'];
+  const defaultGradient = [color.Success[400], color.Success[400]];
 
   const hideMenuDelete =
     playlistUri?.path !== undefined && playlistUri?.path !== '';
