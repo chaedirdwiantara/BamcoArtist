@@ -288,7 +288,7 @@ export const PlaylistContent: React.FC<Props> = ({
             <Text style={styles.description}>
               {dataDetail?.description
                 ? dataDetail.description
-                : 'No Description Given'}
+                : t('General.NoDescription')}
             </Text>
           </View>
 

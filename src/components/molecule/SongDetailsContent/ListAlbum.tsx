@@ -1,44 +1,51 @@
 import React from 'react';
-import {StyleSheet, Text, TouchableOpacity} from 'react-native';
-import {heightPercentage, normalize, widthPercentage} from '../../../utils';
-import {SquareImage} from '../../atom';
-import {color, font, typography} from '../../../theme';
-import {DefaultImage} from '../../../assets/icon';
+import {View, StyleSheet, Text, TouchableOpacity} from 'react-native';
 import {useTranslation} from 'react-i18next';
+import {mvs} from 'react-native-size-matters';
+
+import {SquareImage} from '../../atom';
+import {DefaultImage} from '../../../assets/icon';
+import {color, font, typography} from '../../../theme';
+import {heightPercentage, widthPercentage} from '../../../utils';
 
 interface ListAlbumProps {
-  title?: string;
+  title: string;
   albumName: string;
   imgUri: string;
-  imgSize?: number;
   createdOn: string;
   onPress: () => void;
+  imgSize?: number;
 }
 
 export const ListAlbum: React.FC<ListAlbumProps> = ({
   title,
+  imgUri,
   albumName,
-  imgSize = widthPercentage(96),
   createdOn,
   onPress,
-  imgUri = 'https://wallpaperspeed.id/wp-content/uploads/2021/09/dragon-ball-z-wallpaper-goku-super-saiyan-god-source-moddroid.com_.webp',
+  imgSize = widthPercentage(96),
 }) => {
   const {t} = useTranslation();
   return (
-    <TouchableOpacity onPress={onPress}>
+    <View>
       {title && (
         <Text style={[typography.Subtitle1, styles.titleContent]}>{title}</Text>
       )}
-      {imgUri ? (
-        <SquareImage imgUri={imgUri} size={imgSize} />
-      ) : (
-        <DefaultImage.PlaylistCover width={96} height={96} />
-      )}
-      <Text style={styles.albumName}>{albumName}</Text>
-      <Text style={styles.createdOn}>{`${createdOn} · ${t(
-        'Musician.Label.Album',
-      )}`}</Text>
-    </TouchableOpacity>
+      <TouchableOpacity onPress={onPress}>
+        {imgUri ? (
+          <SquareImage imgUri={imgUri} size={imgSize} />
+        ) : (
+          <DefaultImage.PlaylistCover
+            width={widthPercentage(96)}
+            height={widthPercentage(96)}
+          />
+        )}
+        <Text style={styles.albumName}>{albumName}</Text>
+        <Text style={styles.createdOn}>{`${createdOn} · ${t(
+          'Musician.Label.Album',
+        )}`}</Text>
+      </TouchableOpacity>
+    </View>
   );
 };
 
@@ -49,14 +56,15 @@ const styles = StyleSheet.create({
   },
   albumName: {
     fontFamily: font.InterSemiBold,
-    fontSize: normalize(12),
+    fontSize: mvs(13),
     lineHeight: heightPercentage(12),
     color: color.Neutral[10],
-    paddingTop: heightPercentage(10),
+    paddingTop: heightPercentage(15),
   },
   createdOn: {
     fontFamily: font.InterMedium,
-    fontSize: normalize(10),
+    fontSize: mvs(11),
     color: color.Dark[50],
+    paddingTop: mvs(3),
   },
 });

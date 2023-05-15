@@ -61,7 +61,7 @@ export const SettingContent: React.FC<SettingProps> = ({
 
   const MailTo = () => {
     return Linking.openURL(
-      'mailto:inquiry@sunnysideup.io?subject=Need Help About Application',
+      'mailto:team@thebeam.co?subject=Need Help About Application',
     );
   };
 

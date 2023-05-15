@@ -7,8 +7,8 @@ import {SquareImageText} from '../../components';
 import {RootStackParams} from '../../navigations';
 import {storage} from '../../hooks/use-storage.hook';
 import {useBackHandler} from '../../utils/useBackHandler';
-import {heightPercentage, widthPercentage} from '../../utils';
 import {useSettingHook} from '../../hooks/use-setting.hook';
+import {heightPercentage, widthPercentage} from '../../utils';
 
 type ListImageProps = NativeStackScreenProps<RootStackParams, 'ListImage'>;
 
@@ -51,7 +51,7 @@ export const ListImageScreen: React.FC<ListImageProps> = ({
   const children = () => {
     return (
       <FlatList
-        data={listData ?? []}
+        data={listData.sort((a, b) => (a.name > b.name ? 1 : -1)) ?? []}
         showsVerticalScrollIndicator={false}
         keyExtractor={item => item.id.toString()}
         numColumns={2}

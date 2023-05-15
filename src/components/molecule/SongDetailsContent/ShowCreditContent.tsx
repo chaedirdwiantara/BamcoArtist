@@ -64,6 +64,10 @@ export const ShowCreditContent: React.FC<ShowCreditProps> = ({
       content: dataDetail.album.featuringArtist.map(v => v.fullname),
     },
     {
+      title: t('Music.Credit.Writer'),
+      content: dataDetail.songWriter,
+    },
+    {
       title: t('Music.Credit.Format'),
       content: ['Album'],
     },

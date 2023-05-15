@@ -150,7 +150,7 @@ export const AlbumContent: React.FC<Props> = ({
 
   const createdDate = comingSoon
     ? dateLongMonth(detailAlbum.releaseDateScheduled)
-    : dateLongMonth(detailAlbum.createdAt);
+    : dateLongMonth(detailAlbum.publishedDate);
 
   return (
     <View style={styles.root}>
