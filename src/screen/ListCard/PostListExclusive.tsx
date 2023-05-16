@@ -1,9 +1,9 @@
-import React, {FC, useEffect, useState} from 'react';
+import React, {FC, useEffect, useRef, useState} from 'react';
 import {
   Dimensions,
   FlatList,
-  InteractionManager,
-  NativeModules,
+  NativeScrollEvent,
+  NativeSyntheticEvent,
   StyleSheet,
   Text,
   View,
@@ -68,6 +68,10 @@ import {useQuery} from 'react-query';
 
 const {height} = Dimensions.get('screen');
 
+type OnScrollEventHandler = (
+  event: NativeSyntheticEvent<NativeScrollEvent>,
+) => void;
+
 interface PostListProps {
   dataRightDropdown: DataDropDownType[];
   dataLeftDropdown: DropDownFilterType[] | DropDownSortType[];
@@ -103,6 +107,7 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
     useState<DataDropDownType>();
   const [selectedCategoryMenu, setSelectedCategoryMenu] =
     useState<DataDropDownType>();
+  const [scrollEffect, setScrollEffect] = useState(false);
 
   // * UPDATE HOOKS
   const [selectedIdPost, setSelectedIdPost] = useState<string>();
@@ -137,14 +142,20 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
   const {creditCount, getCreditCount} = useCreditHook();
   const MyUuid = profileStorage()?.uuid;
 
-  // TODO: QUERY AREA
+  //* QUERY AREA
   const [previousData, setPreviousData] = useState<PostList[]>();
   const [showUpdateNotif, setShowUpdateNotif] = useState(false);
   const [numberOfNewData, setNumberOfNewData] = useState<number>(0);
 
+  const flatListRef = useRef<FlatList<any> | null>(null);
+
+  const scrollToTop = () => {
+    flatListRef.current?.scrollToOffset({offset: 0});
+  };
+
   const {
     data: postData,
-    isLoading,
+    isLoading: queryDataLoading,
     isError,
     refetch,
   } = useQuery(
@@ -164,7 +175,7 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
 
   //* check if there's new update
   useCheckNewUpdate(
-    isLoading,
+    queryDataLoading,
     postData,
     previousData,
     setShowUpdateNotif,
@@ -174,12 +185,13 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
 
   const handleUpdateClick = () => {
     setShowUpdateNotif(false);
+    scrollToTop();
     postData?.data && setPreviousData(postData.data);
   };
 
   //* set data into main (show data)
   useSetDataMainQuery(previousData, setDataMain);
-  // TODO: END OF QUERY AREA
+  //* END OF QUERY AREA
 
   const fetchExclusiveContent = () => {
     getExclusiveContent({uuid: MyUuid});
@@ -246,6 +258,13 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
       true,
       uuid,
     );
+  };
+
+  //* Handle when scrolling
+  const handleOnScroll: OnScrollEventHandler = event => {
+    let offsetY = event.nativeEvent.contentOffset.y;
+    const scrolled = offsetY > 120;
+    setScrollEffect(scrolled);
   };
 
   const cardOnPress = (data: PostList) => {
@@ -349,6 +368,7 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
 
   return (
     <>
+      {/* //TODO: HOLD SCROLL EFFECT {!scrollEffect && ( */}
       <View style={styles.container}>
         <DropDownFilter
           labelCaption={
@@ -371,10 +391,12 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
           leftPosition={widthResponsive(-144)}
         />
       </View>
+      {/* )} */}
       {dataExclusiveContent && feedIsLoading === false ? (
         dataMain !== null && dataMain.length !== 0 ? (
           <View style={{flex: 1, marginHorizontal: widthResponsive(-24)}}>
             <FlatList
+              ref={flatListRef}
               data={dataMain}
               showsVerticalScrollIndicator={false}
               keyExtractor={(_, index) => index.toString()}
@@ -388,6 +410,7 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
                     : heightResponsive(160),
               }}
               onEndReached={handleEndScroll}
+              onScroll={handleOnScroll}
               renderItem={({item, index}) => (
                 <>
                   <ListCard.PostList
@@ -546,7 +569,7 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
         modalVisible={modalSuccessDonate && trigger2ndModal ? true : false}
         toggleModal={onPressSuccess}
       />
-      <ModalLoading visible={feedIsLoading} />
+      <ModalLoading visible={queryDataLoading && !previousData} />
 
       {showUpdateNotif && (
         <NewPostAvail

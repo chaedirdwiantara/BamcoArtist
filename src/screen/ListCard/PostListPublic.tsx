@@ -1,4 +1,4 @@
-import React, {FC, useState} from 'react';
+import React, {FC, useRef, useState} from 'react';
 import {
   Dimensions,
   FlatList,
@@ -6,6 +6,8 @@ import {
   StyleSheet,
   Text,
   View,
+  NativeScrollEvent,
+  NativeSyntheticEvent,
 } from 'react-native';
 import {mvs} from 'react-native-size-matters';
 import {
@@ -64,6 +66,10 @@ import {useQuery} from 'react-query';
 
 const {height} = Dimensions.get('screen');
 
+type OnScrollEventHandler = (
+  event: NativeSyntheticEvent<NativeScrollEvent>,
+) => void;
+
 interface PostListProps {
   dataRightDropdown: DataDropDownType[];
   dataLeftDropdown: DropDownFilterType[] | DropDownSortType[];
@@ -107,6 +113,7 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
   const [selectedCategoryMenu, setSelectedCategoryMenu] =
     useState<DataDropDownType>();
   const [refreshing, setRefreshing] = useState<boolean>(false);
+  const [scrollEffect, setScrollEffect] = useState(false);
 
   //* MUSIC HOOKS
   const [pauseModeOn, setPauseModeOn] = useState<boolean>(false);
@@ -141,9 +148,15 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
   const [showUpdateNotif, setShowUpdateNotif] = useState(false);
   const [numberOfNewData, setNumberOfNewData] = useState<number>(0);
 
+  const flatListRef = useRef<FlatList<any> | null>(null);
+
+  const scrollToTop = () => {
+    flatListRef.current?.scrollToOffset({offset: 0});
+  };
+
   const {
     data: postData,
-    isLoading,
+    isLoading: queryDataLoading,
     isError,
     refetch,
   } = useQuery(
@@ -163,7 +176,7 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
 
   //* check if there's new update
   useCheckNewUpdate(
-    isLoading,
+    queryDataLoading,
     postData,
     previousData,
     setShowUpdateNotif,
@@ -173,6 +186,7 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
 
   const handleUpdateClick = () => {
     setShowUpdateNotif(false);
+    scrollToTop();
     postData?.data && setPreviousData(postData.data);
   };
 
@@ -238,6 +252,13 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
       categoryValue,
       filterByValue,
     );
+  };
+
+  //* Handle when scrolling
+  const handleOnScroll: OnScrollEventHandler = event => {
+    let offsetY = event.nativeEvent.contentOffset.y;
+    const scrolled = offsetY > 120;
+    setScrollEffect(scrolled);
   };
 
   const cardOnPress = (data: PostList) => {
@@ -320,6 +341,7 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
 
   return (
     <>
+      {/* //TODO: HOLD SCROLL EFFECT {!scrollEffect && ( */}
       <View style={styles.container}>
         <DropDownFilter
           labelCaption={
@@ -342,6 +364,7 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
           leftPosition={widthResponsive(-144)}
         />
       </View>
+      {/* )} */}
       {videoUploadProgress ? (
         <ProgressBar
           progress={10}
@@ -357,6 +380,7 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
             </View>
           )}
           <FlatList
+            ref={flatListRef}
             data={dataMain}
             showsVerticalScrollIndicator={false}
             keyExtractor={(_, index) => index.toString()}
@@ -376,6 +400,7 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
               />
             }
             onEndReached={handleEndScroll}
+            onScroll={handleOnScroll}
             renderItem={({item, index}) => (
               <>
                 <ListCard.PostList
@@ -477,7 +502,9 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
         modalVisible={modalSuccessDonate && trigger2ndModal ? true : false}
         toggleModal={onPressSuccess}
       />
-      {/* {!refreshing && <ModalLoading visible={feedIsLoading} />} */}
+      {!refreshing && (
+        <ModalLoading visible={queryDataLoading && !previousData} />
+      )}
 
       {showUpdateNotif && (
         <NewPostAvail
