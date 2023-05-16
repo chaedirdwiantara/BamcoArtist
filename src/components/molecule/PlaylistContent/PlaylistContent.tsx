@@ -36,10 +36,10 @@ import {PhotoPlaylist} from './PhotoPlaylist';
 import {TopNavigation} from '../TopNavigation';
 import {ModalShare} from '../Modal/ModalShare';
 import {ModalConfirm} from '../Modal/ModalConfirm';
-import {dateFormat} from '../../../utils/date-format';
 import {color, font, typography} from '../../../theme';
 import {DataDropDownType} from '../../../data/dropdown';
 import {storage} from '../../../hooks/use-storage.hook';
+import {dateLongMonth} from '../../../utils/date-format';
 import ListSongs from '../../../screen/ListCard/ListSongs';
 import {SongList} from '../../../interface/song.interface';
 import {SongTitlePlay} from '../SongTitlePlay/SongTitlePlay';
@@ -257,7 +257,7 @@ export const PlaylistContent: React.FC<Props> = ({
           <SongTitlePlay
             title={dataDetail?.name}
             totalSong={dataDetail?.totalSong}
-            createdDate={dateFormat(dataDetail?.createdAt)}
+            createdDate={dateLongMonth(dataDetail.createdAt)}
             createdBy={dataDetail?.playlistOwner?.fullname}
             avatarUri={dataDetail?.playlistOwner?.image}
             showIconPlay={listSongs?.length > 0}
@@ -346,7 +346,7 @@ export const PlaylistContent: React.FC<Props> = ({
         imgUri={dataDetail?.thumbnailUrl}
         type={'Playlist'}
         titleSong={dataDetail?.name}
-        createdOn={dateFormat(dataDetail?.createdAt)}
+        createdOn={dateLongMonth(dataDetail.createdAt)}
         artist={dataDetail?.playlistOwner?.fullname}
         onPressCopy={() => {
           InteractionManager.runAfterInteractions(() => setToastVisible(true));
