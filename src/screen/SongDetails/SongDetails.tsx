@@ -28,7 +28,7 @@ export const SongDetailsScreen: React.FC<SongDetailProps> = ({
 
   useFocusEffect(
     useCallback(() => {
-      getDetailSong({id: songId.toString()});
+      getDetailSong({id: songId});
     }, []),
   );
 
