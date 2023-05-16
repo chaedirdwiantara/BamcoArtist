@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import Modal from 'react-native-modal';
 import {mvs} from 'react-native-size-matters';
-import ImagePicker, {Image} from 'react-native-image-crop-picker';
+import ImagePicker, {Image, Video} from 'react-native-image-crop-picker';
 
 import {Button} from '../../atom';
 import Font from '../../../theme/Font';
@@ -22,18 +22,21 @@ interface ModalImagePickerProps {
   modalVisible: boolean;
   onPressClose: () => void;
   sendUri: (params: Image) => void;
+  sendUriVideo?: (params: Video) => void;
   sendUriMultiple: (params: Image[]) => void;
   onDeleteImage: () => void;
   hideMenuDelete?: boolean;
   multiple?: boolean;
   maxFiles?: number;
   showVideo?: boolean;
+  onModalHide?: () => void;
 }
 
 export const ModalImagePicker: React.FC<ModalImagePickerProps> = ({
   title = 'Edit Display Profile',
   modalVisible,
   sendUri,
+  sendUriVideo,
   sendUriMultiple,
   onPressClose,
   onDeleteImage,
@@ -41,6 +44,7 @@ export const ModalImagePicker: React.FC<ModalImagePickerProps> = ({
   multiple,
   maxFiles,
   showVideo,
+  onModalHide,
 }) => {
   const {t} = useTranslation();
 
@@ -75,7 +79,7 @@ export const ModalImagePicker: React.FC<ModalImagePickerProps> = ({
     ImagePicker.openPicker({
       mediaType: 'video',
     }).then(image => {
-      sendUri(image);
+      sendUriVideo?.(image);
       onPressClose();
     });
   };
@@ -153,7 +157,10 @@ export const ModalImagePicker: React.FC<ModalImagePickerProps> = ({
   };
 
   return (
-    <Modal isVisible={modalVisible} style={{margin: 0}}>
+    <Modal
+      isVisible={modalVisible}
+      style={{margin: 0}}
+      onModalHide={onModalHide}>
       <TouchableWithoutFeedback onPress={onPressClose}>
         <View style={styles.modalOverlay} />
       </TouchableWithoutFeedback>

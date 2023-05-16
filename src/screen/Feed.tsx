@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {
   View,
   StyleSheet,
@@ -26,7 +26,7 @@ import {
   dropDownDataSort,
   dropDownSetAudience,
 } from '../data/dropdown';
-import {useIsFocused} from '@react-navigation/native';
+import {useFocusEffect, useIsFocused} from '@react-navigation/native';
 import {usePlayerHook} from '../hooks/use-player.hook';
 import {AddPostIcon, CancelCreatePostIcon} from '../assets/icon';
 import {useNavigation} from '@react-navigation/native';
@@ -36,6 +36,13 @@ import {useTranslation} from 'react-i18next';
 import {mvs} from 'react-native-size-matters';
 import {useSettingHook} from '../hooks/use-setting.hook';
 import {profileStorage} from '../hooks/use-storage.hook';
+import {useUploadImageHook} from '../hooks/use-uploadImage.hook';
+import {useDataVideoForPost, useVideoStore} from '../store/video.store';
+import {
+  usePostVideo,
+  useUploadVideo,
+} from './ListCard/ListUtils/PostVideoFunction';
+import {useFeedHook} from '../hooks/use-feed.hook';
 
 const {StatusBarManager} = NativeModules;
 const barHeight = StatusBarManager.HEIGHT;
@@ -44,19 +51,27 @@ export const FeedScreen: React.FC = () => {
   const {t} = useTranslation();
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
-  const [selectedIndex, setSelectedIndex] = useState(-0);
-  const [filter] = useState([
-    {filterName: 'Feed.MyPost'},
-    {filterName: 'Feed.Public'},
-  ]);
   const isLogin = storage.getString('profile');
   const uuid = profileStorage()?.uuid;
 
   const isFocused = useIsFocused();
   const {isPlaying, visible, showPlayer, hidePlayer} = usePlayerHook();
   const {dataExclusiveContent, getExclusiveContent} = useSettingHook();
+  const {dataVideo, setDataVideo, setUploadVideo} = useUploadImageHook();
+  const {dataCreatePost, createPostLoading, setCreatePost} = useFeedHook();
+  const {storedInputText, storedValueFilter, storedDataAudience} =
+    useDataVideoForPost();
+  const {uriVideo, allowToUpload, setUriVideo, setAllowToUpload} =
+    useVideoStore();
+
+  const [selectedIndex, setSelectedIndex] = useState(-0);
+  const [filter] = useState([
+    {filterName: 'Feed.MyPost'},
+    {filterName: 'Feed.Public'},
+  ]);
+  const [allowToPost, setAllowToPost] = useState<boolean>(false);
   const [selectedCategory, setSelectedCategory] = useState<string>();
-  const [offsetCategoryFilter, setOffsetCategoryFilter] = React.useState<{
+  const [offsetCategoryFilter, setOffsetCategoryFilter] = useState<{
     px: number;
     py: number;
   }>();
@@ -64,6 +79,8 @@ export const FeedScreen: React.FC = () => {
     filterModal: false,
     confirmModal: false,
   });
+  const [progress, setProgress] = useState<number>();
+  const [allowToRefresh, setAllowToRefresh] = useState<boolean>(false);
 
   useEffect(() => {
     if (isFocused && isPlaying) {
@@ -83,6 +100,10 @@ export const FeedScreen: React.FC = () => {
       } else {
         setModalVisible({filterModal: false, confirmModal: false});
         setSelectedCategory(undefined);
+        setUriVideo(null);
+        setAllowToUpload(false);
+        setDataVideo(undefined);
+        setAllowToRefresh(false);
         navigation.navigate('CreatePost', {audience: selectedCategory});
       }
     }
@@ -108,6 +129,38 @@ export const FeedScreen: React.FC = () => {
     setSelectedCategory(undefined);
   };
 
+  //! Upload Video area
+  useUploadVideo(
+    uriVideo,
+    allowToUpload,
+    setProgress,
+    setUploadVideo,
+    setAllowToPost,
+  );
+
+  useEffect(() => {
+    if (dataVideo) {
+      setAllowToUpload(false);
+      setProgress(undefined);
+      setAllowToRefresh(true);
+    }
+  }, [dataVideo]);
+
+  useEffect(() => {
+    if (dataCreatePost) {
+      setUriVideo(null);
+    }
+  }, [dataCreatePost]);
+
+  usePostVideo(
+    dataVideo,
+    uriVideo,
+    setCreatePost,
+    storedInputText,
+    storedValueFilter,
+    storedDataAudience,
+  );
+
   return (
     <View style={styles.root}>
       {isLogin ? (
@@ -132,11 +185,16 @@ export const FeedScreen: React.FC = () => {
               <PostListPublic
                 dataRightDropdown={dropDownDataCategory}
                 dataLeftDropdown={dropDownDataSort}
+                videoUploadProgress={progress}
+                uriVideo={uriVideo?.path}
               />
             ) : (
               <PostListMyPost
                 dataRightDropdown={dropDownDataCategory}
                 dataLeftDropdown={dropDownDataSort}
+                videoUploadProgress={progress}
+                uriVideo={uriVideo?.path}
+                allowRefresh={allowToRefresh}
               />
             )}
           </View>
