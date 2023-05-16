@@ -61,9 +61,16 @@ const ListImageDesc: React.FC<ListImageDescProps> = (
                 hideText={title === 'Coming Soon'}
                 onPress={() => onPressImage(item.title, item.id)}
               />
-              <View style={{marginTop: heightPercentage(10)}}>
-                <Text style={styles.title}>{elipsisText(item.title, 13)}</Text>
+              <View
+                style={{
+                  marginTop: heightPercentage(10),
+                  width: widthPercentage(100),
+                }}>
+                <Text numberOfLines={1} style={styles.title}>
+                  {item.title}
+                </Text>
                 <Text
+                  numberOfLines={1}
                   style={[
                     styles.subtitle,
                     {fontSize: title === '' ? mvs(10) : mvs(12)},

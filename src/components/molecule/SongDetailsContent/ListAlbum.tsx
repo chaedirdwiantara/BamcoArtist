@@ -40,7 +40,9 @@ export const ListAlbum: React.FC<ListAlbumProps> = ({
             height={widthPercentage(96)}
           />
         )}
-        <Text style={styles.albumName}>{albumName}</Text>
+        <Text numberOfLines={1} style={styles.albumName}>
+          {albumName}
+        </Text>
         <Text style={styles.createdOn}>{`${createdOn} · ${t(
           'Musician.Label.Album',
         )}`}</Text>
