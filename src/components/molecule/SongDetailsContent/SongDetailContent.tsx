@@ -30,7 +30,6 @@ import {ModalShare} from '../Modal/ModalShare';
 import {TopNavigation} from '../TopNavigation';
 import {ModalDonate} from '../Modal/ModalDonate';
 import {ModalCustom} from '../Modal/ModalCustom';
-import {dummySongImg} from '../../../data/image';
 import {color, font, typography} from '../../../theme';
 import {storage} from '../../../hooks/use-storage.hook';
 import {dateLongMonth} from '../../../utils/date-format';
@@ -159,7 +158,7 @@ export const SongDetailsContent: React.FC<Props> = ({
               <PhotoPlaylist uri={dataDetail.album.imageUrl[1].image} />
             ) : (
               <View style={styles.undefinedImg}>
-                <DefaultImage.PlaylistCover
+                <DefaultImage.SongCover
                   width={widthResponsive(148)}
                   height={widthResponsive(148)}
                 />
@@ -190,11 +189,7 @@ export const SongDetailsContent: React.FC<Props> = ({
             <ListAvatar
               title={t('Home.Topbar.Search.Musician')}
               text={dataDetail.musicianName}
-              avatarUri={
-                dataDetail.imageUrl !== null && dataDetail.imageUrl.length !== 0
-                  ? dataDetail.imageUrl[0].image
-                  : ''
-              }
+              avatarUri={dataDetail.album.musician.imageProfile}
               onPress={goToMusicianProfile}
               uuid={dataDetail.musicianUUID}
             />
@@ -227,7 +222,7 @@ export const SongDetailsContent: React.FC<Props> = ({
                 dataDetail.album.imageUrl !== null &&
                 dataDetail.album.imageUrl.length !== 0
                   ? dataDetail.album.imageUrl[0].image
-                  : dummySongImg
+                  : ''
               }
             />
           </View>
@@ -254,12 +249,14 @@ export const SongDetailsContent: React.FC<Props> = ({
         onPressClose={() => setModalShare(false)}
         titleModal={t('General.Share.Music')}
         imgUri={
-          'https://i.pinimg.com/originals/b3/51/66/b35166174c9bde2d0cc436150a983912.jpg'
+          dataDetail.album.imageUrl.length !== 0
+            ? dataDetail.album.imageUrl[0].image
+            : ''
         }
         type={'Album'}
-        titleSong={'Smoke + Mirror'}
-        createdOn={'2019'}
-        artist={'Imagine Dragons, The Wekeend'}
+        titleSong={dataDetail.title}
+        createdOn={dataDetail.album.productionYear}
+        artist={dataDetail.musicianName}
         onPressCopy={() => {
           setToastText(t('General.LinkCopied') || '');
           InteractionManager.runAfterInteractions(() => setToastVisible(true));
