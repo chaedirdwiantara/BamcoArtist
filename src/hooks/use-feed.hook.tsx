@@ -111,6 +111,14 @@ export const useFeedHook = () => {
       setFeedIsLoading(false);
     }
   };
+  const getListDataMyPostQuery = async (props?: ParamsProps) => {
+    try {
+      const response = await listMyPost(props);
+      return {data: response?.data, meta: response?.meta};
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const getListDataExclusivePost = async (props?: ParamsProps) => {
     setFeedIsLoading(true);
@@ -455,5 +463,6 @@ export const useFeedHook = () => {
     setViewCount,
     getListDataPostQuery,
     getListDataExclusiveQuery,
+    getListDataMyPostQuery,
   };
 };
