@@ -48,6 +48,7 @@ import {SongList, TranscodedSongType} from '../../interface/song.interface';
 import {useTranslation} from 'react-i18next';
 import VideoComp from '../../components/molecule/VideoPlayer/videoComp';
 import {useDataVideoForPost, useVideoStore} from '../../store/video.store';
+import {convertCategoryValue} from './UtilsPost/utils';
 
 type PostDetailProps = NativeStackScreenProps<RootStackParams, 'CreatePost'>;
 
@@ -143,10 +144,11 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   // ! END OF UPLOAD VIDEO AREA
 
   // ! EDIT POST AREA
+
   useEffect(() => {
-    if (dataUpdatePostProps !== undefined && updateOn == false) {
-      setUserId(dataUpdatePostProps.id);
+    if (dataUpdatePostProps !== undefined && !updateOn) {
       setUpdateOn(true);
+      setUserId(dataUpdatePostProps.id);
       setLabel(dataUpdatePostProps.category);
       setValueFilter(dataUpdatePostProps.category);
       setInputText(dataUpdatePostProps.caption);
@@ -197,11 +199,18 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
         };
         setMusicData(dataMusicProps);
       }
+      //* step to edit/update video
+      if (dataUpdatePostProps.video.encodeHlsUrl.length > 0) {
+        setUriVideo(dataUpdatePostProps.video);
+      }
     }
   }, [dataUpdatePostProps, updateOn]);
 
   useEffect(() => {
-    dataUpdatePost !== null && navigation.goBack(), setUpdateOn(false);
+    if (dataUpdatePost) {
+      setUpdateOn(false);
+      navigation.goBack();
+    }
   }, [dataUpdatePost]);
   // ! END OF EDIT POST AREA
 
@@ -217,7 +226,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
 
   //  * 2. trigger hook state to active when Post Button pressed
   const handlePostOnPress = () => {
-    if (uriVideo && allowToBack) {
+    if (uriVideo && allowToBack && updateOn === false) {
       setAllowToUpload(true);
       navigation.goBack();
       setAllowToBack(false);
@@ -247,7 +256,8 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
       active == true &&
       uri.length == 0 &&
       musicData == undefined &&
-      dataUpdatePostProps !== undefined
+      dataUpdatePostProps !== undefined &&
+      !uriVideo
     ) {
       setUpdatePost({
         id: dataUpdatePostProps.id,
@@ -299,7 +309,8 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
       active == true &&
       uri.length == 0 &&
       musicData !== undefined &&
-      updateOn === true
+      updateOn === true &&
+      !uriVideo
     ) {
       setUpdatePost({
         id: userId,
@@ -323,7 +334,26 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
             : undefined,
       });
     }
-  }, [active, uri, musicData]);
+
+    // ? for EDIT UPLOAD VIDEO only
+    if (active == true && updateOn && uriVideo) {
+      const video = {
+        targetType: 'video',
+        coverImage: uriVideo.sourceURL ?? '',
+        encodeDashUrl: uriVideo.localIdentifier ?? '',
+        encodeHlsUrl: uriVideo.path,
+        duration: uriVideo.duration ?? 0,
+      };
+
+      setUpdatePost({
+        id: userId,
+        caption: inputText,
+        category: valueFilter ? valueFilter : 'highlight',
+        isPremium: dataAudience === 'Feed.Exclusive',
+        video,
+      });
+    }
+  }, [active, uri, musicData, updateOn, uriVideo]);
 
   // * 4. set to hook state when response upload image has received
   useEffect(() => {
@@ -584,11 +614,6 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
                 withCloseIcon
                 onPress={closeVideo}
                 dontShowText={false}
-                videoContainer={{
-                  height: keyBrdIsActive
-                    ? widthResponsive(225)
-                    : width - widthResponsive(48),
-                }}
               />
             )}
           </View>
@@ -647,7 +672,11 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
                 }}
                 style={{opacity: 1}}>
                 <ButtonGradientwithIcon
-                  label={label ? t(label) : t('Post.Create.Category')}
+                  label={
+                    label
+                      ? t(convertCategoryValue(label))
+                      : t('Post.Create.Category')
+                  }
                   onPress={() =>
                     setModalVisible({
                       modalFilter: true,

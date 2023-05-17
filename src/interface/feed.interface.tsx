@@ -106,6 +106,7 @@ export type VideoResponseType = {
   encodeDashUrl: string;
   encodeHlsUrl: string;
   views: number;
+  duration: string;
 };
 
 export type PostList = {
