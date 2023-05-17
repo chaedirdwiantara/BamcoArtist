@@ -11,6 +11,7 @@ export type PaginationType = {
 };
 
 export type SongList = {
+  musicianUUID: string;
   isAddedToThisPlaylist: boolean;
   played: boolean;
   id: number;
@@ -117,6 +118,11 @@ export type Featuring = {
 };
 
 export type SongAlbum = {
+  musician: {
+    uuid: string;
+    name: string;
+    imageProfile: string;
+  };
   releaseDate: any;
   id: number;
   musicianId: string;

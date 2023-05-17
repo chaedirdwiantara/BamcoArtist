@@ -49,7 +49,9 @@ export const ListAvatar: React.FC<ListAvatarProps> = ({
             disabled={item.isDeletedUser}
             onPress={() => onPress(item.uuid)}>
             {item.imageProfile ? (
-              <Avatar size={widthPercentage(44)} imgUri={item.imageProfile} />
+              <View style={{opacity: item.isDeletedUser ? 0.5 : 1}}>
+                <Avatar size={widthPercentage(44)} imgUri={item.imageProfile} />
+              </View>
             ) : (
               <DefaultAvatar.MusicianIcon
                 color={item.isDeletedUser ? 'rgba(0, 0, 0, 0.5)' : '#222731'}
