@@ -193,12 +193,16 @@
       }
     },
     "ListMood": {
+      "Title" : "Mood",
       "EmptyState": "Sorry, we don't have any music available for this mood at the moment. Check back soon as we're always adding new music!"
     },
     "ListGenre": {
+      "Title" : "Genre",
       "EmptyState": "Sorry, we don't have any music available for this genre at the moment. Check back soon as we're always adding new music!"
     },
     "DiveIn": {
+      "Title": "Dive In",
+      "Subtitle": "Based on your preferences",
       "Trending": {
         "EmptyState": "We're sorry! There's no trending feed available right now. Check back soon, as we're always working to bring you the best music social media experience."
       },
@@ -210,6 +214,7 @@
       }
     },
     "ComingSoon": {
+      "Title" : "Coming Soon",
       "EmptyState": "Unfortunately, there are no new albums coming soon from any musicians. We'll let you know as soon as something new is on the horizon."
     },
     "Song": {
@@ -219,6 +224,7 @@
       "EmptyState": "We couldn't find any {{title}} for you. Check back soon as we're always adding new musician!"
     },
     "Playlist": {
+      "Title" : "Playlist",
       "EmptyState": "Oops! We couldn't find any playlists for you. Create your own & help other discover great music!"
     }
   },
@@ -387,6 +393,13 @@
         "ReasonInput": "Reason",
         "ReasonPlaceholder": "Tell us more",
         "PasswordInput": "Input Password"
+      },
+       "Reason" : {
+        "First" : "I don’t feel safe on Beamco",
+        "Second" : "I don’t find Beamco useful",
+        "Third" : "I have another Beamco Account",
+        "Fourth" : "I spend too much time using Beamco",
+        "Five" : "I don’t understand how to use Beamco"
       }
     },
     "TnC&PP": {
@@ -511,14 +524,14 @@
       },
       "UseRefer": {
         "Title": "USE REFERRAL",
-        "Text1": "於每筆交易獲取 5% Sunny Side Up 積分",
+        "Text1": "於每筆交易獲取 5% Beamco 積分",
         "Text2": "你朋友的推薦碼",
         "Text3": "推薦碼無法更改",
         "Invalid": "Referral code invalid"
       },
       "OnBoard": {
         "Title": "你有推薦碼嗎？",
-        "Subtitle": "輸入您的推薦碼以快速啟動您的 Sunny Side Up 之旅！",
+        "Subtitle": "輸入您的推薦碼以快速啟動您的 Beamco 之旅！",
         "Actived": "推薦已激活",
         "Success": "恭喜！ 現在您每筆交易將獲得 5% 的積分！"
       }
@@ -693,7 +706,7 @@
       "Change": "您確定要更改電話號碼？"
     },
     "Report": {
-      "Success": "We’ve received your feedback. Thank you for helping us make sunny Side Up better.",
+      "Success": "We’ve received your feedback. Thank you for helping us make Beamco better.",
       "Back": "Back to Settings"
     },
     "SignOut": "Are you sure you want to sign out?",
@@ -746,9 +759,9 @@
   },
   "TopUp": {
     "Title": "Top Up",
-    "Subtitle1": "SSU Coin is your way to show your appreciation",
-    "Subtitle2": "SSU Coin allows you to parcitipate in Musician’s upside and grow their community",
-    "Subtitle3": "Find Musician who is providing a lot of value? Rewards them with SSU Coin as a support",
+    "Subtitle1": "Beamco Coin is your way to show your appreciation",
+    "Subtitle2": "Beamco Coin allows you to parcitipate in Musician’s upside and grow their community",
+    "Subtitle3": "Find Musician who is providing a lot of value? Rewards them with Beamco Coin as a support",
     "MyCoin": "My Coin",
     "Filter": {
       "Buy": "Buy Package",
