@@ -1,6 +1,6 @@
 import {useCallback, useEffect} from 'react';
 import {PostList, PostPropsTypeA} from '../../../interface/feed.interface';
-import {ParamsProps} from '../../../interface/base.interface';
+import {PaginationType, ParamsProps} from '../../../interface/base.interface';
 import {useFocusEffect} from '@react-navigation/native';
 import {TFunction} from 'i18next';
 
@@ -11,6 +11,50 @@ export const useGetCreditCount = (
   useEffect(() => {
     modalDonate && getCreditCount();
   }, [modalDonate]);
+};
+
+export const useCheckNewUpdate = (
+  isLoading: boolean,
+  postData:
+    | {
+        data: PostList[];
+        meta: PaginationType;
+      }
+    | undefined,
+  previousData: PostList[] | undefined,
+  setShowUpdateNotif: React.Dispatch<React.SetStateAction<boolean>>,
+  setNumberOfNewData: React.Dispatch<React.SetStateAction<number>>,
+  setPreviousData: React.Dispatch<React.SetStateAction<PostList[] | undefined>>,
+) => {
+  useEffect(() => {
+    if (!isLoading && postData?.data && !previousData) {
+      setPreviousData(postData.data);
+    } else if (
+      !isLoading &&
+      postData &&
+      previousData &&
+      postData.data !== previousData
+    ) {
+      if (postData.data[0].caption !== previousData[0].caption) {
+        setShowUpdateNotif(true);
+        const index = postData.data.findIndex(
+          obj => obj.caption === previousData[0].caption,
+        );
+        setNumberOfNewData(index);
+      }
+    }
+  }, [isLoading, postData, previousData]);
+};
+
+export const useSetDataMainQuery = (
+  previousData: PostList[] | undefined,
+  setDataMain: React.Dispatch<React.SetStateAction<PostList[]>>,
+) => {
+  useEffect(() => {
+    if (previousData) {
+      setDataMain(previousData);
+    }
+  }, [previousData]);
 };
 
 export const useGetDataOnMount = (

@@ -74,6 +74,7 @@ const PopularPost: FC<PopularPostProps> = (props: PopularPostProps) => {
       page: 1,
       perPage: 1,
       musician_uuid: uuidMusician,
+      sortBy: 'popular',
     });
   }, [uuidMusician]);
 

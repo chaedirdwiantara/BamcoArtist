@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useState} from 'react';
+import React, {FC, useCallback, useEffect, useRef, useState} from 'react';
 import {
   Dimensions,
   FlatList,
@@ -25,7 +25,7 @@ import {
 } from '../../data/dropdown';
 import {color, font, typography} from '../../theme';
 import {heightPercentage, heightResponsive, widthResponsive} from '../../utils';
-import {useNavigation} from '@react-navigation/native';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {MainTabParams, RootStackParams} from '../../navigations';
 import {EmptyState} from '../../components/molecule/EmptyState/EmptyState';
@@ -49,14 +49,17 @@ import {
   likesCountInFeed,
   playSongOnFeed,
   useCategoryFilter,
+  useCheckNewUpdate,
   useGetCreditCount,
   useGetDataOnMountNoId,
   useRefreshingEffect,
+  useSetDataMainQuery,
   useSetDataToMainData,
   useSortByFilter,
   useStopRefreshing,
 } from './ListUtils/ListFunction';
 import Clipboard from '@react-native-community/clipboard';
+import {useQuery} from 'react-query';
 const {height} = Dimensions.get('screen');
 
 interface PostListProps {
@@ -122,6 +125,7 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
     setLikePost,
     setUnlikePost,
     setDeletePost,
+    getListDataMyPostQuery,
   } = useFeedHook();
 
   const {
@@ -137,10 +141,62 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
   const {creditCount, getCreditCount} = useCreditHook();
   const uuid = profileStorage()?.uuid;
 
+  //* QUERY AREA
+  const [previousData, setPreviousData] = useState<PostList[]>();
+  const [showUpdateNotif, setShowUpdateNotif] = useState(false);
+  const [numberOfNewData, setNumberOfNewData] = useState<number>(0);
+
+  const flatListRef = useRef<FlatList<any> | null>(null);
+
+  const scrollToTop = () => {
+    flatListRef.current?.scrollToOffset({offset: 0});
+  };
+
+  const {
+    data: postData,
+    isLoading: queryDataLoading,
+    isError,
+    refetch,
+  } = useQuery(
+    'posts-myPost',
+    () =>
+      getListDataMyPostQuery({
+        page: 1,
+        perPage: perPage,
+        sortBy: filterByValue,
+        category: categoryValue,
+      }),
+    {
+      staleTime: 0,
+      refetchInterval: 300000,
+    },
+  );
+
+  //?get data on mount this page
+  useFocusEffect(
+    useCallback(() => {
+      refetch();
+    }, []),
+  );
+
+  //?setData if not same as current
+  useEffect(() => {
+    if (!queryDataLoading && postData) {
+      if (postData.data !== previousData) {
+        setPreviousData(postData.data);
+      }
+    }
+  }, [queryDataLoading, postData]);
+
+  //? set data into main (show data)
+  useSetDataMainQuery(previousData, setDataMain);
+
+  //* END OF QUERY AREA
+
   //* get data on mount this page
   useGetCreditCount(modalDonate, getCreditCount);
 
-  useGetDataOnMountNoId(perPage, getListDataMyPost, setPage);
+  // useGetDataOnMountNoId(perPage, getListDataMyPost, setPage);
 
   //* get data when video post suceeded
   useEffect(() => {
@@ -347,6 +403,7 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
             </View>
           )}
           <FlatList
+            ref={flatListRef}
             data={
               filterActive
                 ? dataMain
@@ -482,7 +539,9 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
         modalVisible={modalSuccessDonate && trigger2ndModal ? true : false}
         toggleModal={onPressSuccess}
       />
-      {!refreshing && <ModalLoading visible={feedIsLoading} />}
+      {!refreshing && (
+        <ModalLoading visible={queryDataLoading && !previousData} />
+      )}
     </>
   );
 };

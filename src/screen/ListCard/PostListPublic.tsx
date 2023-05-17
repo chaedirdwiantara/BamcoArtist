@@ -1,12 +1,13 @@
-import React, {FC, useState} from 'react';
+import React, {FC, useRef, useState} from 'react';
 import {
   Dimensions,
   FlatList,
-  InteractionManager,
   RefreshControl,
   StyleSheet,
   Text,
   View,
+  NativeScrollEvent,
+  NativeSyntheticEvent,
 } from 'react-native';
 import {mvs} from 'react-native-size-matters';
 import {
@@ -16,6 +17,7 @@ import {
   ModalDonate,
   ModalShare,
   ModalSuccessDonate,
+  NewPostAvail,
   ProgressBar,
   SsuToast,
 } from '../../components';
@@ -50,16 +52,23 @@ import {
   likesCountInFeed,
   playSongOnFeed,
   useCategoryFilter,
+  useCheckNewUpdate,
   useGetCreditCount,
   useGetDataOnMount,
   useRefreshingEffect,
+  useSetDataMainQuery,
   useSetDataToMainData,
   useSortByFilter,
   useStopRefreshing,
 } from './ListUtils/ListFunction';
 import Clipboard from '@react-native-community/clipboard';
+import {useQuery} from 'react-query';
 
 const {height} = Dimensions.get('screen');
+
+type OnScrollEventHandler = (
+  event: NativeSyntheticEvent<NativeScrollEvent>,
+) => void;
 
 interface PostListProps {
   dataRightDropdown: DataDropDownType[];
@@ -104,6 +113,7 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
   const [selectedCategoryMenu, setSelectedCategoryMenu] =
     useState<DataDropDownType>();
   const [refreshing, setRefreshing] = useState<boolean>(false);
+  const [scrollEffect, setScrollEffect] = useState(false);
 
   //* MUSIC HOOKS
   const [pauseModeOn, setPauseModeOn] = useState<boolean>(false);
@@ -117,6 +127,7 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
     getListDataPost,
     setLikePost,
     setUnlikePost,
+    getListDataPostQuery,
   } = useFeedHook();
 
   const {
@@ -132,10 +143,61 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
   const {creditCount, getCreditCount} = useCreditHook();
   const MyUuid = profileStorage()?.uuid;
 
+  //* QUERY AREA
+  const [previousData, setPreviousData] = useState<PostList[]>();
+  const [showUpdateNotif, setShowUpdateNotif] = useState(false);
+  const [numberOfNewData, setNumberOfNewData] = useState<number>(0);
+
+  const flatListRef = useRef<FlatList<any> | null>(null);
+
+  const scrollToTop = () => {
+    flatListRef.current?.scrollToOffset({offset: 0});
+  };
+
+  const {
+    data: postData,
+    isLoading: queryDataLoading,
+    isError,
+    refetch,
+  } = useQuery(
+    'posts-public',
+    () =>
+      getListDataPostQuery({
+        page: 1,
+        perPage: perPage,
+        sortBy: filterByValue,
+        category: categoryValue,
+      }),
+    {
+      staleTime: 300000,
+      refetchInterval: 300000,
+    },
+  );
+
+  //* check if there's new update
+  useCheckNewUpdate(
+    queryDataLoading,
+    postData,
+    previousData,
+    setShowUpdateNotif,
+    setNumberOfNewData,
+    setPreviousData,
+  );
+
+  const handleUpdateClick = () => {
+    setShowUpdateNotif(false);
+    scrollToTop();
+    postData?.data && setPreviousData(postData.data);
+  };
+
+  //* set data into main (show data)
+  useSetDataMainQuery(previousData, setDataMain);
+  //* END OF QUERY AREA
+
   //* get data on mount this page
   useGetCreditCount(modalDonate, getCreditCount);
 
-  useGetDataOnMount(uuidMusician, perPage, getListDataPost, setUuid, setPage);
+  // useGetDataOnMount(uuidMusician, perPage, getListDataPost, setUuid, setPage);
 
   //* call when refreshing
   useRefreshingEffect(
@@ -190,6 +252,13 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
       categoryValue,
       filterByValue,
     );
+  };
+
+  //* Handle when scrolling
+  const handleOnScroll: OnScrollEventHandler = event => {
+    let offsetY = event.nativeEvent.contentOffset.y;
+    const scrolled = offsetY > 120;
+    setScrollEffect(scrolled);
   };
 
   const cardOnPress = (data: PostList) => {
@@ -272,6 +341,7 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
 
   return (
     <>
+      {/* //TODO: HOLD SCROLL EFFECT {!scrollEffect && ( */}
       <View style={styles.container}>
         <DropDownFilter
           labelCaption={
@@ -294,6 +364,7 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
           leftPosition={widthResponsive(-144)}
         />
       </View>
+      {/* )} */}
       {videoUploadProgress ? (
         <ProgressBar
           progress={10}
@@ -309,6 +380,7 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
             </View>
           )}
           <FlatList
+            ref={flatListRef}
             data={dataMain}
             showsVerticalScrollIndicator={false}
             keyExtractor={(_, index) => index.toString()}
@@ -328,6 +400,7 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
               />
             }
             onEndReached={handleEndScroll}
+            onScroll={handleOnScroll}
             renderItem={({item, index}) => (
               <>
                 <ListCard.PostList
@@ -429,7 +502,16 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
         modalVisible={modalSuccessDonate && trigger2ndModal ? true : false}
         toggleModal={onPressSuccess}
       />
-      {!refreshing && <ModalLoading visible={feedIsLoading} />}
+      {!refreshing && (
+        <ModalLoading visible={queryDataLoading && !previousData} />
+      )}
+
+      {showUpdateNotif && (
+        <NewPostAvail
+          onPress={handleUpdateClick}
+          numberOfNewData={numberOfNewData}
+        />
+      )}
     </>
   );
 };
