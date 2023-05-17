@@ -1,10 +1,11 @@
 import {Video} from 'react-native-image-crop-picker';
 import create from 'zustand';
+import {VideoResponseType} from '../interface/feed.interface';
 
 interface VideoStore {
   uriVideo: Video | null;
   allowToUpload: boolean;
-  setUriVideo: (value: Video | null) => void;
+  setUriVideo: (value: Video | VideoResponseType | null) => void;
   setAllowToUpload: (value: boolean) => void;
 }
 
@@ -12,7 +13,37 @@ export const useVideoStore = create<VideoStore>(set => ({
   uriVideo: null,
   allowToUpload: false,
   setAllowToUpload: (value: boolean) => set({allowToUpload: value}),
-  setUriVideo: (value: Video | null) => set({uriVideo: value}),
+  setUriVideo: (value: Video | VideoResponseType | null) => {
+    if (value !== null) {
+      if (
+        'path' in value &&
+        'size' in value &&
+        'width' in value &&
+        'height' in value &&
+        'mime' in value
+      ) {
+        set({uriVideo: value});
+      }
+      if ('encodeHlsUrl' in value) {
+        const timeString = value.duration;
+        const [minutes, seconds] = timeString.split(':').map(Number);
+        const timeInMs = (minutes * 60 + seconds) * 1000;
+        const video: Video = {
+          path: value.encodeHlsUrl,
+          size: 500000,
+          width: 200,
+          height: 320,
+          mime: 'video/mp4/editable',
+          duration: timeInMs,
+          sourceURL: value.coverImage[0].image,
+          localIdentifier: value.encodeDashUrl,
+        };
+        set({uriVideo: video});
+      }
+    } else {
+      set({uriVideo: value});
+    }
+  },
 }));
 
 interface DataVideoForPost {

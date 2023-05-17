@@ -234,7 +234,7 @@ export default VideoComp;
 const styles = StyleSheet.create({
   videoStyle: {
     width: '100%',
-    height: width - widthResponsive(48),
+    height: widthResponsive(225),
     borderRadius: 4,
   },
   closeIcon: {

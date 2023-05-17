@@ -60,6 +60,7 @@ import {
 } from './ListUtils/ListFunction';
 import Clipboard from '@react-native-community/clipboard';
 import {useQuery} from 'react-query';
+import {useVideoStore} from '../../store/video.store';
 const {height} = Dimensions.get('screen');
 
 interface PostListProps {
@@ -138,38 +139,26 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
     addPlaylistFeed,
   } = usePlayerHook();
 
+  const {setUriVideo} = useVideoStore();
+
   const {creditCount, getCreditCount} = useCreditHook();
   const uuid = profileStorage()?.uuid;
 
   //* QUERY AREA
   const [previousData, setPreviousData] = useState<PostList[]>();
-  const [showUpdateNotif, setShowUpdateNotif] = useState(false);
-  const [numberOfNewData, setNumberOfNewData] = useState<number>(0);
-
-  const flatListRef = useRef<FlatList<any> | null>(null);
-
-  const scrollToTop = () => {
-    flatListRef.current?.scrollToOffset({offset: 0});
-  };
 
   const {
     data: postData,
     isLoading: queryDataLoading,
     isError,
     refetch,
-  } = useQuery(
-    'posts-myPost',
-    () =>
-      getListDataMyPostQuery({
-        page: 1,
-        perPage: perPage,
-        sortBy: filterByValue,
-        category: categoryValue,
-      }),
-    {
-      staleTime: 0,
-      refetchInterval: 300000,
-    },
+  } = useQuery('posts-myPost', () =>
+    getListDataMyPostQuery({
+      page: 1,
+      perPage: perPage,
+      sortBy: filterByValue,
+      category: categoryValue,
+    }),
   );
 
   //?get data on mount this page
@@ -331,6 +320,7 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
         setSelectedMenu(undefined);
       }
       if (t(selectedMenu.label) === 'Edit Post') {
+        setUriVideo(null);
         let dataSelected = dataMain.filter(data => data.id === selectedIdPost);
         navigation.navigate('CreatePost', {postData: dataSelected[0]});
         setSelectedMenu(undefined);
@@ -403,7 +393,6 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
             </View>
           )}
           <FlatList
-            ref={flatListRef}
             data={
               filterActive
                 ? dataMain
