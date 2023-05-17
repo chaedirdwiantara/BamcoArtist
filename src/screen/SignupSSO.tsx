@@ -36,18 +36,19 @@ const registerValidation = yup.object({
     .required('This field is required')
     .strict(true)
     .trim('Full name cannot include leading and trailing spaces')
-    .matches(/^.{3,50}$/, 'Fullname allowed 3 to 50 character'),
+    .matches(/^.{3,21}$/, 'Full Name must be shorter than 21 characters'),
   email: yup.string().when('registrationType', {
     is: (val: RegistrationType) => val === 'email',
     then: yup
       .string()
       .required('This field is required')
-      .email('Please use valid email'),
+      .email('This email format is invalid, please enter valid email'),
   }),
   password: yup
     .string()
     .required('This field is required')
-    .matches(/^.{8,40}$/, 'Password should be between 8 to 40 characters'),
+    .min(8, 'Password should be at least 8 characters ')
+    .max(40, 'Password must be shorter than 40 characters'),
   confirmPassword: yup
     .string()
     .required('Field is required')
