@@ -1,11 +1,17 @@
 import {useState} from 'react';
 import {InteractionManager} from 'react-native';
 import {Image, Video} from 'react-native-image-crop-picker';
-import {uploadImage, uploadVideo} from '../api/uploadImage.api';
+import {
+  progressUploadVideo,
+  uploadImage,
+  uploadVideo,
+} from '../api/uploadImage.api';
 import {
   UploadImageResponseType,
   UploadVideoDataResponseType,
 } from '../interface/uploadImage.interface';
+import {ParamsProps} from '../interface/base.interface';
+import {ProgressUploadDataResponseType} from '../interface/uploadImage.interface';
 
 export const useUploadImageHook = () => {
   const [isLoadingImage, setIsLoadingImage] = useState(false);
@@ -14,6 +20,8 @@ export const useUploadImageHook = () => {
   const [dataVideo, setDataVideo] = useState<UploadVideoDataResponseType>();
   const [isErrorImage, setIsErrorImage] = useState(false);
   const [isErrorVideo, setIsErrorVideo] = useState(false);
+  const [uploadStatus, setUploadStatus] =
+    useState<ProgressUploadDataResponseType>();
 
   const setUploadImage = async (image: Image, syncUpload?: string) => {
     InteractionManager.runAfterInteractions(() => setIsLoadingImage(true));
@@ -45,6 +53,18 @@ export const useUploadImageHook = () => {
     }
   };
 
+  const getProgressUploadVideo = async (
+    props: ParamsProps,
+    setProgress: React.Dispatch<React.SetStateAction<number | undefined>>,
+  ) => {
+    try {
+      const response = await progressUploadVideo(props, setProgress);
+      setUploadStatus(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return {
     isLoadingImage,
     isLoadingVideo,
@@ -52,10 +72,13 @@ export const useUploadImageHook = () => {
     isErrorVideo,
     dataImage,
     dataVideo,
+    uploadStatus,
+    setUploadStatus,
     setUploadImage,
     setUploadVideo,
     setIsLoadingVideo,
     setDataVideo,
     setIsErrorVideo,
+    getProgressUploadVideo,
   };
 };

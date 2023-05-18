@@ -439,6 +439,7 @@ export const useFeedHook = () => {
     viewCountError,
     setDataLoadMore,
     setDataComment,
+    setDataCreatePost,
     setDeletePost,
     getListDataPost,
     getListDataMyPost,

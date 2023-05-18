@@ -25,6 +25,7 @@ export type ParamsProps = {
   isPremium?: boolean;
   mood?: string;
   genre?: string;
+  uid?: string;
 };
 
 export type imageTypes = {

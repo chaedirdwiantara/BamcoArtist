@@ -12,13 +12,11 @@ export const useUploadVideo = (
     video: Video,
     setProgress: React.Dispatch<React.SetStateAction<number | undefined>>,
   ) => Promise<void>,
-  setAllowToPost: React.Dispatch<React.SetStateAction<boolean>>,
 ) => {
   useEffect(() => {
     if (uriVideo && uriVideo.duration && allowToUpload) {
       if (uriVideo.duration <= 15000) {
         setUploadVideo(uriVideo, setProgress);
-        setAllowToPost(true);
       }
     }
   }, [uriVideo, allowToUpload]);
@@ -31,25 +29,32 @@ export const usePostVideo = (
   inputText: string,
   valueFilter: string,
   dataAudience: string,
+  allowToPost: boolean,
 ) => {
   useEffect(() => {
     const shouldCreatePost = dataVideo && uriVideo;
 
-    if (shouldCreatePost) {
-      const video = {
-        targetType: 'video',
-        coverImage: dataVideo.coverImage,
-        encodeDashUrl: dataVideo.encodeDashUrl,
-        encodeHlsUrl: dataVideo.encodeHlsUrl,
-        duration: uriVideo.duration ?? 0,
-      };
+    console.log('dataVideo', dataVideo);
+    console.log('uriVideo', uriVideo);
+    console.log('allowToPost', allowToPost);
 
-      setCreatePost({
-        caption: inputText,
-        category: valueFilter,
-        isPremium: dataAudience === 'Feed.Exclusive',
-        video,
-      });
+    if (allowToPost) {
+      if (shouldCreatePost) {
+        const video = {
+          targetType: 'video',
+          coverImage: dataVideo.coverImage,
+          encodeDashUrl: dataVideo.encodeDashUrl,
+          encodeHlsUrl: dataVideo.encodeHlsUrl,
+          duration: uriVideo.duration ?? 0,
+        };
+
+        setCreatePost({
+          caption: inputText,
+          category: valueFilter,
+          isPremium: dataAudience === 'Feed.Exclusive',
+          video,
+        });
+      }
     }
-  }, [dataVideo, uriVideo]);
+  }, [allowToPost]);
 };

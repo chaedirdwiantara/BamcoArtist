@@ -61,6 +61,7 @@ import {
 import Clipboard from '@react-native-community/clipboard';
 import {useQuery} from 'react-query';
 import {useVideoStore} from '../../store/video.store';
+import {useUploadImageHook} from '../../hooks/use-uploadImage.hook';
 const {height} = Dimensions.get('screen');
 
 interface PostListProps {
@@ -117,6 +118,8 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
   const [pauseModeOn, setPauseModeOn] = useState<boolean>(false);
   const [idNowPlaying, setIdNowPlaing] = useState<string>();
 
+  const {setDataVideo} = useUploadImageHook();
+
   const {
     feedIsLoading,
     feedIsError,
@@ -127,6 +130,7 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
     setUnlikePost,
     setDeletePost,
     getListDataMyPostQuery,
+    setDataCreatePost,
   } = useFeedHook();
 
   const {
@@ -321,6 +325,8 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
       }
       if (t(selectedMenu.label) === 'Edit Post') {
         setUriVideo(null);
+        setDataCreatePost(null);
+        setDataVideo(undefined);
         let dataSelected = dataMain.filter(data => data.id === selectedIdPost);
         navigation.navigate('CreatePost', {postData: dataSelected[0]});
         setSelectedMenu(undefined);

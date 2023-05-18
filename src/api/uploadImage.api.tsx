@@ -1,9 +1,12 @@
 import SsuAPI from './baseRinjani';
 import {Image} from 'react-native-image-crop-picker';
 import {
+  ProgressUploadVideoResponseType,
   UploadImageResponseType,
   UploadVideoResponseType,
 } from '../interface/uploadImage.interface';
+import {ParamsProps} from '../interface/base.interface';
+import {ListPostResponseType} from '../interface/feed.interface';
 
 export const uploadImage = async (
   image: Image,
@@ -58,6 +61,21 @@ export const uploadVideo = async (
     // timeout: 60000,
     // maxContentLength: 1000000000000,
     data: formData,
+  });
+
+  return data;
+};
+
+export const progressUploadVideo = async (
+  props: ParamsProps,
+  setProgress: React.Dispatch<React.SetStateAction<number | undefined>>,
+): Promise<ProgressUploadVideoResponseType> => {
+  const {data} = await SsuAPI().request<ProgressUploadVideoResponseType>({
+    url: `/progress-upload-video/${props.uid}`,
+    method: 'GET',
+    onUploadProgress: ({loaded, total}) => {
+      setProgress(loaded / total);
+    },
   });
 
   return data;

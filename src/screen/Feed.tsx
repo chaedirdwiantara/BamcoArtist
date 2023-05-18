@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {
   View,
   StyleSheet,
@@ -57,8 +57,16 @@ export const FeedScreen: React.FC = () => {
   const isFocused = useIsFocused();
   const {isPlaying, visible, showPlayer, hidePlayer} = usePlayerHook();
   const {dataExclusiveContent, getExclusiveContent} = useSettingHook();
-  const {dataVideo, setDataVideo, setUploadVideo} = useUploadImageHook();
-  const {dataCreatePost, createPostLoading, setCreatePost} = useFeedHook();
+  const {
+    dataVideo,
+    uploadStatus,
+    setUploadStatus,
+    setDataVideo,
+    setUploadVideo,
+    getProgressUploadVideo,
+  } = useUploadImageHook();
+  const {dataCreatePost, createPostLoading, setCreatePost, setDataCreatePost} =
+    useFeedHook();
   const {storedInputText, storedValueFilter, storedDataAudience} =
     useDataVideoForPost();
   const {uriVideo, allowToUpload, setUriVideo, setAllowToUpload} =
@@ -80,7 +88,10 @@ export const FeedScreen: React.FC = () => {
     confirmModal: false,
   });
   const [progress, setProgress] = useState<number>();
+  const [uploadProgress, setUploadProgress] = useState<number>();
   const [allowToRefresh, setAllowToRefresh] = useState<boolean>(false);
+  const [getProgressUpload, setGetProgressUpload] = useState<boolean>(false);
+  const [allowCheckUpload, setAllowCheckUpload] = useState<boolean>(false);
 
   useEffect(() => {
     if (isFocused && isPlaying) {
@@ -104,6 +115,8 @@ export const FeedScreen: React.FC = () => {
         setAllowToUpload(false);
         setDataVideo(undefined);
         setAllowToRefresh(false);
+        setDataCreatePost(null);
+        setAllowToPost(false);
         navigation.navigate('CreatePost', {audience: selectedCategory});
       }
     }
@@ -121,6 +134,7 @@ export const FeedScreen: React.FC = () => {
   const handleConfirmModal = () => {
     setModalVisible({filterModal: false, confirmModal: false});
     setSelectedCategory(undefined);
+    setDataCreatePost(null);
     navigation.navigate('ExclusiveContentSetting', {type: 'navToCreatePost'});
   };
 
@@ -129,29 +143,48 @@ export const FeedScreen: React.FC = () => {
     setSelectedCategory(undefined);
   };
 
-  //! Upload Video area
-  useUploadVideo(
-    uriVideo,
-    allowToUpload,
-    setProgress,
-    setUploadVideo,
-    setAllowToPost,
-  );
+  //? 1. Upload Video area
+  useUploadVideo(uriVideo, allowToUpload, setProgress, setUploadVideo);
 
+  //? 2. Check if video is ready to stream or not
   useEffect(() => {
     if (dataVideo) {
-      setAllowToUpload(false);
-      setProgress(undefined);
-      setAllowToRefresh(true);
+      if (dataVideo.readyToStream === true) {
+        setAllowToUpload(false);
+        setProgress(undefined);
+        setAllowToRefresh(true);
+      } else {
+        setGetProgressUpload(true);
+        setAllowCheckUpload(true);
+      }
     }
   }, [dataVideo]);
 
+  //? 3. Check if video is ready to stream till 1 min
+  //TODO: TRY TO DELETE allowCheckUpload
   useEffect(() => {
-    if (dataCreatePost) {
-      setUriVideo(null);
-    }
-  }, [dataCreatePost]);
+    if (getProgressUpload && allowCheckUpload) {
+      let intervalRef = setInterval(() => {
+        if (uploadStatus?.readyToStream === true) {
+          setAllowToPost(true);
+          setAllowCheckUpload(false);
+          setUploadStatus(undefined);
+          clearInterval(intervalRef!);
+        } else if (intervalRef! >= 60000) {
+          clearInterval(intervalRef!);
+          //TODO: set cancel uploading
+        } else {
+          getProgressUploadVideo({uid: dataVideo?.uid}, setUploadProgress);
+        }
+      }, 3000);
 
+      return () => {
+        clearInterval(intervalRef);
+      };
+    }
+  }, [getProgressUpload, uploadStatus, allowCheckUpload]);
+
+  //? 4. post when get permission
   usePostVideo(
     dataVideo,
     uriVideo,
@@ -159,7 +192,19 @@ export const FeedScreen: React.FC = () => {
     storedInputText,
     storedValueFilter,
     storedDataAudience,
+    allowToPost,
   );
+
+  //? 5. clear uriVideo after succeeded create the post
+  useEffect(() => {
+    if (dataCreatePost) {
+      setAllowToPost(false);
+      setUriVideo(null);
+      setAllowToUpload(false);
+      setProgress(undefined);
+      setAllowToRefresh(true);
+    }
+  }, [dataCreatePost]);
 
   return (
     <View style={styles.root}>
