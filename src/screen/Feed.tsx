@@ -231,11 +231,9 @@ export const FeedScreen: React.FC = () => {
                 dataRightDropdown={dropDownDataCategory}
                 dataLeftDropdown={dropDownDataSort}
                 videoUploadProgress={
-                  progress && !allowToPost && dataCreatePost == null
-                    ? progress / 2
-                    : progress && allowToPost && dataCreatePost == null
+                  progress && !allowToPost
                     ? progress / 1.33
-                    : progress && allowToPost && dataCreatePost
+                    : progress && allowToPost
                     ? progress
                     : 0
                 }
@@ -246,11 +244,9 @@ export const FeedScreen: React.FC = () => {
                 dataRightDropdown={dropDownDataCategory}
                 dataLeftDropdown={dropDownDataSort}
                 videoUploadProgress={
-                  progress && !allowToPost && dataCreatePost == null
-                    ? progress / 2
-                    : progress && allowToPost && dataCreatePost == null
+                  progress && !allowToPost
                     ? progress / 1.33
-                    : progress && allowToPost && dataCreatePost
+                    : progress && allowToPost
                     ? progress
                     : 0
                 }
