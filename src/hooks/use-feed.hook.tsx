@@ -465,5 +465,6 @@ export const useFeedHook = () => {
     getListDataPostQuery,
     getListDataExclusiveQuery,
     getListDataMyPostQuery,
+    setCreatePostError,
   };
 };
