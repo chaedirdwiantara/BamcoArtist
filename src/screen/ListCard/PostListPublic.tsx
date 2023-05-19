@@ -367,7 +367,7 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
       {/* )} */}
       {videoUploadProgress ? (
         <ProgressBar
-          progress={10}
+          progress={videoUploadProgress}
           caption={'Uploading is in progress, it will take few second'}
           uri={uriVideo}
         />

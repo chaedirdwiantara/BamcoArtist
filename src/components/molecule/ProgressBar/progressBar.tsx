@@ -16,13 +16,9 @@ interface ProgressBarProps {
 const ProgressBar: FC<ProgressBarProps> = (props: ProgressBarProps) => {
   const {progress, caption, uri} = props;
 
-  console.log('uri', uri);
-
   return (
     <View style={styles.container}>
       <View style={styles.childContainer}>
-        {/* <SquareImage size={32} imgUri={uri} /> */}
-
         <Video
           source={{
             uri: uri,
@@ -30,6 +26,7 @@ const ProgressBar: FC<ProgressBarProps> = (props: ProgressBarProps) => {
           style={styles.videoStyle}
           paused={true}
           poster={uri}
+          resizeMode={'cover'}
         />
 
         <Gap width={8} />

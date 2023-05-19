@@ -230,14 +230,30 @@ export const FeedScreen: React.FC = () => {
               <PostListPublic
                 dataRightDropdown={dropDownDataCategory}
                 dataLeftDropdown={dropDownDataSort}
-                videoUploadProgress={progress}
+                videoUploadProgress={
+                  progress && !allowToPost && dataCreatePost == null
+                    ? progress / 2
+                    : progress && allowToPost && dataCreatePost == null
+                    ? progress / 1.33
+                    : progress && allowToPost && dataCreatePost
+                    ? progress
+                    : 0
+                }
                 uriVideo={uriVideo?.path}
               />
             ) : (
               <PostListMyPost
                 dataRightDropdown={dropDownDataCategory}
                 dataLeftDropdown={dropDownDataSort}
-                videoUploadProgress={progress}
+                videoUploadProgress={
+                  progress && !allowToPost && dataCreatePost == null
+                    ? progress / 2
+                    : progress && allowToPost && dataCreatePost == null
+                    ? progress / 1.33
+                    : progress && allowToPost && dataCreatePost
+                    ? progress
+                    : 0
+                }
                 uriVideo={uriVideo?.path}
                 allowRefresh={allowToRefresh}
               />

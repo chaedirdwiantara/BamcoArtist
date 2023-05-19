@@ -6,7 +6,6 @@ import {
   UploadVideoResponseType,
 } from '../interface/uploadImage.interface';
 import {ParamsProps} from '../interface/base.interface';
-import {ListPostResponseType} from '../interface/feed.interface';
 
 export const uploadImage = async (
   image: Image,
