@@ -167,7 +167,7 @@ export const FeedScreen: React.FC = () => {
   //* set to total upload video progress
   useEffect(() => {
     if (progress) {
-      setTotalProgress(progress);
+      setTotalProgress(progress / 1.33);
     }
   }, [progress]);
 
@@ -295,7 +295,7 @@ export const FeedScreen: React.FC = () => {
                 dataLeftDropdown={dropDownDataSort}
                 videoUploadProgress={
                   totalProgress && !allowToPost
-                    ? totalProgress / 1.33
+                    ? totalProgress
                     : totalProgress && allowToPost
                     ? 1
                     : 0
