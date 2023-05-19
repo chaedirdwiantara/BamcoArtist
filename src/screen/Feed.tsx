@@ -91,7 +91,6 @@ export const FeedScreen: React.FC = () => {
   const [uploadProgress, setUploadProgress] = useState<number>();
   const [allowToRefresh, setAllowToRefresh] = useState<boolean>(false);
   const [getProgressUpload, setGetProgressUpload] = useState<boolean>(false);
-  const [allowCheckUpload, setAllowCheckUpload] = useState<boolean>(false);
 
   useEffect(() => {
     if (isFocused && isPlaying) {
@@ -155,22 +154,23 @@ export const FeedScreen: React.FC = () => {
         setAllowToRefresh(true);
       } else {
         setGetProgressUpload(true);
-        setAllowCheckUpload(true);
       }
     }
   }, [dataVideo]);
 
   //? 3. Check if video is ready to stream till 1 min
-  //TODO: TRY TO DELETE allowCheckUpload
   useEffect(() => {
-    if (getProgressUpload && allowCheckUpload) {
+    if (getProgressUpload) {
       let intervalRef = setInterval(() => {
         if (uploadStatus?.readyToStream === true) {
           setAllowToPost(true);
-          setAllowCheckUpload(false);
           setUploadStatus(undefined);
+          setGetProgressUpload(false);
           clearInterval(intervalRef!);
         } else if (intervalRef! >= 60000) {
+          setAllowToPost(false);
+          setUploadStatus(undefined);
+          setGetProgressUpload(false);
           clearInterval(intervalRef!);
           //TODO: set cancel uploading
         } else {
@@ -182,7 +182,7 @@ export const FeedScreen: React.FC = () => {
         clearInterval(intervalRef);
       };
     }
-  }, [getProgressUpload, uploadStatus, allowCheckUpload]);
+  }, [getProgressUpload, uploadStatus]);
 
   //? 4. post when get permission
   usePostVideo(

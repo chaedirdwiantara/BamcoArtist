@@ -1,10 +1,11 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React, {FC} from 'react';
 import * as Progress from 'react-native-progress';
-import {heightResponsive, widthResponsive} from '../../../utils';
+import {widthResponsive} from '../../../utils';
 import {color, font} from '../../../theme';
 import {mvs} from 'react-native-size-matters';
-import {Gap, SquareImage} from '../../atom';
+import {Gap} from '../../atom';
+import Video from 'react-native-video';
 
 interface ProgressBarProps {
   progress: number;
@@ -15,10 +16,22 @@ interface ProgressBarProps {
 const ProgressBar: FC<ProgressBarProps> = (props: ProgressBarProps) => {
   const {progress, caption, uri} = props;
 
+  console.log('uri', uri);
+
   return (
     <View style={styles.container}>
       <View style={styles.childContainer}>
-        <SquareImage size={32} imgUri={uri} />
+        {/* <SquareImage size={32} imgUri={uri} /> */}
+
+        <Video
+          source={{
+            uri: uri,
+          }}
+          style={styles.videoStyle}
+          paused={true}
+          poster={uri}
+        />
+
         <Gap width={8} />
         <Text style={styles.textStyles}>{caption}</Text>
       </View>
@@ -59,5 +72,9 @@ const styles = StyleSheet.create({
     fontSize: mvs(12),
     fontWeight: '400',
     color: color.Neutral[10],
+  },
+  videoStyle: {
+    height: widthResponsive(32),
+    width: widthResponsive(32),
   },
 });

@@ -1,7 +1,6 @@
 import {useEffect} from 'react';
 import {Video} from 'react-native-image-crop-picker';
-import {ListDataSearchSongs} from '../../../interface/search.interface';
-import {CreatePostProps, PostList} from '../../../interface/feed.interface';
+import {CreatePostProps} from '../../../interface/feed.interface';
 import {UploadVideoDataResponseType} from '../../../interface/uploadImage.interface';
 
 export const useUploadVideo = (
@@ -33,10 +32,6 @@ export const usePostVideo = (
 ) => {
   useEffect(() => {
     const shouldCreatePost = dataVideo && uriVideo;
-
-    console.log('dataVideo', dataVideo);
-    console.log('uriVideo', uriVideo);
-    console.log('allowToPost', allowToPost);
 
     if (allowToPost) {
       if (shouldCreatePost) {
