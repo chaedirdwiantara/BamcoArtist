@@ -130,7 +130,10 @@ export type SongAlbum = {
   description: string;
   imageUrl: imageTypes[];
   featuringArtist: Featuring[];
-  genre: string;
+  genre: {
+    id: number;
+    name: string;
+  };
   subgenre: string;
   likesCount: number;
   shareCount: number;

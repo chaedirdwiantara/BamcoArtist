@@ -89,19 +89,16 @@ export const SongDetailsContent: React.FC<Props> = ({
   }, [modalSuccessDonate, trigger2ndModal]);
 
   const resultDataMore = (dataResult: any) => {
-    if (isLogin && dataResult.value !== '4') {
-      if (dataResult.value === '1') {
-        goToAddToPlaylist();
-      } else if (dataResult.value === '2') {
-        addSong(dataDetail as unknown as SongList);
-        setToastVisible(true);
-        setToastText('Song added to queue!');
-      } else {
-        setModalShare(true);
-      }
+    if (dataResult.value === '1') {
+      goToAddToPlaylist();
+    } else if (dataResult.value === '2') {
+      addSong(dataDetail as unknown as SongList);
+      setToastVisible(true);
+      setToastText('Song added to queue!');
+    } else if (dataResult.value === '3') {
+      setModalShare(true);
     } else {
-      if (dataResult.value === '4') goToShowCredit();
-      else setModalGuestVisible(true);
+      goToShowCredit();
     }
   };
 
