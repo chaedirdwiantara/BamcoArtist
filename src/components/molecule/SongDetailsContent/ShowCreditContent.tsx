@@ -5,7 +5,12 @@ import {useTranslation} from 'react-i18next';
 import {Gap} from '../../atom';
 import Color from '../../../theme/Color';
 import {TopNavigation} from '../TopNavigation';
-import {ArrowLeftIcon} from '../../../assets/icon';
+import {
+  ArrowLeftIcon,
+  CopyrightFansIcon,
+  CopyrightProducerIcon,
+  CopyrightVisualIcon,
+} from '../../../assets/icon';
 import {color, font, typography} from '../../../theme';
 import {ShowCreditType} from '../../../data/showCredit';
 import {dateLongMonth} from '../../../utils/date-format';
@@ -18,6 +23,13 @@ interface ShowCreditProps {
 }
 
 const Content: React.FC<ShowCreditType> = ({title, content}) => {
+  const {t} = useTranslation();
+  const copyrightIcon = [
+    <CopyrightVisualIcon />,
+    <CopyrightProducerIcon />,
+    <CopyrightFansIcon />,
+  ];
+
   if (content.length > 0) {
     return (
       <View>
@@ -26,8 +38,28 @@ const Content: React.FC<ShowCreditType> = ({title, content}) => {
         {content.map((val, i) => {
           const lastIndex = i === content.length - 1;
           const newGapHeight = lastIndex ? 30 : 10;
+          const copyrightSection = title === t('Music.Credit.Copyright');
           if (val === null) {
             return <Text>-</Text>;
+          } else if (copyrightSection) {
+            return (
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                }}
+                key={i}>
+                {copyrightIcon[i]}
+                <Text
+                  style={[
+                    typography.Subtitle2,
+                    {color: color.Neutral[10], fontFamily: font.InterRegular},
+                  ]}>
+                  {val}
+                </Text>
+                <Gap height={heightPercentage(30)} />
+              </View>
+            );
           } else {
             return (
               <View key={i}>
@@ -53,7 +85,7 @@ export const ShowCreditContent: React.FC<ShowCreditProps> = ({
   onPressGoBack,
 }) => {
   const {t} = useTranslation();
-  const genre = dataDetail.album.genre ? [dataDetail.album.genre] : [];
+  const genre = dataDetail.album.genre ? [dataDetail.album.genre.name] : [];
   const dataShowCredit = [
     {
       title: t('Music.Credit.SingBy'),
@@ -86,9 +118,9 @@ export const ShowCreditContent: React.FC<ShowCreditProps> = ({
     {
       title: t('Music.Credit.Copyright'),
       content: [
-        `© ${dataDetail.album.copyrightVisual.join(', ')}`,
-        `℗ ${dataDetail.album.copyrightProducer.join(', ')}`,
-        `® ${dataDetail.album.copyrightFans.join(', ')}`,
+        `${dataDetail.album.copyrightVisual.join(', ')}`,
+        `${dataDetail.album.copyrightProducer.join(', ')}`,
+        `${dataDetail.album.copyrightFans.join(', ')}`,
       ],
     },
   ];
@@ -103,7 +135,7 @@ export const ShowCreditContent: React.FC<ShowCreditProps> = ({
       />
 
       <ScrollView showsVerticalScrollIndicator={false}>
-        <View style={{marginTop: heightPercentage(30)}}>
+        <View style={{marginVertical: heightPercentage(30)}}>
           {dataShowCredit.map((val, i) => (
             <Content key={i} title={t(val.title)} content={val.content} />
           ))}

@@ -587,7 +587,7 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
         {/* End of Tab Musician */}
         {/* Playlist */}
         <ListPlaylistHome
-          title={t('Home.PLaylist.Title')}
+          title={t('Home.Playlist.Title')}
           data={dataPlaylist?.data}
           onPress={() => navigation.navigate('ListPlaylist')}
         />

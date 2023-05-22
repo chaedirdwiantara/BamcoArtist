@@ -64,6 +64,7 @@ interface Props {
   goToDetailSong: (id: number) => void;
   otherPlaylist: boolean;
   goToAddToPlaylist: (id: number) => void;
+  goToProfile: (uuid: string, type: string) => void;
 }
 
 export const PlaylistContent: React.FC<Props> = ({
@@ -81,6 +82,7 @@ export const PlaylistContent: React.FC<Props> = ({
   goToAlbum,
   goToDetailSong,
   goToAddToPlaylist,
+  goToProfile,
 }) => {
   const {t} = useTranslation();
   const {addSong} = usePlayerHook();
@@ -264,7 +266,12 @@ export const PlaylistContent: React.FC<Props> = ({
             isPlaying={isPlaying}
             handlePlayPaused={handlePlayPaused}
             onPressSong={() => onPressSong(firstSong)}
-            disabled={true}
+            goToMusicianProfile={() =>
+              goToProfile(
+                dataDetail.playlistOwner.UUID,
+                dataDetail.playlistOwner.ownerType,
+              )
+            }
           />
 
           <TouchableOpacity

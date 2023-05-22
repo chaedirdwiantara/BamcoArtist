@@ -23,7 +23,7 @@ export const ShowCreditScreen: React.FC<ShowCreditProps> = ({
 
   useFocusEffect(
     useCallback(() => {
-      getDetailSong({id: songId.toString()});
+      getDetailSong({id: songId});
     }, []),
   );
 

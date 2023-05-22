@@ -13,12 +13,12 @@ import {
 import Color from '../../theme/Color';
 import {PlaylistContent} from '../../components';
 import {DefaultPlaylist} from './DefaultPlaylist';
-import {storage} from '../../hooks/use-storage.hook';
 import {SongList} from '../../interface/song.interface';
 import {useBackHandler} from '../../utils/useBackHandler';
 import {usePlayerHook} from '../../hooks/use-player.hook';
 import {usePlaylistHook} from '../../hooks/use-playlist.hook';
 import {MainTabParams, RootStackParams} from '../../navigations';
+import {profileStorage, storage} from '../../hooks/use-storage.hook';
 
 type PlaylistProps = NativeStackScreenProps<RootStackParams, 'Playlist'>;
 
@@ -104,6 +104,18 @@ export const PlaylistScreen: React.FC<PlaylistProps> = ({
     navigation.navigate('ShowCredit', {songId});
   };
 
+  const goToProfile = (uuid: string, type: string) => {
+    if (uuid === profileStorage()?.uuid) {
+      navigation2.navigate('Profile', {});
+    } else {
+      if (type === 'fans') {
+        navigation.push('OtherUserProfile', {id: uuid});
+      } else {
+        navigation.push('MusicianProfile', {id: uuid});
+      }
+    }
+  };
+
   const goToAddToPlaylist = (songId: number) => {
     navigation.navigate('AddToPlaylist', {
       id: [songId],
@@ -155,6 +167,7 @@ export const PlaylistScreen: React.FC<PlaylistProps> = ({
           goToDetailSong={goToDetailSong}
           goToAddToPlaylist={goToAddToPlaylist}
           otherPlaylist={route.params?.from === 'other'}
+          goToProfile={goToProfile}
         />
       )}
 

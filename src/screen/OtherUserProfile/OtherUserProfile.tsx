@@ -99,11 +99,11 @@ export const OtherUserProfile: FC<OtherProfileProps> = ({
   };
 
   const goToPlaylist = (id: number, name: string) => {
-    navigation.navigate('Playlist', {id, name, from: 'other'});
+    navigation.push('Playlist', {id, name, from: 'other'});
   };
 
   const goToFollowing = () => {
-    navigation.navigate('Following', {uuid: data.id});
+    navigation.push('Following', {uuid: data.id});
   };
 
   const onPressGoBack = () => {
