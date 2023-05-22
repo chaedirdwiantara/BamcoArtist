@@ -7,10 +7,12 @@ interface ToastProps {
   onBackPressed?: () => void;
   children?: React.ReactNode;
   modalStyle?: ViewStyle;
+  modalOnHide?: () => void;
 }
 
 const SsuToast: FC<ToastProps> = (props: ToastProps) => {
-  const {modalVisible, onBackPressed, children, modalStyle} = props;
+  const {modalVisible, onBackPressed, children, modalStyle, modalOnHide} =
+    props;
   return (
     <Modal
       isVisible={modalVisible}
@@ -20,6 +22,7 @@ const SsuToast: FC<ToastProps> = (props: ToastProps) => {
       propagateSwipe={true}
       children={children}
       style={modalStyle}
+      onModalHide={modalOnHide}
     />
   );
 };

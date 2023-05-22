@@ -197,7 +197,7 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
   //* get data on mount this page
   useGetCreditCount(modalDonate, getCreditCount);
 
-  // useGetDataOnMount(uuidMusician, perPage, getListDataPost, setUuid, setPage);
+  useGetDataOnMount(uuidMusician, perPage, getListDataPost, setUuid, setPage);
 
   //* call when refreshing
   useRefreshingEffect(
@@ -367,7 +367,7 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
       {/* )} */}
       {videoUploadProgress ? (
         <ProgressBar
-          progress={10}
+          progress={videoUploadProgress}
           caption={'Uploading is in progress, it will take few second'}
           uri={uriVideo}
         />

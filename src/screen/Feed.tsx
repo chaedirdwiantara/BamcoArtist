@@ -1,34 +1,40 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   StyleSheet,
   TouchableOpacity,
   Platform,
   NativeModules,
+  Text,
 } from 'react-native';
 import {widthPercentageToDP} from 'react-native-responsive-screen';
 
 import {color} from '../theme';
 import {storage} from '../hooks/use-storage.hook';
 import PostListPublic from './ListCard/PostListPublic';
-import {heightPercentage, widthResponsive} from '../utils';
+import {heightPercentage, widthPercentage, widthResponsive} from '../utils';
 import PostListMyPost from './ListCard/PostListMyPost';
 import {
   FilterModal,
+  Gap,
   GuestContent,
   ModalConfirm,
+  SsuToast,
   TabFilter,
   TopNavigation,
 } from '../components';
 import {
-  dataStatusPost,
   dropDownDataCategory,
   dropDownDataSort,
   dropDownSetAudience,
 } from '../data/dropdown';
-import {useFocusEffect, useIsFocused} from '@react-navigation/native';
+import {useIsFocused} from '@react-navigation/native';
 import {usePlayerHook} from '../hooks/use-player.hook';
-import {AddPostIcon, CancelCreatePostIcon} from '../assets/icon';
+import {
+  AddPostIcon,
+  CancelCreatePostIcon,
+  InfoCircleIcon,
+} from '../assets/icon';
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParams} from '../navigations';
@@ -57,8 +63,24 @@ export const FeedScreen: React.FC = () => {
   const isFocused = useIsFocused();
   const {isPlaying, visible, showPlayer, hidePlayer} = usePlayerHook();
   const {dataExclusiveContent, getExclusiveContent} = useSettingHook();
-  const {dataVideo, setDataVideo, setUploadVideo} = useUploadImageHook();
-  const {dataCreatePost, createPostLoading, setCreatePost} = useFeedHook();
+  const {
+    dataVideo,
+    uploadStatus,
+    isErrorVideo,
+    setUploadStatus,
+    setDataVideo,
+    setUploadVideo,
+    getProgressUploadVideo,
+    setIsErrorVideo,
+  } = useUploadImageHook();
+  const {
+    dataCreatePost,
+    createPostError,
+    createPostLoading,
+    setCreatePost,
+    setDataCreatePost,
+    setCreatePostError,
+  } = useFeedHook();
   const {storedInputText, storedValueFilter, storedDataAudience} =
     useDataVideoForPost();
   const {uriVideo, allowToUpload, setUriVideo, setAllowToUpload} =
@@ -80,7 +102,14 @@ export const FeedScreen: React.FC = () => {
     confirmModal: false,
   });
   const [progress, setProgress] = useState<number>();
+  const [uploadProgress, setUploadProgress] = useState<number>();
+  const [totalProgress, setTotalProgress] = useState<number>();
   const [allowToRefresh, setAllowToRefresh] = useState<boolean>(false);
+  const [getProgressUpload, setGetProgressUpload] = useState<boolean>(false);
+  const [toastText, setToastText] = useState<string>(
+    `Your post couldn't be uploaded. Try Again`,
+  );
+  const [toastVisible, setToastVisible] = useState<boolean>(false);
 
   useEffect(() => {
     if (isFocused && isPlaying) {
@@ -104,6 +133,8 @@ export const FeedScreen: React.FC = () => {
         setAllowToUpload(false);
         setDataVideo(undefined);
         setAllowToRefresh(false);
+        setDataCreatePost(null);
+        setAllowToPost(false);
         navigation.navigate('CreatePost', {audience: selectedCategory});
       }
     }
@@ -121,6 +152,7 @@ export const FeedScreen: React.FC = () => {
   const handleConfirmModal = () => {
     setModalVisible({filterModal: false, confirmModal: false});
     setSelectedCategory(undefined);
+    setDataCreatePost(null);
     navigation.navigate('ExclusiveContentSetting', {type: 'navToCreatePost'});
   };
 
@@ -129,29 +161,75 @@ export const FeedScreen: React.FC = () => {
     setSelectedCategory(undefined);
   };
 
-  //! Upload Video area
-  useUploadVideo(
-    uriVideo,
-    allowToUpload,
-    setProgress,
-    setUploadVideo,
-    setAllowToPost,
-  );
+  //? 1. Upload Video area
+  useUploadVideo(uriVideo, allowToUpload, setProgress, setUploadVideo);
 
+  //* set to total upload video progress
+  useEffect(() => {
+    if (progress) {
+      setTotalProgress(progress / 1.33);
+    }
+  }, [progress]);
+
+  //? 2. Check if video is ready to stream or not
   useEffect(() => {
     if (dataVideo) {
-      setAllowToUpload(false);
-      setProgress(undefined);
-      setAllowToRefresh(true);
+      if (dataVideo.readyToStream === true) {
+        setAllowToUpload(false);
+        setProgress(undefined);
+        setAllowToRefresh(true);
+      } else {
+        setGetProgressUpload(true);
+      }
     }
   }, [dataVideo]);
 
+  //! When Failed to upload video
   useEffect(() => {
-    if (dataCreatePost) {
+    if (isErrorVideo) {
       setUriVideo(null);
+      setAllowToUpload(false);
+      setGetProgressUpload(false);
+      setAllowToPost(false);
+      setProgress(undefined);
+      setTotalProgress(undefined);
+      setAllowToRefresh(false);
+      setToastVisible(true); //show toast
+      setIsErrorVideo(false);
+      console.log('FAILED TO UPLOAD', isErrorVideo);
     }
-  }, [dataCreatePost]);
+  }, [isErrorVideo]);
 
+  //? 3. Check if video is ready to stream till 1 min
+  useEffect(() => {
+    if (getProgressUpload) {
+      let intervalRef = setInterval(() => {
+        if (uploadStatus?.readyToStream === true) {
+          setAllowToPost(true);
+          setUploadStatus(undefined);
+          setGetProgressUpload(false);
+          clearInterval(intervalRef!);
+        } else if (intervalRef! >= 60000) {
+          setAllowToPost(false);
+          setUploadStatus(undefined);
+          setGetProgressUpload(false);
+          clearInterval(intervalRef!);
+          setToastVisible(true);
+        } else {
+          getProgressUploadVideo({uid: dataVideo?.uid}, setUploadProgress);
+          if (totalProgress) {
+            setTotalProgress(totalProgress + 0.1); // +0.1 every time this called
+          }
+        }
+      }, 3000);
+
+      return () => {
+        clearInterval(intervalRef);
+      };
+    }
+  }, [getProgressUpload, uploadStatus]);
+
+  //? 4. post when get permission
   usePostVideo(
     dataVideo,
     uriVideo,
@@ -159,7 +237,37 @@ export const FeedScreen: React.FC = () => {
     storedInputText,
     storedValueFilter,
     storedDataAudience,
+    allowToPost,
   );
+
+  //? 5. clear uriVideo after succeeded create the post
+  useEffect(() => {
+    if (dataCreatePost) {
+      setAllowToPost(false);
+      setUriVideo(null);
+      setAllowToUpload(false);
+      setProgress(undefined);
+      setTotalProgress(undefined);
+      setAllowToRefresh(true);
+    }
+  }, [dataCreatePost]);
+
+  //! When Failed to Post video
+  useEffect(() => {
+    if (createPostError) {
+      setUriVideo(null);
+      setAllowToUpload(false);
+      setGetProgressUpload(false);
+      setAllowToPost(false);
+      setProgress(undefined);
+      setTotalProgress(undefined);
+      setAllowToRefresh(false);
+      setToastVisible(true); //show toast
+      setIsErrorVideo(false);
+      setCreatePostError(false);
+      console.log('FAILED TO POST', createPostError);
+    }
+  }, [createPostError]);
 
   return (
     <View style={styles.root}>
@@ -185,14 +293,26 @@ export const FeedScreen: React.FC = () => {
               <PostListPublic
                 dataRightDropdown={dropDownDataCategory}
                 dataLeftDropdown={dropDownDataSort}
-                videoUploadProgress={progress}
+                videoUploadProgress={
+                  totalProgress && !allowToPost
+                    ? totalProgress
+                    : totalProgress && allowToPost
+                    ? 1
+                    : 0
+                }
                 uriVideo={uriVideo?.path}
               />
             ) : (
               <PostListMyPost
                 dataRightDropdown={dropDownDataCategory}
                 dataLeftDropdown={dropDownDataSort}
-                videoUploadProgress={progress}
+                videoUploadProgress={
+                  totalProgress && !allowToPost
+                    ? totalProgress / 1.33
+                    : totalProgress && allowToPost
+                    ? 1
+                    : 0
+                }
                 uriVideo={uriVideo?.path}
                 allowRefresh={allowToRefresh}
               />
@@ -254,6 +374,22 @@ export const FeedScreen: React.FC = () => {
             onPressClose={handleMaybeLater}
             onPressOk={handleConfirmModal}
           />
+          <SsuToast
+            modalVisible={toastVisible}
+            onBackPressed={() => setToastVisible(false)}
+            modalOnHide={() =>
+              console.log('modal upload failed already hidden')
+            }
+            children={
+              <View style={[styles.modalContainer]}>
+                <InfoCircleIcon />
+                <Gap width={4} />
+                <Text style={[styles.textStyle]} numberOfLines={2}>
+                  {toastText}
+                </Text>
+              </View>
+            }
+          />
         </View>
       ) : (
         <GuestContent />
@@ -285,5 +421,19 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
     width: '100%',
     height: '100%',
+  },
+  modalContainer: {
+    width: '100%',
+    position: 'absolute',
+    bottom: heightPercentage(22),
+    height: heightPercentage(36),
+    backgroundColor: color.Error[400],
+    paddingHorizontal: widthPercentage(12),
+    borderRadius: 4,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  textStyle: {
+    color: color.Neutral[10],
   },
 });

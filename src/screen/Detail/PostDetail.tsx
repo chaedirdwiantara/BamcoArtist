@@ -414,11 +414,9 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
         content: commentCaption,
       }),
         setCommentCaption(''),
+        setCommmentCountLvl1(commentCountLvl1 + 1),
         dataPostDetail &&
           setParentIdAddComment([...parentIdAddComment, dataPostDetail.id]);
-      if (commentCountLvl1) {
-        setCommmentCountLvl1(commentCountLvl1 + 1);
-      }
     } else null;
     if (updateComment) {
       handleUpdateStaticComment();
