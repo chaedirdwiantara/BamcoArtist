@@ -165,12 +165,12 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
     }),
   );
 
-  //?get data on mount this page
-  useFocusEffect(
-    useCallback(() => {
-      refetch();
-    }, []),
-  );
+  // //?get data on mount this page
+  // useFocusEffect(
+  //   useCallback(() => {
+  //     refetch();
+  //   }, []),
+  // );
 
   //?setData if not same as current
   useEffect(() => {
@@ -189,7 +189,7 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
   //* get data on mount this page
   useGetCreditCount(modalDonate, getCreditCount);
 
-  // useGetDataOnMountNoId(perPage, getListDataMyPost, setPage);
+  useGetDataOnMountNoId(perPage, getListDataMyPost, setPage);
 
   //* get data when video post suceeded
   useEffect(() => {

@@ -197,7 +197,7 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
   //* get data on mount this page
   useGetCreditCount(modalDonate, getCreditCount);
 
-  // useGetDataOnMount(uuidMusician, perPage, getListDataPost, setUuid, setPage);
+  useGetDataOnMount(uuidMusician, perPage, getListDataPost, setUuid, setPage);
 
   //* call when refreshing
   useRefreshingEffect(
