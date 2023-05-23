@@ -107,10 +107,22 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
 
   // * video hooks
   const [keyBrdIsActive, setKeybrdIsActive] = useState<boolean>(false);
+  const [videoTemporary, setVideoTemporary] = useState<Video>();
+  const [updateToUpload, setUpdateToUpload] = useState<boolean>(false);
 
-  const {uriVideo, setUriVideo, setAllowToUpload} = useVideoStore();
-  const {setStoredInputText, setStoredValueFilter, setStoredDataAudience} =
-    useDataVideoForPost();
+  const {
+    uriVideo,
+    allowToUpdate,
+    setUriVideo,
+    setAllowToUpload,
+    setAllowToUpdate,
+  } = useVideoStore();
+  const {
+    setStoredInputText,
+    setStoredValueFilter,
+    setStoredDataAudience,
+    setStoredIdForUpdate,
+  } = useDataVideoForPost();
 
   useEffect(() => {
     if (dataAudienceChoosen) {
@@ -125,7 +137,6 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   }, [label]);
 
   // ! UPLOAD VIDEO AREA
-
   //! set data video to global state
   const sendVideoUri = (val: Video) => {
     setUriVideo(val);
@@ -140,11 +151,20 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
       setAllowToBack(true);
     }
   }, [uriVideo, inputText]);
-
   // ! END OF UPLOAD VIDEO AREA
 
-  // ! EDIT POST AREA
+  //? Make sure the edit video has new video, if yes then we need to upload the video first
+  useEffect(() => {
+    if (uriVideo && updateOn) {
+      if (!videoTemporary) {
+        setVideoTemporary(uriVideo);
+      } else if (videoTemporary && videoTemporary !== uriVideo) {
+        setUpdateToUpload(true);
+      }
+    }
+  }, [uriVideo, updateOn]);
 
+  // ! EDIT POST AREA
   useEffect(() => {
     if (dataUpdatePostProps !== undefined && !updateOn) {
       setUpdateOn(true);
@@ -337,23 +357,32 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
 
     // ? for EDIT UPLOAD VIDEO only
     if (active == true && updateOn && uriVideo) {
-      const video = {
-        targetType: 'video',
-        coverImage: uriVideo.sourceURL ?? '',
-        encodeDashUrl: uriVideo.localIdentifier ?? '',
-        encodeHlsUrl: uriVideo.path,
-        duration: uriVideo.duration ?? 0,
-      };
+      if (!updateToUpload) {
+        const video = {
+          targetType: 'video',
+          coverImage: uriVideo.sourceURL ?? '',
+          encodeDashUrl: uriVideo.localIdentifier ?? '',
+          encodeHlsUrl: uriVideo.path,
+          duration: uriVideo.duration ?? 0,
+        };
 
-      setUpdatePost({
-        id: userId,
-        caption: inputText,
-        category: valueFilter ? valueFilter : 'highlight',
-        isPremium: dataAudience === 'Feed.Exclusive',
-        video,
-      });
+        setUpdatePost({
+          id: userId,
+          caption: inputText,
+          category: valueFilter ? valueFilter : 'highlight',
+          isPremium: dataAudience === 'Feed.Exclusive',
+          video,
+        });
+      } else {
+        setStoredIdForUpdate(userId);
+        setStoredInputText(inputText);
+        setStoredValueFilter(valueFilter ? valueFilter : 'highlight');
+        setStoredDataAudience(dataAudience);
+        setAllowToUpdate(true);
+        navigation.goBack();
+      }
     }
-  }, [active, uri, musicData, updateOn, uriVideo]);
+  }, [active, uri, musicData, updateOn, uriVideo, updateToUpload]);
 
   // * 4. set to hook state when response upload image has received
   useEffect(() => {

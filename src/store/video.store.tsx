@@ -5,14 +5,18 @@ import {VideoResponseType} from '../interface/feed.interface';
 interface VideoStore {
   uriVideo: Video | null;
   allowToUpload: boolean;
+  allowToUpdate: boolean;
   setUriVideo: (value: Video | VideoResponseType | null) => void;
   setAllowToUpload: (value: boolean) => void;
+  setAllowToUpdate: (value: boolean) => void;
 }
 
 export const useVideoStore = create<VideoStore>(set => ({
   uriVideo: null,
   allowToUpload: false,
+  allowToUpdate: false,
   setAllowToUpload: (value: boolean) => set({allowToUpload: value}),
+  setAllowToUpdate: (value: boolean) => set({allowToUpdate: value}),
   setUriVideo: (value: Video | VideoResponseType | null) => {
     if (value !== null) {
       if (
@@ -50,16 +54,20 @@ interface DataVideoForPost {
   storedInputText: string;
   storedValueFilter: string;
   storedDataAudience: string;
+  storedIdForUpdate: string;
   setStoredInputText: (value: string) => void;
   setStoredValueFilter: (value: string) => void;
   setStoredDataAudience: (value: string) => void;
+  setStoredIdForUpdate: (value: string) => void;
 }
 
 export const useDataVideoForPost = create<DataVideoForPost>(set => ({
   storedInputText: '',
   storedValueFilter: '',
   storedDataAudience: '',
+  storedIdForUpdate: '',
   setStoredInputText: (value: string) => set({storedInputText: value}),
   setStoredValueFilter: (value: string) => set({storedValueFilter: value}),
   setStoredDataAudience: (value: string) => set({storedDataAudience: value}),
+  setStoredIdForUpdate: (value: string) => set({storedIdForUpdate: value}),
 }));
