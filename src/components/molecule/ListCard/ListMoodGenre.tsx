@@ -24,7 +24,7 @@ const ListMoodGenre: React.FC<ListMoodGenreProps> = (
   const children = () => {
     return (
       <FlatList
-        data={data ?? []}
+        data={data.sort((a, b) => (a.name > b.name ? 1 : -1)) ?? []}
         horizontal
         showsHorizontalScrollIndicator={false}
         keyExtractor={item => item.id.toString()}

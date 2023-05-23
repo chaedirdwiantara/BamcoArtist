@@ -30,13 +30,14 @@ function ProfileIcon({
 function MusicianIcon({
   width = widthPercentage(44),
   height = widthPercentage(44),
+  color = '#222731',
   fill = 'none',
   style,
 }: SvgProps) {
   return (
     <View style={[{width, height}, style]}>
       <Svg width={'100%'} height={'100%'} fill={fill} viewBox={'0 0 200 200'}>
-        <Circle cx={100} cy={100} r={100} fill="#222731" />
+        <Circle cx={100} cy={100} r={100} fill={color} />
         <Mask
           id="a"
           style={{

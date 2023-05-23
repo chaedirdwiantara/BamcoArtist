@@ -36,10 +36,10 @@ import {PhotoPlaylist} from './PhotoPlaylist';
 import {TopNavigation} from '../TopNavigation';
 import {ModalShare} from '../Modal/ModalShare';
 import {ModalConfirm} from '../Modal/ModalConfirm';
-import {dateFormat} from '../../../utils/date-format';
 import {color, font, typography} from '../../../theme';
 import {DataDropDownType} from '../../../data/dropdown';
 import {storage} from '../../../hooks/use-storage.hook';
+import {dateLongMonth} from '../../../utils/date-format';
 import ListSongs from '../../../screen/ListCard/ListSongs';
 import {SongList} from '../../../interface/song.interface';
 import {SongTitlePlay} from '../SongTitlePlay/SongTitlePlay';
@@ -64,6 +64,7 @@ interface Props {
   goToDetailSong: (id: number) => void;
   otherPlaylist: boolean;
   goToAddToPlaylist: (id: number) => void;
+  goToProfile: (uuid: string, type: string) => void;
 }
 
 export const PlaylistContent: React.FC<Props> = ({
@@ -81,6 +82,7 @@ export const PlaylistContent: React.FC<Props> = ({
   goToAlbum,
   goToDetailSong,
   goToAddToPlaylist,
+  goToProfile,
 }) => {
   const {t} = useTranslation();
   const {addSong} = usePlayerHook();
@@ -257,14 +259,19 @@ export const PlaylistContent: React.FC<Props> = ({
           <SongTitlePlay
             title={dataDetail?.name}
             totalSong={dataDetail?.totalSong}
-            createdDate={dateFormat(dataDetail?.createdAt)}
+            createdDate={dateLongMonth(dataDetail.createdAt)}
             createdBy={dataDetail?.playlistOwner?.fullname}
             avatarUri={dataDetail?.playlistOwner?.image}
             showIconPlay={listSongs?.length > 0}
             isPlaying={isPlaying}
             handlePlayPaused={handlePlayPaused}
             onPressSong={() => onPressSong(firstSong)}
-            disabled={true}
+            goToMusicianProfile={() =>
+              goToProfile(
+                dataDetail.playlistOwner.UUID,
+                dataDetail.playlistOwner.ownerType,
+              )
+            }
           />
 
           <TouchableOpacity
@@ -288,7 +295,7 @@ export const PlaylistContent: React.FC<Props> = ({
             <Text style={styles.description}>
               {dataDetail?.description
                 ? dataDetail.description
-                : 'No Description Given'}
+                : t('General.NoDescription')}
             </Text>
           </View>
 
@@ -346,7 +353,7 @@ export const PlaylistContent: React.FC<Props> = ({
         imgUri={dataDetail?.thumbnailUrl}
         type={'Playlist'}
         titleSong={dataDetail?.name}
-        createdOn={dateFormat(dataDetail?.createdAt)}
+        createdOn={dateLongMonth(dataDetail.createdAt)}
         artist={dataDetail?.playlistOwner?.fullname}
         onPressCopy={() => {
           InteractionManager.runAfterInteractions(() => setToastVisible(true));

@@ -75,7 +75,7 @@ export const useSongHook = () => {
     }
   };
 
-  const getDetailSong = async (props?: PostPropsTypeA) => {
+  const getDetailSong = async (props?: SongPropsTypeA) => {
     setIsLoadingSong(true);
     try {
       const response = await detailSong(props);

@@ -2,7 +2,7 @@
   "General": {
     "Or": "Or",
     "Begin": "Begin Today",
-    "TopDescription": "Sign In or Register to Explore All Our Features",
+    "TopDescription": "Sign In or Register to explore full features and support the musician",
     "Yes": "Yes",
     "No": "No",
     "NoVerifCode": "Didn’t receive verification codes? click to resend",
@@ -12,12 +12,14 @@
     "FollowYou": "Follow you",
     "ItsMe": "It's Me",
     "Listeners": "Listeners",
+    "GotIt": "Ok, I Got It",
     "Share": {
       "Feed": "Share Feed",
       "Album": "Share Album",
       "Music": "Share Music",
       "Playlist": "Share Playlist"
-    }
+    },
+    "NoDescription": "No Description Given"
   },
   "Onboarding": {
     "Step1": {
@@ -56,7 +58,7 @@
     "Password": "Password",
     "PasswordRepeat": "Repeat Password",
     "TnC": {
-      "Phrase1": "I Agree with the Sunny Side Up ",
+      "Phrase1": "I Agree with the Beamco ",
       "Phrase2": "Terms of Use",
       "Phrase3": " & ",
       "Phrase4": "Privacy Policy"
@@ -73,7 +75,7 @@
       "Subtitle": "We have sent a 6-digit verification code to your email {{email}}. Check your inbox and enter the verification code here"
     },
     "ResendAfter": "You can resend recovery code after ",
-    "ResendSuccess": "We've just resend a new code!",
+    "ResendSuccess": "We've just resent a new code!",
     "Accepted": "Recovery code accepted",
     "Rejected": "Please enter a valid recovery code"
   },
@@ -191,12 +193,16 @@
       }
     },
     "ListMood": {
+      "Title": "Mood",
       "EmptyState": "Sorry, we don't have any music available for this mood at the moment. Check back soon as we're always adding new music!"
     },
     "ListGenre": {
+      "Title": "Genre",
       "EmptyState": "Sorry, we don't have any music available for this genre at the moment. Check back soon as we're always adding new music!"
     },
     "DiveIn": {
+      "Title": "Dive In",
+      "Subtitle": "Based on your preferences",
       "Trending": {
         "EmptyState": "We're sorry! There's no trending feed available right now. Check back soon, as we're always working to bring you the best music social media experience."
       },
@@ -208,6 +214,7 @@
       }
     },
     "ComingSoon": {
+      "Title": "Coming Soon",
       "EmptyState": "Unfortunately, there are no new albums coming soon from any musicians. We'll let you know as soon as something new is on the horizon."
     },
     "Song": {
@@ -217,6 +224,7 @@
       "EmptyState": "We couldn't find any {{title}} for you. Check back soon as we're always adding new musician!"
     },
     "Playlist": {
+      "Title": "Playlist",
       "EmptyState": "Oops! We couldn't find any playlists for you. Create your own & help other discover great music!"
     }
   },
@@ -256,7 +264,7 @@
       "Description": "I'm here to share my music career and connect further with my fans!",
       "Following": "FOLLOWING",
       "Liked": "LIKED SONGS",
-      "Point": "POINTS",
+      "Point": "EXPERIENCE",
       "CreatedBy": "Created by",
       "NoPlaylist": "No Playlist have been made",
       "NoMusician": "You don’t have contributions to any musicians",
@@ -385,6 +393,13 @@
         "ReasonInput": "Reason",
         "ReasonPlaceholder": "Tell us more",
         "PasswordInput": "Input Password"
+      },
+      "Reason": {
+        "First": "I don’t feel safe on Beamco",
+        "Second": "I don’t find Beamco useful",
+        "Third": "I have another Beamco Account",
+        "Fourth": "I spend too much time using Beamco",
+        "Five": "I don’t understand how to use Beamco"
       }
     },
     "TnC&PP": {
@@ -518,7 +533,7 @@
       },
       "OnBoard": {
         "Title": "Do you have a referral code?",
-        "Subtitle": "Enter your code to jumpstart your Sunny Side Up Journey!",
+        "Subtitle": "Enter your code to jumpstart your Beamco Journey!",
         "Actived": "Referral Activated",
         "Success": "Congratulations! now you will get 5% credit every transaction!"
       }
@@ -659,6 +674,10 @@
     "Title": "Notification"
   },
   "Modal": {
+    "MusicianNotAvail": {
+      "Title": "Featuring Musician",
+      "Subtitle": "Musician that you’ve looking for is not available in beam platform, we'll let you know as soon as something new is on the horizon."
+    },
     "Limit": {
       "Title": "Limit Reached",
       "Subtitle1": "You have reached the limit of uploading 10 photos, please delete some of your photos to upload new ones.",
@@ -688,7 +707,7 @@
       "Change": "Are you sure you want to change your phone number?"
     },
     "Report": {
-      "Success": "We’ve received your feedback. Thank you for helping us make sunny Side Up better.",
+      "Success": "We’ve received your feedback. Thank you for helping us make Beamco better.",
       "Back": "Back to Settings"
     },
     "SignOut": "Are you sure you want to sign out?",
@@ -741,9 +760,9 @@
   },
   "TopUp": {
     "Title": "Top Up",
-    "Subtitle1": "SSU Coin is your way to show your appreciation",
-    "Subtitle2": "SSU Coin allows you to parcitipate in Musician’s upside and grow their community",
-    "Subtitle3": "Find Musician who is providing a lot of value? Rewards them with SSU Coin as a support",
+    "Subtitle1": "Beamco Coin is your way to show your appreciation",
+    "Subtitle2": "Beamco Coin allows you to parcitipate in Musician’s upside and grow their community",
+    "Subtitle3": "Find Musician who is providing a lot of value? Rewards them with Beamco Coin as a support",
     "MyCoin": "My Coin",
     "Filter": {
       "Buy": "Buy Package",

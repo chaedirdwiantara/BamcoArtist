@@ -96,6 +96,7 @@ export type Transcode = {
 };
 
 export type ListDataSearchSongs = {
+  musicianId: string;
   id: number;
   musicianUUID: string;
   musicianName: string;

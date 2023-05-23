@@ -10,6 +10,7 @@ export type Playlist = {
   totalSong: number;
   ordering: number;
   playlistOwner: {
+    ownerType: string;
     UUID: string;
     fullname: string;
     image: string | null;

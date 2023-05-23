@@ -150,7 +150,6 @@ const styles = StyleSheet.create({
     width: width * 0.9,
     aspectRatio: heightPercentage(327 / 38),
     marginTop: heightPercentage(20),
-    backgroundColor: color.Pink[2],
   },
   btnCancel: {
     width: width * 0.9,

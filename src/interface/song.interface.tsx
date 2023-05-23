@@ -11,6 +11,7 @@ export type PaginationType = {
 };
 
 export type SongList = {
+  musicianUUID: string;
   isAddedToThisPlaylist: boolean;
   played: boolean;
   id: number;
@@ -49,37 +50,32 @@ export type ListSongResponseType = {
   status: number;
 };
 
-export type FeaturingArtists = {
-  Uuid: string;
-  ImageURL: string;
-  ArtistsName: string;
+export type FeaturingArtist = {
+  isDeletedUser: boolean;
+  name: string;
+  uuid: string;
+  fullname: string;
+  imageProfile: string;
 };
 
 export type DataAlbum = {
-  ID: number;
-  MusicianID: string;
-  Title: string;
-  Description: string;
-  ImageURL: string;
-  FeaturingArtist: FeaturingArtists[];
-  PublishedDate: string;
-  IsPublished: boolean;
-  Genre: string;
-  Subgenre: string;
-  LikesCount: number;
-  ShareCount: number;
-  Mood: string;
-  CopyrightProducer: string[];
-  CopyrightVisual: string[];
-  CopyrightFans: string[];
-  ProductionYear: string;
-  Language: string;
-  Label: string[];
-  AlbumType: string;
-  BarcodeUPC: string;
-  CreatedAt: string;
-  UpdatedAt: string;
-  DeletedAt: string;
+  songWriter: string[];
+  id: number;
+  musicianId: string;
+  title: string;
+  description: string;
+  imageUrl: imageTypes[];
+  featuringArtist: FeaturingArtist[];
+  genre: FeaturingArtist;
+  subgenre: FeaturingArtist;
+  likesCount: number;
+  shareCount: number;
+  copyrightProducer: string[];
+  copyrightVisual: string[];
+  copyrightFans: string[];
+  productionYear: string;
+  publishedDate: string;
+  label: string[];
 };
 
 export type RelatedSongs = {
@@ -122,6 +118,11 @@ export type Featuring = {
 };
 
 export type SongAlbum = {
+  musician: {
+    uuid: string;
+    name: string;
+    imageProfile: string;
+  };
   releaseDate: any;
   id: number;
   musicianId: string;
@@ -129,7 +130,10 @@ export type SongAlbum = {
   description: string;
   imageUrl: imageTypes[];
   featuringArtist: Featuring[];
-  genre: string;
+  genre: {
+    id: number;
+    name: string;
+  };
   subgenre: string;
   likesCount: number;
   shareCount: number;
@@ -155,6 +159,10 @@ export type TranscodedSongUrl = {
 };
 
 export type DataDetailSong = {
+  genre: {
+    id: number;
+    name: string;
+  };
   featuring: any;
   id: number;
   musicianUUID: string;
@@ -177,7 +185,7 @@ export type DataDetailSong = {
   CreatedAt: string;
   isAddedToThisPlaylist: boolean;
   transcodedSongUrl: TranscodedSongUrl[];
-  featuringArtists: FeaturingArtists[];
+  featuringArtists: FeaturingArtist[];
   album: SongAlbum;
 };
 
@@ -201,7 +209,7 @@ export type DataDetailAlbum = {
   title: string;
   description: string;
   imageUrl: imageTypes[];
-  featuringArtist: FeaturingArtists[];
+  featuringArtist: FeaturingArtist[];
   genre: string;
   subgenre: string;
   likesCount: number;

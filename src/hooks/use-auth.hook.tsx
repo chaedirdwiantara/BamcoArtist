@@ -317,10 +317,14 @@ export const useAuthHook = () => {
       const response = await confirmSmsOtpLogin(phoneNumber, code, context);
       if (response.code === 200) {
         storage.set('profile', JSON.stringify(response.data));
-        if (response.data.lastLoginAt === null) {
-          setLoginResult('preference');
+        if (response.data.deletedAt === null) {
+          if (response.data.lastLoginAt === null) {
+            setLoginResult('preference');
+          } else {
+            setLoginResult('home');
+          }
         } else {
-          setLoginResult('home');
+          setLoginResult('recover');
         }
         setIsOtpValid(true);
       } else {
@@ -485,10 +489,14 @@ export const useAuthHook = () => {
       if (response.code === 200) {
         if (response.data.accessToken) {
           storage.set('profile', JSON.stringify(response.data));
-          if (response.data.lastLoginAt === null) {
-            setLoginResult('preference');
+          if (response.data.deletedAt === null) {
+            if (response.data.lastLoginAt === null) {
+              setLoginResult('preference');
+            } else {
+              setLoginResult('home');
+            }
           } else {
-            setLoginResult('home');
+            setLoginResult('recover');
           }
         }
       } else {

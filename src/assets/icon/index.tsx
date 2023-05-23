@@ -23,6 +23,9 @@ import CoinIcon from './Coin.icon';
 import CoinCIcon from './CoinC.icon';
 import CoinDIcon from './CoinD.icon';
 import CopyIcon from './Copy.icon';
+import CopyrightFansIcon from './CopyrightFans.icon';
+import CopyrightProducerIcon from './CopyrightProducer.icon';
+import CopyrightVisualIcon from './CopyrightVisual.icon';
 import CollectionIcon from './Collection.icon';
 import CommentIcon from './Comment.icon';
 import CrackEggIcon from './CrackEgg.icon';
@@ -129,6 +132,9 @@ export {
   CoinIcon,
   CoinInput,
   CopyIcon,
+  CopyrightFansIcon,
+  CopyrightProducerIcon,
+  CopyrightVisualIcon,
   CollectionIcon,
   CommentIcon,
   CrackEggIcon,

@@ -1,11 +1,11 @@
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React, {useState} from 'react';
 import {heightResponsive, widthResponsive} from '../../utils';
-import {Gap, SquareImage, Title} from '../../components';
+import {Gap, Title} from '../../components';
 import {color, font} from '../../theme';
 import {ms, mvs} from 'react-native-size-matters';
 import {ChevronDown2, ChevronUp} from '../../assets/icon';
-import {SSULogo} from '../../assets/logo';
+import {BeamcoLogo} from '../../assets/logo';
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParams} from '../../navigations';
@@ -54,7 +54,7 @@ const ExclusiveDailyContent = (props: ECProps) => {
               <SquareComp imgUri={coverImage} size={mvs(82)} radius={4} />
             ) : (
               <View style={styles.logoContainer}>
-                <SSULogo />
+                <BeamcoLogo />
               </View>
             )}
 

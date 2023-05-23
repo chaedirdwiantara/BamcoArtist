@@ -31,7 +31,7 @@ export const listTopSong = async (): Promise<ListSongResponseType> => {
 };
 
 export const detailSong = async (
-  props?: PostPropsTypeA,
+  props?: SongPropsTypeA,
 ): Promise<DetailSongResponseType> => {
   const {data} = await SsuAPI().request<DetailSongResponseType>({
     url: `/musician-app/songs/detail/${props?.id}`,

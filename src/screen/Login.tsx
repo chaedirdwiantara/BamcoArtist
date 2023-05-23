@@ -28,7 +28,7 @@ import {
 } from '../components';
 import {LockIcon, UserIcon} from '../assets/icon';
 import {countryData} from '../data/dropdown';
-import {AppleLogo, GoogleLogo, SSULogo} from '../assets/logo';
+import {AppleLogo, BeamcoLogo, GoogleLogo} from '../assets/logo';
 import type {RegistrationType} from '../interface/profile.interface';
 import {ModalLoading} from '../components/molecule/ModalLoading/ModalLoading';
 import {storage} from '../hooks/use-storage.hook';
@@ -60,6 +60,7 @@ const loginValidation = yup.object({
     then: yup
       .string()
       .required('This field is required')
+      .max(15, 'Your phone number should be shorter than 15 characters')
       .matches(/^[0-9]{0,15}$/, 'Only allowed 15 numerical characters'),
   }),
 });
@@ -440,9 +441,7 @@ export const LoginScreen: React.FC = () => {
           justifyContent: 'center',
           alignItems: 'center',
         }}>
-        <SSULogo />
-        <Text style={styles.titleStyle}>{t('General.Begin')}</Text>
-        <Gap height={12} />
+        <BeamcoLogo />
         <Text style={styles.descStyle}>{t('General.TopDescription')}</Text>
         {height >= 800 ? <Gap height={82} /> : <Gap height={40} />}
       </View>

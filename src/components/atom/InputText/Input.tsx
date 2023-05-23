@@ -170,7 +170,7 @@ const InputText: React.FC<InputProps> = props => {
             width: '100%',
             flexDirection: 'row',
             paddingTop: mvs(4),
-            alignItems: 'flex-end',
+            alignItems: 'flex-start',
           }}>
           <ErrorIcon fill={ErrorColor} style={{marginBottom: mvs(-1)}} />
           <Gap width={4} />

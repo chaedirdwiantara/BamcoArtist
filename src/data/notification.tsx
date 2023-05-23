@@ -62,6 +62,6 @@ export const notifData: NotifDataType[] = [
   },
   {
     type: 'new_update',
-    desc: 'A Newer Version of Sunny Side Up Application have been release, click to updated',
+    desc: 'A Newer Version of Beamco Application have been release, click to updated',
   },
 ];

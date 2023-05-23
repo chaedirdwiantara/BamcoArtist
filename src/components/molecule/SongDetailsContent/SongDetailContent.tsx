@@ -5,15 +5,23 @@ import {
   Text,
   ScrollView,
   InteractionManager,
+  TouchableOpacity,
 } from 'react-native';
+import {useTranslation} from 'react-i18next';
+import {mvs} from 'react-native-size-matters';
 
 import {
   heightPercentage,
   heightResponsive,
   width,
   widthPercentage,
+  widthResponsive,
 } from '../../../utils';
-import {Dropdown} from '../DropDown';
+import {
+  ArrowLeftIcon,
+  DefaultImage,
+  TickCircleIcon,
+} from '../../../assets/icon';
 import {ListAlbum} from './ListAlbum';
 import {ListAvatar} from './ListAvatar';
 import Color from '../../../theme/Color';
@@ -21,47 +29,50 @@ import {Gap, SsuToast} from '../../atom';
 import {ModalShare} from '../Modal/ModalShare';
 import {TopNavigation} from '../TopNavigation';
 import {ModalDonate} from '../Modal/ModalDonate';
+import {ModalCustom} from '../Modal/ModalCustom';
 import {color, font, typography} from '../../../theme';
+import {storage} from '../../../hooks/use-storage.hook';
+import {dateLongMonth} from '../../../utils/date-format';
+import {usePlayerHook} from '../../../hooks/use-player.hook';
+import DropdownMore from '../V2/DropdownFilter/DropdownMore';
 import {ModalSuccessDonate} from '../Modal/ModalSuccessDonate';
 import {PhotoPlaylist} from '../PlaylistContent/PhotoPlaylist';
 import {dropDownHeaderSongDetails} from '../../../data/dropdown';
-import {
-  ArrowLeftIcon,
-  DefaultImage,
-  TickCircleIcon,
-} from '../../../assets/icon';
+import {BottomSheetGuest} from '../GuestComponent/BottomSheetGuest';
+import {DataDetailSong, SongList} from '../../../interface/song.interface';
 import {ListenersAndDonate} from '../ListenersAndDonate/ListenersAndDonate';
-import {DataDetailSong, SongAlbum} from '../../../interface/song.interface';
-import {mvs} from 'react-native-size-matters';
-import {dateLongMonth} from '../../../utils/date-format';
-import {useTranslation} from 'react-i18next';
-import {useCreditHook} from '../../../hooks/use-credit.hook';
-import DropdownMore from '../V2/DropdownFilter/DropdownMore';
 
 interface Props {
   onPressGoBack: () => void;
-  goToAlbum: (dataAlbum: SongAlbum) => void;
   goToShowCredit: () => void;
   dataDetail: DataDetailSong;
+  goToMusicianProfile: (uuid: string) => void;
+  showModalNotAvail: boolean;
+  closeModalNotAvail: () => void;
+  goToAlbum: (id: number) => void;
+  goToAddToPlaylist: () => void;
 }
 
 export const SongDetailsContent: React.FC<Props> = ({
   onPressGoBack,
-  goToAlbum,
   goToShowCredit,
   dataDetail,
+  goToMusicianProfile,
+  showModalNotAvail,
+  closeModalNotAvail,
+  goToAlbum,
+  goToAddToPlaylist,
 }) => {
   const {t} = useTranslation();
-  const {creditCount, getCreditCount} = useCreditHook();
-  const [toastVisible, setToastVisible] = useState(false);
+  const {addSong} = usePlayerHook();
+  const isLogin = storage.getString('profile');
+  const [toastVisible, setToastVisible] = useState<boolean>(false);
+  const [toastText, setToastText] = useState<string>('');
   const [modalDonate, setModalDonate] = useState<boolean>(false);
   const [modalShare, setModalShare] = useState<boolean>(false);
   const [modalSuccessDonate, setModalSuccessDonate] = useState<boolean>(false);
   const [trigger2ndModal, setTrigger2ndModal] = useState<boolean>(false);
-
-  useEffect(() => {
-    getCreditCount();
-  }, [modalDonate]);
+  const [modalGuestVisible, setModalGuestVisible] = useState<boolean>(false);
 
   useEffect(() => {
     toastVisible &&
@@ -78,11 +89,21 @@ export const SongDetailsContent: React.FC<Props> = ({
   }, [modalSuccessDonate, trigger2ndModal]);
 
   const resultDataMore = (dataResult: any) => {
-    if (dataResult.value === '3') {
+    if (dataResult.value === '1') {
+      goToAddToPlaylist();
+    } else if (dataResult.value === '2') {
+      addSong(dataDetail as unknown as SongList);
+      setToastVisible(true);
+      setToastText('Song added to queue!');
+    } else if (dataResult.value === '3') {
       setModalShare(true);
-    } else if (dataResult.value === '4') {
+    } else {
       goToShowCredit();
     }
+  };
+
+  const onPressCoin = () => {
+    isLogin ? setModalDonate(true) : setModalGuestVisible(true);
   };
 
   const onPressDonate = () => {
@@ -92,6 +113,22 @@ export const SongDetailsContent: React.FC<Props> = ({
 
   const onPressSuccess = () => {
     setModalSuccessDonate(false);
+  };
+
+  const children = () => {
+    return (
+      <View style={styles.card}>
+        <Text style={styles.title}>{t('Modal.MusicianNotAvail.Title')}</Text>
+        <Text style={styles.subtitle}>
+          {t('Modal.MusicianNotAvail.Subtitle')}
+        </Text>
+        <View style={styles.containerButton}>
+          <TouchableOpacity onPress={closeModalNotAvail}>
+            <Text style={styles.button}>{t('General.GotIt')}</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    );
   };
 
   return (
@@ -114,18 +151,14 @@ export const SongDetailsContent: React.FC<Props> = ({
       <ScrollView>
         <View style={{paddingHorizontal: widthPercentage(10)}}>
           <View style={{alignSelf: 'center'}}>
-            {dataDetail.imageUrl ? (
-              <PhotoPlaylist
-                uri={
-                  dataDetail.album.imageUrl !== null &&
-                  dataDetail.album.imageUrl.length !== 0
-                    ? dataDetail.album.imageUrl[0].image
-                    : ''
-                }
-              />
+            {dataDetail && dataDetail.imageUrl.length > 0 ? (
+              <PhotoPlaylist uri={dataDetail.album.imageUrl[1].image} />
             ) : (
               <View style={styles.undefinedImg}>
-                <DefaultImage.PlaylistCover width={148} height={148} />
+                <DefaultImage.SongCover
+                  width={widthResponsive(148)}
+                  height={widthResponsive(148)}
+                />
               </View>
             )}
           </View>
@@ -134,15 +167,15 @@ export const SongDetailsContent: React.FC<Props> = ({
               <Text style={styles.titleSong}>{dataDetail.title}</Text>
               <Text style={styles.artist}>{`${dataDetail.musicianName}`}</Text>
               <Text style={styles.albumName}>{`${
-                dataDetail.title
-              } · ${dateLongMonth(dataDetail.publishedDate)}`}</Text>
+                dataDetail.album.title
+              } · ${dateLongMonth(dataDetail.album.publishedDate)}`}</Text>
             </View>
           </View>
           <ListenersAndDonate
             totalListener={
               dataDetail.listenerCount ? dataDetail.listenerCount : 0
             }
-            onPress={() => setModalDonate(true)}
+            onPress={onPressCoin}
           />
         </View>
 
@@ -153,30 +186,35 @@ export const SongDetailsContent: React.FC<Props> = ({
             <ListAvatar
               title={t('Home.Topbar.Search.Musician')}
               text={dataDetail.musicianName}
-              avatarUri={
-                dataDetail.imageUrl !== null && dataDetail.imageUrl.length !== 0
-                  ? dataDetail.imageUrl[0].image
-                  : ''
-              }
+              avatarUri={dataDetail.album.musician.imageProfile}
+              onPress={goToMusicianProfile}
+              uuid={dataDetail.musicianUUID}
             />
-            {dataDetail.featuringArtists ? (
+
+            {dataDetail.featuring !== null &&
+            dataDetail.featuring.length !== 0 ? (
               <ListAvatar
                 title={t('Music.Credit.Featuring')}
                 featuring
-                featuringData={dataDetail.featuringArtists}
+                featuringData={dataDetail.featuring}
+                onPress={goToMusicianProfile}
               />
             ) : null}
 
             <Text style={[typography.Subtitle1, styles.titleContent]}>
               {t('Music.Label.SongDesc')}
             </Text>
-            <Text style={styles.description}>{dataDetail.description}</Text>
+            <Text style={styles.description}>
+              {dataDetail.description
+                ? dataDetail.description
+                : t('General.NoDescription')}
+            </Text>
 
             <ListAlbum
-              title={t('Home.Topbar.Search.Album') || ''}
+              title={t('Home.Topbar.Search.Album')}
               albumName={dataDetail.album.title}
-              onPress={() => goToAlbum(dataDetail.album)}
-              createdOn={dateLongMonth(dataDetail.album.publishedDate)}
+              onPress={() => goToAlbum(dataDetail.album.id)}
+              createdOn={dataDetail.album.productionYear}
               imgUri={
                 dataDetail.album.imageUrl !== null &&
                 dataDetail.album.imageUrl.length !== 0
@@ -208,15 +246,29 @@ export const SongDetailsContent: React.FC<Props> = ({
         onPressClose={() => setModalShare(false)}
         titleModal={t('General.Share.Music')}
         imgUri={
-          'https://i.pinimg.com/originals/b3/51/66/b35166174c9bde2d0cc436150a983912.jpg'
+          dataDetail.album.imageUrl.length !== 0
+            ? dataDetail.album.imageUrl[0].image
+            : ''
         }
         type={'Album'}
-        titleSong={'Smoke + Mirror'}
-        createdOn={'2019'}
-        artist={'Imagine Dragons, The Wekeend'}
-        onPressCopy={() =>
-          InteractionManager.runAfterInteractions(() => setToastVisible(true))
-        }
+        titleSong={dataDetail.title}
+        createdOn={dataDetail.album.productionYear}
+        artist={dataDetail.musicianName}
+        onPressCopy={() => {
+          setToastText(t('General.LinkCopied') || '');
+          InteractionManager.runAfterInteractions(() => setToastVisible(true));
+        }}
+      />
+
+      <ModalCustom
+        modalVisible={showModalNotAvail}
+        children={children()}
+        onPressClose={closeModalNotAvail}
+      />
+
+      <BottomSheetGuest
+        modalVisible={modalGuestVisible}
+        onPressClose={() => setModalGuestVisible(false)}
       />
 
       <SsuToast
@@ -231,7 +283,7 @@ export const SongDetailsContent: React.FC<Props> = ({
             />
             <Gap width={widthPercentage(7)} />
             <Text style={[typography.Button2, styles.textStyle]}>
-              {t('General.LinkCopied')}
+              {toastText}
             </Text>
           </View>
         }
@@ -256,6 +308,7 @@ const styles = StyleSheet.create({
     fontSize: mvs(12),
     color: color.Neutral[50],
     fontFamily: font.InterMedium,
+    marginTop: mvs(3),
   },
   albumName: {
     fontSize: mvs(12),
@@ -277,6 +330,14 @@ const styles = StyleSheet.create({
     color: color.Success[500],
     paddingTop: heightPercentage(12),
   },
+  titleAlbumStyle: {
+    fontFamily: font.InterMedium,
+    fontSize: mvs(15),
+    lineHeight: mvs(20),
+    letterSpacing: 0.15,
+    color: color.Success[500],
+    paddingTop: heightPercentage(12),
+  },
   containerFeaturing: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -293,6 +354,7 @@ const styles = StyleSheet.create({
   containerContent: {
     paddingHorizontal: widthPercentage(20),
     paddingTop: heightPercentage(15),
+    marginBottom: heightPercentage(20),
   },
   artistName: {
     fontFamily: font.InterMedium,
@@ -301,11 +363,12 @@ const styles = StyleSheet.create({
     color: color.Neutral[10],
   },
   description: {
-    fontSize: mvs(12),
+    fontSize: mvs(13),
     color: color.Neutral[10],
     fontFamily: font.InterRegular,
-    lineHeight: heightPercentage(16),
+    lineHeight: mvs(16),
     paddingTop: heightPercentage(8),
+    marginBottom: mvs(10),
   },
   modalContainer: {
     width: '100%',
@@ -325,5 +388,35 @@ const styles = StyleSheet.create({
   undefinedImg: {
     marginTop: heightResponsive(36),
     marginBottom: heightResponsive(28),
+  },
+  card: {
+    width: width * 0.9,
+    backgroundColor: Color.Dark[900],
+    justifyContent: 'center',
+    borderRadius: 4,
+    paddingHorizontal: widthPercentage(20),
+    paddingVertical: heightPercentage(15),
+  },
+  title: {
+    fontSize: mvs(16),
+    color: Color.Neutral[10],
+    fontFamily: font.InterSemiBold,
+  },
+  subtitle: {
+    fontSize: mvs(15),
+    color: Color.Neutral[10],
+    fontFamily: font.InterRegular,
+    marginTop: heightPercentage(10),
+  },
+  containerButton: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    marginTop: heightPercentage(25),
+  },
+  button: {
+    fontSize: mvs(13),
+    paddingHorizontal: widthPercentage(12),
+    color: Color.Neutral[10],
+    fontFamily: font.InterRegular,
   },
 });
