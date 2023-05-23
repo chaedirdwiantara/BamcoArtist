@@ -1,4 +1,4 @@
-package io.ssumusician.android.newarchitecture.modules;
+package co.beam.artist.android.newarchitecture.modules;
 
 import com.facebook.jni.HybridData;
 import com.facebook.react.ReactPackage;
