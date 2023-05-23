@@ -24,12 +24,12 @@ const PopUp: FC<PopUpProps> = (props: PopUpProps) => {
 
   return (
     <View style={[styles.container, containerStyle]}>
-      <View>
+      <View style={styles.textContainer}>
         <Text style={styles.title}>{title}</Text>
         <Gap height={6} />
         <Text style={styles.subtitle}>{subTitle}</Text>
       </View>
-      <View>
+      <View style={styles.iconContainer}>
         <TouchableOpacity onPress={closeOnPress}>
           <CloseCircleIcon width={20} height={20} />
         </TouchableOpacity>
@@ -49,6 +49,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     borderRadius: 4,
   },
+  textContainer: {flex: 9},
+  iconContainer: {flex: 1, alignItems: 'flex-end'},
   title: {
     fontFamily: font.InterBold,
     fontWeight: '600',
