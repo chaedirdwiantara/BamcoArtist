@@ -5,12 +5,11 @@ import {
   NativeStackScreenProps,
 } from '@react-navigation/native-stack';
 import {useTranslation} from 'react-i18next';
-import {useIsFocused, useNavigation} from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 
 import Color from '../../theme/Color';
 import {ProfileContent} from '../../components';
 import {storage} from '../../hooks/use-storage.hook';
-import {usePlayerHook} from '../../hooks/use-player.hook';
 import {useProfileHook} from '../../hooks/use-profile.hook';
 import {useSettingHook} from '../../hooks/use-setting.hook';
 import {usePlaylistHook} from '../../hooks/use-playlist.hook';
@@ -31,8 +30,6 @@ export const ProfileScreen: React.FC<ProfileProps> = ({
     useProfileHook();
   const isFetching = storage.getBoolean('fetchingProfile');
   const {dataPlaylist, getPlaylist} = usePlaylistHook();
-  const isFocused = useIsFocused();
-  const {isPlaying, showPlayer, hidePlayer} = usePlayerHook();
   const {dataExclusiveContent, getExclusiveContent} = useSettingHook();
   const {dataDetailMusician, dataAlbum, getDetailMusician, getAlbum} =
     useMusicianHook();
@@ -74,14 +71,6 @@ export const ProfileScreen: React.FC<ProfileProps> = ({
         setToastVisible(false);
       }, 3000);
   }, [toastVisible]);
-
-  useEffect(() => {
-    if (isFocused && isPlaying) {
-      showPlayer();
-    } else if (!isFocused) {
-      hidePlayer();
-    }
-  }, [isFocused, isPlaying]);
 
   const onPressGoTo = (
     screenName: 'Setting' | 'Following' | 'CreateNewPlaylist',

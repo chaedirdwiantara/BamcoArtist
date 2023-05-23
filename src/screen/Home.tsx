@@ -166,15 +166,6 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
     }, 1000);
   }, [refreshing]);
 
-  useEffect(() => {
-    if (isFocused && isPlaying) {
-      showPlayer();
-    } else if (!isFocused) {
-      hidePlayer();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isFocused, isPlaying]);
-
   const [modalGuestVisible, setModalGuestVisible] = useState<boolean>(false);
   const [scrollEffect, setScrollEffect] = useState<boolean>(false);
   const [toastText, setToastText] = useState<string>('');

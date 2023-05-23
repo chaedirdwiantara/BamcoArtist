@@ -28,7 +28,6 @@ import {
   dropDownDataSort,
   dropDownSetAudience,
 } from '../data/dropdown';
-import {useIsFocused} from '@react-navigation/native';
 import {usePlayerHook} from '../hooks/use-player.hook';
 import {
   AddPostIcon,
@@ -59,9 +58,7 @@ export const FeedScreen: React.FC = () => {
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
   const isLogin = storage.getString('profile');
   const uuid = profileStorage()?.uuid;
-
-  const isFocused = useIsFocused();
-  const {isPlaying, visible, showPlayer, hidePlayer} = usePlayerHook();
+  const {visible} = usePlayerHook();
   const {dataExclusiveContent, getExclusiveContent} = useSettingHook();
   const {
     dataVideo,
@@ -77,14 +74,27 @@ export const FeedScreen: React.FC = () => {
     dataCreatePost,
     createPostError,
     createPostLoading,
+    dataUpdatePost,
     setCreatePost,
+    setUpdatePost,
     setDataCreatePost,
     setCreatePostError,
+    setDataUpdatePost,
   } = useFeedHook();
-  const {storedInputText, storedValueFilter, storedDataAudience} =
-    useDataVideoForPost();
-  const {uriVideo, allowToUpload, setUriVideo, setAllowToUpload} =
-    useVideoStore();
+  const {
+    storedInputText,
+    storedValueFilter,
+    storedDataAudience,
+    storedIdForUpdate,
+  } = useDataVideoForPost();
+  const {
+    uriVideo,
+    allowToUpload,
+    allowToUpdate,
+    setUriVideo,
+    setAllowToUpload,
+    setAllowToUpdate,
+  } = useVideoStore();
 
   const [selectedIndex, setSelectedIndex] = useState(-0);
   const [filter] = useState([
@@ -111,14 +121,6 @@ export const FeedScreen: React.FC = () => {
   );
   const [toastVisible, setToastVisible] = useState<boolean>(false);
 
-  useEffect(() => {
-    if (isFocused && isPlaying) {
-      showPlayer();
-    } else if (!isFocused) {
-      hidePlayer();
-    }
-  }, [isFocused]);
-
   const handleOnCloseModal = () => {
     if (selectedCategory) {
       if (
@@ -131,6 +133,7 @@ export const FeedScreen: React.FC = () => {
         setSelectedCategory(undefined);
         setUriVideo(null);
         setAllowToUpload(false);
+        setAllowToUpdate(false);
         setDataVideo(undefined);
         setAllowToRefresh(false);
         setDataCreatePost(null);
@@ -162,7 +165,13 @@ export const FeedScreen: React.FC = () => {
   };
 
   //? 1. Upload Video area
-  useUploadVideo(uriVideo, allowToUpload, setProgress, setUploadVideo);
+  useUploadVideo(
+    uriVideo,
+    allowToUpload,
+    allowToUpdate,
+    setProgress,
+    setUploadVideo,
+  );
 
   //* set to total upload video progress
   useEffect(() => {
@@ -176,6 +185,7 @@ export const FeedScreen: React.FC = () => {
     if (dataVideo) {
       if (dataVideo.readyToStream === true) {
         setAllowToUpload(false);
+        setAllowToUpdate(false);
         setProgress(undefined);
         setAllowToRefresh(true);
       } else {
@@ -189,6 +199,7 @@ export const FeedScreen: React.FC = () => {
     if (isErrorVideo) {
       setUriVideo(null);
       setAllowToUpload(false);
+      setAllowToUpdate(false);
       setGetProgressUpload(false);
       setAllowToPost(false);
       setProgress(undefined);
@@ -238,6 +249,9 @@ export const FeedScreen: React.FC = () => {
     storedValueFilter,
     storedDataAudience,
     allowToPost,
+    storedIdForUpdate,
+    allowToUpdate,
+    setUpdatePost,
   );
 
   //? 5. clear uriVideo after succeeded create the post
@@ -251,6 +265,17 @@ export const FeedScreen: React.FC = () => {
       setAllowToRefresh(true);
     }
   }, [dataCreatePost]);
+
+  useEffect(() => {
+    if (dataUpdatePost) {
+      setAllowToPost(false);
+      setUriVideo(null);
+      setAllowToUpdate(false);
+      setProgress(undefined);
+      setTotalProgress(undefined);
+      setAllowToRefresh(true);
+    }
+  }, [dataUpdatePost]);
 
   //! When Failed to Post video
   useEffect(() => {
