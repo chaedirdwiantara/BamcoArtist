@@ -560,6 +560,7 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
     setIdComment(undefined);
     setSelectedMenu(undefined);
     setSelectedLvlComment(undefined);
+    setUpdateComment(false);
     setCommentCaption('');
   };
   // ! End Of COMMENT AREA
