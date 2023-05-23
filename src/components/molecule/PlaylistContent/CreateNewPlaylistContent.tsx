@@ -15,6 +15,7 @@ import {Dropdown} from '../DropDown';
 import {color, font} from '../../../theme';
 import {PhotoPlaylist} from './PhotoPlaylist';
 import {TopNavigation} from '../TopNavigation';
+import {debounce} from '../../../utils/debounce';
 import {ArrowLeftIcon} from '../../../assets/icon';
 import {ModalConfirm} from '../Modal/ModalConfirm';
 import {Image} from 'react-native-image-crop-picker';
@@ -260,7 +261,7 @@ export const CreateNewPlaylistContent: React.FC<Props> = ({
           title={t('Btn.Save') || ''}
           subtitle={t('Modal.Playlist.Save') || ''}
           onPressClose={closeModal}
-          onPressOk={onPressConfirm}
+          onPressOk={debounce(onPressConfirm)}
           disabled={isLoading}
         />
 

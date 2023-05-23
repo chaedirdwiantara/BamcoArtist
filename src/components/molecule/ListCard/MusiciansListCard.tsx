@@ -18,11 +18,12 @@ import {color, font, typography} from '../../../theme';
 import {DefaultAvatar} from '../../../assets/icon';
 import {useTranslation} from 'react-i18next';
 import DropdownMore from '../V2/DropdownFilter/DropdownMore';
+import {debounce} from '../../../utils/debounce';
 
 export interface ListProps {
   musicianNum?: number | string;
   onPressMore: (data: any) => void;
-  onPressImage?: () => void;
+  onPressImage: () => void;
   musicianName: string;
   imgUri: string;
   point?: string;
@@ -83,20 +84,16 @@ const MusiciansListCard: React.FC<ListProps> = (props: ListProps) => {
           useGrouping: false,
         })}
       </Text>
-      <TouchableOpacity activeOpacity={1} onPress={onPressImage}>
+      <TouchableOpacity onPress={debounce(onPressImage)}>
         {imgUri ? (
-          <TouchableOpacity onPress={onPressImage}>
-            <Avatar imgUri={imgUri} size={widthPercentage(44)} />
-          </TouchableOpacity>
+          <Avatar imgUri={imgUri} size={widthPercentage(44)} />
         ) : (
-          <TouchableOpacity onPress={onPressImage}>
-            <DefaultAvatar.MusicianIcon />
-          </TouchableOpacity>
+          <DefaultAvatar.MusicianIcon />
         )}
       </TouchableOpacity>
       <Gap width={8} />
       <View style={styles.textContainer}>
-        <TouchableOpacity activeOpacity={1} onPress={onPressImage}>
+        <TouchableOpacity onPress={debounce(onPressImage)}>
           <Text style={styles.musicianName} numberOfLines={1}>
             {musicianName}
           </Text>
