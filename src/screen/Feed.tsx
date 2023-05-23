@@ -28,7 +28,6 @@ import {
   dropDownDataSort,
   dropDownSetAudience,
 } from '../data/dropdown';
-import {useIsFocused} from '@react-navigation/native';
 import {usePlayerHook} from '../hooks/use-player.hook';
 import {
   AddPostIcon,
@@ -59,9 +58,7 @@ export const FeedScreen: React.FC = () => {
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
   const isLogin = storage.getString('profile');
   const uuid = profileStorage()?.uuid;
-
-  const isFocused = useIsFocused();
-  const {isPlaying, visible, showPlayer, hidePlayer} = usePlayerHook();
+  const {visible} = usePlayerHook();
   const {dataExclusiveContent, getExclusiveContent} = useSettingHook();
   const {
     dataVideo,
@@ -123,14 +120,6 @@ export const FeedScreen: React.FC = () => {
     `Your post couldn't be uploaded. Try Again`,
   );
   const [toastVisible, setToastVisible] = useState<boolean>(false);
-
-  useEffect(() => {
-    if (isFocused && isPlaying) {
-      showPlayer();
-    } else if (!isFocused) {
-      hidePlayer();
-    }
-  }, [isFocused]);
 
   const handleOnCloseModal = () => {
     if (selectedCategory) {
