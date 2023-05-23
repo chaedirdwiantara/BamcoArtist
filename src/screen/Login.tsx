@@ -442,8 +442,6 @@ export const LoginScreen: React.FC = () => {
           alignItems: 'center',
         }}>
         <BeamcoLogo />
-        <Text style={styles.titleStyle}>{t('General.Begin')}</Text>
-        <Gap height={12} />
         <Text style={styles.descStyle}>{t('General.TopDescription')}</Text>
         {height >= 800 ? <Gap height={82} /> : <Gap height={40} />}
       </View>
