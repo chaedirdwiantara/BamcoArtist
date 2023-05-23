@@ -8,8 +8,6 @@ import {color} from '../theme';
 import MerchList from './ListCard/MerchList';
 import {BoxStore, CartIcon} from '../assets/icon';
 import ConcertList from './ListCard/ConcertList';
-import {useIsFocused} from '@react-navigation/native';
-import {usePlayerHook} from '../hooks/use-player.hook';
 import {useTranslation} from 'react-i18next';
 
 export const EventScreen: React.FC = () => {
@@ -20,16 +18,6 @@ export const EventScreen: React.FC = () => {
     {filterName: 'Event.Merch.Title'},
   ]);
   const isLogin = storage.getString('profile');
-  const isFocused = useIsFocused();
-  const {isPlaying, showPlayer, hidePlayer} = usePlayerHook();
-
-  useEffect(() => {
-    if (isFocused && isPlaying) {
-      showPlayer();
-    } else if (!isFocused) {
-      hidePlayer();
-    }
-  }, [isFocused]);
 
   const filterData = (item: any, index: any) => {
     setSelectedIndex(index);
