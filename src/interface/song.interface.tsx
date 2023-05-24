@@ -245,3 +245,16 @@ export type LikeSongResponseType = {
   message: string;
   status: number;
 };
+
+export type SongComingSoon = {
+  id: number;
+  musician: Musician;
+  title: string;
+};
+
+export type ListSongComingSoonResponseType = {
+  code: number;
+  data: SongComingSoon[];
+  message: string;
+  status: number;
+};

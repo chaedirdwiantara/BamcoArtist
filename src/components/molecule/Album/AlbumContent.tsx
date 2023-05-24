@@ -7,7 +7,7 @@ import {
   InteractionManager,
 } from 'react-native';
 import {useTranslation} from 'react-i18next';
-import {mvs} from 'react-native-size-matters';
+import {mvs, ms} from 'react-native-size-matters';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
@@ -17,6 +17,7 @@ import {
   ModalDonate,
   ModalShare,
   ModalSuccessDonate,
+  MusicSection,
 } from '../';
 import {
   heightPercentage,
@@ -37,18 +38,23 @@ import {color, font, typography} from '../../../theme';
 import {dateLongMonth} from '../../../utils/date-format';
 import ListSongs from '../../../screen/ListCard/ListSongs';
 import {dropDownHeaderAlbum} from '../../../data/dropdown';
-import {useCreditHook} from '../../../hooks/use-credit.hook';
 import {usePlayerHook} from '../../../hooks/use-player.hook';
 import DropdownMore from '../V2/DropdownFilter/DropdownMore';
 import {profileStorage} from '../../../hooks/use-storage.hook';
 import {PhotoPlaylist} from '../PlaylistContent/PhotoPlaylist';
 import {MainTabParams, RootStackParams} from '../../../navigations';
-import {DataDetailAlbum, SongList} from '../../../interface/song.interface';
+import {
+  DataDetailAlbum,
+  SongComingSoon,
+  SongList,
+} from '../../../interface/song.interface';
 
 interface Props {
   dataSong: SongList[] | null;
+  dataSongComingSoon: SongComingSoon[];
   detailAlbum: DataDetailAlbum;
   onPressGoBack: () => void;
+  isLoading: boolean;
   comingSoon?: boolean;
 }
 
@@ -57,6 +63,8 @@ export const AlbumContent: React.FC<Props> = ({
   dataSong,
   onPressGoBack,
   comingSoon,
+  isLoading,
+  dataSongComingSoon,
 }) => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
@@ -157,6 +165,8 @@ export const AlbumContent: React.FC<Props> = ({
     ? dateLongMonth(detailAlbum.releaseDateScheduled)
     : dateLongMonth(detailAlbum.publishedDate);
 
+  const checkImageAlbum = detailAlbum && detailAlbum.imageUrl.length > 0;
+
   return (
     <View style={styles.root}>
       <TopNavigation.Type4
@@ -181,7 +191,7 @@ export const AlbumContent: React.FC<Props> = ({
       <ScrollView>
         <View style={{paddingHorizontal: widthPercentage(10)}}>
           <View style={{alignSelf: 'center'}}>
-            {detailAlbum && detailAlbum.imageUrl.length > 0 ? (
+            {checkImageAlbum ? (
               <PhotoPlaylist uri={detailAlbum?.imageUrl[1].image} />
             ) : (
               <View style={styles.undefinedImg}>
@@ -239,7 +249,22 @@ export const AlbumContent: React.FC<Props> = ({
             {t('Music.Label.SongList')}
           </Text>
           <View style={{marginBottom: heightPercentage(30)}}>
-            {dataSong !== null && (
+            {isLoading ? null : comingSoon ? (
+              dataSongComingSoon.map((item, index) => (
+                <MusicSection
+                  imgUri={checkImageAlbum ? detailAlbum?.imageUrl[1].image : ''}
+                  musicTitle={item.title}
+                  musicNum={index + 1}
+                  singerName={item.musician.name}
+                  songId={item.id}
+                  onPressAddToQueue={() => null}
+                  key={index}
+                  containerStyles={{marginTop: mvs(20), marginLeft: ms(5)}}
+                  disabled={comingSoon}
+                  hideDropdownMore={true}
+                />
+              ))
+            ) : (
               <ListSongs
                 onPress={onPressSong}
                 hideDropdownMore={true}
