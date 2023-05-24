@@ -399,6 +399,11 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
     navigation.navigate('ExclusiveContentSetting', {type: 'navToCreatePost'});
   };
 
+  const handleMiniPlayerOnPress = () => {
+    hidePlayer();
+    goToScreen('MusicPlayer');
+  };
+
   return (
     <View style={styles.root}>
       <SsuStatusBar type="black" />
@@ -621,7 +626,7 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
         }
       />
 
-      <ModalPlayMusic onPressModal={() => goToScreen('MusicPlayer')} />
+      <ModalPlayMusic onPressModal={handleMiniPlayerOnPress} />
 
       <ModalConfirmChoice
         modalVisible={showModalPost.isExclusivePostModal}
