@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {
   KeyboardAvoidingView,
   Platform,
@@ -8,7 +8,7 @@ import {
   View,
 } from 'react-native';
 import {mvs} from 'react-native-size-matters';
-import {useNavigation} from '@react-navigation/native';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import {
   NativeStackNavigationProp,
   NativeStackScreenProps,
@@ -38,6 +38,7 @@ import {profileStorage} from '../../../hooks/use-storage.hook';
 import {TopNavigation, SsuToast, Gap} from '../../../components';
 import {DataExclusiveProps} from '../../../interface/setting.interface';
 import {useTranslation} from 'react-i18next';
+import {usePlayerStore} from '../../../store/player.store';
 
 type ExclusiveContentSettingProps = NativeStackScreenProps<
   RootStackParams,
@@ -56,10 +57,20 @@ export const ExclusiveContentSetting: React.FC<
   const {fetchData, dataExclusiveContent, getExclusiveContent} =
     useSettingHook();
 
+  const {setWithoutBottomTab, show} = usePlayerStore();
+
   const [mode, setMode] = useState<string>('edit');
   const [toastText, setToastText] = useState<string>('');
   const [toastVisible, setToastVisible] = useState<boolean>(false);
   const [toastError, setToastError] = useState<boolean>(false);
+
+  useFocusEffect(
+    useCallback(() => {
+      if (show) {
+        setWithoutBottomTab(true);
+      }
+    }, [show]),
+  );
 
   useEffect(() => {
     toastVisible &&
@@ -78,6 +89,7 @@ export const ExclusiveContentSetting: React.FC<
   }, []);
 
   const onPressGoBack = () => {
+    show && setWithoutBottomTab(false);
     navigation.goBack();
   };
 

@@ -1,5 +1,5 @@
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import React, {useEffect} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import {useTranslation} from 'react-i18next';
 import {
   FlatList,
@@ -17,6 +17,8 @@ import {useSearchHook} from '../../hooks/use-search.hook';
 import {RootStackParams} from '../../navigations';
 import {color} from '../../theme';
 import {heightPercentage, heightResponsive, widthResponsive} from '../../utils';
+import {useFocusEffect} from '@react-navigation/native';
+import {usePlayerStore} from '../../store/player.store';
 
 type PlaylistProps = NativeStackScreenProps<RootStackParams, 'ListPlaylist'>;
 
@@ -25,6 +27,7 @@ const ListPlaylist: React.FC<PlaylistProps> = ({navigation}: PlaylistProps) => {
 
   // TODO : change api to get playlist by mood
   const {getSearchPlaylists} = useSearchHook();
+  const {setWithoutBottomTab, show} = usePlayerStore();
 
   const {
     data: dataSearchPlaylists,
@@ -48,6 +51,14 @@ const ListPlaylist: React.FC<PlaylistProps> = ({navigation}: PlaylistProps) => {
     },
   );
 
+  useFocusEffect(
+    useCallback(() => {
+      if (show) {
+        setWithoutBottomTab(true);
+      }
+    }, [show]),
+  );
+
   const resultDataMore = (dataResult: any) => {
     console.log(dataResult, 'resultDataMenu');
   };
@@ -66,11 +77,16 @@ const ListPlaylist: React.FC<PlaylistProps> = ({navigation}: PlaylistProps) => {
   const cardOnPress = (id: number) => {
     navigation.navigate('Playlist', {id, name: '', from: 'other'});
   };
+
+  const handleBackAction = () => {
+    show && setWithoutBottomTab(false);
+    navigation.goBack();
+  };
   return (
     <View style={styles.root}>
       <TopNavigation.Type1
         title={t('Home.Topbar.Search.Playlist')}
-        leftIconAction={() => navigation.goBack()}
+        leftIconAction={handleBackAction}
         maxLengthTitle={40}
         itemStrokeColor={color.Neutral[10]}
       />

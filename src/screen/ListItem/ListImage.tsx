@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {FlatList, RefreshControl, StyleSheet, View} from 'react-native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 
@@ -9,6 +9,8 @@ import {storage} from '../../hooks/use-storage.hook';
 import {useBackHandler} from '../../utils/useBackHandler';
 import {useSettingHook} from '../../hooks/use-setting.hook';
 import {heightPercentage, widthPercentage} from '../../utils';
+import {useFocusEffect} from '@react-navigation/native';
+import {usePlayerStore} from '../../store/player.store';
 
 type ListImageProps = NativeStackScreenProps<RootStackParams, 'ListImage'>;
 
@@ -24,8 +26,17 @@ export const ListImageScreen: React.FC<ListImageProps> = ({
     getListMoodPublic,
     getListGenrePublic,
   } = useSettingHook();
+  const {setWithoutBottomTab, show} = usePlayerStore();
   const [refreshing, setRefreshing] = useState<boolean>(false);
   const listData = filterBy === 'mood' ? listMood : listGenre;
+
+  useFocusEffect(
+    useCallback(() => {
+      if (show) {
+        setWithoutBottomTab(true);
+      }
+    }, [show]),
+  );
 
   useEffect(() => {
     if (filterBy === 'mood') {

@@ -9,6 +9,7 @@ import {ArrowLeftIcon} from '../../../assets/icon';
 import {RootStackParams} from '../../../navigations';
 import {heightPercentage, widthPercentage} from '../../../utils';
 import LoadingSpinner from '../../../components/atom/Loading/LoadingSpinner';
+import {usePlayerStore} from '../../../store/player.store';
 
 export interface ListItemProps {
   title: string;
@@ -27,8 +28,10 @@ export const ListItem: React.FC<ListItemProps> = ({
 }) => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
+  const {setWithoutBottomTab, show} = usePlayerStore();
 
   const onPressGoBack = () => {
+    show && setWithoutBottomTab(false);
     navigation.goBack();
   };
 

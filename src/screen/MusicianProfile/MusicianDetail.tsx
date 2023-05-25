@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {
   View,
   StyleSheet,
@@ -24,7 +24,7 @@ import {
   widthResponsive,
 } from '../../utils';
 import {ProfileHeader} from './ProfileHeader';
-import {useNavigation} from '@react-navigation/native';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParams} from '../../navigations';
 import {color, font} from '../../theme';
@@ -45,6 +45,7 @@ import {FansScreen} from './ListFans';
 import {storage} from '../../hooks/use-storage.hook';
 import {mvs} from 'react-native-size-matters';
 import {ArrowLeftIcon} from '../../assets/icon';
+import {usePlayerStore} from '../../store/player.store';
 
 type OnScrollEventHandler = (
   event: NativeSyntheticEvent<NativeScrollEvent>,
@@ -92,6 +93,16 @@ export const MusicianDetail: React.FC<MusicianDetailProps> = ({
 
   const showPopUp: boolean | undefined = storage.getBoolean('showPopUp');
 
+  const {setWithoutBottomTab, show} = usePlayerStore();
+
+  useFocusEffect(
+    useCallback(() => {
+      if (show) {
+        setWithoutBottomTab(true);
+      }
+    }, [show]),
+  );
+
   useEffect(() => {
     if (showStatePopUp === false) {
       const currentValue = storage.getBoolean('showPopUp');
@@ -134,6 +145,12 @@ export const MusicianDetail: React.FC<MusicianDetailProps> = ({
   };
 
   const onPressGoBack = () => {
+    show && setWithoutBottomTab(false);
+    navigation.goBack();
+  };
+
+  const handleBackAction = () => {
+    show && setWithoutBottomTab(false);
     navigation.goBack();
   };
 
@@ -175,7 +192,7 @@ export const MusicianDetail: React.FC<MusicianDetailProps> = ({
       <TopNavigation.Type1
         title=""
         leftIcon={scrolEffect && leftIconHeader()}
-        leftIconAction={navigation.goBack}
+        leftIconAction={handleBackAction}
         maxLengthTitle={20}
         itemStrokeColor={'white'}
         bgColor={scrolEffect ? color.Dark[800] : 'transparent'}
