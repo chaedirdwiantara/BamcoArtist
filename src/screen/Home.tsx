@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {
   View,
   StyleSheet,
@@ -17,7 +17,11 @@ import {
 } from '@react-navigation/native-stack';
 import {useTranslation} from 'react-i18next';
 import {mvs} from 'react-native-size-matters';
-import {useNavigation, useIsFocused} from '@react-navigation/native';
+import {
+  useNavigation,
+  useIsFocused,
+  useFocusEffect,
+} from '@react-navigation/native';
 
 import {
   TopNavigation,
@@ -147,6 +151,14 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
 
   const [randomPlaceHolder, setRandomPlaceHolder] = useState(
     dataPlaceHolder[Math.floor(Math.random() * dataPlaceHolder.length)],
+  );
+
+  useFocusEffect(
+    useCallback(() => {
+      setRandomPlaceHolder(
+        dataPlaceHolder[Math.floor(Math.random() * dataPlaceHolder.length)],
+      );
+    }, []),
   );
 
   useEffect(() => {
