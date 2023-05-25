@@ -12,17 +12,18 @@
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		16823C3E7BC7412289DAE749 /* Inter-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9648F5947E264558A2EE62FF /* Inter-Medium.ttf */; };
-		1AE00235DC758D26610A4256 /* libPods-SsuMusician-SsuMusicianTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 87A8ED0803830D2E86AAF49A /* libPods-SsuMusician-SsuMusicianTests.a */; };
+		176FA95292D1024510101E5C /* libPods-Beamco for Artist.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 642B96A19F7BEBAC7C90CEC6 /* libPods-Beamco for Artist.a */; };
 		2462763A84754F95AF0C3AF8 /* Inter-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F09F402CC72444A38FF0CF8E /* Inter-Light.ttf */; };
 		272114BE12624544A2E591E6 /* Inter-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 37648E08918747618FE5645D /* Inter-ExtraBold.ttf */; };
 		3E96E73221594A88B36D7E76 /* Inter-ExtraLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 88E8F0BFD83847D8B84E9716 /* Inter-ExtraLight.ttf */; };
-		46894671297813D800B278C0 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 46894670297813D800B278C0 /* GoogleService-Info.plist */; };
+		46FAAFD52A1D03ED0010E323 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46FAAFD42A1D03ED0010E323 /* StoreKit.framework */; };
+		46FAAFD72A1D04C90010E323 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 46FAAFD62A1D04C80010E323 /* GoogleService-Info.plist */; };
 		79A065ECE0804D9BA17CEF18 /* Inter-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B987D2CF93DA4637A230ABA5 /* Inter-Black.ttf */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		8B08F56D82FC464CBA91CAC6 /* Inter-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2B8EDB02BF2C4A3982F5E65C /* Inter-Bold.ttf */; };
 		8F24D2B2664F48E18B04CB0E /* Inter-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 633EF273311D4D4B8BCFC2D8 /* Inter-SemiBold.ttf */; };
-		9379C46114408B8D4D8BEDBD /* libPods-SsuMusician.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BAA01D1DF019330A3F66159 /* libPods-SsuMusician.a */; };
 		9B7CB41AA6F74318900CF886 /* Inter-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D0CB0633688143E9A770E2AC /* Inter-Regular.ttf */; };
+		A7BB9CF9CCAE0B832A2EAA04 /* libPods-Beamco for Artist-Beamco for ArtistTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B5319A79746376A54E4BA783 /* libPods-Beamco for Artist-Beamco for ArtistTests.a */; };
 		E8EA343E2CCD444BB85587AF /* Inter-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3732AA36C46146FDA85A0BDA /* Inter-Thin.ttf */; };
 /* End PBXBuildFile section */
 
@@ -37,31 +38,36 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		00E356EE1AD99517003FC87E /* SsuMusicianTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SsuMusicianTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		00E356EE1AD99517003FC87E /* Beamco for ArtistTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Beamco for ArtistTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* SsuMusicianTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SsuMusicianTests.m; sourceTree = "<group>"; };
 		08AAA59FF5E62E752B99BA51 /* Pods-SsuMusician-SsuMusicianTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SsuMusician-SsuMusicianTests.release.xcconfig"; path = "Target Support Files/Pods-SsuMusician-SsuMusicianTests/Pods-SsuMusician-SsuMusicianTests.release.xcconfig"; sourceTree = "<group>"; };
-		13B07F961A680F5B00A75B9A /* SsuMusician.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SsuMusician.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		11A5976D294CE2FEE368C50A /* Pods-Beamco for Artist-Beamco for ArtistTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Beamco for Artist-Beamco for ArtistTests.debug.xcconfig"; path = "Target Support Files/Pods-Beamco for Artist-Beamco for ArtistTests/Pods-Beamco for Artist-Beamco for ArtistTests.debug.xcconfig"; sourceTree = "<group>"; };
+		13B07F961A680F5B00A75B9A /* Beamco for Artist.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Beamco for Artist.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = SsuMusician/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = SsuMusician/AppDelegate.mm; sourceTree = "<group>"; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = SsuMusician/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = SsuMusician/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = SsuMusician/main.m; sourceTree = "<group>"; };
 		18EEAB75E5581C8B2C5E79B2 /* Pods-SsuMusician.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SsuMusician.debug.xcconfig"; path = "Target Support Files/Pods-SsuMusician/Pods-SsuMusician.debug.xcconfig"; sourceTree = "<group>"; };
-		1BAA01D1DF019330A3F66159 /* libPods-SsuMusician.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SsuMusician.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2AE35A2B61DF000008E94548 /* Pods-SsuMusician-SsuMusicianTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SsuMusician-SsuMusicianTests.debug.xcconfig"; path = "Target Support Files/Pods-SsuMusician-SsuMusicianTests/Pods-SsuMusician-SsuMusicianTests.debug.xcconfig"; sourceTree = "<group>"; };
 		2B8EDB02BF2C4A3982F5E65C /* Inter-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-Bold.ttf"; path = "../src/assets/fonts/Inter-Bold.ttf"; sourceTree = "<group>"; };
 		3732AA36C46146FDA85A0BDA /* Inter-Thin.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-Thin.ttf"; path = "../src/assets/fonts/Inter-Thin.ttf"; sourceTree = "<group>"; };
 		37648E08918747618FE5645D /* Inter-ExtraBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-ExtraBold.ttf"; path = "../src/assets/fonts/Inter-ExtraBold.ttf"; sourceTree = "<group>"; };
-		46894670297813D800B278C0 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../GoogleService-Info.plist"; sourceTree = "<group>"; };
 		46914D7429683122003AE31D /* SsuMusician.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = SsuMusician.entitlements; path = SsuMusician/SsuMusician.entitlements; sourceTree = "<group>"; };
+		46FAAFD42A1D03ED0010E323 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
+		46FAAFD62A1D04C80010E323 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		633EF273311D4D4B8BCFC2D8 /* Inter-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-SemiBold.ttf"; path = "../src/assets/fonts/Inter-SemiBold.ttf"; sourceTree = "<group>"; };
+		642B96A19F7BEBAC7C90CEC6 /* libPods-Beamco for Artist.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Beamco for Artist.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		6B0156EF85BFD1FAFBDE84F8 /* Pods-Beamco for Artist-Beamco for ArtistTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Beamco for Artist-Beamco for ArtistTests.release.xcconfig"; path = "Target Support Files/Pods-Beamco for Artist-Beamco for ArtistTests/Pods-Beamco for Artist-Beamco for ArtistTests.release.xcconfig"; sourceTree = "<group>"; };
 		78B0F997783C59E7665D7643 /* Pods-SsuMusician.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SsuMusician.release.xcconfig"; path = "Target Support Files/Pods-SsuMusician/Pods-SsuMusician.release.xcconfig"; sourceTree = "<group>"; };
+		814C0B7BED4246A9CA274FAB /* Pods-Beamco for Artist.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Beamco for Artist.release.xcconfig"; path = "Target Support Files/Pods-Beamco for Artist/Pods-Beamco for Artist.release.xcconfig"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = SsuMusician/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		87A8ED0803830D2E86AAF49A /* libPods-SsuMusician-SsuMusicianTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SsuMusician-SsuMusicianTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		88E8F0BFD83847D8B84E9716 /* Inter-ExtraLight.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-ExtraLight.ttf"; path = "../src/assets/fonts/Inter-ExtraLight.ttf"; sourceTree = "<group>"; };
 		9648F5947E264558A2EE62FF /* Inter-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-Medium.ttf"; path = "../src/assets/fonts/Inter-Medium.ttf"; sourceTree = "<group>"; };
+		B5319A79746376A54E4BA783 /* libPods-Beamco for Artist-Beamco for ArtistTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Beamco for Artist-Beamco for ArtistTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B987D2CF93DA4637A230ABA5 /* Inter-Black.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-Black.ttf"; path = "../src/assets/fonts/Inter-Black.ttf"; sourceTree = "<group>"; };
+		C27225167697E13AED7346EA /* Pods-Beamco for Artist.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Beamco for Artist.debug.xcconfig"; path = "Target Support Files/Pods-Beamco for Artist/Pods-Beamco for Artist.debug.xcconfig"; sourceTree = "<group>"; };
 		D0CB0633688143E9A770E2AC /* Inter-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-Regular.ttf"; path = "../src/assets/fonts/Inter-Regular.ttf"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		F09F402CC72444A38FF0CF8E /* Inter-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-Light.ttf"; path = "../src/assets/fonts/Inter-Light.ttf"; sourceTree = "<group>"; };
@@ -72,7 +78,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1AE00235DC758D26610A4256 /* libPods-SsuMusician-SsuMusicianTests.a in Frameworks */,
+				A7BB9CF9CCAE0B832A2EAA04 /* libPods-Beamco for Artist-Beamco for ArtistTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -80,7 +86,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9379C46114408B8D4D8BEDBD /* libPods-SsuMusician.a in Frameworks */,
+				176FA95292D1024510101E5C /* libPods-Beamco for Artist.a in Frameworks */,
+				46FAAFD52A1D03ED0010E323 /* StoreKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -121,9 +128,10 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				46FAAFD42A1D03ED0010E323 /* StoreKit.framework */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				1BAA01D1DF019330A3F66159 /* libPods-SsuMusician.a */,
-				87A8ED0803830D2E86AAF49A /* libPods-SsuMusician-SsuMusicianTests.a */,
+				642B96A19F7BEBAC7C90CEC6 /* libPods-Beamco for Artist.a */,
+				B5319A79746376A54E4BA783 /* libPods-Beamco for Artist-Beamco for ArtistTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -138,7 +146,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				46894670297813D800B278C0 /* GoogleService-Info.plist */,
+				46FAAFD62A1D04C80010E323 /* GoogleService-Info.plist */,
 				13B07FAE1A68108700A75B9A /* SsuMusician */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* SsuMusicianTests */,
@@ -155,8 +163,8 @@
 		83CBBA001A601CBA00E9B192 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				13B07F961A680F5B00A75B9A /* SsuMusician.app */,
-				00E356EE1AD99517003FC87E /* SsuMusicianTests.xctest */,
+				13B07F961A680F5B00A75B9A /* Beamco for Artist.app */,
+				00E356EE1AD99517003FC87E /* Beamco for ArtistTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -168,6 +176,10 @@
 				78B0F997783C59E7665D7643 /* Pods-SsuMusician.release.xcconfig */,
 				2AE35A2B61DF000008E94548 /* Pods-SsuMusician-SsuMusicianTests.debug.xcconfig */,
 				08AAA59FF5E62E752B99BA51 /* Pods-SsuMusician-SsuMusicianTests.release.xcconfig */,
+				C27225167697E13AED7346EA /* Pods-Beamco for Artist.debug.xcconfig */,
+				814C0B7BED4246A9CA274FAB /* Pods-Beamco for Artist.release.xcconfig */,
+				11A5976D294CE2FEE368C50A /* Pods-Beamco for Artist-Beamco for ArtistTests.debug.xcconfig */,
+				6B0156EF85BFD1FAFBDE84F8 /* Pods-Beamco for Artist-Beamco for ArtistTests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -191,9 +203,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		00E356ED1AD99517003FC87E /* SsuMusicianTests */ = {
+		00E356ED1AD99517003FC87E /* Beamco for ArtistTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "SsuMusicianTests" */;
+			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "Beamco for ArtistTests" */;
 			buildPhases = (
 				E60AD16CE8FC8FE595328476 /* [CP] Check Pods Manifest.lock */,
 				00E356EA1AD99517003FC87E /* Sources */,
@@ -207,14 +219,14 @@
 			dependencies = (
 				00E356F51AD99517003FC87E /* PBXTargetDependency */,
 			);
-			name = SsuMusicianTests;
+			name = "Beamco for ArtistTests";
 			productName = SsuMusicianTests;
-			productReference = 00E356EE1AD99517003FC87E /* SsuMusicianTests.xctest */;
+			productReference = 00E356EE1AD99517003FC87E /* Beamco for ArtistTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		13B07F861A680F5B00A75B9A /* SsuMusician */ = {
+		13B07F861A680F5B00A75B9A /* Beamco for Artist */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "SsuMusician" */;
+			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "Beamco for Artist" */;
 			buildPhases = (
 				4A0BF91510F1ABDE85E5DCEC /* [CP] Check Pods Manifest.lock */,
 				FD10A7F022414F080027D42C /* Start Packager */,
@@ -230,9 +242,9 @@
 			);
 			dependencies = (
 			);
-			name = SsuMusician;
+			name = "Beamco for Artist";
 			productName = SsuMusician;
-			productReference = 13B07F961A680F5B00A75B9A /* SsuMusician.app */;
+			productReference = 13B07F961A680F5B00A75B9A /* Beamco for Artist.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -252,7 +264,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "SsuMusician" */;
+			buildConfigurationList = 83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "Beamco for Artist" */;
 			compatibilityVersion = "Xcode 12.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -265,8 +277,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				13B07F861A680F5B00A75B9A /* SsuMusician */,
-				00E356ED1AD99517003FC87E /* SsuMusicianTests */,
+				13B07F861A680F5B00A75B9A /* Beamco for Artist */,
+				00E356ED1AD99517003FC87E /* Beamco for ArtistTests */,
 			);
 		};
 /* End PBXProject section */
@@ -288,7 +300,7 @@
 				79A065ECE0804D9BA17CEF18 /* Inter-Black.ttf in Resources */,
 				8B08F56D82FC464CBA91CAC6 /* Inter-Bold.ttf in Resources */,
 				272114BE12624544A2E591E6 /* Inter-ExtraBold.ttf in Resources */,
-				46894671297813D800B278C0 /* GoogleService-Info.plist in Resources */,
+				46FAAFD72A1D04C90010E323 /* GoogleService-Info.plist in Resources */,
 				3E96E73221594A88B36D7E76 /* Inter-ExtraLight.ttf in Resources */,
 				2462763A84754F95AF0C3AF8 /* Inter-Light.ttf in Resources */,
 				16823C3E7BC7412289DAE749 /* Inter-Medium.ttf in Resources */,
@@ -323,15 +335,15 @@
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-SsuMusician/Pods-SsuMusician-resources-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-Beamco for Artist/Pods-Beamco for Artist-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-SsuMusician/Pods-SsuMusician-resources-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-Beamco for Artist/Pods-Beamco for Artist-resources-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SsuMusician/Pods-SsuMusician-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Beamco for Artist/Pods-Beamco for Artist-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		36641FC15C60E5BA87571520 /* [CP] Embed Pods Frameworks */ = {
@@ -340,15 +352,15 @@
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-SsuMusician/Pods-SsuMusician-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-Beamco for Artist/Pods-Beamco for Artist-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-SsuMusician/Pods-SsuMusician-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-Beamco for Artist/Pods-Beamco for Artist-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SsuMusician/Pods-SsuMusician-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Beamco for Artist/Pods-Beamco for Artist-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		4A0BF91510F1ABDE85E5DCEC /* [CP] Check Pods Manifest.lock */ = {
@@ -366,7 +378,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-SsuMusician-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-Beamco for Artist-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -392,15 +404,15 @@
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-SsuMusician-SsuMusicianTests/Pods-SsuMusician-SsuMusicianTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-Beamco for Artist-Beamco for ArtistTests/Pods-Beamco for Artist-Beamco for ArtistTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-SsuMusician-SsuMusicianTests/Pods-SsuMusician-SsuMusicianTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-Beamco for Artist-Beamco for ArtistTests/Pods-Beamco for Artist-Beamco for ArtistTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SsuMusician-SsuMusicianTests/Pods-SsuMusician-SsuMusicianTests-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Beamco for Artist-Beamco for ArtistTests/Pods-Beamco for Artist-Beamco for ArtistTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		CA138CA8988725E341CC5DDE /* [CP] Copy Pods Resources */ = {
@@ -409,15 +421,15 @@
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-SsuMusician-SsuMusicianTests/Pods-SsuMusician-SsuMusicianTests-resources-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-Beamco for Artist-Beamco for ArtistTests/Pods-Beamco for Artist-Beamco for ArtistTests-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-SsuMusician-SsuMusicianTests/Pods-SsuMusician-SsuMusicianTests-resources-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-Beamco for Artist-Beamco for ArtistTests/Pods-Beamco for Artist-Beamco for ArtistTests-resources-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SsuMusician-SsuMusicianTests/Pods-SsuMusician-SsuMusicianTests-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Beamco for Artist-Beamco for ArtistTests/Pods-Beamco for Artist-Beamco for ArtistTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		E60AD16CE8FC8FE595328476 /* [CP] Check Pods Manifest.lock */ = {
@@ -435,7 +447,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-SsuMusician-SsuMusicianTests-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-Beamco for Artist-Beamco for ArtistTests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -486,7 +498,7 @@
 /* Begin PBXTargetDependency section */
 		00E356F51AD99517003FC87E /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 13B07F861A680F5B00A75B9A /* SsuMusician */;
+			target = 13B07F861A680F5B00A75B9A /* Beamco for Artist */;
 			targetProxy = 00E356F41AD99517003FC87E /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -494,7 +506,7 @@
 /* Begin XCBuildConfiguration section */
 		00E356F61AD99517003FC87E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2AE35A2B61DF000008E94548 /* Pods-SsuMusician-SsuMusicianTests.debug.xcconfig */;
+			baseConfigurationReference = 11A5976D294CE2FEE368C50A /* Pods-Beamco for Artist-Beamco for ArtistTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -515,13 +527,13 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SsuMusician.app/SsuMusician";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Beamco for Artist.app/Beamco for Artist";
 			};
 			name = Debug;
 		};
 		00E356F71AD99517003FC87E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 08AAA59FF5E62E752B99BA51 /* Pods-SsuMusician-SsuMusicianTests.release.xcconfig */;
+			baseConfigurationReference = 6B0156EF85BFD1FAFBDE84F8 /* Pods-Beamco for Artist-Beamco for ArtistTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
@@ -539,13 +551,13 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SsuMusician.app/SsuMusician";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Beamco for Artist.app/Beamco for Artist";
 			};
 			name = Release;
 		};
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 18EEAB75E5581C8B2C5E79B2 /* Pods-SsuMusician.debug.xcconfig */;
+			baseConfigurationReference = C27225167697E13AED7346EA /* Pods-Beamco for Artist.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -566,8 +578,8 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = io.ssumusician.ios;
-				PRODUCT_NAME = SsuMusician;
+				PRODUCT_BUNDLE_IDENTIFIER = co.beam.artist.ios;
+				PRODUCT_NAME = "Beamco for Artist";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -576,7 +588,7 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 78B0F997783C59E7665D7643 /* Pods-SsuMusician.release.xcconfig */;
+			baseConfigurationReference = 814C0B7BED4246A9CA274FAB /* Pods-Beamco for Artist.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -596,8 +608,8 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = io.ssumusician.ios;
-				PRODUCT_NAME = SsuMusician;
+				PRODUCT_BUNDLE_IDENTIFIER = co.beam.artist.ios;
+				PRODUCT_NAME = "Beamco for Artist";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -743,7 +755,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "SsuMusicianTests" */ = {
+		00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "Beamco for ArtistTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				00E356F61AD99517003FC87E /* Debug */,
@@ -752,7 +764,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "SsuMusician" */ = {
+		13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "Beamco for Artist" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				13B07F941A680F5B00A75B9A /* Debug */,
@@ -761,7 +773,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "SsuMusician" */ = {
+		83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "Beamco for Artist" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				83CBBA201A601CBA00E9B192 /* Debug */,
