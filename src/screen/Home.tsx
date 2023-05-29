@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {
   View,
   StyleSheet,
@@ -17,7 +17,11 @@ import {
 } from '@react-navigation/native-stack';
 import {useTranslation} from 'react-i18next';
 import {mvs} from 'react-native-size-matters';
-import {useNavigation, useIsFocused} from '@react-navigation/native';
+import {
+  useNavigation,
+  useIsFocused,
+  useFocusEffect,
+} from '@react-navigation/native';
 
 import {
   TopNavigation,
@@ -69,6 +73,7 @@ import EmptyStateHome from '../components/molecule/EmptyState/EmptyStateHome';
 import ListPlaylistHome from '../components/molecule/ListCard/ListPlaylistHome';
 import {ModalConfirmChoice} from '../components/molecule/Modal/ModalConfirmChoice';
 import {dataPlaceHolder} from '../data/placeHolder';
+import {useVideoStore} from '../store/video.store';
 
 type OnScrollEventHandler = (
   event: NativeSyntheticEvent<NativeScrollEvent>,
@@ -117,6 +122,8 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
   } = useSettingHook();
   const {getSearchPlaylists} = useSearchHook();
 
+  const {uriVideo, setUriVideo} = useVideoStore();
+
   const isLogin = storage.getBoolean('isLogin');
   const isFocused = useIsFocused();
   const [selectedIndexMusician, setSelectedIndexMusician] = useState(-0);
@@ -144,6 +151,14 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
 
   const [randomPlaceHolder, setRandomPlaceHolder] = useState(
     dataPlaceHolder[Math.floor(Math.random() * dataPlaceHolder.length)],
+  );
+
+  useFocusEffect(
+    useCallback(() => {
+      setRandomPlaceHolder(
+        dataPlaceHolder[Math.floor(Math.random() * dataPlaceHolder.length)],
+      );
+    }, []),
   );
 
   useEffect(() => {
@@ -368,6 +383,7 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
 
   const handleOnModalHide = () => {
     if (postChoice === 'choiceA') {
+      uriVideo && setUriVideo(null);
       setPostChoice(undefined);
       navigation.navigate('CreatePost', {audience: 'Feed.Public'});
     } else if (postChoice === 'choiceB') {
@@ -378,6 +394,7 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
           isSetExclusiveSetting: true,
         });
       } else {
+        uriVideo && setUriVideo(null);
         setPostChoice(undefined);
         navigation.navigate('CreatePost', {audience: 'Feed.Exclusive'});
       }
@@ -397,6 +414,11 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
       isSetExclusiveSetting: false,
     });
     navigation.navigate('ExclusiveContentSetting', {type: 'navToCreatePost'});
+  };
+
+  const handleMiniPlayerOnPress = () => {
+    hidePlayer();
+    goToScreen('MusicPlayer');
   };
 
   return (
@@ -621,7 +643,7 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
         }
       />
 
-      <ModalPlayMusic onPressModal={() => goToScreen('MusicPlayer')} />
+      <ModalPlayMusic onPressModal={handleMiniPlayerOnPress} />
 
       <ModalConfirmChoice
         modalVisible={showModalPost.isExclusivePostModal}

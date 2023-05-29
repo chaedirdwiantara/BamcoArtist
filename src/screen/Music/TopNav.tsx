@@ -7,7 +7,15 @@ import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParams} from '../../navigations';
 
-const TopNav = ({songId, musicianId}: {songId: number; musicianId: string}) => {
+const TopNav = ({
+  songId,
+  musicianId,
+  leftIconAction,
+}: {
+  songId: number;
+  musicianId: string;
+  leftIconAction?: () => void;
+}) => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
   return (
@@ -19,7 +27,7 @@ const TopNav = ({songId, musicianId}: {songId: number; musicianId: string}) => {
           style={{marginLeft: widthResponsive(-6)}}
         />
       }
-      leftIconAction={navigation.goBack}
+      leftIconAction={leftIconAction ?? navigation.goBack}
       rightIcon={<AudioMusic />}
       rightIconAction={() =>
         navigation.navigate('SongDetails', {songId, musicianId})

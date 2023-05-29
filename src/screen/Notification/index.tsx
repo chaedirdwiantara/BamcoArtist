@@ -1,11 +1,12 @@
 import {StyleSheet, View} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {color} from '../../theme';
 import {NotificationCard, TopNavigation} from '../../components';
-import {useNavigation} from '@react-navigation/native';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParams} from '../../navigations';
 import {useNotificationHook} from '../../hooks/use-notification.hook';
+import {usePlayerStore} from '../../store/player.store';
 
 export const Notification = () => {
   const navigation =
@@ -16,6 +17,15 @@ export const Notification = () => {
     page: 1,
     perPage: 15,
   });
+  const {setWithoutBottomTab, show} = usePlayerStore();
+
+  useFocusEffect(
+    useCallback(() => {
+      if (show) {
+        setWithoutBottomTab(true);
+      }
+    }, [show]),
+  );
 
   useEffect(() => {
     getListAllNotification({page: meta.page, perPage: meta.perPage});
@@ -30,11 +40,16 @@ export const Notification = () => {
     });
   };
 
+  const handleBackAction = () => {
+    show && setWithoutBottomTab(false);
+    navigation.goBack();
+  };
+
   return (
     <View style={styles.root}>
       <TopNavigation.Type1
         title="Notification"
-        leftIconAction={() => navigation.goBack()}
+        leftIconAction={handleBackAction}
         maxLengthTitle={20}
         itemStrokeColor={color.Neutral[10]}
       />

@@ -1,9 +1,9 @@
-import {useNavigation} from '@react-navigation/native';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import {
   NativeStackNavigationProp,
   NativeStackScreenProps,
 } from '@react-navigation/native-stack';
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {
   View,
@@ -41,6 +41,7 @@ import {
   widthResponsive,
 } from '../../utils';
 import TopMusician from '../ListCard/TopMusician';
+import {usePlayerStore} from '../../store/player.store';
 
 type MerchDetailProps = NativeStackScreenProps<
   RootStackParams,
@@ -70,6 +71,7 @@ export const ConcertDetail: React.FC<MerchDetailProps> = ({
   } = useMusicianHook();
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
+  const {setWithoutBottomTab, show} = usePlayerStore();
   const [selectedSize, setSelectedSize] = useState<
     SelectSizeType | undefined
   >();
@@ -77,6 +79,19 @@ export const ConcertDetail: React.FC<MerchDetailProps> = ({
     SelectColorType | undefined
   >();
   const [quantity, setQuantity] = useState<number>(0);
+
+  useFocusEffect(
+    useCallback(() => {
+      if (show) {
+        setWithoutBottomTab(true);
+      }
+    }, [show]),
+  );
+
+  const handleBackAction = () => {
+    show && setWithoutBottomTab(false);
+    navigation.goBack();
+  };
 
   const handleQuantity = (type: string) => {
     type === 'increment'
@@ -129,7 +144,7 @@ export const ConcertDetail: React.FC<MerchDetailProps> = ({
           rightIcon={<ThreeDotsIcon fill={Color.Neutral[10]} />}
           rightIconAction={() => null}
           leftIcon={<ArrowLeftIcon />}
-          leftIconAction={() => navigation.goBack()}
+          leftIconAction={handleBackAction}
           containerStyles={{paddingHorizontal: widthPercentage(20)}}
         />
         <ScrollView>

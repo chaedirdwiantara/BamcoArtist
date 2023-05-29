@@ -8,6 +8,7 @@ import {SettingContent} from '../../components';
 import {RootStackParams} from '../../navigations';
 import {useSettingHook} from '../../hooks/use-setting.hook';
 import {useProfileHook} from '../../hooks/use-profile.hook';
+import {usePlayerStore} from '../../store/player.store';
 
 export const SettingScreen: React.FC = () => {
   const navigation =
@@ -15,6 +16,15 @@ export const SettingScreen: React.FC = () => {
 
   const {dataProfile, getProfileUser} = useProfileHook();
   const {dataShippingInfo, getShippingInfo} = useSettingHook();
+  const {setWithoutBottomTab, show} = usePlayerStore();
+
+  useFocusEffect(
+    useCallback(() => {
+      if (show) {
+        setWithoutBottomTab(true);
+      }
+    }, [show]),
+  );
 
   useFocusEffect(
     useCallback(() => {
@@ -24,6 +34,7 @@ export const SettingScreen: React.FC = () => {
   );
 
   const onPressGoBack = () => {
+    show && setWithoutBottomTab(false);
     navigation.goBack();
   };
 
