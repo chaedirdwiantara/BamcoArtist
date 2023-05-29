@@ -36,6 +36,7 @@ export const useSearchHook = () => {
   };
 
   const getSearchMusicians = async (props?: SearchProps) => {
+    setSearchLoading(true);
     try {
       const response = await musicianSearch(props);
       return {

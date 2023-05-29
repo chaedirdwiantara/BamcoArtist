@@ -54,6 +54,7 @@ export const useSongHook = () => {
   };
 
   const getListDataNewSong = async () => {
+    setIsLoadingSong(true);
     try {
       const response = await newSong();
       setDataNewSong(response.data);
@@ -108,7 +109,6 @@ export const useSongHook = () => {
   };
 
   const setLikeSong = async (props?: SongPropsTypeA) => {
-    setIsLoadingSong(true);
     try {
       await likeSong(props);
     } catch (error) {
@@ -119,7 +119,6 @@ export const useSongHook = () => {
   };
 
   const setUnlikeSong = async (props?: SongPropsTypeA) => {
-    setIsLoadingSong(true);
     try {
       await unlikeSong(props);
     } catch (error) {
