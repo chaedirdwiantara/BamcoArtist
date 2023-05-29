@@ -1,4 +1,6 @@
 import React, {FC, useEffect, useState} from 'react';
+import {ScrollView, View} from 'react-native';
+import {useTranslation} from 'react-i18next';
 import {ms, mvs} from 'react-native-size-matters';
 
 import {MusicSection} from '../../components';
@@ -8,8 +10,7 @@ import {SongList} from '../../interface/song.interface';
 import {elipsisText, widthResponsive} from '../../utils';
 import {usePlayerHook} from '../../hooks/use-player.hook';
 import {ListDataSearchSongs} from '../../interface/search.interface';
-import {ScrollView, View} from 'react-native';
-import {useTranslation} from 'react-i18next';
+import LoadingSpinner from '../../components/atom/Loading/LoadingSpinner';
 import {EmptyStateSongMusician} from '../../components/molecule/EmptyState/EmptyStateSongMusician';
 
 interface TopSongPropsScreen {
@@ -27,6 +28,7 @@ interface TopSongPropsScreen {
   newOnPressMore?: (data: DataDropDownType, item: SongList) => void;
   onEndReached?: () => void;
   onEndReachedThreshold?: number;
+  isLoading?: boolean;
 }
 
 const TopSong: FC<TopSongPropsScreen> = (props: TopSongPropsScreen) => {
@@ -43,6 +45,7 @@ const TopSong: FC<TopSongPropsScreen> = (props: TopSongPropsScreen) => {
     loveIcon,
     newDataMore,
     newOnPressMore,
+    isLoading,
   } = props;
   const {currentTrack, isPlaying, addSong} = usePlayerHook();
   const {setLikeSong, setUnlikeSong} = useSongHook();
@@ -175,8 +178,15 @@ const TopSong: FC<TopSongPropsScreen> = (props: TopSongPropsScreen) => {
         </View>
       )}
     </ScrollView>
+  ) : isLoading ? (
+    <View
+      style={{
+        alignItems: 'center',
+        paddingVertical: mvs(20),
+      }}>
+      <LoadingSpinner />
+    </View>
   ) : (
-    // TODO: add spinner or skeleton when loading
     <EmptyStateSongMusician
       text={t('Home.Song.EmptyState', {title: 'New Song'})}
     />
