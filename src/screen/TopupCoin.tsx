@@ -1,17 +1,28 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import {StyleSheet, View} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
 import Color from '../theme/Color';
 import {RootStackParams} from '../navigations';
 import {TopupCoinContent} from '../components';
+import {usePlayerStore} from '../store/player.store';
 
 export const TopupCoinScreen: React.FC = () => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
+  const {setWithoutBottomTab, show} = usePlayerStore();
+
+  useFocusEffect(
+    useCallback(() => {
+      if (show) {
+        setWithoutBottomTab(true);
+      }
+    }, [show]),
+  );
 
   const onPressGoBack = () => {
+    show && setWithoutBottomTab(false);
     navigation.goBack();
   };
 

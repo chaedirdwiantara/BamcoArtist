@@ -46,6 +46,7 @@ import {useTranslation} from 'react-i18next';
 import {useCreditHook} from '../../hooks/use-credit.hook';
 import {profileStorage} from '../../hooks/use-storage.hook';
 import DetailChildrenCard from './DetailChildrenCard';
+import {usePlayerStore} from '../../store/player.store';
 
 export const {width} = Dimensions.get('screen');
 
@@ -115,6 +116,7 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
   const navigation2 = useNavigation<NativeStackNavigationProp<MainTabParams>>();
+  const {setWithoutBottomTab, show} = usePlayerStore();
 
   const [likePressed, setLikePressed] = useState<boolean>();
   const [readMore, setReadMore] = useState<boolean>(false);
@@ -175,6 +177,14 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   //* MUSIC HOOKS
   const [pauseModeOn, setPauseModeOn] = useState<boolean>(false);
   const [idNowPlaying, setIdNowPlaing] = useState<string>();
+
+  useFocusEffect(
+    useCallback(() => {
+      if (show) {
+        setWithoutBottomTab(true);
+      }
+    }, [show]),
+  );
 
   useEffect(() => {
     getCreditCount();
@@ -800,9 +810,10 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
 
   useEffect(() => {
     if (dataDeletePost) {
+      show && setWithoutBottomTab(false);
       navigation.goBack();
     }
-  }, [dataDeletePost]);
+  }, [dataDeletePost, show]);
   // ! END OF UPDATE POST AREA
 
   // ! MUSIC AREA
@@ -885,12 +896,17 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   }, [dataUserCheck, idUserTonavigate]);
   // ! End of Navigate to Fans / Musician Area
 
+  const handleBackAction = () => {
+    show && setWithoutBottomTab(false);
+    navigation.goBack();
+  };
+
   return (
     <View style={styles.root}>
       {/* Header Section */}
       <TopNavigation.Type1
         title={`${musicianName} ${t('Post.Title')}`}
-        leftIconAction={() => navigation.goBack()}
+        leftIconAction={handleBackAction}
         maxLengthTitle={40}
         itemStrokeColor={color.Neutral[10]}
       />

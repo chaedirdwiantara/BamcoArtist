@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {FC, useEffect, useState} from 'react';
+import React, {FC, useCallback, useEffect, useState} from 'react';
 import {color, font} from '../../theme';
 import {
   Button,
@@ -20,7 +20,7 @@ import {
   SsuInput,
   TopNavigation,
 } from '../../components';
-import {useNavigation} from '@react-navigation/native';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import {
   NativeStackNavigationProp,
   NativeStackScreenProps,
@@ -49,6 +49,7 @@ import {useTranslation} from 'react-i18next';
 import VideoComp from '../../components/molecule/VideoPlayer/videoComp';
 import {useDataVideoForPost, useVideoStore} from '../../store/video.store';
 import {convertCategoryValue} from './UtilsPost/utils';
+import {usePlayerStore} from '../../store/player.store';
 
 type PostDetailProps = NativeStackScreenProps<RootStackParams, 'CreatePost'>;
 
@@ -90,6 +91,8 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
     addPlaylist,
   } = usePlayerHook();
 
+  const {setWithoutBottomTab, show} = usePlayerStore();
+
   const [label, setLabel] = useState<string>();
   const [valueFilter, setValueFilter] = useState<string>();
   const [dataAudience, setDataAudience] = useState<string>('');
@@ -123,6 +126,14 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
     setStoredDataAudience,
     setStoredIdForUpdate,
   } = useDataVideoForPost();
+
+  useFocusEffect(
+    useCallback(() => {
+      if (show) {
+        setWithoutBottomTab(true);
+      }
+    }, [show]),
+  );
 
   useEffect(() => {
     if (dataAudienceChoosen) {
@@ -229,6 +240,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   useEffect(() => {
     if (dataUpdatePost) {
       setUpdateOn(false);
+      show && setWithoutBottomTab(false);
       navigation.goBack();
     }
   }, [dataUpdatePost]);
@@ -248,6 +260,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   const handlePostOnPress = () => {
     if (uriVideo && allowToBack && updateOn === false) {
       setAllowToUpload(true);
+      show && setWithoutBottomTab(false);
       navigation.goBack();
       setAllowToBack(false);
     } else {
@@ -379,6 +392,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
         setStoredValueFilter(valueFilter ? valueFilter : 'highlight');
         setStoredDataAudience(dataAudience);
         setAllowToUpdate(true);
+        show && setWithoutBottomTab(false);
         navigation.goBack();
       }
     }
@@ -428,6 +442,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   // * 6. go back after successful create post
   useEffect(() => {
     if (dataCreatePost !== null) {
+      show && setWithoutBottomTab(false);
       navigation.goBack();
     }
   }, [dataCreatePost]);
@@ -570,6 +585,11 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
     }
   };
 
+  const handleBackAction = () => {
+    show && setWithoutBottomTab(false);
+    navigation.goBack();
+  };
+
   return (
     <KeyboardAvoidingView
       style={{flex: 1}}
@@ -583,7 +603,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
           }
           maxLengthTitle={20}
           itemStrokeColor={'white'}
-          leftIconAction={navigation.goBack}
+          leftIconAction={handleBackAction}
         />
         <View style={styles.mainContainer}>
           {/* //! TOP AREA */}

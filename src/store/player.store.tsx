@@ -14,6 +14,7 @@ interface PlayerState {
   playlist: SongList[];
   isShuffle: boolean;
   repeat: 'off' | 'one' | 'all';
+  withoutBottomTab: boolean;
   setPlayerRef: (by: React.MutableRefObject<Video | null>) => void;
   setShow: (by: boolean) => void;
   setDuration: (by: number) => void;
@@ -23,6 +24,7 @@ interface PlayerState {
   setPlaylist: (by: SongList[]) => void;
   setShuffle: (by: boolean) => void;
   setRepeat: (by: 'off' | 'one' | 'all') => void;
+  setWithoutBottomTab: (by: boolean) => void;
 }
 
 export const usePlayerStore = create<PlayerState>()(set => ({
@@ -35,6 +37,7 @@ export const usePlayerStore = create<PlayerState>()(set => ({
   playlist: [],
   isShuffle: false,
   repeat: 'off',
+  withoutBottomTab: false,
   setPlayerRef: by => set(state => ({playerRef: by})),
   setShow: by => set(state => ({show: by})),
   setDuration: by => set(state => ({duration: by})),
@@ -44,6 +47,7 @@ export const usePlayerStore = create<PlayerState>()(set => ({
   setPlaylist: by => set(state => ({playlist: by})),
   setShuffle: by => set(state => ({isShuffle: by})),
   setRepeat: by => set(state => ({repeat: by})),
+  setWithoutBottomTab: by => set(state => ({withoutBottomTab: by})),
 }));
 
 export const useDogStore = create(() => ({paw: true, snout: true, fur: true}));

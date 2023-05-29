@@ -43,6 +43,8 @@ export const MusicPlayer: FC<MusicProps> = ({navigation}: MusicProps) => {
   //   });
   // }, []);
 
+  const {showMiniPlayerOnly} = usePlayerHook();
+
   useEffect(() => {
     getCreditCount();
   }, [modalDonate]);
@@ -79,6 +81,11 @@ export const MusicPlayer: FC<MusicProps> = ({navigation}: MusicProps) => {
     navigation.navigate('MusicianProfile', {id: currentTrack?.musicianId});
   };
 
+  const handleTopLeftIcon = () => {
+    showMiniPlayerOnly();
+    navigation.goBack();
+  };
+
   return (
     <View style={styles.container}>
       <SsuStatusBar type="black" />
@@ -86,6 +93,7 @@ export const MusicPlayer: FC<MusicProps> = ({navigation}: MusicProps) => {
         <TopNav
           songId={currentTrack?.id}
           musicianId={currentTrack?.musicianId}
+          leftIconAction={handleTopLeftIcon}
         />
       </View>
       <View style={styles.mainContainer}>

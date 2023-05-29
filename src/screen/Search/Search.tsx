@@ -1,8 +1,8 @@
-import React, {useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import {View, StyleSheet} from 'react-native';
 import {Gap, SearchBar, TabFilter, TopNavigation} from '../../components';
 import Color from '../../theme/Color';
-import {useNavigation} from '@react-navigation/native';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParams} from '../../navigations';
 import {color} from '../../theme';
@@ -17,11 +17,13 @@ import ListResultPlaylists from './ListResultPlaylist';
 import ListResultMerch from './ListResultMerch';
 import ListResultEvent from './ListResultEvent';
 import {useTranslation} from 'react-i18next';
+import {usePlayerStore} from '../../store/player.store';
 
 export const SearchScreen: React.FC = () => {
   const {t} = useTranslation();
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
+  const {setWithoutBottomTab, show} = usePlayerStore();
 
   const [state, setState] = useState<string>('');
   const [forTrigger, setForTrigger] = useState<boolean>(false);
@@ -39,6 +41,14 @@ export const SearchScreen: React.FC = () => {
     t('Home.Topbar.Search.Event'),
   ];
 
+  useFocusEffect(
+    useCallback(() => {
+      if (show) {
+        setWithoutBottomTab(true);
+      }
+    }, [show]),
+  );
+
   const filterData = (item: string, index: number) => {
     setSelectedIndex(index);
     setTypeSearch(item);
@@ -48,12 +58,17 @@ export const SearchScreen: React.FC = () => {
     navigation.navigate('MusicPlayer');
   };
 
+  const handleBackAction = () => {
+    show && setWithoutBottomTab(false);
+    navigation.goBack();
+  };
+
   return (
     <>
       <View style={styles.root}>
         <TopNavigation.Type1
           title={t('Home.Topbar.Search.Title')}
-          leftIconAction={() => navigation.goBack()}
+          leftIconAction={handleBackAction}
           maxLengthTitle={40}
           itemStrokeColor={color.Neutral[10]}
         />
