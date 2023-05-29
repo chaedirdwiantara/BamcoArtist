@@ -88,6 +88,8 @@ export const LoginScreen: React.FC = () => {
     setSsoError,
     ssoType,
     ssoId,
+    onRegisterUser,
+    ssoFullname,
   } = useAuthHook();
 
   const {
@@ -136,10 +138,12 @@ export const LoginScreen: React.FC = () => {
 
   useEffect(() => {
     if (ssoRegistered !== null && !ssoRegistered) {
-      navigation.navigate('SignupSSO', {
+      onRegisterUser({
+        fullname: ssoFullname,
+        registrationType: ssoType as RegistrationType,
         email: ssoEmail,
-        ssoType: ssoType as RegistrationType,
-        ssoId: ssoId,
+        image: 'https://picsum.photos/200',
+        externalUserID: ssoId,
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
