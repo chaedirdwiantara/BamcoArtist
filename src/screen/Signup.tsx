@@ -97,6 +97,7 @@ export const SignupScreen: React.FC = () => {
     ssoType,
     ssoId,
     loginResult,
+    ssoFullname,
   } = useAuthHook();
   const [focusInput, setFocusInput] = useState<string | null>(null);
   const [countryNumber, setCountryNumber] = useState<string | null>(null);
@@ -215,10 +216,12 @@ export const SignupScreen: React.FC = () => {
 
   useEffect(() => {
     if (ssoRegistered !== null && !ssoRegistered) {
-      navigation.navigate('SignupSSO', {
+      onRegisterUser({
+        fullname: ssoFullname,
+        registrationType: ssoType as RegistrationType,
         email: ssoEmail,
-        ssoType: ssoType as RegistrationType,
-        ssoId: ssoId,
+        image: 'https://picsum.photos/200',
+        externalUserID: ssoId,
       });
     } else if (
       ssoRegistered !== null &&

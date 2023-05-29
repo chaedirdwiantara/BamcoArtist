@@ -47,6 +47,7 @@ export const useAuthHook = () => {
   const [ssoEmail, setSsoEmail] = useState<string>('');
   const [ssoType, setSsoType] = useState<RegistrationType>();
   const [ssoId, setSsoId] = useState<string>('');
+  const [ssoFullname, setSsoFullname] = useState<string>('');
 
   const onRegisterUser = async (props: RegisterPropsType) => {
     setIsError(false);
@@ -140,6 +141,7 @@ export const useAuthHook = () => {
       if (response.code === 1003) {
         setSsoEmail(userInfo.user.email ?? '');
         setSsoId(userInfo.user.id);
+        setSsoFullname(userInfo.user.name ?? userInfo.user.email.split('@')[0]);
         setSsoType('google');
         setSsoRegistered(false);
       } else if (response.code === 200) {
@@ -215,6 +217,11 @@ export const useAuthHook = () => {
         if (response.code === 1003) {
           setSsoEmail(appleAuthRequestResponse.email ?? '');
           setSsoId(appleAuthRequestResponse.user);
+          setSsoFullname(
+            appleAuthRequestResponse.fullName?.nickname ??
+              appleAuthRequestResponse.email?.split('@')[0] ??
+              'Unnamed',
+          );
           setSsoType('apple');
           setSsoRegistered(false);
         } else if (response.code === 200) {
@@ -380,7 +387,6 @@ export const useAuthHook = () => {
     setIsLoading(true);
     try {
       const resp = await resendOtpSms(phoneNumber, context);
-      console.log(resp);
       if (resp.code !== 200) {
         setIsError(true);
         setErrorMsg(resp.message);
@@ -447,7 +453,6 @@ export const useAuthHook = () => {
     setIsLoading(true);
     try {
       const response = await confirmEmailOtpForgotPassword(email, code);
-      console.log({response});
       if (response.code === 200) {
         setIsOtpValid(true);
         setIsError(false);
@@ -485,7 +490,6 @@ export const useAuthHook = () => {
     setErrorMsg('');
     try {
       const response = await changePassword(email, code, password);
-      console.log({response});
       if (response.code === 200) {
         if (response.data.accessToken) {
           storage.set('profile', JSON.stringify(response.data));
@@ -558,5 +562,6 @@ export const useAuthHook = () => {
     forgotPassword,
     confirmEmailOtpFP,
     onChangePassword,
+    ssoFullname,
   };
 };
