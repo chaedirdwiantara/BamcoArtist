@@ -244,6 +244,7 @@
     "Title": "Action",
     "Quantity": "Quantity",
     "Description": "Description",
+    "ComingSoon": "Coming Soon\nStay tuned for the big reveal!",
     "Concert": {
       "Title": "Concert",
       "NoConcert": "No Event Available",

@@ -5,7 +5,7 @@ import {FlashList} from '@shopify/flash-list';
 import MerchListCard from '../../components/molecule/ListCard/MerchListCard';
 import {useEventHook} from '../../hooks/use-event.hook';
 import {EmptyState} from '../../components';
-import {BoxStore} from '../../assets/icon';
+import {BoxStore, FriedEggIcon} from '../../assets/icon';
 import Color from '../../theme/Color';
 import {useQuery} from 'react-query';
 import {MerchData} from '../../interface/event.interface';
@@ -39,7 +39,21 @@ const MerchList: FC<MerchListType> = props => {
           <LoadingSpinner />
         </View>
       )}
-      <FlashList
+
+      <EmptyState
+        icon={
+          <FriedEggIcon
+            fill={Color.Dark[500]}
+            width={widthResponsive(150)}
+            height={heightResponsive(150)}
+            style={styles.iconEmpty}
+          />
+        }
+        text={t('Event.ComingSoon') || ''}
+        containerStyle={styles.containerEmpty}
+      />
+
+      {/* <FlashList
         data={filterList?.data}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.ListContainer}
@@ -82,7 +96,7 @@ const MerchList: FC<MerchListType> = props => {
         refreshControl={
           <RefreshControl refreshing={false} onRefresh={refetch} />
         }
-      />
+      /> */}
     </>
   );
 };

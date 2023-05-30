@@ -1,6 +1,6 @@
 import React, {FC} from 'react';
 import {RefreshControl, StyleSheet, View} from 'react-native';
-import {TicketIcon} from '../../assets/icon';
+import {FriedEggIcon, TicketIcon} from '../../assets/icon';
 import Color from '../../theme/Color';
 import {heightPercentage, heightResponsive, widthResponsive} from '../../utils';
 import {EmptyState} from '../../components';
@@ -42,7 +42,20 @@ const ConcertList: FC<ConcertListType> = props => {
         </View>
       )}
 
-      <FlashList
+      <EmptyState
+        icon={
+          <FriedEggIcon
+            fill={Color.Dark[500]}
+            width={widthResponsive(150)}
+            height={heightResponsive(150)}
+            style={styles.iconEmpty}
+          />
+        }
+        text={t('Event.ComingSoon') || ''}
+        containerStyle={styles.containerEmpty}
+      />
+
+      {/* <FlashList
         data={filterList?.data}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.ListContainer}
@@ -85,7 +98,7 @@ const ConcertList: FC<ConcertListType> = props => {
         refreshControl={
           <RefreshControl refreshing={isRefetching} onRefresh={refetch} />
         }
-      />
+      /> */}
     </>
   );
 };
