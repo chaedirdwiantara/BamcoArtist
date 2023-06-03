@@ -13,42 +13,36 @@ const COMP_C_SCROLL_DISTANCE = HEADER_HEIGHT + COMPONENT_C_HEIGHT;
 
 export const useHeaderAnimation = () => {
   const scrollY = useRef(new Animated.Value(0)).current;
-  const clampedScrollY = useRef(
-    Animated.diffClamp(scrollY, 0, SCROLL_DISTANCE),
-  ).current;
+  const clampedScrollY = Animated.diffClamp(
+    scrollY,
+    0,
+    COMP_A_SCROLL_DISTANCE + COMP_C_SCROLL_DISTANCE,
+  );
 
   const handleScroll = Animated.event(
     [{nativeEvent: {contentOffset: {y: scrollY}}}],
     {useNativeDriver: true},
   );
 
-  const clampedScrollYCompA = useRef(
-    Animated.diffClamp(scrollY, 0, COMP_A_SCROLL_DISTANCE),
-  ).current;
-
-  const clampedScrollYCompB = useRef(
-    Animated.diffClamp(scrollY, 0, COMP_B_SCROLL_DISTANCE),
-  ).current;
-
-  const clampedScrollYCompC = useRef(
-    Animated.diffClamp(scrollY, 0, COMP_C_SCROLL_DISTANCE),
-  ).current;
-
-  const compATranslateY = clampedScrollYCompA.interpolate({
+  const compATranslateY = clampedScrollY.interpolate({
     inputRange: [0, COMP_A_SCROLL_DISTANCE],
     outputRange: [0, -COMP_A_SCROLL_DISTANCE],
     extrapolate: 'clamp',
   });
 
-  const compBTranslateY = clampedScrollYCompB.interpolate({
+  const compBTranslateY = clampedScrollY.interpolate({
     inputRange: [0, COMP_B_SCROLL_DISTANCE],
     outputRange: [0, -COMP_B_SCROLL_DISTANCE],
     extrapolate: 'clamp',
   });
 
-  const compCTranslateY = clampedScrollYCompC.interpolate({
-    inputRange: [0, COMP_C_SCROLL_DISTANCE],
-    outputRange: [0, -COMP_C_SCROLL_DISTANCE],
+  const compCTranslateY = clampedScrollY.interpolate({
+    inputRange: [
+      0,
+      COMP_A_SCROLL_DISTANCE,
+      COMP_A_SCROLL_DISTANCE + COMP_C_SCROLL_DISTANCE,
+    ],
+    outputRange: [0, -COMP_B_SCROLL_DISTANCE, -COMP_C_SCROLL_DISTANCE],
     extrapolate: 'clamp',
   });
 

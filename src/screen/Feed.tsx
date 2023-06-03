@@ -299,7 +299,7 @@ export const FeedScreen: React.FC = () => {
     <SafeAreaView style={styles.root}>
       {isLogin ? (
         <View>
-          <TopNavigation.Type2
+          <TopNavigation.Type2Animated
             title={t('Feed.Title')}
             maxLengthTitle={20}
             itemStrokeColor={'white'}

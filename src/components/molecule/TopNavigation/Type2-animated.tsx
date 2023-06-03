@@ -1,8 +1,9 @@
-import {Text, View, ViewStyle} from 'react-native';
+import {Animated, Text, View, ViewStyle} from 'react-native';
 import React from 'react';
 import {elipsisText} from '../../../utils';
 import topNavstyles from './topNavstyles';
 import {font} from '../../../theme';
+import {useScrollStore} from '../../../store/translateY.store';
 
 /** === INTERFACE === */
 type Props = {
@@ -14,15 +15,20 @@ type Props = {
 };
 
 /** == COMPONENT === */
-const Type2: React.FC<Props> = (props: Props) => {
+const Type2Animated: React.FC<Props> = (props: Props) => {
   /** => header */
   const header = () => {
+    const {compATranslateY, headerOpacity} = useScrollStore();
     return (
-      <View
+      <Animated.View
         style={[
           topNavstyles.headerContainer,
           {
             backgroundColor: props.bgColor,
+            transform: compATranslateY
+              ? [{translateY: compATranslateY}]
+              : undefined,
+            opacity: headerOpacity ? headerOpacity : 1,
           },
           props.containerStyle,
         ]}>
@@ -41,11 +47,11 @@ const Type2: React.FC<Props> = (props: Props) => {
           </Text>
         </View>
         <View style={topNavstyles.rightContainer}></View>
-      </View>
+      </Animated.View>
     );
   };
   /** => MAIN */
   return <>{header()}</>;
 };
 
-export default Type2;
+export default Type2Animated;

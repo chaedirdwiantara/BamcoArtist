@@ -14,16 +14,3 @@ export const useScrollStore = create<ScrollState>(set => ({
   compATranslateY: new Animated.Value(0),
   compBTranslateY: new Animated.Value(0),
 }));
-
-type ReachTop = {
-  compCReachedTop: boolean;
-  setCompCReachedTop: (value: boolean) => void;
-};
-
-export const useReactTop = create<ReachTop>(set => ({
-  compCReachedTop: false,
-  setCompCReachedTop: (value: boolean) =>
-    set(state =>
-      state.compCReachedTop !== value ? {compCReachedTop: value} : {},
-    ),
-}));

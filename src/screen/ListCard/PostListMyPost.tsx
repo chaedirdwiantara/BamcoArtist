@@ -1,5 +1,6 @@
 import React, {FC, useCallback, useEffect, useRef, useState} from 'react';
 import {
+  Animated,
   Dimensions,
   FlatList,
   RefreshControl,
@@ -62,6 +63,7 @@ import Clipboard from '@react-native-community/clipboard';
 import {useQuery} from 'react-query';
 import {useVideoStore} from '../../store/video.store';
 import {useUploadImageHook} from '../../hooks/use-uploadImage.hook';
+import {useHeaderAnimation} from '../../hooks/use-header-animation.hook';
 const {height} = Dimensions.get('screen');
 
 interface PostListProps {
@@ -90,6 +92,8 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
     uriVideo,
     allowRefresh,
   } = props;
+
+  const {handleScroll, compCTranslateY} = useHeaderAnimation();
 
   const [recorder, setRecorder] = useState<string[]>([]);
   const [selectedId, setSelectedId] = useState<string[]>();
@@ -358,7 +362,11 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
 
   return (
     <>
-      <View style={styles.container}>
+      <Animated.View
+        style={[
+          styles.container,
+          {transform: [{translateY: compCTranslateY}]},
+        ]}>
         <DropDownFilter
           labelCaption={
             selectedFilterMenu
@@ -379,7 +387,7 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
           selectedMenu={setSelectedCategoryMenu}
           leftPosition={widthResponsive(-144)}
         />
-      </View>
+      </Animated.View>
       {videoUploadProgress ? (
         <ProgressBar
           progress={videoUploadProgress}
@@ -398,7 +406,7 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
               <LoadingSpinner />
             </View>
           )}
-          <FlatList
+          <Animated.FlatList
             data={
               filterActive
                 ? dataMain
@@ -422,6 +430,8 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
               />
             }
             onEndReached={handleEndScroll}
+            onScroll={handleScroll}
+            bounces={false}
             renderItem={({item, index}) => (
               <>
                 <ListCard.PostList
@@ -548,8 +558,13 @@ const styles = StyleSheet.create({
     width: '100%',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: heightResponsive(10),
-    marginBottom: heightResponsive(8),
+    paddingTop: heightResponsive(10),
+    paddingBottom: heightResponsive(8),
+    position: 'absolute',
+    top: heightResponsive(40),
+    left: widthResponsive(24),
+    zIndex: 1,
+    backgroundColor: color.Dark[800],
   },
   childrenPostTitle: {
     flexShrink: 1,
