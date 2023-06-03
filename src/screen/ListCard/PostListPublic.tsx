@@ -81,6 +81,7 @@ interface PostListProps {
   uriVideo?: string;
 }
 
+//? Dummy url waiting update from BE
 const urlText =
   'https://open.ssu.io/track/19AiJfAtRiccvSU1EWcttT?si=36b9a686dad44ae0';
 
@@ -96,8 +97,7 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
     uriVideo,
   } = props;
 
-  const {handleScroll, headerTranslateY, compCTranslateY, headerOpacityC} =
-    useHeaderAnimation();
+  const {handleScroll, compCTranslateY} = useHeaderAnimation();
 
   const [recorder, setRecorder] = useState<string[]>([]);
   const [selectedId, setSelectedId] = useState<string[]>();
@@ -345,7 +345,6 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
       <Animated.View
         style={[
           styles.container,
-          {opacity: headerOpacityC ? headerOpacityC : undefined},
           {transform: [{translateY: compCTranslateY}]},
         ]}>
         <DropDownFilter

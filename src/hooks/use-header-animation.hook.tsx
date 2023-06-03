@@ -1,13 +1,15 @@
-import {useEffect, useRef} from 'react';
+import {useRef} from 'react';
 import {Animated} from 'react-native';
-import {useReactTop, useScrollStore} from '../store/translateY.store';
+import {useScrollStore} from '../store/translateY.store';
 
 const HEADER_HEIGHT = 60;
 const SCROLL_DISTANCE = 100;
 
+const COMPONENT_C_HEIGHT = 60;
+
 const COMP_A_SCROLL_DISTANCE = HEADER_HEIGHT;
 const COMP_B_SCROLL_DISTANCE = HEADER_HEIGHT;
-const COMP_C_SCROLL_DISTANCE = HEADER_HEIGHT + 60;
+const COMP_C_SCROLL_DISTANCE = HEADER_HEIGHT + COMPONENT_C_HEIGHT;
 
 export const useHeaderAnimation = () => {
   const scrollY = useRef(new Animated.Value(0)).current;
@@ -19,12 +21,6 @@ export const useHeaderAnimation = () => {
     [{nativeEvent: {contentOffset: {y: scrollY}}}],
     {useNativeDriver: true},
   );
-
-  const headerTranslateY = clampedScrollY.interpolate({
-    inputRange: [0, SCROLL_DISTANCE],
-    outputRange: [0, -HEADER_HEIGHT],
-    extrapolate: 'clamp',
-  });
 
   const clampedScrollYCompA = useRef(
     Animated.diffClamp(scrollY, 0, COMP_A_SCROLL_DISTANCE),
@@ -62,12 +58,6 @@ export const useHeaderAnimation = () => {
     extrapolate: 'clamp',
   });
 
-  const headerOpacityC = clampedScrollY.interpolate({
-    inputRange: [0, 500],
-    outputRange: [1, 0],
-    extrapolate: 'clamp',
-  });
-
   // Update Zustand store
   useScrollStore.setState({
     compATranslateY,
@@ -77,9 +67,7 @@ export const useHeaderAnimation = () => {
 
   return {
     handleScroll,
-    headerTranslateY,
     headerOpacity,
     compCTranslateY,
-    headerOpacityC,
   };
 };
