@@ -1,8 +1,9 @@
-import {Text, View} from 'react-native';
+import {Animated, Text, View, ViewStyle} from 'react-native';
 import React from 'react';
 import {elipsisText} from '../../../utils';
 import topNavstyles from './topNavstyles';
 import {font} from '../../../theme';
+import {useScrollStore} from '../../../store/translateY.store';
 
 /** === INTERFACE === */
 type Props = {
@@ -10,19 +11,26 @@ type Props = {
   maxLengthTitle?: number;
   bgColor?: string;
   itemStrokeColor?: string;
+  containerStyle?: ViewStyle;
 };
 
 /** == COMPONENT === */
 const Type2: React.FC<Props> = (props: Props) => {
   /** => header */
   const header = () => {
+    const {compATranslateY, headerOpacity} = useScrollStore();
     return (
-      <View
+      <Animated.View
         style={[
           topNavstyles.headerContainer,
           {
             backgroundColor: props.bgColor,
+            transform: compATranslateY
+              ? [{translateY: compATranslateY}]
+              : undefined,
+            opacity: headerOpacity ? headerOpacity : undefined,
           },
+          props.containerStyle,
         ]}>
         <View style={topNavstyles.leftContainer}></View>
         <View style={topNavstyles.centerContainer}>
@@ -30,13 +38,16 @@ const Type2: React.FC<Props> = (props: Props) => {
             numberOfLines={1}
             style={[
               topNavstyles.centerTitle,
-              {color: props.itemStrokeColor, fontFamily: font.InterSemiBold},
+              {
+                color: props.itemStrokeColor,
+                fontFamily: font.InterSemiBold,
+              },
             ]}>
             {elipsisText(props.title, props.maxLengthTitle ?? 20)}
           </Text>
         </View>
         <View style={topNavstyles.rightContainer}></View>
-      </View>
+      </Animated.View>
     );
   };
   /** => MAIN */

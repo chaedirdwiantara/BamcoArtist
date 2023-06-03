@@ -1,4 +1,4 @@
-import React, {FC, useRef, useState} from 'react';
+import React, {FC, useEffect, useRef, useState} from 'react';
 import {
   Dimensions,
   FlatList,
@@ -8,6 +8,7 @@ import {
   View,
   NativeScrollEvent,
   NativeSyntheticEvent,
+  Animated,
 } from 'react-native';
 import {mvs} from 'react-native-size-matters';
 import {
@@ -63,6 +64,8 @@ import {
 } from './ListUtils/ListFunction';
 import Clipboard from '@react-native-community/clipboard';
 import {useQuery} from 'react-query';
+import {useHeaderAnimation} from '../../hooks/use-header-animation.hook';
+import {useScrollStore} from '../../store/translateY.store';
 
 const {height} = Dimensions.get('screen');
 
@@ -93,6 +96,9 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
     uriVideo,
   } = props;
 
+  const {handleScroll, headerTranslateY, compCTranslateY, headerOpacityC} =
+    useHeaderAnimation();
+
   const [recorder, setRecorder] = useState<string[]>([]);
   const [selectedId, setSelectedId] = useState<string[]>();
   const [modalShare, setModalShare] = useState<boolean>(false);
@@ -113,7 +119,9 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
   const [selectedCategoryMenu, setSelectedCategoryMenu] =
     useState<DataDropDownType>();
   const [refreshing, setRefreshing] = useState<boolean>(false);
-  const [scrollEffect, setScrollEffect] = useState(false);
+  const [scrollEffect, setScrollEffect] = useState<number>(
+    heightResponsive(10),
+  );
 
   //* MUSIC HOOKS
   const [pauseModeOn, setPauseModeOn] = useState<boolean>(false);
@@ -254,13 +262,6 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
     );
   };
 
-  //* Handle when scrolling
-  const handleOnScroll: OnScrollEventHandler = event => {
-    let offsetY = event.nativeEvent.contentOffset.y;
-    const scrolled = offsetY > 120;
-    setScrollEffect(scrolled);
-  };
-
   const cardOnPress = (data: PostList) => {
     navigation.navigate('PostDetail', data);
   };
@@ -341,8 +342,12 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
 
   return (
     <>
-      {/* //TODO: HOLD SCROLL EFFECT {!scrollEffect && ( */}
-      <View style={styles.container}>
+      <Animated.View
+        style={[
+          styles.container,
+          {opacity: headerOpacityC ? headerOpacityC : undefined},
+          {transform: [{translateY: compCTranslateY}]},
+        ]}>
         <DropDownFilter
           labelCaption={
             selectedFilterMenu
@@ -363,8 +368,8 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
           selectedMenu={setSelectedCategoryMenu}
           leftPosition={widthResponsive(-144)}
         />
-      </View>
-      {/* )} */}
+      </Animated.View>
+
       {videoUploadProgress ? (
         <ProgressBar
           progress={videoUploadProgress}
@@ -373,13 +378,17 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
         />
       ) : null}
       {dataMain !== null && dataMain?.length !== 0 ? (
-        <View style={{flex: 1, marginHorizontal: widthResponsive(-24)}}>
-          {refreshing && (
+        <View
+          style={{
+            flex: 1,
+            marginHorizontal: widthResponsive(-24),
+          }}>
+          {/* {refreshing && (
             <View style={styles.loadingContainer}>
               <LoadingSpinner />
             </View>
-          )}
-          <FlatList
+          )} */}
+          <Animated.FlatList
             ref={flatListRef}
             data={dataMain}
             showsVerticalScrollIndicator={false}
@@ -393,16 +402,18 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
                   ? heightResponsive(220)
                   : heightResponsive(160),
             }}
-            refreshControl={
-              <RefreshControl
-                refreshing={refreshing}
-                onRefresh={() => setRefreshing(true)}
-              />
-            }
+            // refreshControl={
+            //   <RefreshControl
+            //     refreshing={refreshing}
+            //     onRefresh={() => setRefreshing(true)}
+            //   />
+            // }
             onEndReached={handleEndScroll}
-            onScroll={handleOnScroll}
+            onScroll={handleScroll}
+            bounces={false}
             renderItem={({item, index}) => (
               <>
+                {index === 0 ? <Gap height={heightResponsive(95)} /> : null}
                 <ListCard.PostList
                   toDetailOnPress={() =>
                     handleToDetailMusician(item.musician.uuid)
@@ -523,8 +534,13 @@ const styles = StyleSheet.create({
     width: '100%',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: heightResponsive(10),
-    marginBottom: heightResponsive(8),
+    paddingTop: heightResponsive(10),
+    paddingBottom: heightResponsive(8),
+    position: 'absolute',
+    top: heightResponsive(40),
+    left: widthResponsive(24),
+    zIndex: 1,
+    backgroundColor: color.Dark[800],
   },
   childrenPostTitle: {
     flexShrink: 1,

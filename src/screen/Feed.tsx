@@ -6,6 +6,7 @@ import {
   Platform,
   NativeModules,
   Text,
+  SafeAreaView,
 } from 'react-native';
 import {widthPercentageToDP} from 'react-native-responsive-screen';
 
@@ -295,14 +296,19 @@ export const FeedScreen: React.FC = () => {
   }, [createPostError]);
 
   return (
-    <View style={styles.root}>
+    <SafeAreaView style={styles.root}>
       {isLogin ? (
         <View>
           <TopNavigation.Type2
             title={t('Feed.Title')}
             maxLengthTitle={20}
             itemStrokeColor={'white'}
+            containerStyle={{
+              paddingTop: 0,
+              zIndex: 1,
+            }}
           />
+
           <View style={styles.feedContainer}>
             <TabFilter.Type1
               filterData={filter}
@@ -313,6 +319,12 @@ export const FeedScreen: React.FC = () => {
               }}
               TouchableStyle={{width: widthPercentageToDP(45)}}
               translation={true}
+              containerStyle={{
+                backgroundColor: color.Dark[800],
+                zIndex: 2,
+                position: 'absolute',
+                left: widthResponsive(24),
+              }}
             />
             {filter[selectedIndex].filterName === 'Feed.Public' ? (
               <PostListPublic
@@ -419,7 +431,7 @@ export const FeedScreen: React.FC = () => {
       ) : (
         <GuestContent />
       )}
-    </View>
+    </SafeAreaView>
   );
 };
 
