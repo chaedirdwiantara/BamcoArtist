@@ -13,7 +13,12 @@ import {widthPercentageToDP} from 'react-native-responsive-screen';
 import {color} from '../theme';
 import {storage} from '../hooks/use-storage.hook';
 import PostListPublic from './ListCard/PostListPublic';
-import {heightPercentage, widthPercentage, widthResponsive} from '../utils';
+import {
+  heightPercentage,
+  heightResponsive,
+  widthPercentage,
+  widthResponsive,
+} from '../utils';
 import PostListMyPost from './ListCard/PostListMyPost';
 import {
   FilterModal,
@@ -304,7 +309,8 @@ export const FeedScreen: React.FC = () => {
             maxLengthTitle={20}
             itemStrokeColor={'white'}
             containerStyle={{
-              paddingTop: 0,
+              paddingTop:
+                Platform.OS === 'ios' ? 0 : heightResponsive(barHeight + 15),
               zIndex: 1,
             }}
           />

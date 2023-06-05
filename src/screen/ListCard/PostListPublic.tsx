@@ -379,11 +379,11 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
             flex: 1,
             marginHorizontal: widthResponsive(-24),
           }}>
-          {/* {refreshing && (
+          {refreshing && (
             <View style={styles.loadingContainer}>
               <LoadingSpinner />
             </View>
-          )} */}
+          )}
           <Animated.FlatList
             ref={flatListRef}
             data={dataMain}
@@ -398,12 +398,12 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
                   ? heightResponsive(220)
                   : heightResponsive(160),
             }}
-            // refreshControl={
-            //   <RefreshControl
-            //     refreshing={refreshing}
-            //     onRefresh={() => setRefreshing(true)}
-            //   />
-            // }
+            refreshControl={
+              <RefreshControl
+                refreshing={refreshing}
+                onRefresh={() => setRefreshing(true)}
+              />
+            }
             onEndReached={handleEndScroll}
             onScroll={handleScroll}
             bounces={false}
