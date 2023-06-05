@@ -119,9 +119,6 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
   const [selectedCategoryMenu, setSelectedCategoryMenu] =
     useState<DataDropDownType>();
   const [refreshing, setRefreshing] = useState<boolean>(false);
-  const [scrollEffect, setScrollEffect] = useState<number>(
-    heightResponsive(10),
-  );
 
   //* MUSIC HOOKS
   const [pauseModeOn, setPauseModeOn] = useState<boolean>(false);

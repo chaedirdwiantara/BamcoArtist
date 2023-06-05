@@ -434,6 +434,7 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
             bounces={false}
             renderItem={({item, index}) => (
               <>
+                {index === 0 ? <Gap height={heightResponsive(95)} /> : null}
                 <ListCard.PostList
                   toDetailOnPress={handleToDetailMusician}
                   musicianName={item.musician.fullname}
