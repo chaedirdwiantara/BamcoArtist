@@ -56,6 +56,7 @@ export const useHeaderAnimation = () => {
   useScrollStore.setState({
     compATranslateY,
     compBTranslateY,
+    compCTranslateY,
     headerOpacity,
   });
 

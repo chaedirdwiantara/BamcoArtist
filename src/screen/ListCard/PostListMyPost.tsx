@@ -405,6 +405,13 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
           progress={videoUploadProgress}
           caption={'Uploading is in progress, it will take few second'}
           uri={uriVideo}
+          containerStyles={{
+            position: 'absolute',
+            top:
+              Platform.OS === 'ios'
+                ? heightResponsive(137)
+                : heightResponsive(barHeight + 160),
+          }}
         />
       ) : null}
       {dataMain && dataMain.length !== 0 ? (
@@ -442,12 +449,20 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
             bounces={false}
             renderItem={({item, index}) => (
               <>
-                {index === 0 ? (
+                {index === 0 && !videoUploadProgress ? (
                   <Gap
                     height={
                       Platform.OS === 'ios'
                         ? heightResponsive(134)
                         : heightResponsive(barHeight + 166)
+                    }
+                  />
+                ) : index === 0 && videoUploadProgress ? (
+                  <Gap
+                    height={
+                      Platform.OS === 'ios'
+                        ? heightResponsive(188)
+                        : heightResponsive(barHeight + 224)
                     }
                   />
                 ) : null}
@@ -582,7 +597,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top:
       Platform.OS === 'ios'
-        ? heightResponsive(82)
+        ? heightResponsive(80)
         : heightResponsive(barHeight + 100),
     left: widthResponsive(24),
     zIndex: 1,

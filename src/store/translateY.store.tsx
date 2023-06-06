@@ -6,6 +6,7 @@ type ScrollState = {
   headerOpacity: Animated.AnimatedInterpolation<number>;
   compATranslateY: Animated.AnimatedInterpolation<number>;
   compBTranslateY: Animated.AnimatedInterpolation<number>;
+  compCTranslateY: Animated.AnimatedInterpolation<number>;
 };
 
 export const useScrollStore = create<ScrollState>(set => ({
@@ -13,4 +14,5 @@ export const useScrollStore = create<ScrollState>(set => ({
   headerOpacity: new Animated.Value(0),
   compATranslateY: new Animated.Value(0),
   compBTranslateY: new Animated.Value(0),
+  compCTranslateY: new Animated.Value(0),
 }));

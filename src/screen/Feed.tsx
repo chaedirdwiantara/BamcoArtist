@@ -333,7 +333,7 @@ export const FeedScreen: React.FC = () => {
                 position: 'absolute',
                 top:
                   Platform.OS === 'ios'
-                    ? heightResponsive(42)
+                    ? heightResponsive(40)
                     : heightResponsive(barHeight + 60),
                 left: widthResponsive(24),
               }}
