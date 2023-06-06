@@ -24,6 +24,11 @@ import {ModalConfirm} from '../Modal/ModalConfirm';
 import {ModalLoading} from '../ModalLoading/ModalLoading';
 import {Gap, SsuToast} from '../../atom';
 import {CheckCircle2Icon} from '../../../assets/icon';
+import {
+  ListSubsDataType,
+  SubsDataType,
+  UnsubsResponseType,
+} from '../../../interface/credit.interface';
 
 interface ListSubsProps {
   status: 'current' | 'past';
@@ -35,9 +40,9 @@ const ListSubs: React.FC<ListSubsProps> = props => {
   const {status, duration} = props;
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
-  const [listSubs, setListSubs] = useState<any>([]);
+  const [listSubs, setListSubs] = useState<SubsDataType[]>([]);
   const [showUnsubModal, setShowUnsubModal] = useState<boolean>(false);
-  const [currentData, setCurrentData] = useState<any>();
+  const [currentData, setCurrentData] = useState<SubsDataType>();
   const [loading, setLoading] = useState<boolean>(false);
   const [toastVisible, setToastVisible] = useState<boolean>(false);
   const [isErrorUnsub, setIsErrorUnsub] = useState<boolean>(false);
@@ -77,7 +82,10 @@ const ListSubs: React.FC<ListSubsProps> = props => {
 
   useEffect(() => {
     if (dataSubs !== undefined) {
-      setListSubs(dataSubs?.pages?.map((page: any) => page.data).flat() ?? []);
+      setListSubs(
+        dataSubs?.pages?.map((page: ListSubsDataType) => page.data).flat() ??
+          [],
+      );
     }
   }, [dataSubs]);
 
@@ -85,7 +93,7 @@ const ListSubs: React.FC<ListSubsProps> = props => {
     refetch();
   }, [status, duration]);
 
-  const resultDataMore = (dataResult: DataDropDownType, val: any) => {
+  const resultDataMore = (dataResult: DataDropDownType, val: SubsDataType) => {
     if (dataResult.value === '1') {
       navigation.navigate('MusicianProfile', {id: val.musician.uuid});
     } else {
@@ -103,7 +111,7 @@ const ListSubs: React.FC<ListSubsProps> = props => {
     setShowUnsubModal(false);
     setLoading(true);
     try {
-      const response: any = await unsubsEC(currentData?.ID);
+      const response: UnsubsResponseType = await unsubsEC(currentData?.ID);
       if (response.code === 200) {
         refetch();
       } else setIsErrorUnsub(true);
@@ -143,7 +151,7 @@ const ListSubs: React.FC<ListSubsProps> = props => {
         )}
 
         {isLoading ? null : listSubs?.length > 0 ? (
-          listSubs?.map((val: any, index: number) => (
+          listSubs?.map((val: SubsDataType, index: number) => (
             <DonateCardContent
               key={index}
               avatarUri={val.musician.imageProfileUrls[0].image}
