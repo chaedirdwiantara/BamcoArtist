@@ -23,6 +23,7 @@ interface DropdownV2Props {
   labelCaption: string;
   topPosition?: number;
   leftPosition: number;
+  containerStyle?: ViewStyle;
 }
 
 const DropDownFilter: React.FC<DropdownV2Props> = (props: DropdownV2Props) => {
@@ -33,6 +34,7 @@ const DropDownFilter: React.FC<DropdownV2Props> = (props: DropdownV2Props) => {
     labelCaption,
     topPosition = 0,
     leftPosition,
+    containerStyle,
   } = props;
   const [offsetSortFilter, setOffsetSortFilter] = useState<{
     px: number;
@@ -54,7 +56,7 @@ const DropDownFilter: React.FC<DropdownV2Props> = (props: DropdownV2Props) => {
 
   return (
     <View
-      style={styles.dropdownContainer}
+      style={[styles.dropdownContainer, containerStyle]}
       onLayout={event => {
         event.target.measure(() => {});
       }}

@@ -309,9 +309,11 @@ export const FeedScreen: React.FC = () => {
             maxLengthTitle={20}
             itemStrokeColor={'white'}
             containerStyle={{
+              position: 'absolute',
               paddingTop:
                 Platform.OS === 'ios' ? 0 : heightResponsive(barHeight + 15),
-              zIndex: 1,
+              zIndex: 4,
+              backgroundColor: color.Dark[800],
             }}
           />
 
@@ -327,8 +329,12 @@ export const FeedScreen: React.FC = () => {
               translation={true}
               containerStyle={{
                 backgroundColor: color.Dark[800],
-                zIndex: 2,
+                zIndex: 3,
                 position: 'absolute',
+                top:
+                  Platform.OS === 'ios'
+                    ? heightResponsive(42)
+                    : heightResponsive(barHeight + 60),
                 left: widthResponsive(24),
               }}
             />
@@ -445,9 +451,9 @@ const styles = StyleSheet.create({
   root: {
     flex: 1,
     backgroundColor: color.Dark[800],
+    zIndex: 2,
   },
   feedContainer: {
-    marginTop: widthResponsive(3),
     paddingHorizontal: widthResponsive(24),
     width: '100%',
     height: '100%',
