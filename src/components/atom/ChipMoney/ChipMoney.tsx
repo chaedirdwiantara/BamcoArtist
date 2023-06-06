@@ -17,7 +17,7 @@ export const ChipMoney: React.FC<ChipMoneyProps> = (props: ChipMoneyProps) => {
   return (
     <View style={[styles.root]}>
       <CoinIcon />
-      <Text style={styles.text}>{kFormatter(balance)}</Text>
+      <Text style={styles.text}>{kFormatter(balance, 1)}</Text>
     </View>
   );
 };

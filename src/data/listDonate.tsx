@@ -33,22 +33,22 @@ export const listCredit: ListDonateType[] = [
 export const creditType: ListDonateType[] = [
   {
     text: 'Only one time',
-    value: 'only_one_time',
+    value: '0',
   },
   {
     text: 'Daily',
-    value: 'daily',
+    value: '1',
   },
   {
     text: 'Weekly',
-    value: 'weekly',
+    value: '7',
   },
   {
     text: 'Monthly',
-    value: 'monthly',
+    value: '30',
   },
   {
     text: 'Yearly',
-    value: 'yearly',
+    value: '365',
   },
 ];
