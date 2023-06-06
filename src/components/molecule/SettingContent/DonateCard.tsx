@@ -1,9 +1,8 @@
 import React from 'react';
 import {View, StyleSheet, Text} from 'react-native';
-import {Dropdown} from '../DropDown';
-import {Avatar, Gap} from '../../atom';
+import {Avatar, Gap, SsuDivider} from '../../atom';
 import {color, typography} from '../../../theme';
-import {dropDownSubscription} from '../../../data/dropdown';
+import {dropDownSubscription, dropDownTipping} from '../../../data/dropdown';
 import {heightPercentage, widthPercentage} from '../../../utils';
 import DropdownMore from '../V2/DropdownFilter/DropdownMore';
 
@@ -13,6 +12,8 @@ interface DonateCardProps {
   username: string;
   detail: string[];
   onPressMore: (value: any) => void;
+  type: string;
+  next: boolean;
 }
 
 export const DonateCardContent: React.FC<DonateCardProps> = ({
@@ -21,45 +22,66 @@ export const DonateCardContent: React.FC<DonateCardProps> = ({
   detail,
   avatarUri = 'https://wallpaperspeed.id/wp-content/uploads/2021/09/dragon-ball-z-wallpaper-goku-super-saiyan-god-source-moddroid.com_.webp',
   onPressMore,
+  type,
+  next,
 }) => {
-  const detailTitle = ['Status', 'Next Payment', 'Price', 'Duration'];
+  const detailTitle = [
+    'Status',
+    next ? 'Next Payment' : 'Ended In',
+    'Price',
+    'Duration',
+  ];
 
   return (
-    <View style={{marginTop: heightPercentage(15)}}>
-      <View style={styles.root}>
-        <View style={styles.header}>
-          <Avatar size={widthPercentage(32)} imgUri={avatarUri} />
-          <View style={{marginLeft: widthPercentage(10)}}>
-            <Text style={[typography.Subtitle1, {color: color.Neutral[10]}]}>
-              {name}
-            </Text>
-            <Text style={[typography.Caption, {color: color.Pink[2]}]}>
-              {username}
-            </Text>
+    <>
+      <View style={{marginTop: heightPercentage(15)}}>
+        <View style={styles.root}>
+          <View style={styles.header}>
+            <Avatar size={widthPercentage(32)} imgUri={avatarUri} />
+            <View style={{marginLeft: widthPercentage(10)}}>
+              <Text style={[typography.Subtitle1, {color: color.Neutral[10]}]}>
+                {name}
+              </Text>
+              <Text style={[typography.Caption, {color: color.Pink[2]}]}>
+                {username}
+              </Text>
+            </View>
           </View>
+          <DropdownMore
+            dataFilter={
+              type === 'subs' ? dropDownSubscription : dropDownTipping
+            }
+            selectedMenu={onPressMore}
+          />
         </View>
-        <DropdownMore
-          dataFilter={dropDownSubscription}
-          selectedMenu={onPressMore}
-        />
-      </View>
 
-      <View style={styles.containerDetail}>
-        {Array.from(Array(4).keys()).map((item, index) => {
-          return (
-            <Text key={index}>
-              <Text style={[typography.Caption, {color: color.Dark[50]}]}>
-                {detailTitle[index]}
+        <View style={styles.containerDetail}>
+          {Array.from(Array(4).keys()).map((item, index) => {
+            return (
+              <Text key={index}>
+                <Text
+                  style={[
+                    typography.Caption,
+                    {color: color.Dark[50], textTransform: 'capitalize'},
+                  ]}>
+                  {detailTitle[index]}
+                </Text>
+                <Gap width={widthPercentage(6)} />
+                <Text
+                  style={[
+                    typography.Caption,
+                    {color: color.Neutral[10], textTransform: 'capitalize'},
+                  ]}>
+                  {detail[index]}
+                </Text>
               </Text>
-              <Gap width={widthPercentage(6)} />
-              <Text style={[typography.Caption, {color: color.Neutral[10]}]}>
-                {detail[index]}
-              </Text>
-            </Text>
-          );
-        })}
+            );
+          })}
+        </View>
       </View>
-    </View>
+      <Gap height={heightPercentage(12)} />
+      <SsuDivider />
+    </>
   );
 };
 

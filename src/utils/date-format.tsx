@@ -47,6 +47,15 @@ const timeToString = (totalSeconds: number) => {
   return result;
 };
 
+const dateFormatSubscribe = (ISOStringDate: string) => {
+  const today = new Date(ISOStringDate);
+  const day = today.toLocaleString('default', {day: 'numeric'});
+  const month = today.toLocaleString('default', {month: 'short'});
+  const year = today.getFullYear();
+
+  return month + ' ' + day + ', ' + year;
+};
+
 export {
   dateFormat,
   dateFormatFullYear,
@@ -54,4 +63,5 @@ export {
   timeToString,
   dateFormatDayOnly,
   dateFormatMonthOnly,
+  dateFormatSubscribe,
 };

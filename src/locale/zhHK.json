@@ -374,7 +374,8 @@
     "Edit": "Edit My Exclusive Content",
     "Active": "Subscription Active",
     "Success": "Congratulations! Your Exclusive Content have been Paid!",
-    "View": "View Exclusive Content"
+    "View": "View Exclusive Content",
+    "Subscribe": "Subscribe Exclusive Content"
   },
   "Setting": {
     "Title": "設定",
@@ -514,7 +515,7 @@
       "AddCustom": "Add custom tip",
       "CustomTip": "Custom tip",
       "Tab": {
-        "Donation": "Donation",
+        "Donation": "Tip",
         "Subs": "Subscription"
       },
       "Filter": {
@@ -756,6 +757,14 @@
       "Body": "To Create Exclusive content, you need to set up your exclusive content pricing and duration, do you want to continue?",
       "ButtonOk": "Yes",
       "ButtonCancel": "Maybe Later"
+    },
+    "Unsub": {
+      "Title": "Unsubscribe",
+      "Subtitle": "Are you sure you want to unsubscribe {{musician}}?"
+    },
+    "StopDonation": {
+      "Title": "Stop Tipping",
+      "Subtitle": "Are you sure you want to stop donation to {{musician}}?"
     }
   },
   "EmptyState": {
@@ -780,7 +789,8 @@
     "NoECSetting": "You have not set your exclusive content yet, let’s try to make one",
     "NoECData": "You don’t have any exclusive content, try to make a new one!",
     "NoFollowersTitle": "People follow this musician",
-    "NoFollowersSubtitle": "When people follow musician, you'll see them here"
+    "NoFollowersSubtitle": "When people follow musician, you'll see them here",
+    "Subscribe": "You don’t have any subscription, try to subsrcibe your favorite musician"
   },
   "Guest": {
     "Title": "立即註冊與音樂人互動",

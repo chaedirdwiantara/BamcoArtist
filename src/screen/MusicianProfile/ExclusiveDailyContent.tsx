@@ -82,7 +82,7 @@ const ExclusiveDailyContent = (props: ECProps) => {
                 ? t('ExclusiveContent.Edit')
                 : subs
                 ? t('ExclusiveContent.Active')
-                : t('Guest.GetExclusive')}
+                : t('ExclusiveContent.Subscribe')}
             </Text>
           </TouchableOpacity>
         </View>

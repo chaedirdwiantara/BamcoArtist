@@ -6,18 +6,23 @@ import {
   normalize,
   width,
   widthPercentage,
+  widthResponsive,
 } from '../../../utils';
 import {Button} from '../../atom';
-import {Dropdown} from '../DropDown';
 import {TabFilter} from '../TabFilter';
 import Color from '../../../theme/Color';
 import {TopNavigation} from '../TopNavigation';
-import {DonateCardContent} from './DonateCard';
 import {ArrowLeftIcon} from '../../../assets/icon';
 import {ModalConfirm} from '../Modal/ModalConfirm';
-import {EmptyState} from '../EmptyState/EmptyState';
-import {dropDownDataSubscription} from '../../../data/dropdown';
+import {
+  DataDropDownType,
+  dropDownDataDonation,
+  dropDownDataSubscription,
+} from '../../../data/dropdown';
 import {useTranslation} from 'react-i18next';
+import ListTips from '../TipsAndSubs/ListTips';
+import ListSubs from '../TipsAndSubs/ListSubs';
+import {DropDownFilter} from '../V2';
 
 interface DASProps {
   onPressGoBack: () => void;
@@ -27,17 +32,17 @@ export const DASContent: FC<DASProps> = ({onPressGoBack}) => {
   const {t} = useTranslation();
   const [isModalVisible, setModalVisible] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const [changeTab, setChangeTab] = useState('current');
+  const [changeTab, setChangeTab] = useState<'current' | 'past'>('current');
+  const [selectedFilterMenu, setSelectedFilterMenu] =
+    useState<DataDropDownType>();
   const [filter] = useState([
     {filterName: 'Setting.Tips.Tab.Donation'},
     {filterName: 'Setting.Tips.Tab.Subs'},
   ]);
   const filterData = (item: any, index: number) => {
     setSelectedIndex(index);
-  };
-
-  const onPressMore = (item: any) => {
-    if (item.value === '2') setModalVisible(true);
+    setChangeTab('current');
+    setSelectedFilterMenu({label: 'Setting.Tips.Filter.All', value: ''});
   };
 
   return (
@@ -63,41 +68,57 @@ export const DASContent: FC<DASProps> = ({onPressGoBack}) => {
             label={t('Setting.Tips.Label.Current')}
             textStyles={{fontSize: normalize(10)}}
             onPress={() => setChangeTab('current')}
-            containerStyles={styles.containerButtonCurrent}
+            containerStyles={[
+              styles.containerButtonCurrent,
+              {
+                backgroundColor:
+                  changeTab === 'current' ? Color.Pink.linear : 'transparent',
+              },
+            ]}
+            borderColor={Color.Pink.linear}
           />
           <Button
             type={changeTab === 'past' ? '' : 'border'}
             label={t('Setting.Tips.Label.Past')}
             textStyles={{fontSize: normalize(10)}}
-            containerStyles={styles.containerButtonPast}
+            containerStyles={[
+              styles.containerButtonPast,
+              {
+                backgroundColor:
+                  changeTab === 'past' ? Color.Pink.linear : 'transparent',
+              },
+            ]}
             onPress={() => setChangeTab('past')}
+            borderColor={Color.Pink.linear}
           />
         </View>
         <View style={{width: widthPercentage(80)}}>
-          <Dropdown.Menu
-            data={dropDownDataSubscription}
-            placeHolder={t('Setting.Tips.Filter.Duration')}
-            selectedMenu={() => null}
-            containerStyle={styles.dropdown}
-            translation={true}
+          <DropDownFilter
+            labelCaption={
+              selectedFilterMenu
+                ? t(selectedFilterMenu.label)
+                : t('Setting.Tips.Filter.Duration')
+            }
+            dataFilter={
+              filter[selectedIndex].filterName === 'Setting.Tips.Tab.Subs'
+                ? dropDownDataSubscription
+                : dropDownDataDonation
+            }
+            selectedMenu={setSelectedFilterMenu}
+            leftPosition={widthResponsive(-100)}
           />
         </View>
       </View>
 
       {filter[selectedIndex].filterName === 'Setting.Tips.Tab.Subs' ? (
-        <DonateCardContent
-          avatarUri={
-            'https://www.vantage.id/wp-content/uploads/2022/03/FOE32FCVQBgK565-1024x1024.jpg'
-          }
-          name={'Kelompok Penerbang Roket'}
-          username={'@kelompok'}
-          detail={['Ongoing', 'Dec 16, 2022', '1,200', 'Monthly']}
-          onPressMore={onPressMore}
+        <ListSubs
+          status={changeTab}
+          duration={selectedFilterMenu?.value || ''}
         />
       ) : (
-        <EmptyState
-          text={t('EmptyState.Donate') || ''}
-          containerStyle={styles.emptyState}
+        <ListTips
+          status={changeTab}
+          duration={selectedFilterMenu?.value || ''}
         />
       )}
 
@@ -123,6 +144,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: heightPercentage(15),
     justifyContent: 'space-between',
+    paddingHorizontal: widthPercentage(6),
   },
   containerButtonCurrent: {
     width: widthPercentage(80),

@@ -48,3 +48,60 @@ export const subsEC = async (props?: SubsECParams): Promise<any> => {
 
   return data;
 };
+
+export const unsubsEC = async (id?: string): Promise<any> => {
+  const {data} = await SsuAPIRinjani().request<any>({
+    url: `/fans-app/subscriptions/${id}/unsubscribe`,
+    method: 'POST',
+  });
+
+  return data;
+};
+
+export const getListTips = async ({
+  page,
+  perPage,
+  filterValue,
+}: {
+  page: number;
+  perPage: number;
+  filterValue: number;
+}): Promise<any> => {
+  const {data} = await SsuAPI().request<any>({
+    url: '/donation',
+    method: 'GET',
+    params: {
+      page: page,
+      per_page: perPage,
+      filter_column: 'contribution_repeat_status',
+      filter_value: Number(filterValue),
+    },
+  });
+
+  return data;
+};
+
+export const getListSubs = async ({
+  page,
+  perPage,
+  durationUnit,
+  status,
+}: {
+  page: number;
+  perPage: number;
+  durationUnit: '' | 'weekly' | 'monthly' | 'yearly' | string;
+  status: 'current' | 'past';
+}): Promise<any> => {
+  const {data} = await SsuAPIRinjani().request<any>({
+    url: '/fans-app/subscriptions',
+    method: 'GET',
+    params: {
+      page: page,
+      perPage: perPage,
+      durationUnit: durationUnit,
+      status: status,
+    },
+  });
+
+  return data;
+};
