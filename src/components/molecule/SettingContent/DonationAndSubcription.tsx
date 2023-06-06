@@ -103,7 +103,7 @@ export const DASContent: FC<DASProps> = ({onPressGoBack}) => {
 
       <ModalConfirm
         modalVisible={isModalVisible}
-        title={t('Setting.Tips.Menu.Sub.Unsubs') || ''}
+        title={t('Setting.Tips.Menu.Subs.Unsubs') || ''}
         subtitle={t('Modal.Donation.Unsubs') || ''}
         onPressClose={() => setModalVisible(false)}
         onPressOk={() => setModalVisible(false)}

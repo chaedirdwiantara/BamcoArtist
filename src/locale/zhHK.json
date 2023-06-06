@@ -371,7 +371,10 @@
     "InputBonus": "Input Bonus",
     "ErrorCoinBonus": "Insufficient coin, add more coin to give bonus",
     "ErrorCoinSubs": "Insufficient coin, add more coin to subscribe",
-    "Edit": "Edit My Exclusive Content"
+    "Edit": "Edit My Exclusive Content",
+    "Active": "Subscription Active",
+    "Success": "Congratulations! Your Exclusive Content have been Paid!",
+    "View": "View Exclusive Content"
   },
   "Setting": {
     "Title": "設定",

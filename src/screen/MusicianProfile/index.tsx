@@ -47,8 +47,9 @@ const MusicianProfile: FC<PostDetailProps> = ({route}: PostDetailProps) => {
     setDataFollow,
   } = useMusicianHook();
 
-  const {creditCount, getCreditCount} = useCreditHook();
   const {dataExclusiveContent, getExclusiveContent} = useSettingHook();
+  const {creditCount, getCreditCount, checkSubs, alreadySubsEC} =
+    useCreditHook();
 
   const [modalDonate, setModalDonate] = useState<boolean>(false);
   const [modalSuccessDonate, setModalSuccessDonate] = useState<boolean>(false);
@@ -58,6 +59,10 @@ const MusicianProfile: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   useEffect(() => {
     getCreditCount();
   }, [modalDonate]);
+
+  useEffect(() => {
+    if (dataExclusiveContent) checkSubs(uuid);
+  }, [dataExclusiveContent]);
 
   //  ? Get Detail Musician
   useFocusEffect(
@@ -154,6 +159,7 @@ const MusicianProfile: FC<PostDetailProps> = ({route}: PostDetailProps) => {
           followersCount={followersCount}
           goToPlaylist={goToPlaylist}
           exclusiveContent={dataExclusiveContent ?? undefined}
+          subsEC={alreadySubsEC}
         />
       )}
       <ModalLoading visible={isLoadingMusician} />

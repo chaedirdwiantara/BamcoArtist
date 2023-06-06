@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {
@@ -8,6 +8,7 @@ import {
 import Color from '../theme/Color';
 import {RootStackParams} from '../navigations';
 import {ExclusiveContent} from '../components';
+import {useCreditHook} from '../hooks/use-credit.hook';
 
 type ECProps = NativeStackScreenProps<RootStackParams, 'ExclusiveContent'>;
 
@@ -16,11 +17,18 @@ export const ExclusiveContentScreen = ({navigation, route}: ECProps) => {
     navigation.goBack();
   };
 
+  const {creditCount, getCreditCount} = useCreditHook();
+
+  useEffect(() => {
+    getCreditCount();
+  }, []);
+
   return (
     <View style={styles.root}>
       <ExclusiveContent
-        onPressGoBack={onPressGoBack}
         data={route.params.data}
+        onPressGoBack={onPressGoBack}
+        credit={creditCount}
       />
     </View>
   );
