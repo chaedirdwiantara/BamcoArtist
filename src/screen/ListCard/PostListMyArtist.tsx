@@ -334,6 +334,7 @@ const PostListMyArtist: FC<PostListProps> = (props: PostListProps) => {
               />
             }
             onEndReached={handleEndScroll}
+            onEndReachedThreshold={1}
             renderItem={({item, index}) => (
               <>
                 <ListCard.PostList

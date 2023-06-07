@@ -419,7 +419,7 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
               />
             }
             onEndReached={handleEndScroll}
-            onEndReachedThreshold={0.3}
+            onEndReachedThreshold={1}
             onScroll={handleScroll}
             bounces={false}
             renderItem={({item, index}) => (
