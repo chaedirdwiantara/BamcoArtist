@@ -83,7 +83,7 @@ export const EditProfile: React.FC<EditProfileProps> = ({
   // handle if user already have photos
   useEffect(() => {
     if (profile?.photos.length > 0) {
-      let newPhotos: {path: string; size: number; filename: string}[] = [];
+      let newPhotos: Image[] = [];
       let newDataResponseImg: string[] = [];
       profile.photos.map((val: {images: {image: string}[]}, i: number) => {
         if (val.images.length > 0) {
@@ -92,6 +92,9 @@ export const EditProfile: React.FC<EditProfileProps> = ({
             path: newPath,
             size: i,
             filename: `${i.toString()}.jpg`,
+            width: 0, // default value
+            height: 0, // default value
+            mime: '', // default value
           });
           newDataResponseImg.push(newPath);
         }
