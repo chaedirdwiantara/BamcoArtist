@@ -260,7 +260,11 @@ export const MusicianDetail: React.FC<MusicianDetailProps> = ({
                   paddingHorizontal: widthResponsive(24),
                   width: '100%',
                 }}>
-                <PostListProfile uuidMusician={uuid} {...exclusiveContent} />
+                {exclusiveContent ? (
+                  <PostListProfile uuidMusician={uuid} {...exclusiveContent} />
+                ) : (
+                  <PostListProfile uuidMusician={uuid} pricingPlans={[]} />
+                )}
               </View>
             ) : filter[selectedIndex].filterName === 'Musician.Tab.Music' ? (
               dataPlaylist.length > 0 ? (
