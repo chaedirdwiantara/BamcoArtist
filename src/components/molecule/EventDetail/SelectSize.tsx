@@ -67,8 +67,8 @@ const styles = StyleSheet.create({
     borderColor: Color.Pink.linear,
     borderWidth: 1,
     alignSelf: 'flex-start',
-    paddingVertical: widthResponsive(7),
-    paddingHorizontal: widthResponsive(16),
+    paddingVertical: widthResponsive(4),
+    paddingHorizontal: widthResponsive(11),
   },
   labelStyle: {
     fontSize: normalize(12),

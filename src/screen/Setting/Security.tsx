@@ -80,18 +80,24 @@ export const SecurityScreen: React.FC<SecurityProps> = ({
         }}
       />
 
-      <MenuText.RightIcon
-        text={t('Setting.Password.Title') || ''}
-        containerStyles={{marginTop: heightPercentage(12)}}
-        onPress={() => onPressGoTo('ChangePassword')}
-      />
-
-      <EmailContent
-        email={dataProfile?.data?.email ?? undefined}
-        onPressGoBack={onPressGoBack}
-        goToChangeEmail={goToChangeEmail}
-        registrationType={dataProfile?.data?.registrationType}
-      />
+      {dataProfile &&
+        dataProfile?.data?.registrationType !== 'apple' &&
+        dataProfile?.data?.registrationType !== 'facebook' &&
+        dataProfile?.data?.registrationType !== 'google' && (
+          <>
+            <MenuText.RightIcon
+              text={t('Setting.Password.Title') || ''}
+              containerStyles={{marginTop: heightPercentage(12)}}
+              onPress={() => onPressGoTo('ChangePassword')}
+            />
+            <EmailContent
+              email={dataProfile?.data?.email ?? undefined}
+              onPressGoBack={onPressGoBack}
+              goToChangeEmail={goToChangeEmail}
+              registrationType={dataProfile?.data?.registrationType}
+            />
+          </>
+        )}
 
       <PhoneNumberContent
         phone={dataProfile?.data?.phoneNumber ?? undefined}

@@ -12,14 +12,21 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   Platform,
+  TouchableOpacity,
 } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import Swiper from 'react-native-swiper';
-import {ArrowLeftIcon, DefaultAvatar, ThreeDotsIcon} from '../../assets/icon';
+import {
+  ArrowLeftIcon,
+  CoinIcon,
+  DefaultAvatar,
+  StarIcon,
+} from '../../assets/icon';
 import {
   Avatar,
   Button,
   ButtonGradient,
+  Gap,
   SsuDivider,
   TopNavigation,
 } from '../../components';
@@ -34,6 +41,7 @@ import {RootStackParams} from '../../navigations';
 import Color from '../../theme/Color';
 import Font from '../../theme/Font';
 import {
+  heightPercentage,
   heightResponsive,
   normalize,
   toCurrency,
@@ -41,6 +49,9 @@ import {
   widthResponsive,
 } from '../../utils';
 import {usePlayerStore} from '../../store/player.store';
+import {mvs} from 'react-native-size-matters';
+import Reviews from './Reviews';
+import Typography from '../../theme/Typography';
 
 type MerchDetailProps = NativeStackScreenProps<RootStackParams, 'MerchDetail'>;
 
@@ -68,7 +79,15 @@ export const MerchDetail: React.FC<MerchDetailProps> = ({
   const [selectedColor, setSelectedColor] = useState<
     SelectColorType | undefined
   >();
+  const [selectedVariant, setSelectedVariant] = useState<
+    SelectSizeType | undefined
+  >();
   const [quantity, setQuantity] = useState<number>(0);
+  const [tabActive, setTabActive] = useState<number>(0);
+
+  const handleChangeTab = (tabId: number) => {
+    setTabActive(tabId);
+  };
 
   useFocusEffect(
     useCallback(() => {
@@ -93,6 +112,17 @@ export const MerchDetail: React.FC<MerchDetailProps> = ({
     const newValue = value.replace(/[^0-9]/g, '');
     setQuantity(Number(newValue));
   };
+
+  const tabs = [
+    {
+      id: 0,
+      title: t('Event.Merch.Product'),
+    },
+    {
+      id: 1,
+      title: t('Review.Title'),
+    },
+  ];
 
   const sizes: SelectSizeType[] = [
     {
@@ -131,17 +161,27 @@ export const MerchDetail: React.FC<MerchDetailProps> = ({
       name: '#FFC0CB',
     },
   ];
+
+  const variant: SelectSizeType[] = [
+    {
+      id: 1,
+      name: 'Long Sleeves',
+    },
+    {
+      id: 2,
+      name: 'Short Sleeves',
+    },
+  ];
+
   return (
     <KeyboardAvoidingView
       style={{flex: 1}}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
       <View style={styles.root}>
-        <TopNavigation.Type4
+        <TopNavigation.Type1
           title={t('Event.Merch.Detail')}
           maxLengthTitle={20}
           itemStrokeColor={'white'}
-          rightIcon={<ThreeDotsIcon fill={Color.Neutral[10]} />}
-          rightIconAction={() => null}
           leftIcon={<ArrowLeftIcon />}
           leftIconAction={handleBackAction}
           containerStyles={{paddingHorizontal: widthPercentage(20)}}
@@ -167,9 +207,61 @@ export const MerchDetail: React.FC<MerchDetailProps> = ({
 
           <View style={styles.descContainer}>
             <Text style={styles.title}>{data.title}</Text>
+
+            <View style={styles.disc}>
+              <CoinIcon
+                height={widthResponsive(24)}
+                width={widthResponsive(24)}
+              />
+              <Gap width={widthResponsive(4)} />
+              <Text style={styles.price}>
+                {toCurrency(data.price, {withFraction: false})}
+              </Text>
+            </View>
+            <View style={styles.disc}>
+              <View style={styles.discPercContainer}>
+                <Text style={styles.discPerc}>25%</Text>
+              </View>
+              <Gap width={widthResponsive(4)} />
+              <Text style={styles.priceDisc}>
+                {toCurrency(data.price, {withFraction: false})}
+              </Text>
+            </View>
+          </View>
+          <SsuDivider />
+          <View style={[styles.descContainer, {flexDirection: 'row'}]}>
+            <View style={{flexDirection: 'row'}}>
+              <StarIcon />
+              <Gap width={widthPercentage(4)} />
+              <Text style={[styles.subtitle, {marginBottom: 0}]}>4,5</Text>
+              <Gap width={widthPercentage(4)} />
+              <Text
+                style={[
+                  styles.subtitle,
+                  {marginBottom: 0, fontFamily: 'Inter-Regular'},
+                ]}>
+                (1,000)
+              </Text>
+            </View>
+            <Gap width={widthPercentage(24)} />
+            <View style={{flexDirection: 'row'}}>
+              <Text style={[styles.subtitle, {marginBottom: 0}]}>
+                {t('Event.Merch.Sold')}
+              </Text>
+              <Gap width={widthPercentage(4)} />
+              <Text
+                style={[
+                  styles.subtitle,
+                  {marginBottom: 0, fontFamily: 'Inter-Regular'},
+                ]}>
+                (1,000)
+              </Text>
+            </View>
+          </View>
+          <SsuDivider />
+          <View style={styles.descContainer}>
             <View style={styles.owner}>
-              <Text style={styles.ownerLabel}>By</Text>
-              <View style={{marginHorizontal: 5}}>
+              <View style={{marginRight: widthPercentage(6)}}>
                 {data?.ownerImage ? (
                   <Avatar
                     imgUri={data?.ownerImage}
@@ -182,63 +274,105 @@ export const MerchDetail: React.FC<MerchDetailProps> = ({
 
               <Text style={styles.ownerLabel}>{data.owner}</Text>
             </View>
-            <Text style={styles.price}>
-              {data.charge === 'no_tickets'
-                ? ''
-                : data.charge === 'free_event'
-                ? 'Free'
-                : data.currency +
-                  ' ' +
-                  toCurrency(data.price / 100, {withFraction: false})}
-            </Text>
-          </View>
-          <SsuDivider />
-          <View style={styles.descContainer}>
             <Text style={styles.subtitle}>{t('Event.Description')}</Text>
             <Text style={styles.desc}>{data.desc ? data.desc : '-'}</Text>
           </View>
           <SsuDivider />
-          <View style={styles.descContainer}>
-            <View style={styles.attribute}>
-              <Text style={styles.subtitle}>{t('Event.Merch.Size')}</Text>
-              <SelectSize
-                selectedSize={selectedSize}
-                sizes={sizes}
-                onPressSize={size => setSelectedSize(size)}
-              />
-            </View>
-            <View style={styles.attribute}>
-              <Text style={styles.subtitle}>{t('Event.Merch.Color')}</Text>
-              <SelectColor
-                selectedColor={selectedColor}
-                colors={colors}
-                onPressColor={color => setSelectedColor(color)}
-              />
-            </View>
-            <View>
-              <Text style={styles.subtitle}>{t('Event.Quantity')}</Text>
-              <QuantityInput
-                value={quantity.toString()}
-                onPress={handleQuantity}
-                onChangeQuantity={(value: string) =>
-                  handleChangeQuantity(value)
-                }
-              />
-            </View>
+          <View style={[styles.tabContainer]}>
+            {tabs.map((tab, index) => {
+              return (
+                <>
+                  <TouchableOpacity onPress={() => handleChangeTab(tab.id)}>
+                    <Text
+                      style={[
+                        Typography.Subtitle3,
+                        {
+                          fontSize: normalize(11),
+                          color:
+                            tabActive === tab.id
+                              ? Color.Pink.linear
+                              : '#ABBED6',
+                        },
+                      ]}>
+                      {tab.title}
+                    </Text>
+                  </TouchableOpacity>
+                  {index + 1 < tabs.length && <View style={styles.tabSpacer} />}
+                </>
+              );
+            })}
           </View>
-          <View style={styles.descContainer}>
-            <ButtonGradient
-              label={t('Btn.BuyNow')}
-              gradientStyles={{width: '100%'}}
-              containerStyles={{marginBottom: 8}}
-              onPress={() => null}
-            />
-            <Button
-              label={t('Btn.AddToCart')}
-              type="border"
-              containerStyles={{width: '100%'}}
-            />
-          </View>
+          {tabActive === 0 ? (
+            <>
+              <View style={[styles.descContainer, {flexDirection: 'row'}]}>
+                <Text style={[styles.subtitle, {marginBottom: 0}]}>
+                  {t('Event.Merch.Condition')} :
+                </Text>
+                <Gap width={widthPercentage(6)} />
+                <Text
+                  style={[
+                    styles.subtitle,
+                    {color: Color.Pink.linear, marginBottom: 0},
+                  ]}>
+                  New
+                </Text>
+              </View>
+              <SsuDivider />
+              <View style={styles.descContainer}>
+                <View style={styles.attribute}>
+                  <Text style={styles.subtitle}>{t('Event.Merch.Size')}</Text>
+                  <SelectSize
+                    selectedSize={selectedSize}
+                    sizes={sizes}
+                    onPressSize={size => setSelectedSize(size)}
+                  />
+                </View>
+                <View style={styles.attribute}>
+                  <Text style={styles.subtitle}>{t('Event.Merch.Color')}</Text>
+                  <SelectColor
+                    selectedColor={selectedColor}
+                    colors={colors}
+                    onPressColor={color => setSelectedColor(color)}
+                  />
+                </View>
+                <View style={styles.attribute}>
+                  <Text style={styles.subtitle}>
+                    {t('Event.Merch.Variant')}
+                  </Text>
+                  <SelectSize
+                    selectedSize={selectedVariant}
+                    sizes={variant}
+                    onPressSize={size => setSelectedVariant(size)}
+                  />
+                </View>
+                <View>
+                  <Text style={styles.subtitle}>{t('Event.Quantity')}</Text>
+                  <QuantityInput
+                    value={quantity.toString()}
+                    onPress={handleQuantity}
+                    onChangeQuantity={(value: string) =>
+                      handleChangeQuantity(value)
+                    }
+                  />
+                </View>
+              </View>
+              <View style={styles.descContainer}>
+                <ButtonGradient
+                  label={t('Btn.BuyNow')}
+                  gradientStyles={{width: '100%'}}
+                  containerStyles={{marginBottom: 8}}
+                  onPress={() => null}
+                />
+                <Button
+                  label={t('Btn.AddToCart')}
+                  type="border"
+                  containerStyles={{width: '100%'}}
+                />
+              </View>
+            </>
+          ) : (
+            <Reviews />
+          )}
         </ScrollView>
       </View>
     </KeyboardAvoidingView>
@@ -283,8 +417,8 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   descContainer: {
-    paddingHorizontal: normalize(24),
-    paddingVertical: normalize(20),
+    paddingHorizontal: widthPercentage(24),
+    paddingVertical: heightPercentage(16),
   },
   desc: {
     color: 'white',
@@ -294,7 +428,7 @@ const styles = StyleSheet.create({
   owner: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 8,
+    marginBottom: heightPercentage(14),
   },
   ownerLabel: {
     color: 'white',
@@ -302,11 +436,41 @@ const styles = StyleSheet.create({
     fontSize: normalize(12),
   },
   price: {
-    color: Color.Pink[2],
+    color: Color.Neutral[10],
     fontSize: normalize(20),
     fontFamily: Font.InterBold,
   },
   attribute: {
-    marginBottom: 20,
+    marginBottom: heightPercentage(24),
+  },
+  disc: {flexDirection: 'row', alignItems: 'center', marginTop: 5},
+  priceDisc: {
+    color: Color.Neutral[50],
+    fontWeight: '500',
+    textDecorationLine: 'line-through',
+  },
+  discPerc: {
+    fontSize: mvs(8),
+    fontFamily: 'Inter-Semibold',
+    color: '#F94D63',
+  },
+  discPercContainer: {
+    backgroundColor: '#FFB8C6',
+    padding: 4,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 4,
+  },
+  tabContainer: {
+    flexDirection: 'row',
+    paddingVertical: heightPercentage(10),
+    paddingHorizontal: widthPercentage(24),
+    borderBottomColor: Color.Dark[500],
+    borderBottomWidth: 1,
+  },
+  tabSpacer: {
+    borderWidth: 1,
+    borderColor: Color.Dark[300],
+    marginHorizontal: widthPercentage(20),
   },
 });

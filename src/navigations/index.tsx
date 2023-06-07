@@ -88,8 +88,19 @@ import {AlbumScreen} from '../screen/Album/Album';
 // TopUp
 import {TopupCoinScreen} from '../screen/TopupCoin';
 
-// Merch
+// Action
+import Cart from '../screen/Action/Cart';
+import PromoCode from '../screen/Action/PromoCode';
+import PromoDetail from '../screen/Action/PromoDetail';
+import Checkout from '../screen/Action/Checkout';
+import Transaction from '../screen/Action/Transaction';
+import TransactionDetailMerch from '../screen/Action/TransactionDetailMerch';
+import TransactionDetailTicket from '../screen/Action/TransactionDetailTicket';
+import Track from '../screen/Action/Track';
 import {MerchDetail} from '../screen/MerchDetail';
+import {ConcertDetail} from '../screen/ConcertDetail';
+import {TicketDetail} from '../screen/ConcertDetail/TicketDetail';
+import Shop from '../screen/Action/Shop';
 
 // Icon
 import {CrownIcon, FeedIcon, HomeIcon, UserProfileIcon} from '../assets/icon';
@@ -98,7 +109,7 @@ import Font from '../theme/Font';
 import Color from '../theme/Color';
 import {normalize} from '../utils';
 import {MerchListType} from '../data/merchList';
-import {ConcertDetail} from '../screen/ConcertDetail';
+
 import {SignupSSOScreen} from '../screen/SignupSSO';
 import {
   ProfileResponseData,
@@ -235,6 +246,7 @@ export type RootStackParams = {
   };
   ShippingInformation: {
     data: DataShippingProps | null;
+    from?: string;
   };
   ShowCredit: {
     songId: number;
@@ -263,6 +275,27 @@ export type RootStackParams = {
     | undefined;
   SplashScreen: undefined;
   ListPlaylist: undefined;
+  Event: undefined;
+  Cart: {
+    promoId?: string;
+  };
+  PromoCode: undefined;
+  PromoDetail: {
+    id: string;
+  };
+  Checkout: undefined;
+  Transaction: undefined;
+  TransactionDetailMerch: {
+    id: string;
+  };
+  TransactionDetailTicket: {
+    id: string;
+  };
+  Track: {
+    status: number;
+  };
+  TicketDetail: undefined;
+  Shop: undefined;
 };
 
 export type MainTabParams = {
@@ -458,6 +491,22 @@ export const RootStackScreen = () => (
     <RootStack.Screen name="ListPost" component={ListPostScreen} />
     <RootStack.Screen name="SplashScreen" component={SplashScreen} />
     <RootStack.Screen name="ListPlaylist" component={ListPlaylist} />
+    <RootStack.Screen name="Cart" component={Cart} />
+    <RootStack.Screen name="PromoCode" component={PromoCode} />
+    <RootStack.Screen name="PromoDetail" component={PromoDetail} />
+    <RootStack.Screen name="Checkout" component={Checkout} />
+    <RootStack.Screen name="Transaction" component={Transaction} />
+    <RootStack.Screen
+      name="TransactionDetailMerch"
+      component={TransactionDetailMerch}
+    />
+    <RootStack.Screen
+      name="TransactionDetailTicket"
+      component={TransactionDetailTicket}
+    />
+    <RootStack.Screen name="Track" component={Track} />
+    <RootStack.Screen name="TicketDetail" component={TicketDetail} />
+    <RootStack.Screen name="Shop" component={Shop} />
   </RootStack.Navigator>
 );
 

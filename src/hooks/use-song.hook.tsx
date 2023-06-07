@@ -6,6 +6,7 @@ import {
   detailSong,
   likeSong,
   listSong,
+  listSongComingSoon,
   listTopSong,
   newSong,
   unlikeSong,
@@ -14,6 +15,7 @@ import {
   DataDetailAlbum,
   DataDetailSong,
   PaginationType,
+  SongComingSoon,
   SongList,
   SongPropsTypeA,
 } from '../interface/song.interface';
@@ -30,6 +32,9 @@ export const useSongHook = () => {
   const [dataDetailSong, setDataDetailSong] = useState<DataDetailSong | null>(
     null,
   );
+  const [dataSongComingSoon, setDataSongComingSoon] = useState<
+    SongComingSoon[]
+  >([]);
   const [dataDetailAlbum, setDataDetailAlbum] =
     useState<DataDetailAlbum | null>(null);
 
@@ -49,6 +54,7 @@ export const useSongHook = () => {
   };
 
   const getListDataNewSong = async () => {
+    setIsLoadingSong(true);
     try {
       const response = await newSong();
       setDataNewSong(response.data);
@@ -103,7 +109,6 @@ export const useSongHook = () => {
   };
 
   const setLikeSong = async (props?: SongPropsTypeA) => {
-    setIsLoadingSong(true);
     try {
       await likeSong(props);
     } catch (error) {
@@ -114,11 +119,24 @@ export const useSongHook = () => {
   };
 
   const setUnlikeSong = async (props?: SongPropsTypeA) => {
-    setIsLoadingSong(true);
     try {
       await unlikeSong(props);
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsLoadingSong(false);
+    }
+  };
+
+  const getListSongComingSoon = async (props?: SongPropsTypeA) => {
+    setIsLoadingSong(true);
+    try {
+      const response = await listSongComingSoon(props);
+      setDataSongComingSoon(response.data);
+    } catch (error) {
+      console.log(error);
+      setIsErrorSong(true);
+      setDataSong([]);
     } finally {
       setIsLoadingSong(false);
     }
@@ -135,6 +153,7 @@ export const useSongHook = () => {
     dataDetailAlbum,
     metaSong,
     metaNewSong,
+    dataSongComingSoon,
     getListDataSong,
     getListDataTopSong,
     getDetailSong,
@@ -143,5 +162,6 @@ export const useSongHook = () => {
     setLikeSong,
     setUnlikeSong,
     getListDataNewSong,
+    getListSongComingSoon,
   };
 };
