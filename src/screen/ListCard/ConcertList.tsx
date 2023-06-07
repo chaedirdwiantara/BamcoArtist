@@ -1,6 +1,6 @@
 import React, {FC} from 'react';
 import {RefreshControl, StyleSheet, View} from 'react-native';
-import {TicketIcon} from '../../assets/icon';
+import {FriedEggIcon, TicketIcon} from '../../assets/icon';
 import Color from '../../theme/Color';
 import {heightPercentage, heightResponsive, widthResponsive} from '../../utils';
 import {EmptyState} from '../../components';
@@ -12,8 +12,13 @@ import {useQuery} from 'react-query';
 import {useTranslation} from 'react-i18next';
 import LoadingSpinner from '../../components/atom/Loading/LoadingSpinner';
 
-const ConcertList: FC = () => {
+type ConcertListType = {
+  type?: string;
+};
+
+const ConcertList: FC<ConcertListType> = props => {
   const {t} = useTranslation();
+  const {type = 'action'} = props;
   const {getListDataConcert} = useEventHook();
 
   const {
@@ -21,7 +26,7 @@ const ConcertList: FC = () => {
     isLoading,
     refetch,
     isRefetching,
-  } = useQuery(['/concert'], () => getListDataConcert());
+  } = useQuery([`/concert/${type}`], () => getListDataConcert());
 
   const filterList: MerchData | undefined = dataConcertList?.data.find(
     concert => {
@@ -37,7 +42,20 @@ const ConcertList: FC = () => {
         </View>
       )}
 
-      <FlashList
+      <EmptyState
+        icon={
+          <FriedEggIcon
+            fill={Color.Dark[500]}
+            width={widthResponsive(150)}
+            height={heightResponsive(150)}
+            style={styles.iconEmpty}
+          />
+        }
+        text={t('Event.ComingSoon') || ''}
+        containerStyle={styles.containerEmpty}
+      />
+
+      {/* <FlashList
         data={filterList?.data}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.ListContainer}
@@ -80,7 +98,7 @@ const ConcertList: FC = () => {
         refreshControl={
           <RefreshControl refreshing={isRefetching} onRefresh={refetch} />
         }
-      />
+      /> */}
     </>
   );
 };
