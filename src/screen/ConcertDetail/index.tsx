@@ -212,11 +212,6 @@ export const ConcertDetail: React.FC<MerchDetailProps> = ({
                   props?: FollowMusicianPropsType,
                   params?: ParamsProps,
                 ) => setUnfollowMusician(props, params)}
-                emptyState={
-                  <View>
-                    <Text style={styles.desc}>-</Text>
-                  </View>
-                }
               />
             </View>
             <View style={styles.attribute}>
