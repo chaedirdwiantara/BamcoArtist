@@ -90,7 +90,7 @@ const FavoriteMusician: FC<FavoriteMusicianProps> = ({
                 containerStyles={{
                   marginTop: mvs(12),
                 }}
-                point={type === 'profile' ? item.point || 0 : null}
+                point={type === 'profile' ? item.point || '' : ''}
                 isFollowed={item.isFollowed}
                 followOnPress={() => followOnPress(item.uuid, item.isFollowed)}
               />
@@ -115,7 +115,7 @@ const FavoriteMusician: FC<FavoriteMusicianProps> = ({
                   containerStyles={{
                     marginTop: mvs(12),
                   }}
-                  point={type === 'profile' ? item.point || 0 : null}
+                  point={type === 'profile' ? item.point || '' : ''}
                   isFollowed={item.isFollowed}
                   followOnPress={() =>
                     followOnPress(item.uuid, item.isFollowed)
