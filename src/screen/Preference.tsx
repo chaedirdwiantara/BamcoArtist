@@ -7,21 +7,15 @@ import Color from '../theme/Color';
 import {RootStackParams} from '../navigations';
 import {ImageSlider, SsuStatusBar} from '../components';
 import {useProfileHook} from '../hooks/use-profile.hook';
+import {useSettingHook} from '../hooks/use-setting.hook';
 import {UpdateProfilePropsType} from '../api/profile.api';
 import {useMusicianHook} from '../hooks/use-musician.hook';
-import {FollowMusicianPropsType} from '../interface/musician.interface';
-import {useSettingHook} from '../hooks/use-setting.hook';
 
 export const PreferenceScreen: React.FC = () => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
   const {updateProfilePreference} = useProfileHook();
-  const {
-    dataMusician,
-    getListDataMusician,
-    setFollowMusician,
-    setUnfollowMusician,
-  } = useMusicianHook();
+  const {dataMusician, getListDataMusician} = useMusicianHook();
   const {getListPreference, listPreference, isLoading} = useSettingHook();
 
   useEffect(() => {
@@ -45,12 +39,6 @@ export const PreferenceScreen: React.FC = () => {
         onPress={goToScreenReferral}
         onUpdatePreference={(props?: UpdateProfilePropsType) =>
           updateProfilePreference(props)
-        }
-        setFollowMusician={(props?: FollowMusicianPropsType) =>
-          setFollowMusician(props, {}, true)
-        }
-        setUnfollowMusician={(props?: FollowMusicianPropsType) =>
-          setUnfollowMusician(props, {}, true)
         }
         dataList={dataMusician}
         isLoading={isLoading}

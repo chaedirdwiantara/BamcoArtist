@@ -38,7 +38,7 @@ export const CreateEC: React.FC<CreateProps> = ({data, onPress}) => {
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [durationUnit, setDurationUnit] = useState<string>('');
   const [price, setPrice] = useState<string>(
-    data?.pricingPlans[0].price.toString() ?? '',
+    data?.pricingPlans[0].price?.toString() ?? '',
   );
 
   const initialDuration = data?.pricingPlans[0].durationUnit;

@@ -12,6 +12,7 @@ import {heightPercentage, widthPercentage} from '../../utils';
 import {useTranslation} from 'react-i18next';
 import {storage} from '../../hooks/use-storage.hook';
 import {setLanguageSettings} from '../../api/setting.api';
+import {PropsType} from '../../data/Settings/account';
 
 export const LanguageScreen: React.FC = () => {
   const {t, i18n} = useTranslation();

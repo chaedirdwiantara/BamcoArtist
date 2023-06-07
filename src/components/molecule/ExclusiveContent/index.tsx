@@ -26,7 +26,7 @@ import {DataExclusiveResponse} from '../../../interface/setting.interface';
 
 interface ExclusiveProps {
   onPressGoBack: () => void;
-  data: DataExclusiveResponse;
+  data?: DataExclusiveResponse;
 }
 
 export const ExclusiveContent: React.FC<ExclusiveProps> = ({
