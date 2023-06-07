@@ -9,6 +9,8 @@ function CheckCircleIcon({
   height = widthPercentage(16),
   fill = 'none',
   style,
+  bg1 = '#38A772',
+  bg2 = '#67CD84',
 }: SvgProps) {
   return (
     <View style={[{width, height}, style]}>
@@ -28,8 +30,8 @@ function CheckCircleIcon({
             x2={17.7862}
             y2={3.14772}
             gradientUnits="userSpaceOnUse">
-            <Stop stopColor="#38A772" />
-            <Stop offset={1} stopColor="#67CD84" />
+            <Stop stopColor={bg1} />
+            <Stop offset={1} stopColor={bg2} />
           </LinearGradient>
         </Defs>
       </Svg>

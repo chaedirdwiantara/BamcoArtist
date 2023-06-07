@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react';
+import {useTranslation} from 'react-i18next';
 import {mvs} from 'react-native-size-matters';
 import {useNavigation} from '@react-navigation/native';
 import {StyleSheet, Text, View, ViewStyle} from 'react-native';
@@ -17,8 +18,6 @@ import {CheckCircle2Icon} from '../../../assets/icon';
 import {MainTabParams, RootStackParams} from '../../../navigations';
 import {profileStorage, storage} from '../../../hooks/use-storage.hook';
 import {heightPercentage, normalize, widthResponsive} from '../../../utils';
-import {useTranslation} from 'react-i18next';
-import {useCreditHook} from '../../../hooks/use-credit.hook';
 
 interface MusicianProps {
   userId: string;
@@ -42,7 +41,6 @@ interface DataMore {
 
 const MusicianSection: React.FC<MusicianProps> = (props: MusicianProps) => {
   const {t} = useTranslation();
-  const {creditCount, getCreditCount} = useCreditHook();
   const {isFollowed, followOnPress, userId, type} = props;
 
   const followText = isFollowed
@@ -53,9 +51,9 @@ const MusicianSection: React.FC<MusicianProps> = (props: MusicianProps) => {
     : t('Home.Tab.TopMusician.Unfollow');
 
   useEffect(() => {
-    setTextFollow(followText);
+    setTextFollow(unfollowText);
     setDropdownText(followText);
-  }, []);
+  }, [isFollowed]);
 
   const [textFollow, setTextFollow] = useState(
     t('Home.Tab.TopMusician.Follow'),
@@ -97,10 +95,6 @@ const MusicianSection: React.FC<MusicianProps> = (props: MusicianProps) => {
   };
 
   useEffect(() => {
-    getCreditCount();
-  }, [modalDonate]);
-
-  useEffect(() => {
     toastVisible &&
       setTimeout(() => {
         setToastVisible(false);
@@ -118,8 +112,6 @@ const MusicianSection: React.FC<MusicianProps> = (props: MusicianProps) => {
     if (dataResult.value === '1') {
       if (isLogin) {
         setToastVisible(true);
-        setTextFollow(followText);
-        setDropdownText(unfollowText);
         followOnPress && followOnPress();
       } else {
         setModalGuestVisible(true);

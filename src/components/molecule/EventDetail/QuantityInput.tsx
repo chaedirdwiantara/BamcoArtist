@@ -1,7 +1,7 @@
 import {View, StyleSheet, TouchableOpacity, TextInput} from 'react-native';
 import React from 'react';
 import {AddIcon, MinusIcon} from '../../../assets/icon';
-import {normalize} from '../../../utils';
+import {heightPercentage, normalize, widthPercentage} from '../../../utils';
 import Font from '../../../theme/Font';
 import Color from '../../../theme/Color';
 
@@ -16,25 +16,27 @@ const QuantityInput = ({
 }) => {
   return (
     <View style={styles.root}>
-      <TouchableOpacity
-        disabled={Number(value) <= 0}
-        onPress={() => onPress('decrement')}>
-        <MinusIcon
-          fill={Number(value) > 0 ? Color.Neutral[10] : Color.Dark[50]}
-        />
-      </TouchableOpacity>
-      <View style={styles.valueContainer}>
-        <TextInput
-          style={styles.value}
-          value={value}
-          keyboardType="numeric"
-          onChangeText={onChangeQuantity}
-        />
-        {/* <InputText style={styles.value}>{value}</Text> */}
+      <View style={styles.container}>
+        <TouchableOpacity
+          disabled={Number(value) <= 0}
+          onPress={() => onPress('decrement')}>
+          <MinusIcon
+            fill={Number(value) > 0 ? Color.Neutral[10] : Color.Dark[50]}
+          />
+        </TouchableOpacity>
+        <View style={styles.valueContainer}>
+          <TextInput
+            style={styles.value}
+            value={value}
+            keyboardType="numeric"
+            onChangeText={onChangeQuantity}
+          />
+          {/* <InputText style={styles.value}>{value}</Text> */}
+        </View>
+        <TouchableOpacity onPress={() => onPress('increment')}>
+          <AddIcon />
+        </TouchableOpacity>
       </View>
-      <TouchableOpacity onPress={() => onPress('increment')}>
-        <AddIcon />
-      </TouchableOpacity>
     </View>
   );
 };
@@ -46,8 +48,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
+  container: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: Color.Dark[900],
+    padding: heightPercentage(8),
+    width: widthPercentage(140),
+  },
   valueContainer: {
-    width: 68,
+    flex: 1,
     margin: 'auto',
   },
   value: {

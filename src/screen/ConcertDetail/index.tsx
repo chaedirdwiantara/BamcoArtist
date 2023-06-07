@@ -12,13 +12,15 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   Platform,
+  TouchableOpacity,
 } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import Swiper from 'react-native-swiper';
-import {ArrowLeftIcon, DefaultAvatar, ThreeDotsIcon} from '../../assets/icon';
+import {ArrowLeftIcon, CoinIcon, DefaultAvatar} from '../../assets/icon';
 import {
   Avatar,
   ButtonGradient,
+  Gap,
   SsuDivider,
   TopNavigation,
 } from '../../components';
@@ -28,12 +30,11 @@ import SelectSize, {
   SelectSizeType,
 } from '../../components/molecule/EventDetail/SelectSize';
 import {useMusicianHook} from '../../hooks/use-musician.hook';
-import {ParamsProps} from '../../interface/base.interface';
-import {FollowMusicianPropsType} from '../../interface/musician.interface';
 import {RootStackParams} from '../../navigations';
 import Color from '../../theme/Color';
 import Font from '../../theme/Font';
 import {
+  heightPercentage,
   heightResponsive,
   normalize,
   toCurrency,
@@ -42,6 +43,14 @@ import {
 } from '../../utils';
 import TopMusician from '../ListCard/TopMusician';
 import {usePlayerStore} from '../../store/player.store';
+import {mvs} from 'react-native-size-matters';
+import Typography from '../../theme/Typography';
+import LineUp from '../../components/molecule/EventDetail/LineUp';
+import SelectDate from '../../components/molecule/EventDetail/SelectDate';
+import TicketCategory, {
+  TicketCategoryType,
+} from '../../components/molecule/EventDetail/TicketCategory';
+import TicketDescription from '../../components/molecule/EventDetail/TicketDescription';
 
 type MerchDetailProps = NativeStackScreenProps<
   RootStackParams,
@@ -63,20 +72,15 @@ export const ConcertDetail: React.FC<MerchDetailProps> = ({
 }: MerchDetailProps) => {
   const {t} = useTranslation();
   const data = route.params;
-  const {
-    dataMusician,
-    getListDataMusician,
-    setFollowMusician,
-    setUnfollowMusician,
-  } = useMusicianHook();
+  const {getListDataMusician} = useMusicianHook();
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
   const {setWithoutBottomTab, show} = usePlayerStore();
-  const [selectedSize, setSelectedSize] = useState<
+  const [selectedDate, setSelectedDate] = useState<
     SelectSizeType | undefined
   >();
-  const [selectedColor, setSelectedColor] = useState<
-    SelectColorType | undefined
+  const [selectedTicket, setSelectedTicket] = useState<
+    TicketCategoryType | undefined
   >();
   const [quantity, setQuantity] = useState<number>(0);
 
@@ -104,26 +108,57 @@ export const ConcertDetail: React.FC<MerchDetailProps> = ({
     setQuantity(Number(newValue));
   };
 
-  const sizes: SelectSizeType[] = [
+  const dates: SelectSizeType[] = [
     {
       id: 1,
-      name: 'VIP',
+      name: '3 March',
     },
     {
       id: 2,
-      name: 'Platinum',
+      name: '4 March',
     },
     {
       id: 3,
-      name: 'Festival',
+      name: '5 March',
     },
     {
       id: 4,
-      name: 'Gold',
+      name: '6 March',
     },
     {
       id: 5,
-      name: 'Silver',
+      name: '7 March',
+    },
+  ];
+
+  const tickets: TicketCategoryType[] = [
+    {
+      id: 1,
+      title: 'Festival (Standing)',
+      desc: 'Price already included tax and admin fee (20%)',
+      price: '2,500',
+      qty: 0,
+    },
+    {
+      id: 2,
+      title: 'Tribune Silver (Seated Row 3)',
+      desc: 'Price already included tax and admin fee (20%)',
+      price: '3,000',
+      qty: 2,
+    },
+    {
+      id: 3,
+      title: 'Tribune Gold  (Seated Row 2)',
+      desc: 'Price already included tax and admin fee (20%)',
+      price: '3,500',
+      qty: 4,
+    },
+    {
+      id: 4,
+      title: 'Tribune Platinum  (Seated Row 1)',
+      desc: 'Price already included tax and admin fee (20%)',
+      price: '4.000',
+      qty: 2,
     },
   ];
 
@@ -137,12 +172,10 @@ export const ConcertDetail: React.FC<MerchDetailProps> = ({
       style={{flex: 1}}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
       <View style={styles.root}>
-        <TopNavigation.Type4
+        <TopNavigation.Type1
           title={t('Event.Concert.Detail')}
           maxLengthTitle={20}
           itemStrokeColor={'white'}
-          rightIcon={<ThreeDotsIcon fill={Color.Neutral[10]} />}
-          rightIconAction={() => null}
           leftIcon={<ArrowLeftIcon />}
           leftIconAction={handleBackAction}
           containerStyles={{paddingHorizontal: widthPercentage(20)}}
@@ -168,8 +201,11 @@ export const ConcertDetail: React.FC<MerchDetailProps> = ({
 
           <View style={styles.descContainer}>
             <Text style={styles.title}>{data.title}</Text>
-            <View style={styles.owner}>
-              <Text style={styles.ownerLabel}>By</Text>
+            <Text style={styles.title2}>Jakarta Velodrome</Text>
+
+            <TouchableOpacity
+              style={styles.owner}
+              onPress={() => navigation.navigate('Shop')}>
               <View style={{marginHorizontal: 5}}>
                 {data?.ownerImage ? (
                   <Avatar
@@ -182,50 +218,78 @@ export const ConcertDetail: React.FC<MerchDetailProps> = ({
               </View>
 
               <Text style={styles.ownerLabel}>{data.owner}</Text>
+            </TouchableOpacity>
+
+            <View style={styles.disc}>
+              <CoinIcon
+                height={widthResponsive(24)}
+                width={widthResponsive(24)}
+              />
+              <Gap width={widthResponsive(4)} />
+              <Text style={styles.price}>
+                {toCurrency(data.price, {withFraction: false})}
+              </Text>
             </View>
-            <Text style={styles.price}>
-              {data.charge === 'no_tickets'
-                ? ''
-                : data.charge === 'free_event'
-                ? 'Free'
-                : data.currency +
-                  ' ' +
-                  toCurrency(data.price / 100, {withFraction: false})}
-            </Text>
+            <View style={styles.disc}>
+              <View style={styles.discPercContainer}>
+                <Text style={styles.discPerc}>25%</Text>
+              </View>
+              <Gap width={widthResponsive(4)} />
+              <Text style={styles.priceDisc}>
+                {toCurrency(data.price, {withFraction: false})}
+              </Text>
+            </View>
           </View>
+
           <SsuDivider />
           <View style={styles.descContainer}>
-            <Text style={styles.subtitle}>{t('Event.Description')}</Text>
-            <Text style={styles.desc}>{data.desc ? data.desc : '-'}</Text>
+            <TicketDescription />
           </View>
           <SsuDivider />
           <View style={styles.descContainer}>
             <View style={styles.attribute}>
-              <Text style={styles.subtitle}>{t('Event.Concert.LineUp')}</Text>
-              <TopMusician
-                dataMusician={dataMusician ? dataMusician : []}
-                setFollowMusician={(
-                  props?: FollowMusicianPropsType,
-                  params?: ParamsProps,
-                ) => setFollowMusician(props, params)}
-                setUnfollowMusician={(
-                  props?: FollowMusicianPropsType,
-                  params?: ParamsProps,
-                ) => setUnfollowMusician(props, params)}
-                emptyState={
-                  <View>
-                    <Text style={styles.desc}>-</Text>
-                  </View>
-                }
-              />
+              <View style={[styles.row, {justifyContent: 'space-between'}]}>
+                <Text style={[styles.subtitle, {marginBottom: 0}]}>
+                  {t('Event.Concert.LineUp')}
+                </Text>
+                <TouchableOpacity>
+                  <Text
+                    style={[
+                      styles.subtitle,
+                      {marginBottom: 0, color: Color.Pink.linear},
+                    ]}>
+                    View More
+                  </Text>
+                </TouchableOpacity>
+              </View>
+
+              <LineUp />
             </View>
             <View style={styles.attribute}>
-              <Text style={styles.subtitle}>{t('Event.Concert.Class')}</Text>
-              <SelectSize
-                selectedSize={selectedSize}
-                sizes={sizes}
-                onPressSize={size => setSelectedSize(size)}
+              <Text style={styles.subtitle}>
+                {t('Event.Concert.ChooseDate')}
+              </Text>
+              <SelectDate
+                selected={selectedDate}
+                data={dates}
+                onPressSize={date => setSelectedDate(date)}
               />
+            </View>
+            <View>
+              <Text style={styles.subtitle}>{t('Event.Concert.Ticket')}</Text>
+              <TicketCategory
+                selected={selectedTicket}
+                data={tickets}
+                onPressSize={ticket => setSelectedTicket(ticket)}
+                onPressDetail={() => navigation.navigate('TicketDetail')}
+              />
+            </View>
+          </View>
+          <SsuDivider />
+          <View style={[styles.descContainer, styles.priceContainer]}>
+            <View>
+              <Text style={styles.subtitle}>{t('Event.Concert.Total')}</Text>
+              <Text style={styles.totalPrice}>3,500 Credits</Text>
             </View>
             <View>
               <Text style={styles.subtitle}>{t('Event.Quantity')}</Text>
@@ -280,23 +344,27 @@ const styles = StyleSheet.create({
   title: {
     color: 'white',
     fontSize: normalize(16),
-    marginBottom: 8,
+    marginBottom: heightPercentage(4),
     fontFamily: Font.InterSemiBold,
+  },
+  title2: {
+    ...Typography.Subtitle2,
+    color: Color.Dark[50],
+    marginBottom: heightPercentage(12),
   },
   subtitle: {
     color: 'white',
     fontFamily: Font.InterMedium,
     fontSize: normalize(12),
-    marginBottom: heightResponsive(8),
+    marginBottom: heightResponsive(12),
   },
   descContainer: {
-    paddingHorizontal: normalize(24),
-    paddingVertical: normalize(20),
+    paddingHorizontal: widthPercentage(24),
+    paddingVertical: heightPercentage(20),
   },
   desc: {
-    color: 'white',
-    fontFamily: Font.InterRegular,
-    fontSize: normalize(11),
+    ...Typography.Subtitle3,
+    color: Color.Neutral[50],
   },
   owner: {
     flexDirection: 'row',
@@ -315,5 +383,41 @@ const styles = StyleSheet.create({
   },
   attribute: {
     marginBottom: heightResponsive(24),
+  },
+  disc: {flexDirection: 'row', alignItems: 'center', marginTop: 5},
+  priceDisc: {
+    color: Color.Neutral[50],
+    fontWeight: '500',
+    textDecorationLine: 'line-through',
+  },
+  discPerc: {
+    fontSize: mvs(8),
+    fontFamily: 'Inter-Semibold',
+    color: '#F94D63',
+  },
+  discPercContainer: {
+    backgroundColor: '#FFB8C6',
+    padding: 4,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 4,
+  },
+  row: {
+    flexDirection: 'row',
+  },
+  descLeft: {
+    width: '35%',
+  },
+  descRight: {
+    flex: 1,
+  },
+  priceContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  totalPrice: {
+    ...Typography.Heading6,
+    color: Color.Success[400],
+    paddingTop: heightPercentage(6),
   },
 });

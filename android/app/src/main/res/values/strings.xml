@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Artist</string>
+    <string name="app_name">Beamco for Artist</string>
     <string name="facebook_app_id">687852656020966</string>
     <string name="facebook_client_token">ea77058ba43ca99a7c661f0003857457</string>
 </resources>
