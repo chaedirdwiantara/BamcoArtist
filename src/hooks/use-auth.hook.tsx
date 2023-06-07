@@ -48,6 +48,7 @@ export const useAuthHook = () => {
   const [ssoType, setSsoType] = useState<RegistrationType>();
   const [ssoId, setSsoId] = useState<string>('');
   const [ssoFullname, setSsoFullname] = useState<string>('');
+  const [isRegisterSSO, setIsRegisterSSO] = useState<boolean>(false);
 
   const onRegisterUser = async (props: RegisterPropsType) => {
     setIsError(false);
@@ -132,6 +133,7 @@ export const useAuthHook = () => {
     setIsError(false);
     setErrorMsg('');
     setSsoRegistered(null);
+    setIsRegisterSSO(false);
     GoogleSignin.configure();
     try {
       await GoogleSignin.hasPlayServices();
@@ -144,6 +146,7 @@ export const useAuthHook = () => {
         setSsoFullname(userInfo.user.name ?? userInfo.user.email.split('@')[0]);
         setSsoType('google');
         setSsoRegistered(false);
+        setIsRegisterSSO(true);
       } else if (response.code === 200) {
         setSsoRegistered(true);
         if (response.data.accessToken) {
@@ -200,9 +203,11 @@ export const useAuthHook = () => {
   const onLoginApple = async () => {
     setIsError(false);
     setSsoRegistered(null);
+    setIsRegisterSSO(false);
     setSsoEmail('');
     setErrorMsg('');
     try {
+      setIsLoading(true);
       const appleAuthRequestResponse = await appleAuth.performRequest({
         requestedOperation: appleAuth.Operation.LOGIN,
         requestedScopes: [appleAuth.Scope.FULL_NAME, appleAuth.Scope.EMAIL],
@@ -224,6 +229,7 @@ export const useAuthHook = () => {
           );
           setSsoType('apple');
           setSsoRegistered(false);
+          setIsRegisterSSO(true);
         } else if (response.code === 200) {
           setSsoRegistered(true);
           if (response.data.accessToken) {
@@ -254,6 +260,8 @@ export const useAuthHook = () => {
       } else if (error instanceof Error) {
         setSsoErrorMsg(error.message);
       }
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -563,5 +571,6 @@ export const useAuthHook = () => {
     confirmEmailOtpFP,
     onChangePassword,
     ssoFullname,
+    isRegisterSSO,
   };
 };
