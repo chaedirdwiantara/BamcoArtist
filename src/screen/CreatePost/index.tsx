@@ -227,6 +227,8 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
             : '',
           songDuration: 60,
           transcodedSongUrl: [transcode, transcode],
+          musicianId: '',
+          album: {id: -1},
         };
         setMusicData(dataMusicProps);
       }
@@ -502,6 +504,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
         dataMusic[0]?.isLiked !== undefined ? dataMusic[0].isLiked : false,
       album: {id: -1},
       musician: {name: dataMusic[0] ? dataMusic[0].musicianName : ''},
+      musicianUUID: '',
     };
 
     addPlaylist({
