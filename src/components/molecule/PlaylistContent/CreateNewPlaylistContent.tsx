@@ -15,7 +15,7 @@ import {Dropdown} from '../DropDown';
 import {color, font} from '../../../theme';
 import {PhotoPlaylist} from './PhotoPlaylist';
 import {TopNavigation} from '../TopNavigation';
-import {debounce} from '../../../utils/debounce';
+import {useDebounce} from '../../../utils/debounce';
 import {ArrowLeftIcon} from '../../../assets/icon';
 import {ModalConfirm} from '../Modal/ModalConfirm';
 import {Image} from 'react-native-image-crop-picker';
@@ -32,7 +32,7 @@ import {heightPercentage, width, widthPercentage} from '../../../utils';
 interface Props {
   goToPlaylist: (id: number) => void;
   onPressGoBack: () => void;
-  songAddedToPlaylist: {id: number[]; type?: string};
+  songAddedToPlaylist: {id?: number[]; type?: string};
 }
 
 export const CreateNewPlaylistContent: React.FC<Props> = ({
@@ -103,10 +103,12 @@ export const CreateNewPlaylistContent: React.FC<Props> = ({
 
   const addSongToPlaylist = async (id: number) => {
     if (songAddedToPlaylist !== undefined) {
+      const songId =
+        songAddedToPlaylist.id !== undefined ? songAddedToPlaylist.id[0] : 0;
       if (songAddedToPlaylist?.type === 'song') {
         await addSong({
           playlistId: id,
-          songId: songAddedToPlaylist.id[0],
+          songId,
         });
       }
     }
@@ -261,7 +263,7 @@ export const CreateNewPlaylistContent: React.FC<Props> = ({
           title={t('Btn.Save') || ''}
           subtitle={t('Modal.Playlist.Save') || ''}
           onPressClose={closeModal}
-          onPressOk={debounce(onPressConfirm)}
+          onPressOk={useDebounce(onPressConfirm)}
           disabled={isLoading}
         />
 
