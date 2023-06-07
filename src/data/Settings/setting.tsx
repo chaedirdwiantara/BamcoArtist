@@ -5,7 +5,7 @@ export const menuSetting: {text: string; value: string}[] = [
   },
   {
     text: 'Setting.Exclusive.Title',
-    value: 'Exclusive Content',
+    value: 'Exclusive Content Setting',
   },
   {
     text: 'Setting.Security.Title',
