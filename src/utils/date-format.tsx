@@ -47,7 +47,7 @@ const timeToString = (totalSeconds: number) => {
   return result;
 };
 
-const dateFormatSubscribe = (ISOStringDate: string) => {
+const dateFormatSubscribe = (ISOStringDate: string | Date) => {
   const today = new Date(ISOStringDate);
   const day = today.toLocaleString('default', {day: 'numeric'});
   const month = today.toLocaleString('default', {month: 'short'});

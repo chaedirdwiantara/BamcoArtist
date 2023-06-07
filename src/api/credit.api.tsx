@@ -61,11 +61,13 @@ export const unsubsEC = async (id?: string): Promise<any> => {
 export const getListTips = async ({
   page,
   perPage,
+  filterColumn,
   filterValue,
 }: {
   page: number;
   perPage: number;
-  filterValue: number;
+  filterColumn: string[];
+  filterValue: number[] | string[];
 }): Promise<any> => {
   const {data} = await SsuAPI().request<any>({
     url: '/donation',
@@ -73,8 +75,8 @@ export const getListTips = async ({
     params: {
       page: page,
       per_page: perPage,
-      filter_column: 'contribution_repeat_status',
-      filter_value: Number(filterValue),
+      filter_column: filterColumn,
+      filter_value: filterValue,
     },
   });
 
