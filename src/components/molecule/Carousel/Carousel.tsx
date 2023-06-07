@@ -50,7 +50,7 @@ export const Carousel: FC<CarouselProps> = ({data, onPressBanner}) => {
 
   const handleScroll: OnScrollEventHandler = event => {
     let offsetX = event.nativeEvent.contentOffset.x;
-    setActiveIndexSlide(Math.ceil(offsetX / width));
+    setActiveIndexSlide(Math.ceil(offsetX / ITEM_LENGTH));
   };
 
   return (
@@ -71,12 +71,12 @@ export const Carousel: FC<CarouselProps> = ({data, onPressBanner}) => {
 
           const translateX = scrollX.interpolate({
             inputRange,
-            outputRange: [ITEM_LENGTH, 0, -ITEM_LENGTH],
+            outputRange: [ITEM_LENGTH + 20, 0, -ITEM_LENGTH + 20],
           });
 
           const scale = scrollX.interpolate({
             inputRange,
-            outputRange: [0.9, 1.2, 0.9],
+            outputRange: [0.9, 1.1, 0.9],
           });
 
           return (
