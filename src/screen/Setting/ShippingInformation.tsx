@@ -15,7 +15,7 @@ export const ShippingInformationScreen: React.FC<ShippingInformationProps> = ({
   navigation,
   route,
 }: ShippingInformationProps) => {
-  const {data} = route.params;
+  const {data, from} = route.params;
   const onPressGoBack = () => {
     navigation.goBack();
   };
@@ -57,6 +57,7 @@ export const ShippingInformationScreen: React.FC<ShippingInformationProps> = ({
         onPressGoBack={onPressGoBack}
         setSelectedCountry={setSelectedCountry}
         setSelectedState={setSelectedState}
+        from={from}
       />
     </View>
   );
