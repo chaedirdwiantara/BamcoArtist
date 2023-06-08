@@ -49,7 +49,13 @@ export const DonateCardContent: React.FC<DonateCardProps> = ({
           </View>
           <DropdownMore
             dataFilter={
-              type === 'subs' ? dropDownSubscription : dropDownTipping
+              type === 'subs'
+                ? next
+                  ? dropDownSubscription
+                  : dropDownSubscription.slice(1)
+                : next
+                ? dropDownTipping
+                : dropDownTipping.slice(1)
             }
             selectedMenu={onPressMore}
           />
