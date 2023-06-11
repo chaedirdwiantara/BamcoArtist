@@ -67,7 +67,6 @@ import {
 import Clipboard from '@react-native-community/clipboard';
 import {useQuery} from 'react-query';
 import {useHeaderAnimation} from '../../hooks/use-header-animation.hook';
-import {useScrollStore} from '../../store/translateY.store';
 
 const {height} = Dimensions.get('screen');
 const {StatusBarManager} = NativeModules;
@@ -420,6 +419,7 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
               />
             }
             onEndReached={handleEndScroll}
+            onEndReachedThreshold={0.3}
             onScroll={handleScroll}
             bounces={false}
             renderItem={({item, index}) => (

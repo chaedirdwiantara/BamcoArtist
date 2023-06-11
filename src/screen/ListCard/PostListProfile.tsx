@@ -272,7 +272,9 @@ const PostListProfile: FC<PostListProps> = (props: PostListProps) => {
               <>
                 <ListCard.PostList
                   toDetailOnPress={
-                    item.isPremiumPost && item.musician.uuid !== MyUuid
+                    item.isPremiumPost &&
+                    item.musician.uuid !== MyUuid &&
+                    !item.isSubscribe
                       ? handleOnBlur
                       : () => {
                           handleToDetailMusician(item.musician.uuid);
@@ -291,7 +293,9 @@ const PostListProfile: FC<PostListProps> = (props: PostListProps) => {
                   postDate2={item.createdAt}
                   category={categoryNormalize(item.category)}
                   onPress={
-                    item.isPremiumPost && item.musician.uuid !== MyUuid
+                    item.isPremiumPost &&
+                    item.musician.uuid !== MyUuid &&
+                    !item.isSubscribe
                       ? handleOnBlur
                       : () => cardOnPress(item)
                   }
@@ -311,13 +315,17 @@ const PostListProfile: FC<PostListProps> = (props: PostListProps) => {
                     <ChildrenCard
                       data={item}
                       onPress={
-                        item.isPremiumPost && item.musician.uuid !== MyUuid
+                        item.isPremiumPost &&
+                        item.musician.uuid !== MyUuid &&
+                        !item.isSubscribe
                           ? handleOnBlur
                           : onPressPlaySong
                       }
                       isPlay={isPlaying}
                       playOrPause={
-                        item.isPremiumPost && item.musician.uuid !== MyUuid
+                        item.isPremiumPost &&
+                        item.musician.uuid !== MyUuid &&
+                        !item.isSubscribe
                           ? handleOnBlur
                           : handlePausePlay
                       }
@@ -325,13 +333,17 @@ const PostListProfile: FC<PostListProps> = (props: PostListProps) => {
                       currentProgress={playerProgress.position}
                       duration={playerProgress.duration}
                       seekPlayer={
-                        item.isPremiumPost && item.musician.uuid !== MyUuid
+                        item.isPremiumPost &&
+                        item.musician.uuid !== MyUuid &&
+                        !item.isSubscribe
                           ? handleOnBlur
                           : seekPlayer
                       }
                       isIdNowPlaying={item.id === idNowPlaying}
                       blurModeOn={
-                        item.isPremiumPost && item.musician.uuid !== MyUuid
+                        item.isPremiumPost &&
+                        item.musician.uuid !== MyUuid &&
+                        !item.isSubscribe
                       }
                     />
                   }
