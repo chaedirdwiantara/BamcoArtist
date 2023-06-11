@@ -1,11 +1,27 @@
-export interface TopUpProps {
+export interface ListPriceProps {
   totalCoin: string;
   price: string;
-  initialCoin?: string;
-  bonusCoin?: string;
+  initialCoin: string;
+  bonusCoin: string;
 }
 
-const listPrice: TopUpProps[] = [
+export interface ListTransactionProps {
+  text: string;
+  date: string;
+  from: string;
+}
+
+export interface ListWithdrawalProps {
+  transactionAmount: number;
+  conversionAmount: number;
+  idMusician: string;
+  date: string;
+  status: string;
+  notes: string;
+  isOpen?: boolean;
+}
+
+const listPrice: ListPriceProps[] = [
   {
     totalCoin: '1,000',
     price: '$7.99',
@@ -38,4 +54,54 @@ const listPrice: TopUpProps[] = [
   },
 ];
 
-export default listPrice;
+const listTransaction: ListTransactionProps[] = [
+  {
+    text: '2.500 credits received from',
+    date: 'Dec 19, 2022',
+    from: '@fanbase',
+  },
+  {
+    text: '500 credits received from',
+    date: 'Dec 18, 2022',
+    from: '@hakunamatata',
+  },
+  {
+    text: '500 credits received from',
+    date: 'Dec 17, 2022',
+    from: '@hakunamatata',
+  },
+  {
+    text: '2,150 Credit have been purchased!',
+    date: 'Dec 16, 2022',
+    from: '',
+  },
+];
+
+const listWithdrawal: ListWithdrawalProps[] = [
+  {
+    transactionAmount: 10000,
+    conversionAmount: 10000,
+    idMusician: '50352657444',
+    date: 'Des 10, 2022',
+    status: 'Pending',
+    notes: '',
+  },
+  {
+    transactionAmount: 40000,
+    conversionAmount: 50000,
+    idMusician: '50352657231',
+    date: 'Des 05, 2022',
+    status: 'Success',
+    notes: '',
+  },
+  {
+    transactionAmount: 100000,
+    conversionAmount: 125000,
+    idMusician: '50352657897',
+    date: 'Des 01, 2022',
+    status: 'Rejected',
+    notes: 'Your withdrawal have been rejected due bank iBeamcoes',
+  },
+];
+
+export {listPrice, listTransaction, listWithdrawal};
