@@ -9,15 +9,25 @@ import {
 } from 'react-native';
 import {ms, mvs} from 'react-native-size-matters';
 
+import {
+  heightPercentage,
+  normalize,
+  width,
+  widthPercentage,
+} from '../../../utils';
+import Gap from '../Gap/Gap';
 import Font from '../../../theme/Font';
 import Color from '../../../theme/Color';
 import Typography from '../../../theme/Typography';
 import {ArrowRightIcon} from '../../../assets/icon';
-import {heightPercentage, normalize, width} from '../../../utils';
+import {ButtonStatus} from '../../molecule/TopupCoin/ButtonStatus';
 
 interface Props {
   text: string;
+  title?: string;
   subtitle?: string;
+  showIcon?: boolean;
+  isButton?: boolean;
   icon?: any;
   onPress?: () => void;
   containerStyles?: ViewStyle;
@@ -80,11 +90,33 @@ const RightIconDisable: React.FC<Props> = (props: Props) => {
   );
 };
 
+const Withdrawal: React.FC<Props> = (props: Props) => {
+  const {icon, showIcon, title, text, isButton, containerStyles} = props;
+
+  return (
+    <View style={[containerStyles]}>
+      <Text style={[Typography.Caption, {color: Color.Dark[50]}]}>{title}</Text>
+      <View style={styles.rootWithdrawal}>
+        {isButton ? (
+          <ButtonStatus label={text} />
+        ) : (
+          <Text style={[Typography.Subtitle2, {color: Color.Neutral[10]}]}>
+            {text ? text : '-'}
+          </Text>
+        )}
+        <Gap width={widthPercentage(10)} />
+        {showIcon && icon}
+      </View>
+    </View>
+  );
+};
+
 export const MenuText = {
   LeftIcon,
   RightIcon,
   LeftIconWithSubtitle,
   RightIconDisable,
+  Withdrawal,
 };
 
 const styles = StyleSheet.create({
@@ -124,5 +156,10 @@ const styles = StyleSheet.create({
   textDisable: {
     color: Color.Neutral[50],
     fontSize: mvs(13),
+  },
+  rootWithdrawal: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: mvs(8),
   },
 });
