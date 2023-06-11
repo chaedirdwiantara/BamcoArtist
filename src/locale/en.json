@@ -775,14 +775,23 @@
     "Support": "Support Your Musician"
   },
   "TopUp": {
-    "Title": "Top Up",
-    "Subtitle1": "Beamco Coin is your way to show your appreciation",
-    "Subtitle2": "Beamco Coin allows you to parcitipate in Musician’s upside and grow their community",
-    "Subtitle3": "Find Musician who is providing a lot of value? Rewards them with Beamco Coin as a support",
-    "MyCoin": "My Coin",
+    "Title": "Credit",
+    "Subtitle1": "BEAMCO Credit is your way to show your appreciation",
+    "Subtitle2": "BEAMCO Credit allows you to parcitipate in Musician’s upside and grow their community",
+    "Subtitle3": "Find Musician who is providing a lot of value? Rewards them with BEAMCO Credit as a support",
+    "MyCoin": "My Credit",
     "Filter": {
       "Buy": "Buy Package",
-      "Transaction": "Transaction"
+      "Transaction": "Transaction",
+      "Withdrawal": "Withdrawal"
+    },
+    "Withdrawal": {
+      "TransactionAmount": "Transaction Amount",
+      "ConversionAmount": "Conversion Amount to HKD",
+      "To": "To",
+      "Date": "Date",
+      "TransactionStatus": "Transaction Status",
+      "Notes": "Notes"
     }
   },
   "RecoverAccount": {
