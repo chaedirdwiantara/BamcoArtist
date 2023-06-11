@@ -1,16 +1,28 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {StyleSheet, View, Text, ScrollView} from 'react-native';
+import {useTranslation} from 'react-i18next';
 
+import {
+  heightPercentage,
+  kFormatter,
+  toCurrency,
+  width,
+  widthPercentage,
+} from '../../../utils';
+import {
+  ListWithdrawalProps,
+  listPrice,
+  listWithdrawal,
+} from '../../../data/topUp';
 import {Gap} from '../../atom';
 import {CoinCard} from './CoinCard';
 import {TabFilter} from '../TabFilter';
-import listPrice from '../../../data/topUp';
 import {TopNavigation} from '../TopNavigation';
+import {WithdrawalCard} from './WithdrawalCard';
 import {color, typography} from '../../../theme/';
 import {TransactionCard} from './TransactionCard';
+import {useCreditHook} from '../../../hooks/use-credit.hook';
 import {ArrowLeftIcon, CoinDIcon} from '../../../assets/icon';
-import {heightPercentage, width, widthPercentage} from '../../../utils';
-import {useTranslation} from 'react-i18next';
 
 interface TopupCoinProps {
   onPressGoBack: () => void;
@@ -18,13 +30,28 @@ interface TopupCoinProps {
 
 export const TopupCoinContent: React.FC<TopupCoinProps> = ({onPressGoBack}) => {
   const {t} = useTranslation();
+  const {creditCount, getCreditCount} = useCreditHook();
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const [withdrawalList, setWithdrawalList] =
+    useState<ListWithdrawalProps[]>(listWithdrawal);
   const [filter] = useState([
     {filterName: 'TopUp.Filter.Buy'},
     {filterName: 'TopUp.Filter.Transaction'},
+    {filterName: 'TopUp.Filter.Withdrawal'},
   ]);
+
+  useEffect(() => {
+    getCreditCount();
+  }, []);
+
   const filterData = (item: any, index: number) => {
     setSelectedIndex(index);
+  };
+
+  const onPressOpenWithdrawal = (index: number) => {
+    let newList = [...withdrawalList];
+    newList[index].isOpen = !newList[index].isOpen;
+    setWithdrawalList(newList);
   };
 
   return (
@@ -59,7 +86,7 @@ export const TopupCoinContent: React.FC<TopupCoinProps> = ({onPressGoBack}) => {
             <CoinDIcon />
             <Gap width={widthPercentage(5)} />
             <Text style={[typography.Heading6, {color: color.Neutral[10]}]}>
-              2,150
+              {kFormatter(creditCount, 1)}
             </Text>
           </View>
         </View>
@@ -68,7 +95,7 @@ export const TopupCoinContent: React.FC<TopupCoinProps> = ({onPressGoBack}) => {
           filterData={filter}
           onPress={filterData}
           selectedIndex={selectedIndex}
-          TouchableStyle={{width: width * 0.45}}
+          TouchableStyle={{width: width * 0.3}}
           translation={true}
         />
 
@@ -95,11 +122,38 @@ export const TopupCoinContent: React.FC<TopupCoinProps> = ({onPressGoBack}) => {
               />
             </View>
           </View>
-        ) : (
+        ) : filter[selectedIndex].filterName === 'TopUp.Filter.Transaction' ? (
           <TransactionCard
-            title="20 Coin have been purchased!"
+            title="20 Credit have been purchased!"
             date="Dec 16, 2022"
           />
+        ) : (
+          <View
+            style={{
+              marginTop: heightPercentage(10),
+              marginBottom: heightPercentage(40),
+            }}>
+            {withdrawalList.map((val, i) => (
+              <WithdrawalCard
+                key={i}
+                transactionAmount={toCurrency(val.transactionAmount, {
+                  withFraction: false,
+                })}
+                conversionAmount={
+                  'HKD ' +
+                  toCurrency(val.conversionAmount, {
+                    withFraction: false,
+                  })
+                }
+                idMusician={val.idMusician}
+                date={val.date}
+                status={val.status}
+                notes={val.notes}
+                isOpen={val.isOpen}
+                onPress={() => onPressOpenWithdrawal(i)}
+              />
+            ))}
+          </View>
         )}
       </ScrollView>
     </View>
