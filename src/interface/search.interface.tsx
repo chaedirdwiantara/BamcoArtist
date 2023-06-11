@@ -45,7 +45,7 @@ export type ListDataSearchMusician = {
   imageProfileUrls: imageTypes[];
   followers: number;
   isFollowed?: boolean;
-  point?: number;
+  point?: string;
 };
 
 export type ListSearchMusicianResponseType = {
@@ -118,6 +118,9 @@ export type ListDataSearchSongs = {
   songDuration: number;
   transcodedSongUrl: Transcode[];
   isLiked?: boolean;
+  album: {
+    id: number;
+  };
 };
 
 export type ListSearchSongsResponseType = {

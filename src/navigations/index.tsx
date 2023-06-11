@@ -157,7 +157,7 @@ export type RootStackParams = {
     oldPhone: string;
   };
   OtpPhoneNumber: OtpPhoneScreen;
-  CreateNewPlaylist: {id: number[]; type?: string};
+  CreateNewPlaylist: {id?: number[]; type?: string};
   DonationAndSubscription: undefined;
   EditProfile: ProfileResponseData;
   EditPlaylist: Playlist;

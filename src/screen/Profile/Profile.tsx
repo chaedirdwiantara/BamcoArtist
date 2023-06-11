@@ -72,10 +72,12 @@ export const ProfileScreen: React.FC<ProfileProps> = ({
       }, 3000);
   }, [toastVisible]);
 
-  const onPressGoTo = (
-    screenName: 'Setting' | 'Following' | 'CreateNewPlaylist',
-  ) => {
-    navigation.navigate(screenName);
+  const goToSetting = () => {
+    navigation.navigate('Setting');
+  };
+
+  const goToCreatePlaylist = () => {
+    navigation.navigate('CreateNewPlaylist', {});
   };
 
   const goToEditProfile = () => {
@@ -125,7 +127,6 @@ export const ProfileScreen: React.FC<ProfileProps> = ({
           goToPlaylist={goToPlaylist}
           dataPlaylist={dataPlaylist}
           goToEditProfile={goToEditProfile}
-          onPressGoTo={screenName => onPressGoTo(screenName)}
           uuid={uuid}
           dataAlbum={dataAlbum}
           dataDetailMusician={dataDetailMusician}
@@ -137,6 +138,8 @@ export const ProfileScreen: React.FC<ProfileProps> = ({
           toastText={toastText}
           refreshing={refreshing}
           setRefreshing={() => setRefreshing(true)}
+          goToSetting={goToSetting}
+          goToCreatePlaylist={goToCreatePlaylist}
         />
       )}
     </View>
