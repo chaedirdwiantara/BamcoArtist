@@ -7,10 +7,12 @@ import {
   FlatList,
   TouchableOpacity,
   ViewStyle,
+  Animated,
 } from 'react-native';
 import {mvs} from 'react-native-size-matters';
 import {color, font} from '../../../theme';
 import {heightResponsive, widthResponsive} from '../../../utils';
+import {useScrollStore} from '../../../store/translateY.store';
 
 interface filterData {
   filterName: string;
@@ -39,8 +41,19 @@ const Type1: React.FC<TabFilterProps> = ({
   translation,
 }) => {
   const {t} = useTranslation();
+  const {compBTranslateY} = useScrollStore();
+
   return (
-    <View style={[styles.tab, containerStyle]}>
+    <Animated.View
+      style={[
+        styles.tab,
+        {
+          transform: compBTranslateY
+            ? [{translateY: compBTranslateY}]
+            : undefined,
+        },
+        containerStyle,
+      ]}>
       <FlatList
         horizontal
         data={filterData}
@@ -77,7 +90,7 @@ const Type1: React.FC<TabFilterProps> = ({
           </TouchableOpacity>
         )}
       />
-    </View>
+    </Animated.View>
   );
 };
 

@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {Animated, StyleSheet, Text, View, ViewStyle} from 'react-native';
 import React, {FC} from 'react';
 import * as Progress from 'react-native-progress';
 import {widthResponsive} from '../../../utils';
@@ -6,18 +6,31 @@ import {color, font} from '../../../theme';
 import {mvs} from 'react-native-size-matters';
 import {Gap} from '../../atom';
 import Video from 'react-native-video';
+import {useScrollStore} from '../../../store/translateY.store';
 
 interface ProgressBarProps {
   progress: number;
   caption: string;
   uri?: string;
+  containerStyles?: ViewStyle;
 }
 
 const ProgressBar: FC<ProgressBarProps> = (props: ProgressBarProps) => {
-  const {progress, caption, uri} = props;
+  const {progress, caption, uri, containerStyles} = props;
+
+  const {compCTranslateY} = useScrollStore();
 
   return (
-    <View style={styles.container}>
+    <Animated.View
+      style={[
+        styles.container,
+        {
+          transform: compCTranslateY
+            ? [{translateY: compCTranslateY}]
+            : undefined,
+        },
+        containerStyles,
+      ]}>
       <View style={styles.childContainer}>
         <Video
           source={{
@@ -43,7 +56,7 @@ const ProgressBar: FC<ProgressBarProps> = (props: ProgressBarProps) => {
         unfilledColor={color.Dark[300]}
         borderRadius={0}
       />
-    </View>
+    </Animated.View>
   );
 };
 
@@ -51,11 +64,13 @@ export default ProgressBar;
 
 const styles = StyleSheet.create({
   container: {
-    marginHorizontal: widthResponsive(-24),
+    // marginHorizontal: widthResponsive(-24),
     borderTopWidth: 1,
     borderTopColor: color.Dark[500],
     paddingTop: widthResponsive(8),
     marginBottom: widthResponsive(16),
+    zIndex: 4,
+    backgroundColor: color.Dark[800],
   },
   childContainer: {
     flexDirection: 'row',
