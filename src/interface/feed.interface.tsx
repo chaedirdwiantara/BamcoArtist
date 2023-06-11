@@ -119,6 +119,7 @@ export type PostList = {
   createdAt: string;
   updatedAt: string;
   isPremiumPost: boolean;
+  isSubscribe: boolean;
   musician: MusicianData;
   isLiked: boolean;
   quoteToPost: QuoteToPost;

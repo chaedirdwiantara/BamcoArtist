@@ -1,7 +1,9 @@
-import React, {FC, useCallback, useEffect, useRef, useState} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import {
+  Animated,
   Dimensions,
-  FlatList,
+  NativeModules,
+  Platform,
   RefreshControl,
   StyleSheet,
   Text,
@@ -25,7 +27,7 @@ import {
 } from '../../data/dropdown';
 import {color, font, typography} from '../../theme';
 import {heightPercentage, heightResponsive, widthResponsive} from '../../utils';
-import {useFocusEffect, useNavigation} from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {MainTabParams, RootStackParams} from '../../navigations';
 import {EmptyState} from '../../components/molecule/EmptyState/EmptyState';
@@ -62,7 +64,11 @@ import Clipboard from '@react-native-community/clipboard';
 import {useQuery} from 'react-query';
 import {useVideoStore} from '../../store/video.store';
 import {useUploadImageHook} from '../../hooks/use-uploadImage.hook';
+import {useHeaderAnimation} from '../../hooks/use-header-animation.hook';
+
 const {height} = Dimensions.get('screen');
+const {StatusBarManager} = NativeModules;
+const barHeight = StatusBarManager.HEIGHT;
 
 interface PostListProps {
   dataRightDropdown: DataDropDownType[];
@@ -90,6 +96,8 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
     uriVideo,
     allowRefresh,
   } = props;
+
+  const {handleScroll, compCTranslateY} = useHeaderAnimation();
 
   const [recorder, setRecorder] = useState<string[]>([]);
   const [selectedId, setSelectedId] = useState<string[]>();
@@ -358,7 +366,11 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
 
   return (
     <>
-      <View style={styles.container}>
+      <Animated.View
+        style={[
+          styles.filterContainer,
+          {transform: [{translateY: compCTranslateY}]},
+        ]}>
         <DropDownFilter
           labelCaption={
             selectedFilterMenu
@@ -368,6 +380,10 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
           dataFilter={dataLeftDropdown}
           selectedMenu={setSelectedFilterMenu}
           leftPosition={widthResponsive(-60)}
+          containerStyle={{
+            marginTop: widthResponsive(20),
+            marginBottom: widthResponsive(20),
+          }}
         />
         <DropDownFilter
           labelCaption={
@@ -378,27 +394,34 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
           dataFilter={dataRightDropdown}
           selectedMenu={setSelectedCategoryMenu}
           leftPosition={widthResponsive(-144)}
+          containerStyle={{
+            marginTop: widthResponsive(20),
+            marginBottom: widthResponsive(20),
+          }}
         />
-      </View>
+      </Animated.View>
       {videoUploadProgress ? (
         <ProgressBar
           progress={videoUploadProgress}
           caption={'Uploading is in progress, it will take few second'}
           uri={uriVideo}
+          containerStyles={{
+            position: 'absolute',
+            top:
+              Platform.OS === 'ios'
+                ? heightResponsive(137)
+                : heightResponsive(barHeight + 160),
+          }}
         />
       ) : null}
       {dataMain && dataMain.length !== 0 ? (
-        <View
-          style={{
-            flex: 1,
-            marginHorizontal: widthResponsive(-24),
-          }}>
+        <View style={styles.bodyContainer}>
           {refreshing && (
             <View style={styles.loadingContainer}>
               <LoadingSpinner />
             </View>
           )}
-          <FlatList
+          <Animated.FlatList
             data={
               filterActive
                 ? dataMain
@@ -422,8 +445,27 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
               />
             }
             onEndReached={handleEndScroll}
+            onScroll={handleScroll}
+            bounces={false}
             renderItem={({item, index}) => (
               <>
+                {index === 0 && !videoUploadProgress ? (
+                  <Gap
+                    height={
+                      Platform.OS === 'ios'
+                        ? heightResponsive(134)
+                        : heightResponsive(barHeight + 166)
+                    }
+                  />
+                ) : index === 0 && videoUploadProgress ? (
+                  <Gap
+                    height={
+                      Platform.OS === 'ios'
+                        ? heightResponsive(188)
+                        : heightResponsive(barHeight + 224)
+                    }
+                  />
+                ) : null}
                 <ListCard.PostList
                   toDetailOnPress={handleToDetailMusician}
                   musicianName={item.musician.fullname}
@@ -544,20 +586,22 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
 export default PostListMyPost;
 
 const styles = StyleSheet.create({
-  container: {
+  bodyContainer: {
+    flex: 1,
+    marginHorizontal: widthResponsive(-24),
+  },
+  filterContainer: {
     width: '100%',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: heightResponsive(10),
-    marginBottom: heightResponsive(8),
-  },
-  childrenPostTitle: {
-    flexShrink: 1,
-    maxWidth: widthResponsive(288),
-    fontFamily: font.InterRegular,
-    fontWeight: '400',
-    fontSize: mvs(13),
-    color: color.Neutral[10],
+    position: 'absolute',
+    top:
+      Platform.OS === 'ios'
+        ? heightResponsive(80)
+        : heightResponsive(barHeight + 100),
+    left: widthResponsive(24),
+    zIndex: 1,
+    backgroundColor: color.Dark[800],
   },
   modalContainer: {
     width: '100%',

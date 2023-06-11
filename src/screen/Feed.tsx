@@ -6,13 +6,19 @@ import {
   Platform,
   NativeModules,
   Text,
+  SafeAreaView,
 } from 'react-native';
 import {widthPercentageToDP} from 'react-native-responsive-screen';
 
 import {color} from '../theme';
 import {storage} from '../hooks/use-storage.hook';
 import PostListPublic from './ListCard/PostListPublic';
-import {heightPercentage, widthPercentage, widthResponsive} from '../utils';
+import {
+  heightPercentage,
+  heightResponsive,
+  widthPercentage,
+  widthResponsive,
+} from '../utils';
 import PostListMyPost from './ListCard/PostListMyPost';
 import {
   FilterModal,
@@ -295,14 +301,22 @@ export const FeedScreen: React.FC = () => {
   }, [createPostError]);
 
   return (
-    <View style={styles.root}>
+    <SafeAreaView style={styles.root}>
       {isLogin ? (
         <View>
-          <TopNavigation.Type2
+          <TopNavigation.Type2Animated
             title={t('Feed.Title')}
             maxLengthTitle={20}
             itemStrokeColor={'white'}
+            containerStyle={{
+              position: 'absolute',
+              paddingTop:
+                Platform.OS === 'ios' ? 0 : heightResponsive(barHeight + 15),
+              zIndex: 4,
+              backgroundColor: color.Dark[800],
+            }}
           />
+
           <View style={styles.feedContainer}>
             <TabFilter.Type1
               filterData={filter}
@@ -313,6 +327,16 @@ export const FeedScreen: React.FC = () => {
               }}
               TouchableStyle={{width: widthPercentageToDP(45)}}
               translation={true}
+              containerStyle={{
+                backgroundColor: color.Dark[800],
+                zIndex: 3,
+                position: 'absolute',
+                top:
+                  Platform.OS === 'ios'
+                    ? heightResponsive(40)
+                    : heightResponsive(barHeight + 60),
+                left: widthResponsive(24),
+              }}
             />
             {filter[selectedIndex].filterName === 'Feed.Public' ? (
               <PostListPublic
@@ -419,7 +443,7 @@ export const FeedScreen: React.FC = () => {
       ) : (
         <GuestContent />
       )}
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -427,9 +451,9 @@ const styles = StyleSheet.create({
   root: {
     flex: 1,
     backgroundColor: color.Dark[800],
+    zIndex: 2,
   },
   feedContainer: {
-    marginTop: widthResponsive(3),
     paddingHorizontal: widthResponsive(24),
     width: '100%',
     height: '100%',
