@@ -52,10 +52,10 @@ export const DonateCardContent: React.FC<DonateCardProps> = ({
               type === 'subs'
                 ? next
                   ? dropDownSubscription
-                  : dropDownSubscription.slice(1)
+                  : dropDownSubscription.filter((v, i) => i !== 1)
                 : next
                 ? dropDownTipping
-                : dropDownTipping.slice(1)
+                : dropDownTipping.filter((v, i) => i !== 1)
             }
             selectedMenu={onPressMore}
           />
