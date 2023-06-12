@@ -55,7 +55,7 @@ const ListSubs: React.FC<ListSubsProps> = props => {
     isFetchingNextPage,
     hasNextPage,
   } = useInfiniteQuery(
-    ['/list-subs'],
+    [`/list-subs/${status}`],
     ({pageParam = 1}) =>
       getListSubs({
         page: pageParam,

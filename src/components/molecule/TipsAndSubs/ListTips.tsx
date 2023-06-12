@@ -61,12 +61,13 @@ const ListTips: React.FC<ListTipsProps> = props => {
     isFetchingNextPage,
     hasNextPage,
   } = useInfiniteQuery(
-    ['/list-tips'],
+    [`/list-tips/${status}`],
     ({pageParam = 1}) =>
       getListTips({
         page: pageParam,
         perPage: 10,
-        filterValue: status === 'current' ? 1 : 2,
+        filterColumn: filterColumn,
+        filterValue: filterValue,
       }),
     {
       getNextPageParam: lastPage => {
