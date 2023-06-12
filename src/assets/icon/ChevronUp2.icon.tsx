@@ -4,7 +4,7 @@ import Svg, {Path} from 'react-native-svg';
 import {widthResponsive} from '../../utils';
 import {SvgProps} from '../../interface/svg.interface';
 
-const ChevronUp = ({
+const ChevronUp2 = ({
   width = widthResponsive(24),
   height = widthResponsive(24),
   fill = '#00D778',
@@ -20,4 +20,4 @@ const ChevronUp = ({
   </View>
 );
 
-export default ChevronUp;
+export default ChevronUp2;
