@@ -1,15 +1,13 @@
 import React, {useEffect} from 'react';
 import {ScrollView, StyleSheet, View} from 'react-native';
 import {useTranslation} from 'react-i18next';
-import {mvs} from 'react-native-size-matters';
+import {ms, mvs} from 'react-native-size-matters';
 
 import {ListItem} from './ListItem';
 import {color, font} from '../../../theme';
 import {widthPercentage} from '../../../utils';
-import {EmptyState} from '../../../components';
-import ListSongs from '../../ListCard/ListSongs';
 import {useHomeHook} from '../../../hooks/use-home.hook';
-import {AlbumData} from '../../../interface/musician.interface';
+import {EmptyState, MusicSection} from '../../../components';
 
 interface ListAlbumProps {
   title: string;
@@ -35,12 +33,21 @@ export const ListAlbum: React.FC<ListAlbumProps> = ({
       return (
         <ScrollView>
           <View style={{paddingHorizontal: widthPercentage(20)}}>
-            <ListSongs
-              dataSong={dataAlbumComingSoon}
-              hideDropdownMore={true}
-              type="coming_soon"
-              onPress={(item: AlbumData) => goToDetailAlbum(item.id)}
-            />
+            {dataAlbumComingSoon.map((item, index) => (
+              <MusicSection
+                imgUri={(item.imageUrl && item.imageUrl[0]?.image) ?? ''}
+                musicTitle={item.title}
+                musicNum={index + 1}
+                singerName={item.musician.name}
+                songId={item.id}
+                onPressAddToQueue={() => null}
+                key={index}
+                containerStyles={{marginTop: mvs(20), marginLeft: ms(5)}}
+                disabled={true}
+                hideDropdownMore={true}
+                onPressCard={() => goToDetailAlbum(item.id)}
+              />
+            ))}
           </View>
         </ScrollView>
       );

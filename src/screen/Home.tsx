@@ -10,6 +10,11 @@ import {
   RefreshControl,
   Platform,
 } from 'react-native';
+import {
+  useNavigation,
+  useIsFocused,
+  useFocusEffect,
+} from '@react-navigation/native';
 import {useQuery} from 'react-query';
 import {
   NativeStackNavigationProp,
@@ -17,11 +22,6 @@ import {
 } from '@react-navigation/native-stack';
 import {useTranslation} from 'react-i18next';
 import {mvs} from 'react-native-size-matters';
-import {
-  useNavigation,
-  useIsFocused,
-  useFocusEffect,
-} from '@react-navigation/native';
 
 import {
   TopNavigation,
@@ -37,7 +37,6 @@ import {
   ListImageDesc,
   CreatePostShortcut,
   ModalConfirm,
-  ModalCustom,
 } from '../components';
 import {font} from '../theme';
 import Color from '../theme/Color';
@@ -46,9 +45,9 @@ import NewSong from './ListCard/NewSong';
 import {defaultBanner} from '../data/home';
 import TopMusician from './ListCard/TopMusician';
 import {useFcmHook} from '../hooks/use-fcm.hook';
-import {profileStorage, storage} from '../hooks/use-storage.hook';
 import {useSongHook} from '../hooks/use-song.hook';
 import {useHomeHook} from '../hooks/use-home.hook';
+import {dataPlaceHolder} from '../data/placeHolder';
 import {SongList} from '../interface/song.interface';
 import * as FCMService from '../service/notification';
 import {useSearchHook} from '../hooks/use-search.hook';
@@ -63,6 +62,7 @@ import FavoriteMusician from './ListCard/FavoriteMusician';
 import {CheckCircle2Icon, SearchIcon} from '../assets/icon';
 import {MainTabParams, RootStackParams} from '../navigations';
 import RecomendedMusician from './ListCard/RecomendedMusician';
+import {profileStorage, storage} from '../hooks/use-storage.hook';
 import {useNotificationHook} from '../hooks/use-notification.hook';
 import LoadingSpinner from '../components/atom/Loading/LoadingSpinner';
 import {FollowMusicianPropsType} from '../interface/musician.interface';
@@ -72,7 +72,6 @@ import {heightPercentage, widthPercentage, widthResponsive} from '../utils';
 import EmptyStateHome from '../components/molecule/EmptyState/EmptyStateHome';
 import ListPlaylistHome from '../components/molecule/ListCard/ListPlaylistHome';
 import {ModalConfirmChoice} from '../components/molecule/Modal/ModalConfirmChoice';
-import {dataPlaceHolder} from '../data/placeHolder';
 import {useVideoStore} from '../store/video.store';
 
 type OnScrollEventHandler = (
@@ -99,6 +98,7 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
   const {addFcmToken} = useFcmHook();
   const {isPlaying, showPlayer, hidePlayer, addPlaylist} = usePlayerHook();
   const {
+    isLoadingMusician,
     dataMusician,
     dataFavoriteMusician,
     dataRecommendedMusician,
@@ -108,8 +108,13 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
     setFollowMusician,
     setUnfollowMusician,
   } = useMusicianHook();
-  const {dataTopSong, dataNewSong, getListDataTopSong, getListDataNewSong} =
-    useSongHook();
+  const {
+    isLoadingSong,
+    dataTopSong,
+    dataNewSong,
+    getListDataTopSong,
+    getListDataNewSong,
+  } = useSongHook();
   const {counter, getCountNotification} = useNotificationHook();
   const {creditCount, getCreditCount} = useCreditHook();
   const {
@@ -164,22 +169,49 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
   useEffect(() => {
     getListDataBanner();
     getProfileUser();
-    getListDataMusician();
-    getListDataTopSong();
     getCountNotification();
     getCreditCount();
     getListMoodPublic();
     getListGenrePublic();
-    getListDataFavoriteMusician();
-    getListDataNewSong();
     getListDiveIn();
     refetchPlaylist();
-    getListDataRecommendedMusician();
     getListComingSoon();
     setTimeout(() => {
       setRefreshing(false);
     }, 1000);
   }, [refreshing]);
+
+  // Triggering isFollowing musician when go back from other screen
+  useFocusEffect(
+    useCallback(() => {
+      if (selectedIndexMusician === 0) {
+        getListDataMusician();
+      } else if (selectedIndexMusician === 1) {
+        getListDataRecommendedMusician();
+      } else {
+        getListDataFavoriteMusician();
+      }
+
+      setTimeout(() => {
+        setRefreshing(false);
+      }, 1000);
+    }, [refreshing, selectedIndexMusician]),
+  );
+
+  // Triggering when click love on the same song in top & new song tab
+  useFocusEffect(
+    useCallback(() => {
+      if (selectedIndexSong === 0) {
+        getListDataTopSong();
+      } else {
+        getListDataNewSong();
+      }
+
+      setTimeout(() => {
+        setRefreshing(false);
+      }, 1000);
+    }, [refreshing, selectedIndexSong]),
+  );
 
   const [modalGuestVisible, setModalGuestVisible] = useState<boolean>(false);
   const [scrollEffect, setScrollEffect] = useState<boolean>(false);
@@ -538,6 +570,7 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
               type={'home'}
               loveIcon={isLogin}
               fromMainTab={true}
+              isLoading={isLoadingSong}
             />
           ) : (
             <NewSong
@@ -545,6 +578,7 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
               onPress={onPressNewSong}
               type={'home'}
               loveIcon={isLogin}
+              isLoading={isLoadingSong}
             />
           )}
         </View>
@@ -569,6 +603,7 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
                 props?: FollowMusicianPropsType,
                 params?: ParamsProps,
               ) => setUnfollowMusician(props, params)}
+              isLoading={isLoadingMusician}
             />
           ) : filterMusician[selectedIndexMusician].filterName ===
             'Home.Tab.Recomended.Title' ? (
@@ -582,6 +617,7 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
                 props?: FollowMusicianPropsType,
                 params?: ParamsProps,
               ) => setUnfollowMusician(props, params)}
+              isLoading={isLoadingMusician}
             />
           ) : (
             <FavoriteMusician
@@ -594,6 +630,7 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
                 props?: FollowMusicianPropsType,
                 params?: ParamsProps,
               ) => setUnfollowMusician(props, params)}
+              isLoading={isLoadingMusician}
             />
           )}
         </View>

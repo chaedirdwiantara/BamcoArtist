@@ -1,4 +1,6 @@
 import React, {FC, useEffect, useState} from 'react';
+import {ScrollView, View} from 'react-native';
+import {useTranslation} from 'react-i18next';
 import {ms, mvs} from 'react-native-size-matters';
 import {
   FollowMusicianPropsType,
@@ -7,9 +9,8 @@ import {
 import {widthResponsive} from '../../utils';
 import {ParamsProps} from '../../interface/base.interface';
 import {ListDataSearchMusician} from '../../interface/search.interface';
+import LoadingSpinner from '../../components/atom/Loading/LoadingSpinner';
 import MusicianSection from '../../components/molecule/MusicianSection/MusicianSection';
-import {ScrollView, View} from 'react-native';
-import {useTranslation} from 'react-i18next';
 import {EmptyStateSongMusician} from '../../components/molecule/EmptyState/EmptyStateSongMusician';
 
 interface FavoriteMusicianProps {
@@ -25,6 +26,7 @@ interface FavoriteMusicianProps {
     params?: ParamsProps,
   ) => void;
   emptyState?: React.ComponentType;
+  isLoading?: boolean;
 }
 
 const FavoriteMusician: FC<FavoriteMusicianProps> = ({
@@ -32,6 +34,7 @@ const FavoriteMusician: FC<FavoriteMusicianProps> = ({
   dataMusician,
   setFollowMusician,
   setUnfollowMusician,
+  isLoading,
 }) => {
   const {t} = useTranslation();
   const [listMusician, setListMusician] = useState(dataMusician);
@@ -87,7 +90,7 @@ const FavoriteMusician: FC<FavoriteMusicianProps> = ({
                 containerStyles={{
                   marginTop: mvs(12),
                 }}
-                point={type === 'profile' ? item.point || 0 : null}
+                point={type === 'profile' ? item.point || '' : ''}
                 isFollowed={item.isFollowed}
                 followOnPress={() => followOnPress(item.uuid, item.isFollowed)}
               />
@@ -112,7 +115,7 @@ const FavoriteMusician: FC<FavoriteMusicianProps> = ({
                   containerStyles={{
                     marginTop: mvs(12),
                   }}
-                  point={type === 'profile' ? item.point || 0 : null}
+                  point={type === 'profile' ? item.point || '' : ''}
                   isFollowed={item.isFollowed}
                   followOnPress={() =>
                     followOnPress(item.uuid, item.isFollowed)
@@ -124,8 +127,15 @@ const FavoriteMusician: FC<FavoriteMusicianProps> = ({
         </View>
       )}
     </ScrollView>
+  ) : isLoading ? (
+    <View
+      style={{
+        alignItems: 'center',
+        paddingVertical: mvs(20),
+      }}>
+      <LoadingSpinner />
+    </View>
   ) : (
-    // TODO: add spinner or skeleton when loading
     <EmptyStateSongMusician
       text={t('Home.Musician.EmptyState', {title: 'Favorite Musician'})}
     />

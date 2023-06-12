@@ -9,9 +9,10 @@ import TrackPlayer, {
   RepeatMode,
 } from 'react-native-track-player';
 import {dummySongImg} from '../data/image';
-import {PostList, QuoteToPost} from '../interface/feed.interface';
 import {SongList} from '../interface/song.interface';
 import {usePlayerStore} from '../store/player.store';
+import {PostList, QuoteToPost} from '../interface/feed.interface';
+import {ListDataSearchSongs} from '../interface/search.interface';
 
 export const usePlayerHook = () => {
   const playerStore = usePlayerStore();
@@ -29,7 +30,9 @@ export const usePlayerHook = () => {
     }
   });
 
-  const addSong = async (val: SongList | SongList[]) => {
+  const addSong = async (
+    val: SongList | SongList[] | ListDataSearchSongs | ListDataSearchSongs[],
+  ) => {
     if (Array.isArray(val)) {
       val.map(async item => {
         const track: Track = {

@@ -14,18 +14,8 @@ interface ReleasedProps {
 
 const Released: FC<ReleasedProps> = (props: ReleasedProps) => {
   const {uuidMusician} = props;
-  const {
-    isLoading,
-    isError,
-    dataDetailMusician,
-    dataAlbum,
-    dataFollow,
-    getDetailMusician,
-    getAlbum,
-    setFollowMusician,
-    setUnfollowMusician,
-    setDataFollow,
-  } = useMusicianHook();
+  const {dataDetailMusician, dataAlbum, getDetailMusician, getAlbum} =
+    useMusicianHook();
 
   useEffect(() => {
     getAlbum({uuid: uuidMusician});

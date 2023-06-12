@@ -14,7 +14,7 @@ export const OnboardScreen: React.FC = () => {
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
 
   const goToScreenGuest = () => {
-    navigation.replace('SignInGuest');
+    navigation.replace('SignInGuest', {});
     storage.set('skipOnboard', true);
   };
 

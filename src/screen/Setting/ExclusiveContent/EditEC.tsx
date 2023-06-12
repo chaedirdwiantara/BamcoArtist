@@ -89,11 +89,11 @@ export const EditEC: React.FC<CreateProps> = ({data, onPress}) => {
 
         <ListItem
           title={t('Setting.Exclusive.Label.Title')}
-          description={data.title}
+          description={data.title || ''}
         />
         <ListItem
           title={t('Setting.Exclusive.Label.Description')}
-          description={data.description}
+          description={data.description || ''}
         />
 
         <Text

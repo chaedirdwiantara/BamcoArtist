@@ -21,30 +21,28 @@ import {
 } from '../../../utils';
 import {font} from '../../../theme';
 import {TabFilter} from '../TabFilter';
+import MainTab from './MainTab/MainTab';
 import Color from '../../../theme/Color';
+import {Gap, SsuToast} from '../../atom';
 import {
   AlbumData,
   DataDetailMusician,
 } from '../../../interface/musician.interface';
-import {CheckCircle2Icon, SettingIcon} from '../../../assets/icon';
 import {ProfileHeader} from './components/Header';
 import {EmptyState} from '../EmptyState/EmptyState';
 import {UserInfoCard} from '../UserInfoCard/UserInfoCard';
+import ImageModal from '../../../screen/Detail/ImageModal';
 import {CreateNewCard} from '../CreateNewCard/CreateNewCard';
 import {Playlist} from '../../../interface/playlist.interface';
 import ListPlaylist from '../../../screen/ListCard/ListPlaylist';
+import {CheckCircle2Icon, SettingIcon} from '../../../assets/icon';
 import PostListPublic from '../../../screen/ListCard/PostListPublic';
-import DataMusician from '../../../screen/MusicianProfile/DataMusician';
-import PostListExclusive from '../../../screen/ListCard/PostListExclusive';
-import {ProfileFansResponseType} from '../../../interface/profile.interface';
-import PostListMyPost from '../../../screen/ListCard/PostListMyPost';
-import {dropDownDataCategory, dropDownDataSort} from '../../../data/dropdown';
-import ImageModal from '../../../screen/Detail/ImageModal';
-import ExclusiveDailyContent from '../../../screen/MusicianProfile/ExclusiveDailyContent';
-import {Gap, SsuToast} from '../../atom';
-import {DataExclusiveResponse} from '../../../interface/setting.interface';
 import PostListProfile from '../../../screen/ListCard/PostListProfile';
-import MainTab from './MainTab/MainTab';
+import DataMusician from '../../../screen/MusicianProfile/DataMusician';
+import {DataExclusiveResponse} from '../../../interface/setting.interface';
+import {ProfileFansResponseType} from '../../../interface/profile.interface';
+import {dropDownDataCategory, dropDownDataSort} from '../../../data/dropdown';
+import ExclusiveDailyContent from '../../../screen/MusicianProfile/ExclusiveDailyContent';
 
 type OnScrollEventHandler = (
   event: NativeSyntheticEvent<NativeScrollEvent>,
@@ -55,9 +53,6 @@ interface ProfileContentProps {
   goToEditProfile: () => void;
   goToPlaylist: (id: number, name: string) => void;
   dataPlaylist?: Playlist[];
-  onPressGoTo: (
-    screenName: 'Setting' | 'Following' | 'CreateNewPlaylist',
-  ) => void;
   uuid?: string;
   dataAlbum?: AlbumData[];
   dataDetailMusician?: DataDetailMusician;
@@ -71,13 +66,14 @@ interface ProfileContentProps {
   toastText: string;
   refreshing: boolean;
   setRefreshing: () => void;
+  goToSetting: () => void;
+  goToCreatePlaylist: () => void;
 }
 
 export const ProfileContent: React.FC<ProfileContentProps> = ({
   profile,
   goToEditProfile,
   goToPlaylist,
-  onPressGoTo,
   dataPlaylist,
   uuid,
   dataAlbum,
@@ -92,6 +88,8 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
   toastText,
   refreshing,
   setRefreshing,
+  goToSetting,
+  goToCreatePlaylist,
 }) => {
   const {t} = useTranslation();
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -137,7 +135,7 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
       {scrollEffect && (
         <View style={styles.containerStickyHeader}>
           <Text style={[styles.name, styles.topIos]}>{profile.fullname}</Text>
-          <TouchableOpacity onPress={() => onPressGoTo('Setting')}>
+          <TouchableOpacity onPress={goToSetting}>
             <SettingIcon style={styles.topIos} />
           </TouchableOpacity>
         </View>
@@ -157,7 +155,7 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
           username={profile.username}
           bio={profile.bio}
           onPress={goToEditProfile}
-          iconPress={() => onPressGoTo('Setting')}
+          iconPress={goToSetting}
           scrollEffect={scrollEffect}
           noEdit={!ownProfile}
           backIcon={!ownProfile}
@@ -229,12 +227,11 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
                 width: '100%',
               }}>
               {ownProfile ? (
-                <PostListProfile
-                  uuidMusician={uuid}
-                  dataRightDropdown={dropDownDataCategory}
-                  dataLeftDropdown={dropDownDataSort}
-                  {...exclusiveContent}
-                />
+                exclusiveContent ? (
+                  <PostListProfile uuidMusician={uuid} {...exclusiveContent} />
+                ) : (
+                  <PostListProfile uuidMusician={uuid} pricingPlans={[]} />
+                )
               ) : (
                 <PostListPublic
                   uuidMusician={uuid}
@@ -249,7 +246,7 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
                 <CreateNewCard
                   num="00"
                   text={t('Profile.Button.CreatePlaylist')}
-                  onPress={() => onPressGoTo('CreateNewPlaylist')}
+                  onPress={goToCreatePlaylist}
                 />
               )}
               <ListPlaylist
@@ -300,7 +297,6 @@ const styles = StyleSheet.create({
   },
   containerContent: {
     flex: 1,
-    // marginTop: heightPercentage(70),
     paddingHorizontal: widthPercentage(20),
     marginBottom: heightPercentage(20),
     width: '100%',

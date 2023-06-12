@@ -131,7 +131,7 @@ export const RecoverAccountScreen: React.FC = () => {
           <ProfileHeader
             noEdit={true}
             backIcon={false}
-            bio={profile.bio}
+            bio={profile.bio || ''}
             onPress={() => null}
             iconPress={() => null}
             onPressImage={() => null}

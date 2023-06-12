@@ -196,3 +196,8 @@ export interface SearchResponse {
   total: number;
   type: TypeEvent;
 }
+
+export enum EventType {
+  Merch = 'Merch',
+  Concert = 'Concert',
+}

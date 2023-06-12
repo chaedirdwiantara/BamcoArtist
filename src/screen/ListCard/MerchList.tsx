@@ -5,15 +5,20 @@ import {FlashList} from '@shopify/flash-list';
 import MerchListCard from '../../components/molecule/ListCard/MerchListCard';
 import {useEventHook} from '../../hooks/use-event.hook';
 import {EmptyState} from '../../components';
-import {BoxStore} from '../../assets/icon';
+import {BoxStore, FriedEggIcon} from '../../assets/icon';
 import Color from '../../theme/Color';
 import {useQuery} from 'react-query';
 import {MerchData} from '../../interface/event.interface';
 import {useTranslation} from 'react-i18next';
 import LoadingSpinner from '../../components/atom/Loading/LoadingSpinner';
 
-const MerchList: FC = () => {
+type MerchListType = {
+  type?: string;
+};
+
+const MerchList: FC<MerchListType> = props => {
   const {t} = useTranslation();
+  const {type = 'action'} = props;
   const {getListDataMerch} = useEventHook();
 
   const {
@@ -21,7 +26,8 @@ const MerchList: FC = () => {
     isLoading,
     refetch,
     isRefetching,
-  } = useQuery(['/merch'], () => getListDataMerch());
+  } = useQuery([`/merch/${type}`], () => getListDataMerch());
+
   const filterList: MerchData | undefined = dataMerchList?.data.find(merch => {
     return merch.name === 'product_latest';
   });
@@ -33,7 +39,21 @@ const MerchList: FC = () => {
           <LoadingSpinner />
         </View>
       )}
-      <FlashList
+
+      <EmptyState
+        icon={
+          <FriedEggIcon
+            fill={Color.Dark[500]}
+            width={widthResponsive(150)}
+            height={heightResponsive(150)}
+            style={styles.iconEmpty}
+          />
+        }
+        text={t('Event.ComingSoon') || ''}
+        containerStyle={styles.containerEmpty}
+      />
+
+      {/* <FlashList
         data={filterList?.data}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.ListContainer}
@@ -74,9 +94,9 @@ const MerchList: FC = () => {
         estimatedItemSize={150}
         numColumns={2}
         refreshControl={
-          <RefreshControl refreshing={isRefetching} onRefresh={refetch} />
+          <RefreshControl refreshing={false} onRefresh={refetch} />
         }
-      />
+      /> */}
     </>
   );
 };

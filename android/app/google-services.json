@@ -7,12 +7,80 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:234390427761:android:30eb4b24e813ae8529a3d0",
+        "android_client_info": {
+          "package_name": "co.beam.artist.android"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "234390427761-fkvna3bbstk708r9jgbivmifiugps4vq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "co.beam.artist.android",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "234390427761-kcuhibhi2ju1tqiljbkr3rg4shoa3sgj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "co.beam.artist.android",
+            "certificate_hash": "4f5dbe3d46f23ec468008a4619b2d3979a2ec916"
+          }
+        },
+        {
+          "client_id": "234390427761-bovho5e6veim38mml17sdpkuvfk9uvjo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCePjuYhvn_B2fobuv48MYSnFaOtyW5MlU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "234390427761-bovho5e6veim38mml17sdpkuvfk9uvjo.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "234390427761-i2k4uvvnlcepmt8p3q9oouc60pr4j39t.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "io.ssumusician.ios"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:234390427761:android:047935c7b67c71a729a3d0",
         "android_client_info": {
           "package_name": "io.ssumusician.android"
         }
       },
       "oauth_client": [
+        {
+          "client_id": "234390427761-4orps7fkenj3uqmj488e3c21oi4mcpk7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.ssumusician.android",
+            "certificate_hash": "4f5dbe3d46f23ec468008a4619b2d3979a2ec916"
+          }
+        },
+        {
+          "client_id": "234390427761-i1n64uu9jqn4tqquu657e2c3ktnrh250.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.ssumusician.android",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
         {
           "client_id": "234390427761-bovho5e6veim38mml17sdpkuvfk9uvjo.apps.googleusercontent.com",
           "client_type": 3
