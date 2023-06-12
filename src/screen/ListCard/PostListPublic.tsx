@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useRef, useState} from 'react';
+import React, {FC, useCallback, useEffect, useRef, useState} from 'react';
 import {
   Dimensions,
   FlatList,
@@ -29,9 +29,9 @@ import {
   DropDownFilterType,
   DropDownSortType,
 } from '../../data/dropdown';
-import {color, font, typography} from '../../theme';
+import {color, typography} from '../../theme';
 import {heightPercentage, heightResponsive, widthResponsive} from '../../utils';
-import {useNavigation} from '@react-navigation/native';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParams} from '../../navigations';
 import {EmptyState} from '../../components/molecule/EmptyState/EmptyState';
@@ -112,6 +112,7 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
   const [trigger2ndModal, setTrigger2ndModal] = useState<boolean>(false);
   const [page, setPage] = useState<number>(1);
   const [perPage, setPerPage] = useState<number>(15);
+  const [dataTemporary, setDataTemporary] = useState<PostList[]>([]);
   const [dataMain, setDataMain] = useState<PostList[]>([]);
   const [filterActive, setFilterActive] = useState<boolean>(true);
   const [filterByValue, setFilterByValue] = useState<string>();
@@ -205,7 +206,13 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
   //* get data on mount this page
   useGetCreditCount(modalDonate, getCreditCount);
 
-  useGetDataOnMount(uuidMusician, perPage, getListDataPost, setUuid, setPage);
+  // useGetDataOnMount(uuidMusician, perPage, getListDataPost, setUuid, setPage);
+  //?get data on mount this page
+  useFocusEffect(
+    useCallback(() => {
+      refetch();
+    }, []),
+  );
 
   //* call when refreshing
   useRefreshingEffect(
@@ -220,7 +227,19 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
   useStopRefreshing(feedIsLoading, setRefreshing);
 
   //* set response data list post to main data
-  useSetDataToMainData(dataPostList, filterActive, dataMain, setDataMain);
+  useEffect(() => {
+    if (postData?.data) {
+      setDataTemporary(postData?.data);
+    }
+  }, [postData]);
+
+  useEffect(() => {
+    if (dataPostList) {
+      setDataTemporary(dataPostList);
+    }
+  }, [dataPostList]);
+
+  useSetDataToMainData(dataTemporary, filterActive, dataMain, setDataMain);
 
   //* hit sort by endpoint
   useSortByFilter(
