@@ -158,7 +158,11 @@ const MusicianProfile: FC<PostDetailProps> = ({route}: PostDetailProps) => {
           donateOnPress={donateOnPress}
           followersCount={followersCount}
           goToPlaylist={goToPlaylist}
-          exclusiveContent={dataExclusiveContent ?? undefined}
+          exclusiveContent={
+            dataExclusiveContent
+              ? {...dataExclusiveContent, musician: dataDetailMusician}
+              : undefined
+          }
           subsEC={alreadySubsEC}
         />
       )}

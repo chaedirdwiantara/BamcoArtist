@@ -71,7 +71,6 @@ export const ExclusiveContent: React.FC<ExclusiveProps> = ({
 
     const response = await subsNewEC(form);
     setLoadingSubs(false);
-    console.log(response);
     if (response.code === 200) {
       setTimeout(() => {
         setSuccessSubs(true);
@@ -183,7 +182,7 @@ export const ExclusiveContent: React.FC<ExclusiveProps> = ({
                 containerStyles={styles.btnCancel}
                 textStyles={{color: Color.Pink.linear}}
                 borderColor={Color.Pink.linear}
-                onPress={onPressSave}
+                onPress={onPressGoBack}
               />
             </View>
           </View>

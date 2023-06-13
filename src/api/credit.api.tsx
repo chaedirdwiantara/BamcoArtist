@@ -38,7 +38,7 @@ export const stopDonation = async (id?: string): Promise<any> => {
 
 export const checkSubsEC = async (musicianID: string): Promise<any> => {
   const {data} = await SsuAPIRinjani().request<any>({
-    url: '/fans-app/subscriptions/check',
+    url: '/musician-app/subscriptions/check',
     method: 'POST',
     data: {
       musicianID: musicianID,
@@ -50,7 +50,7 @@ export const checkSubsEC = async (musicianID: string): Promise<any> => {
 
 export const subsEC = async (props?: SubsECParams): Promise<any> => {
   const {data} = await SsuAPIRinjani().request<any>({
-    url: '/fans-app/subscriptions/subscribe',
+    url: '/musician-app/subscriptions/subscribe',
     method: 'POST',
     data: props,
   });
@@ -60,7 +60,7 @@ export const subsEC = async (props?: SubsECParams): Promise<any> => {
 
 export const unsubsEC = async (id?: string): Promise<any> => {
   const {data} = await SsuAPIRinjani().request<any>({
-    url: `/fans-app/subscriptions/${id}/unsubscribe`,
+    url: `/musician-app/subscriptions/${id}/unsubscribe`,
     method: 'POST',
   });
 
@@ -104,7 +104,7 @@ export const getListSubs = async ({
   status: 'current' | 'past';
 }): Promise<any> => {
   const {data} = await SsuAPIRinjani().request<any>({
-    url: '/fans-app/subscriptions',
+    url: '/musician-app/subscriptions',
     method: 'GET',
     params: {
       page: page,
