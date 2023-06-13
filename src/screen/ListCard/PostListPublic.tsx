@@ -123,6 +123,7 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
   const [selectedCategoryMenu, setSelectedCategoryMenu] =
     useState<DataDropDownType>();
   const [refreshing, setRefreshing] = useState<boolean>(false);
+  const [selectedMusicianId, setSelectedMusicianId] = useState<string>('');
 
   //* MUSIC HOOKS
   const [pauseModeOn, setPauseModeOn] = useState<boolean>(false);
