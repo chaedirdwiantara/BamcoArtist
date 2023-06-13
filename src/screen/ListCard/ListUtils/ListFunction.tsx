@@ -137,20 +137,20 @@ export const useStopRefreshing = (
 };
 
 export const useSetDataToMainData = (
-  dataPostList: PostList[],
+  dataPostList: PostList[] | undefined,
   filterActive: boolean,
   dataMain: PostList[],
   setDataMain: React.Dispatch<React.SetStateAction<PostList[]>>,
 ) => {
   useEffect(() => {
-    if (dataPostList && filterActive === false) {
+    if (dataPostList && dataPostList.length > 0 && filterActive === false) {
       let filterDataPost = [...dataMain, ...dataPostList];
       let filterDuplicate = filterDataPost.filter(
         (v, i, a) => a.findIndex(v2 => v2.id === v.id) === i,
       );
       setDataMain(filterDuplicate);
     }
-    if (dataPostList && filterActive) {
+    if (dataPostList && dataPostList.length > 0 && filterActive) {
       setDataMain(dataPostList);
     }
   }, [dataPostList, filterActive]);

@@ -54,7 +54,7 @@ const ExclusiveDailyContent = (props: ECProps) => {
               <SquareComp imgUri={coverImage} size={mvs(82)} radius={4} />
             ) : (
               <View style={styles.logoContainer}>
-                <BeamcoLogo />
+                <BeamcoLogo width={82} height={82} />
               </View>
             )}
 
