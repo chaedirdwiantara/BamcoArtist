@@ -24,12 +24,17 @@ import {ModalConfirm} from '../Modal/ModalConfirm';
 import {ModalLoading} from '../ModalLoading/ModalLoading';
 import {Gap, SsuToast} from '../../atom';
 import {CheckCircle2Icon} from '../../../assets/icon';
-import {dateFormat, dateFormatSubscribe} from '../../../utils/date-format';
+import {dateFormatSubscribe} from '../../../utils/date-format';
 import {tippingDuration} from '../../../utils/tippingDuration';
+import {
+  ListTipsDataType,
+  StopTippingResponseType,
+  TipsDataType,
+} from '../../../interface/credit.interface';
 
 interface ListTipsProps {
   status: 'current' | 'past';
-  duration: '' | 'weekly' | 'monthly' | 'yearly' | string;
+  duration: '' | 'onetime' | 'weekly' | 'monthly' | 'yearly' | string;
 }
 
 const ListTips: React.FC<ListTipsProps> = props => {
@@ -37,9 +42,9 @@ const ListTips: React.FC<ListTipsProps> = props => {
   const {status, duration} = props;
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
-  const [listTips, setListTips] = useState<any>([]);
+  const [listTips, setListTips] = useState<TipsDataType[]>([]);
   const [showStopTipModal, setShowStopTipModal] = useState<boolean>(false);
-  const [currentData, setCurrentData] = useState<any>();
+  const [currentData, setCurrentData] = useState<TipsDataType>();
   const [loading, setLoading] = useState<boolean>(false);
   const [toastVisible, setToastVisible] = useState<boolean>(false);
   const [isErrorStop, setIsErrorStop] = useState<boolean>(false);
@@ -52,12 +57,29 @@ const ListTips: React.FC<ListTipsProps> = props => {
     isFetchingNextPage,
     hasNextPage,
   } = useInfiniteQuery(
-    ['/list-tips'],
+    [`/list-tips/${status}/${duration}`],
     ({pageParam = 1}) =>
       getListTips({
         page: pageParam,
         perPage: 10,
-        filterValue: status === 'current' ? 1 : 2,
+        filterColumn:
+          duration === ''
+            ? ['contribution_repeat_status']
+            : ['contribution_repeat_status', 'duration'],
+        filterValue:
+          duration === ''
+            ? [`${status === 'current' ? 1 : 2}`]
+            : [
+                `${status === 'current' ? 1 : 2}, ${
+                  duration === 'weekly'
+                    ? 7
+                    : duration === 'monthly'
+                    ? 30
+                    : duration === 'yearly'
+                    ? 365
+                    : 0
+                }`,
+              ],
       }),
     {
       getNextPageParam: lastPage => {
@@ -78,15 +100,43 @@ const ListTips: React.FC<ListTipsProps> = props => {
 
   useEffect(() => {
     if (dataTips !== undefined) {
-      setListTips(dataTips?.pages?.map((page: any) => page.data).flat() ?? []);
+      setListTips(
+        dataTips?.pages?.map((page: ListTipsDataType) => page.data).flat() ??
+          [],
+      );
     }
   }, [dataTips]);
+  //   let column: string[] = filterColumn;
+  //   let value: number[] = filterValue;
 
-  useEffect(() => {
-    refetch();
-  }, [status, duration]);
+  //   value[0] = status === 'current' ? 1 : 2;
+  //   if (duration === '') {
+  //     if (value.length > 1) {
+  //       column = column.splice(0, 1);
+  //       value = value.splice(0, 1);
+  //     }
+  //   } else {
+  //     const formatValue =
+  //       duration === 'weekly'
+  //         ? 7
+  //         : duration === 'monthly'
+  //         ? 30
+  //         : duration === 'yearly'
+  //         ? 365
+  //         : 0;
+  //     if (value.length > 1) {
+  //       value[1] = formatValue;
+  //     } else {
+  //       column.push('duration');
+  //       value.push(formatValue);
+  //     }
+  //   }
 
-  const resultDataMore = (dataResult: DataDropDownType, val: any) => {
+  //   setfilterColumn(column);
+  //   setFilterValue(value);
+  // }, [status, duration]);
+
+  const resultDataMore = (dataResult: DataDropDownType, val: TipsDataType) => {
     if (dataResult.value === '1') {
       navigation.navigate('MusicianProfile', {id: val.ownerId});
     } else {
@@ -104,7 +154,9 @@ const ListTips: React.FC<ListTipsProps> = props => {
     setShowStopTipModal(false);
     setLoading(true);
     try {
-      const response: any = await stopDonation(currentData?.id);
+      const response: StopTippingResponseType = await stopDonation(
+        currentData?.id,
+      );
       if (response.code === 200) {
         refetch();
       } else setIsErrorStop(true);
@@ -144,7 +196,7 @@ const ListTips: React.FC<ListTipsProps> = props => {
         )}
 
         {isLoading ? null : listTips?.length > 0 ? (
-          listTips?.map((val: any, index: number) => (
+          listTips?.map((val: TipsDataType, index: number) => (
             <DonateCardContent
               key={index}
               avatarUri={val.ownerImage}
