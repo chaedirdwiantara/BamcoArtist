@@ -27,6 +27,15 @@ export const createDonation = async (
   return data;
 };
 
+export const stopDonation = async (id?: string): Promise<any> => {
+  const {data} = await SsuAPI().request<any>({
+    url: `/donation/stop-recurring-donation/${id}`,
+    method: 'POST',
+  });
+
+  return data;
+};
+
 export const checkSubsEC = async (musicianID: string): Promise<any> => {
   const {data} = await SsuAPIRinjani().request<any>({
     url: '/fans-app/subscriptions/check',

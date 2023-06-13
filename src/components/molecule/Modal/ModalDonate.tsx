@@ -121,6 +121,7 @@ export const ModalDonate: React.FC<ModalDonateProps> = ({
     const response = await createNewDonation(form);
     setLoadingDonate(false);
     if (response.code === 200) {
+      getCreditCount();
       resetForm();
       onPressDonate();
     } else setErrorDonate(true);

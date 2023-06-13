@@ -24,13 +24,8 @@ import {ModalConfirm} from '../Modal/ModalConfirm';
 import {ModalLoading} from '../ModalLoading/ModalLoading';
 import {Gap, SsuToast} from '../../atom';
 import {CheckCircle2Icon} from '../../../assets/icon';
-import {dateFormatSubscribe} from '../../../utils/date-format';
+import {dateFormat, dateFormatSubscribe} from '../../../utils/date-format';
 import {tippingDuration} from '../../../utils/tippingDuration';
-import {
-  ListTipsDataType,
-  StopTippingResponseType,
-  TipsDataType,
-} from '../../../interface/credit.interface';
 
 interface ListTipsProps {
   status: 'current' | 'past';
@@ -42,16 +37,12 @@ const ListTips: React.FC<ListTipsProps> = props => {
   const {status, duration} = props;
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
-  const [listTips, setListTips] = useState<TipsDataType[]>([]);
+  const [listTips, setListTips] = useState<any>([]);
   const [showStopTipModal, setShowStopTipModal] = useState<boolean>(false);
-  const [currentData, setCurrentData] = useState<TipsDataType>();
+  const [currentData, setCurrentData] = useState<any>();
   const [loading, setLoading] = useState<boolean>(false);
   const [toastVisible, setToastVisible] = useState<boolean>(false);
   const [isErrorStop, setIsErrorStop] = useState<boolean>(false);
-  const [filterColumn, setfilterColumn] = useState<string[]>([
-    'contribution_repeat_status',
-  ]);
-  const [filterValue, setFilterValue] = useState<number[]>([1]);
   const {
     data: dataTips,
     refetch,
@@ -61,13 +52,12 @@ const ListTips: React.FC<ListTipsProps> = props => {
     isFetchingNextPage,
     hasNextPage,
   } = useInfiniteQuery(
-    [`/list-tips/${status}`],
+    ['/list-tips'],
     ({pageParam = 1}) =>
       getListTips({
         page: pageParam,
         perPage: 10,
-        filterColumn: filterColumn,
-        filterValue: filterValue,
+        filterValue: status === 'current' ? 1 : 2,
       }),
     {
       getNextPageParam: lastPage => {
@@ -88,49 +78,15 @@ const ListTips: React.FC<ListTipsProps> = props => {
 
   useEffect(() => {
     if (dataTips !== undefined) {
-      setListTips(
-        dataTips?.pages?.map((page: ListTipsDataType) => page.data).flat() ??
-          [],
-      );
+      setListTips(dataTips?.pages?.map((page: any) => page.data).flat() ?? []);
     }
   }, [dataTips]);
 
   useEffect(() => {
-    let column: string[] = filterColumn;
-    let value: number[] = filterValue;
-
-    value[0] = status === 'current' ? 1 : 2;
-    if (duration === '') {
-      if (value.length > 1) {
-        column = column.splice(0, 1);
-        value = value.splice(0, 1);
-      }
-    } else {
-      const formatValue =
-        duration === 'weekly'
-          ? 7
-          : duration === 'monthly'
-          ? 30
-          : duration === 'yearly'
-          ? 365
-          : 0;
-      if (value.length > 1) {
-        value[1] = formatValue;
-      } else {
-        column.push('duration');
-        value.push(formatValue);
-      }
-    }
-
-    setfilterColumn(column);
-    setFilterValue(value);
-
-    setTimeout(() => {
-      refetch();
-    }, 100);
+    refetch();
   }, [status, duration]);
 
-  const resultDataMore = (dataResult: DataDropDownType, val: TipsDataType) => {
+  const resultDataMore = (dataResult: DataDropDownType, val: any) => {
     if (dataResult.value === '1') {
       navigation.navigate('MusicianProfile', {id: val.ownerId});
     } else {
@@ -148,9 +104,7 @@ const ListTips: React.FC<ListTipsProps> = props => {
     setShowStopTipModal(false);
     setLoading(true);
     try {
-      const response: StopTippingResponseType = await stopDonation(
-        currentData?.id,
-      );
+      const response: any = await stopDonation(currentData?.id);
       if (response.code === 200) {
         refetch();
       } else setIsErrorStop(true);
@@ -190,7 +144,7 @@ const ListTips: React.FC<ListTipsProps> = props => {
         )}
 
         {isLoading ? null : listTips?.length > 0 ? (
-          listTips?.map((val: TipsDataType, index: number) => (
+          listTips?.map((val: any, index: number) => (
             <DonateCardContent
               key={index}
               avatarUri={val.ownerImage}
