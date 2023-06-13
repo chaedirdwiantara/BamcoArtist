@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {View, StyleSheet} from 'react-native';
 import {storage} from '../hooks/use-storage.hook';
 import {GuestContent, TabFilter, TopNavigation} from '../components';
@@ -16,16 +16,7 @@ type EventProps = NativeStackScreenProps<RootStackParams, 'Event'>;
 
 export const EventScreen: React.FC<EventProps> = ({navigation}: EventProps) => {
   const {t} = useTranslation();
-  const [selectedIndex, setSelectedIndex] = useState(-0);
-  const [filter] = useState([
-    {filterName: 'Event.Concert.Title'},
-    {filterName: 'Event.Merch.Title'},
-  ]);
   const isLogin = storage.getString('profile');
-
-  const filterData = (item: any, index: any) => {
-    setSelectedIndex(index);
-  };
 
   return (
     <View style={styles.root}>
@@ -44,21 +35,7 @@ export const EventScreen: React.FC<EventProps> = ({navigation}: EventProps) => {
             containerStyles={{paddingHorizontal: widthPercentage(20)}}
           />
           <View style={styles.listContainer}>
-            <TabFilter.Type1
-              filterData={filter}
-              onPress={filterData}
-              selectedIndex={selectedIndex}
-              flatlistContainerStyle={{
-                justifyContent: 'space-between',
-              }}
-              TouchableStyle={{width: widthPercentageToDP(45)}}
-              translation={true}
-            />
-            {filter[selectedIndex].filterName === 'Event.Concert.Title' ? (
-              <ConcertList />
-            ) : (
-              <MerchList />
-            )}
+            <MerchList />
           </View>
         </View>
       ) : (

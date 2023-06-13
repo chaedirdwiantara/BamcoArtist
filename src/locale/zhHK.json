@@ -272,6 +272,19 @@
       "Condition": "Condition",
       "Sold": "Sold",
       "Product": "Product"
+    },
+    "Dropdown": {
+      "Category": {
+        "All": "All Categories",
+        "Fashion": "Fashion",
+        "Collection": "Collection"
+      },
+      "Sort": {
+        "Placeholder": "Sort By",
+        "HighestPrice": "Highest Price",
+        "LowestPrice": "Lowest Price",
+        "MostSold": "Most Sold"
+      }
     }
   },
   "Profile": {
