@@ -1,34 +1,39 @@
 import React, {useEffect, useState} from 'react';
 import {StyleSheet, View, Text, ScrollView} from 'react-native';
 import {useTranslation} from 'react-i18next';
+import {mvs} from 'react-native-size-matters';
 
 import {
-  heightPercentage,
+  width,
   kFormatter,
   toCurrency,
-  width,
   widthPercentage,
+  heightPercentage,
 } from '../../../utils';
 import {
-  ListWithdrawalProps,
   listPrice,
   listWithdrawal,
+  ListWithdrawalProps,
 } from '../../../data/topUp';
-import {Gap} from '../../atom';
 import {CoinCard} from './CoinCard';
+import {Button, Gap} from '../../atom';
 import {TabFilter} from '../TabFilter';
 import {TopNavigation} from '../TopNavigation';
 import {WithdrawalCard} from './WithdrawalCard';
-import {color, typography} from '../../../theme/';
 import {TransactionCard} from './TransactionCard';
+import {color, font, typography} from '../../../theme/';
 import {useCreditHook} from '../../../hooks/use-credit.hook';
 import {ArrowLeftIcon, CoinDIcon} from '../../../assets/icon';
 
 interface TopupCoinProps {
   onPressGoBack: () => void;
+  onPressWithdrawal: () => void;
 }
 
-export const TopupCoinContent: React.FC<TopupCoinProps> = ({onPressGoBack}) => {
+export const TopupCoinContent: React.FC<TopupCoinProps> = ({
+  onPressGoBack,
+  onPressWithdrawal,
+}) => {
   const {t} = useTranslation();
   const {creditCount, getCreditCount} = useCreditHook();
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -91,6 +96,13 @@ export const TopupCoinContent: React.FC<TopupCoinProps> = ({onPressGoBack}) => {
           </View>
         </View>
 
+        {/* <Button
+          label={t('TopUp.ButtonWithdraw')}
+          textStyles={{fontSize: mvs(13), fontFamily: font.InterMedium}}
+          containerStyles={styles.btnContainer}
+          onPress={onPressWithdrawal}
+        /> */}
+
         <TabFilter.Type1
           filterData={filter}
           onPress={filterData}
@@ -128,11 +140,7 @@ export const TopupCoinContent: React.FC<TopupCoinProps> = ({onPressGoBack}) => {
             date="Dec 16, 2022"
           />
         ) : (
-          <View
-            style={{
-              marginTop: heightPercentage(10),
-              marginBottom: heightPercentage(40),
-            }}>
+          <View style={styles.containerWithdrawal}>
             {withdrawalList.map((val, i) => (
               <WithdrawalCard
                 key={i}
@@ -201,5 +209,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: heightPercentage(10),
     marginBottom: heightPercentage(20),
+  },
+  containerWithdrawal: {
+    marginTop: heightPercentage(10),
+    marginBottom: heightPercentage(40),
+  },
+  btnContainer: {
+    width: width * 0.9,
+    aspectRatio: heightPercentage(327 / 40),
+    marginTop: mvs(5),
+    marginBottom: mvs(15),
   },
 });
