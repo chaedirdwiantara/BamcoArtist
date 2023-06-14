@@ -447,16 +447,16 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
                   <Gap
                     height={
                       Platform.OS === 'ios'
-                        ? heightResponsive(134)
-                        : heightResponsive(barHeight + 166)
+                        ? widthResponsive(134)
+                        : widthResponsive(barHeight + 154)
                     }
                   />
                 ) : index === 0 && videoUploadProgress ? (
                   <Gap
                     height={
                       Platform.OS === 'ios'
-                        ? heightResponsive(188)
-                        : heightResponsive(barHeight + 224)
+                        ? widthResponsive(180)
+                        : widthResponsive(barHeight + 205)
                     }
                   />
                 ) : null}
