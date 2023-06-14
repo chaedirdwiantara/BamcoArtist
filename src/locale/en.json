@@ -272,6 +272,19 @@
       "Condition": "Condition",
       "Sold": "Sold",
       "Product": "Product"
+    },
+    "Dropdown": {
+      "Category": {
+        "All": "All Categories",
+        "Fashion": "Fashion",
+        "Collection": "Collection"
+      },
+      "Sort": {
+        "Placeholder": "Sort By",
+        "HighestPrice": "Highest Price",
+        "LowestPrice": "Lowest Price",
+        "MostSold": "Most Sold"
+      }
     }
   },
   "Profile": {
@@ -780,6 +793,7 @@
     "Subtitle2": "BEAMCO Credit allows you to parcitipate in Musician’s upside and grow their community",
     "Subtitle3": "Find Musician who is providing a lot of value? Rewards them with BEAMCO Credit as a support",
     "MyCoin": "My Credit",
+    "ButtonWithdraw": "Withdraw",
     "Filter": {
       "Buy": "Buy Package",
       "Transaction": "Transaction",
@@ -793,6 +807,9 @@
       "TransactionStatus": "Transaction Status",
       "Notes": "Notes"
     }
+  },
+  "Withdrawal": {
+    "Title": "Withdrawal"
   },
   "RecoverAccount": {
     "Title": "Account Deletion",

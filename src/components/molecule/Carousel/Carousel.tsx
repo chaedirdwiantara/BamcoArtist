@@ -9,6 +9,8 @@ import {
   View,
   ScrollView,
   TouchableOpacity,
+  Text,
+  Platform,
 } from 'react-native';
 
 import {Indicator} from '../../atom';
@@ -76,7 +78,7 @@ export const Carousel: FC<CarouselProps> = ({data, onPressBanner}) => {
 
           const scale = scrollX.interpolate({
             inputRange,
-            outputRange: [0.9, 1.1, 0.9],
+            outputRange: [0.9, 1.2, 0.9],
           });
 
           return (
@@ -103,18 +105,41 @@ export const Carousel: FC<CarouselProps> = ({data, onPressBanner}) => {
                   }
                   style={styles.itemImage}
                 />
-                <Animated.Text
-                  numberOfLines={1}
-                  ellipsizeMode={'tail'}
-                  style={[styles.itemText, {transform: [{translateX}]}]}>
-                  {item.title}
-                </Animated.Text>
-                <Animated.Text
-                  numberOfLines={2}
-                  ellipsizeMode={'tail'}
-                  style={[styles.itemSubtitle, {transform: [{translateX}]}]}>
-                  {item.description}
-                </Animated.Text>
+                {data.length <= 5 || Platform.OS === 'android' ? (
+                  // animated not working properly on iOS, if banner length more than 5
+                  <>
+                    <Animated.Text
+                      numberOfLines={1}
+                      ellipsizeMode={'tail'}
+                      style={[styles.itemText, {transform: [{translateX}]}]}>
+                      {item.title}
+                    </Animated.Text>
+                    <Animated.Text
+                      numberOfLines={2}
+                      ellipsizeMode={'tail'}
+                      style={[
+                        styles.itemSubtitle,
+                        {transform: [{translateX}]},
+                      ]}>
+                      {item.description}
+                    </Animated.Text>
+                  </>
+                ) : (
+                  <>
+                    <Text
+                      numberOfLines={1}
+                      ellipsizeMode={'tail'}
+                      style={[styles.itemText]}>
+                      {item.title}
+                    </Text>
+                    <Text
+                      numberOfLines={2}
+                      ellipsizeMode={'tail'}
+                      style={[styles.itemSubtitle]}>
+                      {item.description}
+                    </Text>
+                  </>
+                )}
               </Animated.View>
             </TouchableOpacity>
           );

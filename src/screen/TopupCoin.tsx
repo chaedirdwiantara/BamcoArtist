@@ -26,9 +26,16 @@ export const TopupCoinScreen: React.FC = () => {
     navigation.goBack();
   };
 
+  const onPressWithdrawal = () => {
+    // navigation.navigate('Withdrawal');
+  };
+
   return (
     <View style={styles.root}>
-      <TopupCoinContent onPressGoBack={onPressGoBack} />
+      <TopupCoinContent
+        onPressGoBack={onPressGoBack}
+        onPressWithdrawal={onPressWithdrawal}
+      />
     </View>
   );
 };
