@@ -241,22 +241,37 @@
     "NoMore": "No more feeds"
   },
   "Event": {
-    "Title": "Event",
+    "Title": "Action",
     "Quantity": "Quantity",
     "Description": "Description",
+    "ComingSoon": "Coming Soon\nStay tuned for the big reveal!",
     "Concert": {
       "Title": "Concert",
       "NoConcert": "No Event Available",
       "Detail": "Ticket Details",
       "LineUp": "Line-Up",
-      "Class": "Select Class"
+      "Class": "Select Class",
+      "Date": "Date",
+      "Time": "Time",
+      "Venue": "Venue",
+      "OpenGate": "Open Gate",
+      "Duration": "Duration",
+      "Location": "Location",
+      "ChooseDate": "Choose Date",
+      "Ticket": "Ticket Category",
+      "Total": "Total Price",
+      "Details": "Details"
     },
     "Merch": {
       "Title": "Merch",
       "NoMerch": "No Merch Available",
       "Detail": "Merch Details",
-      "Size": "Size",
-      "Color": "Color"
+      "Size": "Select Size",
+      "Color": "Choose Color",
+      "Variant": "Choose Variant",
+      "Condition": "Condition",
+      "Sold": "Sold",
+      "Product": "Product"
     }
   },
   "Profile": {
@@ -444,6 +459,7 @@
     "Shipping": {
       "Title": "Shipping Information",
       "Confirm": "Are you sure you want to save your shipping information?",
+      "Confirm2": "Are you sure you want to save your shipping information and continue your progress?",
       "Label": {
         "Email": "Email",
         "Phone": "Phone Number",
@@ -759,14 +775,23 @@
     "Support": "Support Your Musician"
   },
   "TopUp": {
-    "Title": "Top Up",
-    "Subtitle1": "Beamco Coin is your way to show your appreciation",
-    "Subtitle2": "Beamco Coin allows you to parcitipate in Musician’s upside and grow their community",
-    "Subtitle3": "Find Musician who is providing a lot of value? Rewards them with Beamco Coin as a support",
-    "MyCoin": "My Coin",
+    "Title": "Credit",
+    "Subtitle1": "BEAMCO Credit is your way to show your appreciation",
+    "Subtitle2": "BEAMCO Credit allows you to parcitipate in Musician’s upside and grow their community",
+    "Subtitle3": "Find Musician who is providing a lot of value? Rewards them with BEAMCO Credit as a support",
+    "MyCoin": "My Credit",
     "Filter": {
       "Buy": "Buy Package",
-      "Transaction": "Transaction"
+      "Transaction": "Transaction",
+      "Withdrawal": "Withdrawal"
+    },
+    "Withdrawal": {
+      "TransactionAmount": "Transaction Amount",
+      "ConversionAmount": "Conversion Amount to HKD",
+      "To": "To",
+      "Date": "Date",
+      "TransactionStatus": "Transaction Status",
+      "Notes": "Notes"
     }
   },
   "RecoverAccount": {
@@ -782,5 +807,86 @@
       "Title": "Recover Account",
       "Subtitle": "Are you sure you recover your account?"
     }
+  },
+  "Cart": {
+    "Title": "Cart",
+    "SelectAll": "Select All",
+    "Delete": "Delete",
+    "Checkout": "Checkout"
+  },
+  "Promo": {
+    "Code": {
+      "Title": "Promo Code",
+      "Time": "Ended in {{time}}"
+    },
+    "Detail": {
+      "Title": "Promo Detail",
+      "Time": "Ended in",
+      "Minimum": "Minimum Transactions",
+      "TnC": "Terms & Conditions"
+    }
+  },
+  "Checkout": {
+    "Title": "Checkout",
+    "AddShipping": "Add shipping location",
+    "Delivery": "Choose Delivery",
+    "Agent": "Delivery Agent",
+    "Modal": {
+      "Title": "Congratulations! You have successfully purchased your product",
+      "Btn": "View Transaction"
+    }
+  },
+  "Transaction": {
+    "Title": "Transaction",
+    "Merch": {
+      "Unpaid": "Unpaid",
+      "ToShip": "To Ship",
+      "Shipped": "Shipped",
+      "Review": "Review",
+      "Estimated": "Estimated arrival"
+    },
+    "Detail": {
+      "Title": "Details",
+      "Product": "Detail Product",
+      "Total": "Total",
+      "Purchase": {
+        "Title": "Purchase Information",
+        "Date": "Purchasing Date",
+        "Cancel": "Auto Cancel On"
+      },
+      "Shipping": {
+        "Title": "Shipping Information",
+        "Address": "Adress",
+        "Estimation": "Estimation"
+      },
+      "Payment": {
+        "Title": "Payment Details",
+        "Total": "Total Price",
+        "Delivery": "Delivery Price",
+        "Promo": "Promo code",
+        "Tax": "Tax"
+      },
+      "Ticket": "Ticket"
+    },
+    "Finish": "Finish Order",
+    "Track": "Track Status",
+    "Cancel": "Cancel Order",
+    "Order": {
+      "Title": "Finish Order",
+      "Confirm": "Are you sure to finish this order?",
+      "Finish": "Order Finished!"
+    }
+  },
+  "Tracking": {
+    "Title": "Track Status"
+  },
+  "Shop": {
+    "Title": "Shop"
+  },
+  "Review": {
+    "Title": "Review",
+    "Rating": "Take a moment to rate this item",
+    "Input": "Have you satisfied about this product?",
+    "Placeholder": "Ex: I love this product, the finishing is very clean!"
   }
 }

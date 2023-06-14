@@ -15,7 +15,8 @@ import CheckCircle2Icon from './CheckCircle2.icon';
 import CheckGradientIcon from './CheckGradien.icon';
 import ChevronDownIcon from './ChevronDown.icon';
 import ChevronDown2 from './ChevronDown2.icon';
-import ChevronUp from './ChevronUp.icon';
+import ChevronUp from './ChevronUp';
+import ChevronUp2 from './ChevronUp2.icon';
 import CloseIcon from './Close.icon';
 import CloseCircleIcon from './CloseCircle.icon';
 import CoinInput from './CoinInput';
@@ -105,6 +106,13 @@ import BoxStore from './BoxStore.icon';
 import CheckIcon from './Check.icon';
 import MinusIcon from './Minus.icon';
 import TicketIcon from './Ticket.icon';
+import DiscountIcon from './Discount.icon';
+import ClockIcon from './Clock.icon';
+import WalletIcon from './Wallet.icon';
+import LocationIcon from './Location.icon';
+import TruckIcon from './Truck.icon';
+import BagTickIcon from './BagTick.icon';
+import StarIcon from './BagTick.icon';
 
 export {
   AddIcon,
@@ -125,6 +133,7 @@ export {
   ChevronDownIcon,
   ChevronDown2,
   ChevronUp,
+  ChevronUp2,
   CloseIcon,
   CloseCircleIcon,
   CoinCIcon,
@@ -214,4 +223,11 @@ export {
   CheckIcon,
   MinusIcon,
   TicketIcon,
+  DiscountIcon,
+  ClockIcon,
+  WalletIcon,
+  LocationIcon,
+  TruckIcon,
+  BagTickIcon,
+  StarIcon,
 };

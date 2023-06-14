@@ -8,4 +8,6 @@ export interface SvgProps {
   style?: ViewStyle;
   color?: string;
   noRadius?: boolean;
+  bg1?: string;
+  bg2?: string;
 }

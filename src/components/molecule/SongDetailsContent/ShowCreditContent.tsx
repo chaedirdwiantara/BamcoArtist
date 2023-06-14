@@ -12,7 +12,6 @@ import {
   CopyrightVisualIcon,
 } from '../../../assets/icon';
 import {color, font, typography} from '../../../theme';
-import {ShowCreditType} from '../../../data/showCredit';
 import {dateLongMonth} from '../../../utils/date-format';
 import {DataDetailSong} from '../../../interface/song.interface';
 import {heightPercentage, normalize, widthPercentage} from '../../../utils';
@@ -22,7 +21,7 @@ interface ShowCreditProps {
   onPressGoBack: () => void;
 }
 
-const Content: React.FC<ShowCreditType> = ({title, content}) => {
+const ItemContent = ({title, content}: {title: string; content: string[]}) => {
   const {t} = useTranslation();
   const copyrightIcon = [
     <CopyrightVisualIcon />,
@@ -113,7 +112,7 @@ export const ShowCreditContent: React.FC<ShowCreditProps> = ({
     },
     {
       title: t('Music.Credit.Release'),
-      content: [dateLongMonth(dataDetail.album.releaseDate)],
+      content: [dateLongMonth(dataDetail.album.publishedDate)],
     },
     {
       title: t('Music.Credit.Copyright'),
@@ -137,7 +136,12 @@ export const ShowCreditContent: React.FC<ShowCreditProps> = ({
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={{marginVertical: heightPercentage(30)}}>
           {dataShowCredit.map((val, i) => (
-            <Content key={i} title={t(val.title)} content={val.content} />
+            <View key={i}>
+              {ItemContent({
+                title: val.title,
+                content: val.content,
+              })}
+            </View>
           ))}
         </View>
       </ScrollView>

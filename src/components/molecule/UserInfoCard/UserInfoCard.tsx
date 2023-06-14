@@ -18,6 +18,7 @@ import Color from '../../../theme/Color';
 import {InfoProfileType} from '../../../data/profile';
 import {ProfileFansResponseData} from '../../../interface/profile.interface';
 import {useTranslation} from 'react-i18next';
+import {useDebounce} from '../../../utils/debounce';
 
 interface UserInfoCardProps {
   profile?: any;
@@ -132,7 +133,11 @@ const UserInfoCard: FC<UserInfoCardProps> = (props: UserInfoCardProps) => {
         } else {
           return (
             <View key={i} style={{width: type === 'self' ? '30%' : '20%'}}>
-              <Item point={val.point} title={val.title} onPress={newOnPress} />
+              <Item
+                point={val.point}
+                title={val.title}
+                onPress={useDebounce(newOnPress)}
+              />
             </View>
           );
         }

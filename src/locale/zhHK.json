@@ -193,11 +193,11 @@
       }
     },
     "ListMood": {
-      "Title" : "Mood",
+      "Title": "Mood",
       "EmptyState": "Sorry, we don't have any music available for this mood at the moment. Check back soon as we're always adding new music!"
     },
     "ListGenre": {
-      "Title" : "Genre",
+      "Title": "Genre",
       "EmptyState": "Sorry, we don't have any music available for this genre at the moment. Check back soon as we're always adding new music!"
     },
     "DiveIn": {
@@ -214,7 +214,7 @@
       }
     },
     "ComingSoon": {
-      "Title" : "Coming Soon",
+      "Title": "Coming Soon",
       "EmptyState": "Unfortunately, there are no new albums coming soon from any musicians. We'll let you know as soon as something new is on the horizon."
     },
     "Song": {
@@ -224,7 +224,7 @@
       "EmptyState": "We couldn't find any {{title}} for you. Check back soon as we're always adding new musician!"
     },
     "Playlist": {
-      "Title" : "Playlist",
+      "Title": "Playlist",
       "EmptyState": "Oops! We couldn't find any playlists for you. Create your own & help other discover great music!"
     }
   },
@@ -241,22 +241,37 @@
     "NoMore": "No more feeds"
   },
   "Event": {
-    "Title": "活動",
+    "Title": "行動",
     "Quantity": "數量",
     "Description": "描述",
+    "ComingSoon": "Coming Soon\nStay tuned for the big reveal!",
     "Concert": {
       "Title": "門票",
       "NoConcert": "未有活動",
       "Detail": "門票詳情",
       "LineUp": "排隊",
-      "Class": "選擇等級"
+      "Class": "選擇等級",
+      "Date": "Date",
+      "Time": "Time",
+      "Venue": "Venue",
+      "OpenGate": "Open Gate",
+      "Duration": "Duration",
+      "Location": "Location",
+      "ChooseDate": "Choose Date",
+      "Ticket": "Ticket Category",
+      "Total": "Total Price",
+      "Details": "Details"
     },
     "Merch": {
       "Title": "產品",
       "NoMerch": "未有產品",
       "Detail": "產品詳情",
-      "Size": "尺碼",
-      "Color": "顏色"
+      "Size": "Select Size",
+      "Color": "Choose Color",
+      "Variant": "Choose Variant",
+      "Condition": "Condition",
+      "Sold": "Sold",
+      "Product": "Product"
     }
   },
   "Profile": {
@@ -394,12 +409,12 @@
         "ReasonPlaceholder": "Tell us more",
         "PasswordInput": "Input Password"
       },
-       "Reason" : {
-        "First" : "I don’t feel safe on Beamco",
-        "Second" : "I don’t find Beamco useful",
-        "Third" : "I have another Beamco Account",
-        "Fourth" : "I spend too much time using Beamco",
-        "Five" : "I don’t understand how to use Beamco"
+      "Reason": {
+        "First": "I don’t feel safe on Beamco",
+        "Second": "I don’t find Beamco useful",
+        "Third": "I have another Beamco Account",
+        "Fourth": "I spend too much time using Beamco",
+        "Five": "I don’t understand how to use Beamco"
       }
     },
     "TnC&PP": {
@@ -442,6 +457,8 @@
     },
     "Shipping": {
       "Title": "運送信息",
+      "Confirm": "Are you sure you want to save your shipping information?",
+      "Confirm2": "Are you sure you want to save your shipping information and continue your progress?",
       "Label": {
         "Email": "電子郵件",
         "Phone": "電話號碼",
@@ -758,14 +775,23 @@
     "Support": "支持你的音樂人"
   },
   "TopUp": {
-    "Title": "Top Up",
-    "Subtitle1": "Beamco Coin is your way to show your appreciation",
-    "Subtitle2": "Beamco Coin allows you to parcitipate in Musician’s upside and grow their community",
-    "Subtitle3": "Find Musician who is providing a lot of value? Rewards them with Beamco Coin as a support",
-    "MyCoin": "My Coin",
+    "Title": "Credit",
+    "Subtitle1": "BEAMCO Credit is your way to show your appreciation",
+    "Subtitle2": "BEAMCO Credit allows you to parcitipate in Musician’s upside and grow their community",
+    "Subtitle3": "Find Musician who is providing a lot of value? Rewards them with BEAMCO Credit as a support",
+    "MyCoin": "My Credit",
     "Filter": {
       "Buy": "Buy Package",
-      "Transaction": "Transaction"
+      "Transaction": "Transaction",
+      "Withdrawal": "Withdrawal"
+    },
+    "Withdrawal": {
+      "TransactionAmount": "Transaction Amount",
+      "ConversionAmount": "Conversion Amount to HKD",
+      "To": "To",
+      "Date": "Date",
+      "TransactionStatus": "Transaction Status",
+      "Notes": "Notes"
     }
   },
   "RecoverAccount": {
@@ -781,5 +807,86 @@
       "Title": "Recover Account",
       "Subtitle": "Are you sure you recover your account?"
     }
+  },
+  "Cart": {
+    "Title": "Cart",
+    "SelectAll": "Select All",
+    "Delete": "Delete",
+    "Checkout": "Checkout"
+  },
+  "Promo": {
+    "Code": {
+      "Title": "Promo Code",
+      "Time": "Ended in {{time}}"
+    },
+    "Detail": {
+      "Title": "Promo Detail",
+      "Time": "Ended in",
+      "Minimum": "Minimum Transactions",
+      "TnC": "Terms & Conditions"
+    }
+  },
+  "Checkout": {
+    "Title": "Checkout",
+    "AddShipping": "Add shipping location",
+    "Delivery": "Choose Delivery",
+    "Agent": "Delivery Agent",
+    "Modal": {
+      "Title": "Congratulations! You have successfully purchased your product",
+      "Btn": "View Transaction"
+    }
+  },
+  "Transaction": {
+    "Title": "Transaction",
+    "Merch": {
+      "Unpaid": "Unpaid",
+      "ToShip": "To Ship",
+      "Shipped": "Shipped",
+      "Review": "Review",
+      "Estimated": "Estimated arrival"
+    },
+    "Detail": {
+      "Title": "Details",
+      "Product": "Detail Product",
+      "Total": "Total",
+      "Purchase": {
+        "Title": "Purchase Information",
+        "Date": "Purchasing Date",
+        "Cancel": "Auto Cancel On"
+      },
+      "Shipping": {
+        "Title": "Shipping Information",
+        "Address": "Adress",
+        "Estimation": "Estimation"
+      },
+      "Payment": {
+        "Title": "Payment Details",
+        "Total": "Total Price",
+        "Delivery": "Delivery Price",
+        "Promo": "Promo code",
+        "Tax": "Tax"
+      },
+      "Ticket": "Ticket"
+    },
+    "Finish": "Finish Order",
+    "Track": "Track Status",
+    "Cancel": "Cancel Order",
+    "Order": {
+      "Title": "Finish Order",
+      "Confirm": "Are you sure to finish this order?",
+      "Finish": "Order Finished!"
+    }
+  },
+  "Tracking": {
+    "Title": "Track Status"
+  },
+  "Shop": {
+    "Title": "Shop"
+  },
+  "Review": {
+    "Title": "Review",
+    "Rating": "Take a moment to rate this item",
+    "Input": "Have you satisfied about this product?",
+    "Placeholder": "Ex: I love this product, the finishing is very clean!"
   }
 }
