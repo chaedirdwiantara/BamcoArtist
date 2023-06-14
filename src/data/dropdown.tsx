@@ -133,3 +133,14 @@ export const dataStatusPost: DataDropDownType[] = [
   {label: 'Public', value: 'createPublicContent'},
   {label: 'Exclusive', value: 'createExclusiveContent'},
 ];
+
+export const dropDownActionCategory: DataDropDownType[] = [
+  {label: 'Event.Dropdown.Category.Fashion', value: '1'},
+  {label: 'Event.Dropdown.Category.Collection', value: '2'},
+];
+
+export const dropDownActionSort: DataDropDownType[] = [
+  {label: 'Event.Dropdown.Sort.HighestPrice', value: '1'},
+  {label: 'Event.Dropdown.Sort.LowestPrice', value: '2'},
+  {label: 'Event.Dropdown.Sort.MostSold', value: '3'},
+];
