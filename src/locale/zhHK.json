@@ -806,6 +806,10 @@
       "Date": "Date",
       "TransactionStatus": "Transaction Status",
       "Notes": "Notes"
+    },
+    "EmptyState" : {
+      "Transaction": "The transaction list will be displayed here, but as of now, no transactions have been made.",
+      "Withdrawal": "There are no transactions to display at the moment regarding withdrawals."
     }
   },
   "Withdrawal": {
