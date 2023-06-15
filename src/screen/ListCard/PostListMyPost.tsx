@@ -523,29 +523,39 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
             )}
           />
         </View>
-      ) : dataMain?.length === 0 && feedMessage === 'you not follow anyone' ? (
-        <ListToFollowMusician />
-      ) : dataMain?.length === 0 &&
-        feedMessage === `You don't have any post` ? (
-        <EmptyState
-          text={t('EmptyState.DontHavePost') || ''}
-          containerStyle={{
-            justifyContent: 'flex-start',
-            paddingTop: heightPercentage(24),
-          }}
-          icon={<FriedEggIcon />}
-        />
-      ) : dataMain?.length === 0 &&
-        feedMessage ===
+      ) : dataTemporary?.length === 0 &&
+        postData?.message === 'you not follow anyone' ? (
+        <>
+          <Gap height={195} />
+          <ListToFollowMusician />
+        </>
+      ) : dataTemporary?.length === 0 &&
+        postData?.message === `You don't have any post` ? (
+        <>
+          <Gap height={195} />
+          <EmptyState
+            text={t('EmptyState.DontHavePost') || ''}
+            containerStyle={{
+              justifyContent: 'flex-start',
+              paddingTop: heightPercentage(24),
+            }}
+            icon={<FriedEggIcon />}
+          />
+        </>
+      ) : dataTemporary?.length === 0 &&
+        postData?.message ===
           'Your subscribed musician has not yet posted any exclusive content.' ? (
-        <EmptyState
-          text={t('EmptyState.Exclusive') || ''}
-          containerStyle={{
-            justifyContent: 'flex-start',
-            paddingTop: heightPercentage(24),
-          }}
-          icon={<FriedEggIcon />}
-        />
+        <>
+          <Gap height={195} />
+          <EmptyState
+            text={t('EmptyState.Exclusive') || ''}
+            containerStyle={{
+              justifyContent: 'flex-start',
+              paddingTop: heightPercentage(24),
+            }}
+            icon={<FriedEggIcon />}
+          />
+        </>
       ) : null}
       <ModalShare
         url={urlText}
