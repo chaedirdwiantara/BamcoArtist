@@ -483,6 +483,7 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
           <RefreshControl
             refreshing={refreshing}
             onRefresh={() => setRefreshing(true)}
+            tintColor={'transparent'}
           />
         }
         onScroll={handleScroll}>
