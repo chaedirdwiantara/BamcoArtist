@@ -21,6 +21,7 @@ import {TabFilter} from '../TabFilter';
 import {TopNavigation} from '../TopNavigation';
 import {WithdrawalCard} from './WithdrawalCard';
 import {TransactionCard} from './TransactionCard';
+import {EmptyState} from '../EmptyState/EmptyState';
 import {color, font, typography} from '../../../theme/';
 import {useCreditHook} from '../../../hooks/use-credit.hook';
 import {ArrowLeftIcon, CoinDIcon} from '../../../assets/icon';
@@ -135,33 +136,46 @@ export const TopupCoinContent: React.FC<TopupCoinProps> = ({
             </View>
           </View>
         ) : filter[selectedIndex].filterName === 'TopUp.Filter.Transaction' ? (
-          <TransactionCard
-            title="20 Credit have been purchased!"
-            date="Dec 16, 2022"
+          // <TransactionCard
+          //   title="20 Credit have been purchased!"
+          //   date="Dec 16, 2022"
+          // />
+          <EmptyState
+            text={t('TopUp.EmptyState.Transaction') || ''}
+            hideIcon={true}
+            containerStyle={styles.containerEmpty}
+            textStyle={styles.emptyText}
           />
         ) : (
-          <View style={styles.containerWithdrawal}>
-            {withdrawalList.map((val, i) => (
-              <WithdrawalCard
-                key={i}
-                transactionAmount={toCurrency(val.transactionAmount, {
-                  withFraction: false,
-                })}
-                conversionAmount={
-                  'HKD ' +
-                  toCurrency(val.conversionAmount, {
-                    withFraction: false,
-                  })
-                }
-                idMusician={val.idMusician}
-                date={val.date}
-                status={val.status}
-                notes={val.notes}
-                isOpen={val.isOpen}
-                onPress={() => onPressOpenWithdrawal(i)}
-              />
-            ))}
-          </View>
+          // <View style={styles.containerWithdrawal}>
+          //   {withdrawalList.map((val, i) => (
+          //     <WithdrawalCard
+          //       key={i}
+          //       transactionAmount={toCurrency(val.transactionAmount, {
+          //         withFraction: false,
+          //       })}
+          //       conversionAmount={
+          //         'HKD ' +
+          //         toCurrency(val.conversionAmount, {
+          //           withFraction: false,
+          //         })
+          //       }
+          //       idMusician={val.idMusician}
+          //       date={val.date}
+          //       status={val.status}
+          //       notes={val.notes}
+          //       isOpen={val.isOpen}
+          //       onPress={() => onPressOpenWithdrawal(i)}
+          //     />
+          //   ))}
+          // </View>
+
+          <EmptyState
+            text={t('TopUp.EmptyState.Withdrawal') || ''}
+            hideIcon={true}
+            containerStyle={styles.containerEmpty}
+            textStyle={styles.emptyText}
+          />
         )}
       </ScrollView>
     </View>
@@ -219,5 +233,16 @@ const styles = StyleSheet.create({
     aspectRatio: heightPercentage(327 / 40),
     marginTop: mvs(5),
     marginBottom: mvs(15),
+  },
+  containerEmpty: {
+    alignSelf: 'center',
+    marginTop: mvs(120),
+  },
+  emptyText: {
+    fontFamily: font.InterRegular,
+    fontSize: mvs(13),
+    textAlign: 'center',
+    color: color.Neutral[10],
+    lineHeight: mvs(16),
   },
 });
