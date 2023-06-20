@@ -12,6 +12,7 @@ import CartBox from '../../components/atom/Cart/CartBox';
 import BottomPrice from '../../components/atom/Cart/BottomPrice';
 import {dataCart} from '../../data/Action/cart';
 import {dataPromo} from '../../data/Action/promo';
+import AddonItem from '../../components/atom/Cart/AddonItem';
 
 type CartProps = NativeStackScreenProps<RootStackParams, 'Cart'>;
 
@@ -116,14 +117,19 @@ export const Cart: React.FC<CartProps> = ({navigation, route}: CartProps) => {
               onChecked={() => selectOwnerItem(data.id)}
               isChecked={data.isSelected}>
               {data.items.map(item => (
-                <CartItem
-                  name={item.name}
-                  image={item.image}
-                  price={item.totalPrice}
-                  qty={item.qty}
-                  onChecked={() => selectItem(data.id, item.id)}
-                  isChecked={item.isSelected}
-                />
+                <>
+                  <CartItem
+                    name={item.name}
+                    image={item.image}
+                    price={item.totalPrice}
+                    qty={item.qty}
+                    onChecked={() => selectItem(data.id, item.id)}
+                    isChecked={item.isSelected}
+                  />
+                  {item?.addons?.map(addon => (
+                    <AddonItem name={addon.name} image={addon.image} cart />
+                  ))}
+                </>
               ))}
             </CartBox>
           );

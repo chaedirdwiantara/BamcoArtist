@@ -11,6 +11,13 @@ export const dataTransaction = [
         image: 'https://picsum.photos/id/2/200',
         qty: 1,
         totalPrice: 1000,
+        addons: [
+          {
+            id: 'addon-1',
+            name: 'Blackpink Limited World Tour 2023 BornPink Cap',
+            image: 'https://picsum.photos/id/2/200',
+          },
+        ],
       },
     ],
   },

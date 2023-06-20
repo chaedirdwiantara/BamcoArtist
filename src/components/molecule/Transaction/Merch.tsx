@@ -15,6 +15,7 @@ import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParams} from '../../../navigations';
 import {dataTransaction} from '../../../data/Action/transaction';
+import AddonItem from '../../atom/Cart/AddonItem';
 
 const MerchTransaction = () => {
   const {t} = useTranslation();
@@ -86,13 +87,22 @@ const MerchTransaction = () => {
                   navigation.navigate('TransactionDetailMerch', {id: data.id})
                 }>
                 {data.items.map(item => (
-                  <CartItem
-                    name={item.name}
-                    image={item.image}
-                    price={item.totalPrice}
-                    qty={item.qty}
-                    editable={false}
-                  />
+                  <>
+                    <CartItem
+                      name={item.name}
+                      image={item.image}
+                      price={item.totalPrice}
+                      qty={item.qty}
+                      editable={false}
+                    />
+                    {item?.addons?.map(addon => (
+                      <AddonItem
+                        name={addon.name}
+                        image={addon.image}
+                        transaction
+                      />
+                    ))}
+                  </>
                 ))}
               </CartBox>
             );
