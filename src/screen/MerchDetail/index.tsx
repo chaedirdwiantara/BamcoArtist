@@ -52,6 +52,7 @@ import {usePlayerStore} from '../../store/player.store';
 import {mvs} from 'react-native-size-matters';
 import Reviews from './Reviews';
 import Typography from '../../theme/Typography';
+import AddonItem from '../../components/atom/Cart/AddonItem';
 
 type MerchDetailProps = NativeStackScreenProps<RootStackParams, 'MerchDetail'>;
 
@@ -317,6 +318,36 @@ export const MerchDetail: React.FC<MerchDetailProps> = ({
                   New
                 </Text>
               </View>
+              <>
+                <SsuDivider />
+                <View
+                  style={[
+                    styles.descContainer,
+                    {flexDirection: 'row', paddingBottom: heightPercentage(0)},
+                  ]}>
+                  <Text style={[styles.subtitle, {marginBottom: 0}]}>
+                    Buy 1 :
+                  </Text>
+                  <Gap width={widthPercentage(6)} />
+                  <Text
+                    style={[
+                      styles.subtitle,
+                      {color: Color.Pink.linear, marginBottom: 0},
+                    ]}>
+                    Get Free Item
+                  </Text>
+                </View>
+                <View style={styles.descContainer}>
+                  <AddonItem
+                    name="Blackpink Limited World Tour 2023 BornPink Cap"
+                    image="https://picsum.photos/id/2/200"
+                    rating={'4,5'}
+                    ratingQty={1000}
+                    cart={false}
+                    price={1000}
+                  />
+                </View>
+              </>
               <SsuDivider />
               <View style={styles.descContainer}>
                 <View style={styles.attribute}>
