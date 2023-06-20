@@ -10,7 +10,7 @@ import Typography from '../../theme/Typography';
 import CartItem from '../../components/atom/Cart/CartItem';
 import CartBox from '../../components/atom/Cart/CartBox';
 import BottomPrice from '../../components/atom/Cart/BottomPrice';
-import {dataCart} from '../../data/Action/cart';
+import {dataCart, dataCartEmpty} from '../../data/Action/cart';
 import {dataPromo} from '../../data/Action/promo';
 import AddonItem from '../../components/atom/Cart/AddonItem';
 
@@ -109,6 +109,12 @@ export const Cart: React.FC<CartProps> = ({navigation, route}: CartProps) => {
         </View>
       </View>
       <ScrollView showsVerticalScrollIndicator={false} style={{flex: 1}}>
+        <View style={styles.boxAlert}>
+          <Text style={[Typography.Caption, {color: Color.Error[400]}]}>
+            1 of your product is unavailable
+          </Text>
+        </View>
+
         {carts.map(data => {
           return (
             <CartBox
@@ -129,6 +135,45 @@ export const Cart: React.FC<CartProps> = ({navigation, route}: CartProps) => {
                   {item?.addons?.map(addon => (
                     <AddonItem name={addon.name} image={addon.image} cart />
                   ))}
+                </>
+              ))}
+            </CartBox>
+          );
+        })}
+
+        <View style={[styles.topContainer, styles.rowCenter]}>
+          <View style={styles.rowCenter}>
+            <Text style={[Typography.Subtitle2, {color: Color.Neutral[10]}]}>
+              Empty Stock
+            </Text>
+          </View>
+          <View>
+            <Text style={[Typography.Subtitle2, {color: Color.Error[400]}]}>
+              {t('Cart.Delete')}
+            </Text>
+          </View>
+        </View>
+
+        {dataCartEmpty.map(data => {
+          return (
+            <CartBox
+              seller={data.seller}
+              sellerImage={data.sellerImage}
+              onChecked={() => selectOwnerItem(data.id)}
+              isChecked={data.isSelected}
+              isEmpty
+              editable={false}>
+              {data.items.map(item => (
+                <>
+                  <CartItem
+                    name={item.name}
+                    image={item.image}
+                    price={item.totalPrice}
+                    qty={item.qty}
+                    onChecked={() => selectItem(data.id, item.id)}
+                    isChecked={item.isSelected}
+                    isEmpty
+                  />
                 </>
               ))}
             </CartBox>
@@ -161,5 +206,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: widthPercentage(24),
     borderBottomColor: Color.Dark[500],
     borderBottomWidth: 1,
+  },
+  boxAlert: {
+    backgroundColor: '#2D1D1D',
+    marginHorizontal: widthPercentage(24),
+    padding: widthPercentage(12),
+    borderRadius: 6,
+    borderColor: Color.Error[400],
+    borderWidth: 1,
+    marginTop: heightPercentage(16),
   },
 });

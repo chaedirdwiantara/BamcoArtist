@@ -51,3 +51,24 @@ export const dataCart = [
     ],
   },
 ];
+
+export const dataCartEmpty = [
+  {
+    id: '3',
+    seller: 'KoltPley',
+    sellerImage: 'https://picsum.photos/id/3/200',
+    isSelected: false,
+    coDelivery: null,
+    coCourier: null,
+    items: [
+      {
+        id: 'item-2',
+        name: 'KoltPley Jacket Tour 2023',
+        image: 'https://picsum.photos/id/4/200',
+        qty: 2,
+        totalPrice: 2000,
+        isSelected: false,
+      },
+    ],
+  },
+];
