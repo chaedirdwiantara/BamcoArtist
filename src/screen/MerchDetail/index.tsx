@@ -206,6 +206,29 @@ export const MerchDetail: React.FC<MerchDetailProps> = ({
             </Swiper>
           </View>
 
+          <View
+            style={[
+              styles.descContainer,
+              {
+                backgroundColor: '#FFD1F5',
+                width: '100%',
+              },
+            ]}>
+            <Text
+              style={[
+                {
+                  fontFamily: Font.InterBold,
+                  marginBottom: heightPercentage(2),
+                  fontSize: normalize(14),
+                },
+              ]}>
+              Out of stock
+            </Text>
+            <Text style={[Typography.Caption]}>
+              Product that you’ve looking for isn’t available right now
+            </Text>
+          </View>
+
           <View style={styles.descContainer}>
             <Text style={styles.title}>{data.title}</Text>
 
