@@ -206,25 +206,9 @@ export const MerchDetail: React.FC<MerchDetailProps> = ({
             </Swiper>
           </View>
 
-          <View
-            style={[
-              styles.descContainer,
-              {
-                backgroundColor: '#FFD1F5',
-                width: '100%',
-              },
-            ]}>
-            <Text
-              style={[
-                {
-                  fontFamily: Font.InterBold,
-                  marginBottom: heightPercentage(2),
-                  fontSize: normalize(14),
-                },
-              ]}>
-              Out of stock
-            </Text>
-            <Text style={[Typography.Caption]}>
+          <View style={styles.boxPink}>
+            <Text style={styles.outTitle}>Out of stock</Text>
+            <Text style={[Typography.Caption, {color: Color.Dark[300]}]}>
               Product that you’ve looking for isn’t available right now
             </Text>
           </View>
@@ -284,7 +268,9 @@ export const MerchDetail: React.FC<MerchDetailProps> = ({
           </View>
           <SsuDivider />
           <View style={styles.descContainer}>
-            <View style={styles.owner}>
+            <TouchableOpacity
+              style={styles.owner}
+              onPress={() => navigation.navigate('Shop')}>
               <View style={{marginRight: widthPercentage(6)}}>
                 {data?.ownerImage ? (
                   <Avatar
@@ -297,7 +283,7 @@ export const MerchDetail: React.FC<MerchDetailProps> = ({
               </View>
 
               <Text style={styles.ownerLabel}>{data.owner}</Text>
-            </View>
+            </TouchableOpacity>
             <Text style={styles.subtitle}>{t('Event.Description')}</Text>
             <Text style={styles.desc}>{data.desc ? data.desc : '-'}</Text>
           </View>
@@ -526,5 +512,17 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: Color.Dark[300],
     marginHorizontal: widthPercentage(20),
+  },
+  boxPink: {
+    backgroundColor: '#FFD1F5',
+    width: '100%',
+    paddingHorizontal: widthPercentage(24),
+    paddingVertical: heightPercentage(16),
+  },
+  outTitle: {
+    fontFamily: Font.InterBold,
+    marginBottom: heightPercentage(2),
+    fontSize: normalize(14),
+    color: Color.Dark[800],
   },
 });
