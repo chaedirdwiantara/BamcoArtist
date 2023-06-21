@@ -87,6 +87,11 @@ import {AlbumScreen} from '../screen/Album/Album';
 
 // TopUp
 import {TopupCoinScreen} from '../screen/TopupCoin';
+import {WithdrawalScreen} from '../screen/Withdrawal';
+import {InputWithdrawalScreen} from '../screen/Withdrawal/InputWithdrawal';
+import {AddBankAccountScreen} from '../screen/Withdrawal/AddBankAccount';
+import {EditBankAccountScreen} from '../screen/Withdrawal/EditBankAccount';
+import {VerifCodeWithdrawalScreen} from '../screen/Withdrawal/VerifCodeWithdrawal';
 
 // Action
 import Cart from '../screen/Action/Cart';
@@ -296,6 +301,11 @@ export type RootStackParams = {
   };
   TicketDetail: undefined;
   Shop: undefined;
+  AddBankAccount: undefined;
+  EditBankAccount: undefined;
+  InputWithdrawal: undefined;
+  VerifCodeWithdrawal: undefined;
+  Withdrawal: undefined;
 };
 
 export type MainTabParams = {
@@ -479,6 +489,21 @@ export const RootStackScreen = () => (
     <RootStack.Screen name="Webview" component={WebviewPage} />
     <RootStack.Screen name="MusicPlayer" component={MusicPlayer} />
     <RootStack.Screen name="TopupCoin" component={TopupCoinScreen} />
+    <RootStack.Screen name="Withdrawal" component={WithdrawalScreen} />
+    <RootStack.Screen
+      name="InputWithdrawal"
+      component={InputWithdrawalScreen}
+    />
+    <RootStack.Screen name="AddBankAccount" component={AddBankAccountScreen} />
+    <RootStack.Screen
+      name="EditBankAccount"
+      component={EditBankAccountScreen}
+    />
+    <RootStack.Screen
+      name="VerifCodeWithdrawal"
+      component={VerifCodeWithdrawalScreen}
+    />
+
     <RootStack.Screen name="MerchDetail" component={MerchDetail} />
     <RootStack.Screen name="ConcertDetail" component={ConcertDetail} />
     <RootStack.Screen name="CreatePost" component={CreatePost} />
