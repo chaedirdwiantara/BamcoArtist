@@ -51,9 +51,9 @@ const styles = StyleSheet.create({
   },
   emptyText: {
     fontFamily: font.InterRegular,
-    fontSize: mvs(13),
+    fontSize: mvs(12),
     textAlign: 'center',
     color: color.Neutral[10],
-    lineHeight: mvs(16),
+    lineHeight: mvs(14),
   },
 });
