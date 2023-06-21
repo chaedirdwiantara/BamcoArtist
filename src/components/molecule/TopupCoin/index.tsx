@@ -97,12 +97,12 @@ export const TopupCoinContent: React.FC<TopupCoinProps> = ({
           </View>
         </View>
 
-        {/* <Button
+        <Button
           label={t('TopUp.ButtonWithdraw')}
           textStyles={{fontSize: mvs(13), fontFamily: font.InterMedium}}
           containerStyles={styles.btnContainer}
           onPress={onPressWithdrawal}
-        /> */}
+        />
 
         <TabFilter.Type1
           filterData={filter}
