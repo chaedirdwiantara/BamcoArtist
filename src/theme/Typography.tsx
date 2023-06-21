@@ -59,7 +59,7 @@ const Typography = {
   },
   Body1: {
     fontFamily: Font.InterRegular,
-    fontSize: normalize(15),
+    fontSize: mvs(15),
     lineHeight: mvs(24),
     letterSpacing: 0.5,
   },
