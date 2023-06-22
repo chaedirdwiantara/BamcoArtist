@@ -191,6 +191,23 @@
       },
       "NewSong": {
         "Title": "New Songs"
+      },
+      "Analytic": {
+        "Income": {
+          "Title": "收入"
+        },
+        "Fans": {
+          "Title": "粉絲"
+        },
+        "Post": {
+          "Title": "郵政"
+        },
+        "Album": {
+          "Title": "專輯"
+        },
+        "Explore": {
+          "Title": "探索"
+        }
       }
     },
     "ListMood": {

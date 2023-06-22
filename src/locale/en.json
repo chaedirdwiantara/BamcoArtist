@@ -191,6 +191,23 @@
       },
       "NewSong": {
         "Title": "New Songs"
+      },
+      "Analytic": {
+        "Income": {
+          "Title": "Income"
+        },
+        "Fans": {
+          "Title": "Fans"
+        },
+        "Post": {
+          "Title": "Post"
+        },
+        "Album": {
+          "Title": "Album"
+        },
+        "Explore": {
+          "Title": "Explore"
+        }
       }
     },
     "ListMood": {

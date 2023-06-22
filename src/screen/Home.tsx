@@ -10,11 +10,7 @@ import {
   RefreshControl,
   Platform,
 } from 'react-native';
-import {
-  useNavigation,
-  useIsFocused,
-  useFocusEffect,
-} from '@react-navigation/native';
+import {useNavigation, useFocusEffect} from '@react-navigation/native';
 import {useQuery} from 'react-query';
 import {
   NativeStackNavigationProp,
@@ -33,7 +29,6 @@ import {
   BottomSheetGuest,
   SsuToast,
   Gap,
-  ListMoodGenre,
   ListImageDesc,
   CreatePostShortcut,
   ModalConfirm,
@@ -43,7 +38,6 @@ import Color from '../theme/Color';
 import TopSong from './ListCard/TopSong';
 import NewSong from './ListCard/NewSong';
 import {defaultBanner} from '../data/home';
-import TopMusician from './ListCard/TopMusician';
 import {useFcmHook} from '../hooks/use-fcm.hook';
 import {useSongHook} from '../hooks/use-song.hook';
 import {useHomeHook} from '../hooks/use-home.hook';
@@ -54,18 +48,13 @@ import {useSearchHook} from '../hooks/use-search.hook';
 import {useCreditHook} from '../hooks/use-credit.hook';
 import {usePlayerHook} from '../hooks/use-player.hook';
 import {useBannerHook} from '../hooks/use-banner.hook';
-import {ParamsProps} from '../interface/base.interface';
 import {useProfileHook} from '../hooks/use-profile.hook';
 import {useSettingHook} from '../hooks/use-setting.hook';
-import {useMusicianHook} from '../hooks/use-musician.hook';
-import FavoriteMusician from './ListCard/FavoriteMusician';
 import {CheckCircle2Icon, SearchIcon} from '../assets/icon';
 import {MainTabParams, RootStackParams} from '../navigations';
-import RecomendedMusician from './ListCard/RecomendedMusician';
 import {profileStorage, storage} from '../hooks/use-storage.hook';
 import {useNotificationHook} from '../hooks/use-notification.hook';
 import LoadingSpinner from '../components/atom/Loading/LoadingSpinner';
-import {FollowMusicianPropsType} from '../interface/musician.interface';
 import {FirebaseMessagingTypes} from '@react-native-firebase/messaging';
 import {ModalPlayMusic} from '../components/molecule/Modal/ModalPlayMusic';
 import {heightPercentage, widthPercentage, widthResponsive} from '../utils';
@@ -91,23 +80,11 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
   const {i18n, t} = useTranslation();
   const currentLanguage = i18n.language;
-  const {dataDiveIn, dataAlbumComingSoon, getListDiveIn, getListComingSoon} =
-    useHomeHook();
+  const {dataAlbumComingSoon, getListDiveIn, getListComingSoon} = useHomeHook();
   const {dataBanner, getListDataBanner, isLoadingBanner} = useBannerHook();
   const {dataProfile, getProfileUser} = useProfileHook();
   const {addFcmToken} = useFcmHook();
-  const {isPlaying, showPlayer, hidePlayer, addPlaylist} = usePlayerHook();
-  const {
-    isLoadingMusician,
-    dataMusician,
-    dataFavoriteMusician,
-    dataRecommendedMusician,
-    getListDataMusician,
-    getListDataFavoriteMusician,
-    getListDataRecommendedMusician,
-    setFollowMusician,
-    setUnfollowMusician,
-  } = useMusicianHook();
+  const {showPlayer, hidePlayer, addPlaylist} = usePlayerHook();
   const {
     isLoadingSong,
     dataTopSong,
@@ -118,8 +95,6 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
   const {counter, getCountNotification} = useNotificationHook();
   const {creditCount, getCreditCount} = useCreditHook();
   const {
-    listGenre,
-    listMood,
     getListMoodPublic,
     getListGenrePublic,
     dataExclusiveContent,
@@ -130,9 +105,8 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
   const {uriVideo, setUriVideo} = useVideoStore();
 
   const isLogin = storage.getBoolean('isLogin');
-  const isFocused = useIsFocused();
-  const [selectedIndexMusician, setSelectedIndexMusician] = useState(-0);
   const [selectedIndexSong, setSelectedIndexSong] = useState(-0);
+  const [selectedIndexAnalytic, setSelectedIndexAnalytic] = useState(-0);
   const [refreshing, setRefreshing] = useState<boolean>(false);
   const [showModalPost, setShowModalPost] = useState<ModalPostState>({
     isExclusivePostModal: false,
@@ -180,23 +154,6 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
       setRefreshing(false);
     }, 1000);
   }, [refreshing]);
-
-  // Triggering isFollowing musician when go back from other screen
-  useFocusEffect(
-    useCallback(() => {
-      if (selectedIndexMusician === 0) {
-        getListDataMusician();
-      } else if (selectedIndexMusician === 1) {
-        getListDataRecommendedMusician();
-      } else {
-        getListDataFavoriteMusician();
-      }
-
-      setTimeout(() => {
-        setRefreshing(false);
-      }, 1000);
-    }, [refreshing, selectedIndexMusician]),
-  );
 
   // Triggering when click love on the same song in top & new song tab
   useFocusEffect(
@@ -272,32 +229,25 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
     addFcmToken(token);
   };
 
-  const [filterMusician] = useState([
-    {filterName: 'Home.Tab.TopMusician.Title'},
-    {filterName: 'Home.Tab.Recomended.Title'},
-    {filterName: 'Home.Tab.Favorite.Title'},
-  ]);
-
-  const [filterMusicianGuest] = useState([
-    {filterName: 'Home.Tab.TopMusician.Title'},
-    {filterName: 'Home.Tab.Recomended.Title'},
-  ]);
-
   const [filterSong] = useState([
     {filterName: 'Home.Tab.TopSong.Title'},
     {filterName: 'Home.Tab.NewSong.Title'},
   ]);
 
-  const filterDataMusician = (item: any, index: any) => {
-    if (!isLogin && index === 1) {
-      setModalGuestVisible(true);
-    } else {
-      setSelectedIndexMusician(index);
-    }
-  };
+  const [filterAnalytic] = useState([
+    {filterName: 'Home.Tab.Analytic.Income.Title'},
+    {filterName: 'Home.Tab.Analytic.Fans.Title'},
+    {filterName: 'Home.Tab.Analytic.Post.Title'},
+    {filterName: 'Home.Tab.Analytic.Album.Title'},
+    {filterName: 'Home.Tab.Analytic.Explore.Title'},
+  ]);
 
   const filterDataSong = (item: any, index: any) => {
     setSelectedIndexSong(index);
+  };
+
+  const filterDataAnalytic = (item: any, index: any) => {
+    setSelectedIndexAnalytic(index);
   };
 
   const handleSearchButton = () => {
@@ -355,10 +305,6 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
     isLogin ? goToScreen('TopupCoin') : setModalGuestVisible(true);
   };
 
-  const onPressMoodGenre = (title: string, filterBy: string) => {
-    navigation.navigate('ListImage', {title, filterBy});
-  };
-
   const goToListMusic = (
     name: string,
     type: string,
@@ -378,13 +324,9 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
     navigation.navigate('Album', {id, type: 'coming_soon'});
   };
 
-  const goToMusicianPost = (name: string) => {
-    isLogin || name === 'Trending'
-      ? navigation.navigate('ListPost', {title: name})
-      : setModalGuestVisible(true);
-  };
+  const bannerCondition = isLoadingBanner && dataBanner.length === 0;
 
-  if (isLoadingBanner || isLoadingMusician) {
+  if (dataProfile?.data === undefined || bannerCondition) {
     return <View style={styles.root} />;
   }
 
@@ -504,55 +446,43 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
           compOnPress={handleCreatePost}
         />
 
-        {/* Mood */}
-        <ListMoodGenre
-          title={t('Home.ListMood.Title')}
-          data={listMood}
-          containerStyle={styles.containerList}
-          onPress={() => onPressMoodGenre('Moods', 'mood')}
-          onPressImage={(id, name) => goToListMusic(name, 'song', id, 'mood')}
-        />
-        {/* End Of Mood */}
-        {/* Genre */}
-        <ListMoodGenre
-          title={t('Home.ListGenre.Title')}
-          data={listGenre}
-          containerStyle={styles.containerList}
-          imageStyle={{
-            width: widthPercentage(90),
-            height: heightPercentage(80),
-          }}
-          onPress={() => onPressMoodGenre('Genre', 'genre')}
-          onPressImage={(id, name) => goToListMusic(name, 'song', id, 'genre')}
-        />
-        {/* End Of Genre */}
-        {/* Dive In */}
-        <View
-          style={{
-            marginTop: heightPercentage(20),
-            marginBottom: heightPercentage(10),
-            paddingLeft: widthResponsive(24),
-          }}>
-          <Text style={styles.diveInText}>{t('Home.DiveIn.Title')}</Text>
-          <Text style={styles.diveInDesc}>{t('Home.DiveIn.Subtitle')}</Text>
-        </View>
+        <Gap height={heightPercentage(20)} />
 
-        <ListImageDesc
-          title=""
-          hideArrow={true}
-          data={dataDiveIn}
-          containerStyle={{
-            marginTop: heightPercentage(10),
-            marginBottom: heightPercentage(20),
-          }}
-          imageStyle={{
-            width: widthPercentage(115),
-            height: widthPercentage(115),
-          }}
-          onPress={() => null}
-          onPressImage={goToMusicianPost}
-        />
-        {/* End Of Dive In */}
+        {/* Tab Analytic */}
+        <View style={[styles.containerContent]}>
+          <TabFilter.Type3
+            filterData={filterAnalytic}
+            onPress={filterDataAnalytic}
+            selectedIndex={selectedIndexAnalytic}
+            translation={true}
+          />
+          {filterAnalytic[selectedIndexAnalytic].filterName ===
+          'Home.Tab.Analytic.Income.Title' ? (
+            <View>
+              <Text>Income</Text>
+            </View>
+          ) : filterAnalytic[selectedIndexAnalytic].filterName ===
+            'Home.Tab.Analytic.Fans.Title' ? (
+            <View>
+              <Text>Fans</Text>
+            </View>
+          ) : filterAnalytic[selectedIndexAnalytic].filterName ===
+            'Home.Tab.Analytic.Post.Title' ? (
+            <View>
+              <Text>Post</Text>
+            </View>
+          ) : filterAnalytic[selectedIndexAnalytic].filterName ===
+            'Home.Tab.Analytic.Album.Title' ? (
+            <View>
+              <Text>Album</Text>
+            </View>
+          ) : (
+            <View>
+              <Text>Explore</Text>
+            </View>
+          )}
+        </View>
+        {/* End of Tab Analytic */}
         {/* Tab Song */}
         <View style={[styles.containerContent]}>
           <TabFilter.Type3
@@ -582,58 +512,6 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
           )}
         </View>
         {/* End of Tab Song */}
-        {/* Tab Musician */}
-        <View style={[styles.containerContent]}>
-          <TabFilter.Type3
-            filterData={!isLogin ? filterMusicianGuest : filterMusician}
-            onPress={filterDataMusician}
-            selectedIndex={selectedIndexMusician}
-            translation={true}
-          />
-          {filterMusician[selectedIndexMusician].filterName ===
-          'Home.Tab.TopMusician.Title' ? (
-            <TopMusician
-              dataMusician={dataMusician}
-              setFollowMusician={(
-                props?: FollowMusicianPropsType,
-                params?: ParamsProps,
-              ) => setFollowMusician(props, params)}
-              setUnfollowMusician={(
-                props?: FollowMusicianPropsType,
-                params?: ParamsProps,
-              ) => setUnfollowMusician(props, params)}
-              isLoading={isLoadingMusician}
-            />
-          ) : filterMusician[selectedIndexMusician].filterName ===
-            'Home.Tab.Recomended.Title' ? (
-            <RecomendedMusician
-              dataMusician={dataRecommendedMusician}
-              setFollowMusician={(
-                props?: FollowMusicianPropsType,
-                params?: ParamsProps,
-              ) => setFollowMusician(props, params)}
-              setUnfollowMusician={(
-                props?: FollowMusicianPropsType,
-                params?: ParamsProps,
-              ) => setUnfollowMusician(props, params)}
-              isLoading={isLoadingMusician}
-            />
-          ) : (
-            <FavoriteMusician
-              dataMusician={dataFavoriteMusician}
-              setFollowMusician={(
-                props?: FollowMusicianPropsType,
-                params?: ParamsProps,
-              ) => setFollowMusician(props, params)}
-              setUnfollowMusician={(
-                props?: FollowMusicianPropsType,
-                params?: ParamsProps,
-              ) => setUnfollowMusician(props, params)}
-              isLoading={isLoadingMusician}
-            />
-          )}
-        </View>
-        {/* End of Tab Musician */}
         {/* Playlist */}
         <ListPlaylistHome
           title={t('Home.Playlist.Title')}
