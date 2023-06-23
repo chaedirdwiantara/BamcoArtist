@@ -52,6 +52,7 @@ import {usePlayerStore} from '../../store/player.store';
 import {mvs} from 'react-native-size-matters';
 import Reviews from './Reviews';
 import Typography from '../../theme/Typography';
+import AddonItem from '../../components/atom/Cart/AddonItem';
 
 type MerchDetailProps = NativeStackScreenProps<RootStackParams, 'MerchDetail'>;
 
@@ -205,6 +206,13 @@ export const MerchDetail: React.FC<MerchDetailProps> = ({
             </Swiper>
           </View>
 
+          <View style={styles.boxPink}>
+            <Text style={styles.outTitle}>Out of stock</Text>
+            <Text style={[Typography.Caption, {color: Color.Dark[300]}]}>
+              Product that you’ve looking for isn’t available right now
+            </Text>
+          </View>
+
           <View style={styles.descContainer}>
             <Text style={styles.title}>{data.title}</Text>
 
@@ -260,7 +268,9 @@ export const MerchDetail: React.FC<MerchDetailProps> = ({
           </View>
           <SsuDivider />
           <View style={styles.descContainer}>
-            <View style={styles.owner}>
+            <TouchableOpacity
+              style={styles.owner}
+              onPress={() => navigation.navigate('Shop')}>
               <View style={{marginRight: widthPercentage(6)}}>
                 {data?.ownerImage ? (
                   <Avatar
@@ -273,7 +283,7 @@ export const MerchDetail: React.FC<MerchDetailProps> = ({
               </View>
 
               <Text style={styles.ownerLabel}>{data.owner}</Text>
-            </View>
+            </TouchableOpacity>
             <Text style={styles.subtitle}>{t('Event.Description')}</Text>
             <Text style={styles.desc}>{data.desc ? data.desc : '-'}</Text>
           </View>
@@ -317,6 +327,36 @@ export const MerchDetail: React.FC<MerchDetailProps> = ({
                   New
                 </Text>
               </View>
+              <>
+                <SsuDivider />
+                <View
+                  style={[
+                    styles.descContainer,
+                    {flexDirection: 'row', paddingBottom: heightPercentage(0)},
+                  ]}>
+                  <Text style={[styles.subtitle, {marginBottom: 0}]}>
+                    Buy 1 :
+                  </Text>
+                  <Gap width={widthPercentage(6)} />
+                  <Text
+                    style={[
+                      styles.subtitle,
+                      {color: Color.Pink.linear, marginBottom: 0},
+                    ]}>
+                    Get Free Item
+                  </Text>
+                </View>
+                <View style={styles.descContainer}>
+                  <AddonItem
+                    name="Blackpink Limited World Tour 2023 BornPink Cap"
+                    image="https://picsum.photos/id/2/200"
+                    rating={'4,5'}
+                    ratingQty={1000}
+                    cart={false}
+                    price={1000}
+                  />
+                </View>
+              </>
               <SsuDivider />
               <View style={styles.descContainer}>
                 <View style={styles.attribute}>
@@ -472,5 +512,17 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: Color.Dark[300],
     marginHorizontal: widthPercentage(20),
+  },
+  boxPink: {
+    backgroundColor: '#FFD1F5',
+    width: '100%',
+    paddingHorizontal: widthPercentage(24),
+    paddingVertical: heightPercentage(16),
+  },
+  outTitle: {
+    fontFamily: Font.InterBold,
+    marginBottom: heightPercentage(2),
+    fontSize: normalize(14),
+    color: Color.Dark[800],
   },
 });

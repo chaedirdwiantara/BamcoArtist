@@ -19,6 +19,7 @@ import {mvs} from 'react-native-size-matters';
 import {ModalReview} from '../../components/molecule/Modal/ModalReview';
 import {dataTransaction} from '../../data/Action/transaction';
 import {ModalSuccessCheckout} from '../../components/molecule/Modal/ModalSuccessCheckout';
+import AddonItem from '../../components/atom/Cart/AddonItem';
 
 type TransactionDetailMerchProps = NativeStackScreenProps<
   RootStackParams,
@@ -70,14 +71,23 @@ export const TransactionDetailMerch: React.FC<TransactionDetailMerchProps> = ({
           <Gap height={heightPercentage(16)} />
           <View>
             {detail?.items.map(item => (
-              <CartItem
-                detail
-                name={item.name}
-                image={item.image}
-                price={item.totalPrice}
-                qty={item.qty}
-                editable={false}
-              />
+              <>
+                <CartItem
+                  detail
+                  name={item.name}
+                  image={item.image}
+                  price={item.totalPrice}
+                  qty={item.qty}
+                  editable={false}
+                />
+                {item?.addons?.map(addon => (
+                  <AddonItem
+                    name={addon.name}
+                    image={addon.image}
+                    transaction
+                  />
+                ))}
+              </>
             ))}
           </View>
           <Text>
