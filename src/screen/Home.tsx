@@ -384,9 +384,7 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
       : setModalGuestVisible(true);
   };
 
-  const bannerCondition = isLoadingBanner && dataBanner.length === 0;
-
-  if (dataProfile?.data === undefined || bannerCondition) {
+  if (isLoadingBanner || isLoadingMusician) {
     return <View style={styles.root} />;
   }
 
@@ -483,6 +481,7 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
           <RefreshControl
             refreshing={refreshing}
             onRefresh={() => setRefreshing(true)}
+            tintColor={'transparent'}
           />
         }
         onScroll={handleScroll}>
