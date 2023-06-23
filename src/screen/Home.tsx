@@ -235,10 +235,10 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
   ]);
 
   const [filterAnalytic] = useState([
-    {filterName: 'Home.Tab.Analytic.Income.Title'},
     {filterName: 'Home.Tab.Analytic.Fans.Title'},
     {filterName: 'Home.Tab.Analytic.Post.Title'},
     {filterName: 'Home.Tab.Analytic.Album.Title'},
+    {filterName: 'Home.Tab.Analytic.Income.Title'},
     {filterName: 'Home.Tab.Analytic.Explore.Title'},
   ]);
 
@@ -457,30 +457,18 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
             translation={true}
           />
           {filterAnalytic[selectedIndexAnalytic].filterName ===
-          'Home.Tab.Analytic.Income.Title' ? (
-            <View>
-              <Text>Income</Text>
-            </View>
-          ) : filterAnalytic[selectedIndexAnalytic].filterName ===
-            'Home.Tab.Analytic.Fans.Title' ? (
-            <View>
-              <Text>Fans</Text>
-            </View>
-          ) : filterAnalytic[selectedIndexAnalytic].filterName ===
-            'Home.Tab.Analytic.Post.Title' ? (
-            <View>
-              <Text>Post</Text>
-            </View>
-          ) : filterAnalytic[selectedIndexAnalytic].filterName ===
-            'Home.Tab.Analytic.Album.Title' ? (
-            <View>
-              <Text>Album</Text>
-            </View>
-          ) : (
-            <View>
-              <Text>Explore</Text>
-            </View>
-          )}
+          'Home.Tab.Analytic.Income.Title'
+            ? null
+            : filterAnalytic[selectedIndexAnalytic].filterName ===
+              'Home.Tab.Analytic.Fans.Title'
+            ? null
+            : filterAnalytic[selectedIndexAnalytic].filterName ===
+              'Home.Tab.Analytic.Post.Title'
+            ? null
+            : filterAnalytic[selectedIndexAnalytic].filterName ===
+              'Home.Tab.Analytic.Album.Title'
+            ? null
+            : null}
         </View>
         {/* End of Tab Analytic */}
         {/* Tab Song */}
