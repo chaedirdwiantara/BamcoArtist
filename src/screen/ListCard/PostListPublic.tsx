@@ -509,16 +509,24 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
             )}
           />
         </View>
-      ) : dataMain?.length === 0 && feedMessage === 'you not follow anyone' ? (
-        <ListToFollowMusician />
-      ) : dataMain?.length === 0 && feedMessage === 'musician not have post' ? (
-        <EmptyState
-          text={t('EmptyState.FollowMusician') || ''}
-          containerStyle={{
-            justifyContent: 'flex-start',
-            paddingTop: heightPercentage(24),
-          }}
-        />
+      ) : dataTemporary?.length === 0 &&
+        postData?.message === 'you not follow anyone' ? (
+        <>
+          <Gap height={195} />
+          <ListToFollowMusician />
+        </>
+      ) : dataTemporary?.length === 0 &&
+        postData?.message === 'musician not have post' ? (
+        <>
+          <Gap height={195} />
+          <EmptyState
+            text={t('EmptyState.FollowMusician') || ''}
+            containerStyle={{
+              justifyContent: 'flex-start',
+              paddingTop: heightPercentage(24),
+            }}
+          />
+        </>
       ) : null}
       <ModalShare
         url={urlText}
