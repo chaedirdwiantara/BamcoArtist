@@ -23,49 +23,86 @@ import {
 } from '../../../utils';
 import {useTranslation} from 'react-i18next';
 import {DataExclusiveResponse} from '../../../interface/setting.interface';
+import Color from '../../../theme/Color';
+import {useCreditHook} from '../../../hooks/use-credit.hook';
+import {ModalLoading} from '../ModalLoading/ModalLoading';
+import {ModalSuccessSubs} from '../Modal/ModalSuccessSubs';
 
 interface ExclusiveProps {
   onPressGoBack: () => void;
   data?: DataExclusiveResponse;
+  credit: number;
 }
 
 export const ExclusiveContent: React.FC<ExclusiveProps> = ({
   onPressGoBack,
   data,
+  credit,
 }) => {
   const {t} = useTranslation();
+  const {subsNewEC} = useCreditHook();
   const [support, setSupport] = useState('');
   const [planList, setPlanList] = useState(listPlan);
   const [focusInput, setFocusInput] = useState(false);
+  const [selectedPlan, setSelectedPlan] = useState<DataExclusiveResponse>();
+  const [errorBalance, setErrorBalance] = useState<boolean>(false);
+  const [disabledSendButton, setDisabledSendButton] = useState<boolean>(true);
+  const [loadingSubs, setLoadingSubs] = useState<boolean>(false);
+  const [successSubs, setSuccessSubs] = useState<boolean>(false);
 
-  const onPressSelected = (index: number) => {
-    let newList = [...planList];
-    // all radio selected => false
-    newList = newList.map(v => ({...v, selected: false}));
-    // change selected value
-    newList[index].selected = true;
-    setPlanList(newList);
+  const onPressSelected = (plan: any) => {
+    setSelectedPlan(plan);
+    if (plan?.pricingPlans[0].price > credit) {
+      setErrorBalance(true);
+      setDisabledSendButton(true);
+    } else {
+      setErrorBalance(false);
+      setDisabledSendButton(false);
+    }
   };
 
-  const onPressSave = () => {};
+  const onPressSave = async () => {
+    setLoadingSubs(true);
+    const form = {
+      musicianUUID: data?.musician?.uuid || '',
+      packageID: selectedPlan?.ID || '',
+      packagePlanID: selectedPlan?.pricingPlans[0]?.ID || '',
+    };
+
+    const response = await subsNewEC(form);
+    setLoadingSubs(false);
+    if (response.code === 200) {
+      setTimeout(() => {
+        setSuccessSubs(true);
+      }, 500);
+    } else
+      setTimeout(() => {
+        setSuccessSubs(false);
+      }, 500);
+  };
+
+  const onPressSuccess = () => {
+    setSuccessSubs(false);
+    onPressGoBack();
+  };
 
   return (
-    <KeyboardAvoidingView
-      style={{flex: 1}}
-      behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
-      <View style={styles.root}>
-        <TopNavigation.Type1
-          title={t('ExclusiveContent.Title')}
-          leftIcon={<ArrowLeftIcon />}
-          itemStrokeColor={color.Neutral[10]}
-          leftIconAction={onPressGoBack}
-          containerStyles={{
-            marginBottom: heightPercentage(15),
-            paddingHorizontal: widthPercentage(12),
-          }}
-        />
+    <>
+      <KeyboardAvoidingView
+        style={{flex: 1}}
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+        <View style={styles.root}>
+          <TopNavigation.Type1
+            title={t('ExclusiveContent.Title')}
+            leftIcon={<ArrowLeftIcon />}
+            itemStrokeColor={color.Neutral[10]}
+            leftIconAction={onPressGoBack}
+            containerStyles={{
+              marginBottom: heightPercentage(15),
+              paddingHorizontal: widthPercentage(12),
+            }}
+          />
 
-        <ScrollView showsVerticalScrollIndicator={false}>
           <View style={styles.containerContent}>
             <View>
               <Text style={[typography.Subtitle1, styles.title]}>
@@ -76,26 +113,28 @@ export const ExclusiveContent: React.FC<ExclusiveProps> = ({
                 title={data?.title || ''}
                 subtitle={data?.description || ''}
               />
-            </View>
 
-            <View>
-              <Text style={[typography.Subtitle1, styles.titlePlan]}>
-                {t('ExclusiveContent.Choose')}
-              </Text>
-              {planList.map((val, i) =>
-                val.id === data?.pricingPlans[0].durationUnit ? (
-                  <PlanCard
-                    key={i}
-                    title={val.title}
-                    subtitle={val.subtitle}
-                    coin={kFormatter(data?.pricingPlans[0].price) + '/'}
-                    time={val.time}
-                    isError={val.selected}
-                    onPressSelected={() => onPressSelected(i)}
-                    selected={val.selected}
-                  />
-                ) : null,
-              )}
+              <View>
+                <Text style={[typography.Subtitle1, styles.titlePlan]}>
+                  {t('ExclusiveContent.Choose')}
+                </Text>
+                {planList.map((val, i) =>
+                  val.id === data?.pricingPlans[0].durationUnit ? (
+                    <PlanCard
+                      key={i}
+                      title={val.title}
+                      subtitle={val.subtitle}
+                      coin={kFormatter(data?.pricingPlans[0].price) + '/'}
+                      time={val.time}
+                      isError={
+                        credit ? credit < data?.pricingPlans[0].price : false
+                      }
+                      onPressSelected={() => onPressSelected(data)}
+                      selected={selectedPlan?.ID === data?.ID}
+                    />
+                  ) : null,
+                )}
+              </View>
             </View>
 
             <View>
@@ -126,24 +165,35 @@ export const ExclusiveContent: React.FC<ExclusiveProps> = ({
                 isError={false}
                 errorMsg={t('ExclusiveContent.ErrorCoinBonus') || ''}
               />
-            </View>
 
-            <Button
-              label={t('Btn.Purchase')}
-              onPress={onPressSave}
-              containerStyles={styles.button}
-            />
-            <Button
-              type="border"
-              label={t('Btn.Cancel')}
-              containerStyles={styles.btnCancel}
-              textStyles={{color: color.Success[400]}}
-              onPress={onPressSave}
-            />
+              <Button
+                label={t('Btn.Purchase')}
+                onPress={onPressSave}
+                containerStyles={
+                  disabledSendButton || errorBalance
+                    ? styles.buttonDisabled
+                    : styles.button
+                }
+                disabled={disabledSendButton || errorBalance}
+              />
+              <Button
+                type="border"
+                label={t('Btn.Cancel')}
+                containerStyles={styles.btnCancel}
+                textStyles={{color: Color.Pink.linear}}
+                borderColor={Color.Pink.linear}
+                onPress={onPressGoBack}
+              />
+            </View>
           </View>
-        </ScrollView>
-      </View>
-    </KeyboardAvoidingView>
+        </View>
+      </KeyboardAvoidingView>
+      <ModalLoading visible={loadingSubs} />
+      <ModalSuccessSubs
+        modalVisible={successSubs}
+        toggleModal={onPressSuccess}
+      />
+    </>
   );
 };
 
@@ -167,6 +217,13 @@ const styles = StyleSheet.create({
     width: width * 0.9,
     aspectRatio: heightPercentage(327 / 40),
     marginTop: heightPercentage(25),
+    backgroundColor: Color.Pink.linear,
+  },
+  buttonDisabled: {
+    width: width * 0.9,
+    aspectRatio: heightPercentage(327 / 40),
+    marginTop: heightPercentage(25),
+    backgroundColor: '#8794AD',
   },
   btnCancel: {
     width: width * 0.9,
@@ -174,9 +231,12 @@ const styles = StyleSheet.create({
     marginTop: heightPercentage(10),
   },
   containerContent: {
-    justifyContent: 'center',
     alignItems: 'center',
     marginHorizontal: widthPercentage(12),
+    paddingBottom: heightPercentage(30),
+    flex: 1,
+    justifyContent: 'space-between',
+    paddingHorizontal: widthPercentage(12),
   },
   containerInput: {
     width: width * 0.9,

@@ -26,7 +26,7 @@ interface ECProps extends DataExclusiveResponse {
 
 const ExclusiveDailyContent = (props: ECProps) => {
   const {t} = useTranslation();
-  const {coverImage, title, description, edit = false} = props;
+  const {coverImage, title, description, edit = false, subs, musician} = props;
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
 
@@ -73,10 +73,16 @@ const ExclusiveDailyContent = (props: ECProps) => {
             onPress={() =>
               edit
                 ? navigation.navigate('ExclusiveContentSetting')
+                : subs
+                ? null
                 : navigation.navigate('ExclusiveContent', {data: props})
             }>
             <Text style={styles.bottomBodyText}>
-              {edit ? t('ExclusiveContent.Edit') : t('Guest.GetExclusive')}
+              {edit
+                ? t('ExclusiveContent.Edit')
+                : subs
+                ? t('ExclusiveContent.Active')
+                : t('ExclusiveContent.Subscribe')}
             </Text>
           </TouchableOpacity>
         </View>

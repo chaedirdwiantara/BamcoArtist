@@ -63,7 +63,8 @@ export const PlanCard: React.FC<PlanCard> = ({
 
       {isError && (
         <View style={styles.containerCoin}>
-          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          <View
+            style={{flexDirection: 'row', alignItems: 'flex-start', flex: 1}}>
             <ErrorIcon fill={color.Error[400]} />
             <Gap width={widthPercentage(4)} />
             <Text style={[typography.Body4, {color: color.Error[400]}]}>
@@ -102,9 +103,9 @@ const styles = StyleSheet.create({
     marginLeft: widthPercentage(24),
   },
   containerCoin: {
-    alignItems: 'center',
+    alignItems: 'flex-start',
     justifyContent: 'space-between',
     flexDirection: 'row',
-    marginTop: 4,
+    marginTop: heightPercentage(10),
   },
 });

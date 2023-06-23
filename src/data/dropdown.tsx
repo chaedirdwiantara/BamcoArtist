@@ -89,11 +89,18 @@ export const dropDownDataSort: DropDownSortType[] = [
 ];
 
 export const dropDownDataSubscription: DataDropDownType[] = [
-  {label: 'Setting.Tips.Filter.All', value: '1'},
-  {label: 'Setting.Tips.Filter.OneTime', value: '2'},
-  {label: 'Setting.Tips.Filter.Weekly', value: '3'},
-  {label: 'Setting.Tips.Filter.Monthly', value: '4'},
-  {label: 'Setting.Tips.Filter.Yearly', value: '5'},
+  {label: 'Setting.Tips.Filter.All', value: ''},
+  {label: 'Setting.Tips.Filter.Weekly', value: 'weekly'},
+  {label: 'Setting.Tips.Filter.Monthly', value: 'monthly'},
+  {label: 'Setting.Tips.Filter.Yearly', value: 'yearly'},
+];
+
+export const dropDownDataDonation: DataDropDownType[] = [
+  {label: 'Setting.Tips.Filter.All', value: ''},
+  {label: 'Setting.Tips.Filter.OneTime', value: 'onetime'},
+  {label: 'Setting.Tips.Filter.Weekly', value: 'weekly'},
+  {label: 'Setting.Tips.Filter.Monthly', value: 'monthly'},
+  {label: 'Setting.Tips.Filter.Yearly', value: 'yearly'},
 ];
 
 export const dropDownHeaderAlbum: DataDropDownType[] = [
@@ -112,6 +119,11 @@ export const dropDownHeaderSongDetails: DataDropDownType[] = [
 export const dropDownSubscription: DataDropDownType[] = [
   {label: 'Setting.Tips.Menu.Subs.GoToMusician', value: '1'},
   {label: 'Setting.Tips.Menu.Subs.Unsubs', value: '2'},
+];
+
+export const dropDownTipping: DataDropDownType[] = [
+  {label: 'Setting.Tips.Menu.Subs.GoToMusician', value: '1'},
+  {label: 'Setting.Tips.Menu.Donation.Stop', value: '2'},
 ];
 
 export const dropDownSetAudience: DataDropDownType[] = [
