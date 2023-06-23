@@ -108,7 +108,8 @@
     "Set": "Set",
     "Unset": "Unset",
     "Dismiss": "Dismiss",
-    "Update": "Update"
+    "Update": "Update",
+    "Continue": "Continue"
   },
   "ForgotPassword": {
     "Title": "Update Your Password",
@@ -826,7 +827,58 @@
     }
   },
   "Withdrawal": {
-    "Title": "Withdrawal"
+    "Title": "Withdrawal",
+    "BankAccount": {
+      "ChooseAccount": "Choose Account",
+      "AddAccount": "Add Account",
+      "Number": "Number",
+      "AccountNumber": "Account Number",
+      "BankName": "Bank Name",
+      "Action": "Action"
+    },
+    "InputWithdrawal": {
+      "InputWithdrawalAmount": "Input Withdrawal Amount",
+      "InputAmount": "Input Amount",
+      "CreditToWithdraw": "Credit to Withdraw",
+      "TotalConversion": "Total Conversion"
+    },
+    "AddBankAccount": {
+      "Title": "Add Account",
+      "ModalConfirm": {
+        "TitleUnsaved": "Unsaved Progress",
+        "SubtitleAdd": "Are you sure your Withdrawal Account is correct and want to save your current Withdrawal Account?",
+        "SubtitleUnsaved": "Are you sure you want to go back? your withdrawal account will be unsaved and you need to input your data again"
+      },
+      "Label": {
+        "Country": "Country",
+        "BankName": "Bank Name",
+        "AccountNumber": "Account Number",
+        "SwiftCode": "Swift Code",
+        "BankAddress": "Bank Address",
+        "NameOfAccountHolder": "Name of Account Holder",
+        "BeneficiaryName": "Beneficiary Name",
+        "BeneficiaryAddress": "Beneficiary Address",
+        "UploadPhotos" :"Upload Photos of National ID or Passport"
+      },
+      "Placeholder": {
+        "Country": "Select Country",
+        "BankName": "Select Bank Name",
+        "AccountNumber": "Add Account Number",
+        "SwiftCode": "Add Swift Code",
+        "BankAddress": "Add Bank Address",
+        "NameOfAccountHolder": "Add Name of Account Holder",
+        "BeneficiaryName": "Add Beneficiary Name",
+        "BeneficiaryAddress": "Add Beneficiary Address",
+        "UploadPhotos": "Upload"
+      }
+    },
+    "EditBankAccount": {
+      "Title": "Edit Account"
+    },
+    "VerifCode":  {
+      "VerificationCode": "Verification Code",
+      "VerificationText": "We have sent you six digits verification code on address {{email}} check your inbox and enter verification code here"
+    }
   },
   "RecoverAccount": {
     "Title": "Account Deletion",
