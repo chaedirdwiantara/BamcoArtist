@@ -324,12 +324,6 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
     navigation.navigate('Album', {id, type: 'coming_soon'});
   };
 
-  const bannerCondition = isLoadingBanner && dataBanner.length === 0;
-
-  if (dataProfile?.data === undefined || bannerCondition) {
-    return <View style={styles.root} />;
-  }
-
   const handleCreatePost = () => {
     setShowModalPost({
       isExclusivePostModal: true,
