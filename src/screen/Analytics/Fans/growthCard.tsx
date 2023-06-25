@@ -4,26 +4,45 @@ import {widthResponsive} from '../../../utils';
 import {color, font} from '../../../theme';
 import {mvs} from 'react-native-size-matters';
 import {Gap} from '../../../components';
+import {ArrowUpIcon} from '../../../assets/icon';
 
 interface GrowthCardProps {
   number: string;
   numberDiffs: string;
   desc: string;
+  progress: 'improve' | 'regression' | 'same';
   containerStyle?: ViewStyle;
 }
 
 const GrowthCard: FC<GrowthCardProps> = (props: GrowthCardProps) => {
-  const {number, desc, containerStyle, numberDiffs} = props;
+  const {number, desc, numberDiffs, progress, containerStyle} = props;
 
   return (
     <View style={[styles.container, containerStyle]}>
       <View style={styles.percentage}>
         <Text style={styles.textNum}>{number ?? 0}</Text>
         <Gap width={8} />
-        <Text style={styles.numberDiffs}>{numberDiffs}</Text>
+        {progress === 'improve' ? (
+          <ArrowUpIcon stroke={color.Green[200]} height={16} />
+        ) : progress === 'regression' ? (
+          // TODO: CHANGE INTO ARROW DOWN
+          <ArrowUpIcon stroke={color.Error[500]} height={16} />
+        ) : null}
+        <Text
+          style={[
+            styles.numberDiffs,
+            {
+              color:
+                progress === 'improve' ? color.Green[200] : color.Error[500],
+            },
+          ]}>
+          {progress !== 'same' ? numberDiffs : ''}
+        </Text>
       </View>
       <Gap height={2} />
-      <Text style={styles.textDesc}>{desc}</Text>
+      <Text style={styles.textDesc} numberOfLines={1}>
+        {desc}
+      </Text>
     </View>
   );
 };
@@ -38,6 +57,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: color.Dark[400],
     borderRadius: 4,
+    width: '47%',
   },
   percentage: {flexDirection: 'row', alignItems: 'center'},
   textNum: {
@@ -49,7 +69,6 @@ const styles = StyleSheet.create({
   numberDiffs: {
     fontFamily: font.InterMedium,
     fontSize: mvs(13),
-    color: color.Green[200],
   },
   textDesc: {
     fontFamily: font.InterRegular,
