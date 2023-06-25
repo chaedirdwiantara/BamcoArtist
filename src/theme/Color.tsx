@@ -97,6 +97,7 @@ const Color = {
   },
   Green: {
     100: '#43A671',
+    200: '#5EBD94',
   },
   DarkBlue: {
     100: '#15233A',

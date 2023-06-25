@@ -7,6 +7,7 @@ import ArrowRightIcon2 from './ArrowRight2.icon';
 import ArrowUpIcon from './ArrowUp.icon';
 import AudioMusic from './AudioMusic.icon';
 import BellNotif from './BellNotif.icon';
+import BlitzIcon from './Blitz.icon';
 import CameraIcon from './Camera';
 import CancelCreatePostIcon from './CancelCreatePost.icon';
 import CheckBoxIcon from './CheckBox.icon';
@@ -124,6 +125,7 @@ export {
   ArrowUpIcon,
   AudioMusic,
   BellNotif,
+  BlitzIcon,
   CameraIcon,
   CancelCreatePostIcon,
   CheckBoxIcon,

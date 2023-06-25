@@ -62,6 +62,7 @@ import EmptyStateHome from '../components/molecule/EmptyState/EmptyStateHome';
 import ListPlaylistHome from '../components/molecule/ListCard/ListPlaylistHome';
 import {ModalConfirmChoice} from '../components/molecule/Modal/ModalConfirmChoice';
 import {useVideoStore} from '../store/video.store';
+import Fans from './Analytics/Fans';
 
 type OnScrollEventHandler = (
   event: NativeSyntheticEvent<NativeScrollEvent>,
@@ -451,18 +452,17 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
             translation={true}
           />
           {filterAnalytic[selectedIndexAnalytic].filterName ===
-          'Home.Tab.Analytic.Income.Title'
-            ? null
-            : filterAnalytic[selectedIndexAnalytic].filterName ===
-              'Home.Tab.Analytic.Fans.Title'
-            ? null
-            : filterAnalytic[selectedIndexAnalytic].filterName ===
-              'Home.Tab.Analytic.Post.Title'
-            ? null
-            : filterAnalytic[selectedIndexAnalytic].filterName ===
-              'Home.Tab.Analytic.Album.Title'
-            ? null
-            : null}
+          'Home.Tab.Analytic.Income.Title' ? null : filterAnalytic[
+              selectedIndexAnalytic
+            ].filterName === 'Home.Tab.Analytic.Fans.Title' ? (
+            <View style={{paddingHorizontal: widthResponsive(20)}}>
+              <Gap height={widthResponsive(15)} />
+              <Fans />
+            </View>
+          ) : filterAnalytic[selectedIndexAnalytic].filterName ===
+            'Home.Tab.Analytic.Post.Title' ? null : filterAnalytic[
+              selectedIndexAnalytic
+            ].filterName === 'Home.Tab.Analytic.Album.Title' ? null : null}
         </View>
         {/* End of Tab Analytic */}
         {/* Tab Song */}
