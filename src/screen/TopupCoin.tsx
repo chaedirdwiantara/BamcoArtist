@@ -27,7 +27,7 @@ export const TopupCoinScreen: React.FC = () => {
   };
 
   const onPressWithdrawal = () => {
-    // navigation.navigate('Withdrawal');
+    navigation.navigate('Withdrawal');
   };
 
   return (

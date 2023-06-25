@@ -24,6 +24,7 @@ interface CartItemProps {
   qty?: number;
   isChecked?: boolean;
   onChecked?: () => void;
+  isEmpty?: boolean;
 }
 
 const CartItem: React.FC<CartItemProps> = props => {
@@ -36,6 +37,7 @@ const CartItem: React.FC<CartItemProps> = props => {
     qty,
     isChecked = false,
     onChecked = () => null,
+    isEmpty = false,
   } = props;
   return (
     <View
@@ -44,7 +46,7 @@ const CartItem: React.FC<CartItemProps> = props => {
         styles.alignCenter,
         {paddingBottom: heightPercentage(16)},
       ]}>
-      {editable && (
+      {editable && !isEmpty && (
         <>
           <CheckBox handleOnPress={onChecked} active={isChecked} />
           <Gap width={widthPercentage(10)} />

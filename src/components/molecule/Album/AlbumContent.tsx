@@ -284,6 +284,7 @@ export const AlbumContent: React.FC<Props> = ({
       </ScrollView>
 
       <ModalDonate
+        userId={detailAlbum.musician.uuid}
         onPressDonate={onPressDonate}
         modalVisible={modalDonate}
         onModalHide={() => setModalSuccessDonate(true)}

@@ -108,7 +108,8 @@
     "Set": "Set",
     "Unset": "Unset",
     "Dismiss": "Dismiss",
-    "Update": "Update"
+    "Update": "Update",
+    "Continue": "Continue"
   },
   "ForgotPassword": {
     "Title": "Update Your Password",
@@ -190,6 +191,23 @@
       },
       "NewSong": {
         "Title": "New Songs"
+      },
+      "Analytic": {
+        "Income": {
+          "Title": "Income"
+        },
+        "Fans": {
+          "Title": "Fans"
+        },
+        "Post": {
+          "Title": "Post"
+        },
+        "Album": {
+          "Title": "Album"
+        },
+        "Explore": {
+          "Title": "Explore"
+        }
       }
     },
     "ListMood": {
@@ -367,11 +385,15 @@
     "Month": "Month",
     "Year": "Year",
     "Support": "Add support to your plan",
-    "Optional": "Support (optional)",
+    "Optional": "Bonus Support (optional)",
     "InputBonus": "Input Bonus",
     "ErrorCoinBonus": "Insufficient coin, add more coin to give bonus",
     "ErrorCoinSubs": "Insufficient coin, add more coin to subscribe",
-    "Edit": "Edit My Exclusive Content"
+    "Edit": "Edit My Exclusive Content",
+    "Active": "Subscription Active",
+    "Success": "Congratulations! Your Exclusive Content have been Paid!",
+    "View": "View Exclusive Content",
+    "Subscribe": "Subscribe Exclusive Content"
   },
   "Setting": {
     "Title": "Settings",
@@ -512,7 +534,7 @@
       "AddCustom": "Add custom tip",
       "CustomTip": "Custom tip",
       "Tab": {
-        "Donation": "Donation",
+        "Donation": "Tip",
         "Subs": "Subscription"
       },
       "Filter": {
@@ -536,7 +558,7 @@
       "Menu": {
         "Donation": {
           "GoToMusician": "Go To Musician",
-          "Stop": "Stop Donation"
+          "Stop": "Stop Tipping"
         },
         "Subs": {
           "GoToMusician": "Go To Musician",
@@ -753,6 +775,14 @@
       "Body": "To Create Exclusive content, you need to set up your exclusive content pricing and duration, do you want to continue?",
       "ButtonOk": "Yes",
       "ButtonCancel": "Maybe Later"
+    },
+    "Unsub": {
+      "Title": "Unsubscribe",
+      "Subtitle": "Are you sure you want to unsubscribe {{musician}}?"
+    },
+    "StopDonation": {
+      "Title": "Stop Tipping",
+      "Subtitle": "Are you sure you want to stop donation to {{musician}}?"
     }
   },
   "EmptyState": {
@@ -777,7 +807,8 @@
     "NoECSetting": "You have not set your exclusive content yet, let’s try to make one",
     "NoECData": "You don’t have any exclusive content, try to make a new one!",
     "NoFollowersTitle": "People follow this musician",
-    "NoFollowersSubtitle": "When people follow musician, you'll see them here"
+    "NoFollowersSubtitle": "When people follow musician, you'll see them here",
+    "Subscribe": "You don’t have any subscription, try to subsrcibe your favorite musician"
   },
   "Guest": {
     "Title": "Sign Up to Interact with Musician",
@@ -806,10 +837,65 @@
       "Date": "Date",
       "TransactionStatus": "Transaction Status",
       "Notes": "Notes"
+    },
+    "EmptyState" : {
+      "Transaction": "The transaction list will be displayed here, but as of now, no transactions have been made.",
+      "Withdrawal": "There are no transactions to display at the moment regarding withdrawals."
     }
   },
   "Withdrawal": {
-    "Title": "Withdrawal"
+    "Title": "Withdrawal",
+    "BankAccount": {
+      "ChooseAccount": "Choose Account",
+      "AddAccount": "Add Account",
+      "Number": "Number",
+      "AccountNumber": "Account Number",
+      "BankName": "Bank Name",
+      "Action": "Action"
+    },
+    "InputWithdrawal": {
+      "InputWithdrawalAmount": "Input Withdrawal Amount",
+      "InputAmount": "Input Amount",
+      "CreditToWithdraw": "Credit to Withdraw",
+      "TotalConversion": "Total Conversion"
+    },
+    "AddBankAccount": {
+      "Title": "Add Account",
+      "ModalConfirm": {
+        "TitleUnsaved": "Unsaved Progress",
+        "SubtitleAdd": "Are you sure your Withdrawal Account is correct and want to save your current Withdrawal Account?",
+        "SubtitleUnsaved": "Are you sure you want to go back? your withdrawal account will be unsaved and you need to input your data again"
+      },
+      "Label": {
+        "Country": "Country",
+        "BankName": "Bank Name",
+        "AccountNumber": "Account Number",
+        "SwiftCode": "Swift Code",
+        "BankAddress": "Bank Address",
+        "NameOfAccountHolder": "Name of Account Holder",
+        "BeneficiaryName": "Beneficiary Name",
+        "BeneficiaryAddress": "Beneficiary Address",
+        "UploadPhotos" :"Upload Photos of National ID or Passport"
+      },
+      "Placeholder": {
+        "Country": "Select Country",
+        "BankName": "Select Bank Name",
+        "AccountNumber": "Add Account Number",
+        "SwiftCode": "Add Swift Code",
+        "BankAddress": "Add Bank Address",
+        "NameOfAccountHolder": "Add Name of Account Holder",
+        "BeneficiaryName": "Add Beneficiary Name",
+        "BeneficiaryAddress": "Add Beneficiary Address",
+        "UploadPhotos": "Upload"
+      }
+    },
+    "EditBankAccount": {
+      "Title": "Edit Account"
+    },
+    "VerifCode":  {
+      "VerificationCode": "Verification Code",
+      "VerificationText": "We have sent you six digits verification code on address {{email}} check your inbox and enter verification code here"
+    }
   },
   "RecoverAccount": {
     "Title": "Account Deletion",

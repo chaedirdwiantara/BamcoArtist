@@ -128,6 +128,7 @@ const TopSong: FC<TopSongPropsScreen> = (props: TopSongPropsScreen) => {
                 newOnPressMore={data =>
                   newOnPressMore && newOnPressMore(data, item)
                 }
+                singerId={item.musicianId}
               />
             );
           }
@@ -171,6 +172,7 @@ const TopSong: FC<TopSongPropsScreen> = (props: TopSongPropsScreen) => {
                   newOnPressMore={data =>
                     newOnPressMore && newOnPressMore(data, item)
                   }
+                  singerId={item.musicianId}
                 />
               );
             }

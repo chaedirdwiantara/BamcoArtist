@@ -19,18 +19,22 @@ import {
   normalize,
   widthPercentage,
   heightPercentage,
+  kFormatter,
 } from '../../../utils';
 import Font from '../../../theme/Font';
 import Color from '../../../theme/Color';
 import SsuSheet from '../../atom/SsuSheet';
-import {CoinIcon} from '../../../assets/icon';
-import {color, typography} from '../../../theme';
+import {CoinIcon, ErrorIcon} from '../../../assets/icon';
+import {color, font, typography} from '../../../theme';
 import {RootStackParams} from '../../../navigations';
 import {Button, Gap, SelectBoxTip} from '../../atom';
 import {useCreditHook} from '../../../hooks/use-credit.hook';
 import {creditType, listCredit} from '../../../data/listDonate';
+import {useMusicianHook} from '../../../hooks/use-musician.hook';
+import {ModalLoading} from '../ModalLoading/ModalLoading';
 
 interface ModalDonateProps {
+  userId: string;
   modalVisible: boolean;
   onPressClose: () => void;
   onPressDonate: () => void;
@@ -38,6 +42,7 @@ interface ModalDonateProps {
 }
 
 export const ModalDonate: React.FC<ModalDonateProps> = ({
+  userId,
   modalVisible,
   onPressClose,
   onPressDonate,
@@ -46,53 +51,80 @@ export const ModalDonate: React.FC<ModalDonateProps> = ({
   const {t} = useTranslation();
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
-  const {creditCount, getCreditCount} = useCreditHook();
+  const {creditCount, getCreditCount, createNewDonation} = useCreditHook();
+  const {getDetailMusician, dataDetailMusician} = useMusicianHook();
 
   useEffect(() => {
     getCreditCount();
-  }, []);
+  }, [modalVisible]);
 
   const [selectedCredit, setSelectedCredit] = useState<string>('');
   const [selectedCreditType, setSelectedCreditType] = useState<string>('');
   const [donate, setDonate] = useState<string>('');
   const [focusInput, setFocusInput] = useState<boolean>(false);
   const [showCustomInput, setShowCustomInput] = useState<boolean>(false);
+  const [disabledSendButton, setDisabledSendButton] = useState<boolean>(true);
+  const [errorBalance, setErrorBalance] = useState<boolean>(false);
+  const [errorDonate, setErrorDonate] = useState<boolean>(false);
+  const [loadingDonate, setLoadingDonate] = useState<boolean>(false);
+
+  useEffect(() => {
+    if ((selectedCredit !== '' || donate !== '') && selectedCreditType !== '') {
+      if (selectedCredit !== '' && creditCount >= Number(selectedCredit)) {
+        setDisabledSendButton(false);
+      } else if (donate !== '' && creditCount >= Number(donate)) {
+        setDisabledSendButton(false);
+      } else {
+        setDisabledSendButton(true);
+        setErrorBalance(true);
+      }
+    }
+  }, [selectedCredit, selectedCreditType, donate]);
+
+  useEffect(() => {
+    getDetailMusician({id: userId});
+  }, [userId]);
 
   const goToScreenCoin = () => {
     onPressClose();
     navigation.navigate('TopupCoin');
   };
 
-  const CustomInput = () => {
-    return (
-      <View style={styles.containerCustom}>
-        <Text style={[typography.Subtitle1, {color: color.Neutral[10]}]}>
-          {t('Setting.Tips.CustomTip')}
-        </Text>
-        <View
-          style={[
-            styles.containerInput,
-            {
-              borderBottomWidth: focusInput ? 1 : 0,
-            },
-          ]}>
-          <TextInput
-            // value={donate}
-            // onChangeText={(newText: string) => setDonate(newText)}
-            style={styles.inputStyle}
-            placeholder="0.00"
-            placeholderTextColor={'#ffffff4d'}
-            onFocus={() => {
-              setFocusInput(true);
-            }}
-            onBlur={() => {
-              setFocusInput(false);
-            }}
-            keyboardType={'number-pad'}
-          />
-        </View>
-      </View>
-    );
+  const resetForm = () => {
+    setShowCustomInput(false);
+    setDonate('');
+    setSelectedCredit('');
+    setSelectedCreditType('');
+    setErrorBalance(false);
+    setErrorDonate(false);
+    setDisabledSendButton(true);
+  };
+
+  const onCloseModal = () => {
+    resetForm();
+    onPressClose();
+  };
+
+  const submitDonation = async () => {
+    setLoadingDonate(true);
+    const form = {
+      ownerId: dataDetailMusician?.uuid || '',
+      ownerUserName: dataDetailMusician?.username || '',
+      ownerFullName: dataDetailMusician?.fullname || '',
+      ownerImage: dataDetailMusician?.imageProfileUrls[0].image,
+      package: '',
+      duration: Number(selectedCreditType),
+      contributionRepeat: selectedCreditType !== '0' ? 1 : 0,
+      credit: selectedCredit ? Number(selectedCredit) : Number(donate),
+    };
+
+    const response = await createNewDonation(form);
+    setLoadingDonate(false);
+    if (response.code === 200) {
+      getCreditCount();
+      resetForm();
+      onPressDonate();
+    } else setErrorDonate(true);
   };
 
   const children = () => {
@@ -101,7 +133,33 @@ export const ModalDonate: React.FC<ModalDonateProps> = ({
         <Text style={styles.titleStyle}>{t('Home.Tab.TopMusician.Tip')}</Text>
         <View style={styles.separator} />
         {showCustomInput ? (
-          <CustomInput />
+          <View style={styles.containerCustom}>
+            <Text style={[typography.Subtitle1, {color: color.Neutral[10]}]}>
+              {t('Setting.Tips.CustomTip')}
+            </Text>
+            <View
+              style={[
+                styles.containerInput,
+                {
+                  borderBottomWidth: focusInput ? 1 : 0,
+                },
+              ]}>
+              <TextInput
+                value={donate}
+                onChangeText={(newText: string) => setDonate(newText)}
+                style={styles.inputStyle}
+                placeholder="0.00"
+                placeholderTextColor={'#ffffff4d'}
+                onFocus={() => {
+                  setFocusInput(true);
+                }}
+                onBlur={() => {
+                  setFocusInput(false);
+                }}
+                keyboardType={'number-pad'}
+              />
+            </View>
+          </View>
         ) : (
           <View style={styles.containerContent}>
             <Text style={[typography.Subtitle1, {color: color.Neutral[10]}]}>
@@ -127,6 +185,8 @@ export const ModalDonate: React.FC<ModalDonateProps> = ({
           onPress={() => {
             setShowCustomInput(!showCustomInput);
             setDonate('');
+            setSelectedCredit('');
+            setDisabledSendButton(true);
           }}>
           {showCustomInput ? (
             <Text style={[typography.Subtitle1, {color: color.Pink[200]}]}>
@@ -161,7 +221,7 @@ export const ModalDonate: React.FC<ModalDonateProps> = ({
             </Text>
             <CoinIcon style={styles.coinIcon} />
             <Text style={[typography.Button2, {color: color.Pink.linear}]}>
-              {creditCount}
+              {kFormatter(creditCount, 1)}
             </Text>
           </View>
 
@@ -172,10 +232,35 @@ export const ModalDonate: React.FC<ModalDonateProps> = ({
           </TouchableOpacity>
         </View>
 
+        {(errorBalance || errorDonate) && (
+          <View style={styles.containerError}>
+            <ErrorIcon
+              fill={Color.Error[500]}
+              style={{marginBottom: mvs(-1)}}
+            />
+            <Gap width={4} />
+            <Text
+              style={{
+                fontFamily: font.InterRegular,
+                fontWeight: '400',
+                fontSize: mvs(10),
+                color: Color.Error[500],
+                maxWidth: '90%',
+              }}>
+              {errorBalance
+                ? 'It`s seems your balance is lower than your tip amount'
+                : 'Sorry, there is a problem, please try again' + userId}
+            </Text>
+          </View>
+        )}
+
         <Button
           label={t('Home.Tab.TopMusician.Tip')}
-          containerStyles={styles.btnDonate}
-          onPress={onPressDonate}
+          containerStyles={
+            disabledSendButton ? styles.btnDonateDisabled : styles.btnDonate
+          }
+          onPress={submitDonation}
+          disabled={disabledSendButton}
         />
         <Button
           type="border"
@@ -183,7 +268,7 @@ export const ModalDonate: React.FC<ModalDonateProps> = ({
           borderColor={color.Success[400]}
           containerStyles={styles.btnCancel}
           textStyles={{color: Color.Success[400]}}
-          onPress={onPressClose}
+          onPress={onCloseModal}
         />
       </>
     );
@@ -199,6 +284,7 @@ export const ModalDonate: React.FC<ModalDonateProps> = ({
         <View style={styles.modalOverlay} />
       </TouchableWithoutFeedback>
       <SsuSheet children={children()} />
+      <ModalLoading visible={loadingDonate} />
     </Modal>
   );
 };
@@ -229,6 +315,12 @@ const styles = StyleSheet.create({
     aspectRatio: heightPercentage(327 / 40),
     marginTop: heightPercentage(20),
     backgroundColor: color.Success[400],
+  },
+  btnDonateDisabled: {
+    width: width * 0.9,
+    aspectRatio: heightPercentage(327 / 40),
+    marginTop: heightPercentage(20),
+    backgroundColor: '#8794AD',
   },
   btnCancel: {
     width: width * 0.9,
@@ -290,5 +382,12 @@ const styles = StyleSheet.create({
     fontSize: mvs(40),
     color: color.Neutral[10],
     marginVertical: Platform.OS === 'ios' ? mvs(8) : 0,
+  },
+  containerError: {
+    paddingTop: mvs(6),
+    alignItems: 'flex-start',
+    justifyContent: 'flex-start',
+    flexDirection: 'row',
+    width: width * 0.9,
   },
 });

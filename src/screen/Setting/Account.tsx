@@ -33,7 +33,9 @@ export const AccountScreen: React.FC<AccountProps> = ({
   }, []);
 
   useEffect(() => {
-    getCitiesOfCountry({country: selectedCountry});
+    if (selectedCountry) {
+      getCitiesOfCountry({country: selectedCountry});
+    }
   }, [selectedCountry]);
 
   const onPressGoBack = () => {

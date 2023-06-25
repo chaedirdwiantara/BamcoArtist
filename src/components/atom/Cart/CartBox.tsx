@@ -28,6 +28,7 @@ interface CartBoxProps {
   onChecked?: () => void;
   coDelivery?: any;
   coCourier?: any;
+  isEmpty?: boolean;
 }
 
 const CartBox: React.FC<CartBoxProps> = props => {
@@ -49,13 +50,14 @@ const CartBox: React.FC<CartBoxProps> = props => {
     onChecked = () => null,
     coDelivery,
     coCourier,
+    isEmpty = false,
   } = props;
 
   const {t} = useTranslation();
 
   if (type === EventType.Merch) {
     return (
-      <View style={styles.root}>
+      <View style={[styles.root, {opacity: isEmpty ? 0.5 : 1}]}>
         <View
           style={[
             styles.rowCenter,
