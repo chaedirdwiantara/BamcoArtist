@@ -63,6 +63,7 @@ import ListPlaylistHome from '../components/molecule/ListCard/ListPlaylistHome';
 import {ModalConfirmChoice} from '../components/molecule/Modal/ModalConfirmChoice';
 import {useVideoStore} from '../store/video.store';
 import Fans from './Analytics/Fans';
+import Income from './Analytics/Income';
 
 type OnScrollEventHandler = (
   event: NativeSyntheticEvent<NativeScrollEvent>,
@@ -452,9 +453,13 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
             translation={true}
           />
           {filterAnalytic[selectedIndexAnalytic].filterName ===
-          'Home.Tab.Analytic.Income.Title' ? null : filterAnalytic[
-              selectedIndexAnalytic
-            ].filterName === 'Home.Tab.Analytic.Fans.Title' ? (
+          'Home.Tab.Analytic.Income.Title' ? (
+            <View style={{paddingHorizontal: widthResponsive(20)}}>
+              <Gap height={widthResponsive(15)} />
+              <Income />
+            </View>
+          ) : filterAnalytic[selectedIndexAnalytic].filterName ===
+            'Home.Tab.Analytic.Fans.Title' ? (
             <View style={{paddingHorizontal: widthResponsive(20)}}>
               <Gap height={widthResponsive(15)} />
               <Fans />
