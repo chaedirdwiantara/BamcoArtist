@@ -4,7 +4,7 @@ import {widthResponsive} from '../../../utils';
 import {color, font} from '../../../theme';
 import {mvs} from 'react-native-size-matters';
 import {Gap} from '../../../components';
-import {ArrowUpIcon} from '../../../assets/icon';
+import {ArrowDownIcon, ArrowUpGreenIcon} from '../../../assets/icon';
 
 interface GrowthCardProps {
   number: string;
@@ -21,12 +21,11 @@ const GrowthCard: FC<GrowthCardProps> = (props: GrowthCardProps) => {
     <View style={[styles.container, containerStyle]}>
       <View style={styles.percentage}>
         <Text style={styles.textNum}>{number ?? 0}</Text>
-        <Gap width={8} />
+        <Gap width={4} />
         {progress === 'improve' ? (
-          <ArrowUpIcon stroke={color.Green[200]} height={16} />
+          <ArrowUpGreenIcon />
         ) : progress === 'regression' ? (
-          // TODO: CHANGE INTO ARROW DOWN
-          <ArrowUpIcon stroke={color.Error[500]} height={16} />
+          <ArrowDownIcon />
         ) : null}
         <Text
           style={[
@@ -39,7 +38,7 @@ const GrowthCard: FC<GrowthCardProps> = (props: GrowthCardProps) => {
           {progress !== 'same' ? numberDiffs : ''}
         </Text>
       </View>
-      <Gap height={2} />
+      <Gap height={4} />
       <Text style={styles.textDesc} numberOfLines={1}>
         {desc}
       </Text>
@@ -52,7 +51,7 @@ export default GrowthCard;
 const styles = StyleSheet.create({
   container: {
     marginTop: widthResponsive(20),
-    paddingVertical: widthResponsive(10),
+    paddingVertical: widthResponsive(8),
     paddingHorizontal: widthResponsive(12),
     borderWidth: 1,
     borderColor: color.Dark[400],

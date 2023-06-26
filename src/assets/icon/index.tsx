@@ -5,6 +5,8 @@ import ArrowLeftIcon from './ArrowLeft.icon';
 import ArrowRightIcon from './ArrowRight.icon';
 import ArrowRightIcon2 from './ArrowRight2.icon';
 import ArrowUpIcon from './ArrowUp.icon';
+import ArrowUpGreenIcon from './ArrowUpGreen.icon';
+import ArrowDownIcon from './ArrowDown.icon';
 import AudioMusic from './AudioMusic.icon';
 import BellNotif from './BellNotif.icon';
 import BlitzIcon from './Blitz.icon';
@@ -123,6 +125,8 @@ export {
   ArrowRightIcon,
   ArrowRightIcon2,
   ArrowUpIcon,
+  ArrowUpGreenIcon,
+  ArrowDownIcon,
   AudioMusic,
   BellNotif,
   BlitzIcon,
