@@ -18,6 +18,7 @@ import {
   dropDownIncomeType,
 } from '../../../data/dropdown';
 import {storage} from '../../../hooks/use-storage.hook';
+import BottomCard from './BottomCard';
 
 const Income = () => {
   const {t} = useTranslation();
@@ -88,6 +89,39 @@ const Income = () => {
             textCustomStyle={{color: Color.Neutral[10], fontSize: mvs(11)}}
             iconColor={Color.Neutral[10]}
             dropdownStyle={styles.dropdown}
+          />
+        </View>
+
+        <View>
+          <BottomCard
+            type="tip"
+            numberAvg={'8,500'}
+            descAvg={t('Home.Tab.Analytic.Income.BottomCard.Avg', {
+              range: t(selectedType.label),
+            })}
+            numberDiffsAvg={'5%'}
+            progressAvg={'improve'}
+            numberEarned={'8,300'}
+            numberDiffsEarned={'2%'}
+            progressEarned={'regression'}
+            descEarned={t('Home.Tab.Analytic.Income.BottomCard.Earned', {
+              range: t(selectedType.label),
+            })}
+          />
+          <BottomCard
+            type="subscription"
+            numberAvg={'8,500'}
+            descAvg={t('Home.Tab.Analytic.Income.BottomCard.Avg', {
+              range: t(selectedType.label),
+            })}
+            numberDiffsAvg={'5%'}
+            progressAvg={'improve'}
+            numberEarned={'8,300'}
+            numberDiffsEarned={'2%'}
+            progressEarned={'regression'}
+            descEarned={t('Home.Tab.Analytic.Income.BottomCard.Earned', {
+              range: t(selectedType.label),
+            })}
           />
         </View>
       </View>

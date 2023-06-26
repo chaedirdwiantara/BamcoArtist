@@ -199,6 +199,10 @@
             "Tip" : "Tip Earned",
             "Subs" : "Subs Earned"
           },
+          "BottomCard" : {
+            "Avg" : "Avg {{range}} earn",
+            "Earned" : "Earned this {{range}}"
+          },
           "Main" : {
             "Title" : "My Income"
           },
@@ -211,7 +215,10 @@
             "Range" : {
               "Monthly" : "Monthly",
               "Weekly" : "Weekly",
-              "Daily" : "Daily"
+              "Daily" : "Daily",
+              "Month" : "Month",
+              "Week" : "Week",
+              "Today" : "Today"
             }
           }
         },
