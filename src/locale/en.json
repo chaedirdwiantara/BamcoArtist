@@ -194,7 +194,26 @@
       },
       "Analytic": {
         "Income": {
-          "Title": "Income"
+          "Title": "Income",
+          "TopCard" : {
+            "Tip" : "Tip Earned",
+            "Subs" : "Subs Earned"
+          },
+          "Main" : {
+            "Title" : "My Income"
+          },
+          "Filter" : {
+            "Type" : {
+              "All" : "All Income",
+              "Tip" : "Tip",
+              "Subs" : "Subscription"
+            },
+            "Range" : {
+              "Monthly" : "Monthly",
+              "Weekly" : "Weekly",
+              "Daily" : "Daily"
+            }
+          }
         },
         "Fans": {
           "Title": "Fans"

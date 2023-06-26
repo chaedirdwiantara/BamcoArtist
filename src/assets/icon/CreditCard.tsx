@@ -5,8 +5,8 @@ import {widthPercentage} from '../../utils';
 import {SvgProps} from '../../interface/svg.interface';
 
 export function NormalCreditCard({
-  width = widthPercentage(14),
-  height = widthPercentage(14),
+  width = widthPercentage(18),
+  height = widthPercentage(18),
   fill = 'none',
   stroke = '#fff',
   style,
@@ -36,8 +36,8 @@ export function NormalCreditCard({
 }
 
 export function PosCreditCard({
-  width = widthPercentage(14),
-  height = widthPercentage(14),
+  width = widthPercentage(18),
+  height = widthPercentage(18),
   fill = 'none',
   stroke = '#fff',
   style,

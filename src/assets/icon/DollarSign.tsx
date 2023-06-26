@@ -5,8 +5,8 @@ import {widthPercentage} from '../../utils';
 import {SvgProps} from '../../interface/svg.interface';
 
 function DollarSign({
-  width = widthPercentage(14),
-  height = widthPercentage(14),
+  width = widthPercentage(18),
+  height = widthPercentage(18),
   fill = 'none',
   stroke = '#fff',
   style,
