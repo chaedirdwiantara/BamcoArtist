@@ -19,6 +19,7 @@ import {
 } from '../../../data/dropdown';
 import {storage} from '../../../hooks/use-storage.hook';
 import BottomCard from './BottomCard';
+import {BarChart} from 'react-native-gifted-charts';
 
 const Income = () => {
   const {t} = useTranslation();
@@ -32,6 +33,58 @@ const Income = () => {
     label: 'Home.Tab.Analytic.Income.Filter.Range.Monthly',
     value: '1',
   });
+
+  const barData = [
+    {
+      value: 40,
+      label: 'Jan',
+      spacing: 4,
+      labelWidth: 30,
+      frontColor: '#7EF6AB',
+    },
+    {value: 20, frontColor: '#F67DEB'},
+    {
+      value: 50,
+      label: 'Feb',
+      spacing: 4,
+      labelWidth: 30,
+      frontColor: '#7EF6AB',
+    },
+    {value: 40, frontColor: '#F67DEB'},
+    {
+      value: 75,
+      label: 'Mar',
+      spacing: 4,
+      labelWidth: 30,
+      frontColor: '#7EF6AB',
+    },
+    {value: 25, frontColor: '#F67DEB'},
+    {
+      value: 30,
+      label: 'Apr',
+      spacing: 4,
+      labelWidth: 30,
+      frontColor: '#7EF6AB',
+    },
+    {value: 20, frontColor: '#F67DEB'},
+    {
+      value: 60,
+      label: 'May',
+      spacing: 4,
+      labelWidth: 30,
+      frontColor: '#7EF6AB',
+    },
+    {value: 40, frontColor: '#F67DEB'},
+    {
+      value: 65,
+      label: 'Jun',
+      spacing: 4,
+      labelWidth: 30,
+      frontColor: '#7EF6AB',
+    },
+    {value: 30, frontColor: '#F67DEB'},
+  ];
+
   return (
     <>
       <View style={{flexDirection: 'row'}}>
@@ -91,6 +144,33 @@ const Income = () => {
             dropdownStyle={styles.dropdown}
           />
         </View>
+
+        <View style={{marginBottom: heightResponsive(36)}}>
+          <BarChart
+            data={barData}
+            barWidth={8}
+            spacing={widthResponsive(30)}
+            roundedTop
+            roundedBottom
+            yAxisThickness={0}
+            yAxisTextStyle={{color: Color.Dark[100]}}
+            xAxisLabelTextStyle={{
+              color: Color.Neutral[20],
+              marginLeft: 3,
+              top: heightResponsive(16),
+            }}
+            xAxisColor={Color.Dark[300]}
+            xAxisType={'dash'}
+            xAxisLength={widthResponsive(265)}
+            noOfSections={3}
+            maxValue={80}
+            rulesColor={Color.Dark[300]}
+            rulesType="dash"
+            rulesLength={widthResponsive(265)}
+          />
+        </View>
+
+        <Gap height={heightResponsive(20)} />
 
         <View>
           <BottomCard
