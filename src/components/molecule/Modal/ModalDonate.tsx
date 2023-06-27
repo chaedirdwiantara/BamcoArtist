@@ -30,8 +30,8 @@ import {RootStackParams} from '../../../navigations';
 import {Button, Gap, SelectBoxTip} from '../../atom';
 import {useCreditHook} from '../../../hooks/use-credit.hook';
 import {creditType, listCredit} from '../../../data/listDonate';
-import {useMusicianHook} from '../../../hooks/use-musician.hook';
 import {ModalLoading} from '../ModalLoading/ModalLoading';
+import {detailMusicianLite} from '../../../api/musician.api';
 
 interface ModalDonateProps {
   userId: string;
@@ -52,7 +52,6 @@ export const ModalDonate: React.FC<ModalDonateProps> = ({
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
   const {creditCount, getCreditCount, createNewDonation} = useCreditHook();
-  const {getDetailMusician, dataDetailMusician} = useMusicianHook();
 
   useEffect(() => {
     getCreditCount();
@@ -81,10 +80,6 @@ export const ModalDonate: React.FC<ModalDonateProps> = ({
     }
   }, [selectedCredit, selectedCreditType, donate]);
 
-  useEffect(() => {
-    getDetailMusician({id: userId});
-  }, [userId]);
-
   const goToScreenCoin = () => {
     onPressClose();
     navigation.navigate('TopupCoin');
@@ -107,24 +102,34 @@ export const ModalDonate: React.FC<ModalDonateProps> = ({
 
   const submitDonation = async () => {
     setLoadingDonate(true);
-    const form = {
-      ownerId: dataDetailMusician?.uuid || '',
-      ownerUserName: dataDetailMusician?.username || '',
-      ownerFullName: dataDetailMusician?.fullname || '',
-      ownerImage: dataDetailMusician?.imageProfileUrls[0].image,
-      package: '',
-      duration: Number(selectedCreditType),
-      contributionRepeat: selectedCreditType !== '0' ? 1 : 0,
-      credit: selectedCredit ? Number(selectedCredit) : Number(donate),
-    };
+    try {
+      const detailMusician = await detailMusicianLite({id: userId});
 
-    const response = await createNewDonation(form);
-    setLoadingDonate(false);
-    if (response.code === 200) {
-      getCreditCount();
-      resetForm();
-      onPressDonate();
-    } else setErrorDonate(true);
+      const form = {
+        ownerId: detailMusician?.data?.uuid || '',
+        ownerUserName: detailMusician?.data?.username || '',
+        ownerFullName: detailMusician?.data?.fullname || '',
+        ownerImage:
+          detailMusician?.data?.imageProfileUrls?.length > 0
+            ? detailMusician?.data?.imageProfileUrls[0]?.image
+            : '',
+        package: '',
+        duration: Number(selectedCreditType),
+        contributionRepeat: selectedCreditType !== '0' ? 1 : 0,
+        credit: selectedCredit ? Number(selectedCredit) : Number(donate),
+      };
+
+      const response = await createNewDonation(form);
+      setLoadingDonate(false);
+      if (response.code === 200) {
+        getCreditCount();
+        resetForm();
+        onPressDonate();
+      } else setErrorDonate(true);
+    } catch (e) {
+      console.log(e);
+      setLoadingDonate(false);
+    }
   };
 
   const children = () => {
