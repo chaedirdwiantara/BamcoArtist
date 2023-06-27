@@ -2,6 +2,7 @@ import {
   NativeModules,
   Platform,
   StyleSheet,
+  TextStyle,
   View,
   ViewStyle,
 } from 'react-native';
@@ -24,6 +25,9 @@ interface DropdownV2Props {
   topPosition?: number;
   leftPosition: number;
   containerStyle?: ViewStyle;
+  textCustomStyle?: TextStyle;
+  iconColor?: string;
+  dropdownStyle?: ViewStyle;
 }
 
 const DropDownFilter: React.FC<DropdownV2Props> = (props: DropdownV2Props) => {
@@ -35,6 +39,9 @@ const DropDownFilter: React.FC<DropdownV2Props> = (props: DropdownV2Props) => {
     topPosition = 0,
     leftPosition,
     containerStyle,
+    textCustomStyle,
+    iconColor,
+    dropdownStyle,
   } = props;
   const [offsetSortFilter, setOffsetSortFilter] = useState<{
     px: number;
@@ -79,10 +86,11 @@ const DropDownFilter: React.FC<DropdownV2Props> = (props: DropdownV2Props) => {
         label={labelCaption}
         type="border"
         containerStyles={styles.categoryContainerStyle}
-        textStyles={styles.categoryTextStyle}
+        textStyles={{...styles.categoryTextStyle, ...textCustomStyle}}
         borderColor={'transparent'}
         typeOfButton={'withIcon'}
         onPress={() => setIsModalVisible(true)}
+        iconColor={iconColor}
       />
       {offsetSortFilter !== undefined && (
         <FilterModal
@@ -92,11 +100,12 @@ const DropDownFilter: React.FC<DropdownV2Props> = (props: DropdownV2Props) => {
           selectedMenu={handleSelectedOnPress}
           sendCategory={() => {}}
           translation={true}
-          xPosition={offsetSortFilter?.px}
+          xPosition={0}
           yPosition={offsetSortFilter?.py}
           containerStyle={{
             top: offsetSortFilter?.py + topPosition,
             left: offsetSortFilter?.px + leftPosition,
+            ...dropdownStyle,
           }}
           textStyle={{fontSize: mvs(12)}}
           buttonContainerStyle={{

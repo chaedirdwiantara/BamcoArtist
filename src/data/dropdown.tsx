@@ -156,3 +156,15 @@ export const dropDownActionSort: DataDropDownType[] = [
   {label: 'Event.Dropdown.Sort.LowestPrice', value: '2'},
   {label: 'Event.Dropdown.Sort.MostSold', value: '3'},
 ];
+
+export const dropDownIncomeType: DataDropDownType[] = [
+  {label: 'Home.Tab.Analytic.Income.Filter.Type.All', value: '1'},
+  {label: 'Home.Tab.Analytic.Income.Filter.Type.Tip', value: '2'},
+  {label: 'Home.Tab.Analytic.Income.Filter.Type.Subs', value: '3'},
+];
+
+export const dropDownIncomeRange: DataDropDownType[] = [
+  {label: 'Home.Tab.Analytic.Income.Filter.Range.Monthly', value: '1'},
+  {label: 'Home.Tab.Analytic.Income.Filter.Range.Weekly', value: '2'},
+  {label: 'Home.Tab.Analytic.Income.Filter.Range.Daily', value: '3'},
+];

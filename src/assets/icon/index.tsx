@@ -116,6 +116,8 @@ import LocationIcon from './Location.icon';
 import TruckIcon from './Truck.icon';
 import BagTickIcon from './BagTick.icon';
 import StarIcon from './BagTick.icon';
+import {NormalCreditCard, PosCreditCard} from './CreditCard';
+import DollarSign from './DollarSign';
 
 export {
   AddIcon,
@@ -236,4 +238,7 @@ export {
   TruckIcon,
   BagTickIcon,
   StarIcon,
+  NormalCreditCard,
+  PosCreditCard,
+  DollarSign,
 };

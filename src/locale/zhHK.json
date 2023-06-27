@@ -194,7 +194,33 @@
       },
       "Analytic": {
         "Income": {
-          "Title": "收入"
+          "Title": "Income",
+          "TopCard" : {
+            "Tip" : "Tip Earned",
+            "Subs" : "Subs Earned"
+          },
+          "BottomCard" : {
+            "Avg" : "Avg {{range}} earn",
+            "Earned" : "Earned this {{range}}"
+          },
+          "Main" : {
+            "Title" : "My Income"
+          },
+          "Filter" : {
+            "Type" : {
+              "All" : "All Income",
+              "Tip" : "Tip",
+              "Subs" : "Subscription"
+            },
+            "Range" : {
+              "Monthly" : "Monthly",
+              "Weekly" : "Weekly",
+              "Daily" : "Daily",
+              "Month" : "Month",
+              "Week" : "Week",
+              "Today" : "Today"
+            }
+          }
         },
         "Fans": {
           "Title": "粉絲"

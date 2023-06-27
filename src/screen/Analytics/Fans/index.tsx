@@ -119,11 +119,14 @@ const Fans = () => {
 
   return (
     <View style={styles.container}>
+      {/* TITLE AREA */}
       <View style={styles.titleContainer}>
         <BlitzIcon />
         <Gap width={widthResponsive(10)} />
         <Text style={styles.title}>Fans Growth</Text>
       </View>
+
+      {/* CHART AREA */}
       <Gap height={16} />
       <View style={{marginLeft: -7}}>
         <LineChart
@@ -133,6 +136,7 @@ const Fans = () => {
           noOfSections={5}
           areaChart
           yAxisTextStyle={{color: color.Dark[100]}}
+          // @ts-ignore TODO: HANDLE IT LATER
           data={fansData.data}
           curved
           startFillColor={color.Pink[400]}
@@ -152,6 +156,8 @@ const Fans = () => {
           dataPointsWidth={20}
         />
       </View>
+
+      {/* CARD AREA */}
       <View style={styles.cardContainer}>
         <GrowthCard
           number={fansData.beFan}

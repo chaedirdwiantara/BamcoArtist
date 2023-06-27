@@ -95,6 +95,7 @@ const Color = {
     linear: '#F98FD9',
     300: '#951979',
     400: '#FF76F3',
+    new: '#FF72E0',
   },
   Green: {
     100: '#43A671',
