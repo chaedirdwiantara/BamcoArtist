@@ -1,10 +1,10 @@
 import {StyleSheet, Text, View, ViewStyle} from 'react-native';
 import React, {FC} from 'react';
-import {widthResponsive} from '../../../utils';
-import {color, font} from '../../../theme';
+import {widthResponsive} from '../../../../utils';
+import {color, font} from '../../../../theme';
 import {mvs} from 'react-native-size-matters';
-import {Gap} from '../../../components';
-import {ArrowDownIcon, ArrowUpGreenIcon} from '../../../assets/icon';
+import {Gap} from '../../../../components';
+import {ArrowDownIcon, ArrowUpGreenIcon} from '../../../../assets/icon';
 
 interface GrowthCardProps {
   number: string;
