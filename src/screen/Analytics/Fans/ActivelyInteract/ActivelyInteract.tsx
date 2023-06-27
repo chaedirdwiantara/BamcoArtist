@@ -7,9 +7,23 @@ import * as Progress from 'react-native-progress';
 import {mvs} from 'react-native-size-matters';
 import {Gap} from '../../../../components';
 import {useTranslation} from 'react-i18next';
+import {useQuery} from 'react-query';
+import {useAnalyticsHook} from '../../../../hooks/use-analytics.hook';
 
 const FansActiveInteract = () => {
+  const {getDataFansActiveInteract} = useAnalyticsHook();
   const {t} = useTranslation();
+  const {
+    data: fansAnalyticData,
+    isLoading: queryDataLoading,
+    isError,
+    refetch,
+  } = useQuery('fans-interact-analytic', () =>
+    getDataFansActiveInteract({
+      page: 1,
+      perPage: 3,
+    }),
+  );
   interface activeInteractProps {
     value: string;
   }

@@ -14,3 +14,15 @@ export const fansAnalytic = async (
 
   return data;
 };
+
+export const fansActiveInteract = async (
+  props?: ParamsProps,
+): Promise<ListPostResponseType> => {
+  const {data} = await SsuAPI().request<ListPostResponseType>({
+    url: '/musician-app/post/public',
+    method: 'GET',
+    params: props,
+  });
+
+  return data;
+};
