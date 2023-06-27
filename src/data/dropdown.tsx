@@ -168,3 +168,9 @@ export const dropDownIncomeRange: DataDropDownType[] = [
   {label: 'Home.Tab.Analytic.Income.Filter.Range.Weekly', value: '2'},
   {label: 'Home.Tab.Analytic.Income.Filter.Range.Daily', value: '3'},
 ];
+
+export const dropDownFansGrowth: DataDropDownType[] = [
+  {label: 'Home.Tab.Analytic.Fans.Filter.Range.Monthly', value: '1'},
+  {label: 'Home.Tab.Analytic.Fans.Filter.Range.Weekly', value: '2'},
+  {label: 'Home.Tab.Analytic.Fans.Filter.Range.Daily', value: '3'},
+];

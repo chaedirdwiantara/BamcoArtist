@@ -223,7 +223,14 @@
           }
         },
         "Fans": {
-          "Title": "粉絲"
+          "Title": "粉絲",
+          "Filter" : {
+            "Range" : {
+              "Monthly" : "Monthly",
+              "Weekly" : "Weekly",
+              "Daily" : "Daily"
+            }
+          }
         },
         "Post": {
           "Title": "郵政"

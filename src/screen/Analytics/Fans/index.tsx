@@ -1,17 +1,22 @@
 import {StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import React, {useState} from 'react';
 import {color, font} from '../../../theme';
 import {mvs} from 'react-native-size-matters';
 import {BlitzIcon} from '../../../assets/icon';
 import {widthResponsive} from '../../../utils';
-import {Gap} from '../../../components';
+import {DropDownFilter, Gap} from '../../../components';
 import GrowthCard from './growthCard';
 import {LineChart} from 'react-native-gifted-charts';
 import {useQuery} from 'react-query';
 import {useAnalyticsHook} from '../../../hooks/use-analytics.hook';
+import {useTranslation} from 'react-i18next';
+import {storage} from '../../../hooks/use-storage.hook';
+import {DataDropDownType, dropDownFansGrowth} from '../../../data/dropdown';
 
 const Fans = () => {
   const {getListDataFansAnalytic} = useAnalyticsHook();
+  const {t} = useTranslation();
+  const lang = storage.getString('lang');
 
   const {
     data: fansAnalyticData,
@@ -24,6 +29,11 @@ const Fans = () => {
       perPage: 3,
     }),
   );
+
+  const [selectedRange, setSelectedRange] = useState<DataDropDownType>({
+    label: 'Home.Tab.Analytic.Income.Filter.Range.Monthly',
+    value: '1',
+  });
   interface DataChart {
     value: number;
     hideDataPoint: boolean;
@@ -126,8 +136,26 @@ const Fans = () => {
         <Text style={styles.title}>Fans Growth</Text>
       </View>
 
+      {/* DROPDOWN AREA */}
+      <Gap height={10} />
+      <View style={{width: 90, zIndex: 100}}>
+        <DropDownFilter
+          labelCaption={t(selectedRange.label)}
+          dataFilter={dropDownFansGrowth}
+          selectedMenu={setSelectedRange}
+          leftPosition={
+            lang === 'en' ? widthResponsive(-85) : widthResponsive(-85)
+          }
+          topPosition={widthResponsive(20)}
+          containerStyle={styles.dropdownContainer}
+          textCustomStyle={{color: color.Neutral[10], fontSize: mvs(11)}}
+          iconColor={color.Neutral[10]}
+          dropdownStyle={styles.dropdown}
+        />
+      </View>
+
       {/* CHART AREA */}
-      <Gap height={16} />
+      {/* <Gap height={16} /> */}
       <View style={{marginLeft: -7}}>
         <LineChart
           thickness={3}
@@ -196,5 +224,17 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     fontSize: mvs(18),
     color: color.Neutral[10],
+  },
+  dropdownContainer: {
+    borderWidth: 1,
+    borderColor: color.Dark[400],
+    paddingHorizontal: widthResponsive(12),
+    paddingVertical: widthResponsive(8),
+    borderRadius: 4,
+  },
+  dropdown: {
+    backgroundColor: color.Dark[800],
+    borderWidth: 1,
+    borderColor: color.Dark[400],
   },
 });

@@ -223,7 +223,14 @@
           }
         },
         "Fans": {
-          "Title": "Fans"
+          "Title": "Fans",
+          "Filter" : {
+            "Range" : {
+              "Monthly" : "Monthly",
+              "Weekly" : "Weekly",
+              "Daily" : "Daily"
+            }
+          }
         },
         "Post": {
           "Title": "Post"
