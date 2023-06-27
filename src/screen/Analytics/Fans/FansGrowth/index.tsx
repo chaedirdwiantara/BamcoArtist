@@ -31,7 +31,7 @@ const FansGrowth = () => {
   );
 
   const [selectedRange, setSelectedRange] = useState<DataDropDownType>({
-    label: 'Home.Tab.Analytic.Income.Filter.Range.Monthly',
+    label: 'Home.Tab.Analytic.Fans.Filter.Range.Monthly',
     value: '1',
   });
   interface DataChart {
@@ -132,7 +132,9 @@ const FansGrowth = () => {
       <View style={styles.titleContainer}>
         <BlitzIcon />
         <Gap width={widthResponsive(10)} />
-        <Text style={styles.title}>Fans Growth</Text>
+        <Text style={styles.title}>
+          {t('Home.Tab.Analytic.Fans.Main.Title')}
+        </Text>
       </View>
 
       {/* DROPDOWN AREA */}
@@ -187,13 +189,13 @@ const FansGrowth = () => {
       <View style={styles.cardContainer}>
         <GrowthCard
           number={fansData.beFan}
-          desc={'Followers be a fans!'}
+          desc={t('Home.Tab.Analytic.Fans.Growth.BeFan')}
           numberDiffs={fansData.beFanCompare}
           progress={fansData.beFanProgress}
         />
         <GrowthCard
           number={fansData.fansEarn}
-          desc={'Fans earned weekly'}
+          desc={t('Home.Tab.Analytic.Fans.Growth.FansEarn')}
           numberDiffs={fansData.fansEarnCompare}
           progress={fansData.fansEarnProgress}
         />
