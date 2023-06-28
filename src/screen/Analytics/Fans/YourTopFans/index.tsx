@@ -8,9 +8,14 @@ import {useTranslation} from 'react-i18next';
 import {PlayPinkIcon} from '../../../../assets/icon';
 import MusiciansListCard from '../../../../components/molecule/ListCard/MusiciansListCard';
 import {MusicianListData} from '../../../../data/topMusician';
+import {useNavigation} from '@react-navigation/native';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {RootStackParams} from '../../../../navigations';
 
 const YourTopFans = () => {
   const {t} = useTranslation();
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParams>>();
   return (
     <View style={styles.container}>
       <View style={styles.topContainer}>
@@ -21,7 +26,8 @@ const YourTopFans = () => {
             {t('Home.Tab.Analytic.Fans.TopFans.Title')}
           </Text>
         </View>
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('YourTopFansScreen')}>
           <Text style={styles.link}>
             {t('Home.Tab.Analytic.Fans.TopFans.Link')}
           </Text>
@@ -36,7 +42,9 @@ const YourTopFans = () => {
             musicianNum={item.musicNum}
             onPressMore={() => {}}
             activeMore={false}
-            onPressImage={() => {}}
+            onPressImage={() =>
+              navigation.navigate('OtherUserProfile', {id: item.uuid})
+            }
             musicianName={item.fullname}
             imgUri={item.imageProfileUrl}
             point={item.point}

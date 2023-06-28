@@ -7,9 +7,8 @@ export const fansAnalytic = async (
   props?: ParamsProps,
 ): Promise<ListPostResponseType> => {
   const {data} = await SsuAPI().request<ListPostResponseType>({
-    url: '/musician-app/post/public',
+    url: `/musician-app/fans-growth/${props?.interval}`,
     method: 'GET',
-    params: props,
   });
 
   return data;

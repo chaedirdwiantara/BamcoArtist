@@ -241,7 +241,8 @@
           "FansInteract":"Fans actively interact with you",
           "TopFans": {
             "Title" : "Your Top Fans",
-            "Link" : "View All"
+            "Link" : "View All",
+            "FullScreen": "Your Fans"
           }
         },
         "Post": {

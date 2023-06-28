@@ -1,5 +1,5 @@
 import {StyleSheet, Text, View} from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {BlitzIcon} from '../../../../assets/icon';
 import {DropDownFilter, Gap} from '../../../../components';
 import {widthResponsive} from '../../../../utils';
@@ -26,8 +26,14 @@ const FansGrowth = () => {
     refetch,
   } = useQuery('fans-analytic', () =>
     getListDataFansAnalytic({
-      page: 1,
-      perPage: 3,
+      interval:
+        t(selectedRange.label) === 'Monthly'
+          ? 'monthly'
+          : t(selectedRange.label) === 'Weekly'
+          ? 'weekly'
+          : t(selectedRange.label) === 'Daily'
+          ? 'daily'
+          : '',
     }),
   );
 
@@ -35,6 +41,12 @@ const FansGrowth = () => {
     label: 'Home.Tab.Analytic.Fans.Filter.Range.Monthly',
     value: '1',
   });
+
+  useEffect(() => {
+    if (selectedRange) {
+      refetch();
+    }
+  }, [selectedRange]);
   interface DataChart {
     value: number;
     hideDataPoint: boolean;
