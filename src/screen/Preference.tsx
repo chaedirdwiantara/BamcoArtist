@@ -1,32 +1,52 @@
 import React, {useEffect} from 'react';
-import {View, StyleSheet} from 'react-native';
+import {View, StyleSheet, NativeModules, Platform} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
 import Color from '../theme/Color';
+import {heightResponsive} from '../utils';
 import {RootStackParams} from '../navigations';
+import {storage} from '../hooks/use-storage.hook';
 import {ImageSlider, SsuStatusBar} from '../components';
 import {useProfileHook} from '../hooks/use-profile.hook';
 import {useSettingHook} from '../hooks/use-setting.hook';
 import {UpdateProfilePropsType} from '../api/profile.api';
-import {useMusicianHook} from '../hooks/use-musician.hook';
+
+const {StatusBarManager} = NativeModules;
+const barHeight = StatusBarManager.HEIGHT;
 
 export const PreferenceScreen: React.FC = () => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
-  const {updateProfilePreference} = useProfileHook();
-  const {dataMusician, getListDataMusician} = useMusicianHook();
-  const {getListPreference, listPreference, isLoading} = useSettingHook();
+  const {
+    isLoading: isLoadingProfile,
+    dataProfile,
+    infoStep,
+    getProfileUser,
+    updateProfilePreference,
+    setLastStepWizard,
+    getLastStepWizard,
+  } = useProfileHook();
+  const {
+    getListStepWizard,
+    getListGenreSong,
+    listStepWizard,
+    listGenre,
+    isLoading,
+  } = useSettingHook();
 
   useEffect(() => {
-    getListDataMusician();
-    getListPreference();
+    getListStepWizard();
+    getProfileUser();
+    getListGenreSong();
+    getLastStepWizard();
   }, []);
 
-  const goToScreenReferral = () => {
+  const goToHome = () => {
+    storage.set('isPreference', false);
     navigation.reset({
       index: 0,
-      routes: [{name: 'Referral'}],
+      routes: [{name: 'MainTab'}],
     });
   };
 
@@ -35,13 +55,16 @@ export const PreferenceScreen: React.FC = () => {
       <SsuStatusBar type="black" />
       <ImageSlider
         type="Preference"
-        data={listPreference}
-        onPress={goToScreenReferral}
-        onUpdatePreference={(props?: UpdateProfilePropsType) =>
+        data={listStepWizard}
+        onPress={goToHome}
+        onUpdateProfile={(props?: UpdateProfilePropsType) =>
           updateProfilePreference(props)
         }
-        dataList={dataMusician}
-        isLoading={isLoading}
+        profile={dataProfile}
+        isLoading={isLoading || isLoadingProfile}
+        setLastStepWizard={setLastStepWizard}
+        genres={listGenre}
+        infoStep={infoStep}
       />
     </View>
   );
@@ -50,8 +73,10 @@ export const PreferenceScreen: React.FC = () => {
 const styles = StyleSheet.create({
   root: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
     backgroundColor: Color.Dark[800],
+    paddingTop:
+      Platform.OS === 'ios'
+        ? heightResponsive(barHeight + 25)
+        : heightResponsive(barHeight + 30),
   },
 });
