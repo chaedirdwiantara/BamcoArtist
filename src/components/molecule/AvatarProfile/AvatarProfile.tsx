@@ -14,6 +14,7 @@ interface AvatarProps {
   activeOpacity?: number;
   onPress?: () => void;
   icon?: React.ReactNode;
+  backgroundColor?: string;
 }
 
 export const AvatarProfile: React.FC<AvatarProps> = (props: AvatarProps) => {
@@ -25,6 +26,7 @@ export const AvatarProfile: React.FC<AvatarProps> = (props: AvatarProps) => {
     showIcon,
     icon,
     activeOpacity,
+    backgroundColor,
     onPress,
   } = props;
 
@@ -46,7 +48,12 @@ export const AvatarProfile: React.FC<AvatarProps> = (props: AvatarProps) => {
       <View
         style={[
           styles.root,
-          {width: size, backgroundColor: color.Success[400]},
+          {
+            width: size,
+            backgroundColor: backgroundColor
+              ? backgroundColor
+              : color.Success[400],
+          },
         ]}>
         {type === '' ? (
           <Text style={[typography.Heading4, styles.name]}>{initialName}</Text>
