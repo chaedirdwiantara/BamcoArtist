@@ -154,6 +154,7 @@ export const ForgotPassword: FC = () => {
               index: 0,
               routes: [{name: 'Preference'}],
             });
+            storage.set('isPreference', true);
           } else {
             navigation.reset({
               index: 0,
