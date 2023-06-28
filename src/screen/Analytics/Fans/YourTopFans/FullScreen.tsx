@@ -11,11 +11,26 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParams} from '../../../../navigations';
 import {MusicianListData} from '../../../../data/topMusician';
 import MusiciansListCard from '../../../../components/molecule/ListCard/MusiciansListCard';
+import {useAnalyticsHook} from '../../../../hooks/use-analytics.hook';
+import {useQuery} from 'react-query';
 
 const YourTopFansScreen = () => {
   const {t} = useTranslation();
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
+
+  const {getListTopFans} = useAnalyticsHook();
+  const {
+    data: topFansData,
+    isLoading: queryDataLoading,
+    isError,
+    refetch,
+  } = useQuery('fans-topFans', () =>
+    getListTopFans({
+      page: 1,
+      perPage: 10,
+    }),
+  );
   return (
     <View style={styles.container}>
       {/* Header Section */}

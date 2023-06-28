@@ -1,4 +1,4 @@
-import {fansActiveInteract, fansAnalytic} from '../api/analytics.api';
+import {fansActiveInteract, fansAnalytic, topFans} from '../api/analytics.api';
 import {ParamsProps} from '../interface/base.interface';
 
 export const useAnalyticsHook = () => {
@@ -28,8 +28,22 @@ export const useAnalyticsHook = () => {
     }
   };
 
+  const getListTopFans = async (props?: ParamsProps) => {
+    try {
+      const response = await topFans(props);
+      return {
+        data: response?.data,
+        meta: response?.meta,
+        message: response?.message,
+      };
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return {
     getListDataFansAnalytic,
     getDataFansActiveInteract,
+    getListTopFans,
   };
 };

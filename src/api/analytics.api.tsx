@@ -25,3 +25,15 @@ export const fansActiveInteract = async (
 
   return data;
 };
+
+export const topFans = async (
+  props?: ParamsProps,
+): Promise<ListPostResponseType> => {
+  const {data} = await SsuAPI().request<ListPostResponseType>({
+    url: '/musician-app/post/public',
+    method: 'GET',
+    params: props,
+  });
+
+  return data;
+};

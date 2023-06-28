@@ -10,9 +10,9 @@ const Fans = () => {
     <View style={styles.container}>
       <FansGrowth />
       <Gap height={20} />
-      <FansActiveInteract />
-      <Gap height={20} />
       <YourTopFans />
+      <Gap height={20} />
+      <FansActiveInteract />
     </View>
   );
 };

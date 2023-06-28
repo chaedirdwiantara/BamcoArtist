@@ -11,11 +11,27 @@ import {MusicianListData} from '../../../../data/topMusician';
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParams} from '../../../../navigations';
+import {useQuery} from 'react-query';
+import {useAnalyticsHook} from '../../../../hooks/use-analytics.hook';
 
 const YourTopFans = () => {
   const {t} = useTranslation();
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
+
+  const {getListTopFans} = useAnalyticsHook();
+  const {
+    data: topFansData,
+    isLoading: queryDataLoading,
+    isError,
+    refetch,
+  } = useQuery('fans-topFans', () =>
+    getListTopFans({
+      page: 1,
+      perPage: 5,
+    }),
+  );
+
   return (
     <View style={styles.container}>
       <View style={styles.topContainer}>

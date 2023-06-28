@@ -14,7 +14,7 @@ const FansActiveInteract = () => {
   const {getDataFansActiveInteract} = useAnalyticsHook();
   const {t} = useTranslation();
   const {
-    data: fansAnalyticData,
+    data: interactData,
     isLoading: queryDataLoading,
     isError,
     refetch,
