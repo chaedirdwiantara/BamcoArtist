@@ -145,6 +145,11 @@ export type ListAllPreference = {
   expectation: PreferenceList[];
 };
 
+export type ListAllStepWizard = {
+  role: ListRoleType[];
+  expectation: PreferenceList[];
+};
+
 export type LanguageResponseType = {
   code: number;
   data: null;
@@ -167,6 +172,18 @@ export type ListReasonType = {
 export type ListReasonResponseType = {
   code: number;
   data: ListReasonType[];
+  message: string;
+  status: number;
+};
+
+export type ListRoleType = {
+  id: number;
+  name: string;
+};
+
+export type ListRoleResponseType = {
+  code: number;
+  data: ListRoleType[];
   message: string;
   status: number;
 };
