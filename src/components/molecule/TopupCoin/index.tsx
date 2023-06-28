@@ -64,6 +64,10 @@ export const TopupCoinContent: React.FC<TopupCoinProps> = ({
     setListWithdrawal(newList);
   };
 
+  useEffect(() => {
+    getCreditCount();
+  }, []);
+
   return (
     <View style={styles.root}>
       <TopNavigation.Type1

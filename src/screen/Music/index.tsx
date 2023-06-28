@@ -162,6 +162,7 @@ export const MusicPlayer: FC<MusicProps> = ({navigation}: MusicProps) => {
 
       {/* modal */}
       <ModalDonate
+        userId={currentTrack?.musicianId}
         onPressClose={onPressCloseModalDonate}
         onPressDonate={onPressDonate}
         modalVisible={modalDonate}

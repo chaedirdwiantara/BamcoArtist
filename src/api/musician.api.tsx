@@ -92,3 +92,14 @@ export const recommendedMusician = async (
 
   return data;
 };
+
+export const detailMusicianLite = async (
+  props?: PostPropsTypeA,
+): Promise<DetailMusicianResponseType> => {
+  const {data} = await SsuAPI().request<DetailMusicianResponseType>({
+    url: `/public/musicians/${props?.id}/detail`,
+    method: 'GET',
+  });
+
+  return data;
+};

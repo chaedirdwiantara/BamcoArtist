@@ -95,6 +95,7 @@ const PostListHome: FC<PostListProps> = (props: PostListProps) => {
   const [trigger2ndModal, setTrigger2ndModal] = useState<boolean>(false);
   const [page, setPage] = useState<number>(1);
   const [perPage, setPerPage] = useState<number>(15);
+  const [selectedMusicianId, setSelectedMusicianId] = useState<string>('');
 
   // * UPDATE HOOKS
   const [selectedIdPost, setSelectedIdPost] = useState<string>();
@@ -176,8 +177,9 @@ const PostListHome: FC<PostListProps> = (props: PostListProps) => {
     }
   };
 
-  const tokenOnPress = () => {
+  const tokenOnPress = (musicianId: string) => {
     if (isLogin) {
+      setSelectedMusicianId(musicianId);
       setModalDonate(true);
     } else {
       setModalGuestVisible(true);
@@ -321,7 +323,7 @@ const PostListHome: FC<PostListProps> = (props: PostListProps) => {
                   likeOnPress={() => likeOnPress(item.id, item.isLiked)}
                   likePressed={likePressedInFeed(selectedId, item, recorder)}
                   likeCount={likesCountInFeed(selectedId, item, recorder)}
-                  tokenOnPress={tokenOnPress}
+                  tokenOnPress={() => tokenOnPress(item.musician.uuid)}
                   shareOnPress={shareOnPress}
                   commentCount={item.commentsCount}
                   myPost={item.musician.uuid === profileStorage()?.uuid}
@@ -392,6 +394,7 @@ const PostListHome: FC<PostListProps> = (props: PostListProps) => {
         modalStyle={{marginHorizontal: widthResponsive(24)}}
       />
       <ModalDonate
+        userId={selectedMusicianId}
         onPressDonate={onPressDonate}
         modalVisible={modalDonate}
         onPressClose={onPressCloseModalDonate}

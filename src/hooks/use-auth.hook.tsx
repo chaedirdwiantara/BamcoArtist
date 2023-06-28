@@ -138,7 +138,6 @@ export const useAuthHook = () => {
     try {
       await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
-      setIsLoading(true);
       const response = await loginSso(userInfo.user.email, 'google');
       if (response.code === 1003) {
         setSsoEmail(userInfo.user.email ?? '');
@@ -176,8 +175,6 @@ export const useAuthHook = () => {
       } else if (error instanceof Error) {
         setSsoErrorMsg(error.message);
       }
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -207,7 +204,6 @@ export const useAuthHook = () => {
     setSsoEmail('');
     setErrorMsg('');
     try {
-      setIsLoading(true);
       const appleAuthRequestResponse = await appleAuth.performRequest({
         requestedOperation: appleAuth.Operation.LOGIN,
         requestedScopes: [appleAuth.Scope.FULL_NAME, appleAuth.Scope.EMAIL],
@@ -260,8 +256,6 @@ export const useAuthHook = () => {
       } else if (error instanceof Error) {
         setSsoErrorMsg(error.message);
       }
-    } finally {
-      setIsLoading(false);
     }
   };
 

@@ -317,6 +317,7 @@ const PopularPost: FC<PopularPostProps> = (props: PopularPostProps) => {
         </>
       )}
       <ModalDonate
+        userId={uuidMusician}
         onPressDonate={onPressDonate}
         modalVisible={modalDonate}
         onPressClose={onPressCloseModalDonate}

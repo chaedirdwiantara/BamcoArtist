@@ -117,6 +117,7 @@ export const AccountContent: React.FC<AccountProps> = ({
     control,
     formState: {errors, isValid, isValidating},
     getValues,
+    setError,
   } = useForm<InputProps>({
     resolver: yupResolver(validation),
     mode: 'onChange',
@@ -239,6 +240,15 @@ export const AccountContent: React.FC<AccountProps> = ({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSubmit]);
+
+  useEffect(() => {
+    if (getValues('username').length < 3 || getValues('username').length > 30) {
+      setError('username', {
+        type: 'value',
+        message: 'Username should be between 3 to 30 alphanumeric characters',
+      });
+    }
+  }, []);
 
   return (
     <KeyboardAvoidingView

@@ -370,7 +370,7 @@ export const FeedScreen: React.FC = () => {
           <TouchableOpacity
             style={[
               styles.buttonStyle,
-              {height: visible ? widthResponsive(184) : widthResponsive(94)},
+              {height: visible ? widthResponsive(100) : widthResponsive(50)},
             ]}
             onPress={handleFloatingIcon}
             onLayout={event => {
@@ -464,7 +464,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     right: widthResponsive(24),
-    bottom: widthResponsive(94),
+    bottom: widthResponsive(50),
   },
   floatingIcon: {
     resizeMode: 'contain',

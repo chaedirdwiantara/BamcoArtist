@@ -61,6 +61,7 @@ interface MusicianDetailProps {
   followersCount: number;
   goToPlaylist: (id: number) => void;
   exclusiveContent?: DataExclusiveResponse;
+  subsEC?: boolean;
 }
 
 export const MusicianDetail: React.FC<MusicianDetailProps> = ({
@@ -74,6 +75,7 @@ export const MusicianDetail: React.FC<MusicianDetailProps> = ({
   followersCount,
   goToPlaylist,
   exclusiveContent,
+  subsEC,
 }) => {
   const {t} = useTranslation();
   const navigation =
@@ -241,7 +243,9 @@ export const MusicianDetail: React.FC<MusicianDetailProps> = ({
             </View>
           )}
 
-          {exclusiveContent && <ExclusiveDailyContent {...exclusiveContent} />}
+          {exclusiveContent && (
+            <ExclusiveDailyContent {...exclusiveContent} subs={subsEC} />
+          )}
 
           <Gap height={10} />
           <View style={styles.containerContent}>

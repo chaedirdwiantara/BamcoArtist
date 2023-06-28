@@ -72,6 +72,14 @@ const Shop: React.FC<ShopProps> = ({navigation}) => {
               </View>
             </View>
           </View>
+          <View style={styles.boxPink}>
+            <Text style={styles.offTitle}>
+              Closed until Sunday 12 April 2023
+            </Text>
+            <Text style={[Typography.Caption, {color: Color.Dark[300]}]}>
+              Your order will be processed upon the store open
+            </Text>
+          </View>
           <View style={[styles.topContainer]}>
             {filter.map((tab, index) => {
               return (
@@ -150,5 +158,17 @@ const styles = StyleSheet.create({
     fontFamily: Font.InterRegular,
     fontSize: normalize(11.5),
     marginTop: heightPercentage(4),
+  },
+  boxPink: {
+    backgroundColor: '#FFD1F5',
+    width: '100%',
+    paddingHorizontal: widthPercentage(24),
+    paddingVertical: heightPercentage(16),
+  },
+  offTitle: {
+    fontFamily: Font.InterBold,
+    marginBottom: heightPercentage(2),
+    fontSize: normalize(14),
+    color: Color.Dark[800],
   },
 });

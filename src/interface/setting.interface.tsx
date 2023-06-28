@@ -1,3 +1,5 @@
+import {DataDetailMusician} from './musician.interface';
+
 export type EmailPhoneProps = {
   email?: string;
   phoneNumber?: string;
@@ -86,6 +88,8 @@ export type DataExclusiveResponse = {
   }[];
   createdAt?: string;
   updatedAt?: string;
+  subs?: boolean;
+  musician?: DataDetailMusician;
 };
 
 export type ExclusiveResponseType = {
