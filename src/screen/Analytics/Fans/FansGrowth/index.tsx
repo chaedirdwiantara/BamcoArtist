@@ -12,6 +12,7 @@ import {LineChart} from 'react-native-gifted-charts';
 import {color, font} from '../../../../theme';
 import GrowthCard from './GrowthCard';
 import {mvs} from 'react-native-size-matters';
+import {widthPercentageToDP} from 'react-native-responsive-screen';
 
 const FansGrowth = () => {
   const {getListDataFansAnalytic} = useAnalyticsHook();
@@ -60,7 +61,7 @@ const FansGrowth = () => {
     fansEarnProgress: 'regression',
     data: [
       {
-        value: 10,
+        value: 0,
         hideDataPoint: true,
         label: 'Jan',
       },
@@ -166,7 +167,6 @@ const FansGrowth = () => {
           yAxisTextStyle={{color: color.Dark[100]}}
           // @ts-ignore TODO: HANDLE IT LATER
           data={fansData.data}
-          curved
           startFillColor={color.Pink[400]}
           endFillColor={color.Dark[800]}
           startOpacity={0.4}
@@ -178,7 +178,9 @@ const FansGrowth = () => {
           rulesLength={widthResponsive(265)}
           initialSpacing={10}
           yAxisColor="transparent"
-          xAxisColor="transparent"
+          xAxisColor={color.Dark[300]}
+          xAxisLength={widthPercentageToDP('70%')}
+          xAxisType={'dash'}
           xAxisLabelTextStyle={{color: color.Neutral[20], marginLeft: 6}}
           dataPointsHeight={20}
           dataPointsWidth={20}
