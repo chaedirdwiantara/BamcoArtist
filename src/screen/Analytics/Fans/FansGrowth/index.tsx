@@ -60,6 +60,7 @@ const FansGrowth = () => {
     fansEarn: string;
     fansEarnCompare: string;
     fansEarnProgress: 'improve' | 'regression' | 'same';
+    description: String;
     data: DataChart[] | undefined;
   }
 
@@ -71,6 +72,7 @@ const FansGrowth = () => {
     fansEarn: '25%',
     fansEarnCompare: '2%',
     fansEarnProgress: 'regression',
+    description: 'Last 4 months',
     data: [
       {
         value: 0,
@@ -80,62 +82,27 @@ const FansGrowth = () => {
       {
         value: 23,
         hideDataPoint: true,
-        label: '',
-      },
-      {
-        value: 75,
-        hideDataPoint: true,
-        label: '',
-      },
-      {
-        value: 65,
-        hideDataPoint: true,
-        label: '',
-      },
-      {
-        value: 40,
-        hideDataPoint: true,
         label: 'Feb',
       },
       {
-        value: 96,
-        hideDataPoint: true,
-        label: '',
-      },
-      {
         value: 75,
-        hideDataPoint: true,
-        label: '',
-      },
-      {
-        value: 65,
-        hideDataPoint: true,
-        label: '',
-      },
-      {
-        value: 40,
         hideDataPoint: true,
         label: 'Mar',
       },
       {
-        value: 50,
-        hideDataPoint: true,
-        label: '',
-      },
-      {
-        value: 55,
-        hideDataPoint: true,
-        label: '',
-      },
-      {
         value: 65,
         hideDataPoint: true,
-        label: '',
+        label: 'Apr',
       },
       {
-        value: 75,
+        value: 40,
         hideDataPoint: true,
-        label: 'Apr',
+        label: 'Mei',
+      },
+      {
+        value: 96,
+        hideDataPoint: true,
+        label: 'Jun',
       },
     ],
   };
@@ -168,6 +135,10 @@ const FansGrowth = () => {
         />
       </View>
 
+      <Gap height={8} />
+      <Text style={styles.desc}>{fansData.description}</Text>
+      <Gap height={4} />
+
       {/* CHART AREA */}
       <View style={{marginLeft: -7}}>
         <LineChart
@@ -183,7 +154,7 @@ const FansGrowth = () => {
           endFillColor={color.Dark[800]}
           startOpacity={0.4}
           endOpacity={0.5}
-          spacing={38}
+          spacing={55}
           backgroundColor="transparent"
           rulesColor={color.Dark[300]}
           rulesType="dash"
@@ -193,7 +164,7 @@ const FansGrowth = () => {
           xAxisColor={color.Dark[300]}
           xAxisLength={widthPercentageToDP('70%')}
           xAxisType={'dash'}
-          xAxisLabelTextStyle={{color: color.Neutral[20], marginLeft: 6}}
+          xAxisLabelTextStyle={{color: color.Neutral[20], marginLeft: 15}}
           dataPointsHeight={20}
           dataPointsWidth={20}
         />
@@ -250,5 +221,11 @@ const styles = StyleSheet.create({
     backgroundColor: color.Dark[800],
     borderWidth: 1,
     borderColor: color.Dark[400],
+  },
+  desc: {
+    fontFamily: font.InterRegular,
+    fontWeight: '500',
+    fontSize: mvs(9),
+    color: color.Neutral[10],
   },
 });
