@@ -50,24 +50,31 @@ const YourTopFans = () => {
         </TouchableOpacity>
       </View>
       <Gap height={23} />
-      <FlatList
-        showsVerticalScrollIndicator={false}
-        data={MusicianListData}
-        renderItem={({item, index}) => (
-          <MusiciansListCard
-            musicianNum={item.musicNum}
-            onPressMore={() => {}}
-            activeMore={false}
-            onPressImage={() =>
-              navigation.navigate('OtherUserProfile', {id: item.uuid})
-            }
-            musicianName={item.fullname}
-            imgUri={item.imageProfileUrl}
-            point={item.point}
-            containerStyles={{marginBottom: widthResponsive(12)}}
-          />
-        )}
-      />
+      {MusicianListData ? (
+        <FlatList
+          showsVerticalScrollIndicator={false}
+          data={MusicianListData}
+          renderItem={({item, index}) => (
+            <MusiciansListCard
+              musicianNum={item.musicNum}
+              onPressMore={() => {}}
+              activeMore={false}
+              onPressImage={() =>
+                navigation.navigate('OtherUserProfile', {id: item.uuid})
+              }
+              musicianName={item.fullname}
+              imgUri={item.imageProfileUrl}
+              point={item.point}
+              containerStyles={{marginBottom: widthResponsive(12)}}
+            />
+          )}
+        />
+      ) : (
+        <Text style={styles.emptyState}>
+          Oops! We couldn't find any Top fans for you.Post some story or release
+          album to make your own cult!
+        </Text>
+      )}
     </View>
   );
 };
@@ -102,5 +109,13 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     color: color.Success[400],
     lineHeight: mvs(28),
+  },
+  emptyState: {
+    fontFamily: font.InterRegular,
+    fontSize: mvs(12),
+    fontWeight: '400',
+    color: color.Neutral[10],
+    lineHeight: mvs(14.52),
+    textAlign: 'center',
   },
 });
