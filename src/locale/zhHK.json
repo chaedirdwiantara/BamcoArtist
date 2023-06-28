@@ -238,7 +238,11 @@
             "BeFan":"Followers be a fans!",
             "FansEarn":"Fans earned weekly"
           },
-          "FansInteract":"Fans actively interact with you"
+          "FansInteract":"Fans actively interact with you",
+          "TopFans": {
+            "Title" : "Your Top Fans",
+            "Link" : "View All"
+          }
         },
         "Post": {
           "Title": "郵政"

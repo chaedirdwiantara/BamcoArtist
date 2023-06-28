@@ -61,6 +61,7 @@ import HomeIcon from './Home.icon';
 import HornChatIcon from './hornChat.icon';
 import InfoCircleIcon from './InfoCircle.icon';
 import InstagramIcon from './Instagram.icon';
+import PlayPinkIcon from './PlayPink.icon';
 import ImportPhotoIcon from './ImportPhoto.icon';
 import ImportMusicIcon from './importMusic.icon';
 import KeyIcon from './Key.icon';
@@ -205,6 +206,7 @@ export {
   PauseVideoIcon,
   PlayIcon,
   PlayIcon2,
+  PlayPinkIcon,
   PlayVideoIcon,
   PreviousIcon,
   ProcessingIcon,
