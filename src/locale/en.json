@@ -243,6 +243,9 @@
             "Title" : "Your Top Fans",
             "Link" : "View All",
             "FullScreen": "Your Fans"
+          },
+          "FansAge": {
+            "Title" : "Fans Age"
           }
         },
         "Post": {

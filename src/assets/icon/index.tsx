@@ -13,6 +13,7 @@ import BlitzIcon from './Blitz.icon';
 import CameraIcon from './Camera';
 import CancelCreatePostIcon from './CancelCreatePost.icon';
 import ChatIcon from './Chat.icon';
+import ChartIcon from './Chart.icon';
 import CheckBoxIcon from './CheckBox.icon';
 import CheckCircleIcon from './CheckCircle.icon';
 import CheckCircle2Icon from './CheckCircle2.icon';
@@ -137,6 +138,7 @@ export {
   CameraIcon,
   CancelCreatePostIcon,
   ChatIcon,
+  ChartIcon,
   CheckBoxIcon,
   CheckGradientIcon,
   CheckCircleIcon,

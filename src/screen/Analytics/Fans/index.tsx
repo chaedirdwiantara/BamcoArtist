@@ -4,6 +4,7 @@ import FansGrowth from './FansGrowth';
 import FansActiveInteract from './ActivelyInteract/ActivelyInteract';
 import {Gap} from '../../../components';
 import YourTopFans from './YourTopFans';
+import FansAge from './FansAge';
 
 const Fans = () => {
   return (
@@ -13,6 +14,8 @@ const Fans = () => {
       <YourTopFans />
       <Gap height={20} />
       <FansActiveInteract />
+      <Gap height={20} />
+      <FansAge />
     </View>
   );
 };
