@@ -246,6 +246,12 @@
           },
           "FansAge": {
             "Title" : "Fans Age"
+          },
+          "FansGender": {
+            "Title" : "Fans Gender"
+          },
+          "FansCountry": {
+            "Title" : "Your Fans Country"
           }
         },
         "Post": {

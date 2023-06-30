@@ -14,6 +14,7 @@ import CameraIcon from './Camera';
 import CancelCreatePostIcon from './CancelCreatePost.icon';
 import ChatIcon from './Chat.icon';
 import ChartIcon from './Chart.icon';
+import ChartPieIcon from './ChartPie.icon';
 import CheckBoxIcon from './CheckBox.icon';
 import CheckCircleIcon from './CheckCircle.icon';
 import CheckCircle2Icon from './CheckCircle2.icon';
@@ -41,6 +42,7 @@ import {DefaultImage} from './DefaultImage.icon';
 import DonateCoinIcon from './DonateCoin.icon';
 import EditIcon from './Edit.icon';
 import EmailIcon from './Email.icon';
+import EqualizerIcon from './Equalizer.icon';
 import ErrorIcon from './Error.icon';
 import ExportIcon from './Export.icon';
 import ExportMusicIcon from './ExportMusic.icon';
@@ -139,6 +141,7 @@ export {
   CancelCreatePostIcon,
   ChatIcon,
   ChartIcon,
+  ChartPieIcon,
   CheckBoxIcon,
   CheckGradientIcon,
   CheckCircleIcon,
@@ -166,6 +169,7 @@ export {
   DonateCoinIcon,
   EditIcon,
   EmailIcon,
+  EqualizerIcon,
   ErrorIcon,
   ExportIcon,
   ExportMusicIcon,
