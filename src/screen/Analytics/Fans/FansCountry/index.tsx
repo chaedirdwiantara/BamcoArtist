@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {FlatList, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import {EqualizerIcon} from '../../../../assets/icon';
 import {Gap} from '../../../../components';
@@ -8,6 +8,8 @@ import {useAnalyticsHook} from '../../../../hooks/use-analytics.hook';
 import {useQuery} from 'react-query';
 import {color, font} from '../../../../theme';
 import {mvs} from 'react-native-size-matters';
+import CountryCard from './CountryCard';
+import {MerchListItem} from '../../../../data/merchList';
 
 const FansCountry = () => {
   const {t} = useTranslation();
@@ -34,6 +36,23 @@ const FansCountry = () => {
         </Text>
       </View>
       <Gap height={16} />
+      <FlatList
+        showsVerticalScrollIndicator={false}
+        data={MerchListItem}
+        renderItem={({item, index}) => (
+          <View
+            style={{
+              marginTop: index !== 0 ? widthResponsive(10) : 0,
+            }}>
+            <CountryCard
+              countryId={item.id}
+              flagUri={item.image}
+              name={item.owner}
+              value={item.price}
+            />
+          </View>
+        )}
+      />
     </View>
   );
 };
