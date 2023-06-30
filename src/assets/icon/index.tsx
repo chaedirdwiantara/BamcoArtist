@@ -78,6 +78,7 @@ import MusicPlaylistIcon from './MusicPlaylist.icon';
 import MusicSquareIcon from './MusicSquare.icon';
 import MusicSquareAddIcon from './MusicSquareAdd.icon';
 import MusicPinkIcon from './MusicPink.icon';
+import MusicPink2Icon from './MusicPink2.icon';
 import NextIcon from './Next.icon';
 import NotificationIcon from './Notification.icon';
 import NormalScreenIcon from './NormalScreen.icon';
@@ -205,6 +206,7 @@ export {
   MusicSquareIcon,
   MusicSquareAddIcon,
   MusicPinkIcon,
+  MusicPink2Icon,
   NextIcon,
   NotificationIcon,
   NormalScreenIcon,

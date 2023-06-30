@@ -85,3 +85,51 @@ export const ActiveListener = async (
 
   return data;
 };
+
+export const PopularAlbum = async (
+  props?: ParamsProps,
+): Promise<ListPostResponseType> => {
+  const {data} = await SsuAPI().request<ListPostResponseType>({
+    url: '/musician-app/post/public',
+    method: 'GET',
+    params: props,
+  });
+
+  return data;
+};
+
+export const TopSongs = async (
+  props?: ParamsProps,
+): Promise<ListPostResponseType> => {
+  const {data} = await SsuAPI().request<ListPostResponseType>({
+    url: '/musician-app/post/public',
+    method: 'GET',
+    params: props,
+  });
+
+  return data;
+};
+
+export const ListenerCountry = async (
+  props?: ParamsProps,
+): Promise<ListPostResponseType> => {
+  const {data} = await SsuAPI().request<ListPostResponseType>({
+    url: '/musician-app/post/public',
+    method: 'GET',
+    params: props,
+  });
+
+  return data;
+};
+
+export const ListenerLikes = async (
+  props?: ParamsProps,
+): Promise<ListPostResponseType> => {
+  const {data} = await SsuAPI().request<ListPostResponseType>({
+    url: '/musician-app/post/public',
+    method: 'GET',
+    params: props,
+  });
+
+  return data;
+};

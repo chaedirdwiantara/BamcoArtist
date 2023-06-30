@@ -3,6 +3,10 @@ import {
   FansAge,
   FansCountry,
   FansGender,
+  ListenerCountry,
+  ListenerLikes,
+  PopularAlbum,
+  TopSongs,
   fansActiveInteract,
   fansAnalytic,
   topFans,
@@ -101,6 +105,58 @@ export const useAnalyticsHook = () => {
     }
   };
 
+  const getPopularAlbum = async (props?: ParamsProps) => {
+    try {
+      const response = await PopularAlbum(props);
+      return {
+        data: response?.data,
+        meta: response?.meta,
+        message: response?.message,
+      };
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getTopSongs = async (props?: ParamsProps) => {
+    try {
+      const response = await TopSongs(props);
+      return {
+        data: response?.data,
+        meta: response?.meta,
+        message: response?.message,
+      };
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getListenerCountry = async (props?: ParamsProps) => {
+    try {
+      const response = await ListenerCountry(props);
+      return {
+        data: response?.data,
+        meta: response?.meta,
+        message: response?.message,
+      };
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getListenerLike = async (props?: ParamsProps) => {
+    try {
+      const response = await ListenerLikes(props);
+      return {
+        data: response?.data,
+        meta: response?.meta,
+        message: response?.message,
+      };
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return {
     getListDataFansAnalytic,
     getDataFansActiveInteract,
@@ -109,5 +165,9 @@ export const useAnalyticsHook = () => {
     getFansGenderAnalytic,
     getFansCountryAnalytic,
     getActiveListener,
+    getPopularAlbum,
+    getTopSongs,
+    getListenerCountry,
+    getListenerLike,
   };
 };

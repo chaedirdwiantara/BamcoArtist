@@ -265,6 +265,18 @@
               "FanStream":"Fans streams your song monthly!",
               "AvgListener":"Avg listener streamed monthly"
             }
+          },
+          "PopularAlbum": {
+            "Title" : "Popular Album"
+          },
+          "TopSongs": {
+            "Title" : "Your Top Song"
+          },
+          "Listener": {
+            "Title" : "Listener Country"
+          },
+          "ListenerLikes": {
+            "Title" : "Listener Also Like"
           }
         },
         "Explore": {
