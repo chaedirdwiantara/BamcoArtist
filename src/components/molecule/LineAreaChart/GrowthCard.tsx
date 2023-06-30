@@ -1,10 +1,10 @@
 import {StyleSheet, Text, View, ViewStyle} from 'react-native';
 import React, {FC} from 'react';
-import {widthResponsive} from '../../../../utils';
-import {color, font} from '../../../../theme';
 import {mvs} from 'react-native-size-matters';
-import {Gap} from '../../../../components';
-import {ArrowDownIcon, ArrowUpGreenIcon} from '../../../../assets/icon';
+import {Gap} from '../../atom';
+import {ArrowDownIcon, ArrowUpGreenIcon} from '../../../assets/icon';
+import {color, font} from '../../../theme';
+import {widthResponsive} from '../../../utils';
 
 interface GrowthCardProps {
   number: string;
@@ -12,10 +12,12 @@ interface GrowthCardProps {
   desc: string;
   progress: 'improve' | 'regression' | 'same';
   containerStyle?: ViewStyle;
+  noOfLines?: number;
 }
 
 const GrowthCard: FC<GrowthCardProps> = (props: GrowthCardProps) => {
-  const {number, desc, numberDiffs, progress, containerStyle} = props;
+  const {number, desc, numberDiffs, progress, containerStyle, noOfLines} =
+    props;
 
   return (
     <View style={[styles.container, containerStyle]}>
@@ -39,7 +41,7 @@ const GrowthCard: FC<GrowthCardProps> = (props: GrowthCardProps) => {
         </Text>
       </View>
       <Gap height={4} />
-      <Text style={styles.textDesc} numberOfLines={1}>
+      <Text style={styles.textDesc} numberOfLines={noOfLines ? noOfLines : 1}>
         {desc}
       </Text>
     </View>

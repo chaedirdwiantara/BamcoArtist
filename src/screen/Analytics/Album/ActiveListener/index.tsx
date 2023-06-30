@@ -1,28 +1,27 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React, {useEffect, useState} from 'react';
-import {BlitzIcon} from '../../../../assets/icon';
 import {Gap, LineAreaChart} from '../../../../components';
 import {widthResponsive} from '../../../../utils';
-import {DataDropDownType, dropDownFansGrowth} from '../../../../data/dropdown';
-import {useQuery} from 'react-query';
-import {useAnalyticsHook} from '../../../../hooks/use-analytics.hook';
-import {useTranslation} from 'react-i18next';
-import {storage} from '../../../../hooks/use-storage.hook';
 import {color, font} from '../../../../theme';
 import {mvs} from 'react-native-size-matters';
+import {useAnalyticsHook} from '../../../../hooks/use-analytics.hook';
+import {useTranslation} from 'react-i18next';
+import {useQuery} from 'react-query';
+import {DataDropDownType, dropDownFansGrowth} from '../../../../data/dropdown';
 import {Chart} from '../../../../interface/analythic.interface';
+import {MusicPinkIcon} from '../../../../assets/icon';
 
-const FansGrowth = () => {
-  const {getListDataFansAnalytic} = useAnalyticsHook();
+const ActiveListener = () => {
+  const {getActiveListener} = useAnalyticsHook();
   const {t} = useTranslation();
 
   const {
-    data: fansAnalyticData,
+    data: activeListenerData,
     isLoading: queryDataLoading,
     isError,
     refetch,
-  } = useQuery('fans-analytic', () =>
-    getListDataFansAnalytic({
+  } = useQuery('analytic-activeListener', () =>
+    getActiveListener({
       interval:
         t(selectedRange.label) === 'Monthly'
           ? 'monthly'
@@ -91,10 +90,10 @@ const FansGrowth = () => {
     <View style={styles.container}>
       {/* TITLE AREA */}
       <View style={styles.titleContainer}>
-        <BlitzIcon />
+        <MusicPinkIcon />
         <Gap width={widthResponsive(10)} />
         <Text style={styles.title}>
-          {t('Home.Tab.Analytic.Fans.Main.Title')}
+          {t('Home.Tab.Analytic.Album.Listeners.Title')}
         </Text>
       </View>
       {/* BODY AREA */}
@@ -103,14 +102,17 @@ const FansGrowth = () => {
         dataFilter={dropDownFansGrowth}
         selectedMenu={setSelectedRange}
         fansData={fansData}
-        growthDescOne={t('Home.Tab.Analytic.Fans.Growth.BeFan')}
-        growthDescTwo={t('Home.Tab.Analytic.Fans.Growth.FansEarn')}
+        growthDescOne={t('Home.Tab.Analytic.Album.Listeners.Growth.FanStream')}
+        growthDescTwo={t(
+          'Home.Tab.Analytic.Album.Listeners.Growth.AvgListener',
+        )}
+        noOfLines={2}
       />
     </View>
   );
 };
 
-export default FansGrowth;
+export default ActiveListener;
 
 const styles = StyleSheet.create({
   container: {

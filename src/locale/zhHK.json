@@ -258,7 +258,14 @@
           "Title": "郵政"
         },
         "Album": {
-          "Title": "專輯"
+          "Title": "專輯",
+          "Listeners": {
+            "Title": "Your Active Listener",
+            "Growth": {
+              "FanStream":"Fans streams your song monthly!",
+              "AvgListener":"Avg listener streamed monthly"
+            }
+          }
         },
         "Explore": {
           "Title": "探索"

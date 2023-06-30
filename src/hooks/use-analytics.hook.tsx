@@ -1,4 +1,5 @@
 import {
+  ActiveListener,
   FansAge,
   FansCountry,
   FansGender,
@@ -87,6 +88,19 @@ export const useAnalyticsHook = () => {
     }
   };
 
+  const getActiveListener = async (props?: ParamsProps) => {
+    try {
+      const response = await ActiveListener(props);
+      return {
+        data: response?.data,
+        meta: response?.meta,
+        message: response?.message,
+      };
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return {
     getListDataFansAnalytic,
     getDataFansActiveInteract,
@@ -94,5 +108,6 @@ export const useAnalyticsHook = () => {
     getFansAgeAnalytic,
     getFansGenderAnalytic,
     getFansCountryAnalytic,
+    getActiveListener,
   };
 };

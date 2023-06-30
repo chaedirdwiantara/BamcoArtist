@@ -73,3 +73,15 @@ export const FansCountry = async (
 
   return data;
 };
+
+export const ActiveListener = async (
+  props?: ParamsProps,
+): Promise<ListPostResponseType> => {
+  const {data} = await SsuAPI().request<ListPostResponseType>({
+    url: '/musician-app/post/public',
+    method: 'GET',
+    params: props,
+  });
+
+  return data;
+};

@@ -258,7 +258,14 @@
           "Title": "Post"
         },
         "Album": {
-          "Title": "Album"
+          "Title": "Album",
+          "Listeners": {
+            "Title": "Your Active Listener",
+            "Growth": {
+              "FanStream":"Fans streams your song monthly!",
+              "AvgListener":"Avg listener streamed monthly"
+            }
+          }
         },
         "Explore": {
           "Title": "Explore"
