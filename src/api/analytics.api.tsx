@@ -133,3 +133,51 @@ export const ListenerLikes = async (
 
   return data;
 };
+
+export const WhoListenEP = async (
+  props?: ParamsProps,
+): Promise<ListPostResponseType> => {
+  const {data} = await SsuAPI().request<ListPostResponseType>({
+    url: '/musician-app/post/public',
+    method: 'GET',
+    params: props,
+  });
+
+  return data;
+};
+
+export const AlbumListenerCountryEP = async (
+  props?: ParamsProps,
+): Promise<ListPostResponseType> => {
+  const {data} = await SsuAPI().request<ListPostResponseType>({
+    url: '/musician-app/post/public',
+    method: 'GET',
+    params: props,
+  });
+
+  return data;
+};
+
+export const AlbumListenerLikeEP = async (
+  props?: ParamsProps,
+): Promise<ListPostResponseType> => {
+  const {data} = await SsuAPI().request<ListPostResponseType>({
+    url: '/musician-app/post/public',
+    method: 'GET',
+    params: props,
+  });
+
+  return data;
+};
+
+export const AlbumSongEP = async (
+  props?: ParamsProps,
+): Promise<ListPostResponseType> => {
+  const {data} = await SsuAPI().request<ListPostResponseType>({
+    url: '/musician-app/post/public',
+    method: 'GET',
+    params: props,
+  });
+
+  return data;
+};

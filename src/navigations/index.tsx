@@ -38,6 +38,7 @@ import {FollowingScreen} from '../screen/OtherUserProfile/FollowingScreen';
 import QuoteMusic from '../screen/CreatePost/MusicPost/QuoteMusic';
 import AddPreview from '../screen/CreatePost/MusicPost/AddPreview';
 import YourTopFansScreen from '../screen/Analytics/Fans/YourTopFans/FullScreen';
+import MySong from '../screen/Analytics/Album/MySong';
 
 // Home
 import {HomeScreen} from '../screen/Home';
@@ -308,6 +309,7 @@ export type RootStackParams = {
   VerifCodeWithdrawal: undefined;
   Withdrawal: undefined;
   YourTopFansScreen: undefined;
+  MySong: undefined;
 };
 
 export type MainTabParams = {
@@ -535,6 +537,7 @@ export const RootStackScreen = () => (
     <RootStack.Screen name="TicketDetail" component={TicketDetail} />
     <RootStack.Screen name="Shop" component={Shop} />
     <RootStack.Screen name="YourTopFansScreen" component={YourTopFansScreen} />
+    <RootStack.Screen name="MySong" component={MySong} />
   </RootStack.Navigator>
 );
 

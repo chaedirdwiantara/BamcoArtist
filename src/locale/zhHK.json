@@ -285,6 +285,21 @@
           },
           "ListenerLikes": {
             "Title" : "Listener Also Like"
+          },
+          "MySong": {
+            "Title" : "My Song",
+            "Album":{
+              "Title":"Album"
+            },
+            "WhoListen":{
+              "Title" : "Who Listen To This Album"
+            },
+            "ListenerCountry":{
+              "Title" : "Album Listener Country"
+            },
+            "ListenerAlsoLike":{
+              "Title" : "Album Listener Also Like"
+            }
           }
         },
         "Explore": {

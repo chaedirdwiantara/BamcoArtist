@@ -1,5 +1,8 @@
 import {
   ActiveListener,
+  AlbumListenerCountryEP,
+  AlbumListenerLikeEP,
+  AlbumSongEP,
   FansAge,
   FansCountry,
   FansGender,
@@ -7,6 +10,7 @@ import {
   ListenerLikes,
   PopularAlbum,
   TopSongs,
+  WhoListenEP,
   fansActiveInteract,
   fansAnalytic,
   topFans,
@@ -157,6 +161,58 @@ export const useAnalyticsHook = () => {
     }
   };
 
+  const getWhoListen = async (props?: ParamsProps) => {
+    try {
+      const response = await WhoListenEP(props);
+      return {
+        data: response?.data,
+        meta: response?.meta,
+        message: response?.message,
+      };
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getAlbumListenerCountry = async (props?: ParamsProps) => {
+    try {
+      const response = await AlbumListenerCountryEP(props);
+      return {
+        data: response?.data,
+        meta: response?.meta,
+        message: response?.message,
+      };
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getAlbumListenerLike = async (props?: ParamsProps) => {
+    try {
+      const response = await AlbumListenerLikeEP(props);
+      return {
+        data: response?.data,
+        meta: response?.meta,
+        message: response?.message,
+      };
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getAlbumSongs = async (props?: ParamsProps) => {
+    try {
+      const response = await AlbumSongEP(props);
+      return {
+        data: response?.data,
+        meta: response?.meta,
+        message: response?.message,
+      };
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return {
     getListDataFansAnalytic,
     getDataFansActiveInteract,
@@ -169,5 +225,9 @@ export const useAnalyticsHook = () => {
     getTopSongs,
     getListenerCountry,
     getListenerLike,
+    getWhoListen,
+    getAlbumListenerCountry,
+    getAlbumListenerLike,
+    getAlbumSongs,
   };
 };

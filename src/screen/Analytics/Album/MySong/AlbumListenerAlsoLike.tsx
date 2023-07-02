@@ -14,18 +14,18 @@ import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParams} from '../../../../navigations';
 
-const ListenerLikes = () => {
-  const {getListenerLike} = useAnalyticsHook();
+const AlbumListenerLike = () => {
+  const {getAlbumListenerLike} = useAnalyticsHook();
   const {t} = useTranslation();
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
 
   const {
-    data: listenerLikesData,
+    data: AlbumListenerLikeData,
     isLoading: queryDataLoading,
     isError,
     refetch,
-  } = useQuery('analytic-listenerLikes', () => getListenerLike({}));
+  } = useQuery('analytic-AlbumListenerLike', () => getAlbumListenerLike({}));
 
   return (
     <View style={styles.container}>
@@ -34,7 +34,7 @@ const ListenerLikes = () => {
         <PlayPinkIcon />
         <Gap width={widthResponsive(10)} />
         <Text style={styles.title}>
-          {t('Home.Tab.Analytic.Album.ListenerLikes.Title')}
+          {t('Home.Tab.Analytic.Album.MySong.ListenerAlsoLike.Title')}
         </Text>
       </View>
       {/* BODY AREA */}
@@ -68,7 +68,7 @@ const ListenerLikes = () => {
   );
 };
 
-export default ListenerLikes;
+export default AlbumListenerLike;
 
 const styles = StyleSheet.create({
   container: {
