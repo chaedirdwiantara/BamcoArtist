@@ -10,7 +10,7 @@ import {useAnalyticsHook} from '../../../../hooks/use-analytics.hook';
 import {color, font} from '../../../../theme';
 import {mvs} from 'react-native-size-matters';
 import {storage} from '../../../../hooks/use-storage.hook';
-import {AlbumRow} from '../../../../components/molecule/SongDetailsContent/ListSongRow';
+import {AlbumRow} from '../../../../components/molecule/SongDetailsContent/AlbumRow';
 
 const PopularAlbum = () => {
   const {getPopularAlbum} = useAnalyticsHook();

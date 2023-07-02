@@ -1,9 +1,9 @@
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {FlatList, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React, {useEffect, useState} from 'react';
-import {DropDownFilter, Gap} from '../../../../components';
-import {widthResponsive} from '../../../../utils';
+import {DropDownFilter, Gap, ListCard} from '../../../../components';
+import {kFormatter, widthResponsive} from '../../../../utils';
 import {useTranslation} from 'react-i18next';
-import {MusicPink2Icon, MusicPinkIcon} from '../../../../assets/icon';
+import {MusicPinkIcon} from '../../../../assets/icon';
 import {DataDropDownType, dropDownAlbumRange} from '../../../../data/dropdown';
 import {useQuery} from 'react-query';
 import {useAnalyticsHook} from '../../../../hooks/use-analytics.hook';
@@ -13,6 +13,8 @@ import {storage} from '../../../../hooks/use-storage.hook';
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParams} from '../../../../navigations';
+import {AlbumRow} from '../../../../components/molecule/SongDetailsContent/AlbumRow';
+import {songs2} from '../../../../data/music2';
 
 const TopSongs = () => {
   const {getTopSongs} = useAnalyticsHook();
@@ -85,7 +87,42 @@ const TopSongs = () => {
         </View>
       </View>
       {/* BODY AREA */}
-      <View></View>
+      <View>
+        <AlbumRow
+          title={'Rafaela'}
+          imgUri={
+            'https://cdn-2.tstatic.net/tribunnews/foto/bank/images/gambaran-live-stream-rafaela-di-dalam-game-mobile-legends.jpg'
+          }
+          createdOn={'2018'}
+          onPress={() => {}}
+          LikeCount={kFormatter(1500)}
+          streamCount={kFormatter(2500)}
+          imgSize={80}
+        />
+        {/* <Gap height={20} /> */}
+        <FlatList
+          showsVerticalScrollIndicator={false}
+          data={songs2}
+          keyExtractor={item => item.id.toString()}
+          renderItem={({item, index}) => (
+            <ListCard.MusicList
+              imgUri={item.url}
+              musicNum={(index + 2).toLocaleString('en-US', {
+                minimumIntegerDigits: 2,
+                useGrouping: false,
+              })}
+              musicTitle={item.title}
+              singerName={''}
+              likeAnalytics={item.likes}
+              streamAnalytics={item.stream}
+              onPressMore={() => {}}
+              containerStyles={{marginTop: mvs(20)}}
+              onPressCard={() => {}}
+              hideDropdownMore
+            />
+          )}
+        />
+      </View>
     </View>
   );
 };

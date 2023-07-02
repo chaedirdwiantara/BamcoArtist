@@ -18,7 +18,7 @@ interface AlbumRowProps {
   createdOn: string;
   onPress: () => void;
   streamCount?: string | number;
-  LikeCount?: number | number;
+  LikeCount?: string | number;
   imgSize?: number;
 }
 

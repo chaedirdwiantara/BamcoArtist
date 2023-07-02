@@ -15,7 +15,7 @@ import {
   widthResponsive,
 } from '../../../utils';
 import {Dropdown} from '../DropDown';
-import {color, font} from '../../../theme';
+import {color, font, typography} from '../../../theme';
 import {Gap, SquareImage} from '../../atom';
 import {DefaultImage, LoveIcon, SoundIcon} from '../../../assets/icon';
 import {useTranslation} from 'react-i18next';
@@ -41,6 +41,8 @@ interface ListProps {
   likeOnPress?: () => void;
   isLiked?: boolean;
   disabled?: boolean;
+  likeAnalytics?: number;
+  streamAnalytics?: number;
 }
 
 const MusicListCard: React.FC<ListProps> = ({
@@ -62,6 +64,8 @@ const MusicListCard: React.FC<ListProps> = ({
   likeOnPress,
   isLiked,
   disabled,
+  likeAnalytics,
+  streamAnalytics,
 }) => {
   const {t} = useTranslation();
   // ? Dropdown Menu Example
@@ -122,9 +126,31 @@ const MusicListCard: React.FC<ListProps> = ({
           {musicTitle}
         </Text>
         <Gap height={2} />
-        <Text style={[styles.songDesc, {color: descColor}]} numberOfLines={1}>
-          {singerName}
-        </Text>
+        {likeAnalytics && streamAnalytics ? (
+          <View style={{flexDirection: 'row'}}>
+            <Text
+              style={[styles.songDesc, {color: descColor}]}
+              numberOfLines={1}>
+              <Text style={[typography.Caption2, styles.analyticNum]}>
+                {likeAnalytics}
+              </Text>{' '}
+              Likes
+            </Text>
+            <Gap width={12} />
+            <Text
+              style={[styles.songDesc, {color: descColor}]}
+              numberOfLines={1}>
+              <Text style={[typography.Caption2, styles.analyticNum]}>
+                {streamAnalytics}
+              </Text>{' '}
+              Stream
+            </Text>
+          </View>
+        ) : (
+          <Text style={[styles.songDesc, {color: descColor}]} numberOfLines={1}>
+            {singerName}
+          </Text>
+        )}
       </View>
       <TouchableOpacity
         style={styles.containerIcon}
@@ -217,5 +243,8 @@ const styles = StyleSheet.create({
     width: widthPercentage(30),
     marginRight: widthPercentage(10),
     alignItems: 'center',
+  },
+  analyticNum: {
+    color: color.Neutral[10],
   },
 });
