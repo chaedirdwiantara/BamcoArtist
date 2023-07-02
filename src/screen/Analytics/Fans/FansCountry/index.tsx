@@ -8,7 +8,7 @@ import {useAnalyticsHook} from '../../../../hooks/use-analytics.hook';
 import {useQuery} from 'react-query';
 import {color, font} from '../../../../theme';
 import {mvs} from 'react-native-size-matters';
-import CountryCard from './CountryCard';
+import CountryCard from '../../../../components/molecule/CountryCard/CountryCard';
 import {MerchListItem} from '../../../../data/merchList';
 
 const FansCountry = () => {
@@ -35,14 +35,14 @@ const FansCountry = () => {
           {t('Home.Tab.Analytic.Fans.FansCountry.Title')}
         </Text>
       </View>
-      <Gap height={16} />
+      <Gap height={22} />
       <FlatList
         showsVerticalScrollIndicator={false}
         data={MerchListItem}
         renderItem={({item, index}) => (
           <View
             style={{
-              marginTop: index !== 0 ? widthResponsive(10) : 0,
+              marginTop: index !== 0 ? widthResponsive(17) : 0,
             }}>
             <CountryCard
               countryId={item.id}

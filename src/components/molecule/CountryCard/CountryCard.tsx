@@ -1,8 +1,8 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React, {FC} from 'react';
-import {widthResponsive} from '../../../../utils';
-import {color, font} from '../../../../theme';
-import {Gap} from '../../../../components';
+import {widthResponsive} from '../../../utils';
+import {color, font} from '../../../theme';
+import {Gap} from '../..';
 import FastImage from 'react-native-fast-image';
 
 interface CountryCardProps {

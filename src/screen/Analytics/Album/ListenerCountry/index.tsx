@@ -1,14 +1,10 @@
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {FlatList, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {DropDownFilter, Gap} from '../../../../components';
 import {widthResponsive} from '../../../../utils';
 import {useTranslation} from 'react-i18next';
 import {EqualizerIcon} from '../../../../assets/icon';
-import {
-  DataDropDownType,
-  dropDownAlbumRange,
-  dropDownFansGrowth,
-} from '../../../../data/dropdown';
+import {DataDropDownType, dropDownAlbumRange} from '../../../../data/dropdown';
 import {useQuery} from 'react-query';
 import {useAnalyticsHook} from '../../../../hooks/use-analytics.hook';
 import {color, font} from '../../../../theme';
@@ -17,6 +13,8 @@ import {storage} from '../../../../hooks/use-storage.hook';
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParams} from '../../../../navigations';
+import {MerchListItem} from '../../../../data/merchList';
+import CountryCard from '../../../../components/molecule/CountryCard/CountryCard';
 
 const ListenerCountry = () => {
   const {getListenerCountry} = useAnalyticsHook();
@@ -89,7 +87,26 @@ const ListenerCountry = () => {
         </View>
       </View>
       {/* BODY AREA */}
-      <View></View>
+      <View>
+        <FlatList
+          showsVerticalScrollIndicator={false}
+          data={MerchListItem}
+          renderItem={({item, index}) => (
+            <View
+              style={{
+                marginTop:
+                  index !== 0 ? widthResponsive(17) : widthResponsive(18),
+              }}>
+              <CountryCard
+                countryId={item.id}
+                flagUri={item.image}
+                name={item.owner}
+                value={item.price}
+              />
+            </View>
+          )}
+        />
+      </View>
     </View>
   );
 };
