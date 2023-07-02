@@ -3,8 +3,8 @@ import React, {useEffect, useState} from 'react';
 import {DropDownFilter, Gap} from '../../../../components';
 import {widthResponsive} from '../../../../utils';
 import {useTranslation} from 'react-i18next';
-import {MusicPink2Icon} from '../../../../assets/icon';
-import {DataDropDownType, dropDownFansGrowth} from '../../../../data/dropdown';
+import {MusicPink2Icon, MusicPinkIcon} from '../../../../assets/icon';
+import {DataDropDownType, dropDownAlbumRange} from '../../../../data/dropdown';
 import {useQuery} from 'react-query';
 import {useAnalyticsHook} from '../../../../hooks/use-analytics.hook';
 import {color, font} from '../../../../theme';
@@ -40,7 +40,7 @@ const TopSongs = () => {
   );
 
   const [selectedRange, setSelectedRange] = useState<DataDropDownType>({
-    label: 'Home.Tab.Analytic.Fans.Filter.Range.Monthly',
+    label: 'Home.Tab.Analytic.Album.Filter.Range.Alltime',
     value: '1',
   });
   useEffect(() => {
@@ -52,7 +52,7 @@ const TopSongs = () => {
     <View style={styles.container}>
       {/* TITLE AREA */}
       <View style={styles.titleContainer}>
-        <MusicPink2Icon />
+        <MusicPinkIcon />
         <Gap width={widthResponsive(10)} />
         <Text style={styles.title}>
           {t('Home.Tab.Analytic.Album.TopSongs.Title')}
@@ -63,7 +63,7 @@ const TopSongs = () => {
         <View style={{width: 90, zIndex: 100}}>
           <DropDownFilter
             labelCaption={t(selectedRange.label)}
-            dataFilter={dropDownFansGrowth}
+            dataFilter={dropDownAlbumRange}
             selectedMenu={setSelectedRange}
             leftPosition={
               lang === 'en' ? widthResponsive(-85) : widthResponsive(-85)

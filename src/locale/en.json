@@ -259,6 +259,14 @@
         },
         "Album": {
           "Title": "Album",
+          "Filter" : {
+            "Range" : {
+              "Alltime" : "All Time",
+              "Monthly" : "Monthly",
+              "Weekly" : "Weekly",
+              "Daily" : "Daily"
+            }
+          },
           "Listeners": {
             "Title": "Your Active Listener",
             "Growth": {

@@ -90,6 +90,7 @@ import PauseIcon2 from './Pause2.icon';
 import PauseVideoIcon from './PauseVideo.icon';
 import PlayIcon from './Play.icon';
 import PlayIcon2 from './Play2.icon';
+import PlayIcon3 from './PlayRadius.icon';
 import PlayVideoIcon from './PlayVideo.icon';
 import PreviousIcon from './Previous.icon';
 import ProcessingIcon from './Processing.icon';
@@ -216,6 +217,7 @@ export {
   PauseVideoIcon,
   PlayIcon,
   PlayIcon2,
+  PlayIcon3,
   PlayPinkIcon,
   PlayVideoIcon,
   PreviousIcon,

@@ -10,11 +10,11 @@ import ListenerLikes from './ListenerLikes';
 const AlbumAnalytic = () => {
   return (
     <View>
-      <ActiveListener />
-      <Gap height={20} />
       <PopularAlbum />
       <Gap height={20} />
       <TopSongs />
+      <Gap height={20} />
+      <ActiveListener />
       <Gap height={20} />
       <ListenerCountry />
       <Gap height={20} />

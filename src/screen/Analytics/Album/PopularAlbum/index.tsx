@@ -1,15 +1,16 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {DropDownFilter, Gap} from '../../../../components';
-import {widthResponsive} from '../../../../utils';
+import {kFormatter, widthResponsive} from '../../../../utils';
 import {useTranslation} from 'react-i18next';
 import {MusicPink2Icon} from '../../../../assets/icon';
-import {DataDropDownType, dropDownFansGrowth} from '../../../../data/dropdown';
+import {DataDropDownType, dropDownAlbumRange} from '../../../../data/dropdown';
 import {useQuery} from 'react-query';
 import {useAnalyticsHook} from '../../../../hooks/use-analytics.hook';
 import {color, font} from '../../../../theme';
 import {mvs} from 'react-native-size-matters';
 import {storage} from '../../../../hooks/use-storage.hook';
+import {AlbumRow} from '../../../../components/molecule/SongDetailsContent/ListSongRow';
 
 const PopularAlbum = () => {
   const {getPopularAlbum} = useAnalyticsHook();
@@ -35,7 +36,7 @@ const PopularAlbum = () => {
   );
 
   const [selectedRange, setSelectedRange] = useState<DataDropDownType>({
-    label: 'Home.Tab.Analytic.Fans.Filter.Range.Monthly',
+    label: 'Home.Tab.Analytic.Album.Filter.Range.Alltime',
     value: '1',
   });
   useEffect(() => {
@@ -57,7 +58,7 @@ const PopularAlbum = () => {
       <View style={{width: 90, zIndex: 100}}>
         <DropDownFilter
           labelCaption={t(selectedRange.label)}
-          dataFilter={dropDownFansGrowth}
+          dataFilter={dropDownAlbumRange}
           selectedMenu={setSelectedRange}
           leftPosition={
             lang === 'en' ? widthResponsive(-85) : widthResponsive(-85)
@@ -70,7 +71,18 @@ const PopularAlbum = () => {
         />
       </View>
       {/* BODY AREA */}
-      <View></View>
+      <View style={{paddingLeft: widthResponsive(1.8)}}>
+        <AlbumRow
+          title={'Rafaela'}
+          imgUri={
+            'https://cdn-2.tstatic.net/tribunnews/foto/bank/images/gambaran-live-stream-rafaela-di-dalam-game-mobile-legends.jpg'
+          }
+          createdOn={'2018'}
+          onPress={() => {}}
+          streamCount={kFormatter(2500)}
+          imgSize={80}
+        />
+      </View>
     </View>
   );
 };

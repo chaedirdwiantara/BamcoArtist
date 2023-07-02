@@ -174,3 +174,10 @@ export const dropDownFansGrowth: DataDropDownType[] = [
   {label: 'Home.Tab.Analytic.Fans.Filter.Range.Weekly', value: '2'},
   {label: 'Home.Tab.Analytic.Fans.Filter.Range.Daily', value: '3'},
 ];
+
+export const dropDownAlbumRange: DataDropDownType[] = [
+  {label: 'Home.Tab.Analytic.Album.Filter.Range.Alltime', value: '1'},
+  {label: 'Home.Tab.Analytic.Album.Filter.Range.Monthly', value: '2'},
+  {label: 'Home.Tab.Analytic.Album.Filter.Range.Weekly', value: '3'},
+  {label: 'Home.Tab.Analytic.Album.Filter.Range.Daily', value: '4'},
+];
