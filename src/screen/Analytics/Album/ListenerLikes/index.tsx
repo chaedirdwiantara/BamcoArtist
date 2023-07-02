@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {FlatList, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import {Gap} from '../../../../components';
 import {widthResponsive} from '../../../../utils';
@@ -9,11 +9,17 @@ import {useAnalyticsHook} from '../../../../hooks/use-analytics.hook';
 import {color, font} from '../../../../theme';
 import {mvs} from 'react-native-size-matters';
 import {storage} from '../../../../hooks/use-storage.hook';
+import MusiciansListCard from '../../../../components/molecule/ListCard/MusiciansListCard';
+import {MusicianListData} from '../../../../data/topMusician';
+import {useNavigation} from '@react-navigation/native';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {RootStackParams} from '../../../../navigations';
 
 const ListenerLikes = () => {
   const {getListenerLike} = useAnalyticsHook();
   const {t} = useTranslation();
-  const lang = storage.getString('lang');
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParams>>();
 
   const {
     data: listenerLikesData,
@@ -33,7 +39,31 @@ const ListenerLikes = () => {
         </Text>
       </View>
       {/* BODY AREA */}
-      <View></View>
+      <View>
+        <FlatList
+          showsVerticalScrollIndicator={false}
+          data={MusicianListData}
+          renderItem={({item, index}) => (
+            <View
+              style={{
+                marginTop:
+                  index !== 0 ? widthResponsive(12) : widthResponsive(20),
+              }}>
+              <MusiciansListCard
+                musicianNum={item.musicNum}
+                onPressMore={() => {}}
+                activeMore={false}
+                onPressImage={() =>
+                  navigation.navigate('OtherUserProfile', {id: item.uuid})
+                }
+                musicianName={item.fullname}
+                imgUri={item.imageProfileUrl}
+                containerStyles={{marginBottom: widthResponsive(12)}}
+              />
+            </View>
+          )}
+        />
+      </View>
     </View>
   );
 };
