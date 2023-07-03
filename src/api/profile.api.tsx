@@ -8,6 +8,9 @@ import {
   UpdateProfileResponseType,
   CollectPhotoRemoveProps,
   ProfileCountResponseType,
+  SetLastStepResponseType,
+  LastStepResponseType,
+  GetLastStepResponseType,
 } from '../interface/profile.interface';
 import SsuAPI from './baseRinjani';
 import SsuAPISemeru from './baseSemeru';
@@ -20,6 +23,7 @@ export type UpdateProfilePropsType = {
   genres?: number[];
   moods?: number[];
   expectations?: number[];
+  rolesInIndustry?: number[];
   imageProfileUrl?: string;
   banner?: string;
   about?: string;
@@ -123,6 +127,27 @@ export const getTotalCount = async (
     url: '/musician-app/profile',
     method: 'GET',
     params: props,
+  });
+
+  return data;
+};
+
+export const getLastStep = async (): Promise<GetLastStepResponseType> => {
+  const {data} = await SsuAPI().request<GetLastStepResponseType>({
+    url: '/musician-app/last-step-registration',
+    method: 'GET',
+  });
+
+  return data;
+};
+
+export const setLastStep = async (
+  props: LastStepResponseType,
+): Promise<SetLastStepResponseType> => {
+  const {data} = await SsuAPI().request<SetLastStepResponseType>({
+    url: '/musician-app/last-step-registration',
+    method: 'PATCH',
+    data: props,
   });
 
   return data;

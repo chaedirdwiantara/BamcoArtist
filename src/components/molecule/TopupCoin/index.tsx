@@ -12,8 +12,10 @@ import {
 } from '../../../utils';
 import {
   listPrice,
-  listWithdrawal,
+  withdrawalList,
+  transactionList,
   ListWithdrawalProps,
+  ListTransactionProps,
 } from '../../../data/topUp';
 import {CoinCard} from './CoinCard';
 import {Button, Gap} from '../../atom';
@@ -37,9 +39,11 @@ export const TopupCoinContent: React.FC<TopupCoinProps> = ({
 }) => {
   const {t} = useTranslation();
   const {creditCount, getCreditCount} = useCreditHook();
-  const [selectedIndex, setSelectedIndex] = useState(0);
-  const [withdrawalList, setWithdrawalList] =
-    useState<ListWithdrawalProps[]>(listWithdrawal);
+  const [selectedIndex, setSelectedIndex] = useState<number>(0);
+  const [listTransaction] = useState<ListTransactionProps[]>([]);
+  const [listWithdrawal, setListWithdrawal] = useState<ListWithdrawalProps[]>(
+    [],
+  );
   const [filter] = useState([
     {filterName: 'TopUp.Filter.Buy'},
     {filterName: 'TopUp.Filter.Transaction'},
@@ -55,9 +59,9 @@ export const TopupCoinContent: React.FC<TopupCoinProps> = ({
   };
 
   const onPressOpenWithdrawal = (index: number) => {
-    let newList = [...withdrawalList];
+    let newList = [...listWithdrawal];
     newList[index].isOpen = !newList[index].isOpen;
-    setWithdrawalList(newList);
+    setListWithdrawal(newList);
   };
 
   useEffect(() => {
@@ -101,12 +105,13 @@ export const TopupCoinContent: React.FC<TopupCoinProps> = ({
           </View>
         </View>
 
+        {/* // hide until API's ready
         <Button
           label={t('TopUp.ButtonWithdraw')}
           textStyles={{fontSize: mvs(13), fontFamily: font.InterMedium}}
           containerStyles={styles.btnContainer}
           onPress={onPressWithdrawal}
-        />
+        /> */}
 
         <TabFilter.Type1
           filterData={filter}
@@ -140,46 +145,63 @@ export const TopupCoinContent: React.FC<TopupCoinProps> = ({
             </View>
           </View>
         ) : filter[selectedIndex].filterName === 'TopUp.Filter.Transaction' ? (
-          // <TransactionCard
-          //   title="20 Credit have been purchased!"
-          //   date="Dec 16, 2022"
-          // />
-          <EmptyState
-            text={t('TopUp.EmptyState.Transaction') || ''}
-            hideIcon={true}
-            containerStyle={styles.containerEmpty}
-            textStyle={styles.emptyText}
-          />
+          // TODO: Need to be wired with API history transaction
+          <>
+            {listTransaction.length > 0 ? (
+              <View style={styles.containerContent}>
+                {listTransaction.map((val, i) => (
+                  <TransactionCard
+                    key={i}
+                    title={val.text}
+                    date={val.date}
+                    from={val.from}
+                  />
+                ))}
+              </View>
+            ) : (
+              <EmptyState
+                text={t('TopUp.EmptyState.Transaction') || ''}
+                hideIcon={true}
+                containerStyle={styles.containerEmpty}
+                textStyle={styles.emptyText}
+              />
+            )}
+          </>
         ) : (
-          // <View style={styles.containerWithdrawal}>
-          //   {withdrawalList.map((val, i) => (
-          //     <WithdrawalCard
-          //       key={i}
-          //       transactionAmount={toCurrency(val.transactionAmount, {
-          //         withFraction: false,
-          //       })}
-          //       conversionAmount={
-          //         'HKD ' +
-          //         toCurrency(val.conversionAmount, {
-          //           withFraction: false,
-          //         })
-          //       }
-          //       idMusician={val.idMusician}
-          //       date={val.date}
-          //       status={val.status}
-          //       notes={val.notes}
-          //       isOpen={val.isOpen}
-          //       onPress={() => onPressOpenWithdrawal(i)}
-          //     />
-          //   ))}
-          // </View>
-
-          <EmptyState
-            text={t('TopUp.EmptyState.Withdrawal') || ''}
-            hideIcon={true}
-            containerStyle={styles.containerEmpty}
-            textStyle={styles.emptyText}
-          />
+          // TODO: Need to be wired with API history withdrawal
+          <>
+            {listWithdrawal.length > 0 ? (
+              <View style={styles.containerContent}>
+                {listWithdrawal.map((val, i) => (
+                  <WithdrawalCard
+                    key={i}
+                    transactionAmount={toCurrency(val.transactionAmount, {
+                      withFraction: false,
+                    })}
+                    conversionAmount={
+                      'HKD ' +
+                      toCurrency(val.conversionAmount, {
+                        withFraction: false,
+                      })
+                    }
+                    idMusician={val.idMusician}
+                    date={val.date}
+                    status={val.status}
+                    notes={val.notes}
+                    isOpen={val.isOpen}
+                    onPress={() => onPressOpenWithdrawal(i)}
+                  />
+                ))}
+              </View>
+            ) : (
+              <EmptyState
+                text={t('TopUp.EmptyState.Withdrawal') || ''}
+                hideIcon={true}
+                containerStyle={styles.containerEmpty}
+                textStyle={styles.emptyText}
+              />
+            )}
+          </>
         )}
       </ScrollView>
     </View>
@@ -228,7 +250,7 @@ const styles = StyleSheet.create({
     marginTop: heightPercentage(10),
     marginBottom: heightPercentage(20),
   },
-  containerWithdrawal: {
+  containerContent: {
     marginTop: heightPercentage(10),
     marginBottom: heightPercentage(40),
   },

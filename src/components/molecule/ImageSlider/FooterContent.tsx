@@ -3,11 +3,11 @@ import {View, StyleSheet} from 'react-native';
 import {useTranslation} from 'react-i18next';
 
 import Color from '../../../theme/Color';
-import {Button, ButtonGradient, Gap, Indicator} from '../../../components';
-import {heightPercentage, width, widthPercentage} from '../../../utils';
-import {PreferenceList} from '../../../interface/setting.interface';
-import DescriptionBoarding from '../../atom/DescriptionBoarding/DescriptionBoarding';
 import {DataOnboardType} from '../../../data/onboard';
+import {Button, ButtonGradient, Gap, Indicator} from '../../../components';
+import {PreferenceList} from '../../../interface/setting.interface';
+import {heightPercentage, width, widthPercentage} from '../../../utils';
+import DescriptionBoarding from '../../atom/DescriptionBoarding/DescriptionBoarding';
 
 interface FooterContentProps {
   type?: string;
@@ -18,7 +18,6 @@ interface FooterContentProps {
   onPressBack?: () => void;
   onPressGoTo?: () => void;
   onPressNext: () => void;
-  selectedData: number[][];
 }
 
 export const FooterContent: React.FC<FooterContentProps> = ({
@@ -28,14 +27,8 @@ export const FooterContent: React.FC<FooterContentProps> = ({
   onPressBack,
   onPressGoTo,
   onPressNext,
-  selectedData,
 }) => {
   const {t} = useTranslation();
-  const activeColor =
-    type === 'Preference' ? Color.Dark[100] : Color.Success[400];
-  const inActiveColor =
-    type === 'Preference' ? Color.Dark[300] : Color.Success[700];
-
   return (
     <View
       style={[
@@ -57,12 +50,15 @@ export const FooterContent: React.FC<FooterContentProps> = ({
           }
         })}
       <Gap height={heightPercentage(40)} />
-      <Indicator
-        activeIndex={activeIndexSlide}
-        totalIndex={data.length}
-        activeColor={activeColor}
-        inActiveColor={inActiveColor}
-      />
+      {type !== 'Preference' && (
+        <Indicator
+          activeIndex={activeIndexSlide}
+          totalIndex={data.length}
+          activeColor={Color.Success[400]}
+          inActiveColor={Color.Success[700]}
+        />
+      )}
+
       {type === 'Preference' ? (
         <>
           <Gap height={heightPercentage(45)} />
@@ -72,28 +68,20 @@ export const FooterContent: React.FC<FooterContentProps> = ({
                 label={t('Btn.Next')}
                 onPress={onPressNext}
                 gradientStyles={styles.btnFull}
-                disabled={selectedData[0].length === 0}
               />
             ) : (
               <>
                 <Button
                   type="border"
-                  label={activeIndexSlide === 3 ? t('Btn.Skip') : t('Btn.Back')}
+                  label={t('Btn.Back')}
                   containerStyles={styles.btnContainer}
                   textStyles={{color: Color.Success[400]}}
-                  onPress={activeIndexSlide === 3 ? onPressGoTo : onPressBack}
+                  onPress={onPressBack}
                 />
                 <ButtonGradient
-                  label={
-                    activeIndexSlide === 3 ? t('Btn.Finish') : t('Btn.Next')
-                  }
+                  label={t('Btn.Next')}
                   onPress={onPressNext}
                   gradientStyles={styles.btnContainer}
-                  disabled={
-                    activeIndexSlide < 3
-                      ? selectedData[activeIndexSlide].length === 0
-                      : false
-                  }
                 />
               </>
             )}

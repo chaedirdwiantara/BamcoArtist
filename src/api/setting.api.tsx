@@ -16,6 +16,7 @@ import {
   PreferenceResponseType,
   LanguageResponseType,
   ListReasonResponseType,
+  ListRoleResponseType,
 } from '../interface/setting.interface';
 import {ParamsProps} from '../interface/base.interface';
 
@@ -262,6 +263,18 @@ export const listReason = async (): Promise<ListReasonResponseType> => {
   const {data} = await SsuAPI().request<ListReasonResponseType>({
     url: '/public/reasons-delete',
     method: 'GET',
+  });
+
+  return data;
+};
+
+export const getListRole = async (
+  props?: PreferenceProps,
+): Promise<ListRoleResponseType> => {
+  const {data} = await SsuAPI().request<ListRoleResponseType>({
+    url: '/musician-app/roles-in-industry',
+    method: 'GET',
+    params: props,
   });
 
   return data;

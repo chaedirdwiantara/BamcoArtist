@@ -54,7 +54,7 @@ const listPrice: ListPriceProps[] = [
   },
 ];
 
-const listTransaction: ListTransactionProps[] = [
+const transactionList: ListTransactionProps[] = [
   {
     text: '2.500 credits received from',
     date: 'Dec 19, 2022',
@@ -77,7 +77,7 @@ const listTransaction: ListTransactionProps[] = [
   },
 ];
 
-const listWithdrawal: ListWithdrawalProps[] = [
+const withdrawalList: ListWithdrawalProps[] = [
   {
     transactionAmount: 10000,
     conversionAmount: 10000,
@@ -104,4 +104,4 @@ const listWithdrawal: ListWithdrawalProps[] = [
   },
 ];
 
-export {listPrice, listTransaction, listWithdrawal};
+export {listPrice, transactionList, withdrawalList};
