@@ -21,10 +21,11 @@ interface ButtonProps {
   type?: string;
   borderColor?: string;
   containerStyles?: ViewStyle;
-  textStyles?: TextStyle;
+  textStyles?: TextStyle | undefined;
   disabled?: boolean;
   onPress?: () => void;
   typeOfButton?: 'withIcon' | undefined;
+  iconColor?: string;
 }
 
 export const Button: React.FC<ButtonProps> = (props: ButtonProps) => {
@@ -37,6 +38,7 @@ export const Button: React.FC<ButtonProps> = (props: ButtonProps) => {
     disabled,
     onPress,
     typeOfButton,
+    iconColor = Color.Pink[200],
   } = props;
 
   const withBorder = type === 'border' && {
@@ -61,7 +63,7 @@ export const Button: React.FC<ButtonProps> = (props: ButtonProps) => {
         {typeOfButton === 'withIcon' && (
           <View style={{flexDirection: 'row'}}>
             <Gap width={4} />
-            <ChevronDownIcon width={16} height={16} stroke={color.Pink[200]} />
+            <ChevronDownIcon width={16} height={16} stroke={iconColor} />
           </View>
         )}
       </View>

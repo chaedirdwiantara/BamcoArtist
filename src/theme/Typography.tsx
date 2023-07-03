@@ -99,6 +99,12 @@ const Typography = {
     lineHeight: mvs(16),
     letterSpacing: 0.4,
   },
+  Caption2: {
+    fontFamily: Font.InterRegular,
+    fontSize: mvs(11),
+    lineHeight: mvs(16),
+    letterSpacing: 0.4,
+  },
   Overline: {
     fontFamily: Font.InterRegular,
     fontSize: mvs(10),

@@ -24,6 +24,7 @@ import {FollowingList} from './ProfileContent/components/FollowingList';
 import {GuestContent} from './GuestComponent/GuestContent';
 import IconNotif from './IconNotif';
 import {ImageSlider} from './ImageSlider/ImageSlider';
+import LineAreaChart from './LineAreaChart';
 import {ListCard} from './ListCard';
 import {ListenersAndDonate} from './ListenersAndDonate/ListenersAndDonate';
 import ListImageDesc from './ListCard/ListImageDesc';
@@ -92,6 +93,7 @@ export {
   GuestContent,
   IconNotif,
   ImageSlider,
+  LineAreaChart,
   ListCard,
   ListenersAndDonate,
   ListImageDesc,
