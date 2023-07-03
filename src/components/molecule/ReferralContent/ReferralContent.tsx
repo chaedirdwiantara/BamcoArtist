@@ -1,16 +1,15 @@
-import React, {useCallback, useEffect, useRef, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Text,
   View,
   ViewStyle,
-  Dimensions,
   KeyboardAvoidingView,
   Platform,
   StyleSheet,
   Linking,
 } from 'react-native';
-// import {Camera, useCameraDevices} from 'react-native-vision-camera';
-// import {useScanBarcodes, BarcodeFormat} from 'vision-camera-code-scanner';
+import {Camera, useCameraDevices} from 'react-native-vision-camera';
+import {useScanBarcodes, BarcodeFormat} from 'vision-camera-code-scanner';
 import styles from './styles';
 import Color from '../../../theme/Color';
 import Typography from '../../../theme/Typography';
@@ -85,48 +84,53 @@ export const ReferralContent: React.FC<ReferralContentProps> = ({
   const [focusInput, setFocusInput] = useState<string | null>(null);
 
   // Camera
-  // const devices = useCameraDevices();
-  // const device = devices.back;
+  const devices = useCameraDevices();
+  const device = devices.back;
 
   // Camera Handler
-  // async function getPermission() {
-  //   const permission = await Camera.requestCameraPermission();
-  //   console.log(`camera permission status : ${permission}`);
+  async function getPermission() {
+    const permission = await Camera.requestCameraPermission();
+    console.log(`camera permission status : ${permission}`);
 
-  //   if (permission === 'denied') {
-  //     await Linking.openSettings();
-  //   }
-  // }
+    if (permission === 'denied') {
+      await Linking.openSettings();
+    }
+  }
 
-  // useEffect(() => {
-  //   if (isScanning) {
-  //     getPermission();
-  //   }
-  // }, [isScanning]);
+  useEffect(() => {
+    if (isScanning) {
+      getPermission();
+    }
+  }, [isScanning]);
 
   // Barcode
   const [barcode, setBarcode] = useState<string | undefined>('');
   const [isScanned, setIsScanned] = useState(false);
 
-  // const [frameProcessor, barcodes] = useScanBarcodes([BarcodeFormat.QR_CODE]);
+  const [frameProcessor, barcodes] = useScanBarcodes([BarcodeFormat.QR_CODE]);
 
-  // useEffect(() => {
-  //   togleActiveState();
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [barcodes]);
+  useEffect(() => {
+    togleActiveState();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [barcodes]);
 
-  // const togleActiveState = async () => {
-  //   if (barcodes && barcodes.length > 0 && isScanned === false) {
-  //     setIsScanned(true);
+  // TODO: do something after qrcode is being scanned
+  useEffect(() => {
+    console.log('resbar', barcode);
+  }, [barcode]);
 
-  //     barcodes.forEach(async scannedBarcode => {
-  //       if (scannedBarcode.rawValue !== '') {
-  //         setBarcode(scannedBarcode.rawValue);
-  //         console.log('scanned barcode :', barcode);
-  //       }
-  //     });
-  //   }
-  // };
+  const togleActiveState = async () => {
+    if (barcodes && barcodes.length > 0 && isScanned === false) {
+      setIsScanned(true);
+
+      barcodes.forEach(async scannedBarcode => {
+        if (scannedBarcode.rawValue !== '') {
+          setBarcode(scannedBarcode.rawValue);
+          console.log('scanned barcode :', barcode);
+        }
+      });
+    }
+  };
   // const capturePhoto = async () => {
   //   if (camera.current !== null) {
   //     const photo = await camera.current.takePhoto({});
@@ -156,9 +160,9 @@ export const ReferralContent: React.FC<ReferralContentProps> = ({
     setFocusInput(input);
   };
 
-  // if (device == null) {
-  //   return <Text>Camera is not available</Text>;
-  // }
+  if (device == null) {
+    return <Text>Camera is not available</Text>;
+  }
 
   return (
     <KeyboardAvoidingView
@@ -196,14 +200,14 @@ export const ReferralContent: React.FC<ReferralContentProps> = ({
                 height: 289,
                 backgroundColor: 'white',
               }}>
-              {/* <Camera
+              <Camera
                 // ref={camera}
                 style={{flex: 1}}
                 device={device}
                 isActive={true}
                 frameProcessor={frameProcessor}
                 frameProcessorFps={5}
-              /> */}
+              />
             </View>
             <Gap height={32} />
           </>
