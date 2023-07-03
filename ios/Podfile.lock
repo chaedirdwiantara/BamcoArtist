@@ -590,6 +590,8 @@ PODS:
   - RNGoogleSignin (8.2.2):
     - GoogleSignIn (~> 6.2)
     - React-Core
+  - RNIap (12.10.5):
+    - React-Core
   - RNImageCropPicker (0.38.1):
     - React-Core
     - React-RCTImage
@@ -703,6 +705,7 @@ DEPENDENCIES:
   - "RNFBMessaging (from `../node_modules/@react-native-firebase/messaging`)"
   - "RNFlashList (from `../node_modules/@shopify/flash-list`)"
   - "RNGoogleSignin (from `../node_modules/@react-native-google-signin/google-signin`)"
+  - RNIap (from `../node_modules/react-native-iap`)
   - RNImageCropPicker (from `../node_modules/react-native-image-crop-picker`)
   - "RNNotifee (from `../node_modules/@notifee/react-native`)"
   - RNScreens (from `../node_modules/react-native-screens`)
@@ -860,6 +863,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@shopify/flash-list"
   RNGoogleSignin:
     :path: "../node_modules/@react-native-google-signin/google-signin"
+  RNIap:
+    :path: "../node_modules/react-native-iap"
   RNImageCropPicker:
     :path: "../node_modules/react-native-image-crop-picker"
   RNNotifee:
@@ -963,6 +968,7 @@ SPEC CHECKSUMS:
   RNFBMessaging: 1a84a46789e1ee9820d70839683faff890a22411
   RNFlashList: 399bf6a0db68f594ad2c86aaff3ea39564f39f8a
   RNGoogleSignin: 81521697b2c8f97f9a586ac7257b1a1d9b51b115
+  RNIap: c397f49db45af3b10dca64b2325f21bb8078ad21
   RNImageCropPicker: 648356d68fbf9911a1016b3e3723885d28373eda
   RNNotifee: d585266dd69e1f355d26d074cbfdbdfa6c94b7d5
   RNScreens: 34cc502acf1b916c582c60003dc3089fa01dc66d
@@ -977,4 +983,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 58f630e8650f4683f6b515f45fb6e91ace20a8f1
 
-COCOAPODS: 1.11.3
+COCOAPODS: 1.12.1

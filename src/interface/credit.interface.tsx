@@ -107,3 +107,48 @@ export interface UnsubsResponseType extends BaseResponseApi {
 export interface StopTippingResponseType extends BaseResponseApi {
   data: TipsDataType;
 }
+
+export interface SessionPurchaseProps {
+  deviceId: string;
+}
+
+export interface SessionPurchaseResponseType extends BaseResponseApi {
+  data: {
+    Session: string;
+  };
+}
+
+export interface CreateIapPropsType {
+  owner: string;
+  ownerType: number;
+  trxReferenceId: string;
+  credit: number;
+  packageId: string;
+  currency: string;
+  packagePrice: number;
+  trxStatus: number;
+  deviceId: string;
+  trxSession: string;
+}
+
+export interface CreateIapResponseType extends BaseResponseApi {
+  data: {
+    id: string;
+    owner: string;
+    ownerType: number;
+    trxType: number;
+    trxTypeString: string;
+    trxMethod: number;
+    trxMethodString: string;
+    trxReferenceId: string;
+    credit: number;
+    creditAfterTrx: number;
+    packageId: string;
+    currency: string;
+    packagePrice: number;
+    trxStatus: number;
+    createdAt: string;
+    updatedAt: string;
+    deletedAt: string;
+  };
+}
