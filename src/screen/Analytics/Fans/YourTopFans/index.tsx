@@ -60,7 +60,8 @@ const YourTopFans = () => {
               onPressMore={() => {}}
               activeMore={false}
               onPressImage={() =>
-                navigation.navigate('OtherUserProfile', {id: item.uuid})
+                // navigation.navigate('OtherUserProfile', {id: item.uuid})
+                {}
               }
               musicianName={item.fullname}
               imgUri={item.imageProfileUrl}
