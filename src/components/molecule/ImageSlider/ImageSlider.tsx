@@ -1,25 +1,32 @@
-import React, {useState, useRef} from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import {
   Text,
   View,
-  StyleSheet,
-  ScrollView,
-  NativeScrollEvent,
-  NativeSyntheticEvent,
   Image,
   Platform,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+  NativeScrollEvent,
+  NativeSyntheticEvent,
 } from 'react-native';
-
-import {heightPercentage, width} from '../../../utils';
-import Color from '../../../theme/Color';
-import {FooterContent} from './FooterContent';
-import {MusicianList} from '../../../interface/musician.interface';
-import Typography from '../../../theme/Typography';
-import {SelectBox} from '../../../components';
-import {UpdateProfilePropsType} from '../../../api/profile.api';
-import {ModalLoading} from '../ModalLoading/ModalLoading';
-import {DataOnboardType} from '../../../data/onboard';
 import {useTranslation} from 'react-i18next';
+import {mvs} from 'react-native-size-matters';
+
+import {
+  ProfileResponseType,
+  LastStepResponseType,
+  GetStepResponseType,
+} from '../../../interface/profile.interface';
+import {SelectBox} from '../../../components';
+import {FooterContent} from './FooterContent';
+import {DataOnboardType} from '../../../data/onboard';
+import {StepProfile} from '../StepWizard/StepProfile';
+import {color, font, typography} from '../../../theme';
+import {ModalLoading} from '../ModalLoading/ModalLoading';
+import {UpdateProfilePropsType} from '../../../api/profile.api';
+import {PreferenceList} from '../../../interface/setting.interface';
+import {heightPercentage, width, widthPercentage} from '../../../utils';
 
 type OnScrollEventHandler = (
   event: NativeSyntheticEvent<NativeScrollEvent>,
@@ -29,67 +36,103 @@ interface ImageSliderProps {
   type?: string;
   data: any;
   onPress: () => void;
-  onUpdatePreference?: (props?: UpdateProfilePropsType) => void;
-  dataList?: MusicianList[];
+  onUpdateProfile?: (props?: UpdateProfilePropsType) => void;
   isLoading: boolean;
+  profile?: ProfileResponseType | undefined;
+  genres?: PreferenceList[];
+  setLastStepWizard?: (props: LastStepResponseType) => void;
+  infoStep?: GetStepResponseType;
+}
+
+export interface Step3Props {
+  imageProfileUrl: string;
+  username: string;
+  fullname: string;
+  bio: string;
+  favoriteGeneres: number[];
+}
+
+export interface Step3ErrorProps {
+  imageProfileUrl: boolean;
+  username: boolean;
+  fullname: boolean;
+  bio: boolean;
+  favoriteGeneres: boolean;
 }
 
 export const ImageSlider: React.FC<ImageSliderProps> = ({
   type,
   data,
   onPress,
-  onUpdatePreference,
+  onUpdateProfile,
+  profile,
   isLoading,
+  setLastStepWizard,
+  genres,
+  infoStep,
 }) => {
   const {t} = useTranslation();
   const scrollViewRef = useRef<ScrollView>(null);
-  const [selectedGenres, setSelectedGenres] = useState<number[]>([]);
-  const [selectedMoods, setSelectedMoods] = useState<number[]>([]);
+  const [selectedRole, setSelectedRole] = useState<number[]>([]);
   const [selectedExpectations, setSelectedExpectations] = useState<number[]>(
     [],
   );
   const [activeIndexSlide, setActiveIndexSlide] = useState<number>(0);
-  const [loadingSave, setLoadingSave] = useState(false);
-
-  const selectedData = [selectedGenres, selectedMoods, selectedExpectations];
+  const [stateProfile, setStateProfile] = useState<Step3Props>({
+    imageProfileUrl: '',
+    fullname: '',
+    username: '',
+    bio: '',
+    favoriteGeneres: [],
+  });
+  const [errorProfile, setErrorProfile] = useState<Step3ErrorProps>({
+    imageProfileUrl: false,
+    fullname: false,
+    username: false,
+    bio: false,
+    favoriteGeneres: false,
+  });
 
   const dataArray = [
     {
-      title: t('Preference.Genre'),
-      list: data.genre,
+      step: t('Preference.Step.Step1'),
+      title: t('Preference.Title.Title1'),
+      subtitle: t('Preference.Subtitle.Subtitle1'),
+      list: data.role,
     },
     {
-      title: t('Preference.Mood'),
-      list: data.mood,
+      step: t('Preference.Step.Step2'),
+      title: t('Preference.Title.Title2'),
+      subtitle: t('Preference.Subtitle.Subtitle2'),
+      list: [],
     },
     {
-      title: t('Preference.Support'),
+      step: t('Preference.Step.Step3'),
+      title: t('Preference.Title.Title3'),
+      subtitle: t('Preference.Subtitle.Subtitle3'),
+      list: [],
+    },
+    {
+      step: t('Preference.Step.Step4'),
+      title: t('Preference.Title.Title4'),
+      subtitle: t('Preference.Subtitle.Subtitle4'),
       list: data.expectation,
     },
   ];
 
-  const handleNextSlide = async () => {
-    if (activeIndexSlide === 2 && onUpdatePreference) {
-      setLoadingSave(true);
-      onUpdatePreference({
-        favoriteGeneres: selectedGenres,
-        moods: selectedMoods,
-        expectations: selectedExpectations,
+  useEffect(() => {
+    if (profile) {
+      setStateProfile({
+        ...stateProfile,
+        fullname: profile.data.fullname,
+        username: profile.data.username,
       });
     }
-    if (activeIndexSlide === 2) {
-      setTimeout(() => {
-        setLoadingSave(false);
-        const newIndex = activeIndexSlide + 1;
-        setActiveIndexSlide(newIndex);
-        scrollViewRef.current?.scrollTo({
-          x: width * newIndex,
-          y: 0,
-          animated: true,
-        });
-      }, 2000);
-    } else {
-      const newIndex = activeIndexSlide + 1;
+  }, [profile]);
+
+  useEffect(() => {
+    if (infoStep) {
+      const newIndex = infoStep.lastStep;
       setActiveIndexSlide(newIndex);
       scrollViewRef.current?.scrollTo({
         x: width * newIndex,
@@ -97,6 +140,24 @@ export const ImageSlider: React.FC<ImageSliderProps> = ({
         animated: true,
       });
     }
+  }, [infoStep]);
+
+  const handleNextSlide = async () => {
+    if (activeIndexSlide !== 1 && onUpdateProfile) {
+      onUpdateProfile({
+        ...stateProfile,
+        rolesInIndustry: selectedRole,
+        expectations: selectedExpectations,
+      });
+    }
+    const newIndex = activeIndexSlide + 1;
+    setActiveIndexSlide(newIndex);
+    setLastStepWizard && setLastStepWizard({lastStep: newIndex});
+    scrollViewRef.current?.scrollTo({
+      x: width * newIndex,
+      y: 0,
+      animated: true,
+    });
   };
 
   const onPressBack = () => {
@@ -118,10 +179,22 @@ export const ImageSlider: React.FC<ImageSliderProps> = ({
       : onPress;
   };
 
+  const lastOnPress = () => {
+    onPress();
+    if (onUpdateProfile) {
+      onUpdateProfile({
+        expectations: selectedExpectations,
+      });
+    }
+    if (setLastStepWizard) {
+      setLastStepWizard({lastStep: dataArray.length});
+    }
+  };
+
   const onPressNext =
     type === 'Preference'
       ? activeIndexSlide === dataArray.length - 1
-        ? onPress
+        ? lastOnPress
         : handleNextSlide
       : activeIndexSlide === data.length - 1
       ? onPress
@@ -133,7 +206,7 @@ export const ImageSlider: React.FC<ImageSliderProps> = ({
           height: '80%',
         }
       : {
-          height: '60%',
+          height: '65%',
         };
 
   return (
@@ -151,31 +224,40 @@ export const ImageSlider: React.FC<ImageSliderProps> = ({
           contentContainerStyle={[styles.containerScrollView, heightContent]}
           scrollEnabled={false}>
           {dataArray.map((item, index) => {
-            // TODO: render list of the favourites
-            const selected =
-              index === 0
-                ? selectedGenres
-                : index === 1
-                ? selectedMoods
-                : selectedExpectations;
-
+            const selected = index === 0 ? selectedRole : selectedExpectations;
             const setSelected =
-              index === 0
-                ? setSelectedGenres
-                : index === 1
-                ? setSelectedMoods
-                : setSelectedExpectations;
+              index === 0 ? setSelectedRole : setSelectedExpectations;
 
             return (
-              <View key={index} style={{paddingTop: heightPercentage(40)}}>
-                <Text style={[Typography.Heading4, styles.title]}>
-                  {item.title}
-                </Text>
-                <SelectBox
-                  selected={selected}
-                  setSelected={setSelected}
-                  data={item.list}
-                />
+              <View key={index}>
+                <TouchableOpacity
+                  style={styles.containerSkip}
+                  onPress={onPress}>
+                  <Text style={styles.textSkip}>{t('Btn.Skip')}</Text>
+                </TouchableOpacity>
+                <View style={styles.containerStep}>
+                  <Text style={styles.textStep}>{item.step}</Text>
+                  <Text style={[typography.Heading4, styles.title]}>
+                    {item.title}
+                  </Text>
+                  <Text style={styles.textSubtitle}>{item.subtitle}</Text>
+                  {index === 2 ? (
+                    <StepProfile
+                      genres={genres}
+                      stateProfile={stateProfile}
+                      setStateProfile={setStateProfile}
+                      errorProfile={errorProfile}
+                      setErrorProfile={setErrorProfile}
+                    />
+                  ) : (
+                    <SelectBox
+                      selected={selected}
+                      setSelected={setSelected}
+                      data={item.list}
+                      type={index === 0 ? 'single' : 'multiple'}
+                    />
+                  )}
+                </View>
               </View>
             );
           })}
@@ -212,9 +294,8 @@ export const ImageSlider: React.FC<ImageSliderProps> = ({
         onPressBack={onPressBack}
         onPressGoTo={onPress}
         onPressNext={onPressNext}
-        selectedData={selectedData}
       />
-      <ModalLoading visible={isLoading || loadingSave} />
+      <ModalLoading visible={isLoading} />
     </View>
   );
 };
@@ -222,15 +303,12 @@ export const ImageSlider: React.FC<ImageSliderProps> = ({
 const styles = StyleSheet.create({
   root: {
     flex: 1,
-    backgroundColor: Color.Dark[800],
+    backgroundColor: color.Dark[800],
     justifyContent: 'center',
     alignItems: 'center',
   },
   containerScrollView: {
-    justifyContent: 'center',
-    alignItems: 'center',
     height: '100%',
-    // marginBottom: heightPercentage(20)
   },
   image: {
     width,
@@ -238,7 +316,42 @@ const styles = StyleSheet.create({
   },
   title: {
     textAlign: 'center',
-    color: Color.Neutral[10],
-    marginBottom: heightPercentage(32),
+    color: color.Neutral[10],
+    marginVertical: mvs(10),
+  },
+  containerStep: {
+    paddingTop: heightPercentage(50),
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  containerSkip: {
+    position: 'absolute',
+    right: widthPercentage(30),
+    zIndex: 1,
+  },
+  textSkip: {
+    fontSize: mvs(14),
+    fontFamily: font.InterRegular,
+    fontWeight: '500',
+    lineHeight: mvs(17),
+    color: color.Success[400],
+  },
+  textStep: {
+    fontSize: mvs(12),
+    fontFamily: font.InterRegular,
+    fontWeight: '500',
+    lineHeight: mvs(14.5),
+    color: color.Neutral[10],
+    textAlign: 'center',
+  },
+  textSubtitle: {
+    fontSize: mvs(12),
+    fontFamily: font.InterRegular,
+    fontWeight: '500',
+    lineHeight: mvs(14.5),
+    color: '#788AA9',
+    textAlign: 'center',
+    maxWidth: width * 0.8,
+    marginBottom: mvs(30),
   },
 });

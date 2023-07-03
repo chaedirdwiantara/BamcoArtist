@@ -4,10 +4,12 @@ import {
   addPhotos,
   countLikedSong,
   deleteProfile,
+  getLastStep,
   getOtherUserProfile,
   getProfile,
   getTotalCount,
   removePhotos,
+  setLastStep,
   updateProfile,
   UpdateProfilePropsType,
 } from '../api/profile.api';
@@ -19,6 +21,8 @@ import {
   CollectPhotosProps,
   DataCountLiked,
   DataTotalCountPropsType,
+  GetStepResponseType,
+  LastStepResponseType,
   ProfileFansResponseType,
   ProfileResponseType,
 } from '../interface/profile.interface';
@@ -38,6 +42,7 @@ export const useProfileHook = () => {
   const [dataCountLiked, setCountLiked] = useState<DataCountLiked>();
   const [dataCountProfile, setDataCountProfile] =
     useState<DataTotalCountPropsType>();
+  const [infoStep, setInfoStep] = useState<GetStepResponseType>();
 
   const getProfileUser = async () => {
     setIsLoading(true);
@@ -204,6 +209,28 @@ export const useProfileHook = () => {
     }
   };
 
+  const getLastStepWizard = async () => {
+    setIsLoading(true);
+    try {
+      const response = await getLastStep();
+      setInfoStep(response.data);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const setLastStepWizard = async (props: LastStepResponseType) => {
+    try {
+      await setLastStep(props);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return {
     isLoading,
     isError,
@@ -215,6 +242,7 @@ export const useProfileHook = () => {
     dataUserCheck,
     dataCountLiked,
     dataCountProfile,
+    infoStep,
     setIsError,
     setDataUserCheck,
     getProfileUser,
@@ -228,5 +256,7 @@ export const useProfileHook = () => {
     getUserCountLikedSong,
     deleteValueProfile,
     getTotalCountProfile,
+    setLastStepWizard,
+    getLastStepWizard,
   };
 };

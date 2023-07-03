@@ -42,6 +42,7 @@ export const Otp: FC<OtpProps> = ({navigation, route}: OtpProps) => {
           index: 0,
           routes: [{name: 'Preference'}],
         });
+        storage.set('isPreference', true);
       } else if (loginResult === 'home') {
         navigation.reset({
           index: 0,

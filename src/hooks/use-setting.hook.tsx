@@ -17,6 +17,7 @@ import {
   updatePhoneNumber,
   verifPasswordSetting,
   listReason,
+  getListRole,
 } from '../api/setting.api';
 import {
   ChangePasswordProps,
@@ -25,6 +26,7 @@ import {
   EmailPhoneProps,
   EmailPhoneVerifProps,
   ListAllPreference,
+  ListAllStepWizard,
   ListReasonType,
   PreferenceList,
   PreferenceProps,
@@ -49,6 +51,10 @@ export const useSettingHook = () => {
   const [listPreference, setListPreference] = useState<ListAllPreference>({
     mood: [],
     genre: [],
+    expectation: [],
+  });
+  const [listStepWizard, setListStepWizard] = useState<ListAllStepWizard>({
+    role: [],
     expectation: [],
   });
   const [listReasonDelete, setListReasonDelete] = useState<ListReasonType[]>(
@@ -386,6 +392,21 @@ export const useSettingHook = () => {
     }
   };
 
+  const getListGenreSong = async () => {
+    setIsError(false);
+    setIsLoading(true);
+    try {
+      const genre = await getListGenre({perPage: 100});
+      setListGenre(genre.data);
+    } catch (error) {
+      console.log({error});
+      setListGenre([]);
+      setIsError(true);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const getListGenrePublic = async (props?: PreferenceProps) => {
     setIsError(false);
     setIsLoading(true);
@@ -414,6 +435,29 @@ export const useSettingHook = () => {
     }
   };
 
+  const getListStepWizard = async () => {
+    setIsError(false);
+    setIsLoading(true);
+    try {
+      const role = await getListRole({perPage: 100});
+      const expectation = await getListExpectations({perPage: 100});
+
+      setListStepWizard({
+        role: role.data,
+        expectation: expectation.data,
+      });
+    } catch (error) {
+      console.log({error});
+      setListStepWizard({
+        role: [],
+        expectation: [],
+      });
+      setIsError(true);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return {
     isLoading,
     isError,
@@ -427,6 +471,7 @@ export const useSettingHook = () => {
     listExpectation,
     listPreference,
     listReasonDelete,
+    listStepWizard,
     changeEmail,
     changePhoneNumber,
     getVerificationCode,
@@ -443,5 +488,7 @@ export const useSettingHook = () => {
     getListMoodPublic,
     getListGenrePublic,
     getListReasonDelete,
+    getListStepWizard,
+    getListGenreSong,
   };
 };

@@ -10,20 +10,22 @@ interface SelectBoxProps {
   setSelected: (value: number[]) => void;
   data: PreferenceList[];
   containerStyle?: ViewStyle;
+  type: 'single' | 'multiple';
 }
 
 export const SelectBox: React.FC<SelectBoxProps> = (props: SelectBoxProps) => {
-  const {selected, setSelected, data, containerStyle} = props;
+  const {selected, setSelected, data, containerStyle, type} = props;
 
   const onPressBox = (val: number, checkVal: boolean) => {
     let newArr = [...selected];
     const oldIndexValue = newArr.indexOf(val);
     if (checkVal) {
+      // uncheck selected value
       newArr.splice(oldIndexValue, 1);
       setSelected(newArr);
     } else {
-      if (selected?.length > 4) {
-        setSelected([...newArr.slice(1, 5), val]);
+      if (type === 'single') {
+        setSelected([val]);
       } else {
         setSelected([...newArr, val]);
       }

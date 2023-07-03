@@ -167,3 +167,27 @@ export type ProfileCountResponseType = {
   message: string;
   status: number;
 };
+
+export type LastStepResponseType = {
+  lastStep: number;
+};
+
+export type SetLastStepResponseType = {
+  code: number;
+  data: LastStepResponseType;
+  message: string;
+  status: number;
+};
+
+export type GetStepResponseType = {
+  lastStep: number;
+  stepProgress: string;
+  uncompleteList: string[];
+};
+
+export type GetLastStepResponseType = {
+  code: number;
+  data: GetStepResponseType;
+  message: string;
+  status: number;
+};
