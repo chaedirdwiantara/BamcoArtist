@@ -9,8 +9,12 @@ import {
   ListenerCountry,
   ListenerLikes,
   PopularAlbum,
+  SongDescEP,
+  SongListenerCountryEP,
+  SongListenerLikesEP,
   TopSongs,
   WhoListenEP,
+  WhoListenSongEP,
   fansActiveInteract,
   fansAnalytic,
   topFans,
@@ -213,6 +217,58 @@ export const useAnalyticsHook = () => {
     }
   };
 
+  const getWhoListenSong = async (props?: ParamsProps) => {
+    try {
+      const response = await WhoListenSongEP(props);
+      return {
+        data: response?.data,
+        meta: response?.meta,
+        message: response?.message,
+      };
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getSongListenerCountry = async (props?: ParamsProps) => {
+    try {
+      const response = await SongListenerCountryEP(props);
+      return {
+        data: response?.data,
+        meta: response?.meta,
+        message: response?.message,
+      };
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getSongListenerLikes = async (props?: ParamsProps) => {
+    try {
+      const response = await SongListenerLikesEP(props);
+      return {
+        data: response?.data,
+        meta: response?.meta,
+        message: response?.message,
+      };
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getSongDesc = async (props?: ParamsProps) => {
+    try {
+      const response = await SongDescEP(props);
+      return {
+        data: response?.data,
+        meta: response?.meta,
+        message: response?.message,
+      };
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return {
     getListDataFansAnalytic,
     getDataFansActiveInteract,
@@ -229,5 +285,9 @@ export const useAnalyticsHook = () => {
     getAlbumListenerCountry,
     getAlbumListenerLike,
     getAlbumSongs,
+    getWhoListenSong,
+    getSongListenerCountry,
+    getSongListenerLikes,
+    getSongDesc,
   };
 };

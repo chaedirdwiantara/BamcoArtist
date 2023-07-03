@@ -1,56 +1,64 @@
 import {FlatList, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
-import {useAnalyticsHook} from '../../../../hooks/use-analytics.hook';
-import {useTranslation} from 'react-i18next';
-import {useQuery} from 'react-query';
-import {EqualizerIcon} from '../../../../assets/icon';
 import {Gap} from '../../../../components';
 import {widthResponsive} from '../../../../utils';
-import {MerchListItem} from '../../../../data/merchList';
-import CountryCard from '../../../../components/molecule/CountryCard/CountryCard';
+import {useTranslation} from 'react-i18next';
+import {PlayPinkIcon} from '../../../../assets/icon';
+import {useQuery} from 'react-query';
+import {useAnalyticsHook} from '../../../../hooks/use-analytics.hook';
 import {color, font} from '../../../../theme';
 import {mvs} from 'react-native-size-matters';
+import MusiciansListCard from '../../../../components/molecule/ListCard/MusiciansListCard';
+import {MusicianListData} from '../../../../data/topMusician';
+import {useNavigation} from '@react-navigation/native';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {RootStackParams} from '../../../../navigations';
 
-const AlbumListenerCountry = () => {
-  const {getAlbumListenerCountry} = useAnalyticsHook();
+const SongListenerLike = () => {
+  const {getSongListenerLikes} = useAnalyticsHook();
   const {t} = useTranslation();
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParams>>();
 
   const {
-    data: listenerCountryData,
+    data: SongListenerLikeData,
     isLoading: queryDataLoading,
     isError,
     refetch,
-  } = useQuery('analytic-albumListenerCountry', () =>
-    getAlbumListenerCountry({}),
-  );
+  } = useQuery('analytic-SongListenerLike', () => getSongListenerLikes({}));
 
   return (
     <View style={styles.container}>
       {/* TITLE AREA */}
       <View style={styles.titleContainer}>
-        <EqualizerIcon />
+        <PlayPinkIcon />
         <Gap width={widthResponsive(10)} />
         <Text style={styles.title}>
-          {t('Home.Tab.Analytic.Album.MySong.ListenerCountry.Title')}
+          {t('Home.Tab.Analytic.Album.DetailSong.ListenerAlsoLike.Title')}
         </Text>
       </View>
-
       {/* BODY AREA */}
       <View>
         <FlatList
           showsVerticalScrollIndicator={false}
-          data={MerchListItem}
+          data={MusicianListData}
           renderItem={({item, index}) => (
             <View
               style={{
                 marginTop:
-                  index !== 0 ? widthResponsive(17) : widthResponsive(18),
+                  index !== 0 ? widthResponsive(12) : widthResponsive(20),
               }}>
-              <CountryCard
-                countryId={item.id}
-                flagUri={item.image}
-                name={item.owner}
-                value={item.price}
+              <MusiciansListCard
+                musicianNum={item.musicNum}
+                onPressMore={() => {}}
+                activeMore={false}
+                onPressImage={() =>
+                  navigation.navigate('OtherUserProfile', {id: item.uuid})
+                }
+                musicianName={item.fullname}
+                imgUri={item.imageProfileUrl}
+                containerStyles={{marginBottom: widthResponsive(12)}}
+                imageSize={36}
               />
             </View>
           )}
@@ -60,7 +68,7 @@ const AlbumListenerCountry = () => {
   );
 };
 
-export default AlbumListenerCountry;
+export default SongListenerLike;
 
 const styles = StyleSheet.create({
   container: {
@@ -76,11 +84,6 @@ const styles = StyleSheet.create({
     fontSize: mvs(18),
     color: color.Neutral[10],
   },
-  topArea: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
   dropdownContainer: {
     borderWidth: 1,
     borderColor: color.Dark[400],
@@ -92,12 +95,5 @@ const styles = StyleSheet.create({
     backgroundColor: color.Dark[800],
     borderWidth: 1,
     borderColor: color.Dark[400],
-  },
-  link: {
-    fontFamily: font.InterRegular,
-    fontSize: mvs(11),
-    fontWeight: '500',
-    color: color.Success[400],
-    lineHeight: mvs(28),
   },
 });

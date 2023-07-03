@@ -12,6 +12,9 @@ import {AlbumRow} from '../../../../components/molecule/SongDetailsContent/Album
 import {songs2} from '../../../../data/music2';
 import {useQuery} from 'react-query';
 import {useAnalyticsHook} from '../../../../hooks/use-analytics.hook';
+import {useNavigation} from '@react-navigation/native';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {RootStackParams} from '../../../../navigations';
 
 const Album = () => {
   const {t} = useTranslation();
@@ -33,6 +36,8 @@ const Album = () => {
           : '',
     }),
   );
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParams>>();
 
   const [selectedRange, setSelectedRange] = useState<DataDropDownType>({
     label: 'Home.Tab.Analytic.Album.Filter.Range.Alltime',
@@ -98,7 +103,7 @@ const Album = () => {
               streamAnalytics={item.stream}
               onPressMore={() => {}}
               containerStyles={{marginTop: mvs(20)}}
-              onPressCard={() => {}}
+              onPressCard={() => navigation.navigate('SongDetailAnalytic')}
               hideDropdownMore
             />
           )}

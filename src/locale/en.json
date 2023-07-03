@@ -300,6 +300,23 @@
             "ListenerAlsoLike":{
               "Title" : "Album Listener Also Like"
             }
+          },
+          "DetailSong":{
+            "Title" : "Song Details",
+            "Detail":{
+              "Musician":"Musician",
+              "Featuring":"Featuring",
+              "Desc":"Description"
+            },
+            "WhoListen":{
+              "Title" : "Who Listen To This Song"
+            },
+            "ListenerCountry":{
+              "Title" : "Song Listener Country"
+            },
+            "ListenerAlsoLike":{
+              "Title" : "Song Listener Also Like"
+            }
           }
         },
         "Explore": {

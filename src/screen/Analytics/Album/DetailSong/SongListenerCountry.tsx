@@ -1,5 +1,5 @@
 import {FlatList, StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import React, {useState} from 'react';
 import {useAnalyticsHook} from '../../../../hooks/use-analytics.hook';
 import {useTranslation} from 'react-i18next';
 import {useQuery} from 'react-query';
@@ -11,8 +11,8 @@ import CountryCard from '../../../../components/molecule/CountryCard/CountryCard
 import {color, font} from '../../../../theme';
 import {mvs} from 'react-native-size-matters';
 
-const AlbumListenerCountry = () => {
-  const {getAlbumListenerCountry} = useAnalyticsHook();
+const SongListenerCountry = () => {
+  const {getSongListenerCountry} = useAnalyticsHook();
   const {t} = useTranslation();
 
   const {
@@ -20,8 +20,8 @@ const AlbumListenerCountry = () => {
     isLoading: queryDataLoading,
     isError,
     refetch,
-  } = useQuery('analytic-albumListenerCountry', () =>
-    getAlbumListenerCountry({}),
+  } = useQuery('analytic-songListenerCountry', () =>
+    getSongListenerCountry({}),
   );
 
   return (
@@ -31,7 +31,7 @@ const AlbumListenerCountry = () => {
         <EqualizerIcon />
         <Gap width={widthResponsive(10)} />
         <Text style={styles.title}>
-          {t('Home.Tab.Analytic.Album.MySong.ListenerCountry.Title')}
+          {t('Home.Tab.Analytic.Album.DetailSong.ListenerCountry.Title')}
         </Text>
       </View>
 
@@ -60,7 +60,7 @@ const AlbumListenerCountry = () => {
   );
 };
 
-export default AlbumListenerCountry;
+export default SongListenerCountry;
 
 const styles = StyleSheet.create({
   container: {
