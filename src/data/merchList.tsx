@@ -49,7 +49,7 @@ export const MerchListItem: MerchListType[] = [
     desc: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit ut aliquam, purus sit amet luctus venenatis, lectus',
   },
   {
-    id: 4,
+    id: 5,
     title: 'Gray Shirt - 88Rising Edition',
     image:
       'https://upload.wikimedia.org/wikipedia/en/thumb/9/9e/Flag_of_Japan.svg/800px-Flag_of_Japan.svg.png',
@@ -58,7 +58,7 @@ export const MerchListItem: MerchListType[] = [
     desc: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit ut aliquam, purus sit amet luctus venenatis, lectus',
   },
   {
-    id: 4,
+    id: 6,
     title: 'Gray Shirt - 88Rising Edition',
     image:
       'https://cdn.britannica.com/49/1949-004-8818300C/Flag-South-Korea.jpg',
