@@ -48,7 +48,7 @@ const SongDescription = () => {
           onPress={() => {}}
           uuid={dataDetail.musicianUUID}
         />
-
+        <Gap height={8} />
         {dataDetail.featuring !== null && dataDetail.featuring.length !== 0 ? (
           <ListAvatar
             title={t('Music.Credit.Featuring')}
@@ -57,6 +57,7 @@ const SongDescription = () => {
             onPress={() => {}}
           />
         ) : null}
+        <Gap height={8} />
 
         <Text style={[typography.Subtitle1, styles.titleContent]}>
           {t('Music.Label.SongDesc')}
