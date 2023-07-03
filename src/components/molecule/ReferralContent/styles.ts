@@ -19,6 +19,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginBottom: heightPercentage(30),
   },
+  preTitle: {
+    maxWidth: width * 0.9,
+    color: Color.Neutral[10],
+    textAlign: 'center',
+    marginVertical: mvs(5),
+  },
   title: {
     color: Color.Neutral[10],
     maxWidth: width * 0.9,
