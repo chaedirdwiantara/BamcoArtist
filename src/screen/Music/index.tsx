@@ -46,7 +46,7 @@ export const MusicPlayer: FC<MusicProps> = ({navigation}: MusicProps) => {
   const {showMiniPlayerOnly} = usePlayerHook();
 
   useEffect(() => {
-    getCreditCount();
+    if (modalDonate) getCreditCount();
   }, [modalDonate]);
 
   const RenderSongs = (item: SongsProps, index: number) => {

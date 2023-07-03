@@ -57,7 +57,7 @@ const MusicianProfile: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   const [modalGuestVisible, setModalGuestVisible] = useState<boolean>(false);
 
   useEffect(() => {
-    getCreditCount();
+    if (modalDonate) getCreditCount();
   }, [modalDonate]);
 
   useEffect(() => {
