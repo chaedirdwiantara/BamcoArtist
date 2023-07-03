@@ -6,6 +6,7 @@ import {font} from '../../../theme';
 import {mvs} from 'react-native-size-matters';
 import {Gap} from '../../../components';
 import {ArrowUpIcon} from '../../../assets/icon';
+import {useTranslation} from 'react-i18next';
 
 interface BottomCardProps {
   type: 'tip' | 'subscription';
@@ -58,6 +59,7 @@ const Percentage = (props: PercentageProps) => {
 };
 
 const BottomCard = (props: BottomCardProps) => {
+  const {t} = useTranslation();
   const {
     type,
     numberAvg,
@@ -84,14 +86,30 @@ const BottomCard = (props: BottomCardProps) => {
       <Gap height={heightResponsive(12)} />
       <View style={styles.titleContainer}>
         <Percentage
-          desc={descAvg}
+          desc={t('Home.Tab.Analytic.Income.BottomCard.Avg', {
+            range: t(
+              descAvg === '1'
+                ? 'Home.Tab.Analytic.Income.Filter.Range.Monthly'
+                : descAvg === '2'
+                ? 'Home.Tab.Analytic.Income.Filter.Range.Weekly'
+                : 'Home.Tab.Analytic.Income.Filter.Range.Daily',
+            ),
+          })}
           number={numberAvg}
           numberDiffs={numberDiffsAvg}
           progress={progressAvg}
         />
         <Gap width={widthResponsive(25)} />
         <Percentage
-          desc={descEarned}
+          desc={t('Home.Tab.Analytic.Income.BottomCard.Earned', {
+            range: t(
+              descEarned === '1'
+                ? 'Home.Tab.Analytic.Income.Filter.Range.Month'
+                : descEarned === '2'
+                ? 'Home.Tab.Analytic.Income.Filter.Range.Week'
+                : 'Home.Tab.Analytic.Income.Filter.Range.Today',
+            ),
+          })}
           number={numberEarned}
           numberDiffs={numberDiffsEarned}
           progress={progressEarned}

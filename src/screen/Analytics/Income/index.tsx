@@ -21,6 +21,11 @@ import {storage} from '../../../hooks/use-storage.hook';
 import BottomCard from './BottomCard';
 import {BarChart} from 'react-native-gifted-charts';
 
+interface DataChart {
+  value: number;
+  label?: String;
+}
+
 const Income = () => {
   const {t} = useTranslation();
   const lang = storage.getString('lang');
@@ -38,52 +43,64 @@ const Income = () => {
     {
       value: 40,
       label: 'Jan',
-      spacing: 4,
-      labelWidth: 30,
-      frontColor: '#7EF6AB',
     },
-    {value: 20, frontColor: '#F67DEB'},
+    {value: 20},
+
     {
       value: 50,
       label: 'Feb',
-      spacing: 4,
-      labelWidth: 30,
-      frontColor: '#7EF6AB',
     },
-    {value: 40, frontColor: '#F67DEB'},
+    {value: 40},
     {
       value: 75,
       label: 'Mar',
-      spacing: 4,
-      labelWidth: 30,
-      frontColor: '#7EF6AB',
     },
-    {value: 25, frontColor: '#F67DEB'},
+    {value: 25},
     {
       value: 30,
       label: 'Apr',
-      spacing: 4,
-      labelWidth: 30,
-      frontColor: '#7EF6AB',
     },
-    {value: 20, frontColor: '#F67DEB'},
+    {value: 20},
     {
       value: 60,
       label: 'May',
-      spacing: 4,
-      labelWidth: 30,
-      frontColor: '#7EF6AB',
     },
-    {value: 40, frontColor: '#F67DEB'},
+    {value: 40},
     {
       value: 65,
       label: 'Jun',
-      spacing: 4,
-      labelWidth: 30,
-      frontColor: '#7EF6AB',
     },
-    {value: 30, frontColor: '#F67DEB'},
+    {value: 30},
   ];
+
+  const filterBarData = (data: DataChart[]) => {
+    return data.map((v: DataChart, i: number) => {
+      if (selectedType.value === '1') {
+        if (i === 0 || i % 2 === 0) {
+          return {
+            ...v,
+            spacing: 4,
+            frontColor: '#7EF6AB',
+          };
+        } else {
+          return {
+            ...v,
+            frontColor: '#F67DEB',
+          };
+        }
+      } else if (selectedType.value === '2') {
+        return {
+          ...v,
+          frontColor: '#7EF6AB',
+        };
+      } else {
+        return {
+          ...v,
+          frontColor: '#F67DEB',
+        };
+      }
+    });
+  };
 
   return (
     <>
@@ -115,7 +132,7 @@ const Income = () => {
             {t('Home.Tab.Analytic.Income.Main.Title')}
           </Text>
         </View>
-        <View style={{flexDirection: 'row'}}>
+        <View style={{flexDirection: 'row', zIndex: 100}}>
           <DropDownFilter
             labelCaption={t(selectedType.label)}
             dataFilter={dropDownIncomeType}
@@ -145,9 +162,23 @@ const Income = () => {
           />
         </View>
 
-        <View style={{marginBottom: heightResponsive(36)}}>
+        <Gap height={8} />
+        <Text style={styles.desc}>
+          {selectedRange.value === '1'
+            ? 'Last 6 months'
+            : selectedRange.value === '2'
+            ? 'Last 4 weeks'
+            : 'Last 7 days'}
+        </Text>
+        <Gap height={4} />
+
+        <View
+          style={{
+            marginBottom: heightResponsive(36),
+            marginLeft: widthResponsive(-8),
+          }}>
           <BarChart
-            data={barData}
+            data={filterBarData(barData)}
             barWidth={8}
             spacing={widthResponsive(30)}
             roundedTop
@@ -167,6 +198,7 @@ const Income = () => {
             rulesColor={Color.Dark[300]}
             rulesType="dash"
             rulesLength={widthResponsive(265)}
+            labelWidth={30}
           />
         </View>
 
@@ -176,32 +208,24 @@ const Income = () => {
           <BottomCard
             type="tip"
             numberAvg={'8,500'}
-            descAvg={t('Home.Tab.Analytic.Income.BottomCard.Avg', {
-              range: t(selectedType.label),
-            })}
+            descAvg={selectedRange.value}
             numberDiffsAvg={'5%'}
             progressAvg={'improve'}
             numberEarned={'8,300'}
             numberDiffsEarned={'2%'}
             progressEarned={'regression'}
-            descEarned={t('Home.Tab.Analytic.Income.BottomCard.Earned', {
-              range: t(selectedType.label),
-            })}
+            descEarned={selectedRange.value}
           />
           <BottomCard
             type="subscription"
             numberAvg={'8,500'}
-            descAvg={t('Home.Tab.Analytic.Income.BottomCard.Avg', {
-              range: t(selectedType.label),
-            })}
+            descAvg={selectedRange.value}
             numberDiffsAvg={'5%'}
             progressAvg={'improve'}
             numberEarned={'8,300'}
             numberDiffsEarned={'2%'}
             progressEarned={'regression'}
-            descEarned={t('Home.Tab.Analytic.Income.BottomCard.Earned', {
-              range: t(selectedType.label),
-            })}
+            descEarned={selectedRange.value}
           />
         </View>
       </View>
@@ -256,5 +280,11 @@ const styles = StyleSheet.create({
     backgroundColor: Color.Dark[800],
     borderWidth: 1,
     borderColor: color.Dark[400],
+  },
+  desc: {
+    fontFamily: font.InterRegular,
+    fontWeight: '500',
+    fontSize: mvs(9),
+    color: color.Neutral[10],
   },
 });
