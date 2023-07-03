@@ -23,7 +23,7 @@ const Typography = {
   },
   Heading4: {
     fontFamily: Font.InterSemiBold,
-    fontSize: normalize(20),
+    fontSize: mvs(20),
     lineHeight: mvs(28),
     letterSpacing: 0.25,
   },

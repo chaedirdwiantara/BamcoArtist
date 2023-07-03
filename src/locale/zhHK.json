@@ -132,7 +132,25 @@
     "Support": "我是來這裡...",
     "Musician": "Who To Follow",
     "Follow": "追蹤",
-    "Following": "正在追蹤"
+    "Following": "正在追蹤",
+    "Step": {
+      "Step1": "Step 1 of 4",
+      "Step2": "Step 2 of 4",
+      "Step3": "Step 3 of 4",
+      "Step4": "Step 4 of 4"
+    },
+    "Title": {
+      "Title1": "My role in music industry",
+      "Title2": "Scan QR Code to Earn Bonuses!",
+      "Title3": "What should we call you?",
+      "Title4": "What do you want to?"
+    },
+    "Subtitle": {
+      "Subtitle1": "This is to identified how you want to be known as and how the fans will interact with you.",
+      "Subtitle2": "Scan referral code by pressing scan now button, to earn some free stuff and bonuses",
+      "Subtitle3": "This is how others see you. You can use alphanumeric and number",
+      "Subtitle4": "Tell us about your expectation, we will try to make a better experience to fit your needs"
+    }
   },
   "Home": {
     "Topbar": {
@@ -528,7 +546,9 @@
       },
       "Placeholder": {
         "Username": "Add Username",
+        "UsernameStep": "I want to be known as @username",
         "Fullname": "Add Musician Name",
+        "FullnameStep": "You can call me",
         "Genre": "Select Genre",
         "Location": "Select Location",
         "Country": "Select Country",
@@ -536,6 +556,10 @@
         "Member": "Add Member",
         "Active": "Select Year",
         "Label": "Add Label Name"
+      },
+      "Error": {
+        "Fullname": "Fullname allowed 3 to 50 character",
+        "Username": "Username should be between 3 to 30 alphanumeric characters"
       }
     },
     "Security": {

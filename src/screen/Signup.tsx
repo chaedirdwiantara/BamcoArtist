@@ -151,6 +151,7 @@ export const SignupScreen: React.FC = () => {
           index: 0,
           routes: [{name: 'Preference'}],
         });
+        storage.set('isPreference', true);
       } else {
         if (watch('registrationType') === 'email') {
           navigation.replace('Otp', {
@@ -245,6 +246,7 @@ export const SignupScreen: React.FC = () => {
           index: 0,
           routes: [{name: 'Preference'}],
         });
+        storage.set('isPreference', true);
       } else {
         navigation.reset({
           index: 0,

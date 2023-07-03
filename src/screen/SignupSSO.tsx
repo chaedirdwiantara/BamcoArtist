@@ -109,6 +109,7 @@ export const SignupSSOScreen: React.FC<RegisterProps> = ({
         index: 0,
         routes: [{name: 'Preference'}],
       });
+      storage.set('isPreference', true);
     } else if (!isLoading && isError !== null) {
       setError('termsCondition', {
         type: 'value',

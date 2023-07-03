@@ -8,19 +8,26 @@ import {heightPercentage, width, widthPercentage} from '../../../utils';
 interface TransactionCardProps {
   title: string;
   date: string;
+  from?: string;
   containerStyle?: ViewStyle;
 }
 
 export const TransactionCard: React.FC<TransactionCardProps> = ({
   title,
   date,
+  from,
   containerStyle,
 }) => {
   return (
     <View style={[styles.root, containerStyle]}>
-      <Text style={[typography.Button2, {color: color.Neutral[10]}]}>
-        {title}
-      </Text>
+      <View style={styles.containerTitle}>
+        <Text style={[typography.Button2, {color: color.Neutral[10]}]}>
+          {title}
+        </Text>
+        <Text style={[typography.Button2, {color: color.Pink[2]}]}>
+          {' ' + from}
+        </Text>
+      </View>
       <Gap height={heightPercentage(2)} />
       <Text style={[typography.Overline, {color: color.Success[400]}]}>
         {date}
@@ -37,6 +44,10 @@ const styles = StyleSheet.create({
     borderColor: color.Dark[500],
     paddingHorizontal: widthPercentage(20),
     paddingVertical: heightPercentage(15),
-    marginTop: heightPercentage(20),
+    marginTop: heightPercentage(10),
+  },
+  containerTitle: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
 });
