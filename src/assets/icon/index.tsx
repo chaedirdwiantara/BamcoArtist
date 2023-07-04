@@ -5,10 +5,16 @@ import ArrowLeftIcon from './ArrowLeft.icon';
 import ArrowRightIcon from './ArrowRight.icon';
 import ArrowRightIcon2 from './ArrowRight2.icon';
 import ArrowUpIcon from './ArrowUp.icon';
+import ArrowUpGreenIcon from './ArrowUpGreen.icon';
+import ArrowDownIcon from './ArrowDown.icon';
 import AudioMusic from './AudioMusic.icon';
 import BellNotif from './BellNotif.icon';
+import BlitzIcon from './Blitz.icon';
 import CameraIcon from './Camera';
 import CancelCreatePostIcon from './CancelCreatePost.icon';
+import ChatIcon from './Chat.icon';
+import ChartIcon from './Chart.icon';
+import ChartPieIcon from './ChartPie.icon';
 import CheckBoxIcon from './CheckBox.icon';
 import CheckCircleIcon from './CheckCircle.icon';
 import CheckCircle2Icon from './CheckCircle2.icon';
@@ -36,6 +42,7 @@ import {DefaultImage} from './DefaultImage.icon';
 import DonateCoinIcon from './DonateCoin.icon';
 import EditIcon from './Edit.icon';
 import EmailIcon from './Email.icon';
+import EqualizerIcon from './Equalizer.icon';
 import ErrorIcon from './Error.icon';
 import ExportIcon from './Export.icon';
 import ExportMusicIcon from './ExportMusic.icon';
@@ -58,6 +65,7 @@ import HornChatIcon from './hornChat.icon';
 import InfoCircleIcon from './InfoCircle.icon';
 import InfoCircle2Icon from './InfoCircle2.icon';
 import InstagramIcon from './Instagram.icon';
+import PlayPinkIcon from './PlayPink.icon';
 import ImportPhotoIcon from './ImportPhoto.icon';
 import ImportMusicIcon from './importMusic.icon';
 import KeyIcon from './Key.icon';
@@ -70,6 +78,8 @@ import MinusCircleIcon from './MinusCircle.icon';
 import MusicPlaylistIcon from './MusicPlaylist.icon';
 import MusicSquareIcon from './MusicSquare.icon';
 import MusicSquareAddIcon from './MusicSquareAdd.icon';
+import MusicPinkIcon from './MusicPink.icon';
+import MusicPink2Icon from './MusicPink2.icon';
 import NextIcon from './Next.icon';
 import NotificationIcon from './Notification.icon';
 import NormalScreenIcon from './NormalScreen.icon';
@@ -81,6 +91,7 @@ import PauseIcon2 from './Pause2.icon';
 import PauseVideoIcon from './PauseVideo.icon';
 import PlayIcon from './Play.icon';
 import PlayIcon2 from './Play2.icon';
+import PlayIcon3 from './PlayRadius.icon';
 import PlayVideoIcon from './PlayVideo.icon';
 import PreviousIcon from './Previous.icon';
 import ProcessingIcon from './Processing.icon';
@@ -115,6 +126,8 @@ import LocationIcon from './Location.icon';
 import TruckIcon from './Truck.icon';
 import BagTickIcon from './BagTick.icon';
 import StarIcon from './BagTick.icon';
+import {NormalCreditCard, PosCreditCard} from './CreditCard';
+import DollarSign from './DollarSign';
 
 export {
   AddIcon,
@@ -124,10 +137,16 @@ export {
   ArrowRightIcon,
   ArrowRightIcon2,
   ArrowUpIcon,
+  ArrowUpGreenIcon,
+  ArrowDownIcon,
   AudioMusic,
   BellNotif,
+  BlitzIcon,
   CameraIcon,
   CancelCreatePostIcon,
+  ChatIcon,
+  ChartIcon,
+  ChartPieIcon,
   CheckBoxIcon,
   CheckGradientIcon,
   CheckCircleIcon,
@@ -155,6 +174,7 @@ export {
   DonateCoinIcon,
   EditIcon,
   EmailIcon,
+  EqualizerIcon,
   ErrorIcon,
   ExportIcon,
   ExportMusicIcon,
@@ -189,6 +209,8 @@ export {
   MusicPlaylistIcon,
   MusicSquareIcon,
   MusicSquareAddIcon,
+  MusicPinkIcon,
+  MusicPink2Icon,
   NextIcon,
   NotificationIcon,
   NormalScreenIcon,
@@ -198,6 +220,8 @@ export {
   PauseVideoIcon,
   PlayIcon,
   PlayIcon2,
+  PlayIcon3,
+  PlayPinkIcon,
   PlayVideoIcon,
   PreviousIcon,
   ProcessingIcon,
@@ -234,4 +258,7 @@ export {
   TruckIcon,
   BagTickIcon,
   StarIcon,
+  NormalCreditCard,
+  PosCreditCard,
+  DollarSign,
 };

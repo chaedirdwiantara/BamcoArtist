@@ -223,16 +223,130 @@
       },
       "Analytic": {
         "Income": {
-          "Title": "Income"
+          "Title": "Income",
+          "TopCard": {
+            "Tip": "Tip Earned",
+            "Subs": "Subs Earned"
+          },
+          "BottomCard": {
+            "Avg": "Avg {{range}} earn",
+            "Earned": "Earned this {{range}}"
+          },
+          "Main": {
+            "Title": "My Income"
+          },
+          "Filter": {
+            "Type": {
+              "All": "All Income",
+              "Tip": "Tip",
+              "Subs": "Subscription"
+            },
+            "Range": {
+              "Monthly": "Monthly",
+              "Weekly": "Weekly",
+              "Daily": "Daily",
+              "Month": "Month",
+              "Week": "Week",
+              "Today": "Today"
+            }
+          }
         },
         "Fans": {
-          "Title": "Fans"
+          "Title": "Fans",
+          "Main": {
+            "Title": "Fans Growth"
+          },
+          "Filter": {
+            "Range": {
+              "Monthly": "Monthly",
+              "Weekly": "Weekly",
+              "Daily": "Daily"
+            }
+          },
+          "Growth": {
+            "BeFan": "Followers be a fans!",
+            "FansEarn": "Fans earned weekly"
+          },
+          "FansInteract": "Fans actively interact with you",
+          "TopFans": {
+            "Title": "Your Top Fans",
+            "Link": "View All",
+            "FullScreen": "Your Fans"
+          },
+          "FansAge": {
+            "Title": "Fans Age"
+          },
+          "FansGender": {
+            "Title": "Fans Gender"
+          },
+          "FansCountry": {
+            "Title": "Your Fans Country"
+          }
         },
         "Post": {
           "Title": "Post"
         },
         "Album": {
-          "Title": "Album"
+          "Title": "Album",
+          "Filter": {
+            "Range": {
+              "Alltime": "All Time",
+              "Monthly": "Monthly",
+              "Weekly": "Weekly",
+              "Daily": "Daily"
+            }
+          },
+          "Listeners": {
+            "Title": "Your Active Listener",
+            "Growth": {
+              "FanStream": "Fans streams your song monthly!",
+              "AvgListener": "Avg listener streamed monthly"
+            }
+          },
+          "PopularAlbum": {
+            "Title": "Popular Album"
+          },
+          "TopSongs": {
+            "Title": "Your Top Song"
+          },
+          "Listener": {
+            "Title": "Listener Country"
+          },
+          "ListenerLikes": {
+            "Title": "Listener Also Like"
+          },
+          "MySong": {
+            "Title": "My Song",
+            "Album": {
+              "Title": "Album"
+            },
+            "WhoListen": {
+              "Title": "Who Listen To This Album"
+            },
+            "ListenerCountry": {
+              "Title": "Album Listener Country"
+            },
+            "ListenerAlsoLike": {
+              "Title": "Album Listener Also Like"
+            }
+          },
+          "DetailSong": {
+            "Title": "Song Details",
+            "Detail": {
+              "Musician": "Musician",
+              "Featuring": "Featuring",
+              "Desc": "Description"
+            },
+            "WhoListen": {
+              "Title": "Who Listen To This Song"
+            },
+            "ListenerCountry": {
+              "Title": "Song Listener Country"
+            },
+            "ListenerAlsoLike": {
+              "Title": "Song Listener Also Like"
+            }
+          }
         },
         "Explore": {
           "Title": "Explore"
@@ -876,7 +990,7 @@
       "TransactionStatus": "Transaction Status",
       "Notes": "Notes"
     },
-    "EmptyState" : {
+    "EmptyState": {
       "Transaction": "The transaction list will be displayed here, but as of now, no transactions have been made.",
       "Withdrawal": "There are no transactions to display at the moment regarding withdrawals."
     }
@@ -913,7 +1027,7 @@
         "NameOfAccountHolder": "Name of Account Holder",
         "BeneficiaryName": "Beneficiary Name",
         "BeneficiaryAddress": "Beneficiary Address",
-        "UploadPhotos" :"Upload Photos of National ID or Passport"
+        "UploadPhotos": "Upload Photos of National ID or Passport"
       },
       "Placeholder": {
         "Country": "Select Country",
@@ -930,7 +1044,7 @@
     "EditBankAccount": {
       "Title": "Edit Account"
     },
-    "VerifCode":  {
+    "VerifCode": {
       "VerificationCode": "Verification Code",
       "VerificationText": "We have sent you six digits verification code on address {{email}} check your inbox and enter verification code here"
     }

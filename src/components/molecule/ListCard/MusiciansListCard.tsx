@@ -33,6 +33,7 @@ export interface ListProps {
   followersCount?: number;
   activeMore?: boolean;
   self?: boolean;
+  imageSize?: number;
 }
 
 const MusiciansListCard: React.FC<ListProps> = (props: ListProps) => {
@@ -50,6 +51,7 @@ const MusiciansListCard: React.FC<ListProps> = (props: ListProps) => {
     followerMode,
     activeMore = true,
     self,
+    imageSize,
   } = props;
 
   // ? Dropdown Menu Example
@@ -86,7 +88,10 @@ const MusiciansListCard: React.FC<ListProps> = (props: ListProps) => {
       </Text>
       <TouchableOpacity onPress={useDebounce(onPressImage)}>
         {imgUri ? (
-          <Avatar imgUri={imgUri} size={widthPercentage(44)} />
+          <Avatar
+            imgUri={imgUri}
+            size={imageSize ? widthResponsive(imageSize) : widthPercentage(44)}
+          />
         ) : (
           <DefaultAvatar.MusicianIcon />
         )}

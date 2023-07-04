@@ -1,3 +1,4 @@
+import 'react-native-reanimated';
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {AppProvider} from './context/app.context';
