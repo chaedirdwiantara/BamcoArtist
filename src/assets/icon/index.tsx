@@ -56,6 +56,7 @@ import HeartIcon from './Heart.icon';
 import HomeIcon from './Home.icon';
 import HornChatIcon from './hornChat.icon';
 import InfoCircleIcon from './InfoCircle.icon';
+import InfoCircle2Icon from './InfoCircle2.icon';
 import InstagramIcon from './Instagram.icon';
 import ImportPhotoIcon from './ImportPhoto.icon';
 import ImportMusicIcon from './importMusic.icon';
@@ -94,6 +95,7 @@ import SoundIcon from './Sound.icon';
 import ThreeDotsIcon from './ThreeDots.icon';
 import TickCircleIcon from './TickCircle.icon';
 import TiktokIcon from './Tiktok.icon';
+import TooltipIcon from './Tooltip.icon';
 import TrashIcon from './Trash.icon';
 import TwitterIcon from './Twitter.icon';
 import UserIcon from './User.icon';
@@ -173,6 +175,7 @@ export {
   HomeIcon,
   HornChatIcon,
   InfoCircleIcon,
+  InfoCircle2Icon,
   InstagramIcon,
   ImportMusicIcon,
   ImportPhotoIcon,
@@ -211,6 +214,7 @@ export {
   ThreeDotsIcon,
   TickCircleIcon,
   TiktokIcon,
+  TooltipIcon,
   TrashIcon,
   TwitterIcon,
   UserIcon,
