@@ -12,5 +12,11 @@ export interface Chart {
   fansEarnCompare: string;
   fansEarnProgress: 'improve' | 'regression' | 'same';
   description: String;
-  data: DataChart[] | undefined;
+  data: DataChart[];
 }
+
+export type ChartResponseType = {
+  data: Chart;
+  message: string;
+  status: number;
+};

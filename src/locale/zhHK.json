@@ -273,7 +273,13 @@
           }
         },
         "Post": {
-          "Title": "郵政"
+          "Title": "郵政",
+          "Popular":{
+            "Title" : "Popular Post"
+          },
+          "Engagement": {
+            "Title" : "Post Engagement Rate"
+          }
         },
         "Album": {
           "Title": "專輯",

@@ -1,12 +1,13 @@
 import SsuAPI from './baseRinjani';
 import {ListPostResponseType} from '../interface/feed.interface';
 import {ParamsProps} from '../interface/base.interface';
+import {ChartResponseType} from '../interface/analythic.interface';
 
 // => List Post Area
 export const fansAnalytic = async (
   props?: ParamsProps,
-): Promise<ListPostResponseType> => {
-  const {data} = await SsuAPI().request<ListPostResponseType>({
+): Promise<ChartResponseType> => {
+  const {data} = await SsuAPI().request<ChartResponseType>({
     url: `/musician-app/fans-growth/${props?.interval}`,
     method: 'GET',
   });
@@ -219,6 +220,18 @@ export const SongListenerLikesEP = async (
 };
 
 export const SongDescEP = async (
+  props?: ParamsProps,
+): Promise<ListPostResponseType> => {
+  const {data} = await SsuAPI().request<ListPostResponseType>({
+    url: '/musician-app/post/public',
+    method: 'GET',
+    params: props,
+  });
+
+  return data;
+};
+
+export const PostEngagementEP = async (
   props?: ParamsProps,
 ): Promise<ListPostResponseType> => {
   const {data} = await SsuAPI().request<ListPostResponseType>({

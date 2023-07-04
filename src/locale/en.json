@@ -273,7 +273,13 @@
           }
         },
         "Post": {
-          "Title": "Post"
+          "Title": "Post",
+          "Popular":{
+            "Title" : "Popular Post"
+          },
+          "Engagement": {
+            "Title" : "Post Engagement Rate"
+          }
         },
         "Album": {
           "Title": "Album",

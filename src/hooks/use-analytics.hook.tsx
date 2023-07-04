@@ -9,6 +9,7 @@ import {
   ListenerCountry,
   ListenerLikes,
   PopularAlbum,
+  PostEngagementEP,
   SongDescEP,
   SongListenerCountryEP,
   SongListenerLikesEP,
@@ -27,8 +28,6 @@ export const useAnalyticsHook = () => {
       const response = await fansAnalytic(props);
       return {
         data: response?.data,
-        meta: response?.meta,
-        message: response?.message,
       };
     } catch (error) {
       console.log(error);
@@ -269,6 +268,19 @@ export const useAnalyticsHook = () => {
     }
   };
 
+  const getPostEngagement = async (props?: ParamsProps) => {
+    try {
+      const response = await PostEngagementEP(props);
+      return {
+        data: response?.data,
+        meta: response?.meta,
+        message: response?.message,
+      };
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return {
     getListDataFansAnalytic,
     getDataFansActiveInteract,
@@ -289,5 +301,6 @@ export const useAnalyticsHook = () => {
     getSongListenerCountry,
     getSongListenerLikes,
     getSongDesc,
+    getPostEngagement,
   };
 };
