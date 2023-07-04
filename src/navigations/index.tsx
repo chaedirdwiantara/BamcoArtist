@@ -43,6 +43,7 @@ import {HomeScreen} from '../screen/Home';
 import {ListImageScreen} from '../screen/ListItem/ListImage';
 import {ListMusicScreen} from '../screen/ListItem/ListMusic';
 import {ListPostScreen} from '../screen/ListItem/ListPost';
+import {ProfileProgressScreen} from '../screen/ProfileProgress';
 
 // Setting
 import {SettingScreen} from '../screen/Setting/Setting';
@@ -118,7 +119,6 @@ import {MerchListType} from '../data/merchList';
 import {SignupSSOScreen} from '../screen/SignupSSO';
 import {
   ProfileResponseData,
-  ProfileResponseType,
   RegistrationType,
 } from '../interface/profile.interface';
 
@@ -143,9 +143,7 @@ import ListPlaylist from '../screen/Playlist/ListPlaylist';
 
 export type RootStackParams = {
   AboutDeletion: undefined;
-  Account: {
-    data: ProfileResponseType;
-  };
+  Account: ProfileResponseData;
   AddToPlaylist: {id: number[]; type?: string; fromMainTab?: boolean};
   AddSong: Playlist;
   AddPreview: ListDataSearchSongs;
@@ -228,6 +226,7 @@ export type RootStackParams = {
   };
   Preference: undefined;
   PreferenceSetting: undefined;
+  ProfileProgress: undefined;
   PushNotification: undefined;
   RecoverAccount: undefined;
   Referral: undefined;
@@ -503,7 +502,10 @@ export const RootStackScreen = () => (
       name="VerifCodeWithdrawal"
       component={VerifCodeWithdrawalScreen}
     />
-
+    <RootStack.Screen
+      name="ProfileProgress"
+      component={ProfileProgressScreen}
+    />
     <RootStack.Screen name="MerchDetail" component={MerchDetail} />
     <RootStack.Screen name="ConcertDetail" component={ConcertDetail} />
     <RootStack.Screen name="CreatePost" component={CreatePost} />
