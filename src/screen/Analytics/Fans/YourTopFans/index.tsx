@@ -1,6 +1,6 @@
 import {FlatList, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React from 'react';
-import {Gap} from '../../../../components';
+import {EmptyStateAnalytic, Gap} from '../../../../components';
 import {widthResponsive} from '../../../../utils';
 import {color, font} from '../../../../theme';
 import {mvs} from 'react-native-size-matters';
@@ -71,10 +71,9 @@ const YourTopFans = () => {
           )}
         />
       ) : (
-        <Text style={styles.emptyState}>
-          Oops! We couldn't find any Top fans for you.Post some story or release
-          album to make your own cult!
-        </Text>
+        <EmptyStateAnalytic
+          caption={t('Home.Tab.Analytic.Fans.TopFans.EmptyState')}
+        />
       )}
     </View>
   );
@@ -110,13 +109,5 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     color: color.Success[400],
     lineHeight: mvs(28),
-  },
-  emptyState: {
-    fontFamily: font.InterRegular,
-    fontSize: mvs(12),
-    fontWeight: '400',
-    color: color.Neutral[10],
-    lineHeight: mvs(14.52),
-    textAlign: 'center',
   },
 });

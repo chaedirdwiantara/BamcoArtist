@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {FlatList, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import {widthResponsive} from '../../../../utils';
 import {color, font} from '../../../../theme';
@@ -14,14 +14,13 @@ const FansAge = () => {
   const {t} = useTranslation();
   const {getFansAgeAnalytic} = useAnalyticsHook();
   const {
-    data: fansAgeData,
+    data: ageData,
     isLoading: queryDataLoading,
     isError,
     refetch,
   } = useQuery('fans-fansAge', () =>
     getFansAgeAnalytic({
-      page: 1,
-      perPage: 5,
+      filterBy: 'age',
     }),
   );
   return (
@@ -35,10 +34,22 @@ const FansAge = () => {
         </Text>
       </View>
       <Gap height={16} />
-      <Diagram value={24} caption="<18" />
-      <Diagram value={26} caption="18-22" />
-      <Diagram value={30} caption="23-27" />
-      <Diagram value={20} caption="28-34" />
+      {ageData?.data ? (
+        <FlatList
+          showsVerticalScrollIndicator={false}
+          data={ageData?.data}
+          renderItem={({item, index}) => (
+            <Diagram value={item.percentage} caption={item.label} />
+          )}
+        />
+      ) : (
+        <>
+          <Diagram value={0} caption="<18" />
+          <Diagram value={0} caption="18-22" />
+          <Diagram value={0} caption="23-27" />
+          <Diagram value={0} caption="28-34" />
+        </>
+      )}
     </View>
   );
 };

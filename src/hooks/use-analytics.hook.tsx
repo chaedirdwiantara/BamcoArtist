@@ -34,12 +34,11 @@ export const useAnalyticsHook = () => {
     }
   };
 
-  const getDataFansActiveInteract = async (props?: ParamsProps) => {
+  const getDataFansActiveInteract = async () => {
     try {
-      const response = await fansActiveInteract(props);
+      const response = await fansActiveInteract();
       return {
         data: response?.data,
-        meta: response?.meta,
         message: response?.message,
       };
     } catch (error) {
@@ -65,7 +64,6 @@ export const useAnalyticsHook = () => {
       const response = await FansAge(props);
       return {
         data: response?.data,
-        meta: response?.meta,
         message: response?.message,
       };
     } catch (error) {
@@ -78,7 +76,6 @@ export const useAnalyticsHook = () => {
       const response = await FansGender(props);
       return {
         data: response?.data,
-        meta: response?.meta,
         message: response?.message,
       };
     } catch (error) {
@@ -91,7 +88,6 @@ export const useAnalyticsHook = () => {
       const response = await FansCountry(props);
       return {
         data: response?.data,
-        meta: response?.meta,
         message: response?.message,
       };
     } catch (error) {

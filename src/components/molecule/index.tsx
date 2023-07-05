@@ -19,6 +19,7 @@ import {EditProfile} from './ProfileContent/EditProfile';
 import {EmailContent} from './SettingContent/EmailContent';
 import {EmptyState} from './EmptyState/EmptyState';
 import EmptyStateHome from './EmptyState/EmptyStateHome';
+import EmptyStateAnalytic from './EmptyState/EmptyStateAnalytic';
 import {ExclusiveContent} from './ExclusiveContent';
 import {FollowingList} from './ProfileContent/components/FollowingList';
 import {GuestContent} from './GuestComponent/GuestContent';
@@ -88,6 +89,7 @@ export {
   EmailContent,
   EmptyState,
   EmptyStateHome,
+  EmptyStateAnalytic,
   ExclusiveContent,
   FollowingList,
   GuestContent,

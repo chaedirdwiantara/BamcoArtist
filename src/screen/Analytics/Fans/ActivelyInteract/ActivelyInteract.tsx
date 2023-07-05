@@ -18,40 +18,33 @@ const FansActiveInteract = () => {
     isLoading: queryDataLoading,
     isError,
     refetch,
-  } = useQuery('fans-interact-analytic', () =>
-    getDataFansActiveInteract({
-      page: 1,
-      perPage: 3,
-    }),
-  );
+  } = useQuery('fans-interact-analytic', () => getDataFansActiveInteract());
   interface activeInteractProps {
     value: string;
   }
-
-  const data = {
-    value: 78,
-  };
 
   return (
     <View style={styles.container}>
       <ChatIcon />
       <Gap width={12} />
       <View>
-        <Text style={styles.value}>{data.value}%</Text>
+        <Text style={styles.value}>{interactData?.data.percentage}%</Text>
         <Text style={styles.desc}>
           {t('Home.Tab.Analytic.Fans.FansInteract')}
         </Text>
         <Gap height={4} />
-        <Progress.Bar
-          progress={data.value / 100}
-          width={widthResponsive(248)}
-          height={widthResponsive(12)}
-          animated={true}
-          borderWidth={0}
-          color={color.Pink.linear}
-          unfilledColor={color.Dark[300]}
-          borderRadius={10}
-        />
+        {interactData?.data && (
+          <Progress.Bar
+            progress={interactData?.data.percentage / 100}
+            width={widthResponsive(248)}
+            height={widthResponsive(12)}
+            animated={true}
+            borderWidth={0}
+            color={color.Pink.linear}
+            unfilledColor={color.Dark[300]}
+            borderRadius={10}
+          />
+        )}
       </View>
     </View>
   );

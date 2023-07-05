@@ -20,3 +20,59 @@ export type ChartResponseType = {
   message: string;
   status: number;
 };
+
+export type EngagementData = {
+  likesCount: number;
+  commentsCount: number;
+  shareCount: number;
+  followers: number;
+  percentage: number;
+};
+
+export type EngagementResponseType = {
+  data: EngagementData;
+  message: string;
+  status: number;
+};
+
+export type DataGender = {
+  label: string;
+  percentage: number;
+};
+
+export type DemogDataGender = {
+  totalFans: number;
+  data: DataGender[];
+};
+
+export type DemogGenderResponseType = {
+  data: DemogDataGender;
+  message: string;
+  status: number;
+};
+
+export type DataCountry = {
+  country: {
+    name: string;
+    image: string;
+  };
+  total: number;
+};
+
+export type DemogCountryResponseType = {
+  data: DataCountry[];
+  message: string;
+  status: number;
+};
+
+export type DataAge = {
+  label: string;
+  percentage: number;
+  total: number;
+};
+
+export type DemogAgeResponseType = {
+  data: DataAge[];
+  message: string;
+  status: number;
+};
