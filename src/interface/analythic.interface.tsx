@@ -24,6 +24,8 @@ export interface IncomeData {
   join: IncomeDataJoin;
   subs: IncomeDataJoin;
   tips: IncomeDataJoin;
+  totalSubs: number;
+  totalTips: number;
 }
 
 export interface IncomeDataJoin {

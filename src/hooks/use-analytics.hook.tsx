@@ -277,6 +277,8 @@ export const useAnalyticsHook = () => {
         all: response?.data?.join,
         tips: response?.data?.tips,
         subs: response?.data?.subs,
+        totalTips: response?.data?.totalTips,
+        totalSubs: response?.data?.totalSubs,
         meta: response?.meta,
         message: response?.message,
       };

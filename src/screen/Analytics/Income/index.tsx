@@ -7,7 +7,7 @@ import {
   NormalCreditCard,
   PosCreditCard,
 } from '../../../assets/icon';
-import {heightResponsive, widthResponsive} from '../../../utils';
+import {heightResponsive, kFormatter, widthResponsive} from '../../../utils';
 import {DropDownFilter, Gap} from '../../../components';
 import Color from '../../../theme/Color';
 import TopCard from './TopCard';
@@ -43,19 +43,16 @@ const Income = () => {
   });
   const [dataChart, setDataChart] = useState<IncomeDataJoin>();
 
-  const {
-    data: incomeData,
-    isLoading: queryDataLoading,
-    isError,
-    refetch,
-  } = useQuery(`income-analytic/${selectedRange.label}`, () =>
-    getIncome(
-      selectedRange.value === '1'
-        ? 'monthly'
-        : selectedRange.value === '2'
-        ? 'weekly'
-        : 'daily',
-    ),
+  const {data: incomeData} = useQuery(
+    `income-analytic/${selectedRange.label}`,
+    () =>
+      getIncome(
+        selectedRange.value === '1'
+          ? 'monthly'
+          : selectedRange.value === '2'
+          ? 'weekly'
+          : 'daily',
+      ),
   );
 
   useEffect(() => {
@@ -102,14 +99,26 @@ const Income = () => {
         <TopCard
           icon={<DollarSign />}
           bgIcon={Color.Success[400]}
-          value="27.5K"
+          value={
+            incomeData?.totalTips
+              ? incomeData?.totalTips?.toString().length > 4
+                ? kFormatter(incomeData?.totalTips, 1)
+                : incomeData?.totalTips
+              : 0
+          }
           text={t('Home.Tab.Analytic.Income.TopCard.Tip')}
         />
         <Gap width={widthResponsive(10)} />
         <TopCard
           icon={<PosCreditCard />}
           bgIcon={Color.Pink.new}
-          value="5000"
+          value={
+            incomeData?.totalSubs
+              ? incomeData?.totalSubs?.toString().length > 4
+                ? kFormatter(incomeData?.totalSubs, 1)
+                : incomeData?.totalSubs
+              : 0
+          }
           text={t('Home.Tab.Analytic.Income.TopCard.Subs')}
         />
       </View>
