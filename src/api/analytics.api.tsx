@@ -1,7 +1,9 @@
 import SsuAPI from './baseRinjani';
+import SsuApiSemeru from './baseSemeru';
 import {ListPostResponseType} from '../interface/feed.interface';
 import {ParamsProps} from '../interface/base.interface';
 import {
+  AlbumTopSongResponseType,
   ChartResponseType,
   DemogAgeResponseType,
   DemogCountryResponseType,
@@ -104,11 +106,10 @@ export const PopularAlbum = async (
 
 export const TopSongs = async (
   props?: ParamsProps,
-): Promise<ListPostResponseType> => {
-  const {data} = await SsuAPI().request<ListPostResponseType>({
-    url: '/musician-app/post/public',
+): Promise<AlbumTopSongResponseType> => {
+  const {data} = await SsuApiSemeru().request<AlbumTopSongResponseType>({
+    url: `/musician-app/songs/my-top/${props?.interval}`,
     method: 'GET',
-    params: props,
   });
 
   return data;

@@ -28,7 +28,10 @@ const FansActiveInteract = () => {
       <ChatIcon />
       <Gap width={12} />
       <View>
-        <Text style={styles.value}>{interactData?.data.percentage}%</Text>
+        <Text style={styles.value}>
+          {interactData?.data ? interactData.data.percentage : 0}%
+        </Text>
+
         <Text style={styles.desc}>
           {t('Home.Tab.Analytic.Fans.FansInteract')}
         </Text>

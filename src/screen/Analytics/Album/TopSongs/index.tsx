@@ -1,6 +1,11 @@
-import {FlatList, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {FlatList, StyleSheet, Text, View} from 'react-native';
 import React, {useEffect, useState} from 'react';
-import {DropDownFilter, Gap, ListCard} from '../../../../components';
+import {
+  DropDownFilter,
+  EmptyStateAnalytic,
+  Gap,
+  ListCard,
+} from '../../../../components';
 import {kFormatter, widthResponsive} from '../../../../utils';
 import {useTranslation} from 'react-i18next';
 import {MusicPinkIcon} from '../../../../assets/icon';
@@ -10,21 +15,15 @@ import {useAnalyticsHook} from '../../../../hooks/use-analytics.hook';
 import {color, font} from '../../../../theme';
 import {mvs} from 'react-native-size-matters';
 import {storage} from '../../../../hooks/use-storage.hook';
-import {useNavigation} from '@react-navigation/native';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {RootStackParams} from '../../../../navigations';
 import {AlbumRow} from '../../../../components/molecule/SongDetailsContent/AlbumRow';
-import {songs2} from '../../../../data/music2';
 
 const TopSongs = () => {
   const {getTopSongs} = useAnalyticsHook();
   const {t} = useTranslation();
-  const navigation =
-    useNavigation<NativeStackNavigationProp<RootStackParams>>();
   const lang = storage.getString('lang');
 
   const {
-    data: popularAlbumData,
+    data: songData,
     isLoading: queryDataLoading,
     isError,
     refetch,
@@ -37,6 +36,8 @@ const TopSongs = () => {
           ? 'weekly'
           : t(selectedRange.label) === 'Daily'
           ? 'daily'
+          : t(selectedRange.label) === 'All Time'
+          ? 'all_time'
           : '',
     }),
   );
@@ -77,50 +78,53 @@ const TopSongs = () => {
             dropdownStyle={styles.dropdown}
           />
         </View>
-        <View>
-          <TouchableOpacity onPress={() => navigation.navigate('MySong')}>
-            <Text style={styles.link}>
-              {t('Home.Tab.Analytic.Fans.TopFans.Link')}
-            </Text>
-          </TouchableOpacity>
-        </View>
       </View>
       {/* BODY AREA */}
       <View>
-        <AlbumRow
-          title={'Rafaela'}
-          imgUri={
-            'https://cdn-2.tstatic.net/tribunnews/foto/bank/images/gambaran-live-stream-rafaela-di-dalam-game-mobile-legends.jpg'
-          }
-          createdOn={'2018'}
-          onPress={() => {}}
-          LikeCount={kFormatter(1500)}
-          streamCount={kFormatter(2500)}
-          imgSize={80}
-        />
-        {/* <Gap height={20} /> */}
-        <FlatList
-          showsVerticalScrollIndicator={false}
-          data={songs2}
-          keyExtractor={item => item.id.toString()}
-          renderItem={({item, index}) => (
-            <ListCard.MusicList
-              imgUri={item.url}
-              musicNum={(index + 2).toLocaleString('en-US', {
-                minimumIntegerDigits: 2,
-                useGrouping: false,
-              })}
-              musicTitle={item.title}
-              singerName={''}
-              likeAnalytics={item.likes}
-              streamAnalytics={item.stream}
-              onPressMore={() => {}}
-              containerStyles={{marginTop: mvs(20)}}
-              onPressCard={() => {}}
-              hideDropdownMore
+        {songData?.data && songData?.data.length > 0 ? (
+          <>
+            <AlbumRow
+              title={songData.data[0].title}
+              imgUri={songData.data[0].imageUrl[0].image}
+              createdOn={songData.data[0].publishedDate}
+              onPress={() => {}}
+              LikeCount={kFormatter(songData.data[0].likesCount)}
+              streamCount={kFormatter(songData.data[0].listenerCount)}
+              albumTitle={songData.data[0].album.title}
+              imgSize={80}
             />
-          )}
-        />
+            <FlatList
+              showsVerticalScrollIndicator={false}
+              data={songData.data}
+              keyExtractor={item => item.id.toString()}
+              renderItem={({item, index}) =>
+                index !== 0 ? (
+                  <ListCard.MusicList
+                    imgUri={item.imageUrl[0].image}
+                    musicNum={(index + 1).toLocaleString('en-US', {
+                      minimumIntegerDigits: 2,
+                      useGrouping: false,
+                    })}
+                    musicTitle={item.title}
+                    singerName={''}
+                    likeAnalytics={item.likesCount}
+                    streamAnalytics={item.listenerCount}
+                    onPressMore={() => {}}
+                    containerStyles={{marginTop: mvs(20)}}
+                    onPressCard={() => {}}
+                    hideDropdownMore
+                  />
+                ) : (
+                  <View />
+                )
+              }
+            />
+          </>
+        ) : (
+          <EmptyStateAnalytic
+            caption={t('Home.Tab.Analytic.Album.TopSongs.EmptyState')}
+          />
+        )}
       </View>
     </View>
   );
@@ -158,12 +162,5 @@ const styles = StyleSheet.create({
     backgroundColor: color.Dark[800],
     borderWidth: 1,
     borderColor: color.Dark[400],
-  },
-  link: {
-    fontFamily: font.InterRegular,
-    fontSize: mvs(11),
-    fontWeight: '500',
-    color: color.Success[400],
-    lineHeight: mvs(28),
   },
 });

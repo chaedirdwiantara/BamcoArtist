@@ -126,7 +126,6 @@ export const useAnalyticsHook = () => {
       const response = await TopSongs(props);
       return {
         data: response?.data,
-        meta: response?.meta,
         message: response?.message,
       };
     } catch (error) {

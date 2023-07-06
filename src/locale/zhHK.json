@@ -271,8 +271,8 @@
             "Title" : "Fans Gender"
           },
           "FansCountry": {
-            "Title" : "Your Fans Country","EmptyState": "Oops! We couldn't find any of your fans country. Post some story or release album to make your own cult!"
-         
+            "Title" : "Your Fans Country",
+            "EmptyState": "Oops! We couldn't find any of your fans country. Post some story or release album to make your own cult!"
           }
         },
         "Post": {
@@ -305,7 +305,8 @@
             "Title" : "Popular Album"
           },
           "TopSongs": {
-            "Title" : "Your Top Song"
+            "Title" : "Your Top Song",
+            "EmptyState": "Oops! We couldn't find your top song.Publish your song and interact to make your own cult!"
           },
           "Listener": {
             "Title" : "Listener Country"

@@ -1,3 +1,6 @@
+import {imageTypes} from './base.interface';
+import {DataAlbum} from './song.interface';
+
 export interface DataChart {
   value: number;
   hideDataPoint: boolean;
@@ -73,6 +76,45 @@ export type DataAge = {
 
 export type DemogAgeResponseType = {
   data: DataAge[];
+  message: string;
+  status: number;
+};
+
+export type TopSongData = {
+  id: number;
+  musicianId: string;
+  musicianName: string;
+  albumId: number;
+  title: string;
+  description: string;
+  songWriter: string[];
+  imageUrl: imageTypes[];
+  publishedDate: string;
+  isPublished: true;
+  isFeaturing: false;
+  likesCount: number;
+  shareCount: number;
+  listenerCount: number;
+  mood: string;
+  genre: string;
+  version: string;
+  lyrics: string;
+  copyright: string;
+  originalSongUrl: string;
+  transcodedSongUrl: string;
+  drmFileUrl: string;
+  drmKey: string;
+  language: string;
+  barcodeIsrc: string;
+  songDuration: number;
+  CreatedAt: string;
+  UpdatedAt: string;
+  DeletedAt: string;
+  album: DataAlbum;
+};
+
+export type AlbumTopSongResponseType = {
+  data: TopSongData[];
   message: string;
   status: number;
 };
