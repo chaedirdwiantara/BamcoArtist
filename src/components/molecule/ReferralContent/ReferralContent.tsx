@@ -100,7 +100,6 @@ export const ReferralContent: React.FC<ReferralContentProps> = ({
   // Camera Handler
   async function getPermission() {
     const permission = await Camera.requestCameraPermission();
-    console.log(`camera permission status : ${permission}`);
 
     if (permission === 'denied') {
       await Linking.openSettings();
@@ -116,7 +115,6 @@ export const ReferralContent: React.FC<ReferralContentProps> = ({
   useEffect(() => {
     if (isValidRef) {
       setIsScanSuccess(isValidRef);
-      console.log('scann success :', isScanSuccess);
     } else if (!isValidRef && isScanning) {
       setIsScanFailed(true);
     }
@@ -133,7 +131,6 @@ export const ReferralContent: React.FC<ReferralContentProps> = ({
   }, [barcodes]);
 
   useEffect(() => {
-    console.log('refcode :', refCode);
     if (onPress && refCode !== '' && isScanning) {
       onPress(refCode);
     }
@@ -151,11 +148,6 @@ export const ReferralContent: React.FC<ReferralContentProps> = ({
           scannedBarcode.rawValue !== undefined
         ) {
           setRefCode(scannedBarcode.rawValue);
-          console.log(
-            '🚀 ~ file: ReferralContent.tsx:129 ~ togleActiveState ~ scannedBarcode:',
-            scannedBarcode,
-          );
-          console.log('scanned barcode :', scannedBarcode.rawValue);
         }
       });
     }
