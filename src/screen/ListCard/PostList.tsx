@@ -110,7 +110,7 @@ const PostListHome: FC<PostListProps> = (props: PostListProps) => {
   const [idNowPlaying, setIdNowPlaing] = useState<string>();
 
   useEffect(() => {
-    getCreditCount();
+    if (modalDonate) getCreditCount();
   }, [modalDonate]);
 
   useFocusEffect(

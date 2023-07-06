@@ -28,10 +28,13 @@ interface Props {
   subtitle?: string;
   showIcon?: boolean;
   isButton?: boolean;
-  icon?: any;
+  icon?: React.ReactNode;
+  tooltip?: React.ReactNode;
   onPress?: () => void;
   containerStyles?: ViewStyle;
   textStyles?: TextStyle;
+  activeOpacity?: number;
+  onPressTooltip?: () => void;
 }
 
 const LeftIcon: React.FC<Props> = (props: Props) => {
@@ -47,15 +50,29 @@ const LeftIcon: React.FC<Props> = (props: Props) => {
 const RightIcon: React.FC<Props> = (props: Props) => {
   const {
     icon = <ArrowRightIcon />,
+    activeOpacity,
+    tooltip,
     text,
     onPress,
     containerStyles,
     textStyles,
+    onPressTooltip,
   } = props;
 
   return (
-    <TouchableOpacity style={[styles.root2, containerStyles]} onPress={onPress}>
-      <Text style={[Typography.Button2, styles.text, textStyles]}>{text}</Text>
+    <TouchableOpacity
+      style={[styles.root2, containerStyles]}
+      activeOpacity={activeOpacity}
+      onPress={onPress}>
+      <TouchableOpacity
+        activeOpacity={1}
+        style={{flexDirection: 'row', alignItems: 'center'}}
+        onPress={onPressTooltip}>
+        <Text style={[Typography.Button2, styles.text, textStyles]}>
+          {text}
+        </Text>
+        {tooltip}
+      </TouchableOpacity>
       {icon}
     </TouchableOpacity>
   );

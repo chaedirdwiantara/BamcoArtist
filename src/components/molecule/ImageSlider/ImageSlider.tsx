@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   NativeScrollEvent,
   NativeSyntheticEvent,
+  KeyboardAvoidingView,
 } from 'react-native';
 import {useTranslation} from 'react-i18next';
 import {mvs} from 'react-native-size-matters';
@@ -22,11 +23,11 @@ import {SelectBox} from '../../../components';
 import {FooterContent} from './FooterContent';
 import {DataOnboardType} from '../../../data/onboard';
 import {StepProfile} from '../StepWizard/StepProfile';
+import {width, widthPercentage} from '../../../utils';
 import {color, font, typography} from '../../../theme';
 import {ModalLoading} from '../ModalLoading/ModalLoading';
 import {UpdateProfilePropsType} from '../../../api/profile.api';
 import {PreferenceList} from '../../../interface/setting.interface';
-import {heightPercentage, width, widthPercentage} from '../../../utils';
 
 type OnScrollEventHandler = (
   event: NativeSyntheticEvent<NativeScrollEvent>,
@@ -206,7 +207,7 @@ export const ImageSlider: React.FC<ImageSliderProps> = ({
           height: '80%',
         }
       : {
-          height: '65%',
+          height: Platform.OS === 'ios' ? '60%' : '65%',
         };
 
   return (
@@ -227,15 +228,19 @@ export const ImageSlider: React.FC<ImageSliderProps> = ({
             const selected = index === 0 ? selectedRole : selectedExpectations;
             const setSelected =
               index === 0 ? setSelectedRole : setSelectedExpectations;
+            const paddingTop = index === 2 ? mvs(40) : mvs(50);
 
             return (
-              <View key={index}>
+              <KeyboardAvoidingView
+                key={index}
+                keyboardVerticalOffset={mvs(50)}
+                behavior={Platform.OS === 'ios' ? 'position' : undefined}>
                 <TouchableOpacity
                   style={styles.containerSkip}
                   onPress={onPress}>
                   <Text style={styles.textSkip}>{t('Btn.Skip')}</Text>
                 </TouchableOpacity>
-                <View style={styles.containerStep}>
+                <View style={[styles.containerStep, {paddingTop}]}>
                   <Text style={styles.textStep}>{item.step}</Text>
                   <Text style={[typography.Heading4, styles.title]}>
                     {item.title}
@@ -258,7 +263,7 @@ export const ImageSlider: React.FC<ImageSliderProps> = ({
                     />
                   )}
                 </View>
-              </View>
+              </KeyboardAvoidingView>
             );
           })}
         </ScrollView>
@@ -320,7 +325,7 @@ const styles = StyleSheet.create({
     marginVertical: mvs(10),
   },
   containerStep: {
-    paddingTop: heightPercentage(50),
+    paddingTop: mvs(50),
     justifyContent: 'center',
     alignItems: 'center',
   },

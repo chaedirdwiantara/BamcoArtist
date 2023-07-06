@@ -70,7 +70,7 @@ export const MusicSection: React.FC<ListProps> = (props: ListProps) => {
   const [trigger2ndModal, setTrigger2ndModal] = useState<boolean>(false);
 
   useEffect(() => {
-    getCreditCount();
+    if (modalDonate) getCreditCount();
   }, [modalDonate]);
 
   useEffect(() => {

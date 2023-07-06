@@ -6,6 +6,7 @@ import {
   FansAge,
   FansCountry,
   FansGender,
+  Income,
   ListenerCountry,
   ListenerLikes,
   PopularAlbum,
@@ -297,5 +298,6 @@ export const useAnalyticsHook = () => {
     getSongListenerLikes,
     getSongDesc,
     getPostEngagement,
+    // getIncome,
   };
 };

@@ -19,7 +19,8 @@
       "Music": "Share Music",
       "Playlist": "Share Playlist"
     },
-    "NoDescription": "No Description Given"
+    "NoDescription": "No Description Given",
+    "Required": "Required"
   },
   "Onboarding": {
     "Step1": {
@@ -153,6 +154,16 @@
     }
   },
   "Home": {
+    "OverviewCard": {
+      "Title": "My Overview",
+      "FirstCard": "My Fans",
+      "SecondCard": "My Public Post",
+      "ThirdCard": "My Exclusive Post",
+      "FourthCard": "My Album",
+      "FifthCard": "My Songs",
+      "SixthCard": "My Income"
+    },
+    "CreateNewPost": "Create New Post",
     "Topbar": {
       "Hi": "Hi, {{name}}",
       "Search": {
@@ -480,6 +491,8 @@
       "AddVideo": "Add Video From Gallery",
       "AddVideoCamera": "Add Video From Camera",
       "Delete": "Delete Photo",
+      "AddBio": "Add Bio",
+      "AddWebsite": "Add Website or Social Media",
       "Social": "Social Media Settings",
       "About": "Tell us about yourself",
       "Website": "Add your website address",
@@ -552,7 +565,8 @@
         "Active": "Years Active",
         "Origin": "Origin",
         "Member": "Member",
-        "AddMore": "Add More"
+        "AddMore": "Add More",
+        "TypeOfMusician": "Type of Musician"
       },
       "Placeholder": {
         "Username": "Add Username",
@@ -1139,5 +1153,18 @@
     "Rating": "Take a moment to rate this item",
     "Input": "Have you satisfied about this product?",
     "Placeholder": "Ex: I love this product, the finishing is very clean!"
+  },
+  "ProfileProgress": {
+    "Title": "Profile Progress",
+    "Card": {
+      "Title": "Profile & Account Information",
+      "Subtitle": "Tap to complete your account information"
+    },
+    "Title2": "Task To Complete",
+    "Tab": {
+      "AccountInformation": "Account Information",
+      "ProfileInformation": "Profile Information"
+    },
+    "SubtitleTooltip": "To finish this step, you need to fulfill this information below:"
   }
 }
