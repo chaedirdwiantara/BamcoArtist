@@ -2,10 +2,8 @@ import React, {useState} from 'react';
 import {
   View,
   Text,
-  Platform,
   StyleSheet,
   InteractionManager,
-  KeyboardAvoidingView,
   ScrollView,
 } from 'react-native';
 import {useTranslation} from 'react-i18next';
@@ -98,100 +96,96 @@ export const StepProfile: React.FC<AccountProps> = ({
 
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
-      <KeyboardAvoidingView
-        style={{flex: 1}}
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
-        <View style={styles.root}>
-          <View style={styles.containerAvatar}>
-            <AvatarProfile
-              imgUri={stateProfile.imageProfileUrl}
-              type={'edit'}
-              showIcon={true}
-              icon={<CameraIcon />}
-              onPress={() => setShowModalImage(true)}
-              backgroundColor={'#353E4D'}
-            />
-          </View>
-
-          <SsuInput.InputLabel
-            label={t('Setting.Account.Label.Fullname') || ''}
-            value={stateProfile.fullname}
-            onChangeText={text => onChangeFullname(text)}
-            placeholder={t('Setting.Account.Placeholder.FullnameStep') || ''}
-            isError={errorProfile.fullname}
-            errorMsg={t('Setting.Account.Error.Fullname') || ''}
-            containerStyles={{marginTop: heightPercentage(10)}}
+      <View style={styles.root}>
+        <View style={styles.containerAvatar}>
+          <AvatarProfile
+            imgUri={stateProfile.imageProfileUrl}
+            type={'edit'}
+            showIcon={true}
+            icon={<CameraIcon />}
+            onPress={() => setShowModalImage(true)}
+            backgroundColor={'#353E4D'}
           />
-
-          <SsuInput.InputLabel
-            label={t('Setting.Account.Label.Username') || ''}
-            value={stateProfile.username}
-            onChangeText={text => onChangeUsername(text)}
-            placeholder={t('Setting.Account.Placeholder.UsernameStep') || ''}
-            isError={errorProfile.username}
-            autoCapitalize="none"
-            errorMsg={t('Setting.Account.Error.Username') || ''}
-            containerStyles={{marginTop: heightPercentage(10)}}
-          />
-
-          <Dropdown.Multi
-            data={formatValueName2(genres || []) ?? []}
-            placeHolder={t('Setting.Account.Placeholder.Genre') || ''}
-            dropdownLabel={t('Setting.Account.Label.Genre') || ''}
-            textTyped={(_newText: string) => null}
-            containerStyles={{marginTop: heightPercentage(10)}}
-            initialValue={stateProfile.favoriteGeneres}
-            setValues={val => onChangeText(val, 'favoriteGeneres')}
-          />
-
-          <View style={{paddingBottom: mvs(30)}}>
-            <SsuInput.InputLabel
-              label={t('Profile.Edit.Bio') || ''}
-              placeholder={t('Profile.Edit.About') || ''}
-              value={stateProfile.bio}
-              containerStyles={styles.textArea}
-              multiline
-              numberOfLines={10}
-              inputStyles={styles.inputDesc}
-              maxLength={600}
-              onChangeText={text => {
-                onChangeText(text, 'bio');
-                setIsError(false);
-              }}
-            />
-            <Text
-              style={[
-                styles.length,
-                {
-                  color:
-                    stateProfile.bio.length === 600
-                      ? color.Error[400]
-                      : color.Neutral[10],
-                },
-              ]}>{`${stateProfile.bio.length}/600`}</Text>
-          </View>
-
-          {isError ? (
-            <View style={styles.containerErrorMsg}>
-              <ErrorIcon fill={color.Error[400]} />
-              <Gap width={ms(4)} />
-              <Text style={styles.errorMsg}>{errorMsg}</Text>
-            </View>
-          ) : null}
-
-          <ModalImagePicker
-            title={t('Profile.Edit.ProfilePicture') || ''}
-            modalVisible={showModalImage}
-            sendUri={sendUri}
-            onDeleteImage={resetImage}
-            onPressClose={() => setShowModalImage(false)}
-            hideMenuDelete={stateProfile.imageProfileUrl !== ''}
-            sendUriMultiple={() => null}
-          />
-
-          <ModalLoading visible={imageLoading} />
         </View>
-      </KeyboardAvoidingView>
+
+        <SsuInput.InputLabel
+          label={t('Setting.Account.Label.Fullname') || ''}
+          value={stateProfile.fullname}
+          onChangeText={text => onChangeFullname(text)}
+          placeholder={t('Setting.Account.Placeholder.FullnameStep') || ''}
+          isError={errorProfile.fullname}
+          errorMsg={t('Setting.Account.Error.Fullname') || ''}
+          containerStyles={{marginTop: heightPercentage(10)}}
+        />
+
+        <SsuInput.InputLabel
+          label={t('Setting.Account.Label.Username') || ''}
+          value={stateProfile.username}
+          onChangeText={text => onChangeUsername(text)}
+          placeholder={t('Setting.Account.Placeholder.UsernameStep') || ''}
+          isError={errorProfile.username}
+          autoCapitalize="none"
+          errorMsg={t('Setting.Account.Error.Username') || ''}
+          containerStyles={{marginTop: heightPercentage(10)}}
+        />
+
+        <Dropdown.Multi
+          data={formatValueName2(genres || []) ?? []}
+          placeHolder={t('Setting.Account.Placeholder.Genre') || ''}
+          dropdownLabel={t('Setting.Account.Label.Genre') || ''}
+          textTyped={(_newText: string) => null}
+          containerStyles={{marginTop: heightPercentage(10)}}
+          initialValue={stateProfile.favoriteGeneres}
+          setValues={val => onChangeText(val, 'favoriteGeneres')}
+        />
+
+        <View style={{paddingBottom: mvs(30)}}>
+          <SsuInput.InputLabel
+            label={t('Profile.Edit.Bio') || ''}
+            placeholder={t('Profile.Edit.About') || ''}
+            value={stateProfile.bio}
+            containerStyles={styles.textArea}
+            multiline
+            numberOfLines={10}
+            inputStyles={styles.inputDesc}
+            maxLength={600}
+            onChangeText={text => {
+              onChangeText(text, 'bio');
+              setIsError(false);
+            }}
+          />
+          <Text
+            style={[
+              styles.length,
+              {
+                color:
+                  stateProfile.bio.length === 600
+                    ? color.Error[400]
+                    : color.Neutral[10],
+              },
+            ]}>{`${stateProfile.bio.length}/600`}</Text>
+        </View>
+
+        {isError ? (
+          <View style={styles.containerErrorMsg}>
+            <ErrorIcon fill={color.Error[400]} />
+            <Gap width={ms(4)} />
+            <Text style={styles.errorMsg}>{errorMsg}</Text>
+          </View>
+        ) : null}
+
+        <ModalImagePicker
+          title={t('Profile.Edit.ProfilePicture') || ''}
+          modalVisible={showModalImage}
+          sendUri={sendUri}
+          onDeleteImage={resetImage}
+          onPressClose={() => setShowModalImage(false)}
+          hideMenuDelete={stateProfile.imageProfileUrl !== ''}
+          sendUriMultiple={() => null}
+        />
+
+        <ModalLoading visible={imageLoading} />
+      </View>
     </ScrollView>
   );
 };

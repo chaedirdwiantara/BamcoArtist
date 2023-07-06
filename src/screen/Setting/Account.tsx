@@ -7,7 +7,6 @@ import {AccountContent} from '../../components';
 import {RootStackParams} from '../../navigations';
 import {useSettingHook} from '../../hooks/use-setting.hook';
 import {useLocationHook} from '../../hooks/use-location.hook';
-import {ModalLoading} from '../../components/molecule/ModalLoading/ModalLoading';
 
 type AccountProps = NativeStackScreenProps<RootStackParams, 'Account'>;
 
@@ -15,21 +14,28 @@ export const AccountScreen: React.FC<AccountProps> = ({
   navigation,
   route,
 }: AccountProps) => {
-  const {data} = route.params;
+  const dataProfile = route.params;
   const {
     dataAllCountry,
     dataCitiesOfCountry,
     getDataAllCountry,
     getCitiesOfCountry,
   } = useLocationHook();
-  const {getListMoodGenre, listGenre, listMood} = useSettingHook();
+  const {
+    getListMoodGenre,
+    getListRolesInIndustry,
+    listRoles,
+    listGenre,
+    listMood,
+  } = useSettingHook();
   const [selectedCountry, setSelectedCountry] = useState<string>(
-    data?.data.locationCountry || '',
+    dataProfile.locationCountry || '',
   );
 
   useEffect(() => {
     getDataAllCountry();
     getListMoodGenre({page: 0, perPage: 30});
+    getListRolesInIndustry();
   }, []);
 
   useEffect(() => {
@@ -44,20 +50,20 @@ export const AccountScreen: React.FC<AccountProps> = ({
 
   return (
     <View style={styles.root}>
-      {data && (
+      {dataProfile && (
         <AccountContent
           dataAllCountry={dataAllCountry !== undefined ? dataAllCountry : []}
           dataCitiesOfCountry={
             dataCitiesOfCountry !== undefined ? dataCitiesOfCountry : []
           }
-          profile={data}
+          profile={dataProfile}
           moods={listMood}
           genres={listGenre}
+          roles={listRoles}
           onPressGoBack={onPressGoBack}
           setSelectedCountry={setSelectedCountry}
         />
       )}
-      <ModalLoading visible={!data} />
     </View>
   );
 };

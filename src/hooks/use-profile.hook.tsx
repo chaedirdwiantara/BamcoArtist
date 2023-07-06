@@ -7,6 +7,7 @@ import {
   getLastStep,
   getOtherUserProfile,
   getProfile,
+  getProfileCompletion,
   getTotalCount,
   removePhotos,
   setLastStep,
@@ -24,6 +25,7 @@ import {
   GetStepResponseType,
   LastStepResponseType,
   ProfileFansResponseType,
+  ProfileProgressResponseType,
   ProfileResponseType,
 } from '../interface/profile.interface';
 
@@ -43,6 +45,8 @@ export const useProfileHook = () => {
   const [dataCountProfile, setDataCountProfile] =
     useState<DataTotalCountPropsType>();
   const [infoStep, setInfoStep] = useState<GetStepResponseType>();
+  const [profileProgress, setProfileProgress] =
+    useState<ProfileProgressResponseType>();
 
   const getProfileUser = async () => {
     setIsLoading(true);
@@ -209,6 +213,18 @@ export const useProfileHook = () => {
     }
   };
 
+  const getProfileProgress = async () => {
+    setIsLoading(true);
+    try {
+      const response = await getProfileCompletion();
+      setProfileProgress(response.data);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const getLastStepWizard = async () => {
     setIsLoading(true);
     try {
@@ -243,6 +259,7 @@ export const useProfileHook = () => {
     dataCountLiked,
     dataCountProfile,
     infoStep,
+    profileProgress,
     setIsError,
     setDataUserCheck,
     getProfileUser,
@@ -258,5 +275,6 @@ export const useProfileHook = () => {
     getTotalCountProfile,
     setLastStepWizard,
     getLastStepWizard,
+    getProfileProgress,
   };
 };

@@ -73,6 +73,10 @@ export type ProfileResponseData = {
   members: string[];
   socialMedia: null | nameValue[];
   rank: string;
+  rolesInIndustry: {
+    id: number;
+    name: string;
+  }[];
 };
 
 export type ProfileResponseType = {
@@ -181,13 +185,26 @@ export type SetLastStepResponseType = {
 
 export type GetStepResponseType = {
   lastStep: number;
-  stepProgress: string;
-  uncompleteList: string[];
 };
 
 export type GetLastStepResponseType = {
   code: number;
   data: GetStepResponseType;
+  message: string;
+  status: number;
+};
+
+export type ProfileProgressResponseType = {
+  stepProgress: string;
+  uncompleteList: {
+    accountInformation: string[];
+    profileInformation: string[];
+  };
+};
+
+export type GetProfileProgressResponseType = {
+  code: number;
+  data: ProfileProgressResponseType;
   message: string;
   status: number;
 };

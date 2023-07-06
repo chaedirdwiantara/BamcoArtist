@@ -11,6 +11,7 @@ import {
   SetLastStepResponseType,
   LastStepResponseType,
   GetLastStepResponseType,
+  GetProfileProgressResponseType,
 } from '../interface/profile.interface';
 import SsuAPI from './baseRinjani';
 import SsuAPISemeru from './baseSemeru';
@@ -131,6 +132,16 @@ export const getTotalCount = async (
 
   return data;
 };
+
+export const getProfileCompletion =
+  async (): Promise<GetProfileProgressResponseType> => {
+    const {data} = await SsuAPI().request<GetProfileProgressResponseType>({
+      url: '/musician-app/profile-completion',
+      method: 'GET',
+    });
+
+    return data;
+  };
 
 export const getLastStep = async (): Promise<GetLastStepResponseType> => {
   const {data} = await SsuAPI().request<GetLastStepResponseType>({

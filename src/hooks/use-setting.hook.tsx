@@ -28,6 +28,7 @@ import {
   ListAllPreference,
   ListAllStepWizard,
   ListReasonType,
+  ListRoleType,
   PreferenceList,
   PreferenceProps,
   VerifPasswordSetting,
@@ -47,6 +48,7 @@ export const useSettingHook = () => {
     useState<DataExclusiveResponse | null>(null);
   const [listMood, setListMood] = useState<PreferenceList[]>([]);
   const [listGenre, setListGenre] = useState<PreferenceList[]>([]);
+  const [listRoles, setListRoles] = useState<ListRoleType[]>([]);
   const [listExpectation, setListExpectation] = useState<PreferenceList[]>([]);
   const [listPreference, setListPreference] = useState<ListAllPreference>({
     mood: [],
@@ -458,6 +460,21 @@ export const useSettingHook = () => {
     }
   };
 
+  const getListRolesInIndustry = async () => {
+    setIsError(false);
+    setIsLoading(true);
+    try {
+      const role = await getListRole({perPage: 100});
+      setListRoles(role.data);
+    } catch (error) {
+      console.log({error});
+      setListRoles([]);
+      setIsError(true);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return {
     isLoading,
     isError,
@@ -472,6 +489,7 @@ export const useSettingHook = () => {
     listPreference,
     listReasonDelete,
     listStepWizard,
+    listRoles,
     changeEmail,
     changePhoneNumber,
     getVerificationCode,
@@ -490,5 +508,6 @@ export const useSettingHook = () => {
     getListReasonDelete,
     getListStepWizard,
     getListGenreSong,
+    getListRolesInIndustry,
   };
 };
