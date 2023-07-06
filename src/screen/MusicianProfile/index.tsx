@@ -90,8 +90,8 @@ const MusicianProfile: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   const [followersCount, setFollowersCount] = useState<number>(0);
 
   useEffect(() => {
-    if (dataDetailMusician !== undefined && dataDetailMusician.followers) {
-      setFollowersCount(dataDetailMusician.followers);
+    if (dataDetailMusician !== undefined && dataDetailMusician?.followers) {
+      setFollowersCount(dataDetailMusician?.followers);
     }
   }, [dataDetailMusician, uuid]);
 
