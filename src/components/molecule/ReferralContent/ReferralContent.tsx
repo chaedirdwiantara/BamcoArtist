@@ -3,10 +3,9 @@ import {
   Text,
   View,
   ViewStyle,
-  KeyboardAvoidingView,
-  Platform,
   StyleSheet,
   Linking,
+  TouchableOpacity,
 } from 'react-native';
 import {Camera, useCameraDevices} from 'react-native-vision-camera';
 import {useScanBarcodes, BarcodeFormat} from 'vision-camera-code-scanner';
@@ -14,12 +13,12 @@ import styles from './styles';
 import Color from '../../../theme/Color';
 import Typography from '../../../theme/Typography';
 import {Button, Gap, SsuDivider, SsuInput} from '../../atom';
-import {CheckCircleIcon, GiftIcon} from '../../../assets/icon';
+import {CheckCircleIcon, CoinCIcon, GiftIcon} from '../../../assets/icon';
 import ReferralQRImage from '../../../assets/image/ReferralQR.image';
 import {widthResponsive} from '../../../utils';
 import {useTranslation} from 'react-i18next';
 import {color} from '../../../theme';
-import {mvs} from 'react-native-size-matters';
+import {ms, mvs} from 'react-native-size-matters';
 import ReferralQRSuccessImage from '../../../assets/image/ReferralQRSuccess.image';
 
 interface ReferralContentProps {
@@ -39,10 +38,8 @@ const titleToScan = 'Setting.ReferralQR.OnBoard.Title';
 const titleScanSuccess = 'Setting.ReferralQR.OnBoard.SuccessTitle';
 const descriptionToScan = 'Setting.ReferralQR.OnBoard.Subtitle';
 const descriptionScanSuccess = 'Setting.ReferralQR.OnBoard.SuccessDesc';
-const continueTitle = 'Setting.ReferralQR.OnBoard.Continue';
 const dividerOnScan = 'Setting.ReferralQR.OnBoard.DividerOnScan';
 const dividerOnManualEnter = 'Setting.ReferralQR.OnBoard.DividerOnManualEnter';
-const nextTitle = 'Setting.ReferralQR.OnBoard.Next';
 const referralAddedTitle = 'Setting.ReferralQR.OnBoard.ReferralAdded';
 const friendReferral = 'Setting.ReferralQR.UseRefer.Text2';
 const refCannotBeChanged = 'Setting.ReferralQR.UseRefer.Text3';
@@ -76,12 +73,12 @@ export const ReferralContent: React.FC<ReferralContentProps> = ({
   isValidRef,
 }) => {
   const {t} = useTranslation();
-  const [isScanning, setIsScanning] = useState<boolean>(false);
-  const [isScanSuccess, setIsScanSuccess] = useState<boolean>(false);
-  // const [isScanFailed, setIsScanFailed] = useState<boolean>(false);
-  const [isManualEnter, setIsManualEnter] = useState<boolean>(false);
   const [refCode, setRefCode] = useState<string>('');
   const [focusInput, setFocusInput] = useState<string | null>(null);
+  const [isScanning, setIsScanning] = useState<boolean>(false);
+  const [isScanSuccess, setIsScanSuccess] = useState<boolean>(false);
+  const [isScanFailed, setIsScanFailed] = useState<boolean>(false);
+  const [isManualEnter, setIsManualEnter] = useState<boolean>(false);
 
   // Camera
   const devices = useCameraDevices();
@@ -103,8 +100,13 @@ export const ReferralContent: React.FC<ReferralContentProps> = ({
     }
   }, [isScanning]);
 
-  // Barcode
-  const [barcode, setBarcode] = useState<string | undefined>('');
+  useEffect(() => {
+    if (isValidRef) {
+      setIsScanSuccess(isValidRef);
+    }
+  }, [isValidRef]);
+
+  // QRCode
   const [isScanned, setIsScanned] = useState(false);
 
   const [frameProcessor, barcodes] = useScanBarcodes([BarcodeFormat.QR_CODE]);
@@ -114,31 +116,33 @@ export const ReferralContent: React.FC<ReferralContentProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [barcodes]);
 
-  // TODO: do something after qrcode is being scanned
   useEffect(() => {
-    console.log('resbar', barcode);
-  }, [barcode]);
+    console.log('refcode :', refCode);
+    if (onPress && refCode !== '') {
+      onPress(refCode);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [refCode]);
 
   const togleActiveState = async () => {
     if (barcodes && barcodes.length > 0 && isScanned === false) {
       setIsScanned(true);
 
       barcodes.forEach(async scannedBarcode => {
-        if (scannedBarcode.rawValue !== '') {
-          setBarcode(scannedBarcode.rawValue);
-          console.log('scanned barcode :', barcode);
+        if (
+          scannedBarcode.rawValue !== '' &&
+          scannedBarcode.rawValue !== undefined
+        ) {
+          setRefCode(scannedBarcode.rawValue);
+          console.log(
+            '🚀 ~ file: ReferralContent.tsx:129 ~ togleActiveState ~ scannedBarcode:',
+            scannedBarcode,
+          );
+          console.log('scanned barcode :', scannedBarcode.rawValue);
         }
       });
     }
   };
-  // const capturePhoto = async () => {
-  //   if (camera.current !== null) {
-  //     const photo = await camera.current.takePhoto({});
-  //     setImageSource(photo.path);
-  //     setShowCamera(false);
-  //     console.log(photo.path);
-  //   }
-  // };
 
   const handleScanning = () => {
     setIsScanning(true);
@@ -150,14 +154,20 @@ export const ReferralContent: React.FC<ReferralContentProps> = ({
     setIsScanning(false);
   };
 
-  const handleNext = () => {
-    setIsManualEnter(false);
-    setIsScanning(false);
-    setIsScanSuccess(!isScanSuccess);
-  };
-
   const handleFocusInput = (input: string | null) => {
     setFocusInput(input);
+  };
+
+  const SubmitIconComp = () => {
+    return (
+      <TouchableOpacity
+        onPress={() => {
+          onPress && onPress(refCode);
+        }}
+        style={{padding: ms(4)}}>
+        <CoinCIcon stroke={Color.Neutral[10]} fill="white" />
+      </TouchableOpacity>
+    );
   };
 
   if (device == null) {
@@ -165,188 +175,143 @@ export const ReferralContent: React.FC<ReferralContentProps> = ({
   }
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
-      <View style={[styles.root, containerStyle]}>
-        {!isScanSuccess ? (
-          <View style={{width: 5}}>
-            <Button
-              label="Skip"
-              type="border"
-              borderColor="transparent"
-              textStyles={{fontSize: mvs(14), color: color.Success[400]}}
-              onPress={() => {
-                onSkip && onSkip();
-              }}
+    <View style={[styles.root, containerStyle]}>
+      <View style={{width: 5}}>
+        <Button
+          label={t('Btn.Skip')}
+          type="border"
+          borderColor="transparent"
+          textStyles={{fontSize: mvs(14), color: color.Success[400]}}
+          onPress={() => {
+            onSkip && onSkip();
+          }}
+        />
+      </View>
+      <Text style={[Typography.Subtitle2, styles.preTitle]}>Step 2 of 4</Text>
+      <View style={styles.containerText}>
+        <Text style={[Typography.Heading4, styles.title]}>
+          {isScanSuccess ? t(titleScanSuccess) : t(titleToScan)}
+        </Text>
+        <Text style={[Typography.Subtitle2, styles.description]}>
+          {isScanSuccess ? t(descriptionScanSuccess) : t(descriptionToScan)}
+        </Text>
+      </View>
+      {isScanning && !isScanSuccess ? (
+        <>
+          <View
+            style={{
+              width: 289,
+              height: 289,
+              backgroundColor: 'white',
+            }}>
+            <Camera
+              style={{flex: 1}}
+              device={device}
+              isActive={true}
+              frameProcessor={frameProcessor}
+              frameProcessorFps={5}
             />
           </View>
-        ) : (
-          ''
-        )}
-        <Text style={[Typography.Subtitle2, styles.preTitle]}>Step 2 of 4</Text>
-        <View style={styles.containerText}>
-          <Text style={[Typography.Heading4, styles.title]}>
-            {isScanSuccess ? t(titleScanSuccess) : t(titleToScan)}
-          </Text>
-          <Text style={[Typography.Subtitle2, styles.description]}>
-            {isScanSuccess ? t(descriptionScanSuccess) : t(descriptionToScan)}
-          </Text>
-        </View>
-        {isScanning ? (
-          <>
-            <View
-              style={{
-                width: 289,
-                height: 289,
-                backgroundColor: 'white',
-              }}>
-              <Camera
-                // ref={camera}
-                style={{flex: 1}}
-                device={device}
-                isActive={true}
-                frameProcessor={frameProcessor}
-                frameProcessorFps={5}
-              />
-            </View>
-            <Gap height={32} />
-          </>
-        ) : isScanSuccess ? (
-          <>
-            <Gap height={8} />
-            <ReferralQRSuccessImage />
-            <Gap height={16} />
-          </>
-        ) : (
-          <ReferralQRImage />
-        )}
+          <Gap height={32} />
+        </>
+      ) : isScanSuccess ? (
+        <>
+          <Gap height={8} />
+          <ReferralQRSuccessImage />
+          <Gap height={16} />
+        </>
+      ) : (
+        <ReferralQRImage />
+      )}
 
-        {isManualEnter ? (
-          <View style={elStyles.container}>
-            <SsuInput.InputText
-              value={refCode}
-              isError={isError}
-              placeholder={t('Setting.Referral.Title') || ''}
-              errorMsg={errorMsg}
-              leftIcon={<GiftIcon />}
-              fontColor={Color.Neutral[10]}
-              borderColor={Color.Pink.linear}
-              onChangeText={(newText: string) => setRefCode(newText)}
-              onFocus={() => {
-                handleFocusInput('refcode');
-              }}
-              onBlur={() => {
-                handleFocusInput(null);
-              }}
-              isFocus={focusInput === 'refcode'}
-            />
-            <Gap height={24} />
-          </View>
-        ) : (
-          ''
-        )}
-
-        {isScanning || isManualEnter || isScanSuccess ? (
-          <>
-            <SsuDivider
-              containerStyle={{paddingHorizontal: widthResponsive(48)}}
-              text={
-                t(
-                  isScanning
-                    ? dividerOnScan
-                    : isManualEnter
-                    ? dividerOnManualEnter
-                    : referralAddedTitle,
-                ) || ''
-              }
-            />
-            <Gap height={16} />
-          </>
-        ) : (
-          ''
-        )}
-
+      {isManualEnter && !isScanSuccess ? (
         <View style={elStyles.container}>
-          {!isScanning && !isScanSuccess ? (
+          <SsuInput.InputText
+            value={refCode}
+            isError={isError}
+            placeholder={t('Setting.Referral.Title') || ''}
+            errorMsg={errorMsg}
+            rightIcon={true}
+            rightIconComponent={<SubmitIconComp />}
+            leftIcon={<GiftIcon />}
+            fontColor={Color.Neutral[10]}
+            borderColor={Color.Pink.linear}
+            onChangeText={(newText: string) => setRefCode(newText)}
+            onFocus={() => {
+              handleFocusInput('refcode');
+            }}
+            onBlur={() => {
+              handleFocusInput(null);
+            }}
+            isFocus={focusInput === 'refcode'}
+          />
+          <Gap height={24} />
+        </View>
+      ) : (
+        ''
+      )}
+
+      {isScanning || isManualEnter || isScanSuccess ? (
+        <>
+          <SsuDivider
+            containerStyle={{paddingHorizontal: widthResponsive(48)}}
+            text={
+              t(
+                isScanning && !isScanSuccess
+                  ? dividerOnScan
+                  : isManualEnter && !isScanSuccess
+                  ? dividerOnManualEnter
+                  : referralAddedTitle,
+              ) || ''
+            }
+          />
+          <Gap height={16} />
+        </>
+      ) : (
+        ''
+      )}
+
+      <View style={elStyles.container}>
+        {!isScanning && !isScanSuccess ? (
+          <>
+            <Button
+              label="Scan Now"
+              textStyles={{fontSize: mvs(14)}}
+              containerStyles={{width: '100%'}}
+              onPress={handleScanning}
+            />
+            <Gap height={16} />
+          </>
+        ) : (
+          ''
+        )}
+        {!isManualEnter && !isScanSuccess ? (
+          <>
+            <Button
+              label="Enter Manually"
+              type="border"
+              textStyles={{fontSize: mvs(14), color: color.Success[400]}}
+              containerStyles={{width: '100%'}}
+              onPress={handleManualEnter}
+            />
+            <Gap height={4} />
+          </>
+        ) : (
+          ''
+        )}
+        <View style={elStyles.container}>
+          {isScanSuccess ? (
             <>
-              <Button
-                label="Scan Now"
-                textStyles={{fontSize: mvs(14)}}
-                containerStyles={{width: '100%'}}
-                onPress={handleScanning}
-              />
-              <Gap height={16} />
+              <ReferralActivated refCode={refCode} />
             </>
           ) : (
             ''
           )}
-          {!isManualEnter && !isScanSuccess ? (
-            <>
-              <Button
-                label="Enter Manually"
-                type="border"
-                // borderColor="transparent"
-                textStyles={{fontSize: mvs(14), color: color.Success[400]}}
-                containerStyles={{width: '100%'}}
-                onPress={handleManualEnter}
-              />
-              <Gap height={4} />
-            </>
-          ) : (
-            ''
-          )}
-          <View style={elStyles.container}>
-            {!isScanSuccess ? (
-              <>
-                <Button
-                  label={t(nextTitle)}
-                  type="border"
-                  borderColor="transparent"
-                  textStyles={{fontSize: mvs(14), color: color.Success[400]}}
-                  containerStyles={{width: '100%'}}
-                  onPress={handleNext}
-                />
-              </>
-            ) : (
-              <>
-                {/* <ReferralActivated refCode={refCode} /> */}
-                <Button
-                  label={t(continueTitle)}
-                  textStyles={{fontSize: mvs(14)}}
-                  containerStyles={{paddingHorizontal: widthResponsive(48)}}
-                  // containerStyles={{width: '100%'}}
-                  onPress={() => {
-                    onSkip && onSkip();
-                  }}
-                />
-              </>
-            )}
-          </View>
         </View>
       </View>
-    </KeyboardAvoidingView>
+    </View>
   );
 };
-
-//   return (
-//     // <KeyboardAvoidingView
-//     //   behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
-//     <View style={[styles.root, containerStyle]}>
-//       {/* {showCamera && ( */}
-//       <>
-//         <Camera
-//           // ref={camera}
-//           style={elStyles.square}
-//           device={device}
-//           isActive={true}
-//           photo={true}
-//         />
-//       </>
-//       {/* // )} */}
-//     </View>
-//     // </KeyboardAvoidingView>
-//   );
-// };
 
 const elStyles = StyleSheet.create({
   container: {

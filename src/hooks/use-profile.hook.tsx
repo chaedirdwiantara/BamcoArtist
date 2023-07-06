@@ -133,12 +133,26 @@ export const useProfileHook = () => {
   const applyReferralUser = async (refCode: string) => {
     try {
       setIsLoading(true);
-      const response = await applyReferral(refCode);
+      // const response = await applyReferral(refCode);
+      const response = {code: 200, message: refCode};
+      console.log(
+        '🚀 ~ file: use-profile.hook.tsx:137 ~ applyReferralUser ~ response:',
+        response,
+      );
+
+      console.log('check 1');
       if (response.code === 200) {
         setIsValidReferral(true);
+        console.log('check 2');
       } else {
+        console.log('check 3');
         setIsValidReferral(false);
         setErrorMsg(response.message);
+        console.log(
+          '🚀 ~ file: use-profile.hook.tsx:150 ~ applyReferralUser ~ response.message:',
+          response.message,
+        );
+        console.log('check 4');
       }
     } catch (error) {
       if (

@@ -7,6 +7,8 @@ import {
   width,
   widthPercentage,
 } from '../../../utils';
+import {color} from '../../../theme';
+import Font from '../../../theme/Font';
 
 const styles = StyleSheet.create({
   root: {
@@ -49,6 +51,19 @@ const styles = StyleSheet.create({
     width: widthPercentage(155),
     aspectRatio: heightPercentage(155 / 46),
   },
+  containerSkip: {
+    position: 'absolute',
+    top: 0,
+    right: widthPercentage(30),
+    zIndex: 1,
+  },
+  textSkip: {
+    fontSize: mvs(14),
+    fontFamily: Font.InterRegular,
+    fontWeight: '500',
+    lineHeight: mvs(17),
+    color: color.Success[400],
+  },
   containerActivated: {
     marginBottom: mvs(40),
   },
@@ -78,6 +93,13 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: Color.Neutral[10],
     marginVertical: mvs(5),
+  },
+  qrContainer: {
+    width: widthPercentage(200),
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: Color.Neutral[10],
+    padding: widthPercentage(10),
   },
 });
 

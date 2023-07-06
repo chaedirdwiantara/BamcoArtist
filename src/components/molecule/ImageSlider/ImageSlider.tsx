@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   NativeScrollEvent,
   NativeSyntheticEvent,
+  KeyboardAvoidingView,
 } from 'react-native';
 import {useTranslation} from 'react-i18next';
 import {mvs} from 'react-native-size-matters';
@@ -18,7 +19,7 @@ import {
   LastStepResponseType,
   GetStepResponseType,
 } from '../../../interface/profile.interface';
-import {SelectBox} from '../../../components';
+import {ReferralContent, SelectBox} from '../../../components';
 import {FooterContent} from './FooterContent';
 import {DataOnboardType} from '../../../data/onboard';
 import {StepProfile} from '../StepWizard/StepProfile';
@@ -27,6 +28,10 @@ import {ModalLoading} from '../ModalLoading/ModalLoading';
 import {UpdateProfilePropsType} from '../../../api/profile.api';
 import {PreferenceList} from '../../../interface/setting.interface';
 import {heightPercentage, width, widthPercentage} from '../../../utils';
+import {useProfileHook} from '../../../hooks/use-profile.hook';
+import {RootStackParams} from '../../../navigations';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {useNavigation} from '@react-navigation/native';
 
 type OnScrollEventHandler = (
   event: NativeSyntheticEvent<NativeScrollEvent>,
@@ -72,6 +77,7 @@ export const ImageSlider: React.FC<ImageSliderProps> = ({
   infoStep,
 }) => {
   const {t} = useTranslation();
+  const {isValidReferral, errorMsg, applyReferralUser} = useProfileHook();
   const scrollViewRef = useRef<ScrollView>(null);
   const [selectedRole, setSelectedRole] = useState<number[]>([]);
   const [selectedExpectations, setSelectedExpectations] = useState<number[]>(
@@ -92,6 +98,10 @@ export const ImageSlider: React.FC<ImageSliderProps> = ({
     bio: false,
     favoriteGeneres: false,
   });
+
+  const onApplyReferral = (refCode: string) => {
+    applyReferralUser(refCode);
+  };
 
   const dataArray = [
     {
@@ -212,81 +222,133 @@ export const ImageSlider: React.FC<ImageSliderProps> = ({
   return (
     <View style={styles.root}>
       {type === 'Preference' ? (
-        <ScrollView
-          ref={scrollViewRef}
-          horizontal={true}
-          pagingEnabled={true}
-          snapToInterval={width}
-          decelerationRate="fast"
-          scrollEventThrottle={200}
-          snapToAlignment={'center'}
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={[styles.containerScrollView, heightContent]}
-          scrollEnabled={false}>
-          {dataArray.map((item, index) => {
-            const selected = index === 0 ? selectedRole : selectedExpectations;
-            const setSelected =
-              index === 0 ? setSelectedRole : setSelectedExpectations;
+        <>
+          {/* <View
+            style={{
+              width: '100%',
+              height: '100%',
+              position: 'absolute',
+              backgroundColor: 'rgba(0, 0, 0, 0.4)',
+              zIndex: 10,
+              borderRadius: 4,
+              padding: 16,
+              gap: 16,
+              alignItems: 'center',
+            }}>
+            <View
+              style={{
+                width: '90%',
+                marginTop: 220,
+                height: 135,
+                backgroundColor: '#141921',
+              }}></View>
+          </View> */}
+          <ScrollView
+            ref={scrollViewRef}
+            horizontal={true}
+            pagingEnabled={true}
+            snapToInterval={width}
+            decelerationRate="fast"
+            scrollEventThrottle={200}
+            snapToAlignment={'center'}
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={[styles.containerScrollView, heightContent]}
+            scrollEnabled={false}>
+            {dataArray.map((item, index) => {
+              const selected =
+                index === 0 ? selectedRole : selectedExpectations;
+              const setSelected =
+                index === 0 ? setSelectedRole : setSelectedExpectations;
 
-            return (
-              <View key={index}>
-                <TouchableOpacity
-                  style={styles.containerSkip}
-                  onPress={onPress}>
-                  <Text style={styles.textSkip}>{t('Btn.Skip')}</Text>
-                </TouchableOpacity>
-                <View style={styles.containerStep}>
-                  <Text style={styles.textStep}>{item.step}</Text>
-                  <Text style={[typography.Heading4, styles.title]}>
-                    {item.title}
-                  </Text>
-                  <Text style={styles.textSubtitle}>{item.subtitle}</Text>
-                  {index === 2 ? (
-                    <StepProfile
-                      genres={genres}
-                      stateProfile={stateProfile}
-                      setStateProfile={setStateProfile}
-                      errorProfile={errorProfile}
-                      setErrorProfile={setErrorProfile}
-                    />
+              return (
+                <KeyboardAvoidingView
+                  key={index}
+                  behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+                  {index === 1 ? (
+                    ''
                   ) : (
-                    <SelectBox
-                      selected={selected}
-                      setSelected={setSelected}
-                      data={item.list}
-                      type={index === 0 ? 'single' : 'multiple'}
-                    />
+                    <TouchableOpacity
+                      style={styles.containerSkip}
+                      onPress={onPress}>
+                      <Text style={styles.textSkip}>{t('Btn.Skip')}</Text>
+                    </TouchableOpacity>
                   )}
-                </View>
-              </View>
-            );
-          })}
-        </ScrollView>
+                  <View style={styles.containerStep}>
+                    {index === 1 ? (
+                      ''
+                    ) : (
+                      <>
+                        <Text style={styles.textStep}>{item.step}</Text>
+                        <Text style={[typography.Heading4, styles.title]}>
+                          {item.title}
+                        </Text>
+                        <Text style={styles.textSubtitle}>{item.subtitle}</Text>
+                      </>
+                    )}
+                    {index === 1 ? (
+                      <ReferralContent
+                        onSkip={onPress}
+                        onPress={onApplyReferral}
+                        isError={errorMsg !== ''}
+                        errorMsg={errorMsg}
+                        isValidRef={isValidReferral}
+                      />
+                    ) : index === 2 ? (
+                      <StepProfile
+                        genres={genres}
+                        stateProfile={stateProfile}
+                        setStateProfile={setStateProfile}
+                        errorProfile={errorProfile}
+                        setErrorProfile={setErrorProfile}
+                      />
+                    ) : (
+                      <SelectBox
+                        selected={selected}
+                        setSelected={setSelected}
+                        data={item.list}
+                        type={index === 0 ? 'single' : 'multiple'}
+                      />
+                    )}
+                  </View>
+                </KeyboardAvoidingView>
+              );
+            })}
+          </ScrollView>
+          <FooterContent
+            type={type}
+            activeIndexSlide={activeIndexSlide}
+            data={type === 'Preference' ? dataArray : data}
+            onPressBack={onPressBack}
+            onPressGoTo={onPress}
+            onPressNext={onPressNext}
+          />
+        </>
       ) : (
-        <ScrollView
-          ref={scrollViewRef}
-          horizontal={true}
-          pagingEnabled={true}
-          snapToInterval={width}
-          decelerationRate="fast"
-          scrollEventThrottle={200}
-          snapToAlignment={'center'}
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={[styles.containerScrollView, heightContent]}
-          onScroll={handleScroll}>
-          {data.map((item: DataOnboardType, index: number) => {
-            return (
-              <Image
-                key={index}
-                source={item.uri}
-                style={styles.image}
-                resizeMode={'cover'}
-              />
-            );
-          })}
-        </ScrollView>
+        <>
+          <ScrollView
+            ref={scrollViewRef}
+            horizontal={true}
+            pagingEnabled={true}
+            snapToInterval={width}
+            decelerationRate="fast"
+            scrollEventThrottle={200}
+            snapToAlignment={'center'}
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={[styles.containerScrollView, heightContent]}
+            onScroll={handleScroll}>
+            {data.map((item: DataOnboardType, index: number) => {
+              return (
+                <Image
+                  key={index}
+                  source={item.uri}
+                  style={styles.image}
+                  resizeMode={'cover'}
+                />
+              );
+            })}
+          </ScrollView>
+        </>
       )}
-
       <FooterContent
         type={type}
         activeIndexSlide={activeIndexSlide}
