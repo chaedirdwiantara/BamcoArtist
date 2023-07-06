@@ -79,7 +79,7 @@ const PopularPost: FC<PopularPostProps> = (props: PopularPostProps) => {
   }, [uuidMusician]);
 
   useEffect(() => {
-    getCreditCount();
+    if (modalDonate) getCreditCount();
   }, [modalDonate]);
 
   const cardOnPress = (data: PostList) => {

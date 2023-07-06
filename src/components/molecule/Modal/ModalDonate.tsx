@@ -54,7 +54,7 @@ export const ModalDonate: React.FC<ModalDonateProps> = ({
   const {creditCount, getCreditCount, createNewDonation} = useCreditHook();
 
   useEffect(() => {
-    getCreditCount();
+    if (modalVisible) getCreditCount();
   }, [modalVisible]);
 
   const [selectedCredit, setSelectedCredit] = useState<string>('');

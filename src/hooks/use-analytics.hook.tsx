@@ -6,6 +6,7 @@ import {
   FansAge,
   FansCountry,
   FansGender,
+  Income,
   ListenerCountry,
   ListenerLikes,
   PopularAlbum,
@@ -269,6 +270,23 @@ export const useAnalyticsHook = () => {
     }
   };
 
+  const getIncome = async (interval?: string) => {
+    try {
+      const response = await Income(interval);
+      return {
+        all: response?.data?.join,
+        tips: response?.data?.tips,
+        subs: response?.data?.subs,
+        totalTips: response?.data?.totalTips,
+        totalSubs: response?.data?.totalSubs,
+        meta: response?.meta,
+        message: response?.message,
+      };
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return {
     getListDataFansAnalytic,
     getDataFansActiveInteract,
@@ -289,5 +307,6 @@ export const useAnalyticsHook = () => {
     getSongListenerCountry,
     getSongListenerLikes,
     getSongDesc,
+    getIncome,
   };
 };

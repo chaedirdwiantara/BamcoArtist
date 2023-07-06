@@ -2,7 +2,7 @@ import {
   DataCountryType,
   DataStatePropsType,
 } from '../interface/location.interface';
-import {PreferenceList} from '../interface/setting.interface';
+import {ListRoleType, PreferenceList} from '../interface/setting.interface';
 
 const formatValueName = (data: string[]) => {
   return data.map((item, index) => {
@@ -13,7 +13,7 @@ const formatValueName = (data: string[]) => {
   });
 };
 
-const formatValueName2 = (data: PreferenceList[]) => {
+const formatValueName2 = (data: PreferenceList[] | ListRoleType[]) => {
   return data.map(item => {
     return {
       label: item.name,

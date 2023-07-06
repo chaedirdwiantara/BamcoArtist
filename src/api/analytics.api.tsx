@@ -1,6 +1,8 @@
 import SsuAPI from './baseRinjani';
+import SsuAPIKrakatau from './baseKrakatau';
 import {ListPostResponseType} from '../interface/feed.interface';
 import {ParamsProps} from '../interface/base.interface';
+import {ListIncomeResponseType} from '../interface/analythic.interface';
 
 // => List Post Area
 export const fansAnalytic = async (
@@ -225,6 +227,17 @@ export const SongDescEP = async (
     url: '/musician-app/post/public',
     method: 'GET',
     params: props,
+  });
+
+  return data;
+};
+
+export const Income = async (
+  interval?: string,
+): Promise<ListIncomeResponseType> => {
+  const {data} = await SsuAPIKrakatau().request<ListIncomeResponseType>({
+    url: `/analytic/${interval}`,
+    method: 'GET',
   });
 
   return data;
