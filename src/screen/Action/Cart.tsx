@@ -13,13 +13,14 @@ import BottomPrice from '../../components/atom/Cart/BottomPrice';
 import {dataCart, dataCartEmpty} from '../../data/Action/cart';
 import {dataPromo} from '../../data/Action/promo';
 import AddonItem from '../../components/atom/Cart/AddonItem';
+import {TransactionCart} from '../../interface/transaction.interface';
 
 type CartProps = NativeStackScreenProps<RootStackParams, 'Cart'>;
 
 export const Cart: React.FC<CartProps> = ({navigation, route}: CartProps) => {
   const {t} = useTranslation();
 
-  const [carts, setCarts] = useState(dataCart);
+  const [carts, setCarts] = useState<TransactionCart[]>(dataCart);
   const [isSelectedAll, setIsSelectedAll] = useState<boolean>(false);
   const [promo, setPromo] = useState<any>();
 

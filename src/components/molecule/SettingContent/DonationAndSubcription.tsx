@@ -68,26 +68,22 @@ export const DASContent: FC<DASProps> = ({onPressGoBack}) => {
             label={t('Setting.Tips.Label.Current')}
             textStyles={{fontSize: normalize(10)}}
             onPress={() => setChangeTab('current')}
-            containerStyles={[
-              styles.containerButtonCurrent,
-              {
-                backgroundColor:
-                  changeTab === 'current' ? Color.Pink.linear : 'transparent',
-              },
-            ]}
+            containerStyles={{
+              ...styles.containerButtonCurrent,
+              backgroundColor:
+                changeTab === 'current' ? Color.Pink.linear : 'transparent',
+            }}
             borderColor={Color.Pink.linear}
           />
           <Button
             type={changeTab === 'past' ? '' : 'border'}
             label={t('Setting.Tips.Label.Past')}
             textStyles={{fontSize: normalize(10)}}
-            containerStyles={[
-              styles.containerButtonPast,
-              {
-                backgroundColor:
-                  changeTab === 'past' ? Color.Pink.linear : 'transparent',
-              },
-            ]}
+            containerStyles={{
+              ...styles.containerButtonPast,
+              backgroundColor:
+                changeTab === 'past' ? Color.Pink.linear : 'transparent',
+            }}
             onPress={() => setChangeTab('past')}
             borderColor={Color.Pink.linear}
           />

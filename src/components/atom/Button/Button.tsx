@@ -13,7 +13,6 @@ import Font from '../../../theme/Font';
 import Color from '../../../theme/Color';
 import {heightPercentage, normalize, widthPercentage} from '../../../utils';
 import {ChevronDownIcon} from '../../../assets/icon';
-import {color} from '../../../theme';
 import Gap from '../Gap/Gap';
 
 interface ButtonProps {
