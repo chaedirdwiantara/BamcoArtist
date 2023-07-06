@@ -1,4 +1,4 @@
-import {imageTypes} from './base.interface';
+import {PaginationType, imageTypes} from './base.interface';
 import {DataAlbum} from './song.interface';
 
 export interface DataChart {
@@ -35,6 +35,21 @@ export type EngagementData = {
 export type EngagementResponseType = {
   data: EngagementData;
   message: string;
+  status: number;
+};
+
+export type TopFansAnalyticData = {
+  uuid: string;
+  fullname: string;
+  image: imageTypes[];
+  totalPoint: number;
+  userType: string;
+};
+
+export type EngagementTopFansResponseType = {
+  data: TopFansAnalyticData[];
+  message: string;
+  meta: PaginationType;
   status: number;
 };
 

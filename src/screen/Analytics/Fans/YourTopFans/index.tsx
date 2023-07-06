@@ -42,31 +42,37 @@ const YourTopFans = () => {
             {t('Home.Tab.Analytic.Fans.TopFans.Title')}
           </Text>
         </View>
-        <TouchableOpacity
-          onPress={() => navigation.navigate('YourTopFansScreen')}>
-          <Text style={styles.link}>
-            {t('Home.Tab.Analytic.Fans.TopFans.Link')}
-          </Text>
-        </TouchableOpacity>
+        {topFansData?.data && topFansData?.data.length > 0 ? (
+          <TouchableOpacity
+            onPress={() => navigation.navigate('YourTopFansScreen')}>
+            <Text style={styles.link}>
+              {t('Home.Tab.Analytic.Fans.TopFans.Link')}
+            </Text>
+          </TouchableOpacity>
+        ) : (
+          <View />
+        )}
       </View>
       <Gap height={23} />
-      {MusicianListData ? (
+      {topFansData?.data && topFansData?.data.length > 0 ? (
         <FlatList
           showsVerticalScrollIndicator={false}
           scrollEnabled={false}
-          data={MusicianListData}
+          data={topFansData?.data}
           renderItem={({item, index}) => (
             <MusiciansListCard
-              musicianNum={item.musicNum}
+              musicianNum={(index + 1).toLocaleString('en-US', {
+                minimumIntegerDigits: 2,
+                useGrouping: false,
+              })}
               onPressMore={() => {}}
               activeMore={false}
               onPressImage={() =>
-                // navigation.navigate('OtherUserProfile', {id: item.uuid})
-                {}
+                navigation.navigate('OtherUserProfile', {id: item.uuid})
               }
               musicianName={item.fullname}
-              imgUri={item.imageProfileUrl}
-              point={item.point}
+              imgUri={item.image[0].image}
+              point={item.totalPoint.toString()}
               containerStyles={{marginBottom: widthResponsive(12)}}
             />
           )}

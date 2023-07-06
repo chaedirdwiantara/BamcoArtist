@@ -9,6 +9,7 @@ import {
   DemogCountryResponseType,
   DemogGenderResponseType,
   EngagementResponseType,
+  EngagementTopFansResponseType,
 } from '../interface/analythic.interface';
 
 // => List Post Area
@@ -34,9 +35,9 @@ export const fansActiveInteract = async (): Promise<EngagementResponseType> => {
 
 export const topFans = async (
   props?: ParamsProps,
-): Promise<ListPostResponseType> => {
-  const {data} = await SsuAPI().request<ListPostResponseType>({
-    url: '/musician-app/post/public',
+): Promise<EngagementTopFansResponseType> => {
+  const {data} = await SsuAPI().request<EngagementTopFansResponseType>({
+    url: '/musician-app/engagements/top-fans',
     method: 'GET',
     params: props,
   });
