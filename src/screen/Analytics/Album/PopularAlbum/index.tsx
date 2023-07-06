@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {DropDownFilter, Gap} from '../../../../components';
 import {kFormatter, widthResponsive} from '../../../../utils';
@@ -11,11 +11,16 @@ import {color, font} from '../../../../theme';
 import {mvs} from 'react-native-size-matters';
 import {storage} from '../../../../hooks/use-storage.hook';
 import {AlbumRow} from '../../../../components/molecule/SongDetailsContent/AlbumRow';
+import {useNavigation} from '@react-navigation/native';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {RootStackParams} from '../../../../navigations';
 
 const PopularAlbum = () => {
   const {getPopularAlbum} = useAnalyticsHook();
   const {t} = useTranslation();
   const lang = storage.getString('lang');
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParams>>();
 
   const {
     data: popularAlbumData,
@@ -55,7 +60,7 @@ const PopularAlbum = () => {
         </Text>
       </View>
       {/* DROPDOWN AREA */}
-      <View style={{width: 90, zIndex: 100}}>
+      <View style={styles.topContainer}>
         <DropDownFilter
           labelCaption={t(selectedRange.label)}
           dataFilter={dropDownAlbumRange}
@@ -69,6 +74,13 @@ const PopularAlbum = () => {
           iconColor={color.Neutral[10]}
           dropdownStyle={styles.dropdown}
         />
+        <View>
+          <TouchableOpacity onPress={() => navigation.navigate('MySong')}>
+            <Text style={styles.link}>
+              {t('Home.Tab.Analytic.Fans.TopFans.Link')}
+            </Text>
+          </TouchableOpacity>
+        </View>
       </View>
       {/* BODY AREA */}
       <View style={{paddingLeft: widthResponsive(1.8)}}>
@@ -103,6 +115,13 @@ const styles = StyleSheet.create({
     fontSize: mvs(18),
     color: color.Neutral[10],
   },
+  topContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: '100%',
+    zIndex: 100,
+  },
   dropdownContainer: {
     borderWidth: 1,
     borderColor: color.Dark[400],
@@ -114,5 +133,12 @@ const styles = StyleSheet.create({
     backgroundColor: color.Dark[800],
     borderWidth: 1,
     borderColor: color.Dark[400],
+  },
+  link: {
+    fontFamily: font.InterRegular,
+    fontSize: mvs(11),
+    fontWeight: '500',
+    color: color.Success[400],
+    lineHeight: mvs(28),
   },
 });

@@ -98,14 +98,16 @@ const FansGrowth = () => {
         </Text>
       </View>
       {/* BODY AREA */}
-      <LineAreaChart
-        labelCaption={t(selectedRange.label)}
-        dataFilter={dropDownFansGrowth}
-        selectedMenu={setSelectedRange}
-        fansData={fansData}
-        growthDescOne={t('Home.Tab.Analytic.Fans.Growth.BeFan')}
-        growthDescTwo={t('Home.Tab.Analytic.Fans.Growth.FansEarn')}
-      />
+      {fansAnalyticData?.data && (
+        <LineAreaChart
+          labelCaption={t(selectedRange.label)}
+          dataFilter={dropDownFansGrowth}
+          selectedMenu={setSelectedRange}
+          fansData={fansAnalyticData.data}
+          growthDescOne={t('Home.Tab.Analytic.Fans.Growth.BeFan')}
+          growthDescTwo={t('Home.Tab.Analytic.Fans.Growth.FansEarn')}
+        />
+      )}
     </View>
   );
 };

@@ -20,6 +20,7 @@ interface AlbumRowProps {
   streamCount?: string | number;
   LikeCount?: string | number;
   imgSize?: number;
+  albumTitle?: string;
 }
 
 export const AlbumRow: React.FC<AlbumRowProps> = ({
@@ -29,6 +30,7 @@ export const AlbumRow: React.FC<AlbumRowProps> = ({
   onPress,
   streamCount,
   LikeCount,
+  albumTitle,
   imgSize = widthPercentage(96),
 }) => {
   const {t} = useTranslation();
@@ -51,9 +53,9 @@ export const AlbumRow: React.FC<AlbumRowProps> = ({
             {title}
           </Text>
 
-          <Text style={styles.createdOn}>{`${t(
-            'Musician.Label.Album',
-          )} · ${createdOn}`}</Text>
+          <Text style={styles.createdOn}>{`${
+            albumTitle ?? t('Musician.Label.Album')
+          } · ${createdOn}`}</Text>
         </View>
         <View style={styles.desc}>
           {LikeCount && (

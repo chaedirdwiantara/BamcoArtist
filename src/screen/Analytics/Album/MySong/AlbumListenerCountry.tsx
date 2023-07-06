@@ -39,6 +39,7 @@ const AlbumListenerCountry = () => {
       <View>
         <FlatList
           showsVerticalScrollIndicator={false}
+          scrollEnabled={false}
           data={MerchListItem}
           renderItem={({item, index}) => (
             <View

@@ -126,7 +126,7 @@ const MusicListCard: React.FC<ListProps> = ({
           {musicTitle}
         </Text>
         <Gap height={2} />
-        {likeAnalytics && streamAnalytics ? (
+        {likeAnalytics != null && streamAnalytics != null ? (
           <View style={{flexDirection: 'row'}}>
             <Text
               style={[styles.songDesc, {color: descColor}]}

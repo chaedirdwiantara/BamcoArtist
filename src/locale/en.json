@@ -269,9 +269,11 @@
           },
           "FansInteract": "Fans actively interact with you",
           "TopFans": {
-            "Title": "Your Top Fans",
-            "Link": "View All",
-            "FullScreen": "Your Fans"
+            "Title" : "Your Top Fans",
+            "Link" : "View All",
+            "FullScreen": "Your Fans",
+            "EmptyState": "Oops! We couldn't find any Top fans for you. Post some story or release album to make your own cult!"
+         
           },
           "FansAge": {
             "Title": "Fans Age"
@@ -280,11 +282,18 @@
             "Title": "Fans Gender"
           },
           "FansCountry": {
-            "Title": "Your Fans Country"
+            "Title" : "Your Fans Country",
+            "EmptyState": "Oops! We couldn't find any of your fans country. Post some story or release album to make your own cult!"
           }
         },
         "Post": {
-          "Title": "Post"
+          "Title": "Post",
+          "Popular":{
+            "Title" : "Popular Post"
+          },
+          "Engagement": {
+            "Title" : "Post Engagement Rate"
+          }
         },
         "Album": {
           "Title": "Album",
@@ -307,7 +316,8 @@
             "Title": "Popular Album"
           },
           "TopSongs": {
-            "Title": "Your Top Song"
+            "Title" : "Your Top Song",
+            "EmptyState": "Oops! We couldn't find your top song.Publish your song and interact to make your own cult!"
           },
           "Listener": {
             "Title": "Listener Country"

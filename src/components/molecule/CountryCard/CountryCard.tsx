@@ -6,7 +6,7 @@ import {Gap} from '../..';
 import FastImage from 'react-native-fast-image';
 
 interface CountryCardProps {
-  countryId: number;
+  countryId: number | string;
   flagUri: string;
   name: string;
   value: number;

@@ -53,7 +53,7 @@ const LineAreaChart: FC<LineAreaChartProps> = (props: LineAreaChartProps) => {
       </View>
 
       <Gap height={8} />
-      <Text style={styles.desc}>{fansData.description}</Text>
+      <Text style={styles.desc}>{fansData?.description}</Text>
       <Gap height={4} />
 
       {/* CHART AREA */}
@@ -66,7 +66,7 @@ const LineAreaChart: FC<LineAreaChartProps> = (props: LineAreaChartProps) => {
           areaChart
           yAxisTextStyle={{color: color.Dark[100]}}
           // @ts-ignore TODO: HANDLE IT LATER
-          data={fansData.data}
+          data={fansData?.data}
           startFillColor={color.Pink[400]}
           endFillColor={color.Dark[800]}
           startOpacity={0.4}
@@ -90,17 +90,17 @@ const LineAreaChart: FC<LineAreaChartProps> = (props: LineAreaChartProps) => {
       {/* CARD AREA */}
       <View style={styles.cardContainer}>
         <GrowthCard
-          number={fansData.beFan}
+          number={fansData?.beFan}
           desc={growthDescOne ?? ''}
-          numberDiffs={fansData.beFanCompare}
-          progress={fansData.beFanProgress}
+          numberDiffs={fansData?.beFanCompare}
+          progress={fansData?.beFanProgress}
           noOfLines={noOfLines}
         />
         <GrowthCard
-          number={fansData.fansEarn}
+          number={fansData?.fansEarn}
           desc={growthDescTwo ?? ''}
-          numberDiffs={fansData.fansEarnCompare}
-          progress={fansData.fansEarnProgress}
+          numberDiffs={fansData?.fansEarnCompare}
+          progress={fansData?.fansEarnProgress}
           noOfLines={noOfLines}
         />
       </View>

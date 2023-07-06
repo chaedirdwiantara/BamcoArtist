@@ -10,6 +10,7 @@ import {
   ListenerCountry,
   ListenerLikes,
   PopularAlbum,
+  PostEngagementEP,
   SongDescEP,
   SongListenerCountryEP,
   SongListenerLikesEP,
@@ -28,20 +29,17 @@ export const useAnalyticsHook = () => {
       const response = await fansAnalytic(props);
       return {
         data: response?.data,
-        meta: response?.meta,
-        message: response?.message,
       };
     } catch (error) {
       console.log(error);
     }
   };
 
-  const getDataFansActiveInteract = async (props?: ParamsProps) => {
+  const getDataFansActiveInteract = async () => {
     try {
-      const response = await fansActiveInteract(props);
+      const response = await fansActiveInteract();
       return {
         data: response?.data,
-        meta: response?.meta,
         message: response?.message,
       };
     } catch (error) {
@@ -67,7 +65,6 @@ export const useAnalyticsHook = () => {
       const response = await FansAge(props);
       return {
         data: response?.data,
-        meta: response?.meta,
         message: response?.message,
       };
     } catch (error) {
@@ -80,7 +77,6 @@ export const useAnalyticsHook = () => {
       const response = await FansGender(props);
       return {
         data: response?.data,
-        meta: response?.meta,
         message: response?.message,
       };
     } catch (error) {
@@ -93,7 +89,6 @@ export const useAnalyticsHook = () => {
       const response = await FansCountry(props);
       return {
         data: response?.data,
-        meta: response?.meta,
         message: response?.message,
       };
     } catch (error) {
@@ -132,7 +127,6 @@ export const useAnalyticsHook = () => {
       const response = await TopSongs(props);
       return {
         data: response?.data,
-        meta: response?.meta,
         message: response?.message,
       };
     } catch (error) {
@@ -270,6 +264,19 @@ export const useAnalyticsHook = () => {
     }
   };
 
+  const getPostEngagement = async (props?: ParamsProps) => {
+    try {
+      const response = await PostEngagementEP(props);
+      return {
+        data: response?.data,
+        meta: response?.meta,
+        message: response?.message,
+      };
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const getIncome = async (interval?: string) => {
     try {
       const response = await Income(interval);
@@ -307,6 +314,7 @@ export const useAnalyticsHook = () => {
     getSongListenerCountry,
     getSongListenerLikes,
     getSongDesc,
+    getPostEngagement,
     getIncome,
   };
 };
