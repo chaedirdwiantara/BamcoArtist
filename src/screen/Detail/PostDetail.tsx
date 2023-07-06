@@ -187,7 +187,7 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   );
 
   useEffect(() => {
-    getCreditCount();
+    if (modalDonate) getCreditCount();
   }, [modalDonate]);
 
   // ! FIRST LOAD when open the screen

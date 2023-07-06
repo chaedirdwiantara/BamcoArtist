@@ -87,10 +87,6 @@ export const TopupCoinContent: React.FC<TopupCoinProps> = ({
     setListWithdrawal(newList);
   };
 
-  useEffect(() => {
-    getCreditCount();
-  }, []);
-
   const onPressCardCoin = (productId: string) => {
     purchaseProduct(productId);
   };
