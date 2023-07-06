@@ -1,5 +1,6 @@
 import {Dimensions, Platform, PixelRatio} from 'react-native';
 import {DataShippingProps} from '../interface/setting.interface';
+import {toCurrency} from './currency-format';
 
 const {width: SCREEN_WIDTH, height: SCREEN_HEIGHT} = Dimensions.get('window');
 
@@ -47,4 +48,26 @@ const formatShipping = (dataShippingInfo: DataShippingProps) => {
   }
 };
 
-export {normalize, elipsisText, formatShipping};
+const getCoinFromProductId = (props: {
+  productId: string;
+  type?: 'number' | 'currency';
+}): string => {
+  const {productId, type = 'currency'} = props;
+  let totalCoin = '';
+  let indexDelimiter = productId.lastIndexOf('_');
+  if (indexDelimiter > -1) {
+    if (type === 'currency') {
+      totalCoin = toCurrency(
+        parseInt(productId.substring(indexDelimiter + 1)),
+        {
+          withFraction: false,
+        },
+      );
+    } else {
+      totalCoin = productId.substring(indexDelimiter + 1);
+    }
+  }
+  return totalCoin;
+};
+
+export {normalize, elipsisText, formatShipping, getCoinFromProductId};

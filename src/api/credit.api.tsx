@@ -1,7 +1,11 @@
 import SsuAPI from './baseKrakatau';
 import {
   CreateDonationParams,
+  CreateIapPropsType,
+  CreateIapResponseType,
   CreditResponseType,
+  SessionPurchaseProps,
+  SessionPurchaseResponseType,
   SubsECParams,
 } from '../interface/credit.interface';
 import SsuAPIRinjani from './baseRinjani';
@@ -111,6 +115,36 @@ export const getListSubs = async ({
       perPage: perPage,
       durationUnit: durationUnit,
       status: status,
+    },
+  });
+
+  return data;
+};
+
+export const generateSessionPurchase = async (
+  props: SessionPurchaseProps,
+): Promise<SessionPurchaseResponseType> => {
+  const {data} = await SsuAPI().request<SessionPurchaseResponseType>({
+    url: '/trx/session/generate',
+    method: 'GET',
+    headers: {
+      'Device-Id': props.deviceId,
+    },
+  });
+
+  return data;
+};
+
+export const createIapApple = async (
+  props: CreateIapPropsType,
+): Promise<CreateIapResponseType> => {
+  const {data} = await SsuAPI().request<CreateIapResponseType>({
+    url: '/transaction/iap/apple',
+    method: 'POST',
+    data: props,
+    headers: {
+      'Device-Id': props.deviceId,
+      'Transaction-Session': props.trxSession,
     },
   });
 
