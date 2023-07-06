@@ -95,6 +95,7 @@ const TopSongs = () => {
             />
             <FlatList
               showsVerticalScrollIndicator={false}
+              scrollEnabled={false}
               data={songData.data}
               keyExtractor={item => item.id.toString()}
               renderItem={({item, index}) =>

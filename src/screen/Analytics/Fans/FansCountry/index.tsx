@@ -37,6 +37,7 @@ const FansCountry = () => {
       {countryData?.data ? (
         <FlatList
           showsVerticalScrollIndicator={false}
+          scrollEnabled={false}
           data={countryData?.data}
           renderItem={({item, index}) => (
             <View

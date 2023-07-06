@@ -37,8 +37,9 @@ const FansAge = () => {
       {ageData?.data ? (
         <FlatList
           showsVerticalScrollIndicator={false}
+          scrollEnabled={false}
           data={ageData?.data}
-          renderItem={({item, index}) => (
+          renderItem={({item}) => (
             <Diagram value={item.percentage} caption={item.label} />
           )}
         />

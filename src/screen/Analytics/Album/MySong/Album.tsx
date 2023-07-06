@@ -88,6 +88,7 @@ const Album = () => {
         <Text style={[typography.Heading6, styles.caption]}>Song</Text>
         <FlatList
           showsVerticalScrollIndicator={false}
+          scrollEnabled={false}
           data={songs2}
           keyExtractor={item => item.id.toString()}
           renderItem={({item, index}) => (

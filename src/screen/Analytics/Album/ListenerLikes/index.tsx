@@ -41,6 +41,7 @@ const ListenerLikes = () => {
       <View>
         <FlatList
           showsVerticalScrollIndicator={false}
+          scrollEnabled={false}
           data={MusicianListData}
           renderItem={({item, index}) => (
             <View
