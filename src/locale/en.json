@@ -265,7 +265,7 @@
           },
           "Growth": {
             "BeFan": "Followers be a fans!",
-            "FansEarn": "Fans earned weekly"
+            "FansEarn": "Fans earned"
           },
           "FansInteract": "Fans actively interact with you",
           "TopFans": {
@@ -308,8 +308,8 @@
           "Listeners": {
             "Title": "Your Active Listener",
             "Growth": {
-              "FanStream": "Fans streams your song monthly!",
-              "AvgListener": "Avg listener streamed monthly"
+              "FanStream": "Fans streams your song!",
+              "AvgListener": "Avg listener streamed"
             }
           },
           "PopularAlbum": {

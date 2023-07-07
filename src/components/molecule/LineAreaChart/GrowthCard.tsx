@@ -22,7 +22,11 @@ const GrowthCard: FC<GrowthCardProps> = (props: GrowthCardProps) => {
   return (
     <View style={[styles.container, containerStyle]}>
       <View style={styles.percentage}>
-        <Text style={styles.textNum}>{number ?? 0}</Text>
+        {number ? (
+          <Text style={styles.textNum}>{number}</Text>
+        ) : (
+          <Text style={styles.textNum}>{'0.00%'}</Text>
+        )}
         <Gap width={4} />
         {progress === 'improve' ? (
           <ArrowUpGreenIcon />

@@ -61,7 +61,7 @@ const LineAreaChart: FC<LineAreaChartProps> = (props: LineAreaChartProps) => {
         <LineChart
           thickness={3}
           color={color.Pink[400]}
-          maxValue={100}
+          maxValue={fansData.maxValue}
           noOfSections={5}
           areaChart
           yAxisTextStyle={{color: color.Dark[100]}}
@@ -90,17 +90,17 @@ const LineAreaChart: FC<LineAreaChartProps> = (props: LineAreaChartProps) => {
       {/* CARD AREA */}
       <View style={styles.cardContainer}>
         <GrowthCard
-          number={fansData?.beFan}
+          number={fansData?.fansEarn}
           desc={growthDescOne ?? ''}
-          numberDiffs={fansData?.beFanCompare}
-          progress={fansData?.beFanProgress}
+          numberDiffs={fansData?.fansEarnCompare}
+          progress={fansData?.fansEarnProgress}
           noOfLines={noOfLines}
         />
         <GrowthCard
-          number={fansData?.fansEarn}
+          number={fansData?.beFan}
           desc={growthDescTwo ?? ''}
-          numberDiffs={fansData?.fansEarnCompare}
-          progress={fansData?.fansEarnProgress}
+          numberDiffs={fansData?.beFanCompare}
+          progress={fansData?.beFanProgress}
           noOfLines={noOfLines}
         />
       </View>
