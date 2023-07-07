@@ -308,7 +308,7 @@
           "Listeners": {
             "Title": "Your Active Listener",
             "Growth": {
-              "FanStream": "Fans streams your song!",
+              "FanStream": "Fans streams your song",
               "AvgListener": "Avg listener streamed"
             }
           },
