@@ -20,6 +20,7 @@ interface LineAreaChartProps {
   growthDescOne: string;
   growthDescTwo: string;
   noOfLines?: number;
+  type: 'Monthly' | 'Weekly' | 'Daily';
 }
 
 const LineAreaChart: FC<LineAreaChartProps> = (props: LineAreaChartProps) => {
@@ -31,6 +32,7 @@ const LineAreaChart: FC<LineAreaChartProps> = (props: LineAreaChartProps) => {
     growthDescOne,
     growthDescTwo,
     noOfLines,
+    type,
   } = props;
   const lang = storage.getString('lang');
   return (
@@ -61,7 +63,7 @@ const LineAreaChart: FC<LineAreaChartProps> = (props: LineAreaChartProps) => {
         <LineChart
           thickness={3}
           color={color.Pink[400]}
-          maxValue={100}
+          maxValue={fansData.maxValue}
           noOfSections={5}
           areaChart
           yAxisTextStyle={{color: color.Dark[100]}}
@@ -71,12 +73,12 @@ const LineAreaChart: FC<LineAreaChartProps> = (props: LineAreaChartProps) => {
           endFillColor={color.Dark[800]}
           startOpacity={0.4}
           endOpacity={0.5}
-          spacing={55}
+          spacing={type === 'Weekly' ? 80 : 55}
           backgroundColor="transparent"
           rulesColor={color.Dark[300]}
           rulesType="dash"
           rulesLength={widthResponsive(265)}
-          initialSpacing={10}
+          initialSpacing={type === 'Weekly' ? 25 : 12}
           yAxisColor="transparent"
           xAxisColor={color.Dark[300]}
           xAxisLength={widthPercentageToDP('70%')}
@@ -90,17 +92,17 @@ const LineAreaChart: FC<LineAreaChartProps> = (props: LineAreaChartProps) => {
       {/* CARD AREA */}
       <View style={styles.cardContainer}>
         <GrowthCard
-          number={fansData?.beFan}
+          number={fansData?.fansEarn}
           desc={growthDescOne ?? ''}
-          numberDiffs={fansData?.beFanCompare}
-          progress={fansData?.beFanProgress}
+          numberDiffs={fansData?.fansEarnCompare}
+          progress={fansData?.fansEarnProgress}
           noOfLines={noOfLines}
         />
         <GrowthCard
-          number={fansData?.fansEarn}
+          number={fansData?.beFan}
           desc={growthDescTwo ?? ''}
-          numberDiffs={fansData?.fansEarnCompare}
-          progress={fansData?.fansEarnProgress}
+          numberDiffs={fansData?.beFanCompare}
+          progress={fansData?.beFanProgress}
           noOfLines={noOfLines}
         />
       </View>
