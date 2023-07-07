@@ -20,6 +20,7 @@ interface LineAreaChartProps {
   growthDescOne: string;
   growthDescTwo: string;
   noOfLines?: number;
+  type: 'Monthly' | 'Weekly' | 'Daily';
 }
 
 const LineAreaChart: FC<LineAreaChartProps> = (props: LineAreaChartProps) => {
@@ -31,6 +32,7 @@ const LineAreaChart: FC<LineAreaChartProps> = (props: LineAreaChartProps) => {
     growthDescOne,
     growthDescTwo,
     noOfLines,
+    type,
   } = props;
   const lang = storage.getString('lang');
   return (
@@ -71,12 +73,12 @@ const LineAreaChart: FC<LineAreaChartProps> = (props: LineAreaChartProps) => {
           endFillColor={color.Dark[800]}
           startOpacity={0.4}
           endOpacity={0.5}
-          spacing={55}
+          spacing={type === 'Weekly' ? 80 : 55}
           backgroundColor="transparent"
           rulesColor={color.Dark[300]}
           rulesType="dash"
           rulesLength={widthResponsive(265)}
-          initialSpacing={10}
+          initialSpacing={type === 'Weekly' ? 25 : 12}
           yAxisColor="transparent"
           xAxisColor={color.Dark[300]}
           xAxisLength={widthPercentageToDP('70%')}

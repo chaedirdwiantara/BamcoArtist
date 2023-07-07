@@ -66,6 +66,7 @@ const FansGrowth = () => {
             selectedRange.label,
           )}`}
           growthDescTwo={t('Home.Tab.Analytic.Fans.Growth.BeFan')}
+          type={t(selectedRange.label)}
         />
       )}
     </View>
