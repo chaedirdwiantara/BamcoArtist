@@ -5,7 +5,7 @@ import Color from '../../../theme/Color';
 import {font} from '../../../theme';
 import {mvs} from 'react-native-size-matters';
 import {Gap} from '../../../components';
-import {ArrowUpIcon} from '../../../assets/icon';
+import {ArrowDownIcon, ArrowUpGreenIcon} from '../../../assets/icon';
 import {useTranslation} from 'react-i18next';
 
 interface BottomCardProps {
@@ -38,10 +38,9 @@ const Percentage = (props: PercentageProps) => {
         <Text style={styles.textNum}>{number ?? 0}</Text>
         <Gap width={widthResponsive(2)} />
         {progress === 'improve' ? (
-          <ArrowUpIcon stroke={Color.Green[200]} height={16} />
+          <ArrowUpGreenIcon />
         ) : progress === 'regression' ? (
-          // TODO: CHANGE INTO ARROW DOWN
-          <ArrowUpIcon stroke={Color.Error[500]} height={16} />
+          <ArrowDownIcon />
         ) : null}
         <Text
           style={[

@@ -4,7 +4,7 @@ import {widthResponsive} from '../../../../utils';
 import {color, font} from '../../../../theme';
 import {mvs} from 'react-native-size-matters';
 import {PlayPinkIcon} from '../../../../assets/icon';
-import {Gap, TopNavigation} from '../../../../components';
+import {EmptyStateAnalytic, Gap, TopNavigation} from '../../../../components';
 import {useTranslation} from 'react-i18next';
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
@@ -25,12 +25,7 @@ const YourTopFansScreen = () => {
     isLoading: queryDataLoading,
     isError,
     refetch,
-  } = useQuery('fans-topFans', () =>
-    getListTopFans({
-      page: 1,
-      perPage: 10,
-    }),
-  );
+  } = useQuery('fans-topFansFullScreen', () => getListTopFans());
   return (
     <View style={styles.container}>
       {/* Header Section */}
@@ -55,25 +50,34 @@ const YourTopFansScreen = () => {
           </View>
         </View>
         <Gap height={23} />
-        <FlatList
-          showsVerticalScrollIndicator={false}
-          data={MusicianListData}
-          renderItem={({item, index}) => (
-            <MusiciansListCard
-              musicianNum={item.musicNum}
-              onPressMore={() => {}}
-              activeMore={false}
-              onPressImage={() =>
-                // navigation.navigate('OtherUserProfile', {id: item.uuid})
-                {}
-              }
-              musicianName={item.fullname}
-              imgUri={item.imageProfileUrl}
-              point={item.point}
-              containerStyles={{marginBottom: widthResponsive(12)}}
-            />
-          )}
-        />
+        {topFansData?.data && topFansData?.data.length > 0 ? (
+          <FlatList
+            showsVerticalScrollIndicator={false}
+            scrollEnabled={false}
+            data={topFansData?.data}
+            renderItem={({item, index}) => (
+              <MusiciansListCard
+                musicianNum={(index + 1).toLocaleString('en-US', {
+                  minimumIntegerDigits: 2,
+                  useGrouping: false,
+                })}
+                onPressMore={() => {}}
+                activeMore={false}
+                onPressImage={() =>
+                  navigation.navigate('OtherUserProfile', {id: item.uuid})
+                }
+                musicianName={item.fullname}
+                imgUri={item.image[0].image}
+                point={item.totalPoint.toString()}
+                containerStyles={{marginBottom: widthResponsive(12)}}
+              />
+            )}
+          />
+        ) : (
+          <EmptyStateAnalytic
+            caption={t('Home.Tab.Analytic.Fans.TopFans.EmptyState')}
+          />
+        )}
       </View>
     </View>
   );

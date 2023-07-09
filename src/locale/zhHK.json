@@ -19,7 +19,8 @@
       "Music": "分享歌曲",
       "Playlist": "Share Playlist"
     },
-    "NoDescription": "No Description Given"
+    "NoDescription": "No Description Given",
+    "Required": "Required"
   },
   "Onboarding": {
     "Step1": {
@@ -153,6 +154,16 @@
     }
   },
   "Home": {
+    "OverviewCard": {
+      "Title": "My Overview",
+      "FirstCard": "My Fans",
+      "SecondCard": "My Public Post",
+      "ThirdCard": "My Exclusive Post",
+      "FourthCard": "My Album",
+      "FifthCard": "My Songs",
+      "SixthCard": "My Income"
+    },
+    "CreateNewPost": "Create New Post",
     "Topbar": {
       "Hi": "您好, {{name}}",
       "Search": {
@@ -254,13 +265,15 @@
           },
           "Growth": {
             "BeFan": "Followers be a fans!",
-            "FansEarn": "Fans earned weekly"
+            "FansEarn": "Fans earned"
           },
           "FansInteract": "Fans actively interact with you",
           "TopFans": {
-            "Title": "Your Top Fans",
-            "Link": "View All",
-            "FullScreen": "Your Fans"
+            "Title" : "Your Top Fans",
+            "Link" : "View All",
+            "FullScreen": "Your Fans",
+            "EmptyState": "Oops! We couldn't find any Top fans for you. Post some story or release album to make your own cult!"
+         
           },
           "FansAge": {
             "Title": "Fans Age"
@@ -269,11 +282,18 @@
             "Title": "Fans Gender"
           },
           "FansCountry": {
-            "Title": "Your Fans Country"
+            "Title" : "Your Fans Country",
+            "EmptyState": "Oops! We couldn't find any of your fans country. Post some story or release album to make your own cult!"
           }
         },
         "Post": {
-          "Title": "郵政"
+          "Title": "郵政",
+          "Popular":{
+            "Title" : "Popular Post"
+          },
+          "Engagement": {
+            "Title" : "Post Engagement Rate"
+          }
         },
         "Album": {
           "Title": "專輯",
@@ -288,15 +308,16 @@
           "Listeners": {
             "Title": "Your Active Listener",
             "Growth": {
-              "FanStream": "Fans streams your song monthly!",
-              "AvgListener": "Avg listener streamed monthly"
+              "FanStream": "Fans streams your song",
+              "AvgListener": "Avg listener streamed"
             }
           },
           "PopularAlbum": {
             "Title": "Popular Album"
           },
           "TopSongs": {
-            "Title": "Your Top Song"
+            "Title" : "Your Top Song",
+            "EmptyState": "Oops! We couldn't find your top song.Publish your song and interact to make your own cult!"
           },
           "Listener": {
             "Title": "Listener Country"
@@ -470,6 +491,8 @@
       "AddVideo": "Add Video From Gallery",
       "AddVideoCamera": "Add Video From Camera",
       "Delete": "刪除照片",
+      "AddBio": "Add Bio",
+      "AddWebsite": "Add Website or Social Media",
       "Social": "Social Media Settings",
       "About": "Tell us about yourself",
       "Website": "Add your website address",
@@ -542,7 +565,8 @@
         "Active": "活躍年期",
         "Origin": "來自",
         "Member": "Member",
-        "AddMore": "Add More"
+        "AddMore": "Add More",
+        "TypeOfMusician": "Type of Musician"
       },
       "Placeholder": {
         "Username": "Add Username",
@@ -1165,5 +1189,18 @@
     "Rating": "Take a moment to rate this item",
     "Input": "Have you satisfied about this product?",
     "Placeholder": "Ex: I love this product, the finishing is very clean!"
+  },
+  "ProfileProgress": {
+    "Title": "Profile Progress",
+    "Card": {
+      "Title": "Profile & Account Information",
+      "Subtitle": "Tap to complete your account information"
+    },
+    "Title2": "Task To Complete",
+    "Tab": {
+      "AccountInformation": "Account Information",
+      "ProfileInformation": "Profile Information"
+    },
+    "SubtitleTooltip": "To finish this step, you need to fulfill this information below:"
   }
 }

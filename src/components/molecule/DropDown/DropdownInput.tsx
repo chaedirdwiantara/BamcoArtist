@@ -28,6 +28,7 @@ interface InputDropdownProps {
   translation?: boolean;
   disable?: boolean;
   dropdownPosition?: 'auto' | 'bottom' | 'top';
+  isRequired?: boolean;
 }
 
 const borderColor = color.Dark[500];
@@ -52,6 +53,7 @@ const InputDropdown: React.FC<InputDropdownProps> = (
     translation,
     disable,
     dropdownPosition,
+    isRequired = false,
   } = props;
   const initValue = {label: initialValue, value: initialValue};
 
@@ -72,9 +74,20 @@ const InputDropdown: React.FC<InputDropdownProps> = (
 
   const renderLabel = () => {
     return (
-      <Text style={[typography.Overline, {color: color.Neutral[50]}]}>
-        {dropdownLabel}
-      </Text>
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+        }}>
+        <Text style={[typography.Overline, {color: color.Neutral[50]}]}>
+          {dropdownLabel}
+        </Text>
+        {isRequired && (
+          <Text style={[typography.Overline, {color: color.Pink[200]}]}>
+            {' *' + t('General.Required')}
+          </Text>
+        )}
+      </View>
     );
   };
 

@@ -39,6 +39,7 @@ import CrackEggIcon from './CrackEgg.icon';
 import CrownIcon from './Crown.icon';
 import {DefaultAvatar} from './DefaultAvatar.icon';
 import {DefaultImage} from './DefaultImage.icon';
+import DiagramIcon from './Diagram.icon';
 import DonateCoinIcon from './DonateCoin.icon';
 import EditIcon from './Edit.icon';
 import EmailIcon from './Email.icon';
@@ -63,6 +64,7 @@ import HeartIcon from './Heart.icon';
 import HomeIcon from './Home.icon';
 import HornChatIcon from './hornChat.icon';
 import InfoCircleIcon from './InfoCircle.icon';
+import InfoCircle2Icon from './InfoCircle2.icon';
 import InstagramIcon from './Instagram.icon';
 import PlayPinkIcon from './PlayPink.icon';
 import ImportPhotoIcon from './ImportPhoto.icon';
@@ -88,6 +90,7 @@ import RepeatOneIcon from './RepeatOne.icon';
 import PauseIcon from './Pause.icon';
 import PauseIcon2 from './Pause2.icon';
 import PauseVideoIcon from './PauseVideo.icon';
+import PencilIcon from './Pencil.icon';
 import PlayIcon from './Play.icon';
 import PlayIcon2 from './Play2.icon';
 import PlayIcon3 from './PlayRadius.icon';
@@ -101,10 +104,12 @@ import SettingIcon from './Setting.icon';
 import ShareIcon from './Share.icon';
 import ShuffleIcon from './Shuffle.icon';
 import SnapchatIcon from './Snapchat.icon';
+import StarPinkIcon from './StarPink.icon';
 import SoundIcon from './Sound.icon';
 import ThreeDotsIcon from './ThreeDots.icon';
 import TickCircleIcon from './TickCircle.icon';
 import TiktokIcon from './Tiktok.icon';
+import TooltipIcon from './Tooltip.icon';
 import TrashIcon from './Trash.icon';
 import TwitterIcon from './Twitter.icon';
 import UserIcon from './User.icon';
@@ -169,6 +174,7 @@ export {
   CrownIcon,
   DefaultAvatar,
   DefaultImage,
+  DiagramIcon,
   DonateCoinIcon,
   EditIcon,
   EmailIcon,
@@ -193,6 +199,7 @@ export {
   HomeIcon,
   HornChatIcon,
   InfoCircleIcon,
+  InfoCircle2Icon,
   InstagramIcon,
   ImportMusicIcon,
   ImportPhotoIcon,
@@ -215,6 +222,7 @@ export {
   PauseIcon,
   PauseIcon2,
   PauseVideoIcon,
+  PencilIcon,
   PlayIcon,
   PlayIcon2,
   PlayIcon3,
@@ -231,10 +239,12 @@ export {
   ShareIcon,
   ShuffleIcon,
   SnapchatIcon,
+  StarPinkIcon,
   SoundIcon,
   ThreeDotsIcon,
   TickCircleIcon,
   TiktokIcon,
+  TooltipIcon,
   TrashIcon,
   TwitterIcon,
   UserIcon,

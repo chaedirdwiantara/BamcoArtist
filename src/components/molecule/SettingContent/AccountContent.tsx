@@ -39,19 +39,23 @@ import {DataDropDownType} from '../../../data/dropdown';
 import {Button, Gap, SsuInput, SsuToast} from '../../atom';
 import {useProfileHook} from '../../../hooks/use-profile.hook';
 import {formatValueName2} from '../../../utils/formatValueName';
-import {PreferenceList} from '../../../interface/setting.interface';
+import {
+  ListRoleType,
+  PreferenceList,
+} from '../../../interface/setting.interface';
 import {profileStorage, storage} from '../../../hooks/use-storage.hook';
-import {ProfileResponseType} from '../../../interface/profile.interface';
+import {ProfileResponseData} from '../../../interface/profile.interface';
 import {dataYearsFrom, dataYearsTo} from '../../../data/Settings/account';
 
 interface AccountProps {
-  profile: ProfileResponseType;
+  profile: ProfileResponseData;
   onPressGoBack: () => void;
   dataAllCountry: DataDropDownType[];
   dataCitiesOfCountry: DataDropDownType[];
   setSelectedCountry: (value: string) => void;
   moods: PreferenceList[];
   genres: PreferenceList[];
+  roles: ListRoleType[];
 }
 
 interface InputProps {
@@ -63,6 +67,7 @@ interface InputProps {
   yearsActiveTo: string;
   locationCountry: string;
   locationCity: string;
+  typeOfMusician: string;
 }
 
 const validation = yup.object({
@@ -83,6 +88,7 @@ const validation = yup.object({
   yearsActiveTo: yup.string(),
   locationCountry: yup.string(),
   locationCity: yup.string(),
+  typeOfMusician: yup.string(),
 });
 
 export const AccountContent: React.FC<AccountProps> = ({
@@ -93,21 +99,25 @@ export const AccountContent: React.FC<AccountProps> = ({
   setSelectedCountry,
   genres,
   moods,
+  roles,
 }) => {
   const {t} = useTranslation();
-  const member =
-    profile?.data.members?.length > 0 ? profile?.data.members : [''];
+  const member = profile.members?.length > 0 ? profile.members : [''];
   const [members, setMembers] = useState<string[]>(member);
   const [changes, setChanges] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [disabledButton, setDisabledButton] = useState<boolean>(true);
   const [toastVisible, setToastVisible] = useState<boolean>(false);
   const [isSubmit, setIsSubmit] = useState<boolean>(false);
+  const [initialMusicianType, setInitialMusicianType] = useState<string>('');
   const [valueGenres, setValueGenres] = useState<(number | undefined)[]>([]);
   const [valueMoodsPreference, setValueMoodsPreference] = useState<
     (number | undefined)[]
   >([]);
   const [valueGenresPreference, setValueGenresPreference] = useState<
+    (number | undefined)[]
+  >([]);
+  const [valueTypeOfMusician, setValueTypeOfMusician] = useState<
     (number | undefined)[]
   >([]);
   const {updateProfilePreference, isError, isLoading, errorMsg, setIsError} =
@@ -122,13 +132,17 @@ export const AccountContent: React.FC<AccountProps> = ({
     resolver: yupResolver(validation),
     mode: 'onChange',
     defaultValues: {
-      username: profile?.data.username || '',
-      fullname: profile?.data.fullname || '',
-      labels: profile?.data.labels || '',
-      yearsActiveFrom: profile?.data.yearsActiveFrom || '',
-      yearsActiveTo: profile?.data.yearsActiveTo || '',
-      locationCountry: profile?.data.locationCountry || '',
-      locationCity: profile?.data.locationCity || '',
+      username: profile.username || '',
+      fullname: profile.fullname || '',
+      labels: profile.labels || '',
+      yearsActiveFrom: profile.yearsActiveFrom || '',
+      yearsActiveTo: profile.yearsActiveTo || '',
+      locationCountry: profile.locationCountry || '',
+      locationCity: profile.locationCity || '',
+      typeOfMusician:
+        profile.rolesInIndustry.length > 0
+          ? profile.rolesInIndustry[0].name
+          : '',
     },
   });
 
@@ -144,12 +158,17 @@ export const AccountContent: React.FC<AccountProps> = ({
 
   useEffect(() => {
     if (profile) {
-      const gr = getValue(formatValueName2(profile.data?.genres));
-      const md = getValue(formatValueName2(profile.data?.moods));
-      const fvgr = getValue(formatValueName2(profile.data?.favoriteGenres));
+      const gr = getValue(formatValueName2(profile.genres));
+      const md = getValue(formatValueName2(profile.moods));
+      const fvgr = getValue(formatValueName2(profile.favoriteGenres));
+      const musicianType =
+        profile.rolesInIndustry.length > 0
+          ? profile.rolesInIndustry[0].name
+          : '';
       setValueGenres(gr);
       setValueMoodsPreference(md);
       setValueGenresPreference(fvgr);
+      setInitialMusicianType(musicianType);
     }
   }, [profile]);
 
@@ -192,6 +211,7 @@ export const AccountContent: React.FC<AccountProps> = ({
         genres: valueGenres as number[],
         moods: valueMoodsPreference as number[],
         favoriteGeneres: valueGenresPreference as number[],
+        rolesInIndustry: valueTypeOfMusician as number[],
       });
 
       storage.set(
@@ -313,6 +333,7 @@ export const AccountContent: React.FC<AccountProps> = ({
 
           <Dropdown.Multi
             data={formatValueName2(genres) ?? []}
+            isRequired={true}
             placeHolder={t('Setting.Account.Placeholder.Genre') || ''}
             dropdownLabel={t('Setting.Account.Label.Genre') || ''}
             textTyped={(_newText: string) => null}
@@ -344,6 +365,55 @@ export const AccountContent: React.FC<AccountProps> = ({
             )}
           />
 
+          <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+            <Controller
+              name="yearsActiveFrom"
+              control={control}
+              render={({field: {onChange, value}}) => (
+                <Dropdown.Input
+                  initialValue={value}
+                  isRequired={true}
+                  data={dataYearsFrom}
+                  placeHolder={t('Setting.Account.Placeholder.Active') || ''}
+                  dropdownLabel={t('Musician.Label.Active') || ''}
+                  textTyped={(newText: {label: string; value: string}) => {
+                    onChange(newText.value);
+                    setChanges(true);
+                  }}
+                  containerStyles={{
+                    marginTop: heightPercentage(15),
+                    width: '49%',
+                  }}
+                  isError={errors?.yearsActiveFrom ? true : false}
+                  errorMsg={errors?.yearsActiveFrom?.message}
+                />
+              )}
+            />
+
+            <Controller
+              name="yearsActiveTo"
+              control={control}
+              render={({field: {onChange, value}}) => (
+                <Dropdown.Input
+                  initialValue={value}
+                  data={dataYearsTo}
+                  placeHolder={t('Setting.Account.Placeholder.Active') || ''}
+                  dropdownLabel={''}
+                  textTyped={(newText: {label: string; value: string}) => {
+                    onChange(newText.value);
+                    setChanges(true);
+                  }}
+                  containerStyles={{
+                    marginTop: heightPercentage(14),
+                    width: '49%',
+                  }}
+                  isError={errors?.yearsActiveTo ? true : false}
+                  errorMsg={errors?.yearsActiveTo?.message}
+                />
+              )}
+            />
+          </View>
+
           <View
             style={{
               flexDirection: 'row',
@@ -356,6 +426,7 @@ export const AccountContent: React.FC<AccountProps> = ({
               render={({field: {onChange, value}}) => (
                 <Dropdown.Input
                   type="location"
+                  isRequired={true}
                   initialValue={value}
                   data={dataAllCountry}
                   placeHolder={t('Setting.Account.Placeholder.Country') || ''}
@@ -400,89 +471,71 @@ export const AccountContent: React.FC<AccountProps> = ({
             />
           </View>
 
-          <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-            <Controller
-              name="yearsActiveFrom"
-              control={control}
-              render={({field: {onChange, value}}) => (
-                <Dropdown.Input
-                  initialValue={value}
-                  data={dataYearsFrom}
-                  placeHolder={t('Setting.Account.Placeholder.Active') || ''}
-                  dropdownLabel={t('Musician.Label.Active') || ''}
-                  textTyped={(newText: {label: string; value: string}) => {
-                    onChange(newText.value);
-                    setChanges(true);
-                  }}
-                  containerStyles={{
-                    marginTop: heightPercentage(15),
-                    width: '49%',
-                  }}
-                  isError={errors?.yearsActiveFrom ? true : false}
-                  errorMsg={errors?.yearsActiveFrom?.message}
-                />
-              )}
-            />
+          <Controller
+            name="typeOfMusician"
+            control={control}
+            render={({field: {onChange, value}}) => (
+              <Dropdown.Input
+                initialValue={initialMusicianType}
+                isRequired={true}
+                data={formatValueName2(roles) ?? []}
+                placeHolder={t('Setting.Account.Label.TypeOfMusician') || ''}
+                dropdownLabel={t('Setting.Account.Label.TypeOfMusician') || ''}
+                textTyped={(newText: {label: string; value: number}) => {
+                  onChange(newText.value);
+                  setChanges(true);
+                  setValueTypeOfMusician([newText.value]);
+                }}
+                containerStyles={{
+                  marginTop: heightPercentage(15),
+                }}
+                isError={errors?.typeOfMusician ? true : false}
+                errorMsg={errors?.typeOfMusician?.message}
+              />
+            )}
+          />
 
-            <Controller
-              name="yearsActiveTo"
-              control={control}
-              render={({field: {onChange, value}}) => (
-                <Dropdown.Input
-                  initialValue={value}
-                  data={dataYearsTo}
-                  placeHolder={t('Setting.Account.Placeholder.Active') || ''}
-                  dropdownLabel={''}
-                  textTyped={(newText: {label: string; value: string}) => {
-                    onChange(newText.value);
-                    setChanges(true);
-                  }}
-                  containerStyles={{
-                    marginTop: heightPercentage(14),
-                    width: '49%',
-                  }}
-                  isError={errors?.yearsActiveTo ? true : false}
-                  errorMsg={errors?.yearsActiveTo?.message}
-                />
-              )}
-            />
-          </View>
+          {valueTypeOfMusician[0] === 3 &&
+            members.map((val, index) => (
+              <SsuInput.InputLabel
+                key={index}
+                label={
+                  index === 0 ? t('Setting.Account.Label.Member') || '' : ''
+                }
+                value={val}
+                onChangeText={text => addMemberOnChange(text, index)}
+                placeholder={t('Setting.Account.Placeholder.Member') || ''}
+                containerStyles={{
+                  marginTop: index === 0 ? heightPercentage(15) : 0,
+                }}
+                rightIcon={
+                  <TouchableOpacity onPress={() => removeMember(index)}>
+                    <CloseCircleIcon
+                      style={{
+                        width: widthPercentage(22),
+                        height: widthPercentage(22),
+                      }}
+                    />
+                  </TouchableOpacity>
+                }
+              />
+            ))}
 
-          {members.map((val, index) => (
-            <SsuInput.InputLabel
-              key={index}
-              label={index === 0 ? t('Setting.Account.Label.Member') || '' : ''}
-              value={val}
-              onChangeText={text => addMemberOnChange(text, index)}
-              placeholder={t('Setting.Account.Placeholder.Member') || ''}
-              containerStyles={{
-                marginTop: index === 0 ? heightPercentage(15) : 0,
-              }}
-              rightIcon={
-                <TouchableOpacity onPress={() => removeMember(index)}>
-                  <CloseCircleIcon
-                    style={{
-                      width: widthPercentage(22),
-                      height: widthPercentage(22),
-                    }}
-                  />
-                </TouchableOpacity>
-              }
-            />
-          ))}
-          <TouchableOpacity onPress={onPressAddMember}>
-            <Text
-              style={[
-                Typography.Body4,
-                {
-                  color: color.Pink[2],
-                  paddingTop: mvs(7),
-                  fontSize: mvs(11),
-                },
-              ]}>
-              + Add More
-            </Text>
-          </TouchableOpacity>
+          {valueTypeOfMusician[0] === 3 && (
+            <TouchableOpacity onPress={onPressAddMember}>
+              <Text
+                style={[
+                  Typography.Body4,
+                  {
+                    color: color.Pink[2],
+                    paddingTop: mvs(7),
+                    fontSize: mvs(11),
+                  },
+                ]}>
+                + Add More
+              </Text>
+            </TouchableOpacity>
+          )}
 
           <Dropdown.Multi
             data={formatValueName2(genres) ?? []}

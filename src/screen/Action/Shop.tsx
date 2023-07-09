@@ -55,7 +55,9 @@ const Shop: React.FC<ShopProps> = ({navigation}) => {
             maxLengthTitle={20}
             itemStrokeColor={'white'}
             rightIcon={<CartIcon />}
-            rightIconAction={() => navigation.navigate('Cart')}
+            rightIconAction={() =>
+              navigation.navigate('Cart', {promoId: 'tes'})
+            }
             leftIcon={<ArrowLeftIcon />}
             leftIconAction={() => navigation.goBack()}
             containerStyles={{paddingHorizontal: widthPercentage(20)}}

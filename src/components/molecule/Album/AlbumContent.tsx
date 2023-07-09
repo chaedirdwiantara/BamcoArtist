@@ -268,6 +268,7 @@ export const AlbumContent: React.FC<Props> = ({
                   containerStyles={{marginTop: mvs(20), marginLeft: ms(5)}}
                   disabled={comingSoon}
                   hideDropdownMore={true}
+                  singerId={item.musician.uuid}
                 />
               ))
             ) : (

@@ -85,7 +85,7 @@ export const usePlayerHook = () => {
                 ? item.imageUrl[1].image
                 : dummySongImg,
             id: item.id,
-            musicianId: item.musicianId,
+            musicianId: item.musicianId || item.musicianUUID,
           };
         });
       if (playSongId) {

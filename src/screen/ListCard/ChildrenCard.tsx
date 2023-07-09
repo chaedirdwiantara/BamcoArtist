@@ -30,6 +30,8 @@ interface ChildrenCardProps {
   seekPlayer: (second: number) => void;
   isIdNowPlaying: boolean;
   blurModeOn?: boolean;
+  imgWidth?: number;
+  imgWidth2?: number;
 }
 
 const ChildrenCard: FC<ChildrenCardProps> = (props: ChildrenCardProps) => {
@@ -44,6 +46,8 @@ const ChildrenCard: FC<ChildrenCardProps> = (props: ChildrenCardProps) => {
     seekPlayer,
     isIdNowPlaying,
     blurModeOn,
+    imgWidth,
+    imgWidth2,
   } = props;
 
   const [isModalVisible, setModalVisible] = useState<boolean>(false);
@@ -89,10 +93,10 @@ const ChildrenCard: FC<ChildrenCardProps> = (props: ChildrenCardProps) => {
               }}>
               <ImageList
                 imgData={data.images}
-                width={132}
+                width={imgWidth ?? 132}
                 height={69.5}
                 heightType2={142}
-                widthType2={269}
+                widthType2={imgWidth2 ?? 269}
                 onPress={blurModeOn ? () => {} : toggleModalOnPress}
                 blurModeOn={blurModeOn}
                 disabled={false}

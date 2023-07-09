@@ -9,6 +9,7 @@ import {
   Text,
   RefreshControl,
   Platform,
+  FlatList,
 } from 'react-native';
 import {useNavigation, useFocusEffect} from '@react-navigation/native';
 import {useQuery} from 'react-query';
@@ -21,9 +22,7 @@ import {mvs} from 'react-native-size-matters';
 
 import {
   TopNavigation,
-  SearchBar,
   TabFilter,
-  Carousel,
   IconNotif,
   SsuStatusBar,
   BottomSheetGuest,
@@ -37,7 +36,7 @@ import {font} from '../theme';
 import Color from '../theme/Color';
 import TopSong from './ListCard/TopSong';
 import NewSong from './ListCard/NewSong';
-import {defaultBanner} from '../data/home';
+import {listOverviewCard} from '../data/home';
 import {useFcmHook} from '../hooks/use-fcm.hook';
 import {useSongHook} from '../hooks/use-song.hook';
 import {useHomeHook} from '../hooks/use-home.hook';
@@ -47,7 +46,6 @@ import * as FCMService from '../service/notification';
 import {useSearchHook} from '../hooks/use-search.hook';
 import {useCreditHook} from '../hooks/use-credit.hook';
 import {usePlayerHook} from '../hooks/use-player.hook';
-import {useBannerHook} from '../hooks/use-banner.hook';
 import {useProfileHook} from '../hooks/use-profile.hook';
 import {useSettingHook} from '../hooks/use-setting.hook';
 import {CheckCircle2Icon, SearchIcon} from '../assets/icon';
@@ -56,15 +54,23 @@ import {profileStorage, storage} from '../hooks/use-storage.hook';
 import {useNotificationHook} from '../hooks/use-notification.hook';
 import LoadingSpinner from '../components/atom/Loading/LoadingSpinner';
 import {FirebaseMessagingTypes} from '@react-native-firebase/messaging';
+import {ProgressCard} from '../components/molecule/ListCard/ProgressCard';
 import {ModalPlayMusic} from '../components/molecule/Modal/ModalPlayMusic';
-import {heightPercentage, widthPercentage, widthResponsive} from '../utils';
+import {
+  heightPercentage,
+  width,
+  widthPercentage,
+  widthResponsive,
+} from '../utils';
 import EmptyStateHome from '../components/molecule/EmptyState/EmptyStateHome';
 import ListPlaylistHome from '../components/molecule/ListCard/ListPlaylistHome';
 import {ModalConfirmChoice} from '../components/molecule/Modal/ModalConfirmChoice';
+import OverviewCard from '../components/molecule/ListCard/OverviewCard';
 import {useVideoStore} from '../store/video.store';
 import Fans from './Analytics/Fans';
 import Income from './Analytics/Income';
 import AlbumAnalytic from './Analytics/Album';
+import PostAnalytic from './Analytics/Post';
 
 type OnScrollEventHandler = (
   event: NativeSyntheticEvent<NativeScrollEvent>,
@@ -84,8 +90,8 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
   const {i18n, t} = useTranslation();
   const currentLanguage = i18n.language;
   const {dataAlbumComingSoon, getListDiveIn, getListComingSoon} = useHomeHook();
-  const {dataBanner, getListDataBanner, isLoadingBanner} = useBannerHook();
-  const {dataProfile, getProfileUser} = useProfileHook();
+  const {dataProfile, profileProgress, getProfileUser, getProfileProgress} =
+    useProfileHook();
   const {addFcmToken} = useFcmHook();
   const {showPlayer, hidePlayer, addPlaylist} = usePlayerHook();
   const {
@@ -140,11 +146,11 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
       setRandomPlaceHolder(
         dataPlaceHolder[Math.floor(Math.random() * dataPlaceHolder.length)],
       );
+      getProfileProgress();
     }, []),
   );
 
   useEffect(() => {
-    getListDataBanner();
     getProfileUser();
     getCountNotification();
     getCreditCount();
@@ -390,6 +396,10 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
     goToScreen('MusicPlayer');
   };
 
+  const goToProfileProgress = () => {
+    navigation.navigate('ProfileProgress');
+  };
+
   return (
     <View style={styles.root}>
       <SsuStatusBar type="black" />
@@ -424,24 +434,41 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
           />
         }
         onScroll={handleScroll}>
-        <TouchableOpacity onPress={handleSearchButton}>
-          <SearchBar
-            containerStyle={{paddingHorizontal: widthResponsive(24)}}
-            disabled={true}
-            onTouchStart={handleSearchButton}
+        {profileProgress?.stepProgress !== '100%' ? (
+          <ProgressCard
+            percentage={profileProgress?.stepProgress}
+            onPress={goToProfileProgress}
+            containerStyle={{marginTop: mvs(10)}}
           />
-        </TouchableOpacity>
-        <Carousel
-          data={dataBanner?.length > 0 ? dataBanner : defaultBanner}
-          onPressBanner={handleWebview}
+        ) : null}
+        <Text style={styles.titleOverview}>{t('Home.OverviewCard.Title')}</Text>
+        <FlatList
+          data={listOverviewCard}
+          showsVerticalScrollIndicator={false}
+          numColumns={2}
+          keyExtractor={item => item.id.toString()}
+          contentContainerStyle={{alignItems: 'center'}}
+          renderItem={({item}) => (
+            <OverviewCard
+              key={item.id}
+              amount={item.amount}
+              path={item.path}
+              title={t(item.title)}
+              type={item.id === 1 || item.id === 2 ? 'black' : 'white'}
+            />
+          )}
         />
-
+        <Text style={[styles.titleOverview, {paddingVertical: mvs(15)}]}>
+          {t('Home.CreateNewPost')}
+        </Text>
         {/* Create Post Shortcuts */}
-        <CreatePostShortcut
-          avatarUri={dataProfile?.data?.imageProfileUrls[1]?.image}
-          placeholder={`${randomPlaceHolder}...`}
-          compOnPress={handleCreatePost}
-        />
+        {dataProfile?.data && (
+          <CreatePostShortcut
+            avatarUri={dataProfile?.data?.imageProfileUrls[1]?.image}
+            placeholder={`${randomPlaceHolder}...`}
+            compOnPress={handleCreatePost}
+          />
+        )}
 
         <Gap height={heightPercentage(20)} />
 
@@ -466,9 +493,10 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
               <Fans />
             </View>
           ) : filterAnalytic[selectedIndexAnalytic].filterName ===
-            'Home.Tab.Analytic.Post.Title' ? null : filterAnalytic[
-              selectedIndexAnalytic
-            ].filterName === 'Home.Tab.Analytic.Album.Title' ? (
+            'Home.Tab.Analytic.Post.Title' ? (
+            <PostAnalytic uuid={uuid} />
+          ) : filterAnalytic[selectedIndexAnalytic].filterName ===
+            'Home.Tab.Analytic.Album.Title' ? (
             <View style={{paddingHorizontal: widthResponsive(20)}}>
               <Gap height={widthResponsive(15)} />
               <AlbumAnalytic />
@@ -617,5 +645,14 @@ const styles = StyleSheet.create({
   },
   containerList: {
     marginTop: heightPercentage(10),
+  },
+  titleOverview: {
+    width: width * 0.9,
+    alignSelf: 'center',
+    color: Color.Neutral[10],
+    fontSize: mvs(18),
+    fontFamily: font.InterMedium,
+    fontWeight: '600',
+    paddingVertical: mvs(10),
   },
 });

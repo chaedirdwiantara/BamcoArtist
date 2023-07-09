@@ -9,7 +9,7 @@ import {Gap} from '../../../components';
 interface TopCardProps {
   icon: ReactNode;
   bgIcon: string;
-  value: string;
+  value: string | number;
   text: string;
 }
 
