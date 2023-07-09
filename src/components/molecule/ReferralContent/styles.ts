@@ -6,6 +6,7 @@ import {
   normalize,
   width,
   widthPercentage,
+  widthResponsive,
 } from '../../../utils';
 import {color} from '../../../theme';
 import Font from '../../../theme/Font';
@@ -15,6 +16,9 @@ const styles = StyleSheet.create({
     width,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  container: {
+    paddingHorizontal: widthResponsive(48),
   },
   containerText: {
     alignItems: 'center',
@@ -100,6 +104,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: Color.Neutral[10],
     padding: widthPercentage(10),
+  },
+  cameraContainer: {
+    width: 289,
+    height: 289,
+    backgroundColor: 'white',
   },
 });
 

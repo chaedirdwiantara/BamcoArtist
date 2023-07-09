@@ -5,7 +5,7 @@ export const applyReferral = async (
   username: string,
 ): Promise<ApplyReferralResponseType> => {
   const {data} = await SsuAPI().request<ApplyReferralResponseType>({
-    url: '/fans-app/referral/apply',
+    url: '/musician-app/referral/apply',
     method: 'POST',
     data: {
       username: username,

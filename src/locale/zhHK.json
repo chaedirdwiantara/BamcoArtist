@@ -752,7 +752,14 @@
         "Next": "Next",
         "DividerOnScan": "Or",
         "DividerOnManualEnter": "Or Try Another Method",
-        "ReferralAdded": "Referral Code Added"
+        "ReferralAdded": "Referral Code Added",
+        "BtnScan": "Scan Now",
+        "BtnManual": "Enter Manually"
+      },
+      "ScanFailed": {
+        "Title": "Scan QR Code",
+        "Desc": "Referral Code invalid, Scan another QR Code",
+        "Btn": "Dismiss"
       }
     },
     "Language": {

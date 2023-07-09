@@ -1,25 +1,19 @@
 import React, {useEffect, useState} from 'react';
-import {
-  Text,
-  View,
-  ViewStyle,
-  StyleSheet,
-  Linking,
-  TouchableOpacity,
-} from 'react-native';
+import {Text, View, ViewStyle, Linking, TouchableOpacity} from 'react-native';
 import {Camera, useCameraDevices} from 'react-native-vision-camera';
 import {useScanBarcodes, BarcodeFormat} from 'vision-camera-code-scanner';
 import styles from './styles';
 import Color from '../../../theme/Color';
 import Typography from '../../../theme/Typography';
 import {Button, Gap, SsuDivider, SsuInput} from '../../atom';
-import {CheckCircleIcon, CoinCIcon, GiftIcon} from '../../../assets/icon';
+import {CheckCircleIcon, GiftIcon} from '../../../assets/icon';
 import ReferralQRImage from '../../../assets/image/ReferralQR.image';
 import {widthResponsive} from '../../../utils';
 import {useTranslation} from 'react-i18next';
 import {color} from '../../../theme';
-import {ms, mvs} from 'react-native-size-matters';
+import {mvs} from 'react-native-size-matters';
 import ReferralQRSuccessImage from '../../../assets/image/ReferralQRSuccess.image';
+import SigninIcon from '../../../assets/icon/Signin.icon';
 
 interface ReferralContentProps {
   containerStyle?: ViewStyle;
@@ -28,6 +22,17 @@ interface ReferralContentProps {
   isError: boolean;
   errorMsg: string;
   isValidRef: boolean | null;
+  refCode: string;
+  setRefCode: (value: string) => void;
+  isScanning: boolean;
+  setIsScanning: (value: boolean) => void;
+  isScanSuccess: boolean;
+  setIsScanSuccess: (value: boolean) => void;
+  isScanned: boolean;
+  setIsScanned: (value: boolean) => void;
+  setIsScanFailed: (value: boolean) => void;
+  isManualEnter: boolean;
+  setIsManualEnter: (value: boolean) => void;
 }
 
 interface ActivatedProps {
@@ -41,6 +46,8 @@ const descriptionScanSuccess = 'Setting.ReferralQR.OnBoard.SuccessDesc';
 const dividerOnScan = 'Setting.ReferralQR.OnBoard.DividerOnScan';
 const dividerOnManualEnter = 'Setting.ReferralQR.OnBoard.DividerOnManualEnter';
 const referralAddedTitle = 'Setting.ReferralQR.OnBoard.ReferralAdded';
+const BtnScan = 'Setting.ReferralQR.OnBoard.BtnScan';
+const BtnManual = 'Setting.ReferralQR.OnBoard.BtnManual';
 const friendReferral = 'Setting.ReferralQR.UseRefer.Text2';
 const refCannotBeChanged = 'Setting.ReferralQR.UseRefer.Text3';
 
@@ -71,14 +78,20 @@ export const ReferralContent: React.FC<ReferralContentProps> = ({
   isError,
   errorMsg,
   isValidRef,
+  refCode,
+  setRefCode,
+  isScanning,
+  setIsScanning,
+  isScanSuccess,
+  setIsScanSuccess,
+  isScanned,
+  setIsScanned,
+  setIsScanFailed,
+  isManualEnter,
+  setIsManualEnter,
 }) => {
   const {t} = useTranslation();
-  const [refCode, setRefCode] = useState<string>('');
   const [focusInput, setFocusInput] = useState<string | null>(null);
-  const [isScanning, setIsScanning] = useState<boolean>(false);
-  const [isScanSuccess, setIsScanSuccess] = useState<boolean>(false);
-  const [isScanFailed, setIsScanFailed] = useState<boolean>(false);
-  const [isManualEnter, setIsManualEnter] = useState<boolean>(false);
 
   // Camera
   const devices = useCameraDevices();
@@ -103,12 +116,15 @@ export const ReferralContent: React.FC<ReferralContentProps> = ({
   useEffect(() => {
     if (isValidRef) {
       setIsScanSuccess(isValidRef);
+      console.log('scann success :', isScanSuccess);
+    } else if (!isValidRef && isScanning) {
+      setIsScanFailed(true);
     }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isValidRef]);
 
   // QRCode
-  const [isScanned, setIsScanned] = useState(false);
-
   const [frameProcessor, barcodes] = useScanBarcodes([BarcodeFormat.QR_CODE]);
 
   useEffect(() => {
@@ -118,9 +134,10 @@ export const ReferralContent: React.FC<ReferralContentProps> = ({
 
   useEffect(() => {
     console.log('refcode :', refCode);
-    if (onPress && refCode !== '') {
+    if (onPress && refCode !== '' && isScanning) {
       onPress(refCode);
     }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [refCode]);
 
@@ -163,16 +180,11 @@ export const ReferralContent: React.FC<ReferralContentProps> = ({
       <TouchableOpacity
         onPress={() => {
           onPress && onPress(refCode);
-        }}
-        style={{padding: ms(4)}}>
-        <CoinCIcon stroke={Color.Neutral[10]} fill="white" />
+        }}>
+        <SigninIcon stroke={Color.Neutral[10]} fill="white" />
       </TouchableOpacity>
     );
   };
-
-  if (device == null) {
-    return <Text>Camera is not available</Text>;
-  }
 
   return (
     <View style={[styles.root, containerStyle]}>
@@ -198,19 +210,18 @@ export const ReferralContent: React.FC<ReferralContentProps> = ({
       </View>
       {isScanning && !isScanSuccess ? (
         <>
-          <View
-            style={{
-              width: 289,
-              height: 289,
-              backgroundColor: 'white',
-            }}>
-            <Camera
-              style={{flex: 1}}
-              device={device}
-              isActive={true}
-              frameProcessor={frameProcessor}
-              frameProcessorFps={5}
-            />
+          <View style={styles.cameraContainer}>
+            {device !== undefined ? (
+              <Camera
+                style={{flex: 1}}
+                device={device}
+                isActive={true}
+                frameProcessor={frameProcessor}
+                frameProcessorFps={5}
+              />
+            ) : (
+              ''
+            )}
           </View>
           <Gap height={32} />
         </>
@@ -225,7 +236,7 @@ export const ReferralContent: React.FC<ReferralContentProps> = ({
       )}
 
       {isManualEnter && !isScanSuccess ? (
-        <View style={elStyles.container}>
+        <View style={styles.container}>
           <SsuInput.InputText
             value={refCode}
             isError={isError}
@@ -271,11 +282,11 @@ export const ReferralContent: React.FC<ReferralContentProps> = ({
         ''
       )}
 
-      <View style={elStyles.container}>
+      <View style={styles.container}>
         {!isScanning && !isScanSuccess ? (
           <>
             <Button
-              label="Scan Now"
+              label={t(BtnScan)}
               textStyles={{fontSize: mvs(14)}}
               containerStyles={{width: '100%'}}
               onPress={handleScanning}
@@ -288,7 +299,7 @@ export const ReferralContent: React.FC<ReferralContentProps> = ({
         {!isManualEnter && !isScanSuccess ? (
           <>
             <Button
-              label="Enter Manually"
+              label={t(BtnManual)}
               type="border"
               textStyles={{fontSize: mvs(14), color: color.Success[400]}}
               containerStyles={{width: '100%'}}
@@ -299,7 +310,7 @@ export const ReferralContent: React.FC<ReferralContentProps> = ({
         ) : (
           ''
         )}
-        <View style={elStyles.container}>
+        <View style={styles.container}>
           {isScanSuccess ? (
             <>
               <ReferralActivated refCode={refCode} />
@@ -312,19 +323,3 @@ export const ReferralContent: React.FC<ReferralContentProps> = ({
     </View>
   );
 };
-
-const elStyles = StyleSheet.create({
-  container: {
-    paddingHorizontal: widthResponsive(48),
-  },
-  endJustify: {
-    width: '90%',
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-  },
-  square: {
-    width: 70,
-    height: 50,
-  },
-});

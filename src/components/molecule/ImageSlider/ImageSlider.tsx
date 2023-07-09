@@ -29,9 +29,6 @@ import {UpdateProfilePropsType} from '../../../api/profile.api';
 import {PreferenceList} from '../../../interface/setting.interface';
 import {heightPercentage, width, widthPercentage} from '../../../utils';
 import {useProfileHook} from '../../../hooks/use-profile.hook';
-import {RootStackParams} from '../../../navigations';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {useNavigation} from '@react-navigation/native';
 
 type OnScrollEventHandler = (
   event: NativeSyntheticEvent<NativeScrollEvent>,
@@ -99,8 +96,16 @@ export const ImageSlider: React.FC<ImageSliderProps> = ({
     favoriteGeneres: false,
   });
 
-  const onApplyReferral = (refCode: string) => {
-    applyReferralUser(refCode);
+  // Refferal Content
+  const [isScanFailed, setIsScanFailed] = useState<boolean>(false);
+  const [refCode, setRefCode] = useState<string>('');
+  const [isScanning, setIsScanning] = useState<boolean>(false);
+  const [isScanSuccess, setIsScanSuccess] = useState<boolean>(false);
+  const [isManualEnter, setIsManualEnter] = useState<boolean>(false);
+  const [isScanned, setIsScanned] = useState(false);
+
+  const onApplyReferral = (referralCode: string) => {
+    applyReferralUser(referralCode);
   };
 
   const dataArray = [
@@ -138,6 +143,7 @@ export const ImageSlider: React.FC<ImageSliderProps> = ({
         username: profile.data.username,
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [profile]);
 
   useEffect(() => {
@@ -201,6 +207,15 @@ export const ImageSlider: React.FC<ImageSliderProps> = ({
     }
   };
 
+  const handleSkipFailed = () => {
+    console.log('handle skip');
+
+    setIsScanFailed(false);
+    setIsScanning(true);
+    setIsScanned(false);
+    setRefCode('');
+  };
+
   const onPressNext =
     type === 'Preference'
       ? activeIndexSlide === dataArray.length - 1
@@ -223,26 +238,25 @@ export const ImageSlider: React.FC<ImageSliderProps> = ({
     <View style={styles.root}>
       {type === 'Preference' ? (
         <>
-          {/* <View
-            style={{
-              width: '100%',
-              height: '100%',
-              position: 'absolute',
-              backgroundColor: 'rgba(0, 0, 0, 0.4)',
-              zIndex: 10,
-              borderRadius: 4,
-              padding: 16,
-              gap: 16,
-              alignItems: 'center',
-            }}>
-            <View
-              style={{
-                width: '90%',
-                marginTop: 220,
-                height: 135,
-                backgroundColor: '#141921',
-              }}></View>
-          </View> */}
+          {isScanFailed && !isScanSuccess ? (
+            <View style={styles.backgroundFailed}>
+              <View style={styles.containerFailed}>
+                <Text style={[typography.Heading6, styles.titleStart]}>
+                  {t('Setting.ReferralQR.ScanFailed.Title')}
+                </Text>
+                <Text style={[typography.Body1, styles.titleStart]}>
+                  {t('Setting.ReferralQR.ScanFailed.Desc')}
+                </Text>
+                <TouchableOpacity onPress={handleSkipFailed}>
+                  <Text style={[typography.Body2, styles.titleEnd]}>
+                    {t('Setting.ReferralQR.ScanFailed.Btn')}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          ) : (
+            ''
+          )}
           <ScrollView
             ref={scrollViewRef}
             horizontal={true}
@@ -292,6 +306,17 @@ export const ImageSlider: React.FC<ImageSliderProps> = ({
                         isError={errorMsg !== ''}
                         errorMsg={errorMsg}
                         isValidRef={isValidReferral}
+                        setIsScanFailed={setIsScanFailed}
+                        refCode={refCode}
+                        setRefCode={setRefCode}
+                        isScanning={isScanning}
+                        setIsScanning={setIsScanning}
+                        isScanSuccess={isScanSuccess}
+                        setIsScanSuccess={setIsScanSuccess}
+                        isScanned={isScanned}
+                        setIsScanned={setIsScanned}
+                        isManualEnter={isManualEnter}
+                        setIsManualEnter={setIsManualEnter}
                       />
                     ) : index === 2 ? (
                       <StepProfile
@@ -381,6 +406,15 @@ const styles = StyleSheet.create({
     color: color.Neutral[10],
     marginVertical: mvs(10),
   },
+  titleStart: {
+    color: color.Neutral[10],
+    marginVertical: mvs(10),
+  },
+  titleEnd: {
+    textAlign: 'right',
+    color: color.Neutral[10],
+    marginVertical: mvs(10),
+  },
   containerStep: {
     paddingTop: heightPercentage(50),
     justifyContent: 'center',
@@ -415,5 +449,22 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     maxWidth: width * 0.8,
     marginBottom: mvs(30),
+  },
+  backgroundFailed: {
+    width: '100%',
+    height: '100%',
+    position: 'absolute',
+    backgroundColor: 'rgba(0, 0, 0, 0.4)',
+    zIndex: 10,
+    borderRadius: 4,
+    padding: 16,
+    gap: 16,
+    alignItems: 'center',
+  },
+  containerFailed: {
+    width: '90%',
+    marginTop: 220,
+    backgroundColor: color.Dark[800],
+    padding: 24,
   },
 });
