@@ -1,5 +1,5 @@
 import {StyleSheet, Text, View} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import {useAnalyticsHook} from '../../../../hooks/use-analytics.hook';
 import {useTranslation} from 'react-i18next';
 import {useQuery} from 'react-query';
@@ -11,9 +11,15 @@ import {widthResponsive} from '../../../../utils';
 import {color, font} from '../../../../theme';
 import {mvs} from 'react-native-size-matters';
 
-const WhoListenSong = () => {
+interface WhoListenProps {
+  songId: string;
+}
+
+const WhoListenSong: FC<WhoListenProps> = (props: WhoListenProps) => {
   const {getWhoListenSong} = useAnalyticsHook();
   const {t} = useTranslation();
+
+  const {songId} = props;
 
   const {
     data: whoListenData,
@@ -31,7 +37,7 @@ const WhoListenSong = () => {
           ? 'daily'
           : '',
       //TODO: UNCOMMENT AFTER WE GET SONG ID
-      //songID:idSong
+      //songID:songId
     }),
   );
 
