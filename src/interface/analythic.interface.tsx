@@ -24,6 +24,24 @@ export type ChartResponseType = {
   status: number;
 };
 
+export interface SongChart {
+  maxValue: number;
+  description: string;
+  fansStream: string;
+  fansStreamCompared: string;
+  fansStreamPogress: 'improve' | 'regression' | 'same';
+  fansAvgStream: number;
+  fansAvgStreamCompared: string;
+  fansAvgStreamPogress: 'improve' | 'regression' | 'same';
+  diagramData: DataChart[];
+}
+
+export type SongChartResponseType = {
+  data: SongChart;
+  message: string;
+  status: number;
+};
+
 export type EngagementData = {
   likesCount: number;
   commentsCount: number;

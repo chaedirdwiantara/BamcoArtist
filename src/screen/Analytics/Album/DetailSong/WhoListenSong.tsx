@@ -30,6 +30,8 @@ const WhoListenSong = () => {
           : t(selectedRange.label) === 'Daily'
           ? 'daily'
           : '',
+      //TODO: UNCOMMENT AFTER WE GET SONG ID
+      //songID:idSong
     }),
   );
 
@@ -102,10 +104,13 @@ const WhoListenSong = () => {
         dataFilter={dropDownFansGrowth}
         selectedMenu={setSelectedRange}
         fansData={fansData}
-        growthDescOne={t('Home.Tab.Analytic.Album.Listeners.Growth.FanStream')}
-        growthDescTwo={t(
+        growthDescOne={`${t(
+          'Home.Tab.Analytic.Album.Listeners.Growth.FanStream',
+        )} ${t(selectedRange.label)}`}
+        growthDescTwo={`${t(
           'Home.Tab.Analytic.Album.Listeners.Growth.AvgListener',
-        )}
+        )} ${t(selectedRange.label)}`}
+        type={t(selectedRange.label)}
         noOfLines={2}
       />
     </View>

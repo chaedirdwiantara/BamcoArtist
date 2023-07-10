@@ -27,6 +27,7 @@ export type ParamsProps = {
   genre?: string;
   uid?: string;
   interval?: string;
+  songID?: string;
 };
 
 export type imageTypes = {
