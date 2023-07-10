@@ -38,7 +38,7 @@ target 'SsuMusician' do
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
 
-  target 'Beamco for ArtistTests' do
+  target 'Beamco for ArtistTest' do
     inherit! :complete
     # Pods for testing
   end
