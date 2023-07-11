@@ -1,5 +1,5 @@
 import {
-  ActiveListener,
+  AlbumTabActiveListenerEP,
   AlbumListenerCountryEP,
   AlbumListenerLikeEP,
   AlbumSongEP,
@@ -96,12 +96,11 @@ export const useAnalyticsHook = () => {
     }
   };
 
-  const getActiveListener = async (props?: ParamsProps) => {
+  const getAlbumActiveListener = async (props?: ParamsProps) => {
     try {
-      const response = await ActiveListener(props);
+      const response = await AlbumTabActiveListenerEP(props);
       return {
         data: response?.data,
-        meta: response?.meta,
         message: response?.message,
       };
     } catch (error) {
@@ -165,7 +164,6 @@ export const useAnalyticsHook = () => {
       const response = await WhoListenEP(props);
       return {
         data: response?.data,
-        meta: response?.meta,
         message: response?.message,
       };
     } catch (error) {
@@ -300,7 +298,7 @@ export const useAnalyticsHook = () => {
     getFansAgeAnalytic,
     getFansGenderAnalytic,
     getFansCountryAnalytic,
-    getActiveListener,
+    getAlbumActiveListener,
     getPopularAlbum,
     getTopSongs,
     getListenerCountry,

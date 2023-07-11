@@ -84,11 +84,11 @@ export const FansCountry = async (
   return data;
 };
 
-export const ActiveListener = async (
+export const AlbumTabActiveListenerEP = async (
   props?: ParamsProps,
-): Promise<ListPostResponseType> => {
-  const {data} = await SsuAPI().request<ListPostResponseType>({
-    url: '/musician-app/',
+): Promise<SongChartResponseType> => {
+  const {data} = await SsuApiSemeru().request<SongChartResponseType>({
+    url: `/musician-app/analytics/song-stream`,
     method: 'GET',
     params: props,
   });
@@ -145,11 +145,11 @@ export const ListenerLikes = async (
 
 export const WhoListenEP = async (
   props?: ParamsProps,
-): Promise<ListPostResponseType> => {
-  const {data} = await SsuAPI().request<ListPostResponseType>({
-    url: '/musician-app/post/public',
+): Promise<SongChartResponseType> => {
+  const {data} = await SsuApiSemeru().request<SongChartResponseType>({
+    url: `/musician-app/analytics/album-stream/${props?.songID}`,
     method: 'GET',
-    params: props,
+    params: props?.interval,
   });
 
   return data;

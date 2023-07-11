@@ -38,7 +38,7 @@ import {FollowingScreen} from '../screen/OtherUserProfile/FollowingScreen';
 import QuoteMusic from '../screen/CreatePost/MusicPost/QuoteMusic';
 import AddPreview from '../screen/CreatePost/MusicPost/AddPreview';
 import YourTopFansScreen from '../screen/Analytics/Fans/YourTopFans/FullScreen';
-import MySong from '../screen/Analytics/Album/MySong';
+import AlbumAnalyticScreen from '../screen/Analytics/Album/AlbumFullScreen';
 import SongDetailAnalytic from '../screen/Analytics/Album/DetailSong';
 
 // Home
@@ -309,7 +309,7 @@ export type RootStackParams = {
   VerifCodeWithdrawal: undefined;
   Withdrawal: undefined;
   YourTopFansScreen: undefined;
-  MySong: undefined;
+  AlbumAnalyticScreen: {albumId: number};
   SongDetailAnalytic: {
     songId: string;
   };
@@ -543,7 +543,10 @@ export const RootStackScreen = () => (
     <RootStack.Screen name="TicketDetail" component={TicketDetail} />
     <RootStack.Screen name="Shop" component={Shop} />
     <RootStack.Screen name="YourTopFansScreen" component={YourTopFansScreen} />
-    <RootStack.Screen name="MySong" component={MySong} />
+    <RootStack.Screen
+      name="AlbumAnalyticScreen"
+      component={AlbumAnalyticScreen}
+    />
     <RootStack.Screen
       name="SongDetailAnalytic"
       component={SongDetailAnalytic}

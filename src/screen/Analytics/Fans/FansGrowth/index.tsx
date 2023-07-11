@@ -15,7 +15,7 @@ const FansGrowth = () => {
   const {t} = useTranslation();
 
   const {
-    data: fansAnalyticData,
+    data,
     isLoading: queryDataLoading,
     isError,
     refetch,
@@ -43,6 +43,8 @@ const FansGrowth = () => {
     }
   }, [selectedRange]);
 
+  const fansAnalyticData = data?.data;
+
   return (
     <View style={styles.container}>
       {/* TITLE AREA */}
@@ -54,19 +56,29 @@ const FansGrowth = () => {
         </Text>
       </View>
       {/* BODY AREA */}
-      {fansAnalyticData?.data && (
+      {data?.data ? (
         <LineAreaChart
           labelCaption={t(selectedRange.label)}
           dataFilter={dropDownFansGrowth}
           selectedMenu={setSelectedRange}
-          fansData={fansAnalyticData.data}
-          growthDescOne={`${t('Home.Tab.Analytic.Fans.Growth.FansEarn')} ${t(
+          description={fansAnalyticData.description}
+          maxValue={fansAnalyticData.maxValue}
+          chartData={fansAnalyticData.data}
+          cardOneValue={fansAnalyticData.fansEarn}
+          cardOneDesc={`${t('Home.Tab.Analytic.Fans.Growth.FansEarn')} ${t(
             selectedRange.label,
           )}`}
-          growthDescTwo={t('Home.Tab.Analytic.Fans.Growth.BeFan')}
+          cardOneAvgStreamCompare={fansAnalyticData.fansEarnCompare}
+          cardOneAvgProgress={fansAnalyticData.fansEarnProgress}
+          cardTwoValue={fansAnalyticData.beFan}
+          cardTwoDesc={`${t('Home.Tab.Analytic.Fans.Growth.BeFan')} ${t(
+            selectedRange.label,
+          )}`}
+          cardTwoAvgStreamCompare={fansAnalyticData.beFanCompare}
+          cardTwoAvgProgress={fansAnalyticData.beFanProgress}
           type={t(selectedRange.label)}
         />
-      )}
+      ) : null}
     </View>
   );
 };
