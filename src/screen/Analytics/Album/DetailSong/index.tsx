@@ -3,7 +3,10 @@ import React from 'react';
 import {Gap, TopNavigation} from '../../../../components';
 import {useTranslation} from 'react-i18next';
 import {useNavigation} from '@react-navigation/native';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {
+  NativeStackNavigationProp,
+  NativeStackScreenProps,
+} from '@react-navigation/native-stack';
 import {RootStackParams} from '../../../../navigations';
 import {color} from '../../../../theme';
 import WhoListenSong from './WhoListenSong';
@@ -12,10 +15,17 @@ import SongListenerCountry from './SongListenerCountry';
 import SongListenerLike from './SongListenerLikes';
 import SongDescription from './SongDesc';
 
-const SongDetailAnalytic = () => {
+type SongDetailProps = NativeStackScreenProps<
+  RootStackParams,
+  'SongDetailAnalytic'
+>;
+
+const SongDetailAnalytic = ({route}: SongDetailProps) => {
   const {t} = useTranslation();
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
+  const songId = route.params.songId;
+
   return (
     <View style={styles.container}>
       {/* Header Section */}
@@ -32,7 +42,7 @@ const SongDetailAnalytic = () => {
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <SongDescription />
         <Gap height={20} />
-        <WhoListenSong />
+        <WhoListenSong songId={songId} />
         <Gap height={20} />
         <SongListenerCountry />
         <Gap height={20} />

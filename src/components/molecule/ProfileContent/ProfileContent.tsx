@@ -101,7 +101,7 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
   ]);
 
   const [filter2] = useState([
-    {filterName: 'Musician.Tab.Main'},
+    // {filterName: 'Musician.Tab.Main'},// TODO: DISABLE FOR NOW
     {filterName: 'Musician.Tab.Musician'},
     {filterName: 'Musician.Tab.Music'},
     {filterName: 'Musician.Tab.Fans'},
@@ -259,9 +259,11 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
                 scrollable={false}
               />
             </View>
-          ) : filter2[selectedIndex].filterName === 'Musician.Tab.Main' ? (
-            <MainTab uuid={uuid} />
           ) : (
+            // TODO: DISABLE FOR NOW
+            // : filter2[selectedIndex].filterName === 'Musician.Tab.Main' ? (
+            //   <MainTab uuid={uuid} />
+            // )
             <EmptyState
               text={t('EmptyState.NoData') || ''}
               containerStyle={{marginTop: heightPercentage(30)}}

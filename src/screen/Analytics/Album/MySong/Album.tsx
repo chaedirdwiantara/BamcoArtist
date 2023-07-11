@@ -104,7 +104,12 @@ const Album = () => {
               streamAnalytics={item.stream}
               onPressMore={() => {}}
               containerStyles={{marginTop: mvs(20)}}
-              onPressCard={() => navigation.navigate('SongDetailAnalytic')}
+              //TODO: CHANGE ID TO CORRECT ONE LATER
+              onPressCard={() =>
+                navigation.navigate('SongDetailAnalytic', {
+                  songId: item.id.toString(),
+                })
+              }
               hideDropdownMore
             />
           )}

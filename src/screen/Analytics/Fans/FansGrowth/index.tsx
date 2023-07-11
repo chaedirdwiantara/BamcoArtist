@@ -7,10 +7,8 @@ import {DataDropDownType, dropDownFansGrowth} from '../../../../data/dropdown';
 import {useQuery} from 'react-query';
 import {useAnalyticsHook} from '../../../../hooks/use-analytics.hook';
 import {useTranslation} from 'react-i18next';
-import {storage} from '../../../../hooks/use-storage.hook';
 import {color, font} from '../../../../theme';
 import {mvs} from 'react-native-size-matters';
-import {Chart} from '../../../../interface/analythic.interface';
 
 const FansGrowth = () => {
   const {getListDataFansAnalytic} = useAnalyticsHook();

@@ -10,6 +10,7 @@ import {
   DemogGenderResponseType,
   EngagementResponseType,
   EngagementTopFansResponseType,
+  SongChartResponseType,
 } from '../interface/analythic.interface';
 import SsuAPIKrakatau from './baseKrakatau';
 import {ListIncomeResponseType} from '../interface/analythic.interface';
@@ -192,11 +193,11 @@ export const AlbumSongEP = async (
 
 export const WhoListenSongEP = async (
   props?: ParamsProps,
-): Promise<ListPostResponseType> => {
-  const {data} = await SsuAPI().request<ListPostResponseType>({
-    url: '/musician-app/post/public',
+): Promise<SongChartResponseType> => {
+  const {data} = await SsuApiSemeru().request<SongChartResponseType>({
+    url: `/musician-app/analytics/song-stream/${props?.songID}`,
     method: 'GET',
-    params: props,
+    params: props?.interval,
   });
 
   return data;

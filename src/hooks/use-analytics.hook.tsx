@@ -217,7 +217,6 @@ export const useAnalyticsHook = () => {
       const response = await WhoListenSongEP(props);
       return {
         data: response?.data,
-        meta: response?.meta,
         message: response?.message,
       };
     } catch (error) {
