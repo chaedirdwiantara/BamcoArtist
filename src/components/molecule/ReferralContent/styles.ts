@@ -6,13 +6,19 @@ import {
   normalize,
   width,
   widthPercentage,
+  widthResponsive,
 } from '../../../utils';
+import {color} from '../../../theme';
+import Font from '../../../theme/Font';
 
 const styles = StyleSheet.create({
   root: {
     width,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  container: {
+    paddingHorizontal: widthResponsive(48),
   },
   containerText: {
     alignItems: 'center',
@@ -49,6 +55,19 @@ const styles = StyleSheet.create({
     width: widthPercentage(155),
     aspectRatio: heightPercentage(155 / 46),
   },
+  containerSkip: {
+    position: 'absolute',
+    top: 0,
+    right: widthPercentage(30),
+    zIndex: 1,
+  },
+  textSkip: {
+    fontSize: mvs(14),
+    fontFamily: Font.InterRegular,
+    fontWeight: '500',
+    lineHeight: mvs(17),
+    color: color.Success[400],
+  },
   containerActivated: {
     marginBottom: mvs(40),
   },
@@ -78,6 +97,18 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: Color.Neutral[10],
     marginVertical: mvs(5),
+  },
+  qrContainer: {
+    width: widthPercentage(200),
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: Color.Neutral[10],
+    padding: widthPercentage(10),
+  },
+  cameraContainer: {
+    width: 289,
+    height: 289,
+    backgroundColor: 'white',
   },
 });
 
