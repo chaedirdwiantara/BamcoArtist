@@ -56,7 +56,7 @@ const ActiveListener = () => {
         </Text>
       </View>
       {/* BODY AREA */}
-      {data?.data ? (
+      {albumTabData ? (
         <LineAreaChart
           labelCaption={t(selectedRange.label)}
           dataFilter={dropDownFansGrowth}

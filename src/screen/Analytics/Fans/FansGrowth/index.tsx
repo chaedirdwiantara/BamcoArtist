@@ -56,7 +56,7 @@ const FansGrowth = () => {
         </Text>
       </View>
       {/* BODY AREA */}
-      {data?.data ? (
+      {fansAnalyticData ? (
         <LineAreaChart
           labelCaption={t(selectedRange.label)}
           dataFilter={dropDownFansGrowth}

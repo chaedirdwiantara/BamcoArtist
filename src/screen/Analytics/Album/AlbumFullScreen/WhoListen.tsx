@@ -60,7 +60,7 @@ const WhoListen: FC<WhoListenProps> = (props: WhoListenProps) => {
         </Text>
       </View>
       {/* BODY AREA */}
-      {data?.data ? (
+      {whoListenData ? (
         <LineAreaChart
           labelCaption={t(selectedRange.label)}
           dataFilter={dropDownFansGrowth}
