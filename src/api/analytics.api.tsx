@@ -13,6 +13,7 @@ import {
   DemogGenderResponseType,
   EngagementResponseType,
   EngagementTopFansResponseType,
+  ListenerLikesResponseType,
   SongChartResponseType,
 } from '../interface/analythic.interface';
 import SsuAPIKrakatau from './baseKrakatau';
@@ -136,11 +137,11 @@ export const ListenerCountry = async (
 
 export const ListenerLikes = async (
   props?: ParamsProps,
-): Promise<ListPostResponseType> => {
-  const {data} = await SsuAPI().request<ListPostResponseType>({
-    url: '/musician-app/post/public',
+): Promise<ListenerLikesResponseType> => {
+  const {data} = await SsuAPI().request<ListenerLikesResponseType>({
+    url: `/musician-app/similar-musician/${props?.genreID}/genre`,
     method: 'GET',
-    params: props,
+    params: props?.perPage,
   });
 
   return data;

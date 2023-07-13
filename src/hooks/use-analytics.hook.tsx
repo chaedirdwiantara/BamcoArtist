@@ -151,7 +151,6 @@ export const useAnalyticsHook = () => {
       const response = await ListenerLikes(props);
       return {
         data: response?.data,
-        meta: response?.meta,
         message: response?.message,
       };
     } catch (error) {

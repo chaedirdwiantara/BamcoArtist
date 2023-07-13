@@ -4,8 +4,6 @@ import {Gap} from '../../../../components';
 import {widthResponsive} from '../../../../utils';
 import {useTranslation} from 'react-i18next';
 import {PlayPinkIcon} from '../../../../assets/icon';
-import {useQuery} from 'react-query';
-import {useAnalyticsHook} from '../../../../hooks/use-analytics.hook';
 import {color, font} from '../../../../theme';
 import {mvs} from 'react-native-size-matters';
 import MusiciansListCard from '../../../../components/molecule/ListCard/MusiciansListCard';
@@ -15,17 +13,9 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParams} from '../../../../navigations';
 
 const ListenerLikes = () => {
-  const {getListenerLike} = useAnalyticsHook();
   const {t} = useTranslation();
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
-
-  const {
-    data: listenerLikesData,
-    isLoading: queryDataLoading,
-    isError,
-    refetch,
-  } = useQuery('analytic-listenerLikes', () => getListenerLike({}));
 
   return (
     <View style={styles.container}>

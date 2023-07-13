@@ -190,3 +190,20 @@ export type ListIncomeResponseType = {
   meta: number;
   status: number;
 };
+
+export type ListenerLikesData = {
+  uuid: string;
+  username: string;
+  fullname: string;
+  email: string;
+  imageProfileUrls: imageTypes[];
+  followers: number;
+  isFollowed: boolean;
+};
+
+export type ListenerLikesResponseType = {
+  code: number;
+  data: ListenerLikesData[];
+  message: string;
+  status: number;
+};
