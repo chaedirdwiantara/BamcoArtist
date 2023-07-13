@@ -292,7 +292,11 @@
             "Title" : "Popular Post"
           },
           "Engagement": {
-            "Title" : "Post Engagement Rate"
+            "Title" : "Post Engagement Rate",
+            "AvgView": "Avg view per post",
+            "AvgLiked": "Avg liked per post",
+            "AvgReply": "Avg reply per post",
+            "AvgShared": "Avg shared per post"
           }
         },
         "Album": {

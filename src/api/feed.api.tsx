@@ -1,6 +1,7 @@
 import SsuAPI from './baseRinjani';
 import SsuSemeruPublic from './baseSemeru';
 import {
+  AnalyticPostResponseType,
   CommentDetailResponseType,
   CommentResponseType,
   CommentUpdateResponseType,
@@ -89,6 +90,17 @@ export const listPostSimilar = async (
     url: '/posts/similar-post',
     method: 'GET',
     params: props,
+  });
+
+  return data;
+};
+
+export const AnalyticPost = async (
+  props?: ParamsProps,
+): Promise<AnalyticPostResponseType> => {
+  const {data} = await SsuAPI().request<AnalyticPostResponseType>({
+    url: `/musician-app/post/my-top-post/${props?.interval}`,
+    method: 'GET',
   });
 
   return data;

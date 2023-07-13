@@ -1,6 +1,9 @@
 import SsuAPI from './baseRinjani';
 import SsuApiSemeru from './baseSemeru';
-import {ListPostResponseType} from '../interface/feed.interface';
+import {
+  AnalyticPostEngagementResponseType,
+  ListPostResponseType,
+} from '../interface/feed.interface';
 import {ParamsProps} from '../interface/base.interface';
 import {
   AlbumTopSongResponseType,
@@ -241,11 +244,10 @@ export const SongDescEP = async (
 
 export const PostEngagementEP = async (
   props?: ParamsProps,
-): Promise<ListPostResponseType> => {
-  const {data} = await SsuAPI().request<ListPostResponseType>({
-    url: '/musician-app/post/public',
+): Promise<AnalyticPostEngagementResponseType> => {
+  const {data} = await SsuAPI().request<AnalyticPostEngagementResponseType>({
+    url: `/musician-app/post/my-post-engagement-rate/${props?.interval}`,
     method: 'GET',
-    params: props,
   });
 
   return data;

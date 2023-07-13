@@ -266,7 +266,6 @@ export const useAnalyticsHook = () => {
       const response = await PostEngagementEP(props);
       return {
         data: response?.data,
-        meta: response?.meta,
         message: response?.message,
       };
     } catch (error) {
