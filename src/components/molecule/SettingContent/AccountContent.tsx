@@ -12,11 +12,13 @@ import {
 import * as yup from 'yup';
 import {useTranslation} from 'react-i18next';
 import {ms, mvs} from 'react-native-size-matters';
+import DatePicker from 'react-native-date-picker';
 import {yupResolver} from '@hookform/resolvers/yup';
 import {Controller, useForm} from 'react-hook-form';
 
 import {
   ArrowLeftIcon,
+  ChevronDownIcon,
   CloseCircleIcon,
   ErrorIcon,
   TickCircleIcon,
@@ -29,33 +31,41 @@ import {
   widthResponsive,
 } from '../../../utils';
 import {Dropdown} from '../DropDown';
+import {
+  dataGender,
+  dataYearsFrom,
+  dataYearsTo,
+} from '../../../data/Settings/account';
 import Color from '../../../theme/Color';
-import {TopNavigation} from '../TopNavigation';
-import Typography from '../../../theme/Typography';
-import {ModalConfirm} from '../Modal/ModalConfirm';
-import {dataProps} from '../DropDown/DropdownMulti';
-import {color, font, typography} from '../../../theme';
-import {DataDropDownType} from '../../../data/dropdown';
-import {Button, Gap, SsuInput, SsuToast} from '../../atom';
-import {useProfileHook} from '../../../hooks/use-profile.hook';
-import {formatValueName2} from '../../../utils/formatValueName';
 import {
   ListRoleType,
   PreferenceList,
 } from '../../../interface/setting.interface';
+import {TopNavigation} from '../TopNavigation';
+import Typography from '../../../theme/Typography';
+import {ModalConfirm} from '../Modal/ModalConfirm';
+import {dataProps} from '../DropDown/DropdownMulti';
+import {MenuText} from '../../atom/MenuText/MenuText';
+import {color, font, typography} from '../../../theme';
+import {DataDropDownType} from '../../../data/dropdown';
+import {dateFormatBirth} from '../../../utils/date-format';
+import {Button, Gap, SsuInput, SsuToast} from '../../atom';
+import {useProfileHook} from '../../../hooks/use-profile.hook';
+import {formatValueName2} from '../../../utils/formatValueName';
 import {profileStorage, storage} from '../../../hooks/use-storage.hook';
 import {ProfileResponseData} from '../../../interface/profile.interface';
-import {dataYearsFrom, dataYearsTo} from '../../../data/Settings/account';
+import {ListCountryType} from '../../../interface/location.interface';
 
 interface AccountProps {
   profile: ProfileResponseData;
   onPressGoBack: () => void;
-  dataAllCountry: DataDropDownType[];
+  dataAllCountry: ListCountryType[];
   dataCitiesOfCountry: DataDropDownType[];
-  setSelectedCountry: (value: string) => void;
+  setSelectedCountry: (value: number) => void;
   moods: PreferenceList[];
   genres: PreferenceList[];
   roles: ListRoleType[];
+  fromScreen: string;
 }
 
 interface InputProps {
@@ -65,9 +75,10 @@ interface InputProps {
   labels: string;
   yearsActiveFrom: string;
   yearsActiveTo: string;
-  locationCountry: string;
+  locationCountry: number;
   locationCity: string;
-  typeOfMusician: string;
+  typeOfMusician: number;
+  gender: string;
 }
 
 const validation = yup.object({
@@ -86,9 +97,10 @@ const validation = yup.object({
   labels: yup.string(),
   yearsActiveFrom: yup.string(),
   yearsActiveTo: yup.string(),
-  locationCountry: yup.string(),
+  locationCountry: yup.number(),
   locationCity: yup.string(),
-  typeOfMusician: yup.string(),
+  typeOfMusician: yup.number(),
+  gender: yup.string(),
 });
 
 export const AccountContent: React.FC<AccountProps> = ({
@@ -100,6 +112,7 @@ export const AccountContent: React.FC<AccountProps> = ({
   genres,
   moods,
   roles,
+  fromScreen,
 }) => {
   const {t} = useTranslation();
   const member = profile.members?.length > 0 ? profile.members : [''];
@@ -109,7 +122,6 @@ export const AccountContent: React.FC<AccountProps> = ({
   const [disabledButton, setDisabledButton] = useState<boolean>(true);
   const [toastVisible, setToastVisible] = useState<boolean>(false);
   const [isSubmit, setIsSubmit] = useState<boolean>(false);
-  const [initialMusicianType, setInitialMusicianType] = useState<string>('');
   const [valueGenres, setValueGenres] = useState<(number | undefined)[]>([]);
   const [valueMoodsPreference, setValueMoodsPreference] = useState<
     (number | undefined)[]
@@ -120,6 +132,8 @@ export const AccountContent: React.FC<AccountProps> = ({
   const [valueTypeOfMusician, setValueTypeOfMusician] = useState<
     (number | undefined)[]
   >([]);
+  const [birthdate, setBirthDate] = useState<string>('');
+  const [openPickerBirth, setOpenPickerBirth] = useState<boolean>(false);
   const {updateProfilePreference, isError, isLoading, errorMsg, setIsError} =
     useProfileHook();
 
@@ -137,12 +151,11 @@ export const AccountContent: React.FC<AccountProps> = ({
       labels: profile.labels || '',
       yearsActiveFrom: profile.yearsActiveFrom || '',
       yearsActiveTo: profile.yearsActiveTo || '',
-      locationCountry: profile.locationCountry || '',
+      locationCountry: profile.locationCountry?.id || 0,
       locationCity: profile.locationCity || '',
       typeOfMusician:
-        profile.rolesInIndustry.length > 0
-          ? profile.rolesInIndustry[0].name
-          : '',
+        profile.rolesInIndustry.length > 0 ? profile.rolesInIndustry[0].id : -1,
+      gender: profile.gender || '',
     },
   });
 
@@ -161,14 +174,11 @@ export const AccountContent: React.FC<AccountProps> = ({
       const gr = getValue(formatValueName2(profile.genres));
       const md = getValue(formatValueName2(profile.moods));
       const fvgr = getValue(formatValueName2(profile.favoriteGenres));
-      const musicianType =
-        profile.rolesInIndustry.length > 0
-          ? profile.rolesInIndustry[0].name
-          : '';
       setValueGenres(gr);
       setValueMoodsPreference(md);
       setValueGenresPreference(fvgr);
-      setInitialMusicianType(musicianType);
+      setValueTypeOfMusician([profile.rolesInIndustry[0].id]);
+      setBirthDate(profile.birthdate);
     }
   }, [profile]);
 
@@ -182,15 +192,19 @@ export const AccountContent: React.FC<AccountProps> = ({
   useEffect(() => {
     if (
       isValid &&
-      valueMoodsPreference.length > 0 &&
-      valueGenresPreference.length > 0
+      valueGenres.length > 0 &&
+      valueTypeOfMusician.length > 0 &&
+      getValues('yearsActiveFrom') &&
+      getValues('yearsActiveTo') &&
+      getValues('locationCountry') &&
+      getValues('locationCity')
     ) {
       setDisabledButton(false);
     } else {
       setDisabledButton(true);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isValidating, isValid, valueMoodsPreference, valueGenresPreference]);
+  }, [isValidating, isValid, valueGenres, valueTypeOfMusician, changes]);
 
   const onPressSave = () => {
     changes ? setShowModal(true) : onPressConfirm();
@@ -207,6 +221,8 @@ export const AccountContent: React.FC<AccountProps> = ({
         yearsActiveTo: getValues('yearsActiveTo'),
         locationCountry: getValues('locationCountry'),
         locationCity: getValues('locationCity'),
+        gender: getValues('gender'),
+        birthdate,
         members: members.filter(val => val !== ''),
         genres: valueGenres as number[],
         moods: valueMoodsPreference as number[],
@@ -270,6 +286,8 @@ export const AccountContent: React.FC<AccountProps> = ({
     }
   }, []);
 
+  const soloRole = valueTypeOfMusician[0] !== 3 && valueTypeOfMusician[0] !== 8;
+
   return (
     <KeyboardAvoidingView
       style={{flex: 1}}
@@ -307,6 +325,10 @@ export const AccountContent: React.FC<AccountProps> = ({
                 isError={errors?.username ? true : false}
                 errorMsg={errors?.username?.message}
                 containerStyles={{marginTop: heightPercentage(15)}}
+                editable={fromScreen !== 'progress'}
+                inputStyles={{
+                  color: fromScreen !== 'progress' ? '#fff' : 'gray',
+                }}
               />
             )}
           />
@@ -327,13 +349,17 @@ export const AccountContent: React.FC<AccountProps> = ({
                 isError={errors?.fullname ? true : false}
                 errorMsg={errors?.fullname?.message}
                 containerStyles={{marginTop: heightPercentage(15)}}
+                editable={fromScreen !== 'progress'}
+                inputStyles={{
+                  color: fromScreen !== 'progress' ? '#fff' : 'gray',
+                }}
               />
             )}
           />
 
           <Dropdown.Multi
             data={formatValueName2(genres) ?? []}
-            isRequired={true}
+            isRequired={true && fromScreen === 'progress'}
             placeHolder={t('Setting.Account.Placeholder.Genre') || ''}
             dropdownLabel={t('Setting.Account.Label.Genre') || ''}
             textTyped={(_newText: string) => null}
@@ -342,6 +368,49 @@ export const AccountContent: React.FC<AccountProps> = ({
             setValues={val => {
               setValueGenres(val);
               setChanges(true);
+            }}
+          />
+
+          <View style={styles.containerBirth}>
+            <Text style={[typography.Overline, {color: Color.Neutral[50]}]}>
+              {t('Setting.Account.Label.DateOfBirth')}
+            </Text>
+            {fromScreen === 'progress' && (
+              <Text style={[typography.Overline, {color: Color.Pink[200]}]}>
+                {' *' + t('General.Required')}
+              </Text>
+            )}
+          </View>
+          <MenuText.RightIcon
+            text={birthdate === '' ? 'YYYY-MM-DD' : birthdate}
+            containerStyles={{marginTop: mvs(10), marginLeft: ms(4)}}
+            icon={
+              <ChevronDownIcon
+                stroke="#7c7b7c"
+                style={{
+                  width: widthPercentage(15),
+                  height: widthPercentage(15),
+                  marginRight: ms(10),
+                }}
+              />
+            }
+            onPress={() => setOpenPickerBirth(true)}
+            onPressTooltip={() => setOpenPickerBirth(true)}
+          />
+
+          <DatePicker
+            modal
+            open={openPickerBirth}
+            date={birthdate === '' ? new Date() : new Date(birthdate)}
+            mode="date"
+            theme="dark"
+            textColor={Color.Pink[200]}
+            onConfirm={date => {
+              setOpenPickerBirth(false);
+              setBirthDate(dateFormatBirth(date));
+            }}
+            onCancel={() => {
+              setOpenPickerBirth(false);
             }}
           />
 
@@ -372,7 +441,7 @@ export const AccountContent: React.FC<AccountProps> = ({
               render={({field: {onChange, value}}) => (
                 <Dropdown.Input
                   initialValue={value}
-                  isRequired={true}
+                  isRequired={true && fromScreen === 'progress'}
                   data={dataYearsFrom}
                   placeHolder={t('Setting.Account.Placeholder.Active') || ''}
                   dropdownLabel={t('Musician.Label.Active') || ''}
@@ -426,12 +495,12 @@ export const AccountContent: React.FC<AccountProps> = ({
               render={({field: {onChange, value}}) => (
                 <Dropdown.Input
                   type="location"
-                  isRequired={true}
+                  isRequired={true && fromScreen === 'progress'}
                   initialValue={value}
                   data={dataAllCountry}
                   placeHolder={t('Setting.Account.Placeholder.Country') || ''}
                   dropdownLabel={t('Setting.Account.Label.Location') || ''}
-                  textTyped={(newText: {label: string; value: string}) => {
+                  textTyped={(newText: {label: string; value: number}) => {
                     onChange(newText.value);
                     setSelectedCountry(newText.value);
                     setChanges(true);
@@ -476,8 +545,8 @@ export const AccountContent: React.FC<AccountProps> = ({
             control={control}
             render={({field: {onChange, value}}) => (
               <Dropdown.Input
-                initialValue={initialMusicianType}
-                isRequired={true}
+                initialValue={value}
+                isRequired={true && fromScreen === 'progress'}
                 data={formatValueName2(roles) ?? []}
                 placeHolder={t('Setting.Account.Label.TypeOfMusician') || ''}
                 dropdownLabel={t('Setting.Account.Label.TypeOfMusician') || ''}
@@ -494,6 +563,29 @@ export const AccountContent: React.FC<AccountProps> = ({
               />
             )}
           />
+
+          {soloRole && (
+            <Controller
+              name="gender"
+              control={control}
+              render={({field: {onChange, value}}) => (
+                <Dropdown.Input
+                  initialValue={value}
+                  data={dataGender}
+                  isRequired={true && fromScreen === 'progress'}
+                  placeHolder={t('Setting.Account.Placeholder.Gender')}
+                  dropdownLabel={t('Setting.Account.Label.Gender')}
+                  textTyped={(newText: {label: string; value: string}) => {
+                    onChange(newText.value);
+                    setChanges(true);
+                  }}
+                  containerStyles={{marginTop: heightPercentage(15)}}
+                  isError={errors?.gender ? true : false}
+                  errorMsg={errors?.gender?.message}
+                />
+              )}
+            />
+          )}
 
           {valueTypeOfMusician[0] === 3 &&
             members.map((val, index) => (
@@ -661,5 +753,16 @@ const styles = StyleSheet.create({
     marginVertical: heightPercentage(25),
     alignSelf: 'center',
     backgroundColor: Color.Dark[50],
+  },
+  containerBirth: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: heightPercentage(15),
+  },
+  titleBirthDate: {
+    color: Color.Error[400],
+    fontFamily: font.InterRegular,
+    fontSize: normalize(10),
+    lineHeight: mvs(12),
   },
 });
