@@ -27,6 +27,11 @@ interface CompletedType {
   profile: boolean;
 }
 
+interface UncompleteListType {
+  account: string[];
+  profile: string[];
+}
+
 export const ProfileProgressScreen: React.FC = () => {
   const {t} = useTranslation();
   const navigation =
@@ -46,6 +51,10 @@ export const ProfileProgressScreen: React.FC = () => {
     show: false,
     type: 'account',
   });
+  const [uncompleteList, setUncompleteList] = useState<UncompleteListType>({
+    account: [],
+    profile: [],
+  });
 
   useFocusEffect(
     useCallback(() => {
@@ -56,10 +65,16 @@ export const ProfileProgressScreen: React.FC = () => {
 
   useEffect(() => {
     // all required input = done, if unchecked list is empty.
-    setCompleted({
-      account: profileProgress?.uncompleteList.accountInformation.length === 0,
-      profile: profileProgress?.uncompleteList.profileInformation.length === 0,
-    });
+    if (profileProgress) {
+      setCompleted({
+        account: profileProgress.uncompleteList.accountInformation.length === 0,
+        profile: profileProgress.uncompleteList.profileInformation.length === 0,
+      });
+      setUncompleteList({
+        account: profileProgress.uncompleteList.accountInformation,
+        profile: profileProgress.uncompleteList.profileInformation,
+      });
+    }
   }, [profileProgress]);
 
   const goBack = () => {
@@ -82,7 +97,14 @@ export const ProfileProgressScreen: React.FC = () => {
       null;
     } else {
       if (dataProfile) {
-        navigation.navigate(screenName, {...dataProfile.data});
+        if (screenName === 'Account') {
+          navigation.navigate(screenName, {
+            data: dataProfile?.data,
+            fromScreen: 'progress',
+          });
+        } else {
+          navigation.navigate(screenName, {data: dataProfile?.data});
+        }
       }
     }
   };
@@ -94,40 +116,38 @@ export const ProfileProgressScreen: React.FC = () => {
       type === 'account'
         ? t('ProfileProgress.Tab.AccountInformation')
         : t('ProfileProgress.Tab.ProfileInformation');
-
-    const uncompleteList =
+    const uncompleteListTemp =
       type === 'account'
-        ? profileProgress?.uncompleteList.accountInformation
-        : profileProgress?.uncompleteList.profileInformation;
+        ? uncompleteList.account.filter(val => val !== 'Expectation')
+        : uncompleteList.profile;
+    const uncompleteSubtitle =
+      uncompleteListTemp.length > 0
+        ? t('ProfileProgress.SubtitleTooltip')
+        : t('ProfileProgress.SubtitleTooltipFinish');
+
     return (
       <View style={styles.card}>
         <Text style={[typography.Heading6, {color: color.Neutral[10]}]}>
           {title}
         </Text>
-        <Text style={styles.subtitleModal}>
-          {t('ProfileProgress.SubtitleTooltip')}
-        </Text>
-        {content.map((val, i) => {
-          const unFilled =
-            uncompleteList !== undefined
-              ? uncompleteList.filter(item => item === t(val)).length > 0
-              : false;
-          return (
-            <View style={styles.containerItem} key={i}>
-              <Text style={styles.listItem}>{i + 1 + '. '}</Text>
-              <Text style={styles.listItem}>{t(val)}</Text>
-              <Gap width={ms(7)} />
-              {unFilled ? (
-                <InfoCircle2Icon />
-              ) : (
-                <CheckCircle2Icon
-                  stroke="#FF7ED8"
-                  style={{width: mvs(16), height: mvs(16)}}
-                />
-              )}
-            </View>
-          );
-        })}
+        <Text style={styles.subtitleModal}>{uncompleteSubtitle}</Text>
+        {uncompleteListTemp.length > 0 &&
+          content.map(val => {
+            const unFilled =
+              uncompleteListTemp.filter(item => item === t(val)).length > 0;
+            const index = uncompleteListTemp.indexOf(t(val));
+
+            if (unFilled) {
+              return (
+                <View style={styles.containerItem} key={index}>
+                  <Text style={styles.listItem}>{index + 1 + '. '}</Text>
+                  <Text style={styles.listItem}>{t(val)}</Text>
+                  <Gap width={ms(7)} />
+                  <InfoCircle2Icon />
+                </View>
+              );
+            }
+          })}
         <View style={styles.dismissContainer}>
           <TouchableOpacity
             onPress={() =>
