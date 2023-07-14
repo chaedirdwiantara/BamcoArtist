@@ -4,17 +4,17 @@ import {DataAlbum} from './song.interface';
 export interface DataChart {
   value: number;
   hideDataPoint: boolean;
-  label: String;
+  label: string;
 }
 export interface Chart {
   maxValue: number;
-  beFan: string;
+  beFan: number;
   beFanCompare: string;
   beFanProgress: 'improve' | 'regression' | 'same';
   fansEarn: string;
   fansEarnCompare: string;
   fansEarnProgress: 'improve' | 'regression' | 'same';
-  description: String;
+  description: string;
   data: DataChart[];
 }
 

@@ -8,7 +8,7 @@ import {Gap} from '../../atom';
 import {LineChart} from 'react-native-gifted-charts';
 import GrowthCard from './GrowthCard';
 import {DataDropDownType} from '../../../data/dropdown';
-import {Chart} from '../../../interface/analythic.interface';
+import {DataChart} from '../../../interface/analythic.interface';
 import {widthPercentageToDP} from 'react-native-responsive-screen';
 import {storage} from '../../../hooks/use-storage.hook';
 
@@ -16,11 +16,19 @@ interface LineAreaChartProps {
   labelCaption: string;
   dataFilter: DataDropDownType[];
   selectedMenu: React.Dispatch<React.SetStateAction<DataDropDownType>>;
-  fansData: Chart;
-  growthDescOne: string;
-  growthDescTwo: string;
-  noOfLines?: number;
+  description: string;
+  maxValue: number;
+  chartData: DataChart[];
+  cardOneValue: number | string;
+  cardOneDesc: string;
+  cardOneAvgStreamCompare: string;
+  cardOneAvgProgress: 'improve' | 'regression' | 'same';
+  cardTwoValue: number | string;
+  cardTwoDesc: string;
+  cardTwoAvgStreamCompare: string;
+  cardTwoAvgProgress: 'improve' | 'regression' | 'same';
   type: 'Monthly' | 'Weekly' | 'Daily';
+  noOfLines?: number;
 }
 
 const LineAreaChart: FC<LineAreaChartProps> = (props: LineAreaChartProps) => {
@@ -28,11 +36,19 @@ const LineAreaChart: FC<LineAreaChartProps> = (props: LineAreaChartProps) => {
     labelCaption,
     dataFilter,
     selectedMenu,
-    fansData,
-    growthDescOne,
-    growthDescTwo,
-    noOfLines,
+    description,
+    maxValue,
+    chartData,
+    cardOneValue,
+    cardOneDesc,
+    cardOneAvgStreamCompare,
+    cardOneAvgProgress,
+    cardTwoValue,
+    cardTwoDesc,
+    cardTwoAvgStreamCompare,
+    cardTwoAvgProgress,
     type,
+    noOfLines,
   } = props;
   const lang = storage.getString('lang');
   return (
@@ -55,7 +71,7 @@ const LineAreaChart: FC<LineAreaChartProps> = (props: LineAreaChartProps) => {
       </View>
 
       <Gap height={8} />
-      <Text style={styles.desc}>{fansData?.description}</Text>
+      <Text style={styles.desc}>{description}</Text>
       <Gap height={4} />
 
       {/* CHART AREA */}
@@ -63,12 +79,12 @@ const LineAreaChart: FC<LineAreaChartProps> = (props: LineAreaChartProps) => {
         <LineChart
           thickness={3}
           color={color.Pink[400]}
-          maxValue={fansData.maxValue}
+          maxValue={maxValue}
           noOfSections={5}
           areaChart
           yAxisTextStyle={{color: color.Dark[100]}}
           // @ts-ignore TODO: HANDLE IT LATER
-          data={fansData?.data}
+          data={chartData}
           startFillColor={color.Pink[400]}
           endFillColor={color.Dark[800]}
           startOpacity={0.4}
@@ -92,17 +108,17 @@ const LineAreaChart: FC<LineAreaChartProps> = (props: LineAreaChartProps) => {
       {/* CARD AREA */}
       <View style={styles.cardContainer}>
         <GrowthCard
-          number={fansData?.fansEarn}
-          desc={growthDescOne ?? ''}
-          numberDiffs={fansData?.fansEarnCompare}
-          progress={fansData?.fansEarnProgress}
+          number={cardOneValue}
+          desc={cardOneDesc}
+          numberDiffs={cardOneAvgStreamCompare}
+          progress={cardOneAvgProgress}
           noOfLines={noOfLines}
         />
         <GrowthCard
-          number={fansData?.beFan}
-          desc={growthDescTwo ?? ''}
-          numberDiffs={fansData?.beFanCompare}
-          progress={fansData?.beFanProgress}
+          number={cardTwoValue}
+          desc={cardTwoDesc}
+          numberDiffs={cardTwoAvgStreamCompare}
+          progress={cardTwoAvgProgress}
           noOfLines={noOfLines}
         />
       </View>

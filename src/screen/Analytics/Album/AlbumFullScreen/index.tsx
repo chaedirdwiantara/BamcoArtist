@@ -3,7 +3,10 @@ import React from 'react';
 import {Gap, TopNavigation} from '../../../../components';
 import {useTranslation} from 'react-i18next';
 import {useNavigation} from '@react-navigation/native';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {
+  NativeStackNavigationProp,
+  NativeStackScreenProps,
+} from '@react-navigation/native-stack';
 import {RootStackParams} from '../../../../navigations';
 import {color} from '../../../../theme';
 import {widthResponsive} from '../../../../utils';
@@ -12,7 +15,13 @@ import WhoListen from './WhoListen';
 import AlbumListenerCountry from './AlbumListenerCountry';
 import AlbumListenerLike from './AlbumListenerAlsoLike';
 
-const MySong = () => {
+type SongDetailProps = NativeStackScreenProps<
+  RootStackParams,
+  'AlbumAnalyticScreen'
+>;
+
+const AlbumAnalyticScreen = ({route}: SongDetailProps) => {
+  const songId = route.params.albumId;
   const {t} = useTranslation();
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
@@ -32,7 +41,7 @@ const MySong = () => {
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <Album />
         <Gap height={20} />
-        <WhoListen />
+        <WhoListen albumId={songId} />
         <Gap height={20} />
         <AlbumListenerCountry />
         <Gap height={20} />
@@ -42,7 +51,7 @@ const MySong = () => {
   );
 };
 
-export default MySong;
+export default AlbumAnalyticScreen;
 
 const styles = StyleSheet.create({
   container: {

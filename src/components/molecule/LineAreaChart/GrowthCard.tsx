@@ -7,7 +7,7 @@ import {color, font} from '../../../theme';
 import {widthResponsive} from '../../../utils';
 
 interface GrowthCardProps {
-  number: string;
+  number: string | number;
   numberDiffs: string;
   desc: string;
   progress: 'improve' | 'regression' | 'same';
