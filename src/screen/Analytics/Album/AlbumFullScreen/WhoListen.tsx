@@ -4,7 +4,7 @@ import {useAnalyticsHook} from '../../../../hooks/use-analytics.hook';
 import {useTranslation} from 'react-i18next';
 import {useQuery} from 'react-query';
 import {DataDropDownType, dropDownFansGrowth} from '../../../../data/dropdown';
-import {Chart} from '../../../../interface/analythic.interface';
+import {Chart, SongChart} from '../../../../interface/analythic.interface';
 import {MusicPinkIcon} from '../../../../assets/icon';
 import {Gap, LineAreaChart} from '../../../../components';
 import {widthResponsive} from '../../../../utils';
@@ -12,33 +12,28 @@ import {color, font} from '../../../../theme';
 import {mvs} from 'react-native-size-matters';
 
 interface WhoListenProps {
-  songId: string;
+  albumId: number;
 }
 
-const WhoListenSong: FC<WhoListenProps> = (props: WhoListenProps) => {
-  const {getWhoListenSong} = useAnalyticsHook();
+const WhoListen: FC<WhoListenProps> = (props: WhoListenProps) => {
+  const {getWhoListen} = useAnalyticsHook();
   const {t} = useTranslation();
+  const {albumId} = props;
 
-  const {songId} = props;
-
-  const {
-    data,
-    isLoading: queryDataLoading,
-    isError,
-    refetch,
-  } = useQuery('analytic-whoListenSong', () =>
-    getWhoListenSong({
-      interval:
-        t(selectedRange.label) === 'Monthly'
-          ? 'monthly'
-          : t(selectedRange.label) === 'Weekly'
-          ? 'weekly'
-          : t(selectedRange.label) === 'Daily'
-          ? 'daily'
-          : '',
-      //TODO: UNCOMMENT AFTER WE GET SONG ID
-      //songID:songId
-    }),
+  const {data, isLoading, isError, refetch} = useQuery(
+    'analytic-whoListen',
+    () =>
+      getWhoListen({
+        interval:
+          t(selectedRange.label) === 'Monthly'
+            ? 'monthly'
+            : t(selectedRange.label) === 'Weekly'
+            ? 'weekly'
+            : t(selectedRange.label) === 'Daily'
+            ? 'daily'
+            : '',
+        albumID: albumId,
+      }),
   );
 
   const [selectedRange, setSelectedRange] = useState<DataDropDownType>({
@@ -61,7 +56,7 @@ const WhoListenSong: FC<WhoListenProps> = (props: WhoListenProps) => {
         <MusicPinkIcon />
         <Gap width={widthResponsive(10)} />
         <Text style={styles.title}>
-          {t('Home.Tab.Analytic.Album.DetailSong.WhoListen.Title')}
+          {t('Home.Tab.Analytic.Album.MySong.WhoListen.Title')}
         </Text>
       </View>
       {/* BODY AREA */}
@@ -93,7 +88,7 @@ const WhoListenSong: FC<WhoListenProps> = (props: WhoListenProps) => {
   );
 };
 
-export default WhoListenSong;
+export default WhoListen;
 
 const styles = StyleSheet.create({
   container: {

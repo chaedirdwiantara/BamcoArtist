@@ -75,7 +75,11 @@ const PopularAlbum = () => {
           dropdownStyle={styles.dropdown}
         />
         <View>
-          <TouchableOpacity onPress={() => navigation.navigate('MySong')}>
+          <TouchableOpacity
+            // TODO: ADD ALBUM ID
+            onPress={() =>
+              navigation.navigate('AlbumAnalyticScreen', {albumId: 0})
+            }>
             <Text style={styles.link}>
               {t('Home.Tab.Analytic.Fans.TopFans.Link')}
             </Text>

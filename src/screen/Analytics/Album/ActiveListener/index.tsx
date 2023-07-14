@@ -12,16 +12,16 @@ import {Chart} from '../../../../interface/analythic.interface';
 import {MusicPinkIcon} from '../../../../assets/icon';
 
 const ActiveListener = () => {
-  const {getActiveListener} = useAnalyticsHook();
+  const {getAlbumActiveListener} = useAnalyticsHook();
   const {t} = useTranslation();
 
   const {
-    data: activeListenerData,
+    data,
     isLoading: queryDataLoading,
     isError,
     refetch,
   } = useQuery('analytic-activeListener', () =>
-    getActiveListener({
+    getAlbumActiveListener({
       interval:
         t(selectedRange.label) === 'Monthly'
           ? 'monthly'
@@ -44,48 +44,7 @@ const ActiveListener = () => {
     }
   }, [selectedRange]);
 
-  const fansData: Chart = {
-    maxValue: 100,
-    beFan: '75%',
-    beFanCompare: '4%',
-    beFanProgress: 'improve',
-    fansEarn: '25',
-    fansEarnCompare: '2%',
-    fansEarnProgress: 'regression',
-    description: 'Last 4 months',
-    data: [
-      {
-        value: 0,
-        hideDataPoint: true,
-        label: 'Jan',
-      },
-      {
-        value: 23,
-        hideDataPoint: true,
-        label: 'Feb',
-      },
-      {
-        value: 75,
-        hideDataPoint: true,
-        label: 'Mar',
-      },
-      {
-        value: 65,
-        hideDataPoint: true,
-        label: 'Apr',
-      },
-      {
-        value: 40,
-        hideDataPoint: true,
-        label: 'Mei',
-      },
-      {
-        value: 96,
-        hideDataPoint: true,
-        label: 'Jun',
-      },
-    ],
-  };
+  const albumTabData = data?.data;
   return (
     <View style={styles.container}>
       {/* TITLE AREA */}
@@ -97,20 +56,30 @@ const ActiveListener = () => {
         </Text>
       </View>
       {/* BODY AREA */}
-      <LineAreaChart
-        labelCaption={t(selectedRange.label)}
-        dataFilter={dropDownFansGrowth}
-        selectedMenu={setSelectedRange}
-        fansData={fansData}
-        growthDescOne={`${t(
-          'Home.Tab.Analytic.Album.Listeners.Growth.FanStream',
-        )} ${t(selectedRange.label)}`}
-        growthDescTwo={`${t(
-          'Home.Tab.Analytic.Album.Listeners.Growth.AvgListener',
-        )} ${t(selectedRange.label)}`}
-        type={t(selectedRange.label)}
-        noOfLines={2}
-      />
+      {albumTabData ? (
+        <LineAreaChart
+          labelCaption={t(selectedRange.label)}
+          dataFilter={dropDownFansGrowth}
+          selectedMenu={setSelectedRange}
+          description={albumTabData.description}
+          maxValue={albumTabData.maxValue}
+          chartData={albumTabData.diagramData}
+          cardOneValue={albumTabData.fansAvgStream}
+          cardOneDesc={`${t(
+            'Home.Tab.Analytic.Album.Listeners.Growth.AvgListener',
+          )} ${t(selectedRange.label)}`}
+          cardOneAvgStreamCompare={albumTabData.fansAvgStreamCompared}
+          cardOneAvgProgress={albumTabData.fansAvgStreamPogress}
+          cardTwoValue={albumTabData.fansStream}
+          cardTwoDesc={`${t(
+            'Home.Tab.Analytic.Album.Listeners.Growth.FanStream',
+          )} ${t(selectedRange.label)}`}
+          cardTwoAvgStreamCompare={albumTabData.fansStreamCompared}
+          cardTwoAvgProgress={albumTabData.fansStreamPogress}
+          type={t(selectedRange.label)}
+          noOfLines={2}
+        />
+      ) : null}
     </View>
   );
 };
