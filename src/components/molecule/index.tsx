@@ -28,6 +28,7 @@ import {ImageSlider} from './ImageSlider/ImageSlider';
 import LineAreaChart from './LineAreaChart';
 import {ListCard} from './ListCard';
 import {ListenersAndDonate} from './ListenersAndDonate/ListenersAndDonate';
+import ListenersCountry from './ListenerCountry';
 import ListImageDesc from './ListCard/ListImageDesc';
 import ListMoodGenre from './ListCard/ListMoodGenre';
 import ListenerLikes from './ListenerAlsoLikes';
@@ -99,6 +100,7 @@ export {
   LineAreaChart,
   ListCard,
   ListenersAndDonate,
+  ListenersCountry,
   ListenerLikes,
   ListImageDesc,
   ListMoodGenre,

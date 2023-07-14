@@ -13,6 +13,7 @@ import {
   DemogGenderResponseType,
   EngagementResponseType,
   EngagementTopFansResponseType,
+  ListenerCountryResponseType,
   ListenerLikesResponseType,
   SongChartResponseType,
 } from '../interface/analythic.interface';
@@ -123,11 +124,11 @@ export const TopSongs = async (
   return data;
 };
 
-export const ListenerCountry = async (
+export const ListenerCountryEP = async (
   props?: ParamsProps,
-): Promise<ListPostResponseType> => {
-  const {data} = await SsuAPI().request<ListPostResponseType>({
-    url: '/musician-app/post/public',
+): Promise<ListenerCountryResponseType> => {
+  const {data} = await SsuApiSemeru().request<ListenerCountryResponseType>({
+    url: '/musician-app/analytics/listener-stream',
     method: 'GET',
     params: props,
   });

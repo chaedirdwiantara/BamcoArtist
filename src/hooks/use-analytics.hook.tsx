@@ -7,7 +7,6 @@ import {
   FansCountry,
   FansGender,
   Income,
-  ListenerCountry,
   ListenerLikes,
   PopularAlbum,
   PostEngagementEP,
@@ -20,6 +19,7 @@ import {
   fansActiveInteract,
   fansAnalytic,
   topFans,
+  ListenerCountryEP,
 } from '../api/analytics.api';
 import {ParamsProps} from '../interface/base.interface';
 import {useListenerAlsoLikesStore} from '../store/listenerAlsoLike';
@@ -136,10 +136,9 @@ export const useAnalyticsHook = () => {
 
   const getListenerCountry = async (props?: ParamsProps) => {
     try {
-      const response = await ListenerCountry(props);
+      const response = await ListenerCountryEP(props);
       return {
         data: response?.data,
-        meta: response?.meta,
         message: response?.message,
       };
     } catch (error) {

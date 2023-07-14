@@ -1,4 +1,4 @@
-import {PaginationType, imageTypes} from './base.interface';
+import {PaginationType, countryTypes, imageTypes} from './base.interface';
 import {DataAlbum} from './song.interface';
 
 export interface DataChart {
@@ -205,5 +205,18 @@ export type ListenerLikesResponseType = {
   code: number;
   data: ListenerLikesData[];
   message: string;
+  status: number;
+};
+
+export type ListenerCountryData = {
+  country: countryTypes;
+  totalStream: number;
+};
+
+export type ListenerCountryResponseType = {
+  code: number;
+  data: ListenerCountryData[];
+  message: string;
+  meta: PaginationType;
   status: number;
 };

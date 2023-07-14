@@ -49,3 +49,9 @@ export type BaseResponseApi = {
   message: string;
   status: number;
 };
+
+export type countryTypes = {
+  id: number;
+  name: string;
+  image: string;
+};
