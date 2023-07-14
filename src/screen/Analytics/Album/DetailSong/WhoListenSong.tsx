@@ -1,5 +1,5 @@
 import {StyleSheet, Text, View} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import {useAnalyticsHook} from '../../../../hooks/use-analytics.hook';
 import {useTranslation} from 'react-i18next';
 import {useQuery} from 'react-query';
@@ -11,9 +11,15 @@ import {widthResponsive} from '../../../../utils';
 import {color, font} from '../../../../theme';
 import {mvs} from 'react-native-size-matters';
 
-const WhoListenSong = () => {
+interface WhoListenProps {
+  songId: string;
+}
+
+const WhoListenSong: FC<WhoListenProps> = (props: WhoListenProps) => {
   const {getWhoListenSong} = useAnalyticsHook();
   const {t} = useTranslation();
+
+  const {songId} = props;
 
   const {
     data: whoListenData,
@@ -30,6 +36,8 @@ const WhoListenSong = () => {
           : t(selectedRange.label) === 'Daily'
           ? 'daily'
           : '',
+      //TODO: UNCOMMENT AFTER WE GET SONG ID
+      //songID:songId
     }),
   );
 
@@ -102,10 +110,13 @@ const WhoListenSong = () => {
         dataFilter={dropDownFansGrowth}
         selectedMenu={setSelectedRange}
         fansData={fansData}
-        growthDescOne={t('Home.Tab.Analytic.Album.Listeners.Growth.FanStream')}
-        growthDescTwo={t(
+        growthDescOne={`${t(
+          'Home.Tab.Analytic.Album.Listeners.Growth.FanStream',
+        )} ${t(selectedRange.label)}`}
+        growthDescTwo={`${t(
           'Home.Tab.Analytic.Album.Listeners.Growth.AvgListener',
-        )}
+        )} ${t(selectedRange.label)}`}
+        type={t(selectedRange.label)}
         noOfLines={2}
       />
     </View>

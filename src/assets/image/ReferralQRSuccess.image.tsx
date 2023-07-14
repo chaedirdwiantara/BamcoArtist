@@ -23,7 +23,7 @@ function ReferralQRSuccessImage({
 }: SvgProps) {
   return (
     <View style={[{width, height}, style]}>
-      <Svg width={'264px'} height={'281px'} fill={fill} viewBox={'0 0 264 281'}>
+      <Svg width={'100%'} height={'281px'} fill={fill} viewBox={'0 0 264 281'}>
         <G filter="url(#filter0_b_2621_139900)">
           <Rect
             width="264"

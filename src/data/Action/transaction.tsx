@@ -1,4 +1,6 @@
-export const dataTransaction = [
+import {TransactionMerch} from '../../interface/transaction.interface';
+
+export const dataTransaction: TransactionMerch[] = [
   {
     id: '1',
     seller: 'Blackpink',

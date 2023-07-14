@@ -28,6 +28,7 @@ export type ParamsProps = {
   uid?: string;
   interval?: string;
   order?: 'asc' | 'desc';
+  songID?: string;
 };
 
 export type imageTypes = {

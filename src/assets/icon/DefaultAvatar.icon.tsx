@@ -40,9 +40,6 @@ function MusicianIcon({
         <Circle cx={100} cy={100} r={100} fill={color} />
         <Mask
           id="a"
-          style={{
-            maskType: 'alpha',
-          }}
           maskUnits="userSpaceOnUse"
           x={0}
           y={0}

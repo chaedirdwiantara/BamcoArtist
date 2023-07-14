@@ -313,7 +313,9 @@ export type RootStackParams = {
   Withdrawal: undefined;
   YourTopFansScreen: undefined;
   MySong: undefined;
-  SongDetailAnalytic: undefined;
+  SongDetailAnalytic: {
+    songId: string;
+  };
 };
 
 export type MainTabParams = {

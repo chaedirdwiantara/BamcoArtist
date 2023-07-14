@@ -7,10 +7,8 @@ import {DataDropDownType, dropDownFansGrowth} from '../../../../data/dropdown';
 import {useQuery} from 'react-query';
 import {useAnalyticsHook} from '../../../../hooks/use-analytics.hook';
 import {useTranslation} from 'react-i18next';
-import {storage} from '../../../../hooks/use-storage.hook';
 import {color, font} from '../../../../theme';
 import {mvs} from 'react-native-size-matters';
-import {Chart} from '../../../../interface/analythic.interface';
 
 const FansGrowth = () => {
   const {getListDataFansAnalytic} = useAnalyticsHook();
@@ -45,48 +43,6 @@ const FansGrowth = () => {
     }
   }, [selectedRange]);
 
-  const fansData: Chart = {
-    maxValue: 100,
-    beFan: '75%',
-    beFanCompare: '4%',
-    beFanProgress: 'improve',
-    fansEarn: '25%',
-    fansEarnCompare: '2%',
-    fansEarnProgress: 'regression',
-    description: 'Last 4 months',
-    data: [
-      {
-        value: 0,
-        hideDataPoint: true,
-        label: 'Jan',
-      },
-      {
-        value: 23,
-        hideDataPoint: true,
-        label: 'Feb',
-      },
-      {
-        value: 75,
-        hideDataPoint: true,
-        label: 'Mar',
-      },
-      {
-        value: 65,
-        hideDataPoint: true,
-        label: 'Apr',
-      },
-      {
-        value: 40,
-        hideDataPoint: true,
-        label: 'Mei',
-      },
-      {
-        value: 96,
-        hideDataPoint: true,
-        label: 'Jun',
-      },
-    ],
-  };
   return (
     <View style={styles.container}>
       {/* TITLE AREA */}
@@ -98,14 +54,19 @@ const FansGrowth = () => {
         </Text>
       </View>
       {/* BODY AREA */}
-      <LineAreaChart
-        labelCaption={t(selectedRange.label)}
-        dataFilter={dropDownFansGrowth}
-        selectedMenu={setSelectedRange}
-        fansData={fansData}
-        growthDescOne={t('Home.Tab.Analytic.Fans.Growth.BeFan')}
-        growthDescTwo={t('Home.Tab.Analytic.Fans.Growth.FansEarn')}
-      />
+      {fansAnalyticData?.data && (
+        <LineAreaChart
+          labelCaption={t(selectedRange.label)}
+          dataFilter={dropDownFansGrowth}
+          selectedMenu={setSelectedRange}
+          fansData={fansAnalyticData.data}
+          growthDescOne={`${t('Home.Tab.Analytic.Fans.Growth.FansEarn')} ${t(
+            selectedRange.label,
+          )}`}
+          growthDescTwo={t('Home.Tab.Analytic.Fans.Growth.BeFan')}
+          type={t(selectedRange.label)}
+        />
+      )}
     </View>
   );
 };

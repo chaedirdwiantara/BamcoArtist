@@ -49,7 +49,7 @@ const WhoListen = () => {
     beFan: '75%',
     beFanCompare: '4%',
     beFanProgress: 'improve',
-    fansEarn: '25%',
+    fansEarn: '25',
     fansEarnCompare: '2%',
     fansEarnProgress: 'regression',
     description: 'Last 4 months',
@@ -102,10 +102,13 @@ const WhoListen = () => {
         dataFilter={dropDownFansGrowth}
         selectedMenu={setSelectedRange}
         fansData={fansData}
-        growthDescOne={t('Home.Tab.Analytic.Album.Listeners.Growth.FanStream')}
-        growthDescTwo={t(
+        growthDescOne={`${t(
+          'Home.Tab.Analytic.Album.Listeners.Growth.FanStream',
+        )} ${t(selectedRange.label)}`}
+        growthDescTwo={`${t(
           'Home.Tab.Analytic.Album.Listeners.Growth.AvgListener',
-        )}
+        )} ${t(selectedRange.label)}`}
+        type={t(selectedRange.label)}
         noOfLines={2}
       />
     </View>

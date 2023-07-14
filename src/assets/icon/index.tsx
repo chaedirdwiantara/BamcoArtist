@@ -39,6 +39,7 @@ import CrackEggIcon from './CrackEgg.icon';
 import CrownIcon from './Crown.icon';
 import {DefaultAvatar} from './DefaultAvatar.icon';
 import {DefaultImage} from './DefaultImage.icon';
+import DiagramIcon from './Diagram.icon';
 import DonateCoinIcon from './DonateCoin.icon';
 import EditIcon from './Edit.icon';
 import EmailIcon from './Email.icon';
@@ -89,6 +90,7 @@ import RepeatOneIcon from './RepeatOne.icon';
 import PauseIcon from './Pause.icon';
 import PauseIcon2 from './Pause2.icon';
 import PauseVideoIcon from './PauseVideo.icon';
+import PencilIcon from './Pencil.icon';
 import PlayIcon from './Play.icon';
 import PlayIcon2 from './Play2.icon';
 import PlayIcon3 from './PlayRadius.icon';
@@ -102,6 +104,7 @@ import SettingIcon from './Setting.icon';
 import ShareIcon from './Share.icon';
 import ShuffleIcon from './Shuffle.icon';
 import SnapchatIcon from './Snapchat.icon';
+import StarPinkIcon from './StarPink.icon';
 import SoundIcon from './Sound.icon';
 import ThreeDotsIcon from './ThreeDots.icon';
 import TickCircleIcon from './TickCircle.icon';
@@ -171,6 +174,7 @@ export {
   CrownIcon,
   DefaultAvatar,
   DefaultImage,
+  DiagramIcon,
   DonateCoinIcon,
   EditIcon,
   EmailIcon,
@@ -218,6 +222,7 @@ export {
   PauseIcon,
   PauseIcon2,
   PauseVideoIcon,
+  PencilIcon,
   PlayIcon,
   PlayIcon2,
   PlayIcon3,
@@ -234,6 +239,7 @@ export {
   ShareIcon,
   ShuffleIcon,
   SnapchatIcon,
+  StarPinkIcon,
   SoundIcon,
   ThreeDotsIcon,
   TickCircleIcon,

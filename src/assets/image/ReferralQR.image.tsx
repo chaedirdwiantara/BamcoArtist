@@ -16,8 +16,8 @@ import {ms, mvs} from 'react-native-size-matters';
 import {SvgProps} from '../../interface/svg.interface';
 
 function ReferralQRImage({
-  width = ms(280),
-  height = mvs(280),
+  width = ms(221),
+  height = mvs(221),
   fill = 'none',
   style,
 }: SvgProps) {

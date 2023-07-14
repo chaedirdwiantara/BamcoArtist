@@ -265,13 +265,15 @@
           },
           "Growth": {
             "BeFan": "Followers be a fans!",
-            "FansEarn": "Fans earned weekly"
+            "FansEarn": "Fans earned"
           },
           "FansInteract": "Fans actively interact with you",
           "TopFans": {
-            "Title": "Your Top Fans",
-            "Link": "View All",
-            "FullScreen": "Your Fans"
+            "Title" : "Your Top Fans",
+            "Link" : "View All",
+            "FullScreen": "Your Fans",
+            "EmptyState": "Oops! We couldn't find any Top fans for you. Post some story or release album to make your own cult!"
+         
           },
           "FansAge": {
             "Title": "Fans Age"
@@ -280,11 +282,18 @@
             "Title": "Fans Gender"
           },
           "FansCountry": {
-            "Title": "Your Fans Country"
+            "Title" : "Your Fans Country",
+            "EmptyState": "Oops! We couldn't find any of your fans country. Post some story or release album to make your own cult!"
           }
         },
         "Post": {
-          "Title": "郵政"
+          "Title": "郵政",
+          "Popular":{
+            "Title" : "Popular Post"
+          },
+          "Engagement": {
+            "Title" : "Post Engagement Rate"
+          }
         },
         "Album": {
           "Title": "專輯",
@@ -299,15 +308,16 @@
           "Listeners": {
             "Title": "Your Active Listener",
             "Growth": {
-              "FanStream": "Fans streams your song monthly!",
-              "AvgListener": "Avg listener streamed monthly"
+              "FanStream": "Fans streams your song",
+              "AvgListener": "Avg listener streamed"
             }
           },
           "PopularAlbum": {
             "Title": "Popular Album"
           },
           "TopSongs": {
-            "Title": "Your Top Song"
+            "Title" : "Your Top Song",
+            "EmptyState": "Oops! We couldn't find your top song.Publish your song and interact to make your own cult!"
           },
           "Listener": {
             "Title": "Listener Country"
@@ -741,6 +751,42 @@
         "Subtitle": "輸入您的推薦碼以快速啟動您的 Beamco 之旅！",
         "Actived": "推薦已激活",
         "Success": "恭喜！ 現在您每筆交易將獲得 5% 的積分！"
+      }
+    },
+    "ReferralQR": {
+      "Title": "推薦碼",
+      "ReferFriend": {
+        "Title": "REFER A FRIEND",
+        "Text1": "每筆交易推薦並賺取 5% 的佣金",
+        "Text2": "使用您的@用戶名作為推薦碼",
+        "Btn1": "使用鏈接推薦給朋友",
+        "Btn2": "閱讀條款細則"
+      },
+      "UseRefer": {
+        "Title": "USE REFERRAL",
+        "Text1": "於每筆交易獲取 5% Beamco 積分",
+        "Text2": "你朋友的推薦碼",
+        "Text3": "推薦碼無法更改",
+        "Invalid": "Referral code invalid"
+      },
+      "OnBoard": {
+        "Title": "你有推薦碼嗎？",
+        "Subtitle": "輸入您的推薦碼以快速啟動您的 Beamco 之旅！",
+        "Actived": "推薦已激活",
+        "SuccessTitle": "Your scan was successful!",
+        "SuccessDesc": "Congratulations! now you will get 5% credit every transaction!",
+        "Continue": "Continue",
+        "Next": "Next",
+        "DividerOnScan": "Or",
+        "DividerOnManualEnter": "Or Try Another Method",
+        "ReferralAdded": "Referral Code Added",
+        "BtnScan": "Scan Now",
+        "BtnManual": "Enter Manually"
+      },
+      "ScanFailed": {
+        "Title": "Scan QR Code",
+        "Desc": "Referral Code invalid, Scan another QR Code",
+        "Btn": "Dismiss"
       }
     },
     "Language": {

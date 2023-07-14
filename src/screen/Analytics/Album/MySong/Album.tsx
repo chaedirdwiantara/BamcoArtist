@@ -88,6 +88,7 @@ const Album = () => {
         <Text style={[typography.Heading6, styles.caption]}>Song</Text>
         <FlatList
           showsVerticalScrollIndicator={false}
+          scrollEnabled={false}
           data={songs2}
           keyExtractor={item => item.id.toString()}
           renderItem={({item, index}) => (
@@ -103,7 +104,12 @@ const Album = () => {
               streamAnalytics={item.stream}
               onPressMore={() => {}}
               containerStyles={{marginTop: mvs(20)}}
-              onPressCard={() => navigation.navigate('SongDetailAnalytic')}
+              //TODO: CHANGE ID TO CORRECT ONE LATER
+              onPressCard={() =>
+                navigation.navigate('SongDetailAnalytic', {
+                  songId: item.id.toString(),
+                })
+              }
               hideDropdownMore
             />
           )}

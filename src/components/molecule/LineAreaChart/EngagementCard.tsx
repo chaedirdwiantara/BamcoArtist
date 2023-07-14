@@ -6,7 +6,7 @@ import {ArrowDownIcon, ArrowUpGreenIcon} from '../../../assets/icon';
 import {color, font} from '../../../theme';
 import {widthResponsive} from '../../../utils';
 
-interface GrowthCardProps {
+interface EngagementCardProps {
   number: string;
   numberDiffs: string;
   desc: string;
@@ -15,16 +15,20 @@ interface GrowthCardProps {
   noOfLines?: number;
 }
 
-const GrowthCard: FC<GrowthCardProps> = (props: GrowthCardProps) => {
+const EngagementCard: FC<EngagementCardProps> = (
+  props: EngagementCardProps,
+) => {
   const {number, desc, numberDiffs, progress, containerStyle, noOfLines} =
     props;
 
   return (
     <View style={[styles.container, containerStyle]}>
+      <Text style={styles.textDesc} numberOfLines={noOfLines ? noOfLines : 1}>
+        {desc}
+      </Text>
+      <Gap height={4} />
       <View style={styles.percentage}>
-        <Text style={styles.textNum}>
-          {number && number !== '' ? number : 0}
-        </Text>
+        <Text style={styles.textNum}>{number ?? 0}</Text>
         <Gap width={4} />
         {progress === 'improve' ? (
           <ArrowUpGreenIcon />
@@ -42,15 +46,11 @@ const GrowthCard: FC<GrowthCardProps> = (props: GrowthCardProps) => {
           {progress !== 'same' ? numberDiffs : ''}
         </Text>
       </View>
-      <Gap height={4} />
-      <Text style={styles.textDesc} numberOfLines={noOfLines ? noOfLines : 1}>
-        {desc}
-      </Text>
     </View>
   );
 };
 
-export default GrowthCard;
+export default EngagementCard;
 
 const styles = StyleSheet.create({
   container: {
@@ -77,6 +77,6 @@ const styles = StyleSheet.create({
     fontFamily: font.InterRegular,
     fontSize: mvs(9),
     fontWeight: '500',
-    color: color.Neutral[10],
+    color: color.Dark[100],
   },
 });

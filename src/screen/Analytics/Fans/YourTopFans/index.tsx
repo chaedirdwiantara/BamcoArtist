@@ -1,6 +1,6 @@
 import {FlatList, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React from 'react';
-import {Gap} from '../../../../components';
+import {EmptyStateAnalytic, Gap} from '../../../../components';
 import {widthResponsive} from '../../../../utils';
 import {color, font} from '../../../../theme';
 import {mvs} from 'react-native-size-matters';
@@ -42,39 +42,45 @@ const YourTopFans = () => {
             {t('Home.Tab.Analytic.Fans.TopFans.Title')}
           </Text>
         </View>
-        <TouchableOpacity
-          onPress={() => navigation.navigate('YourTopFansScreen')}>
-          <Text style={styles.link}>
-            {t('Home.Tab.Analytic.Fans.TopFans.Link')}
-          </Text>
-        </TouchableOpacity>
+        {topFansData?.data && topFansData?.data.length > 0 ? (
+          <TouchableOpacity
+            onPress={() => navigation.navigate('YourTopFansScreen')}>
+            <Text style={styles.link}>
+              {t('Home.Tab.Analytic.Fans.TopFans.Link')}
+            </Text>
+          </TouchableOpacity>
+        ) : (
+          <View />
+        )}
       </View>
       <Gap height={23} />
-      {MusicianListData ? (
+      {topFansData?.data && topFansData?.data.length > 0 ? (
         <FlatList
           showsVerticalScrollIndicator={false}
-          data={MusicianListData}
+          scrollEnabled={false}
+          data={topFansData?.data}
           renderItem={({item, index}) => (
             <MusiciansListCard
-              musicianNum={item.musicNum}
+              musicianNum={(index + 1).toLocaleString('en-US', {
+                minimumIntegerDigits: 2,
+                useGrouping: false,
+              })}
               onPressMore={() => {}}
               activeMore={false}
               onPressImage={() =>
-                // navigation.navigate('OtherUserProfile', {id: item.uuid})
-                {}
+                navigation.navigate('OtherUserProfile', {id: item.uuid})
               }
               musicianName={item.fullname}
-              imgUri={item.imageProfileUrl}
-              point={item.point}
+              imgUri={item.image[0].image}
+              point={item.totalPoint.toString()}
               containerStyles={{marginBottom: widthResponsive(12)}}
             />
           )}
         />
       ) : (
-        <Text style={styles.emptyState}>
-          Oops! We couldn't find any Top fans for you.Post some story or release
-          album to make your own cult!
-        </Text>
+        <EmptyStateAnalytic
+          caption={t('Home.Tab.Analytic.Fans.TopFans.EmptyState')}
+        />
       )}
     </View>
   );
@@ -110,13 +116,5 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     color: color.Success[400],
     lineHeight: mvs(28),
-  },
-  emptyState: {
-    fontFamily: font.InterRegular,
-    fontSize: mvs(12),
-    fontWeight: '400',
-    color: color.Neutral[10],
-    lineHeight: mvs(14.52),
-    textAlign: 'center',
   },
 });

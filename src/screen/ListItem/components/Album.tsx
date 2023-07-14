@@ -46,6 +46,7 @@ export const ListAlbum: React.FC<ListAlbumProps> = ({
                 disabled={true}
                 hideDropdownMore={true}
                 onPressCard={() => goToDetailAlbum(item.id)}
+                singerId={item.musician.uuid}
               />
             ))}
           </View>

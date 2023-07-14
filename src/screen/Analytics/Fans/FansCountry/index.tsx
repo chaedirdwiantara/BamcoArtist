@@ -1,7 +1,7 @@
 import {FlatList, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import {EqualizerIcon} from '../../../../assets/icon';
-import {Gap} from '../../../../components';
+import {EmptyStateAnalytic, Gap} from '../../../../components';
 import {widthResponsive} from '../../../../utils';
 import {useTranslation} from 'react-i18next';
 import {useAnalyticsHook} from '../../../../hooks/use-analytics.hook';
@@ -9,20 +9,18 @@ import {useQuery} from 'react-query';
 import {color, font} from '../../../../theme';
 import {mvs} from 'react-native-size-matters';
 import CountryCard from '../../../../components/molecule/CountryCard/CountryCard';
-import {MerchListItem} from '../../../../data/merchList';
 
 const FansCountry = () => {
   const {t} = useTranslation();
   const {getFansCountryAnalytic} = useAnalyticsHook();
   const {
-    data: fansCountryData,
+    data: countryData,
     isLoading: queryDataLoading,
     isError,
     refetch,
   } = useQuery('fans-fansCountry', () =>
     getFansCountryAnalytic({
-      page: 1,
-      perPage: 5,
+      filterBy: 'country',
     }),
   );
   return (
@@ -36,23 +34,33 @@ const FansCountry = () => {
         </Text>
       </View>
       <Gap height={22} />
-      <FlatList
-        showsVerticalScrollIndicator={false}
-        data={MerchListItem}
-        renderItem={({item, index}) => (
-          <View
-            style={{
-              marginTop: index !== 0 ? widthResponsive(17) : 0,
-            }}>
-            <CountryCard
-              countryId={item.id}
-              flagUri={item.image}
-              name={item.owner}
-              value={item.price}
-            />
-          </View>
-        )}
-      />
+      {countryData?.data ? (
+        <FlatList
+          showsVerticalScrollIndicator={false}
+          scrollEnabled={false}
+          data={countryData?.data}
+          renderItem={({item, index}) => (
+            <View
+              style={{
+                marginTop: index !== 0 ? widthResponsive(17) : 0,
+              }}>
+              <CountryCard
+                countryId={(index + 1).toLocaleString('en-US', {
+                  minimumIntegerDigits: 2,
+                  useGrouping: false,
+                })}
+                flagUri={item.country.image}
+                name={item.country.name}
+                value={item.total}
+              />
+            </View>
+          )}
+        />
+      ) : (
+        <EmptyStateAnalytic
+          caption={t('Home.Tab.Analytic.Fans.FansCountry.EmptyState')}
+        />
+      )}
     </View>
   );
 };

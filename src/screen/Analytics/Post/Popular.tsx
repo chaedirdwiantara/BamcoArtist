@@ -1,28 +1,37 @@
-import {InteractionManager, StyleSheet, Text, View} from 'react-native';
+import {
+  InteractionManager,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import React, {FC, useEffect, useState} from 'react';
-import {color, font, typography} from '../../../../theme';
-import {mvs} from 'react-native-size-matters';
-import {ListCard} from '../../ListCard';
-import {Gap, SsuToast} from '../../../atom';
-import {useFeedHook} from '../../../../hooks/use-feed.hook';
-import categoryNormalize from '../../../../utils/categoryNormalize';
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {RootStackParams} from '../../../../navigations';
-import {PostList} from '../../../../interface/feed.interface';
-import {dateFormat} from '../../../../utils/date-format';
-import {DataDropDownType} from '../../../../data/dropdown';
-import ChildrenCard from '../../../../screen/ListCard/ChildrenCard';
-import {usePlayerHook} from '../../../../hooks/use-player.hook';
-import {profileStorage} from '../../../../hooks/use-storage.hook';
-import {useCreditHook} from '../../../../hooks/use-credit.hook';
-import {ModalDonate} from '../../Modal/ModalDonate';
-import {ModalSuccessDonate} from '../../Modal/ModalSuccessDonate';
-import {ModalShare} from '../../Modal/ModalShare';
+import {RootStackParams} from '../../../navigations';
+import {profileStorage, storage} from '../../../hooks/use-storage.hook';
+import {useFeedHook} from '../../../hooks/use-feed.hook';
+import {usePlayerHook} from '../../../hooks/use-player.hook';
+import {useCreditHook} from '../../../hooks/use-credit.hook';
+import {DataDropDownType, dropDownAlbumRange} from '../../../data/dropdown';
 import {useTranslation} from 'react-i18next';
-import {TickCircleIcon} from '../../../../assets/icon';
-import {heightPercentage, widthResponsive} from '../../../../utils';
-import ImageModal from '../../../../screen/Detail/ImageModal';
+import {PostList} from '../../../interface/feed.interface';
+import {
+  DropDownFilter,
+  Gap,
+  ListCard,
+  ModalDonate,
+  ModalShare,
+  ModalSuccessDonate,
+  SsuToast,
+} from '../../../components';
+import {heightPercentage, widthResponsive} from '../../../utils';
+import {dateFormat} from '../../../utils/date-format';
+import categoryNormalize from '../../../utils/categoryNormalize';
+import ChildrenCard from '../../ListCard/ChildrenCard';
+import {StarPinkIcon, TickCircleIcon} from '../../../assets/icon';
+import {color, font, typography} from '../../../theme';
+import {mvs} from 'react-native-size-matters';
 
 interface PopularPostProps {
   uuidMusician: string;
@@ -79,7 +88,7 @@ const PopularPost: FC<PopularPostProps> = (props: PopularPostProps) => {
   }, [uuidMusician]);
 
   useEffect(() => {
-    if (modalDonate) getCreditCount();
+    getCreditCount();
   }, [modalDonate]);
 
   const cardOnPress = (data: PostList) => {
@@ -227,30 +236,42 @@ const PopularPost: FC<PopularPostProps> = (props: PopularPostProps) => {
   }, [selectedIdPost, selectedMenu, dataPostList]);
   // ! END OF UPDATE POST AREA
 
+  const lang = storage.getString('lang');
+  const [selectedRange, setSelectedRange] = useState<DataDropDownType>({
+    label: 'Home.Tab.Analytic.Album.Filter.Range.Alltime',
+    value: '1',
+  });
+
   return (
-    <View>
+    //TODO:NAVIGATE TO POST LIST (TOP POST)
+    <TouchableOpacity style={styles.container} onPress={() => {}}>
       {dataPostList.length > 0 && (
         <>
-          <Text style={styles.textComp}>Popular Post</Text>
-          <Gap height={heightPercentage(16)} />
-
-          <ListCard.PostList
+          <View style={styles.titleStyle}>
+            <StarPinkIcon />
+            <Gap width={10} />
+            <Text style={styles.textComp}>
+              {t('Home.Tab.Analytic.Post.Popular.Title')}
+            </Text>
+          </View>
+          {/* DROPDOWN AREA */}
+          <View style={{width: 90, zIndex: 100}}>
+            <DropDownFilter
+              labelCaption={t(selectedRange.label)}
+              dataFilter={dropDownAlbumRange}
+              selectedMenu={setSelectedRange}
+              leftPosition={
+                lang === 'en' ? widthResponsive(-85) : widthResponsive(-85)
+              }
+              topPosition={widthResponsive(20)}
+              containerStyle={styles.dropdownContainer}
+              textCustomStyle={{color: color.Neutral[10], fontSize: mvs(11)}}
+              iconColor={color.Neutral[10]}
+              dropdownStyle={styles.dropdown}
+            />
+          </View>
+          <ListCard.PostListOld
             containerStyles={{paddingHorizontal: 0}}
-            toDetailOnPress={() => {}}
-            musicianName={dataPostList[0].musician.fullname}
-            musicianId={`@${dataPostList[0].musician.username}`}
-            imgUri={
-              dataPostList[0].musician.imageProfileUrls.length !== 0
-                ? dataPostList[0].musician.imageProfileUrls[0]?.image
-                : ''
-            }
-            postDate={
-              dataPostList[0]?.timeAgo
-                ? dataPostList[0].timeAgo
-                : dateFormat(dataPostList[0].createdAt)
-            }
-            postDate2={dataPostList[0].createdAt}
-            category={categoryNormalize(dataPostList[0].category)}
             onPress={() => cardOnPress(dataPostList[0])}
             likeOnPress={() =>
               likeOnPress(dataPostList[0].id, dataPostList[0].isLiked)
@@ -290,14 +311,8 @@ const PopularPost: FC<PopularPostProps> = (props: PopularPostProps) => {
                 ? dataPostList[0].likesCount
                 : dataPostList[0].likesCount
             }
-            tokenOnPress={tokenOnPress}
             shareOnPress={shareOnPress}
             commentCount={dataPostList[0].commentsCount}
-            myPost={dataPostList[0].musician.uuid === MyUuid}
-            selectedMenu={setSelectedMenu}
-            idPost={dataPostList[0].id}
-            selectedIdPost={setSelectedIdPost}
-            isPremium={dataPostList[0].isPremiumPost}
             children={
               <ChildrenCard
                 data={dataPostList[0]}
@@ -309,11 +324,11 @@ const PopularPost: FC<PopularPostProps> = (props: PopularPostProps) => {
                 duration={playerProgress.duration}
                 seekPlayer={seekPlayer}
                 isIdNowPlaying={dataPostList[0].id === idNowPlaying}
+                imgWidth={125}
+                imgWidth2={290}
               />
             }
           />
-
-          <Gap height={heightPercentage(24)} />
         </>
       )}
       <ModalDonate
@@ -357,16 +372,26 @@ const PopularPost: FC<PopularPostProps> = (props: PopularPostProps) => {
         }
         modalStyle={{marginHorizontal: widthResponsive(24)}}
       />
-    </View>
+    </TouchableOpacity>
   );
 };
 
 export default PopularPost;
 
 const styles = StyleSheet.create({
+  container: {
+    borderWidth: 1,
+    borderColor: color.Dark[400],
+    borderRadius: 4,
+    padding: widthResponsive(20),
+  },
+  titleStyle: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
   textComp: {
     fontFamily: font.InterRegular,
-    fontSize: mvs(16),
+    fontSize: mvs(18),
     fontWeight: '600',
     color: color.Neutral[10],
   },
@@ -384,5 +409,17 @@ const styles = StyleSheet.create({
   },
   textStyle: {
     color: color.Neutral[10],
+  },
+  dropdownContainer: {
+    borderWidth: 1,
+    borderColor: color.Dark[400],
+    paddingHorizontal: widthResponsive(12),
+    paddingVertical: widthResponsive(8),
+    borderRadius: 4,
+  },
+  dropdown: {
+    backgroundColor: color.Dark[800],
+    borderWidth: 1,
+    borderColor: color.Dark[400],
   },
 });
