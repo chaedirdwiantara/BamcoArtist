@@ -19,7 +19,7 @@ export type ParamsProps = {
   uuid?: string;
   playlistID?: number;
   albumID?: number;
-  id?: string;
+  id?: string | number;
   context?: string;
   listType?: string;
   isPremium?: boolean;
@@ -27,6 +27,7 @@ export type ParamsProps = {
   genre?: string;
   uid?: string;
   interval?: string;
+  order?: 'asc' | 'desc';
 };
 
 export type imageTypes = {

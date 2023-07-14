@@ -1,14 +1,31 @@
+import {ParamsProps} from '../interface/base.interface';
 import {
   CityResponseType,
   DataStateProps,
   GetAllCountryResponseType,
+  GetCitiesResponseType,
   StateResponseType,
 } from '../interface/location.interface';
 import SsuAPI from './baseLocation';
+import SsuAPIPublic from './baseRinjani';
 
-export const getAllCountry = async (): Promise<GetAllCountryResponseType> => {
-  const {data} = await SsuAPI().request<GetAllCountryResponseType>({
-    url: '/info?returns=unicodeFlag',
+export const getAllCountry = async (
+  props?: ParamsProps,
+): Promise<GetAllCountryResponseType> => {
+  const {data} = await SsuAPIPublic().request<GetAllCountryResponseType>({
+    url: '/public/countries',
+    method: 'GET',
+    params: props,
+  });
+
+  return data;
+};
+
+export const getCountryById = async (
+  id: number,
+): Promise<GetAllCountryResponseType> => {
+  const {data} = await SsuAPIPublic().request<GetAllCountryResponseType>({
+    url: `/public/countries/${id}`,
     method: 'GET',
   });
 
@@ -40,12 +57,12 @@ export const getCity = async (
 };
 
 export const getCityOfCountry = async (
-  props: DataStateProps,
-): Promise<CityResponseType> => {
-  const {data} = await SsuAPI().request<CityResponseType>({
-    url: '/cities',
-    method: 'POST',
-    data: new URLSearchParams(props).toString(),
+  props: ParamsProps,
+): Promise<GetCitiesResponseType> => {
+  const {data} = await SsuAPIPublic().request<GetCitiesResponseType>({
+    url: `/public/cities/bycountry/${props.id}`,
+    method: 'GET',
+    params: props,
   });
 
   return data;
