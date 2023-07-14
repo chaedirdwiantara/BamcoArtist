@@ -273,7 +273,8 @@ export const ImageSlider: React.FC<ImageSliderProps> = ({
                 index === 0 ? selectedRole : selectedExpectations;
               const setSelected =
                 index === 0 ? setSelectedRole : setSelectedExpectations;
-              const paddingTop = index === 2 ? mvs(40) : mvs(50);
+              const paddingTop =
+                index === 2 ? mvs(40) : index === 1 ? 0 : mvs(50);
               const marginBottom = index === 2 ? mvs(20) : mvs(30);
 
               return (

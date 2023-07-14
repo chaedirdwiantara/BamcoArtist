@@ -388,9 +388,9 @@ export const AccountContent: React.FC<AccountProps> = ({
               <ChevronDownIcon
                 stroke="#7c7b7c"
                 style={{
-                  width: widthPercentage(15),
-                  height: widthPercentage(15),
-                  marginRight: ms(10),
+                  width: widthPercentage(16),
+                  height: widthPercentage(16),
+                  marginRight: ms(5),
                 }}
               />
             }
