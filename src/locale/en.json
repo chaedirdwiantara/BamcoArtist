@@ -556,7 +556,9 @@
         "Origin": "Origin",
         "Member": "Member",
         "AddMore": "Add More",
-        "TypeOfMusician": "Type of Musician"
+        "TypeOfMusician": "Type of Musician",
+        "Gender": "Gender",
+        "DateOfBirth": "Date of Birth"
       },
       "Placeholder": {
         "Username": "Add Username",
@@ -569,7 +571,8 @@
         "City": "Select City",
         "Member": "Add Member",
         "Active": "Select Year",
-        "Label": "Add Label Name"
+        "Label": "Add Label Name",
+        "Gender": "Select Gender"
       },
       "Error": {
         "Fullname": "Fullname allowed 3 to 50 character",
@@ -1155,6 +1158,7 @@
       "AccountInformation": "Account Information",
       "ProfileInformation": "Profile Information"
     },
-    "SubtitleTooltip": "To finish this step, you need to fulfill this information below:"
+    "SubtitleTooltip": "To finish this step, you need to fulfill this information below:",
+    "SubtitleTooltipFinish": "You have already completed your account information"
   }
 }
