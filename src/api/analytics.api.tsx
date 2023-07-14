@@ -161,11 +161,11 @@ export const WhoListenEP = async (
 
 export const AlbumListenerCountryEP = async (
   props?: ParamsProps,
-): Promise<ListPostResponseType> => {
-  const {data} = await SsuAPI().request<ListPostResponseType>({
-    url: '/musician-app/post/public',
+): Promise<ListenerCountryResponseType> => {
+  const {data} = await SsuApiSemeru().request<ListenerCountryResponseType>({
+    url: `/musician-app/analytics/listener-stream/${props?.albumID}/albums`,
     method: 'GET',
-    params: props,
+    params: props?.limit,
   });
 
   return data;
@@ -209,11 +209,11 @@ export const WhoListenSongEP = async (
 
 export const SongListenerCountryEP = async (
   props?: ParamsProps,
-): Promise<ListPostResponseType> => {
-  const {data} = await SsuAPI().request<ListPostResponseType>({
-    url: '/musician-app/post/public',
+): Promise<ListenerCountryResponseType> => {
+  const {data} = await SsuApiSemeru().request<ListenerCountryResponseType>({
+    url: `/musician-app/analytics/listener-stream/${props?.songID}/songs`,
     method: 'GET',
-    params: props,
+    params: props?.limit,
   });
 
   return data;

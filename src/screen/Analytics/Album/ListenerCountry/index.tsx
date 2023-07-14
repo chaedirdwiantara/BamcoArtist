@@ -4,20 +4,12 @@ import {useTranslation} from 'react-i18next';
 import {DataDropDownType, dropDownAlbumRange} from '../../../../data/dropdown';
 import {useQuery} from 'react-query';
 import {useAnalyticsHook} from '../../../../hooks/use-analytics.hook';
-import {storage} from '../../../../hooks/use-storage.hook';
-import {useNavigation} from '@react-navigation/native';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {RootStackParams} from '../../../../navigations';
 
 const ListenerCountry = () => {
   const {getListenerCountry} = useAnalyticsHook();
   const {t} = useTranslation();
-  const navigation =
-    useNavigation<NativeStackNavigationProp<RootStackParams>>();
-  const lang = storage.getString('lang');
 
   const [viewAll, setViewAll] = useState<boolean>(false);
-
   const [selectedRange, setSelectedRange] = useState<DataDropDownType>({
     label: 'Home.Tab.Analytic.Album.Filter.Range.Alltime',
     value: '1',
@@ -51,6 +43,7 @@ const ListenerCountry = () => {
   }, [viewAll]);
   return (
     <ListenersCountry
+      compTitle={t('Home.Tab.Analytic.Album.Listener.Title')}
       withInteraction={true}
       labelCaption={t(selectedRange.label)}
       dataFilter={dropDownAlbumRange}

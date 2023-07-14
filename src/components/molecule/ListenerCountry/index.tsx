@@ -14,12 +14,13 @@ import {DataDropDownType} from '../../../data/dropdown';
 import {ListenerCountryData} from '../../../interface/analythic.interface';
 
 interface ListenerCountryProps {
+  compTitle: string;
   withInteraction: boolean;
   labelCaption: string;
   dataFilter?: DataDropDownType[];
   selectedMenu?: React.Dispatch<React.SetStateAction<DataDropDownType>>;
   setViewAll: React.Dispatch<React.SetStateAction<boolean>>;
-  viewAll: boolean;
+  viewAll?: boolean;
   dataCountry: ListenerCountryData[] | undefined;
 }
 
@@ -27,6 +28,7 @@ const ListenerCountry: FC<ListenerCountryProps> = (
   props: ListenerCountryProps,
 ) => {
   const {
+    compTitle,
     withInteraction,
     labelCaption,
     dataFilter,
@@ -44,9 +46,7 @@ const ListenerCountry: FC<ListenerCountryProps> = (
       <View style={styles.titleContainer}>
         <EqualizerIcon />
         <Gap width={10} />
-        <Text style={styles.title}>
-          {t('Home.Tab.Analytic.Album.Listener.Title')}
-        </Text>
+        <Text style={styles.title}>{compTitle}</Text>
       </View>
       {/* DROPDOWN AREA */}
       {withInteraction && (
@@ -79,6 +79,7 @@ const ListenerCountry: FC<ListenerCountryProps> = (
           </View>
         </View>
       )}
+      {!withInteraction && <Gap height={16} />}
       {/* BODY AREA */}
       {dataCountry && dataCountry?.length > 0 ? (
         <View>

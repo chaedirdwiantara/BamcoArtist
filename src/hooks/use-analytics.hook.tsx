@@ -173,7 +173,6 @@ export const useAnalyticsHook = () => {
       const response = await AlbumListenerCountryEP(props);
       return {
         data: response?.data,
-        meta: response?.meta,
         message: response?.message,
       };
     } catch (error) {
