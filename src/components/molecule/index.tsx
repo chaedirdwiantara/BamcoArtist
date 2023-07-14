@@ -30,6 +30,7 @@ import {ListCard} from './ListCard';
 import {ListenersAndDonate} from './ListenersAndDonate/ListenersAndDonate';
 import ListImageDesc from './ListCard/ListImageDesc';
 import ListMoodGenre from './ListCard/ListMoodGenre';
+import ListenerLikes from './ListenerAlsoLikes';
 import {LoginDescription} from './LoginDescription/LoginDescription';
 import {ModalConfirm} from './Modal/ModalConfirm';
 import {ModalCustom} from './Modal/ModalCustom';
@@ -98,6 +99,7 @@ export {
   LineAreaChart,
   ListCard,
   ListenersAndDonate,
+  ListenerLikes,
   ListImageDesc,
   ListMoodGenre,
   LoginDescription,

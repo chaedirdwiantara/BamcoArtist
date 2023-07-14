@@ -22,6 +22,7 @@ import {
   topFans,
 } from '../api/analytics.api';
 import {ParamsProps} from '../interface/base.interface';
+import {useListenerAlsoLikesStore} from '../store/listenerAlsoLike';
 
 export const useAnalyticsHook = () => {
   const getListDataFansAnalytic = async (props?: ParamsProps) => {
@@ -146,13 +147,11 @@ export const useAnalyticsHook = () => {
     }
   };
 
+  const {setStoredListenerLikes} = useListenerAlsoLikesStore();
   const getListenerLike = async (props?: ParamsProps) => {
     try {
       const response = await ListenerLikes(props);
-      return {
-        data: response?.data,
-        message: response?.message,
-      };
+      setStoredListenerLikes(response?.data);
     } catch (error) {
       console.log(error);
     }

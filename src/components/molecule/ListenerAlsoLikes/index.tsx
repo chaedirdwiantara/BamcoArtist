@@ -1,61 +1,60 @@
-import {FlatList, StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
-import {Gap} from '../../../../components';
-import {widthResponsive} from '../../../../utils';
 import {useTranslation} from 'react-i18next';
-import {PlayPinkIcon} from '../../../../assets/icon';
-import {color, font} from '../../../../theme';
 import {mvs} from 'react-native-size-matters';
-import MusiciansListCard from '../../../../components/molecule/ListCard/MusiciansListCard';
-import {MusicianListData} from '../../../../data/topMusician';
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {RootStackParams} from '../../../../navigations';
+import {RootStackParams} from '../../../navigations';
+import {useListenerAlsoLikesStore} from '../../../store/listenerAlsoLike';
+import {PlayPinkIcon} from '../../../assets/icon';
+import {Gap} from '../../atom';
+import {widthResponsive} from '../../../utils';
+import MusiciansListCard from '../ListCard/MusiciansListCard';
+import {color, font} from '../../../theme';
 
 const ListenerLikes = () => {
   const {t} = useTranslation();
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
 
+  const {storedListenerLikes} = useListenerAlsoLikesStore();
+
   return (
     <View style={styles.container}>
       {/* TITLE AREA */}
       <View style={styles.titleContainer}>
         <PlayPinkIcon />
-        <Gap width={widthResponsive(10)} />
+        <Gap width={10} />
         <Text style={styles.title}>
           {t('Home.Tab.Analytic.Album.ListenerLikes.Title')}
         </Text>
       </View>
       {/* BODY AREA */}
-      <View>
-        <FlatList
-          showsVerticalScrollIndicator={false}
-          scrollEnabled={false}
-          data={MusicianListData}
-          renderItem={({item, index}) => (
+      {storedListenerLikes && (
+        <View>
+          {storedListenerLikes.map((item, index) => (
             <View
               style={{
                 marginTop:
                   index !== 0 ? widthResponsive(12) : widthResponsive(20),
-              }}>
+              }}
+              key={index}>
               <MusiciansListCard
-                musicianNum={item.musicNum}
+                musicianNum={index + 1}
                 onPressMore={() => {}}
                 activeMore={false}
-                onPressImage={() =>
+                onPressImage={() => {
                   // navigation.navigate('OtherUserProfile', {id: item.uuid})
-                  {}
-                }
+                }}
                 musicianName={item.fullname}
-                imgUri={item.imageProfileUrl}
+                imgUri={item.imageProfileUrls[0]?.image}
                 containerStyles={{marginBottom: widthResponsive(12)}}
                 imageSize={36}
               />
             </View>
-          )}
-        />
-      </View>
+          ))}
+        </View>
+      )}
     </View>
   );
 };

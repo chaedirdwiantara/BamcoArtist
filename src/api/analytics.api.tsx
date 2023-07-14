@@ -141,7 +141,6 @@ export const ListenerLikes = async (
   const {data} = await SsuAPI().request<ListenerLikesResponseType>({
     url: `/musician-app/similar-musician/${props?.genreID}/genre`,
     method: 'GET',
-    params: props?.perPage,
   });
 
   return data;
