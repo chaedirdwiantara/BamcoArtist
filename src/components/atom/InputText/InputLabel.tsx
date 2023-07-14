@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   Platform,
   ImageBackground,
+  TextStyle,
 } from 'react-native';
 import {ms, mvs} from 'react-native-size-matters';
 import {Image} from 'react-native-image-crop-picker';
@@ -32,7 +33,7 @@ interface InputLabelProps extends TextInputProps {
   errorMsg?: string;
   verifText?: string;
   password?: boolean;
-  inputStyles?: ViewStyle;
+  inputStyles?: ViewStyle | TextStyle;
   containerStyles?: ViewStyle;
   containerInputStyles?: ViewStyle;
   showImage?: boolean;

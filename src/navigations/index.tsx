@@ -146,7 +146,10 @@ import ListPlaylist from '../screen/Playlist/ListPlaylist';
 
 export type RootStackParams = {
   AboutDeletion: undefined;
-  Account: ProfileResponseData;
+  Account: {
+    data: ProfileResponseData;
+    fromScreen: string;
+  };
   AddToPlaylist: {id: number[]; type?: string; fromMainTab?: boolean};
   AddSong: Playlist;
   AddPreview: ListDataSearchSongs;
@@ -165,7 +168,7 @@ export type RootStackParams = {
   OtpPhoneNumber: OtpPhoneScreen;
   CreateNewPlaylist: {id?: number[]; type?: string};
   DonationAndSubscription: undefined;
-  EditProfile: ProfileResponseData;
+  EditProfile: {data: ProfileResponseData};
   EditPlaylist: Playlist;
   Email: {
     info?: boolean;
