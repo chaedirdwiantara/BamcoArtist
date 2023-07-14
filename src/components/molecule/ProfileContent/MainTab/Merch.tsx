@@ -2,14 +2,15 @@ import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import {color, font} from '../../../../theme';
 import {mvs} from 'react-native-size-matters';
-import {Gap} from '../../../atom';
-import {heightPercentage} from '../../../../utils';
+import {useTranslation} from 'react-i18next';
+import {heightResponsive} from '../../../../utils';
 
 const Merch = () => {
+  const {t} = useTranslation();
   return (
     <View>
       <Text style={styles.textComp}>Merch</Text>
-      <Gap height={heightPercentage(24)} />
+      <Text style={styles.emptyState}>{t('EmptyState.Merch')}</Text>
     </View>
   );
 };
@@ -22,5 +23,10 @@ const styles = StyleSheet.create({
     fontSize: mvs(16),
     fontWeight: '600',
     color: color.Neutral[10],
+  },
+  emptyState: {
+    color: color.Neutral[10],
+    paddingVertical: heightResponsive(60),
+    textAlign: 'center',
   },
 });

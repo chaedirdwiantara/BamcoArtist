@@ -225,8 +225,8 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
   }, []);
 
   useEffect(() => {
-    if (dataProfile?.data.language !== currentLanguage) {
-      i18n.changeLanguage(dataProfile?.data.language);
+    if (dataProfile && dataProfile?.data?.language !== currentLanguage) {
+      i18n.changeLanguage(dataProfile?.data?.language);
     }
   }, [dataProfile]);
 
