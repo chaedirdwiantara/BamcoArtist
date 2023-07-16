@@ -7,14 +7,19 @@ import TopSongs from './TopSongs';
 import ListenerCountry from './ListenerCountry';
 import {useAnalyticsHook} from '../../../hooks/use-analytics.hook';
 import {useQuery} from 'react-query';
+import {myIdGenreStore} from '../../../store/myIdGenre.store';
+import {useTranslation} from 'react-i18next';
 
 const AlbumAnalytic = () => {
+  const {t} = useTranslation();
   const {getListenerLike} = useAnalyticsHook();
-  const {isLoading, isError, refetch} = useQuery('analytic-listenerLikes', () =>
-    getListenerLike({
-      //TODO: ADD GENRE ID TOOK FROM PROFILE STORAGE
-      genreID: 4,
-    }),
+  const {idGenre} = myIdGenreStore();
+  const {isLoading, isError} = useQuery('analytic-listenerLikes', () =>
+    idGenre.length > 0
+      ? getListenerLike({
+          genreID: idGenre,
+        })
+      : undefined,
   );
 
   return (
@@ -27,7 +32,7 @@ const AlbumAnalytic = () => {
       <Gap height={20} />
       <ListenerCountry />
       <Gap height={20} />
-      <ListenerLikes />
+      <ListenerLikes title={t('Home.Tab.Analytic.Album.ListenerLikes.Title')} />
     </View>
   );
 };

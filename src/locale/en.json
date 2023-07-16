@@ -329,7 +329,8 @@
             "EmptyState": "Oops! We couldn't find any of your listener country. Release song or album to make your own cult!"
           },
           "ListenerLikes": {
-            "Title": "Listener Also Like"
+            "Title": "Listener Also Like",
+            "EmptyState":"Oops! We couldn't find any of your listener. Release song or album to make your own cult!"
           },
           "MySong": {
             "Title": "My Song",

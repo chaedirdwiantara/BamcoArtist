@@ -28,8 +28,10 @@ import {
   ProfileProgressResponseType,
   ProfileResponseType,
 } from '../interface/profile.interface';
+import {myIdGenreStore} from '../store/myIdGenre.store';
 
 export const useProfileHook = () => {
+  const {setIdGenre} = myIdGenreStore();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isError, setIsError] = useState<boolean>(false);
   const [errorMsg, setErrorMsg] = useState<string>('');
@@ -53,6 +55,7 @@ export const useProfileHook = () => {
     try {
       const response = await getProfile();
       setDataProfile(response);
+      setIdGenre(response.data.favoriteGenres.map(item => item.id));
     } catch (error) {
       console.log(error);
     } finally {

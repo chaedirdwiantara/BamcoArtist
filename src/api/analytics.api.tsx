@@ -139,9 +139,12 @@ export const ListenerCountryEP = async (
 export const ListenerLikes = async (
   props?: ParamsProps,
 ): Promise<ListenerLikesResponseType> => {
+  console.log('GENRE', props?.genreID);
+
   const {data} = await SsuAPI().request<ListenerLikesResponseType>({
-    url: `/musician-app/similar-musician/${props?.genreID}/genre`,
+    url: `/musician-app/similar-musician/genre`,
     method: 'GET',
+    params: props?.genreID,
   });
 
   return data;

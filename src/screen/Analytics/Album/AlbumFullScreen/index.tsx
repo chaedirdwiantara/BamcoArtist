@@ -1,6 +1,6 @@
 import {ScrollView, StyleSheet, View} from 'react-native';
 import React from 'react';
-import {Gap, TopNavigation} from '../../../../components';
+import {Gap, ListenerLikes, TopNavigation} from '../../../../components';
 import {useTranslation} from 'react-i18next';
 import {useNavigation} from '@react-navigation/native';
 import {
@@ -13,7 +13,6 @@ import {widthResponsive} from '../../../../utils';
 import Album from './Album';
 import WhoListen from './WhoListen';
 import AlbumListenerCountry from './AlbumListenerCountry';
-import AlbumListenerLike from './AlbumListenerAlsoLike';
 
 type SongDetailProps = NativeStackScreenProps<
   RootStackParams,
@@ -45,7 +44,9 @@ const AlbumAnalyticScreen = ({route}: SongDetailProps) => {
         <Gap height={20} />
         <AlbumListenerCountry />
         <Gap height={20} />
-        <AlbumListenerLike />
+        <ListenerLikes
+          title={t('Home.Tab.Analytic.Album.MySong.ListenerAlsoLike.Title')}
+        />
       </ScrollView>
     </View>
   );

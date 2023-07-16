@@ -101,7 +101,7 @@ const TopSongs = () => {
               renderItem={({item, index}) =>
                 index !== 0 ? (
                   <ListCard.MusicList
-                    imgUri={item.imageUrl[0].image}
+                    imgUri={item.imageUrl[0]?.image}
                     musicNum={(index + 1).toLocaleString('en-US', {
                       minimumIntegerDigits: 2,
                       useGrouping: false,

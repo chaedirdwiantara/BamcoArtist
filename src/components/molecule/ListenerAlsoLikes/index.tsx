@@ -1,6 +1,5 @@
 import {StyleSheet, Text, View} from 'react-native';
-import React from 'react';
-import {useTranslation} from 'react-i18next';
+import React, {FC} from 'react';
 import {mvs} from 'react-native-size-matters';
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
@@ -11,11 +10,18 @@ import {Gap} from '../../atom';
 import {widthResponsive} from '../../../utils';
 import MusiciansListCard from '../ListCard/MusiciansListCard';
 import {color, font} from '../../../theme';
+import EmptyStateAnalytic from '../EmptyState/EmptyStateAnalytic';
+import {useTranslation} from 'react-i18next';
 
-const ListenerLikes = () => {
-  const {t} = useTranslation();
+interface ListenerLikesProps {
+  title: string;
+}
+
+const ListenerLikes: FC<ListenerLikesProps> = (props: ListenerLikesProps) => {
+  const {title} = props;
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
+  const {t} = useTranslation();
 
   const {storedListenerLikes} = useListenerAlsoLikesStore();
 
@@ -25,12 +31,10 @@ const ListenerLikes = () => {
       <View style={styles.titleContainer}>
         <PlayPinkIcon />
         <Gap width={10} />
-        <Text style={styles.title}>
-          {t('Home.Tab.Analytic.Album.ListenerLikes.Title')}
-        </Text>
+        <Text style={styles.title}>{title}</Text>
       </View>
       {/* BODY AREA */}
-      {storedListenerLikes && (
+      {storedListenerLikes ? (
         <View>
           {storedListenerLikes.map((item, index) => (
             <View
@@ -44,9 +48,9 @@ const ListenerLikes = () => {
                 onPressMore={() => {}}
                 activeMore={false}
                 onPressImage={() => {
-                  // navigation.navigate('OtherUserProfile', {id: item.uuid})
+                  navigation.navigate('MusicianProfile', {id: item?.uuid});
                 }}
-                musicianName={item.fullname}
+                musicianName={item?.fullname}
                 imgUri={item.imageProfileUrls[0]?.image}
                 containerStyles={{marginBottom: widthResponsive(12)}}
                 imageSize={36}
@@ -54,6 +58,10 @@ const ListenerLikes = () => {
             </View>
           ))}
         </View>
+      ) : (
+        <EmptyStateAnalytic
+          caption={t('Home.Tab.Analytic.Album.ListenerLikes.EmptyState')}
+        />
       )}
     </View>
   );
