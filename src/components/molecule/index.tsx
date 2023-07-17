@@ -66,6 +66,7 @@ import TermAndConditions from './Tnc';
 import Title from './Title';
 import {TopupCoinContent} from './TopupCoin';
 import {TopNavigation} from './TopNavigation';
+import TopFans from './TopFans/TopFans';
 import {UseReferralContent} from './SettingContent/UseReferralContent';
 import {UserInfoCard} from './UserInfoCard/UserInfoCard';
 
@@ -138,6 +139,7 @@ export {
   Title,
   TopNavigation,
   TopupCoinContent,
+  TopFans,
   UseReferralContent,
   UserInfoCard,
 };
