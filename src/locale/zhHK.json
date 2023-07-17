@@ -318,7 +318,8 @@
             }
           },
           "PopularAlbum": {
-            "Title": "Popular Album"
+            "Title": "Popular Album",
+            "Link": "Explore Your Album"
           },
           "TopSongs": {
             "Title" : "Your Top Song",

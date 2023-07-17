@@ -81,7 +81,7 @@ const PopularAlbum = () => {
               navigation.navigate('AlbumAnalyticScreen', {albumId: 0})
             }>
             <Text style={styles.link}>
-              {t('Home.Tab.Analytic.Fans.TopFans.Link')}
+              {t('Home.Tab.Analytic.Album.PopularAlbum.Link')}
             </Text>
           </TouchableOpacity>
         </View>
