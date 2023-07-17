@@ -1,4 +1,4 @@
-import {FlatList, StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, View} from 'react-native';
 import React, {useState} from 'react';
 import {MusicPink2Icon} from '../../../../assets/icon';
 import {DropDownFilter, Gap, ListCard} from '../../../../components';
