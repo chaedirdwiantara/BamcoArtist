@@ -35,27 +35,23 @@ const FansCountry = () => {
       </View>
       <Gap height={22} />
       {countryData?.data ? (
-        <FlatList
-          showsVerticalScrollIndicator={false}
-          scrollEnabled={false}
-          data={countryData?.data}
-          renderItem={({item, index}) => (
-            <View
-              style={{
-                marginTop: index !== 0 ? widthResponsive(17) : 0,
-              }}>
-              <CountryCard
-                countryId={(index + 1).toLocaleString('en-US', {
-                  minimumIntegerDigits: 2,
-                  useGrouping: false,
-                })}
-                flagUri={item.country.image}
-                name={item.country.name}
-                value={item.total}
-              />
-            </View>
-          )}
-        />
+        countryData?.data.map((item, index) => (
+          <View
+            style={{
+              marginTop: index !== 0 ? widthResponsive(17) : 0,
+            }}
+            key={index}>
+            <CountryCard
+              countryId={(index + 1).toLocaleString('en-US', {
+                minimumIntegerDigits: 2,
+                useGrouping: false,
+              })}
+              flagUri={item.country.image}
+              name={item.country.name}
+              value={item.total}
+            />
+          </View>
+        ))
       ) : (
         <EmptyStateAnalytic
           caption={t('Home.Tab.Analytic.Fans.FansCountry.EmptyState')}
