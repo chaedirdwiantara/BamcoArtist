@@ -290,7 +290,8 @@
         "Post": {
           "Title": "郵政",
           "Popular":{
-            "Title" : "Popular Post"
+            "Title" : "Popular Post",
+            "EmptyState":"Oops! We couldn't find your popular post. Post your story and interact to make your own cult!"
           },
           "Engagement": {
             "Title" : "Post Engagement Rate",

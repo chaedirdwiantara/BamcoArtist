@@ -17,6 +17,7 @@ import {useTranslation} from 'react-i18next';
 import {PostList} from '../../../interface/feed.interface';
 import {
   DropDownFilter,
+  EmptyStateAnalytic,
   Gap,
   ListCard,
   ModalShare,
@@ -229,31 +230,31 @@ const PopularPost: FC<PopularPostProps> = (props: PopularPostProps) => {
           ? navigation.navigate('PostDetail', TranslatePostList)
           : {}
       }>
-      {analyticPostData && (
-        <>
-          <View style={styles.titleStyle}>
-            <StarPinkIcon />
-            <Gap width={10} />
-            <Text style={styles.textComp}>
-              {t('Home.Tab.Analytic.Post.Popular.Title')}
-            </Text>
-          </View>
-          {/* DROPDOWN AREA */}
-          <View style={{width: 90, zIndex: 100}}>
-            <DropDownFilter
-              labelCaption={t(selectedRange.label)}
-              dataFilter={dropDownAlbumRange}
-              selectedMenu={setSelectedRange}
-              leftPosition={
-                lang === 'en' ? widthResponsive(-85) : widthResponsive(-85)
-              }
-              topPosition={widthResponsive(20)}
-              containerStyle={styles.dropdownContainer}
-              textCustomStyle={{color: color.Neutral[10], fontSize: mvs(11)}}
-              iconColor={color.Neutral[10]}
-              dropdownStyle={styles.dropdown}
-            />
-          </View>
+      <>
+        <View style={styles.titleStyle}>
+          <StarPinkIcon />
+          <Gap width={10} />
+          <Text style={styles.textComp}>
+            {t('Home.Tab.Analytic.Post.Popular.Title')}
+          </Text>
+        </View>
+        {/* DROPDOWN AREA */}
+        <View style={{width: 90, zIndex: 100}}>
+          <DropDownFilter
+            labelCaption={t(selectedRange.label)}
+            dataFilter={dropDownAlbumRange}
+            selectedMenu={setSelectedRange}
+            leftPosition={
+              lang === 'en' ? widthResponsive(-85) : widthResponsive(-85)
+            }
+            topPosition={widthResponsive(20)}
+            containerStyle={styles.dropdownContainer}
+            textCustomStyle={{color: color.Neutral[10], fontSize: mvs(11)}}
+            iconColor={color.Neutral[10]}
+            dropdownStyle={styles.dropdown}
+          />
+        </View>
+        {analyticPostData ? (
           <ListCard.PostListOld
             containerStyles={{paddingHorizontal: 0}}
             onPress={() =>
@@ -318,8 +319,13 @@ const PopularPost: FC<PopularPostProps> = (props: PopularPostProps) => {
               ) : null
             }
           />
-        </>
-      )}
+        ) : (
+          <EmptyStateAnalytic
+            caption={t('Home.Tab.Analytic.Post.Popular.EmptyState')}
+          />
+        )}
+      </>
+
       <ModalShare
         //TODO: CHANGE DUMMY URL
         url={
