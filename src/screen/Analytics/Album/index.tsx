@@ -14,6 +14,7 @@ const AlbumAnalytic = () => {
   const {t} = useTranslation();
   const {getListenerLike} = useAnalyticsHook();
   const {idGenre} = myIdGenreStore();
+
   const {isLoading, isError} = useQuery('analytic-listenerLikes', () =>
     idGenre.length > 0
       ? getListenerLike({
