@@ -193,127 +193,165 @@ const PopularPost: FC<PopularPostProps> = (props: PopularPostProps) => {
     value: '1',
   });
 
+  const TranslatePostList: PostList | undefined = analyticPostData
+    ? {
+        id: analyticPostData?.id,
+        caption: analyticPostData?.caption,
+        likesCount: analyticPostData?.likesCount,
+        commentsCount: analyticPostData?.commentsCount,
+        category: analyticPostData?.category,
+        images: analyticPostData?.images,
+        createdAt: analyticPostData?.createdAt,
+        updatedAt: analyticPostData?.updatedAt,
+        isPremiumPost: analyticPostData?.isPremiumPost,
+        isSubscribe: false,
+        musician: analyticPostData?.musician ?? {
+          uuid: '',
+          username: '',
+          fullname: '',
+          email: '',
+          isFollowed: '',
+          imageProfileUrls: [{image: '', presetName: ''}],
+          followers: 0,
+        },
+        isLiked: analyticPostData?.isLiked ?? false,
+        quoteToPost: analyticPostData?.quoteToPost,
+        video: analyticPostData?.video,
+        timeAgo: analyticPostData.timeAgo,
+      }
+    : undefined;
+
   return (
-    //TODO:NAVIGATE TO POST LIST (TOP POST)
-    // <TouchableOpacity style={styles.container} onPress={() => {}}>
-    //   {analyticPostData && (
-    //     <>
-    //       <View style={styles.titleStyle}>
-    //         <StarPinkIcon />
-    //         <Gap width={10} />
-    //         <Text style={styles.textComp}>
-    //           {t('Home.Tab.Analytic.Post.Popular.Title')}
-    //         </Text>
-    //       </View>
-    //       {/* DROPDOWN AREA */}
-    //       <View style={{width: 90, zIndex: 100}}>
-    //         <DropDownFilter
-    //           labelCaption={t(selectedRange.label)}
-    //           dataFilter={dropDownAlbumRange}
-    //           selectedMenu={setSelectedRange}
-    //           leftPosition={
-    //             lang === 'en' ? widthResponsive(-85) : widthResponsive(-85)
-    //           }
-    //           topPosition={widthResponsive(20)}
-    //           containerStyle={styles.dropdownContainer}
-    //           textCustomStyle={{color: color.Neutral[10], fontSize: mvs(11)}}
-    //           iconColor={color.Neutral[10]}
-    //           dropdownStyle={styles.dropdown}
-    //         />
-    //       </View>
-    //       <ListCard.PostListOld
-    //         containerStyles={{paddingHorizontal: 0}}
-    //         onPress={() => cardOnPress(analyticPostData[0])}
-    //         likeOnPress={() =>
-    //           likeOnPress(analyticPostData.ID, analyticPostData.IsLiked)
-    //         }
-    //         likePressed={
-    //           selectedId === undefined
-    //             ? analyticPostData.IsLiked
-    //             : selectedId.includes(analyticPostData.ID) &&
-    //               recorder.includes(analyticPostData.ID)
-    //             ? true
-    //             : !selectedId.includes(analyticPostData.ID) &&
-    //               recorder.includes(analyticPostData.ID)
-    //             ? false
-    //             : !selectedId.includes(analyticPostData.ID) &&
-    //               !recorder.includes(analyticPostData.ID)
-    //             ? analyticPostData.IsLiked
-    //             : analyticPostData.IsLiked
-    //         }
-    //         likeCount={
-    //           selectedId === undefined
-    //             ? analyticPostData.likes_count
-    //             : selectedId.includes(analyticPostData.ID) &&
-    //               recorder.includes(analyticPostData.ID) &&
-    //               analyticPostData.IsLiked === true
-    //             ? analyticPostData.likes_count
-    //             : selectedId.includes(analyticPostData.ID) &&
-    //               recorder.includes(analyticPostData.ID) &&
-    //               analyticPostData.IsLiked === false
-    //             ? analyticPostData.likes_count + 1
-    //             : !selectedId.includes(analyticPostData.ID) &&
-    //               recorder.includes(analyticPostData.ID) &&
-    //               analyticPostData.IsLiked === true
-    //             ? analyticPostData.likes_count - 1
-    //             : !selectedId.includes(analyticPostData.ID) &&
-    //               recorder.includes(analyticPostData.ID) &&
-    //               analyticPostData.IsLiked === false
-    //             ? analyticPostData.likes_count
-    //             : analyticPostData.likes_count
-    //         }
-    //         shareOnPress={shareOnPress}
-    //         commentCount={analyticPostData.comments_count}
-    //         children={
-    //           <ChildrenCard
-    //             data={analyticPostData[0]}
-    //             onPress={onPressPlaySong}
-    //             isPlay={isPlaying}
-    //             playOrPause={handlePausePlay}
-    //             pauseModeOn={pauseModeOn}
-    //             currentProgress={playerProgress.position}
-    //             duration={playerProgress.duration}
-    //             seekPlayer={seekPlayer}
-    //             isIdNowPlaying={analyticPostData.Id === idNowPlaying}
-    //             imgWidth={125}
-    //             imgWidth2={290}
-    //           />
-    //         }
-    //       />
-    //     </>
-    //   )}
-    //   <ModalShare
-    //     url={
-    //       'https://open.ssu.io/track/19AiJfAtRiccvSU1EWcttT?si=36b9a686dad44ae0'
-    //     }
-    //     modalVisible={modalShare}
-    //     onPressClose={() => setModalShare(false)}
-    //     titleModal={t('General.Share.Feed')}
-    //     hideMusic
-    //     onPressCopy={() =>
-    //       InteractionManager.runAfterInteractions(() => setToastVisible(true))
-    //     }
-    //   />
-    //   <SsuToast
-    //     modalVisible={toastVisible}
-    //     onBackPressed={() => setToastVisible(false)}
-    //     children={
-    //       <View style={[styles.modalContainer]}>
-    //         <TickCircleIcon
-    //           width={widthResponsive(21)}
-    //           height={heightPercentage(20)}
-    //           stroke={color.Neutral[10]}
-    //         />
-    //         <Gap width={widthResponsive(7)} />
-    //         <Text style={[typography.Button2, styles.textStyle]}>
-    //           {t('General.LinkCopied')}
-    //         </Text>
-    //       </View>
-    //     }
-    //     modalStyle={{marginHorizontal: widthResponsive(24)}}
-    //   />
-    // </TouchableOpacity>
-    <View></View>
+    <TouchableOpacity
+      style={styles.container}
+      onPress={() =>
+        TranslatePostList
+          ? navigation.navigate('PostDetail', TranslatePostList)
+          : {}
+      }>
+      {analyticPostData && (
+        <>
+          <View style={styles.titleStyle}>
+            <StarPinkIcon />
+            <Gap width={10} />
+            <Text style={styles.textComp}>
+              {t('Home.Tab.Analytic.Post.Popular.Title')}
+            </Text>
+          </View>
+          {/* DROPDOWN AREA */}
+          <View style={{width: 90, zIndex: 100}}>
+            <DropDownFilter
+              labelCaption={t(selectedRange.label)}
+              dataFilter={dropDownAlbumRange}
+              selectedMenu={setSelectedRange}
+              leftPosition={
+                lang === 'en' ? widthResponsive(-85) : widthResponsive(-85)
+              }
+              topPosition={widthResponsive(20)}
+              containerStyle={styles.dropdownContainer}
+              textCustomStyle={{color: color.Neutral[10], fontSize: mvs(11)}}
+              iconColor={color.Neutral[10]}
+              dropdownStyle={styles.dropdown}
+            />
+          </View>
+          <ListCard.PostListOld
+            containerStyles={{paddingHorizontal: 0}}
+            onPress={() =>
+              TranslatePostList ? cardOnPress(TranslatePostList) : {}
+            }
+            likeOnPress={() =>
+              likeOnPress(analyticPostData.id, analyticPostData.isLiked)
+            }
+            likePressed={
+              selectedId === undefined
+                ? analyticPostData.isLiked
+                : selectedId.includes(analyticPostData.id) &&
+                  recorder.includes(analyticPostData.id)
+                ? true
+                : !selectedId.includes(analyticPostData.id) &&
+                  recorder.includes(analyticPostData.id)
+                ? false
+                : !selectedId.includes(analyticPostData.id) &&
+                  !recorder.includes(analyticPostData.id)
+                ? analyticPostData.isLiked
+                : analyticPostData.isLiked
+            }
+            likeCount={
+              selectedId === undefined
+                ? analyticPostData.likesCount
+                : selectedId.includes(analyticPostData.id) &&
+                  recorder.includes(analyticPostData.id) &&
+                  analyticPostData.isLiked === true
+                ? analyticPostData.likesCount
+                : selectedId.includes(analyticPostData.id) &&
+                  recorder.includes(analyticPostData.id) &&
+                  analyticPostData.isLiked === false
+                ? analyticPostData.likesCount + 1
+                : !selectedId.includes(analyticPostData.id) &&
+                  recorder.includes(analyticPostData.id) &&
+                  analyticPostData.isLiked === true
+                ? analyticPostData.likesCount - 1
+                : !selectedId.includes(analyticPostData.id) &&
+                  recorder.includes(analyticPostData.id) &&
+                  analyticPostData.isLiked === false
+                ? analyticPostData.likesCount
+                : analyticPostData.likesCount
+            }
+            viewCount={analyticPostData.viewsCount}
+            shareOnPress={shareOnPress}
+            commentCount={analyticPostData.commentsCount}
+            children={
+              TranslatePostList ? (
+                <ChildrenCard
+                  data={TranslatePostList}
+                  onPress={onPressPlaySong}
+                  isPlay={isPlaying}
+                  playOrPause={handlePausePlay}
+                  pauseModeOn={pauseModeOn}
+                  currentProgress={playerProgress.position}
+                  duration={playerProgress.duration}
+                  seekPlayer={seekPlayer}
+                  isIdNowPlaying={analyticPostData.id === idNowPlaying}
+                  imgWidth={125}
+                  imgWidth2={290}
+                />
+              ) : null
+            }
+          />
+        </>
+      )}
+      <ModalShare
+        //TODO: CHANGE DUMMY URL
+        url={
+          'https://open.ssu.io/track/19AiJfAtRiccvSU1EWcttT?si=36b9a686dad44ae0'
+        }
+        modalVisible={modalShare}
+        onPressClose={() => setModalShare(false)}
+        titleModal={t('General.Share.Feed')}
+        hideMusic
+        onPressCopy={() =>
+          InteractionManager.runAfterInteractions(() => setToastVisible(true))
+        }
+      />
+      <SsuToast
+        modalVisible={toastVisible}
+        onBackPressed={() => setToastVisible(false)}
+        children={
+          <View style={[styles.modalContainer]}>
+            <TickCircleIcon
+              width={widthResponsive(21)}
+              height={heightPercentage(20)}
+              stroke={color.Neutral[10]}
+            />
+            <Gap width={widthResponsive(7)} />
+            <Text style={[typography.Button2, styles.textStyle]}>
+              {t('General.LinkCopied')}
+            </Text>
+          </View>
+        }
+        modalStyle={{marginHorizontal: widthResponsive(24)}}
+      />
+    </TouchableOpacity>
   );
 };
 
