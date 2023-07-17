@@ -307,11 +307,13 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
   };
 
   const onPressNotif = () => {
-    isLogin ? goToScreen('Notification') : setModalGuestVisible(true);
+    navigation.navigate('Preference');
+    // isLogin ? goToScreen('Notification') : setModalGuestVisible(true);
   };
 
   const onPressCoin = () => {
-    isLogin ? goToScreen('TopupCoin') : setModalGuestVisible(true);
+    navigation.navigate('ReferralCode');
+    // isLogin ? goToScreen('TopupCoin') : setModalGuestVisible(true);
   };
 
   const goToListMusic = (

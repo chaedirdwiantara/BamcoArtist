@@ -8,7 +8,7 @@ import {
   widthPercentage,
   widthResponsive,
 } from '../../../utils';
-import {color} from '../../../theme';
+import {color, font} from '../../../theme';
 import Font from '../../../theme/Font';
 
 const styles = StyleSheet.create({
@@ -34,6 +34,16 @@ const styles = StyleSheet.create({
   title: {
     color: Color.Neutral[10],
     maxWidth: width * 0.9,
+  },
+  textSubtitle: {
+    fontSize: mvs(12),
+    fontFamily: font.InterRegular,
+    fontWeight: '500',
+    lineHeight: mvs(14.5),
+    color: '#788AA9',
+    textAlign: 'center',
+    maxWidth: width * 0.8,
+    marginBottom: mvs(30),
   },
   description: {
     maxWidth: width * 0.9,

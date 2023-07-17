@@ -269,11 +269,10 @@
           },
           "FansInteract": "Fans actively interact with you",
           "TopFans": {
-            "Title" : "Your Top Fans",
-            "Link" : "View All",
+            "Title": "Your Top Fans",
+            "Link": "View All",
             "FullScreen": "Your Fans",
             "EmptyState": "Oops! We couldn't find any Top fans for you. Post some story or release album to make your own cult!"
-         
           },
           "FansAge": {
             "Title": "Fans Age"
@@ -282,17 +281,17 @@
             "Title": "Fans Gender"
           },
           "FansCountry": {
-            "Title" : "Your Fans Country",
+            "Title": "Your Fans Country",
             "EmptyState": "Oops! We couldn't find any of your fans country. Post some story or release album to make your own cult!"
           }
         },
         "Post": {
           "Title": "Post",
-          "Popular":{
-            "Title" : "Popular Post"
+          "Popular": {
+            "Title": "Popular Post"
           },
           "Engagement": {
-            "Title" : "Post Engagement Rate"
+            "Title": "Post Engagement Rate"
           }
         },
         "Album": {
@@ -316,7 +315,7 @@
             "Title": "Popular Album"
           },
           "TopSongs": {
-            "Title" : "Your Top Song",
+            "Title": "Your Top Song",
             "EmptyState": "Oops! We couldn't find your top song.Publish your song and interact to make your own cult!"
           },
           "Listener": {
@@ -731,22 +730,24 @@
     "Referral": {
       "Title": "Referral Code",
       "ReferFriend": {
-        "Title": "REFER A FRIEND",
+        "Title": "Refer A Friend",
         "Text1": "Refer a friend and earn 50 free credits",
         "Text2": "Use your @username as referral code",
         "Btn1": "Refer a friend using link",
-        "Btn2": "Read Terms of Use"
+        "Btn2": "Read Terms and Conditions"
       },
       "UseRefer": {
-        "Title": "USE REFERRAL",
+        "Title": "Use Referral",
         "Text1": "Earn 50 free credits",
         "Text2": "Your Friend’s Referral Code",
-        "Text3": "Referral code can not be changed",
-        "Invalid": "Referral code invalid"
+        "Text3": "Refferal code can not be changed"
+      },
+      "ReferUsed": {
+        "Title": "Referral Used"
       },
       "OnBoard": {
-        "Title": "Scan QR Code to Earn Bonuses!",
-        "Subtitle": "Scan referral code by pressing scan now button, to earn some free stuff and bonuses",
+        "Title": "Do you have a referral code?",
+        "Subtitle": "Enter your code to jumpstart your Beamco Journey!",
         "Actived": "Referral Activated",
         "Success": "Congratulations! now you will get 5% credit every transaction!"
       }
@@ -770,7 +771,7 @@
       "OnBoard": {
         "Title": "Scan QR Code to Earn Bonuses!",
         "Subtitle": "Scan referral code by pressing scan now button, to earn some free stuff and bonuses",
-        "Actived": "Referral Activated",
+        "Activated": "Your 5% Comission for every transaction have been activated!",
         "SuccessTitle": "Your scan was successful!",
         "SuccessDesc": "Congratulations! now you will get 5% credit every transaction!",
         "Continue": "Continue",
