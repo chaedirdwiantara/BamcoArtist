@@ -1,4 +1,4 @@
-import {FlatList, StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import {EqualizerIcon} from '../../../../assets/icon';
 import {EmptyStateAnalytic, Gap} from '../../../../components';

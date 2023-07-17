@@ -109,12 +109,11 @@ export const useAnalyticsHook = () => {
     }
   };
 
-  const getPopularAlbum = async (props?: ParamsProps) => {
+  const getPopularAlbum = async () => {
     try {
-      const response = await PopularAlbum(props);
+      const response = await PopularAlbum();
       return {
         data: response?.data,
-        meta: response?.meta,
         message: response?.message,
       };
     } catch (error) {

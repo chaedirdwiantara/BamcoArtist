@@ -15,6 +15,7 @@ import {
   EngagementTopFansResponseType,
   ListenerCountryResponseType,
   ListenerLikesResponseType,
+  PopularAlbumResponseType,
   SongChartResponseType,
 } from '../interface/analythic.interface';
 import SsuAPIKrakatau from './baseKrakatau';
@@ -101,13 +102,10 @@ export const AlbumTabActiveListenerEP = async (
   return data;
 };
 
-export const PopularAlbum = async (
-  props?: ParamsProps,
-): Promise<ListPostResponseType> => {
-  const {data} = await SsuAPI().request<ListPostResponseType>({
-    url: '/musician-app/post/public',
+export const PopularAlbum = async (): Promise<PopularAlbumResponseType> => {
+  const {data} = await SsuApiSemeru().request<PopularAlbumResponseType>({
+    url: '/musician-app/analytics/most-popular-album',
     method: 'GET',
-    params: props,
   });
 
   return data;

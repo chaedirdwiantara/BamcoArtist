@@ -320,7 +320,9 @@
           },
           "PopularAlbum": {
             "Title": "Popular Album",
-            "Link": "Explore Your Album"
+            "Link": "Explore Your Album",
+            "Subtitle": "Popular all the time",
+            "EmptyState": "Oops! We couldn't find your popular album. Release song or album to make your own cult!"
           },
           "TopSongs": {
             "Title" : "Your Top Song",

@@ -220,3 +220,19 @@ export type ListenerCountryResponseType = {
   meta: PaginationType;
   status: number;
 };
+
+export type PopularAlbumData = {
+  id: number;
+  title: string;
+  albumType: string;
+  albumImage: imageTypes[];
+  productionYear: string;
+  totalCountListener: number;
+};
+
+export type PopularAlbumResponseType = {
+  code: number;
+  data: PopularAlbumData;
+  message: string;
+  status: number;
+};
