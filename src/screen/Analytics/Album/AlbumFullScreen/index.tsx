@@ -20,7 +20,7 @@ type SongDetailProps = NativeStackScreenProps<
 >;
 
 const AlbumAnalyticScreen = ({route}: SongDetailProps) => {
-  const songId = route.params.albumId;
+  const albumId = route.params.albumId;
   const {t} = useTranslation();
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
@@ -38,9 +38,9 @@ const AlbumAnalyticScreen = ({route}: SongDetailProps) => {
         }}
       />
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <Album />
+        <Album albumId={albumId} />
         <Gap height={20} />
-        <WhoListen albumId={songId} />
+        <WhoListen albumId={albumId} />
         <Gap height={20} />
         <AlbumListenerCountry />
         <Gap height={20} />

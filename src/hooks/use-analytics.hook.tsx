@@ -2,7 +2,6 @@ import {
   AlbumTabActiveListenerEP,
   AlbumListenerCountryEP,
   AlbumListenerLikeEP,
-  AlbumSongEP,
   FansAge,
   FansCountry,
   FansGender,
@@ -21,7 +20,9 @@ import {
   topFans,
   ListenerCountryEP,
 } from '../api/analytics.api';
+import {detailAlbum} from '../api/song.api';
 import {ParamsProps} from '../interface/base.interface';
+import {PostPropsTypeA} from '../interface/feed.interface';
 import {useListenerAlsoLikesStore} from '../store/listenerAlsoLike';
 
 export const useAnalyticsHook = () => {
@@ -192,12 +193,11 @@ export const useAnalyticsHook = () => {
     }
   };
 
-  const getAlbumSongs = async (props?: ParamsProps) => {
+  const getAlbumDetail = async (props?: PostPropsTypeA) => {
     try {
-      const response = await AlbumSongEP(props);
+      const response = await detailAlbum(props);
       return {
         data: response?.data,
-        meta: response?.meta,
         message: response?.message,
       };
     } catch (error) {
@@ -300,7 +300,7 @@ export const useAnalyticsHook = () => {
     getWhoListen,
     getAlbumListenerCountry,
     getAlbumListenerLike,
-    getAlbumSongs,
+    getAlbumDetail,
     getWhoListenSong,
     getSongListenerCountry,
     getSongListenerLikes,

@@ -184,18 +184,6 @@ export const AlbumListenerLikeEP = async (
   return data;
 };
 
-export const AlbumSongEP = async (
-  props?: ParamsProps,
-): Promise<ListPostResponseType> => {
-  const {data} = await SsuAPI().request<ListPostResponseType>({
-    url: '/musician-app/post/public',
-    method: 'GET',
-    params: props,
-  });
-
-  return data;
-};
-
 export const WhoListenSongEP = async (
   props?: ParamsProps,
 ): Promise<SongChartResponseType> => {

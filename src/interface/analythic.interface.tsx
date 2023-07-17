@@ -1,5 +1,5 @@
 import {PaginationType, countryTypes, imageTypes} from './base.interface';
-import {DataAlbum} from './song.interface';
+import {DataAlbum, FeaturingArtist} from './song.interface';
 
 export interface DataChart {
   value: number;
