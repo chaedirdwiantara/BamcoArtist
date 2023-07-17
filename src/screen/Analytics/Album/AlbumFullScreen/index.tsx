@@ -28,7 +28,7 @@ const AlbumAnalyticScreen = ({route}: SongDetailProps) => {
     <View style={styles.container}>
       {/* Header Section */}
       <TopNavigation.Type1
-        title={`${t('Home.Tab.Analytic.Album.MySong.Title')}`}
+        title={`${t('Home.Tab.Analytic.Album.Title')}`}
         leftIconAction={() => navigation.goBack()}
         maxLengthTitle={40}
         itemStrokeColor={color.Neutral[10]}

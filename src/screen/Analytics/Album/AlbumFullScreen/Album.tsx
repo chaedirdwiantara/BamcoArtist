@@ -86,34 +86,29 @@ const Album = () => {
         <View style={styles.lineStyle} />
         <Gap height={18} />
         <Text style={[typography.Heading6, styles.caption]}>Song</Text>
-        <FlatList
-          showsVerticalScrollIndicator={false}
-          scrollEnabled={false}
-          data={songs2}
-          keyExtractor={item => item.id.toString()}
-          renderItem={({item, index}) => (
-            <ListCard.MusicList
-              imgUri={item.url}
-              musicNum={(index + 1).toLocaleString('en-US', {
-                minimumIntegerDigits: 2,
-                useGrouping: false,
-              })}
-              musicTitle={item.title}
-              singerName={''}
-              likeAnalytics={item.likes}
-              streamAnalytics={item.stream}
-              onPressMore={() => {}}
-              containerStyles={{marginTop: mvs(20)}}
-              //TODO: CHANGE ID TO CORRECT ONE LATER
-              onPressCard={() =>
-                navigation.navigate('SongDetailAnalytic', {
-                  songId: item.id.toString(),
-                })
-              }
-              hideDropdownMore
-            />
-          )}
-        />
+        {songs2.map((item, index) => (
+          <ListCard.MusicList
+            imgUri={item.url}
+            musicNum={(index + 1).toLocaleString('en-US', {
+              minimumIntegerDigits: 2,
+              useGrouping: false,
+            })}
+            musicTitle={item.title}
+            singerName={''}
+            likeAnalytics={item.likes}
+            streamAnalytics={item.stream}
+            onPressMore={() => {}}
+            containerStyles={{marginTop: mvs(20)}}
+            //TODO: CHANGE ID TO CORRECT ONE LATER
+            onPressCard={() =>
+              navigation.navigate('SongDetailAnalytic', {
+                songId: item.id.toString(),
+              })
+            }
+            hideDropdownMore
+            key={index}
+          />
+        ))}
       </View>
     </View>
   );
