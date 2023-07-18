@@ -13,6 +13,7 @@ import {
   DemogGenderResponseType,
   EngagementResponseType,
   EngagementTopFansResponseType,
+  ListAlbumResponseType,
   ListenerCountryResponseType,
   ListenerLikesResponseType,
   PopularAlbumResponseType,
@@ -249,6 +250,18 @@ export const Income = async (
   const {data} = await SsuAPIKrakatau().request<ListIncomeResponseType>({
     url: `/analytic/${interval}`,
     method: 'GET',
+  });
+
+  return data;
+};
+
+export const ListAlbumEP = async (
+  props?: ParamsProps,
+): Promise<ListAlbumResponseType> => {
+  const {data} = await SsuApiSemeru().request<ListAlbumResponseType>({
+    url: `/musician-app/albums`,
+    method: 'GET',
+    params: props,
   });
 
   return data;

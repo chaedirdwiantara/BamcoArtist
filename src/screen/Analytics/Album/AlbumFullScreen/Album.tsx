@@ -1,5 +1,5 @@
 import {StyleSheet, Text, View} from 'react-native';
-import React, {FC, useState} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import {MusicPink2Icon} from '../../../../assets/icon';
 import {
   DropDownFilter,
@@ -7,19 +7,19 @@ import {
   Gap,
   ListCard,
 } from '../../../../components';
-import {kFormatter, widthResponsive} from '../../../../utils';
+import {elipsisText, kFormatter, widthResponsive} from '../../../../utils';
 import {useTranslation} from 'react-i18next';
-import {DataDropDownType, dropDownAlbumRange} from '../../../../data/dropdown';
-import {storage} from '../../../../hooks/use-storage.hook';
+import {DataDropDownType} from '../../../../data/dropdown';
+import {profileStorage, storage} from '../../../../hooks/use-storage.hook';
 import {color, font, typography} from '../../../../theme';
 import {mvs} from 'react-native-size-matters';
 import {AlbumRow} from '../../../../components/molecule/SongDetailsContent/AlbumRow';
-import {songs2} from '../../../../data/music2';
 import {useQuery} from 'react-query';
 import {useAnalyticsHook} from '../../../../hooks/use-analytics.hook';
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParams} from '../../../../navigations';
+import {DataDetailAlbum} from '../../../../interface/song.interface';
 
 interface AlbumProps {
   albumId: number;
@@ -28,29 +28,64 @@ interface AlbumProps {
 const Album: FC<AlbumProps> = (props: AlbumProps) => {
   const {albumId} = props;
   const {t} = useTranslation();
-  const {getAlbumDetail} = useAnalyticsHook();
-  const {
-    data: albumData,
-    isLoading,
-    isError,
-  } = useQuery('analytic-albumSongs', () =>
-    getAlbumDetail({
-      id: albumId.toString(),
-    }),
-  );
-
-  // TODO: WIRING SONG LIST BY ALBUM ID AND LIST ALBUM
-
+  const uuid = profileStorage()?.uuid;
+  const lang = storage.getString('lang');
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
 
-  const [selectedRange, setSelectedRange] = useState<DataDropDownType>({
-    label: 'Select Album',
-    value: '1',
-  });
-  const lang = storage.getString('lang');
+  const {getAlbumDetail, getSongListByAlbumId, getAlbumListbyUuid} =
+    useAnalyticsHook();
 
-  const albumDesc = albumData?.data;
+  //! STATE HOOK AREAS
+  const [selectedAlbum, setSelectedAlbum] = useState<DataDropDownType>({
+    label: 'Select Album',
+    value: albumId.toString(),
+  });
+  const [albumDesc, setAlbumDesc] = useState<DataDetailAlbum>();
+
+  //! QUERY AREAS
+  const {data: albumDetailData, refetch: refetchAlbumDetail} = useQuery(
+    'analytic-albumDetail',
+    () =>
+      getAlbumDetail({
+        id: selectedAlbum.value,
+      }),
+  );
+
+  const {data: albumListData} = useQuery('analytic-albumList', () =>
+    getAlbumListbyUuid({
+      uuid,
+    }),
+  );
+
+  const {data: songListData, refetch: refetchSongList} = useQuery(
+    'analytic-songList',
+    () =>
+      getSongListByAlbumId({
+        albumID: Number(selectedAlbum.value),
+      }),
+  );
+
+  // ! HOOK EFFECTS AREAS
+  // ? set data api to state, and then use it in to component
+  useEffect(() => {
+    setAlbumDesc(albumDetailData?.data);
+  }, [albumDetailData]);
+
+  // ? refetch album detail & song list when user change the selected album
+  useEffect(() => {
+    refetchAlbumDetail();
+    refetchSongList();
+  }, [selectedAlbum]);
+
+  //! VARIABLE AREAS
+  const songList = songListData?.data;
+  const albumList: DataDropDownType[] = albumListData?.data
+    ? albumListData?.data.map(item => ({
+        label: elipsisText(item.title, 11),
+        value: item.id.toString(),
+      }))
+    : [];
 
   return (
     <View style={styles.container}>
@@ -65,11 +100,11 @@ const Album: FC<AlbumProps> = (props: AlbumProps) => {
       {/* DROPDOWN AREA */}
       <View style={{width: widthResponsive(120), zIndex: 100}}>
         <DropDownFilter
-          labelCaption={t(selectedRange.label)}
-          dataFilter={dropDownAlbumRange}
-          selectedMenu={setSelectedRange}
+          labelCaption={selectedAlbum.label}
+          dataFilter={albumList}
+          selectedMenu={setSelectedAlbum}
           leftPosition={
-            lang === 'en' ? widthResponsive(-115) : widthResponsive(-115)
+            lang === 'en' ? widthResponsive(-120) : widthResponsive(-120)
           }
           topPosition={widthResponsive(20)}
           containerStyle={styles.dropdownContainer}
@@ -79,7 +114,7 @@ const Album: FC<AlbumProps> = (props: AlbumProps) => {
         />
       </View>
       {/* BODY AREA */}
-      {albumDesc ? (
+      {albumDesc && songList ? (
         <View>
           <AlbumRow
             title={albumDesc.title}
@@ -93,21 +128,19 @@ const Album: FC<AlbumProps> = (props: AlbumProps) => {
           <View style={styles.lineStyle} />
           <Gap height={18} />
           <Text style={[typography.Heading6, styles.caption]}>Song</Text>
-          {/* //TODO: WIRING LIST SONG BY ALBUM ID */}
-          {songs2.map((item, index) => (
+          {songList.map((item, index) => (
             <ListCard.MusicList
-              imgUri={item.url}
+              imgUri={item.imageUrl[0]?.image}
               musicNum={(index + 1).toLocaleString('en-US', {
                 minimumIntegerDigits: 2,
                 useGrouping: false,
               })}
               musicTitle={item.title}
               singerName={''}
-              likeAnalytics={item.likes}
-              streamAnalytics={item.stream}
+              likeAnalytics={item.likesCount}
+              streamAnalytics={item.listenerCount}
               onPressMore={() => {}}
               containerStyles={{marginTop: mvs(20)}}
-              //TODO: CHANGE ID TO CORRECT ONE LATER
               onPressCard={() =>
                 navigation.navigate('SongDetailAnalytic', {
                   songId: item.id.toString(),

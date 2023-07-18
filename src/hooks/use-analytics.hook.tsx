@@ -19,8 +19,9 @@ import {
   fansAnalytic,
   topFans,
   ListenerCountryEP,
+  ListAlbumEP,
 } from '../api/analytics.api';
-import {detailAlbum} from '../api/song.api';
+import {detailAlbum, listSong} from '../api/song.api';
 import {ParamsProps} from '../interface/base.interface';
 import {PostPropsTypeA} from '../interface/feed.interface';
 import {useListenerAlsoLikesStore} from '../store/listenerAlsoLike';
@@ -205,6 +206,30 @@ export const useAnalyticsHook = () => {
     }
   };
 
+  const getSongListByAlbumId = async (props?: ParamsProps) => {
+    try {
+      const response = await listSong(props);
+      return {
+        data: response?.data,
+        message: response?.message,
+      };
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getAlbumListbyUuid = async (props?: ParamsProps) => {
+    try {
+      const response = await ListAlbumEP(props);
+      return {
+        data: response?.data,
+        message: response?.message,
+      };
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const getWhoListenSong = async (props?: ParamsProps) => {
     try {
       const response = await WhoListenSongEP(props);
@@ -307,5 +332,7 @@ export const useAnalyticsHook = () => {
     getSongDesc,
     getPostEngagement,
     getIncome,
+    getSongListByAlbumId,
+    getAlbumListbyUuid,
   };
 };

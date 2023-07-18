@@ -1,4 +1,10 @@
-import {PaginationType, countryTypes, imageTypes} from './base.interface';
+import {
+  MoodBaseData,
+  MusicianBaseData,
+  PaginationType,
+  countryTypes,
+  imageTypes,
+} from './base.interface';
 import {DataAlbum, FeaturingArtist} from './song.interface';
 
 export interface DataChart {
@@ -233,6 +239,47 @@ export type PopularAlbumData = {
 export type PopularAlbumResponseType = {
   code: number;
   data: PopularAlbumData;
+  message: string;
+  status: number;
+};
+
+export type ListAlbumData = {
+  id: number;
+  musician: MusicianBaseData;
+  title: string;
+  description: string;
+  imageUrl: imageTypes[];
+  featuringArtist: string[];
+  genre: {
+    id: number;
+    name: string;
+  };
+  subgenre: string;
+  likesCount: number;
+  shareCount: number;
+  mood: MoodBaseData[];
+  copyrightProducer: string[];
+  copyrightVisual: string[];
+  copyrightFans: string[];
+  productionYear: string;
+  albumType: string;
+  releaseDate: string;
+  isScheduleReleased: boolean;
+  releaseDateScheduled: string;
+  publishedDate: string;
+  isPublished: boolean;
+  language: string;
+  label: string[];
+  barcodeUpc: string;
+  createdAt: string;
+  updatedAt: string;
+  status: string;
+  totalCountListener: number;
+};
+
+export type ListAlbumResponseType = {
+  code: number;
+  data: ListAlbumData[];
   message: string;
   status: number;
 };

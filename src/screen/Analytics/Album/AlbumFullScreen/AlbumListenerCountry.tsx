@@ -1,10 +1,17 @@
-import React from 'react';
+import React, {FC} from 'react';
 import {useAnalyticsHook} from '../../../../hooks/use-analytics.hook';
 import {useTranslation} from 'react-i18next';
 import {useQuery} from 'react-query';
 import {ListenersCountry} from '../../../../components';
 
-const AlbumListenerCountry = () => {
+interface AlbumListenerCountryProps {
+  albumId: number;
+}
+
+const AlbumListenerCountry: FC<AlbumListenerCountryProps> = (
+  props: AlbumListenerCountryProps,
+) => {
+  const {albumId} = props;
   const {getAlbumListenerCountry} = useAnalyticsHook();
   const {t} = useTranslation();
 
@@ -12,9 +19,8 @@ const AlbumListenerCountry = () => {
     'analytic-albumListenerCountry',
     () =>
       getAlbumListenerCountry({
-        //TODO: CHANGE DUMMY ALBUM ID
-        albumID: 4,
-        limit: 5,
+        albumID: albumId,
+        // limit: 5,
       }),
   );
 

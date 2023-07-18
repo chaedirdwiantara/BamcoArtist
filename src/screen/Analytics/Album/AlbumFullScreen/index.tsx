@@ -42,7 +42,7 @@ const AlbumAnalyticScreen = ({route}: SongDetailProps) => {
         <Gap height={20} />
         <WhoListen albumId={albumId} />
         <Gap height={20} />
-        <AlbumListenerCountry />
+        <AlbumListenerCountry albumId={albumId} />
         <Gap height={20} />
         <ListenerLikes
           title={t('Home.Tab.Analytic.Album.MySong.ListenerAlsoLike.Title')}

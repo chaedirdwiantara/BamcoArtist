@@ -30,6 +30,14 @@ export type SongList = {
   musician: {
     name: string;
   };
+  publishedDate: string;
+  likesCount: number;
+  shareCount: number;
+  listenerCount: number;
+  copyright: string;
+  originalSongURL: string;
+  originalFilename: string;
+  barcodeISRC: string;
 };
 
 export type TranscodedSongType = {

@@ -55,3 +55,14 @@ export type countryTypes = {
   name: string;
   image: string;
 };
+
+export type MusicianBaseData = {
+  uuid: string;
+  name: string;
+  imageProfile: string;
+};
+
+export type MoodBaseData = {
+  id: number;
+  name: string;
+};
