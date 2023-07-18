@@ -1,10 +1,17 @@
-import React from 'react';
+import React, {FC} from 'react';
 import {useAnalyticsHook} from '../../../../hooks/use-analytics.hook';
 import {useTranslation} from 'react-i18next';
 import {useQuery} from 'react-query';
 import {ListenersCountry} from '../../../../components';
 
-const SongListenerCountry = () => {
+interface LisstenerCountryProps {
+  songId: string;
+}
+
+const SongListenerCountry: FC<LisstenerCountryProps> = (
+  props: LisstenerCountryProps,
+) => {
+  const {songId} = props;
   const {getSongListenerCountry} = useAnalyticsHook();
   const {t} = useTranslation();
 
@@ -12,9 +19,7 @@ const SongListenerCountry = () => {
     'analytic-songListenerCountry',
     () =>
       getSongListenerCountry({
-        //TODO: CHANGE DUMMY SONG ID
-        songID: 'abdc',
-        limit: 5,
+        songID: songId,
       }),
   );
 

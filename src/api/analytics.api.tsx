@@ -191,7 +191,9 @@ export const WhoListenSongEP = async (
   const {data} = await SsuApiSemeru().request<SongChartResponseType>({
     url: `/musician-app/analytics/song-stream/${props?.songID}`,
     method: 'GET',
-    params: props?.interval,
+    params: {
+      interval: props?.interval,
+    },
   });
 
   return data;

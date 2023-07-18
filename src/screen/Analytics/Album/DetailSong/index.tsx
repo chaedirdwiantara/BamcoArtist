@@ -39,11 +39,11 @@ const SongDetailAnalytic = ({route}: SongDetailProps) => {
         }}
       />
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <SongDescription />
+        <SongDescription songId={songId} />
         <Gap height={20} />
         <WhoListenSong songId={songId} />
         <Gap height={20} />
-        <SongListenerCountry />
+        <SongListenerCountry songId={songId} />
         <Gap height={20} />
         <ListenerLikes
           title={t('Home.Tab.Analytic.Album.DetailSong.ListenerAlsoLike.Title')}

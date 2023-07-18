@@ -9,7 +9,6 @@ import {
   ListenerLikes,
   PopularAlbum,
   PostEngagementEP,
-  SongDescEP,
   SongListenerCountryEP,
   SongListenerLikesEP,
   TopSongs,
@@ -21,9 +20,10 @@ import {
   ListenerCountryEP,
   ListAlbumEP,
 } from '../api/analytics.api';
-import {detailAlbum, listSong} from '../api/song.api';
+import {detailAlbum, detailSong, listSong} from '../api/song.api';
 import {ParamsProps} from '../interface/base.interface';
 import {PostPropsTypeA} from '../interface/feed.interface';
+import {SongPropsTypeA} from '../interface/song.interface';
 import {useListenerAlsoLikesStore} from '../store/listenerAlsoLike';
 
 export const useAnalyticsHook = () => {
@@ -268,12 +268,11 @@ export const useAnalyticsHook = () => {
     }
   };
 
-  const getSongDesc = async (props?: ParamsProps) => {
+  const getSongDesc = async (props?: SongPropsTypeA) => {
     try {
-      const response = await SongDescEP(props);
+      const response = await detailSong(props);
       return {
         data: response?.data,
-        meta: response?.meta,
         message: response?.message,
       };
     } catch (error) {
