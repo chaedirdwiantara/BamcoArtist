@@ -92,6 +92,7 @@ const TopSongs = () => {
               streamCount={kFormatter(songData.data[0].listenerCount)}
               albumTitle={songData.data[0].album.title}
               imgSize={80}
+              key={-1}
             />
             {songData.data.map((item, index) =>
               index !== 0 ? (
