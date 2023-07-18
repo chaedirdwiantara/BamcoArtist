@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
   containerText: {
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: heightPercentage(30),
+    marginBottom: heightPercentage(16),
   },
   preTitle: {
     maxWidth: width * 0.9,
@@ -43,7 +43,6 @@ const styles = StyleSheet.create({
     color: '#788AA9',
     textAlign: 'center',
     maxWidth: width * 0.8,
-    marginBottom: mvs(30),
   },
   description: {
     maxWidth: width * 0.9,

@@ -143,13 +143,14 @@ export const ReferralCodeSetting: React.FC = () => {
               style={{
                 flex: 1,
                 alignItems: 'center',
-                paddingTop: 50,
+                paddingTop: 40,
               }}>
               <UseReferralContent
                 onPress={onApplyReferral}
                 isError={errorMsg !== ''}
                 errorMsg={errorMsg}
                 isValidRef={isValidReferral}
+                isScanFailed={isScanFailed}
                 setIsScanFailed={setIsScanFailed}
                 refCode={refCode}
                 setRefCode={setRefCode}

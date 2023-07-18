@@ -11,7 +11,6 @@ import {widthResponsive} from '../../../utils';
 import {useTranslation} from 'react-i18next';
 import {color} from '../../../theme';
 import {mvs} from 'react-native-size-matters';
-import ReferralQRSuccessImage from '../../../assets/image/ReferralQRSuccess.image';
 import SigninIcon from '../../../assets/icon/Signin.icon';
 import styles from '../ReferralContent/styles';
 
@@ -22,15 +21,16 @@ interface UseReferralContentProps {
   isError: boolean;
   errorMsg: string;
   isValidRef: boolean | null;
+  referralFrom: string | null;
   refCode: string;
   setRefCode: (value: string) => void;
-  referralFrom?: string | null;
   isScanning: boolean;
   setIsScanning: (value: boolean) => void;
   isScanSuccess: boolean;
   setIsScanSuccess: (value: boolean) => void;
   isScanned: boolean;
   setIsScanned: (value: boolean) => void;
+  isScanFailed: boolean;
   setIsScanFailed: (value: boolean) => void;
   isManualEnter: boolean;
   setIsManualEnter: (value: boolean) => void;
@@ -85,6 +85,7 @@ export const UseReferralContent: React.FC<UseReferralContentProps> = ({
   setIsScanSuccess,
   isScanned,
   setIsScanned,
+  isScanFailed,
   setIsScanFailed,
   isManualEnter,
   setIsManualEnter,
@@ -130,7 +131,7 @@ export const UseReferralContent: React.FC<UseReferralContentProps> = ({
   }, [barcodes]);
 
   useEffect(() => {
-    if (onPress && referralFrom !== null && isScanning) {
+    if (onPress && isScanning) {
       onPress(refCode);
     }
 
@@ -178,19 +179,23 @@ export const UseReferralContent: React.FC<UseReferralContentProps> = ({
   };
 
   return (
-    <View style={[styles.root, containerStyle]}>
+    <View style={[styles.root]}>
       <View style={styles.containerText}>
         <Text
           style={[Typography.Heading6, styles.title, {textAlign: 'center'}]}>
           {referralFrom !== null ? t(titleActivated) : t(titleToScan)}
         </Text>
-        <Text style={styles.textSubtitle}>
+        <Text
+          style={[
+            styles.textSubtitle,
+            {marginBottom: referralFrom === null ? mvs(24) : 0},
+          ]}>
           {referralFrom === null
             ? t('Setting.ReferralQR.OnBoard.Subtitle')
             : ''}
         </Text>
       </View>
-      {isScanning && referralFrom === null ? (
+      {isScanning && !isScanSuccess ? (
         <>
           <View style={styles.cameraContainer}>
             {device !== undefined ? (
@@ -243,7 +248,7 @@ export const UseReferralContent: React.FC<UseReferralContentProps> = ({
         ''
       )}
 
-      {isScanning || isManualEnter ? (
+      {(isScanning || isManualEnter) && !isScanSuccess ? (
         <>
           <SsuDivider
             containerStyle={{paddingHorizontal: widthResponsive(48)}}
@@ -291,15 +296,15 @@ export const UseReferralContent: React.FC<UseReferralContentProps> = ({
         ) : (
           ''
         )}
-        <View style={styles.container}>
-          {isScanSuccess || referralFrom !== null ? (
-            <>
-              <ReferralActivated refCode={referralFrom || refCode} />
-            </>
-          ) : (
-            ''
-          )}
-        </View>
+        {/* <View style={styles.container}> */}
+        {isScanSuccess || referralFrom !== null ? (
+          <>
+            <ReferralActivated refCode={referralFrom || refCode} />
+          </>
+        ) : (
+          ''
+        )}
+        {/* </View> */}
       </View>
     </View>
   );

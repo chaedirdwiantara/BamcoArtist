@@ -207,7 +207,10 @@ export const ReferralContent: React.FC<ReferralContentProps> = ({
             <ReferralQRSuccessImage />
           </>
         ) : (
-          <ReferralQRImage />
+          <>
+            <ReferralQRImage />
+            <Gap height={32} />
+          </>
         )}
 
         {isManualEnter && !isScanSuccess ? (
