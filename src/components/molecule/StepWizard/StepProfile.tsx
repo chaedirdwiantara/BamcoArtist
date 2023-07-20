@@ -223,6 +223,6 @@ const styles = StyleSheet.create({
   },
   containerAvatar: {
     alignSelf: 'center',
-    marginBottom: mvs(10),
+    marginBottom: mvs(15),
   },
 });

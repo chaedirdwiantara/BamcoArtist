@@ -21,8 +21,11 @@ import {ModalSuccessDonate} from '../../Modal/ModalSuccessDonate';
 import {ModalShare} from '../../Modal/ModalShare';
 import {useTranslation} from 'react-i18next';
 import {TickCircleIcon} from '../../../../assets/icon';
-import {heightPercentage, widthResponsive} from '../../../../utils';
-import ImageModal from '../../../../screen/Detail/ImageModal';
+import {
+  heightPercentage,
+  heightResponsive,
+  widthResponsive,
+} from '../../../../utils';
 
 interface PopularPostProps {
   uuidMusician: string;
@@ -53,7 +56,7 @@ const PopularPost: FC<PopularPostProps> = (props: PopularPostProps) => {
     addPlaylistFeed,
   } = usePlayerHook();
 
-  const {creditCount, getCreditCount} = useCreditHook();
+  const {getCreditCount} = useCreditHook();
 
   const [recorder, setRecorder] = useState<string[]>([]);
   const [selectedId, setSelectedId] = useState<string[]>();
@@ -229,11 +232,11 @@ const PopularPost: FC<PopularPostProps> = (props: PopularPostProps) => {
 
   return (
     <View>
-      {dataPostList.length > 0 && (
-        <>
-          <Text style={styles.textComp}>Popular Post</Text>
-          <Gap height={heightPercentage(16)} />
+      <Text style={styles.textComp}>Popular Post</Text>
 
+      {dataPostList.length > 0 ? (
+        <>
+          <Gap height={heightPercentage(16)} />
           <ListCard.PostList
             containerStyles={{paddingHorizontal: 0}}
             toDetailOnPress={() => {}}
@@ -315,6 +318,8 @@ const PopularPost: FC<PopularPostProps> = (props: PopularPostProps) => {
 
           <Gap height={heightPercentage(24)} />
         </>
+      ) : (
+        <Text style={styles.emptyState}>{t('EmptyState.PopularPost')}</Text>
       )}
       <ModalDonate
         userId={uuidMusician}
@@ -384,5 +389,10 @@ const styles = StyleSheet.create({
   },
   textStyle: {
     color: color.Neutral[10],
+  },
+  emptyState: {
+    color: color.Neutral[10],
+    paddingVertical: heightResponsive(60),
+    textAlign: 'center',
   },
 });

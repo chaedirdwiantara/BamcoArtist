@@ -6,7 +6,7 @@ import {Gap} from '../../../atom';
 import {useMusicianHook} from '../../../../hooks/use-musician.hook';
 import {useTranslation} from 'react-i18next';
 import ReleasedAlbum from '../../../../screen/MusicianProfile/ReleasedAlbum';
-import {heightPercentage} from '../../../../utils';
+import {heightPercentage, heightResponsive} from '../../../../utils';
 
 interface ReleasedProps {
   uuidMusician: string;
@@ -28,20 +28,26 @@ const Released: FC<ReleasedProps> = (props: ReleasedProps) => {
 
   return (
     <View>
-      {dataAlbum.length > 0 && (
+      <Text style={styles.textComp}>Released This Year</Text>
+      {dataAlbum.length > 0 ? (
         <>
-          <Text style={styles.textComp}>Released This Year</Text>
-          <Gap height={heightPercentage(16)} />
           {dataDetailMusician ? (
-            <ReleasedAlbum
-              title={''}
-              data={dataAlbum}
-              artistName={dataDetailMusician.fullname}
-              errorText={noAlbumText}
-              noTitle
-            />
-          ) : null}
+            <>
+              <Gap height={heightPercentage(16)} />
+              <ReleasedAlbum
+                title={''}
+                data={dataAlbum}
+                artistName={dataDetailMusician.fullname}
+                errorText={noAlbumText}
+                noTitle
+              />
+            </>
+          ) : (
+            <Text style={styles.emptyState}>{t('EmptyState.Released')}</Text>
+          )}
         </>
+      ) : (
+        <Text style={styles.emptyState}>{t('EmptyState.Released')}</Text>
       )}
     </View>
   );
@@ -55,5 +61,10 @@ const styles = StyleSheet.create({
     fontSize: mvs(16),
     fontWeight: '600',
     color: color.Neutral[10],
+  },
+  emptyState: {
+    color: color.Neutral[10],
+    paddingVertical: heightResponsive(60),
+    textAlign: 'center',
   },
 });

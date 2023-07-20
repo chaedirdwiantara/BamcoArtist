@@ -33,7 +33,7 @@ export const ProgressCard: React.FC<ProgressCardProps> = (
       activeOpacity={onPress ? 0 : 1}
       onPress={onPress}>
       <CircularProgress percentage={convertToNumber} />
-      <Gap width={widthPercentage(10)} />
+      <Gap width={widthPercentage(8)} />
       <View>
         <Text style={styles.title}>{t('ProfileProgress.Card.Title')}</Text>
         <Text style={styles.subtitle}>
@@ -46,7 +46,7 @@ export const ProgressCard: React.FC<ProgressCardProps> = (
 
 const styles = StyleSheet.create({
   containerContent: {
-    width: width * 0.9,
+    width: width * 0.89,
     paddingVertical: mvs(10),
     flexDirection: 'row',
     backgroundColor: '#223149',

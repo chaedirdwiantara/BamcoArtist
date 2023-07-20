@@ -516,7 +516,7 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
           <ListToFollowMusician />
         </>
       ) : dataTemporary?.length === 0 &&
-        postData?.message === 'musician not have post' ? (
+        postData?.message === `Musician don't have any post` ? (
         <>
           <Gap height={Platform.OS === 'android' ? 195 : 145} />
           <EmptyState

@@ -7,7 +7,8 @@ import MusicListPreview from '../../MusicPreview/MusicListPreview';
 import {usePlayerHook} from '../../../../hooks/use-player.hook';
 import {useFeedHook} from '../../../../hooks/use-feed.hook';
 import {QuoteToPost} from '../../../../interface/feed.interface';
-import {heightPercentage} from '../../../../utils';
+import {heightPercentage, heightResponsive} from '../../../../utils';
+import {useTranslation} from 'react-i18next';
 
 interface MostPlayedProps {
   uuidMusician: string;
@@ -15,6 +16,8 @@ interface MostPlayedProps {
 
 const MostPlayed: FC<MostPlayedProps> = (props: MostPlayedProps) => {
   const {uuidMusician} = props;
+
+  const {t} = useTranslation();
 
   const {mostPlayedLoading, dataMostPlayed, mostPlayedError, getMostPlayed} =
     useFeedHook();
@@ -64,9 +67,9 @@ const MostPlayed: FC<MostPlayedProps> = (props: MostPlayedProps) => {
 
   return (
     <View>
-      {dataMostPlayed && (
+      <Text style={styles.textComp}>Most Played</Text>
+      {dataMostPlayed ? (
         <>
-          <Text style={styles.textComp}>Most Played</Text>
           <Gap height={heightPercentage(16)} />
 
           <MusicListPreview
@@ -98,6 +101,8 @@ const MostPlayed: FC<MostPlayedProps> = (props: MostPlayedProps) => {
 
           <Gap height={heightPercentage(24)} />
         </>
+      ) : (
+        <Text style={styles.emptyState}>{t('EmptyState.MostPlayed')}</Text>
       )}
     </View>
   );
@@ -111,5 +116,10 @@ const styles = StyleSheet.create({
     fontSize: mvs(16),
     fontWeight: '600',
     color: color.Neutral[10],
+  },
+  emptyState: {
+    color: color.Neutral[10],
+    paddingVertical: heightResponsive(60),
+    textAlign: 'center',
   },
 });

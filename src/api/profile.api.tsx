@@ -32,7 +32,7 @@ export type UpdateProfilePropsType = {
   labels?: string;
   originCountry?: string;
   originCity?: string;
-  locationCountry?: string;
+  locationCountry?: number;
   locationCity?: string;
   members?: string[];
   Website?: string;
@@ -40,6 +40,8 @@ export type UpdateProfilePropsType = {
   yearsActiveTo?: string;
   language?: string;
   socialMedia?: {name: string; value: string}[];
+  gender?: string;
+  birthdate?: string;
 };
 
 export const getProfile = async (): Promise<ProfileResponseType> => {
