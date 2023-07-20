@@ -11,6 +11,7 @@ import {
   Animated,
   Platform,
   NativeModules,
+  ViewToken,
 } from 'react-native';
 import {mvs} from 'react-native-size-matters';
 import {
@@ -361,6 +362,42 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
   };
   // ! END OF MUSIC AREA
 
+  //TODO: EXPERIMENT AREA UNCOMMENT LATER
+  // const [viewedItems, setViewedItems] = useState<string[]>([]);
+  // const viewedTimeout = useRef<number | null>(null);
+
+  // const viewabilityConfig = useRef({
+  //   itemVisiblePercentThreshold: 50, // Modify this as needed
+  // });
+
+  // const onViewableItemsChanged = useCallback(
+  //   ({viewableItems}: {viewableItems: ViewToken[]}) => {
+  //     // Clear the previous timeout
+  //     if (viewedTimeout.current) clearTimeout(viewedTimeout.current);
+
+  //     // Check if there are any viewable items
+  //     if (viewableItems.length > 0) {
+  //       // Get the first viewable item (assuming this is the one in focus)
+  //       const firstItem = viewableItems[0].item;
+
+  //       // If the item has not been viewed yet
+  //       setViewedItems(prevViewedItems => {
+  //         if (!prevViewedItems.includes(firstItem.id)) {
+  //           // Set a timeout
+  //           viewedTimeout.current = setTimeout(() => {
+  //             // Send your API call here with firstItem.id
+  //             console.log(`User has viewed post id: ${firstItem.id}`);
+  //           }, 5000); // 5 seconds
+  //           return [...prevViewedItems, firstItem.id];
+  //         } else {
+  //           return prevViewedItems;
+  //         }
+  //       });
+  //     }
+  //   },
+  //   [],
+  // );
+
   return (
     <>
       <Animated.View
@@ -443,6 +480,9 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
             onEndReachedThreshold={1}
             onScroll={handleScroll}
             bounces={false}
+            //TODO: UNCOMMENT LATER
+            // viewabilityConfig={viewabilityConfig.current}
+            // onViewableItemsChanged={onViewableItemsChanged}
             renderItem={({item, index}) => (
               <>
                 {index === 0 && !videoUploadProgress ? (

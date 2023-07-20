@@ -1,4 +1,4 @@
-import {FlatList, StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import {widthResponsive} from '../../../../utils';
 import {color, font} from '../../../../theme';
@@ -35,14 +35,9 @@ const FansAge = () => {
       </View>
       <Gap height={16} />
       {ageData?.data ? (
-        <FlatList
-          showsVerticalScrollIndicator={false}
-          scrollEnabled={false}
-          data={ageData?.data}
-          renderItem={({item}) => (
-            <Diagram value={item.percentage} caption={item.label} />
-          )}
-        />
+        ageData?.data.map((item, index) => (
+          <Diagram value={item.percentage} caption={item.label} key={index} />
+        ))
       ) : (
         <>
           <Diagram value={0} caption="<18" />

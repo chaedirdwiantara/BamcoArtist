@@ -54,7 +54,6 @@ export default EngagementCard;
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: widthResponsive(20),
     paddingVertical: widthResponsive(8),
     paddingHorizontal: widthResponsive(12),
     borderWidth: 1,

@@ -1,6 +1,9 @@
 import SsuAPI from './baseRinjani';
 import SsuApiSemeru from './baseSemeru';
-import {ListPostResponseType} from '../interface/feed.interface';
+import {
+  AnalyticPostEngagementResponseType,
+  ListPostResponseType,
+} from '../interface/feed.interface';
 import {ParamsProps} from '../interface/base.interface';
 import {
   AlbumTopSongResponseType,
@@ -10,6 +13,10 @@ import {
   DemogGenderResponseType,
   EngagementResponseType,
   EngagementTopFansResponseType,
+  ListAlbumResponseType,
+  ListenerCountryResponseType,
+  ListenerLikesResponseType,
+  PopularAlbumResponseType,
   SongChartResponseType,
 } from '../interface/analythic.interface';
 import SsuAPIKrakatau from './baseKrakatau';
@@ -96,13 +103,10 @@ export const AlbumTabActiveListenerEP = async (
   return data;
 };
 
-export const PopularAlbum = async (
-  props?: ParamsProps,
-): Promise<ListPostResponseType> => {
-  const {data} = await SsuAPI().request<ListPostResponseType>({
-    url: '/musician-app/post/public',
+export const PopularAlbum = async (): Promise<PopularAlbumResponseType> => {
+  const {data} = await SsuApiSemeru().request<PopularAlbumResponseType>({
+    url: '/musician-app/analytics/most-popular-album',
     method: 'GET',
-    params: props,
   });
 
   return data;
@@ -119,11 +123,11 @@ export const TopSongs = async (
   return data;
 };
 
-export const ListenerCountry = async (
+export const ListenerCountryEP = async (
   props?: ParamsProps,
-): Promise<ListPostResponseType> => {
-  const {data} = await SsuAPI().request<ListPostResponseType>({
-    url: '/musician-app/post/public',
+): Promise<ListenerCountryResponseType> => {
+  const {data} = await SsuApiSemeru().request<ListenerCountryResponseType>({
+    url: '/musician-app/analytics/listener-stream',
     method: 'GET',
     params: props,
   });
@@ -133,11 +137,13 @@ export const ListenerCountry = async (
 
 export const ListenerLikes = async (
   props?: ParamsProps,
-): Promise<ListPostResponseType> => {
-  const {data} = await SsuAPI().request<ListPostResponseType>({
-    url: '/musician-app/post/public',
-    method: 'GET',
-    params: props,
+): Promise<ListenerLikesResponseType> => {
+  const {data} = await SsuAPI().request<ListenerLikesResponseType>({
+    url: `/musician-app/similar-musician/genre`,
+    method: 'POST',
+    data: {
+      genre: props?.genreID,
+    },
   });
 
   return data;
@@ -149,7 +155,9 @@ export const WhoListenEP = async (
   const {data} = await SsuApiSemeru().request<SongChartResponseType>({
     url: `/musician-app/analytics/album-stream/${props?.songID}`,
     method: 'GET',
-    params: props?.interval,
+    params: {
+      interval: props?.interval,
+    },
   });
 
   return data;
@@ -157,11 +165,11 @@ export const WhoListenEP = async (
 
 export const AlbumListenerCountryEP = async (
   props?: ParamsProps,
-): Promise<ListPostResponseType> => {
-  const {data} = await SsuAPI().request<ListPostResponseType>({
-    url: '/musician-app/post/public',
+): Promise<ListenerCountryResponseType> => {
+  const {data} = await SsuApiSemeru().request<ListenerCountryResponseType>({
+    url: `/musician-app/analytics/listener-stream/${props?.albumID}/albums`,
     method: 'GET',
-    params: props,
+    params: props?.limit,
   });
 
   return data;
@@ -179,25 +187,15 @@ export const AlbumListenerLikeEP = async (
   return data;
 };
 
-export const AlbumSongEP = async (
-  props?: ParamsProps,
-): Promise<ListPostResponseType> => {
-  const {data} = await SsuAPI().request<ListPostResponseType>({
-    url: '/musician-app/post/public',
-    method: 'GET',
-    params: props,
-  });
-
-  return data;
-};
-
 export const WhoListenSongEP = async (
   props?: ParamsProps,
 ): Promise<SongChartResponseType> => {
   const {data} = await SsuApiSemeru().request<SongChartResponseType>({
     url: `/musician-app/analytics/song-stream/${props?.songID}`,
     method: 'GET',
-    params: props?.interval,
+    params: {
+      interval: props?.interval,
+    },
   });
 
   return data;
@@ -205,11 +203,11 @@ export const WhoListenSongEP = async (
 
 export const SongListenerCountryEP = async (
   props?: ParamsProps,
-): Promise<ListPostResponseType> => {
-  const {data} = await SsuAPI().request<ListPostResponseType>({
-    url: '/musician-app/post/public',
+): Promise<ListenerCountryResponseType> => {
+  const {data} = await SsuApiSemeru().request<ListenerCountryResponseType>({
+    url: `/musician-app/analytics/listener-stream/${props?.songID}/songs`,
     method: 'GET',
-    params: props,
+    params: props?.limit,
   });
 
   return data;
@@ -241,11 +239,10 @@ export const SongDescEP = async (
 
 export const PostEngagementEP = async (
   props?: ParamsProps,
-): Promise<ListPostResponseType> => {
-  const {data} = await SsuAPI().request<ListPostResponseType>({
-    url: '/musician-app/post/public',
+): Promise<AnalyticPostEngagementResponseType> => {
+  const {data} = await SsuAPI().request<AnalyticPostEngagementResponseType>({
+    url: `/musician-app/post/my-post-engagement-rate/${props?.interval}`,
     method: 'GET',
-    params: props,
   });
 
   return data;
@@ -257,6 +254,18 @@ export const Income = async (
   const {data} = await SsuAPIKrakatau().request<ListIncomeResponseType>({
     url: `/analytic/${interval}`,
     method: 'GET',
+  });
+
+  return data;
+};
+
+export const ListAlbumEP = async (
+  props?: ParamsProps,
+): Promise<ListAlbumResponseType> => {
+  const {data} = await SsuApiSemeru().request<ListAlbumResponseType>({
+    url: `/musician-app/albums`,
+    method: 'GET',
+    params: props,
   });
 
   return data;

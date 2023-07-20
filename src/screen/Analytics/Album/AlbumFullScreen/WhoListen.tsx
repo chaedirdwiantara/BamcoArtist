@@ -4,7 +4,6 @@ import {useAnalyticsHook} from '../../../../hooks/use-analytics.hook';
 import {useTranslation} from 'react-i18next';
 import {useQuery} from 'react-query';
 import {DataDropDownType, dropDownFansGrowth} from '../../../../data/dropdown';
-import {Chart, SongChart} from '../../../../interface/analythic.interface';
 import {MusicPinkIcon} from '../../../../assets/icon';
 import {Gap, LineAreaChart} from '../../../../components';
 import {widthResponsive} from '../../../../utils';

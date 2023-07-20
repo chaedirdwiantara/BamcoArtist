@@ -135,6 +135,34 @@ export type ListPostResponseType = {
   status: number;
 };
 
+export type AnalyticPostData = {
+  caption: string;
+  category: string;
+  comments: [];
+  commentsCount: number;
+  createdAt: string;
+  id: string;
+  images: imageTypes[][];
+  isLiked: boolean;
+  isPremiumPost: boolean;
+  likesCount: number;
+  musician: MusicianData;
+  quoteToPost: QuoteToPost;
+  shareCount: number;
+  timeAgo: string;
+  updatedAt: string;
+  video: VideoResponseType;
+  viewsCount: number;
+};
+
+export type AnalyticPostResponseType = {
+  code: number;
+  data: AnalyticPostData;
+  message: string;
+  meta: PaginationType;
+  status: number;
+};
+
 export type DetailPostData = {
   id: string;
   caption: string;
@@ -320,6 +348,28 @@ export type ViewsCount = {};
 export type SetViewsCountResponseType = {
   code: number;
   data: ViewsCount;
+  message: string;
+  status: number;
+};
+
+export type PostEngagementData = {
+  avgView: string;
+  avgViewCompare: 'improve' | 'regression' | 'same';
+  avgViewProgress: string;
+  avgLiked: string;
+  avgLikedCompare: 'improve' | 'regression' | 'same';
+  avgLikedProgress: string;
+  avgComment: string;
+  avgCommentCompare: 'improve' | 'regression' | 'same';
+  avgCommentProgress: string;
+  avgShared: string;
+  avgSharedCompare: 'improve' | 'regression' | 'same';
+  avgSharedProgress: string;
+};
+
+export type AnalyticPostEngagementResponseType = {
+  code: number;
+  data: PostEngagementData;
   message: string;
   status: number;
 };

@@ -2,16 +2,13 @@ import {
   AlbumTabActiveListenerEP,
   AlbumListenerCountryEP,
   AlbumListenerLikeEP,
-  AlbumSongEP,
   FansAge,
   FansCountry,
   FansGender,
   Income,
-  ListenerCountry,
   ListenerLikes,
   PopularAlbum,
   PostEngagementEP,
-  SongDescEP,
   SongListenerCountryEP,
   SongListenerLikesEP,
   TopSongs,
@@ -20,8 +17,14 @@ import {
   fansActiveInteract,
   fansAnalytic,
   topFans,
+  ListenerCountryEP,
+  ListAlbumEP,
 } from '../api/analytics.api';
+import {detailAlbum, detailSong, listSong} from '../api/song.api';
 import {ParamsProps} from '../interface/base.interface';
+import {PostPropsTypeA} from '../interface/feed.interface';
+import {SongPropsTypeA} from '../interface/song.interface';
+import {useListenerAlsoLikesStore} from '../store/listenerAlsoLike';
 
 export const useAnalyticsHook = () => {
   const getListDataFansAnalytic = async (props?: ParamsProps) => {
@@ -108,12 +111,11 @@ export const useAnalyticsHook = () => {
     }
   };
 
-  const getPopularAlbum = async (props?: ParamsProps) => {
+  const getPopularAlbum = async () => {
     try {
-      const response = await PopularAlbum(props);
+      const response = await PopularAlbum();
       return {
         data: response?.data,
-        meta: response?.meta,
         message: response?.message,
       };
     } catch (error) {
@@ -135,10 +137,9 @@ export const useAnalyticsHook = () => {
 
   const getListenerCountry = async (props?: ParamsProps) => {
     try {
-      const response = await ListenerCountry(props);
+      const response = await ListenerCountryEP(props);
       return {
         data: response?.data,
-        meta: response?.meta,
         message: response?.message,
       };
     } catch (error) {
@@ -146,14 +147,11 @@ export const useAnalyticsHook = () => {
     }
   };
 
+  const {setStoredListenerLikes} = useListenerAlsoLikesStore();
   const getListenerLike = async (props?: ParamsProps) => {
     try {
       const response = await ListenerLikes(props);
-      return {
-        data: response?.data,
-        meta: response?.meta,
-        message: response?.message,
-      };
+      setStoredListenerLikes(response?.data);
     } catch (error) {
       console.log(error);
     }
@@ -176,7 +174,6 @@ export const useAnalyticsHook = () => {
       const response = await AlbumListenerCountryEP(props);
       return {
         data: response?.data,
-        meta: response?.meta,
         message: response?.message,
       };
     } catch (error) {
@@ -197,12 +194,35 @@ export const useAnalyticsHook = () => {
     }
   };
 
-  const getAlbumSongs = async (props?: ParamsProps) => {
+  const getAlbumDetail = async (props?: PostPropsTypeA) => {
     try {
-      const response = await AlbumSongEP(props);
+      const response = await detailAlbum(props);
       return {
         data: response?.data,
-        meta: response?.meta,
+        message: response?.message,
+      };
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getSongListByAlbumId = async (props?: ParamsProps) => {
+    try {
+      const response = await listSong(props);
+      return {
+        data: response?.data,
+        message: response?.message,
+      };
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getAlbumListbyUuid = async (props?: ParamsProps) => {
+    try {
+      const response = await ListAlbumEP(props);
+      return {
+        data: response?.data,
         message: response?.message,
       };
     } catch (error) {
@@ -248,12 +268,11 @@ export const useAnalyticsHook = () => {
     }
   };
 
-  const getSongDesc = async (props?: ParamsProps) => {
+  const getSongDesc = async (props?: SongPropsTypeA) => {
     try {
-      const response = await SongDescEP(props);
+      const response = await detailSong(props);
       return {
         data: response?.data,
-        meta: response?.meta,
         message: response?.message,
       };
     } catch (error) {
@@ -266,7 +285,6 @@ export const useAnalyticsHook = () => {
       const response = await PostEngagementEP(props);
       return {
         data: response?.data,
-        meta: response?.meta,
         message: response?.message,
       };
     } catch (error) {
@@ -306,12 +324,14 @@ export const useAnalyticsHook = () => {
     getWhoListen,
     getAlbumListenerCountry,
     getAlbumListenerLike,
-    getAlbumSongs,
+    getAlbumDetail,
     getWhoListenSong,
     getSongListenerCountry,
     getSongListenerLikes,
     getSongDesc,
     getPostEngagement,
     getIncome,
+    getSongListByAlbumId,
+    getAlbumListbyUuid,
   };
 };

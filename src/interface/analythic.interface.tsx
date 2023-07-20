@@ -1,5 +1,11 @@
-import {PaginationType, imageTypes} from './base.interface';
-import {DataAlbum} from './song.interface';
+import {
+  MoodBaseData,
+  MusicianBaseData,
+  PaginationType,
+  countryTypes,
+  imageTypes,
+} from './base.interface';
+import {DataAlbum, FeaturingArtist} from './song.interface';
 
 export interface DataChart {
   value: number;
@@ -188,5 +194,92 @@ export type ListIncomeResponseType = {
   data: IncomeData;
   message: string;
   meta: number;
+  status: number;
+};
+
+export type ListenerLikesData = {
+  uuid: string;
+  username: string;
+  fullname: string;
+  email: string;
+  imageProfileUrls: imageTypes[];
+  followers: number;
+  isFollowed: boolean;
+};
+
+export type ListenerLikesResponseType = {
+  code: number;
+  data: ListenerLikesData[];
+  message: string;
+  status: number;
+};
+
+export type ListenerCountryData = {
+  country: countryTypes;
+  totalStream: number;
+};
+
+export type ListenerCountryResponseType = {
+  code: number;
+  data: ListenerCountryData[];
+  message: string;
+  meta: PaginationType;
+  status: number;
+};
+
+export type PopularAlbumData = {
+  id: number;
+  title: string;
+  albumType: string;
+  albumImage: imageTypes[];
+  productionYear: string;
+  totalCountListener: number;
+};
+
+export type PopularAlbumResponseType = {
+  code: number;
+  data: PopularAlbumData;
+  message: string;
+  status: number;
+};
+
+export type ListAlbumData = {
+  id: number;
+  musician: MusicianBaseData;
+  title: string;
+  description: string;
+  imageUrl: imageTypes[];
+  featuringArtist: string[];
+  genre: {
+    id: number;
+    name: string;
+  };
+  subgenre: string;
+  likesCount: number;
+  shareCount: number;
+  mood: MoodBaseData[];
+  copyrightProducer: string[];
+  copyrightVisual: string[];
+  copyrightFans: string[];
+  productionYear: string;
+  albumType: string;
+  releaseDate: string;
+  isScheduleReleased: boolean;
+  releaseDateScheduled: string;
+  publishedDate: string;
+  isPublished: boolean;
+  language: string;
+  label: string[];
+  barcodeUpc: string;
+  createdAt: string;
+  updatedAt: string;
+  status: string;
+  totalCountListener: number;
+};
+
+export type ListAlbumResponseType = {
+  code: number;
+  data: ListAlbumData[];
+  message: string;
   status: number;
 };

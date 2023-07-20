@@ -29,6 +29,7 @@ export type ParamsProps = {
   interval?: string;
   order?: 'asc' | 'desc';
   songID?: string;
+  genreID?: number[];
 };
 
 export type imageTypes = {
@@ -48,4 +49,21 @@ export type BaseResponseApi = {
   code: number;
   message: string;
   status: number;
+};
+
+export type countryTypes = {
+  id: number;
+  name: string;
+  image: string;
+};
+
+export type MusicianBaseData = {
+  uuid: string;
+  name: string;
+  imageProfile: string;
+};
+
+export type MoodBaseData = {
+  id: number;
+  name: string;
 };

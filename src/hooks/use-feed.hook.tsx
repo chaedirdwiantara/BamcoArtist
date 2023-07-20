@@ -22,9 +22,11 @@ import {
   listPostProfile,
   mostPlayedSong,
   viewsCount,
+  AnalyticPost,
 } from '../api/feed.api';
 import {ParamsProps} from '../interface/base.interface';
 import {
+  AnalyticPostData,
   CommentDetailData,
   CommentList,
   CreatePostProps,
@@ -174,6 +176,26 @@ export const useFeedHook = () => {
       setFeedIsError(true);
     } finally {
       setFeedIsLoading(false);
+    }
+  };
+
+  // Analytics area
+  const [analyticPostLoading, setAnalyticPostLoading] = useState(true);
+  const [analyticPostError, setAnalyticPostError] = useState<boolean>(false);
+  const [analyticPostMessage, setAnalyticPostMessage] = useState<string>('');
+  const [analyticPostData, setAnalyticPostData] = useState<AnalyticPostData>();
+
+  const getAnalyticPopularPost = async (props?: ParamsProps) => {
+    setAnalyticPostLoading(true);
+    setAnalyticPostError(false);
+    try {
+      const response = await AnalyticPost(props);
+      setAnalyticPostData(response.data);
+      setAnalyticPostMessage(response.message);
+    } catch (error) {
+      setAnalyticPostError(true);
+    } finally {
+      setAnalyticPostLoading(false);
     }
   };
 
@@ -445,6 +467,10 @@ export const useFeedHook = () => {
     viewCountLoading,
     dataViewsCount,
     viewCountError,
+    analyticPostLoading,
+    analyticPostError,
+    analyticPostMessage,
+    analyticPostData,
     setDataLoadMore,
     setDataComment,
     setDataCreatePost,
@@ -475,5 +501,6 @@ export const useFeedHook = () => {
     getListDataMyPostQuery,
     setCreatePostError,
     setDataUpdatePost,
+    getAnalyticPopularPost,
   };
 };

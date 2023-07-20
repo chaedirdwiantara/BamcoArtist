@@ -271,6 +271,7 @@
           "TopFans": {
             "Title": "Your Top Fans",
             "Link": "View All",
+            "Hide" : "Hide",
             "FullScreen": "Your Fans",
             "EmptyState": "Oops! We couldn't find any Top fans for you. Post some story or release album to make your own cult!"
           },
@@ -287,11 +288,16 @@
         },
         "Post": {
           "Title": "郵政",
-          "Popular": {
-            "Title": "Popular Post"
+          "Popular":{
+            "Title" : "Popular Post",
+            "EmptyState":"Oops! We couldn't find your popular post. Post your story and interact to make your own cult!"
           },
           "Engagement": {
-            "Title": "Post Engagement Rate"
+            "Title" : "Post Engagement Rate",
+            "AvgView": "Avg view per post",
+            "AvgLiked": "Avg liked per post",
+            "AvgReply": "Avg reply per post",
+            "AvgShared": "Avg shared per post"
           }
         },
         "Album": {
@@ -312,17 +318,22 @@
             }
           },
           "PopularAlbum": {
-            "Title": "Popular Album"
+            "Title": "Popular Album",
+            "Link": "Explore Your Album",
+            "Subtitle": "Popular all the time",
+            "EmptyState": "Oops! We couldn't find your popular album. Release song or album to make your own cult!"
           },
           "TopSongs": {
             "Title": "Your Top Song",
             "EmptyState": "Oops! We couldn't find your top song.Publish your song and interact to make your own cult!"
           },
           "Listener": {
-            "Title": "Listener Country"
+            "Title": "Listener Country",
+            "EmptyState": "Oops! We couldn't find any of your listener country. Release song or album to make your own cult!"
           },
           "ListenerLikes": {
-            "Title": "Listener Also Like"
+            "Title": "Listener Also Like",
+            "EmptyState":"Oops! We couldn't find any of your listener. Release song or album to make your own cult!"
           },
           "MySong": {
             "Title": "My Song",
@@ -1011,11 +1022,11 @@
     "NoFollowersTitle": "People follow this musician",
     "NoFollowersSubtitle": "When people follow musician, you'll see them here",
     "Subscribe": "You don’t have any subscription, try to subsrcibe your favorite musician",
-    "PopularPost": "Oops! We couldn't find any top posts for you. Create your own post and start building your own cult!",
+    "PopularPost": "Oops! We couldn't find any top posts for you.Create your own post and start building your own cult!",
     "MostPlayed": "Oops! We couldn't find a most played song for you.Release your album or song and show the world your musical taste!",
     "Merch": "Oops! We couldn't find any of your merchandise. Your merchandise will be displayed here.",
     "Released": "Oops! We couldn't find any albums or songs that have been released this year. Release your album and share your musical talent with the world!",
-    "Musician": "Oops! It’s seems you don’t have any post,  your post will displayed here. \nLet’s create a new post!"
+    "Musician": "Oops! It’s seems you don’t have any post, your post will displayed here. \nLet’s create a new post!"
   },
   "Guest": {
     "Title": "立即註冊與音樂人互動",

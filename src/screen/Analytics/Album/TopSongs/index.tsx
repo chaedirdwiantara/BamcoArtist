@@ -1,4 +1,4 @@
-import {FlatList, StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, View} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {
   DropDownFilter,
@@ -92,34 +92,30 @@ const TopSongs = () => {
               streamCount={kFormatter(songData.data[0].listenerCount)}
               albumTitle={songData.data[0].album.title}
               imgSize={80}
+              key={-1}
             />
-            <FlatList
-              showsVerticalScrollIndicator={false}
-              scrollEnabled={false}
-              data={songData.data}
-              keyExtractor={item => item.id.toString()}
-              renderItem={({item, index}) =>
-                index !== 0 ? (
-                  <ListCard.MusicList
-                    imgUri={item.imageUrl[0].image}
-                    musicNum={(index + 1).toLocaleString('en-US', {
-                      minimumIntegerDigits: 2,
-                      useGrouping: false,
-                    })}
-                    musicTitle={item.title}
-                    singerName={''}
-                    likeAnalytics={item.likesCount}
-                    streamAnalytics={item.listenerCount}
-                    onPressMore={() => {}}
-                    containerStyles={{marginTop: mvs(20)}}
-                    onPressCard={() => {}}
-                    hideDropdownMore
-                  />
-                ) : (
-                  <View />
-                )
-              }
-            />
+            {songData.data.map((item, index) =>
+              index !== 0 ? (
+                <ListCard.MusicList
+                  imgUri={item.imageUrl[0]?.image}
+                  musicNum={(index + 1).toLocaleString('en-US', {
+                    minimumIntegerDigits: 2,
+                    useGrouping: false,
+                  })}
+                  musicTitle={item.title}
+                  singerName={''}
+                  likeAnalytics={item.likesCount}
+                  streamAnalytics={item.listenerCount}
+                  onPressMore={() => {}}
+                  containerStyles={{marginTop: mvs(20)}}
+                  onPressCard={() => {}}
+                  hideDropdownMore
+                  key={index}
+                />
+              ) : (
+                <View />
+              ),
+            )}
           </>
         ) : (
           <EmptyStateAnalytic
