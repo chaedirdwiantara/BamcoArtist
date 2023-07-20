@@ -63,6 +63,7 @@ export type ProfileResponseData = {
   songAdded: number | null;
   createdAt: string;
   updatedAt: string;
+  referralFrom: string | null;
   gender: string;
   followers: number;
   fans: number;

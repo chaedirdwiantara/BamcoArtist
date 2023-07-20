@@ -1,18 +1,37 @@
-import React from 'react';
-import {View, StyleSheet, Text} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {View, StyleSheet, Text, TouchableOpacity} from 'react-native';
 
-import {Button, Gap} from '../../atom';
-import {CopyIcon} from '../../../assets/icon';
+import {Button, Gap, SsuToast} from '../../atom';
+import {CopyIcon, TickCircleIcon} from '../../../assets/icon';
 import {color, typography} from '../../../theme';
 import ReferralImage from '../../../assets/image/Referral.image';
 import {heightPercentage, width, widthPercentage} from '../../../utils';
 import {useTranslation} from 'react-i18next';
+import Clipboard from '@react-native-community/clipboard';
 
-interface ReferralProps {}
+interface ReferralProps {
+  username: string;
+  handleWebview: (title: string, url: string) => void;
+}
 
-export const ReferAFriend: React.FC<ReferralProps> = ({}) => {
+export const ReferAFriend: React.FC<ReferralProps> = ({
+  username,
+  handleWebview,
+}) => {
   const {t} = useTranslation();
-  const onPressSave = () => {};
+  const [toastVisible, setToastVisible] = useState(false);
+
+  const copyToClipboard = () => {
+    Clipboard.setString(username || '');
+    setToastVisible(true);
+  };
+
+  useEffect(() => {
+    toastVisible &&
+      setTimeout(() => {
+        setToastVisible(false);
+      }, 3000);
+  }, [toastVisible]);
 
   return (
     <View style={styles.root}>
@@ -28,18 +47,20 @@ export const ReferAFriend: React.FC<ReferralProps> = ({}) => {
       <Text style={[typography.Overline, styles.useUsername]}>
         {t('Setting.Referral.ReferFriend.Text2')}
       </Text>
-      <View style={styles.containerUsername}>
+      <TouchableOpacity
+        style={styles.containerUsername}
+        onPress={copyToClipboard}>
         <Text style={[typography.Heading4, {color: color.Neutral[10]}]}>
-          {'taylor88'}
+          {username}
         </Text>
         <Gap width={widthPercentage(5)} />
         <CopyIcon />
-      </View>
+      </TouchableOpacity>
 
       <View style={{alignSelf: 'center'}}>
         <Button
           label={t('Setting.Referral.ReferFriend.Btn1')}
-          onPress={onPressSave}
+          onPress={copyToClipboard}
           containerStyles={styles.button}
         />
         <Button
@@ -48,9 +69,33 @@ export const ReferAFriend: React.FC<ReferralProps> = ({}) => {
           borderColor="transparent"
           textStyles={{color: color.Success[400]}}
           containerStyles={{width: width * 0.9}}
-          onPress={() => null}
+          onPress={() =>
+            handleWebview(
+              'Terms Conditions',
+              'https://sunnysideup.io/marketplace/tos',
+            )
+          }
         />
       </View>
+
+      <SsuToast
+        modalVisible={toastVisible}
+        onBackPressed={() => setToastVisible(false)}
+        children={
+          <View style={[styles.modalContainer]}>
+            <TickCircleIcon
+              width={widthPercentage(21)}
+              height={heightPercentage(20)}
+              stroke={color.Neutral[10]}
+            />
+            <Gap width={widthPercentage(7)} />
+            <Text style={[typography.Button2, styles.textStyle]}>
+              {t('General.LinkCopied')}
+            </Text>
+          </View>
+        }
+        modalStyle={{marginHorizontal: widthPercentage(24)}}
+      />
     </View>
   );
 };
@@ -78,5 +123,19 @@ const styles = StyleSheet.create({
     aspectRatio: widthPercentage(327 / 36),
     marginTop: heightPercentage(30),
     alignSelf: 'center',
+  },
+  modalContainer: {
+    width: '100%',
+    position: 'absolute',
+    bottom: heightPercentage(22),
+    height: heightPercentage(36),
+    backgroundColor: color.Success[400],
+    paddingHorizontal: widthPercentage(12),
+    borderRadius: 4,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  textStyle: {
+    color: color.Neutral[10],
   },
 });

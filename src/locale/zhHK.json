@@ -730,48 +730,50 @@
       }
     },
     "Referral": {
-      "Title": "推薦碼",
+      "Title": "Referral Code",
       "ReferFriend": {
-        "Title": "REFER A FRIEND",
-        "Text1": "每筆交易推薦並賺取 5% 的佣金",
-        "Text2": "使用您的@用戶名作為推薦碼",
-        "Btn1": "使用鏈接推薦給朋友",
-        "Btn2": "閱讀條款細則"
+        "Title": "Refer A Friend",
+        "Text1": "Refer a friend and earn 50 free credits",
+        "Text2": "Use your @username as referral code",
+        "Btn1": "Refer a friend using link",
+        "Btn2": "Read Terms and Conditions"
       },
       "UseRefer": {
-        "Title": "USE REFERRAL",
-        "Text1": "於每筆交易獲取 5% Beamco 積分",
-        "Text2": "你朋友的推薦碼",
-        "Text3": "推薦碼無法更改",
-        "Invalid": "Referral code invalid"
+        "Title": "Use Referral",
+        "Text1": "Earn 50 free credits",
+        "Text2": "Your Friend’s Referral Code",
+        "Text3": "Refferal code can not be changed"
+      },
+      "ReferUsed": {
+        "Title": "Referral Used"
       },
       "OnBoard": {
-        "Title": "你有推薦碼嗎？",
-        "Subtitle": "輸入您的推薦碼以快速啟動您的 Beamco 之旅！",
-        "Actived": "推薦已激活",
-        "Success": "恭喜！ 現在您每筆交易將獲得 5% 的積分！"
+        "Title": "Do you have a referral code?",
+        "Subtitle": "Enter your code to jumpstart your Beamco Journey!",
+        "Actived": "Referral Activated",
+        "Success": "Congratulations! now you will get 5% credit every transaction!"
       }
     },
     "ReferralQR": {
-      "Title": "推薦碼",
+      "Title": "Referral Code",
       "ReferFriend": {
         "Title": "REFER A FRIEND",
-        "Text1": "每筆交易推薦並賺取 5% 的佣金",
-        "Text2": "使用您的@用戶名作為推薦碼",
-        "Btn1": "使用鏈接推薦給朋友",
-        "Btn2": "閱讀條款細則"
+        "Text1": "Refer a friend and earn 50 free credits",
+        "Text2": "Use your @username as referral code",
+        "Btn1": "Refer a friend using link",
+        "Btn2": "Read Terms of Use"
       },
       "UseRefer": {
         "Title": "USE REFERRAL",
-        "Text1": "於每筆交易獲取 5% Beamco 積分",
-        "Text2": "你朋友的推薦碼",
-        "Text3": "推薦碼無法更改",
+        "Text1": "Earn 50 free credits",
+        "Text2": "Your Friend’s Referral Code",
+        "Text3": "Referral code can not be changed",
         "Invalid": "Referral code invalid"
       },
       "OnBoard": {
-        "Title": "你有推薦碼嗎？",
-        "Subtitle": "輸入您的推薦碼以快速啟動您的 Beamco 之旅！",
-        "Actived": "推薦已激活",
+        "Title": "Scan QR Code to Earn Bonuses!",
+        "Subtitle": "Scan referral code by pressing scan now button, to earn some free stuff and bonuses",
+        "Activated": "Your 5% Comission for every transaction have been activated!",
         "SuccessTitle": "Your scan was successful!",
         "SuccessDesc": "Congratulations! now you will get 5% credit every transaction!",
         "Continue": "Continue",
