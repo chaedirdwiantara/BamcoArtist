@@ -33,6 +33,7 @@ import {myIdGenreStore} from '../store/myIdGenre.store';
 export const useProfileHook = () => {
   const {setIdGenre} = myIdGenreStore();
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoadingStep, setIsLoadingStep] = useState<boolean>(false);
   const [isError, setIsError] = useState<boolean>(false);
   const [errorMsg, setErrorMsg] = useState<string>('');
   const [successMsg, setSuccessMsg] = useState<string>('');
@@ -52,6 +53,7 @@ export const useProfileHook = () => {
 
   const getProfileUser = async () => {
     setIsLoading(true);
+    setIsLoadingStep(true);
     try {
       const response = await getProfile();
       setDataProfile(response);
@@ -60,6 +62,7 @@ export const useProfileHook = () => {
       console.log(error);
     } finally {
       setIsLoading(false);
+      setIsLoadingStep(false);
     }
   };
 
@@ -231,6 +234,7 @@ export const useProfileHook = () => {
 
   const getLastStepWizard = async () => {
     setIsLoading(true);
+    setIsLoadingStep(true);
     try {
       const response = await getLastStep();
       setInfoStep(response.data);
@@ -238,6 +242,7 @@ export const useProfileHook = () => {
       console.log(error);
     } finally {
       setIsLoading(false);
+      setIsLoadingStep(false);
     }
   };
 
@@ -253,6 +258,7 @@ export const useProfileHook = () => {
 
   return {
     isLoading,
+    isLoadingStep,
     isError,
     errorMsg,
     successMsg,

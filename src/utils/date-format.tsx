@@ -7,6 +7,15 @@ const dateFormat = (ISOStringDate: string) => {
   return today;
 };
 
+const dateFormatBirth = (date: Date) => {
+  const today = new Date(date);
+  const day = today.toLocaleString('default', {day: 'numeric'});
+  const month = today.toLocaleString('default', {month: '2-digit'});
+  const year = today.getFullYear();
+
+  return year + '-' + month + '-' + day;
+};
+
 const dateFormatDayOnly = (ISOStringDate: string) => {
   const today = new Date(ISOStringDate).toLocaleDateString('en-GB', {
     day: 'numeric',
@@ -58,6 +67,7 @@ const dateFormatSubscribe = (ISOStringDate: string | Date) => {
 
 export {
   dateFormat,
+  dateFormatBirth,
   dateFormatFullYear,
   dateLongMonth,
   timeToString,

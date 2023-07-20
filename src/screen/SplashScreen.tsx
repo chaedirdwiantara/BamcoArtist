@@ -44,22 +44,24 @@ export const SplashScreen: React.FC<SplashScrennProps> = ({
     }, 500);
   };
 
-  useEffect(() => {
-    storage.getBoolean('skipOnboard')
-      ? getVersionInfo({
-          platform: Platform.OS,
-        })
-      : navigation.replace('Boarding');
-  }, []);
+  // TODO: Need update in versioning iOS (mas khamzah)
+  // useEffect(() => {
+  //   storage.getBoolean('skipOnboard')
+  //     ? getVersionInfo({
+  //         platform: Platform.OS,
+  //       })
+  //     : navigation.replace('Boarding');
+  // }, []);
 
   useEffect(() => {
-    if (dataVersion?.version === currentVersion) {
-      onCancel();
-    } else {
-      setTimeout(() => {
-        setModalVisible(true);
-      }, 2000);
-    }
+    onCancel();
+    // if (dataVersion?.version === currentVersion) {
+    //   onCancel();
+    // } else {
+    //   setTimeout(() => {
+    //     setModalVisible(true);
+    //   }, 2000);
+    // }
   }, [dataVersion]);
 
   return (

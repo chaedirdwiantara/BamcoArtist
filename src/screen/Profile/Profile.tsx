@@ -82,7 +82,7 @@ export const ProfileScreen: React.FC<ProfileProps> = ({
 
   const goToEditProfile = () => {
     if (dataProfile !== undefined) {
-      navigation.navigate('EditProfile', {...dataProfile?.data});
+      navigation.navigate('EditProfile', {data: dataProfile?.data});
     }
   };
 

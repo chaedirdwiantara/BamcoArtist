@@ -356,14 +356,9 @@ const PostListProfile: FC<PostListProps> = (props: PostListProps) => {
         </View>
       ) : dataMain?.length === 0 && feedMessage === 'you not follow anyone' ? (
         <ListToFollowMusician />
-      ) : dataMain?.length === 0 && feedMessage === 'musician not have post' ? (
-        <EmptyState
-          text={t('EmptyState.FollowMusician') || ''}
-          containerStyle={{
-            justifyContent: 'flex-start',
-            paddingTop: heightPercentage(24),
-          }}
-        />
+      ) : dataMain?.length === 0 &&
+        feedMessage === `Musician don't have any post` ? (
+        <Text style={styles.emptyState}>{t('EmptyState.Musician')}</Text>
       ) : null}
       <ModalShare
         url={urlText}
@@ -470,5 +465,10 @@ const styles = StyleSheet.create({
   loadingContainer: {
     alignItems: 'center',
     paddingVertical: heightPercentage(20),
+  },
+  emptyState: {
+    color: color.Neutral[10],
+    paddingVertical: heightResponsive(100),
+    textAlign: 'center',
   },
 });

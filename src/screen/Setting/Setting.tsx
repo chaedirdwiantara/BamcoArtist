@@ -40,7 +40,10 @@ export const SettingScreen: React.FC = () => {
 
   const onPressGoTo = (screenName: any, params: any) => {
     if (screenName === 'Account') {
-      navigation.navigate(screenName, {...dataProfile?.data});
+      navigation.navigate(screenName, {
+        data: dataProfile?.data,
+        fromScreen: 'setting',
+      });
     } else if (screenName === 'ShippingInformation') {
       navigation.navigate(screenName, {data: dataShippingInfo});
     } else {
