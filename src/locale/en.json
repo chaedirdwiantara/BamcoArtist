@@ -269,11 +269,10 @@
           },
           "FansInteract": "Fans actively interact with you",
           "TopFans": {
-            "Title" : "Your Top Fans",
-            "Link" : "View All",
+            "Title": "Your Top Fans",
+            "Link": "View All",
             "FullScreen": "Your Fans",
             "EmptyState": "Oops! We couldn't find any Top fans for you. Post some story or release album to make your own cult!"
-         
           },
           "FansAge": {
             "Title": "Fans Age"
@@ -282,17 +281,17 @@
             "Title": "Fans Gender"
           },
           "FansCountry": {
-            "Title" : "Your Fans Country",
+            "Title": "Your Fans Country",
             "EmptyState": "Oops! We couldn't find any of your fans country. Post some story or release album to make your own cult!"
           }
         },
         "Post": {
           "Title": "Post",
-          "Popular":{
-            "Title" : "Popular Post"
+          "Popular": {
+            "Title": "Popular Post"
           },
           "Engagement": {
-            "Title" : "Post Engagement Rate"
+            "Title": "Post Engagement Rate"
           }
         },
         "Album": {
@@ -316,7 +315,7 @@
             "Title": "Popular Album"
           },
           "TopSongs": {
-            "Title" : "Your Top Song",
+            "Title": "Your Top Song",
             "EmptyState": "Oops! We couldn't find your top song.Publish your song and interact to make your own cult!"
           },
           "Listener": {
@@ -1006,7 +1005,12 @@
     "NoECData": "You don’t have any exclusive content, try to make a new one!",
     "NoFollowersTitle": "People follow this musician",
     "NoFollowersSubtitle": "When people follow musician, you'll see them here",
-    "Subscribe": "You don’t have any subscription, try to subsrcibe your favorite musician"
+    "Subscribe": "You don’t have any subscription, try to subsrcibe your favorite musician",
+    "PopularPost": "Oops! We couldn't find any top posts for you.  Create your own post and start building your own cult!",
+    "MostPlayed": "Oops! We couldn't find a most played song for you. Release your album or song and show the world your musical taste!",
+    "Merch": "Oops! We couldn't find any of your merchandise. Your merchandise will be displayed here.",
+    "Released": "Oops! We couldn't find any albums or songs that have been released this year. Release your album and share your musical talent with the world!",
+    "Musician": "Oops! It’s seems you don’t have any post,  your post will displayed here. \nLet’s create a new post!"
   },
   "Guest": {
     "Title": "Sign Up to Interact with Musician",
