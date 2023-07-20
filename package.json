@@ -32,6 +32,7 @@
     "react-hook-form": "^7.39.1",
     "react-i18next": "^12.1.5",
     "react-native": "0.70.6",
+    "react-native-date-picker": "^4.2.13",
     "react-native-device-info": "^10.6.0",
     "react-native-element-dropdown": "^2.3.0",
     "react-native-fast-image": "^8.6.3",

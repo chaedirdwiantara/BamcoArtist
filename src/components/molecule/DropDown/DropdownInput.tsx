@@ -11,7 +11,7 @@ import {heightPercentage, normalize, widthPercentage} from '../../../utils';
 
 interface dataProps {
   label: string;
-  value?: string;
+  value: string | number;
 }
 
 interface InputDropdownProps {
@@ -20,7 +20,7 @@ interface InputDropdownProps {
   dropdownLabel: string;
   textTyped: (data: any) => void;
   containerStyles?: ViewStyle;
-  initialValue?: string;
+  initialValue?: string | number;
   isError?: boolean;
   errorMsg?: string;
   type?: string;

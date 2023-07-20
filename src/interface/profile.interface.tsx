@@ -37,6 +37,11 @@ export type CollectPhotosResponseType = {
   status: number;
 };
 
+export type LocationType = {
+  id: number;
+  name: string;
+};
+
 export type ProfileResponseData = {
   uuid: string;
   username: string;
@@ -65,7 +70,7 @@ export type ProfileResponseData = {
   labels: string;
   originCountry: string;
   originCity: string;
-  locationCountry: string;
+  locationCountry: LocationType;
   locationCity: string;
   yearsActiveFrom: string;
   website: string;
@@ -73,6 +78,7 @@ export type ProfileResponseData = {
   members: string[];
   socialMedia: null | nameValue[];
   rank: string;
+  birthdate: string;
   rolesInIndustry: {
     id: number;
     name: string;

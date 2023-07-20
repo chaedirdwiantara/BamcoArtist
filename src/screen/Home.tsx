@@ -31,12 +31,14 @@ import {
   ListImageDesc,
   CreatePostShortcut,
   ModalConfirm,
+  SearchBar,
+  Carousel,
 } from '../components';
 import {font} from '../theme';
 import Color from '../theme/Color';
 import TopSong from './ListCard/TopSong';
 import NewSong from './ListCard/NewSong';
-import {listOverviewCard} from '../data/home';
+import {defaultBanner, listOverviewCard} from '../data/home';
 import {useFcmHook} from '../hooks/use-fcm.hook';
 import {useSongHook} from '../hooks/use-song.hook';
 import {useHomeHook} from '../hooks/use-home.hook';
@@ -46,6 +48,7 @@ import * as FCMService from '../service/notification';
 import {useSearchHook} from '../hooks/use-search.hook';
 import {useCreditHook} from '../hooks/use-credit.hook';
 import {usePlayerHook} from '../hooks/use-player.hook';
+import {useBannerHook} from '../hooks/use-banner.hook';
 import {useProfileHook} from '../hooks/use-profile.hook';
 import {useSettingHook} from '../hooks/use-setting.hook';
 import {CheckCircle2Icon, SearchIcon} from '../assets/icon';
@@ -90,6 +93,7 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
   const {i18n, t} = useTranslation();
   const currentLanguage = i18n.language;
   const {dataAlbumComingSoon, getListDiveIn, getListComingSoon} = useHomeHook();
+  const {isLoadingBanner, dataBanner, getListDataBanner} = useBannerHook();
   const {dataProfile, profileProgress, getProfileUser, getProfileProgress} =
     useProfileHook();
   const {addFcmToken} = useFcmHook();
@@ -146,12 +150,14 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
       setRandomPlaceHolder(
         dataPlaceHolder[Math.floor(Math.random() * dataPlaceHolder.length)],
       );
+
+      // Triggering when go back from other screen
       getProfileProgress();
+      getProfileUser();
     }, []),
   );
 
   useEffect(() => {
-    getProfileUser();
     getCountNotification();
     getCreditCount();
     getListMoodPublic();
@@ -163,6 +169,11 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
       setRefreshing(false);
     }, 1000);
   }, [refreshing]);
+
+  // Doesn't trigger the banner when pull refresh
+  useEffect(() => {
+    getListDataBanner();
+  }, []);
 
   // Triggering when click love on the same song in top & new song tab
   useFocusEffect(
@@ -400,6 +411,10 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
     navigation.navigate('ProfileProgress');
   };
 
+  if (isLoadingBanner) {
+    return <View style={styles.root} />;
+  }
+
   return (
     <View style={styles.root}>
       <SsuStatusBar type="black" />
@@ -434,13 +449,25 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
           />
         }
         onScroll={handleScroll}>
+        <TouchableOpacity onPress={handleSearchButton}>
+          <SearchBar
+            containerStyle={{width: width * 0.9, alignSelf: 'center'}}
+            disabled={true}
+            onTouchStart={handleSearchButton}
+          />
+        </TouchableOpacity>
         {profileProgress?.stepProgress !== '100%' ? (
           <ProgressCard
             percentage={profileProgress?.stepProgress}
             onPress={goToProfileProgress}
-            containerStyle={{marginTop: mvs(10)}}
+            containerStyle={{marginTop: mvs(20)}}
           />
         ) : null}
+        <Carousel
+          data={dataBanner?.length > 0 ? dataBanner : defaultBanner}
+          onPressBanner={handleWebview}
+        />
+
         <Text style={styles.titleOverview}>{t('Home.OverviewCard.Title')}</Text>
         <FlatList
           data={listOverviewCard}
@@ -458,7 +485,7 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
             />
           )}
         />
-        <Text style={[styles.titleOverview, {paddingVertical: mvs(15)}]}>
+        <Text style={[styles.titleOverview, {paddingVertical: mvs(20)}]}>
           {t('Home.CreateNewPost')}
         </Text>
         {/* Create Post Shortcuts */}
@@ -653,6 +680,6 @@ const styles = StyleSheet.create({
     fontSize: mvs(18),
     fontFamily: font.InterMedium,
     fontWeight: '600',
-    paddingVertical: mvs(10),
+    paddingVertical: mvs(15),
   },
 });

@@ -14,12 +14,12 @@ export const AccountScreen: React.FC<AccountProps> = ({
   navigation,
   route,
 }: AccountProps) => {
-  const dataProfile = route.params;
+  const {data, fromScreen} = route.params;
   const {
     dataAllCountry,
     dataCitiesOfCountry,
-    getDataAllCountry,
     getCitiesOfCountry,
+    getDataAllCountry,
   } = useLocationHook();
   const {
     getListMoodGenre,
@@ -28,9 +28,7 @@ export const AccountScreen: React.FC<AccountProps> = ({
     listGenre,
     listMood,
   } = useSettingHook();
-  const [selectedCountry, setSelectedCountry] = useState<string>(
-    dataProfile.locationCountry || '',
-  );
+  const [selectedCountry, setSelectedCountry] = useState<number>(0);
 
   useEffect(() => {
     getDataAllCountry();
@@ -39,10 +37,16 @@ export const AccountScreen: React.FC<AccountProps> = ({
   }, []);
 
   useEffect(() => {
-    if (selectedCountry) {
-      getCitiesOfCountry({country: selectedCountry});
+    if (data) {
+      setSelectedCountry(data.locationCountry?.id || 0);
     }
-  }, [selectedCountry]);
+  }, [data]);
+
+  useEffect(() => {
+    if (selectedCountry > 0) {
+      getCitiesOfCountry({id: selectedCountry});
+    }
+  }, [data, selectedCountry]);
 
   const onPressGoBack = () => {
     navigation.goBack();
@@ -50,18 +54,19 @@ export const AccountScreen: React.FC<AccountProps> = ({
 
   return (
     <View style={styles.root}>
-      {dataProfile && (
+      {data && (
         <AccountContent
           dataAllCountry={dataAllCountry !== undefined ? dataAllCountry : []}
           dataCitiesOfCountry={
             dataCitiesOfCountry !== undefined ? dataCitiesOfCountry : []
           }
-          profile={dataProfile}
+          profile={data}
           moods={listMood}
           genres={listGenre}
           roles={listRoles}
           onPressGoBack={onPressGoBack}
           setSelectedCountry={setSelectedCountry}
+          fromScreen={fromScreen}
         />
       )}
     </View>

@@ -19,7 +19,7 @@ export const PreferenceScreen: React.FC = () => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
   const {
-    isLoading: isLoadingProfile,
+    isLoadingStep,
     dataProfile,
     infoStep,
     getProfileUser,
@@ -61,7 +61,7 @@ export const PreferenceScreen: React.FC = () => {
           updateProfilePreference(props)
         }
         profile={dataProfile}
-        isLoading={isLoading || isLoadingProfile}
+        isLoading={isLoading || isLoadingStep}
         setLastStepWizard={setLastStepWizard}
         genres={listGenre}
         infoStep={infoStep}
@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
     backgroundColor: Color.Dark[800],
     paddingTop:
       Platform.OS === 'ios'
-        ? heightResponsive(barHeight + 25)
-        : heightResponsive(barHeight + 30),
+        ? heightResponsive(barHeight + 10)
+        : heightResponsive(barHeight + 20),
   },
 });

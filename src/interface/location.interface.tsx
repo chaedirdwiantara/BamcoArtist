@@ -1,8 +1,3 @@
-export type DataCountryType = {
-  name: string;
-  unicodeFlag: string;
-};
-
 export type DataStateProps = {
   country: string;
   state?: string;
@@ -13,12 +8,6 @@ export type DataCountryTypeB = {
   value: string;
   name: string;
   unicodeFlag: string;
-};
-
-export type GetAllCountryResponseType = {
-  error: boolean;
-  data: DataCountryType[];
-  msg: string;
 };
 
 export type DataStatePropsType = {
@@ -40,4 +29,36 @@ export type CityResponseType = {
   error: boolean;
   data: string[];
   msg: string;
+};
+
+export type CitiesCountryResponseType = {
+  id: number;
+  name: string;
+  createdAt: string;
+};
+
+export type GetCitiesResponseType = {
+  code: number;
+  data: CitiesCountryResponseType[];
+  message: string;
+  status: number;
+};
+
+export type ListCountryType = {
+  value: number;
+  label: string;
+};
+
+export type DataCountryType = {
+  id: number;
+  name: string;
+  imageUrl: string[];
+  createdAt: string;
+};
+
+export type GetAllCountryResponseType = {
+  code: number;
+  data: DataCountryType[];
+  message: string;
+  status: number;
 };

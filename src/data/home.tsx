@@ -58,18 +58,11 @@ export const listOverviewCard: OverviewCardType[] = [
   },
 ];
 
-export const uncheckedList: string[] = [
-  'Setting.Preference.Label.Genre',
-  'Setting.Account.Label.YearsActive',
-  'Profile.Edit.AddPhotos',
-  'Profile.Edit.AddWebsite',
-];
-
 export const listRequiredAccount: string[] = [
   'Setting.Preference.Label.Genre',
+  'Setting.Account.Label.TypeOfMusician',
   'Setting.Account.Label.Active',
   'Setting.Account.Label.Location',
-  'Setting.Account.Label.TypeOfMusician',
 ];
 
 export const listRequiredProfile: string[] = [

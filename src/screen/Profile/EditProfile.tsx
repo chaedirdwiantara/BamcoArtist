@@ -1,10 +1,17 @@
 import React, {useState} from 'react';
-import {InteractionManager, StyleSheet, View} from 'react-native';
-import {Image} from 'react-native-image-crop-picker';
 import {
-  NativeStackNavigationProp,
+  View,
+  Platform,
+  StyleSheet,
+  InteractionManager,
+  KeyboardAvoidingView,
+} from 'react-native';
+import {
   NativeStackScreenProps,
+  NativeStackNavigationProp,
 } from '@react-navigation/native-stack';
+import {useTranslation} from 'react-i18next';
+import {Image} from 'react-native-image-crop-picker';
 import {useNavigation} from '@react-navigation/native';
 
 import Color from '../../theme/Color';
@@ -13,7 +20,6 @@ import {uploadImage} from '../../api/uploadImage.api';
 import {useProfileHook} from '../../hooks/use-profile.hook';
 import {MainTabParams, RootStackParams} from '../../navigations';
 import {ModalLoading} from '../../components/molecule/ModalLoading/ModalLoading';
-import {useTranslation} from 'react-i18next';
 
 type EditProfileProps = NativeStackScreenProps<RootStackParams, 'EditProfile'>;
 
@@ -23,7 +29,7 @@ export const EditProfileScreen: React.FC<EditProfileProps> = ({
 }: EditProfileProps) => {
   const {t} = useTranslation();
   const navigation2 = useNavigation<NativeStackNavigationProp<MainTabParams>>();
-  const dataProfile = route.params;
+  const dataProfile = route.params.data;
   const banners =
     dataProfile !== undefined && dataProfile.banners?.length > 0
       ? dataProfile.banners[2].image
@@ -39,7 +45,7 @@ export const EditProfileScreen: React.FC<EditProfileProps> = ({
       ? dataProfile.photos
       : [];
 
-  const {isLoading, updateProfileUser, addCollectPhotos, deleteValueProfile} =
+  const {updateProfileUser, addCollectPhotos, deleteValueProfile} =
     useProfileHook();
 
   const [avatarUri, setAvatarUri] = useState(avatar || '');
@@ -111,23 +117,27 @@ export const EditProfileScreen: React.FC<EditProfileProps> = ({
   };
 
   return (
-    <View style={styles.root}>
-      <EditProfile
-        profile={profile}
-        type={'edit'}
-        onPressGoBack={goBack}
-        onPressSave={onPressSave}
-        setUploadPhoto={(image: Image, type: string) =>
-          setUploadPhoto(image, type)
-        }
-        setResetImage={(type: string) => {
-          setResetImage(type);
-        }}
-        goToGallery={goToGallery}
-        deleteValueProfile={deleteValueProfile}
-      />
-      <ModalLoading visible={loadingUpload} />
-    </View>
+    <KeyboardAvoidingView
+      style={{flex: 1}}
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+      <View style={styles.root}>
+        <EditProfile
+          profile={profile}
+          type={'edit'}
+          onPressGoBack={goBack}
+          onPressSave={onPressSave}
+          setUploadPhoto={(image: Image, type: string) =>
+            setUploadPhoto(image, type)
+          }
+          setResetImage={(type: string) => {
+            setResetImage(type);
+          }}
+          goToGallery={goToGallery}
+          deleteValueProfile={deleteValueProfile}
+        />
+        <ModalLoading visible={loadingUpload} />
+      </View>
+    </KeyboardAvoidingView>
   );
 };
 

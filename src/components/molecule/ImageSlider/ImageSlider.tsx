@@ -273,6 +273,9 @@ export const ImageSlider: React.FC<ImageSliderProps> = ({
                 index === 0 ? selectedRole : selectedExpectations;
               const setSelected =
                 index === 0 ? setSelectedRole : setSelectedExpectations;
+              const paddingTop =
+                index === 2 ? mvs(40) : index === 1 ? 0 : mvs(50);
+              const marginBottom = index === 2 ? mvs(20) : mvs(30);
 
               return (
                 <KeyboardAvoidingView
@@ -287,7 +290,7 @@ export const ImageSlider: React.FC<ImageSliderProps> = ({
                       <Text style={styles.textSkip}>{t('Btn.Skip')}</Text>
                     </TouchableOpacity>
                   )}
-                  <View style={styles.containerStep}>
+                  <View style={[styles.containerStep, {paddingTop}]}>
                     {index === 1 ? (
                       ''
                     ) : (
@@ -296,7 +299,9 @@ export const ImageSlider: React.FC<ImageSliderProps> = ({
                         <Text style={[typography.Heading4, styles.title]}>
                           {item.title}
                         </Text>
-                        <Text style={styles.textSubtitle}>{item.subtitle}</Text>
+                        <Text style={[styles.textSubtitle, {marginBottom}]}>
+                          {item.subtitle}
+                        </Text>
                       </>
                     )}
                     {index === 1 ? (
@@ -448,7 +453,6 @@ const styles = StyleSheet.create({
     color: '#788AA9',
     textAlign: 'center',
     maxWidth: width * 0.8,
-    marginBottom: mvs(30),
   },
   backgroundFailed: {
     width: '100%',
