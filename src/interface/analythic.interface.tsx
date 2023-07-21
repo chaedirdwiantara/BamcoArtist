@@ -35,7 +35,7 @@ export interface SongChart {
   description: string;
   fansStream: string;
   fansStreamCompared: string;
-  fansStreamPogress: 'improve' | 'regression' | 'same';
+  fansStreamProgress: 'improve' | 'regression' | 'same';
   fansAvgStream: number;
   fansAvgStreamCompared: string;
   fansAvgStreamPogress: 'improve' | 'regression' | 'same';
