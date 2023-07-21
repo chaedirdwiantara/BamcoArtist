@@ -78,7 +78,7 @@ const WhoListen: FC<WhoListenProps> = (props: WhoListenProps) => {
             'Home.Tab.Analytic.Album.Listeners.Growth.AvgListener',
           )} ${t(selectedRange.label)}`}
           cardTwoAvgStreamCompare={whoListenData.fansStreamCompared}
-          cardTwoAvgProgress={whoListenData.fansStreamPogress}
+          cardTwoAvgProgress={whoListenData.fansStreamProgress}
           type={t(selectedRange.label)}
           noOfLines={2}
         />

@@ -22,6 +22,7 @@ interface ListenerCountryProps {
   setViewAll: React.Dispatch<React.SetStateAction<boolean>>;
   viewAll?: boolean;
   dataCountry: ListenerCountryData[] | undefined;
+  totalData?: number;
 }
 
 const ListenerCountry: FC<ListenerCountryProps> = (
@@ -36,6 +37,7 @@ const ListenerCountry: FC<ListenerCountryProps> = (
     dataCountry,
     setViewAll,
     viewAll,
+    totalData,
   } = props;
   const {t} = useTranslation();
   const lang = storage.getString('lang');
@@ -69,13 +71,15 @@ const ListenerCountry: FC<ListenerCountryProps> = (
             )}
           </View>
           <View>
-            <TouchableOpacity onPress={() => setViewAll(!viewAll)}>
-              <Text style={styles.link}>
-                {!viewAll
-                  ? t('Home.Tab.Analytic.Fans.TopFans.Link')
-                  : t('Home.Tab.Analytic.Fans.TopFans.Hide')}
-              </Text>
-            </TouchableOpacity>
+            {dataCountry && totalData && dataCountry?.length < totalData && (
+              <TouchableOpacity onPress={() => setViewAll(!viewAll)}>
+                <Text style={styles.link}>
+                  {!viewAll
+                    ? t('Home.Tab.Analytic.Fans.TopFans.Link')
+                    : t('Home.Tab.Analytic.Fans.TopFans.Hide')}
+                </Text>
+              </TouchableOpacity>
+            )}
           </View>
         </View>
       )}
