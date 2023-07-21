@@ -41,6 +41,8 @@ import {
   QuoteToPost,
   ViewsCount,
 } from '../interface/feed.interface';
+import {sendShareLogEP, sendViewLogEP} from '../api/analytics.api';
+import {LogData} from '../interface/analythic.interface';
 
 export const useFeedHook = () => {
   const [feedIsLoading, setFeedIsLoading] = useState(true);
@@ -435,6 +437,27 @@ export const useFeedHook = () => {
     }
   };
 
+  const [dataLog, setDataLog] = useState<LogData>();
+  const [dataLogIsError, setDataLogIsError] = useState<boolean>(false);
+
+  const sendLogView = async (props?: ParamsProps) => {
+    try {
+      const response = await sendViewLogEP(props);
+      setDataLog(response.data);
+    } catch (error) {
+      setDataLogIsError(true);
+    }
+  };
+
+  const sendLogShare = async (props?: ParamsProps) => {
+    try {
+      const response = await sendShareLogEP(props);
+      setDataLog(response.data);
+    } catch (error) {
+      setDataLogIsError(true);
+    }
+  };
+
   return {
     feedIsLoading,
     likePostLoading,
@@ -471,6 +494,8 @@ export const useFeedHook = () => {
     analyticPostError,
     analyticPostMessage,
     analyticPostData,
+    dataLog,
+    dataLogIsError,
     setDataLoadMore,
     setDataComment,
     setDataCreatePost,
@@ -502,5 +527,7 @@ export const useFeedHook = () => {
     setCreatePostError,
     setDataUpdatePost,
     getAnalyticPopularPost,
+    sendLogView,
+    sendLogShare,
   };
 };

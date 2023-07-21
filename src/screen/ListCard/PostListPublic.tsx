@@ -68,6 +68,7 @@ import {
 import Clipboard from '@react-native-community/clipboard';
 import {useQuery} from 'react-query';
 import {useHeaderAnimation} from '../../hooks/use-header-animation.hook';
+import {usePostLogger} from './ListUtils/use-PostLogger';
 
 const {height} = Dimensions.get('screen');
 const {StatusBarManager} = NativeModules;
@@ -102,6 +103,7 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
   } = props;
 
   const {handleScroll, compCTranslateY} = useHeaderAnimation();
+  const {viewabilityConfig, onViewableItemsChanged} = usePostLogger();
 
   const [recorder, setRecorder] = useState<string[]>([]);
   const [selectedId, setSelectedId] = useState<string[]>();
@@ -139,6 +141,7 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
     setLikePost,
     setUnlikePost,
     getListDataPostQuery,
+    sendLogShare,
   } = useFeedHook();
 
   const {
@@ -300,8 +303,9 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
     );
   };
 
-  const shareOnPress = () => {
+  const shareOnPress = (musicianId: string) => {
     setModalShare(true);
+    setSelectedMusicianId(musicianId);
   };
 
   //Credit onPress
@@ -338,6 +342,7 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
     setIsCopied(true);
     if (Clipboard && Clipboard.setString) {
       Clipboard.setString(urlText);
+      sendLogShare({id: selectedMusicianId});
     }
   };
 
@@ -361,42 +366,6 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
     }
   };
   // ! END OF MUSIC AREA
-
-  //TODO: EXPERIMENT AREA UNCOMMENT LATER
-  // const [viewedItems, setViewedItems] = useState<string[]>([]);
-  // const viewedTimeout = useRef<number | null>(null);
-
-  // const viewabilityConfig = useRef({
-  //   itemVisiblePercentThreshold: 50, // Modify this as needed
-  // });
-
-  // const onViewableItemsChanged = useCallback(
-  //   ({viewableItems}: {viewableItems: ViewToken[]}) => {
-  //     // Clear the previous timeout
-  //     if (viewedTimeout.current) clearTimeout(viewedTimeout.current);
-
-  //     // Check if there are any viewable items
-  //     if (viewableItems.length > 0) {
-  //       // Get the first viewable item (assuming this is the one in focus)
-  //       const firstItem = viewableItems[0].item;
-
-  //       // If the item has not been viewed yet
-  //       setViewedItems(prevViewedItems => {
-  //         if (!prevViewedItems.includes(firstItem.id)) {
-  //           // Set a timeout
-  //           viewedTimeout.current = setTimeout(() => {
-  //             // Send your API call here with firstItem.id
-  //             console.log(`User has viewed post id: ${firstItem.id}`);
-  //           }, 5000); // 5 seconds
-  //           return [...prevViewedItems, firstItem.id];
-  //         } else {
-  //           return prevViewedItems;
-  //         }
-  //       });
-  //     }
-  //   },
-  //   [],
-  // );
 
   return (
     <>
@@ -480,9 +449,8 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
             onEndReachedThreshold={1}
             onScroll={handleScroll}
             bounces={false}
-            //TODO: UNCOMMENT LATER
-            // viewabilityConfig={viewabilityConfig.current}
-            // onViewableItemsChanged={onViewableItemsChanged}
+            viewabilityConfig={viewabilityConfig}
+            onViewableItemsChanged={onViewableItemsChanged}
             renderItem={({item, index}) => (
               <>
                 {index === 0 && !videoUploadProgress ? (
@@ -523,7 +491,7 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
                   likePressed={likePressedInFeed(selectedId, item, recorder)}
                   likeCount={likesCountInFeed(selectedId, item, recorder)}
                   tokenOnPress={() => tokenOnPress(item.musician.uuid)}
-                  shareOnPress={shareOnPress}
+                  shareOnPress={() => shareOnPress(item.id)}
                   commentCount={item.commentsCount}
                   myPost={item.musician.uuid === MyUuid}
                   selectedMenu={() => {}}

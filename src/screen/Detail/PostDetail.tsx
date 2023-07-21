@@ -47,6 +47,7 @@ import {useCreditHook} from '../../hooks/use-credit.hook';
 import {profileStorage} from '../../hooks/use-storage.hook';
 import DetailChildrenCard from './DetailChildrenCard';
 import {usePlayerStore} from '../../store/player.store';
+import Clipboard from '@react-native-community/clipboard';
 
 export const {width} = Dimensions.get('screen');
 
@@ -58,6 +59,10 @@ type cmntToCmnt = {
 };
 
 type PostDetailProps = NativeStackScreenProps<RootStackParams, 'PostDetail'>;
+
+//? Dummy url waiting update from BE
+const urlText =
+  'https://open.ssu.io/track/19AiJfAtRiccvSU1EWcttT?si=36b9a686dad44ae0';
 
 export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   const {t} = useTranslation();
@@ -85,6 +90,7 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
     setCommentDelete,
     setCommentUpdate,
     setDeletePost,
+    sendLogShare,
   } = useFeedHook();
 
   const {
@@ -129,6 +135,8 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   const [modalSuccessDonate, setModalSuccessDonate] = useState<boolean>(false);
   const [trigger2ndModal, setTrigger2ndModal] = useState<boolean>(false);
   const [idUserTonavigate, setIdUserTonavigate] = useState<string>();
+  const [selectedMusicianId, setSelectedMusicianId] = useState<string>('');
+  const [isCopied, setIsCopied] = useState<boolean>(false);
 
   // * VIEW MORE HOOKS
   const [viewMore, setViewMore] = useState<string>('');
@@ -800,6 +808,7 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
           quoteToPost: dataPostDetail.quoteToPost,
           video: dataPostDetail.video,
           timeAgo: dataPostDetail.timeAgo,
+          isSubscribe: dataPostDetail.isSubscribe,
         };
 
         navigation.navigate('CreatePost', {postData: toEditPost});
@@ -844,8 +853,24 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
     setModalDonate(true);
   };
 
-  const shareOnPress = () => {
+  const shareOnPress = (musicianId: string, MyPost: boolean) => {
     setModalShare(true);
+    if (MyPost) {
+      setSelectedMusicianId(musicianId);
+    }
+  };
+
+  const onModalShareHide = () => {
+    setToastVisible(true);
+    setIsCopied(false);
+  };
+
+  const onPressCopy = () => {
+    setIsCopied(true);
+    if (Clipboard && Clipboard.setString) {
+      Clipboard.setString(urlText);
+      sendLogShare({id: selectedMusicianId});
+    }
   };
 
   const readMoreOnPress = () => {
@@ -957,7 +982,12 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
                     : dataPostDetail.likesCount
                 }
                 tokenOnPress={tokenOnPress}
-                shareOnPress={shareOnPress}
+                shareOnPress={() =>
+                  shareOnPress(
+                    data.id,
+                    dataPostDetail.musician.uuid === dataProfile?.data.uuid,
+                  )
+                }
                 commentOnPress={() => commentOnPress(data.id, musicianName)}
                 commentCount={commentCountLvl1}
                 myPost={dataPostDetail.musician.uuid === dataProfile?.data.uuid}
@@ -1025,15 +1055,16 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
           userAvatarUri={dataProfileImg}
         />
         <ModalShare
-          url={
-            'https://open.ssu.io/track/19AiJfAtRiccvSU1EWcttT?si=36b9a686dad44ae0'
-          }
+          url={urlText}
           modalVisible={modalShare}
           onPressClose={() => setModalShare(false)}
           titleModal={t('General.Share.Feed')}
           hideMusic
-          onPressCopy={() =>
-            InteractionManager.runAfterInteractions(() => setToastVisible(true))
+          onPressCopy={onPressCopy}
+          onModalHide={
+            isCopied
+              ? onModalShareHide
+              : () => console.log(modalShare, 'modal is hide')
           }
         />
         <SsuToast

@@ -179,6 +179,7 @@ export type DetailPostData = {
   isPremium: boolean;
   video: VideoResponseType;
   timeAgo: string;
+  isSubscribe: boolean;
 };
 
 export type DetailPostResponseType = {
