@@ -17,6 +17,7 @@ import {
   ListenerCountryResponseType,
   ListenerLikesResponseType,
   PopularAlbumResponseType,
+  SendLogResponseType,
   SongChartResponseType,
 } from '../interface/analythic.interface';
 import SsuAPIKrakatau from './baseKrakatau';
@@ -266,6 +267,36 @@ export const ListAlbumEP = async (
     url: `/musician-app/albums`,
     method: 'GET',
     params: props,
+  });
+
+  return data;
+};
+
+export const sendViewLogEP = async (
+  props?: ParamsProps,
+): Promise<SendLogResponseType> => {
+  const {data} = await SsuAPI().request<SendLogResponseType>({
+    url: '/send-tracking/view',
+    method: 'POST',
+    data: {
+      id: props?.id,
+      context: 'post',
+    },
+  });
+
+  return data;
+};
+
+export const sendShareLogEP = async (
+  props?: ParamsProps,
+): Promise<SendLogResponseType> => {
+  const {data} = await SsuAPI().request<SendLogResponseType>({
+    url: '/send-tracking/share',
+    method: 'POST',
+    data: {
+      id: props?.id,
+      context: 'post',
+    },
   });
 
   return data;
