@@ -43,6 +43,7 @@ import {DataExclusiveResponse} from '../../../interface/setting.interface';
 import {ProfileFansResponseType} from '../../../interface/profile.interface';
 import {dropDownDataCategory, dropDownDataSort} from '../../../data/dropdown';
 import ExclusiveDailyContent from '../../../screen/MusicianProfile/ExclusiveDailyContent';
+import {FansScreen} from '../ListFans';
 
 type OnScrollEventHandler = (
   event: NativeSyntheticEvent<NativeScrollEvent>,
@@ -258,6 +259,10 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
                 onPress={goToPlaylist}
                 scrollable={false}
               />
+            </View>
+          ) : filter2[selectedIndex].filterName === 'Musician.Tab.Fans' ? (
+            <View style={{paddingHorizontal: widthResponsive(20)}}>
+              {uuid && <FansScreen uuid={uuid} />}
             </View>
           ) : (
             // TODO: DISABLE FOR NOW

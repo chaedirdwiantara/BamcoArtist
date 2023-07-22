@@ -67,7 +67,7 @@ export type TopFansAnalyticData = {
   fullname: string;
   image: imageTypes[];
   totalPoint: number;
-  userType: string;
+  userType: 'fans' | 'musician';
 };
 
 export type EngagementTopFansResponseType = {

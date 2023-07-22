@@ -2,10 +2,11 @@ import React from 'react';
 import {View, StyleSheet} from 'react-native';
 import Color from '../../../theme/Color';
 import {useSearchHook} from '../../../hooks/use-search.hook';
-import {useInfiniteQuery} from 'react-query';
+import {useQuery} from 'react-query';
 import {FansListMusician} from './ListFansMusician';
-import {EmptyState} from '../../../components';
+import {EmptyState} from '../..';
 import {heightPercentage} from '../../../utils';
+import {ListDataFans} from '../../../interface/search.interface';
 
 interface FollowersProps {
   uuid: string;
@@ -20,15 +21,13 @@ export const FansScreen: React.FC<FollowersProps> = (props: FollowersProps) => {
     refetch,
     isRefetching,
     isLoading,
-  } = useInfiniteQuery(['/list-fans', uuid], ({pageParam = 1}) =>
-    getListMusiciansFans({uuid, page: pageParam}),
-  );
+  } = useQuery('/list-fans', () => getListMusiciansFans({uuid}));
 
   return (
     <View style={styles.root}>
-      {dataFans?.pages[0] && dataFans?.pages[0]?.data.length > 0 ? (
+      {dataFans?.data && dataFans?.data?.length > 0 ? (
         <FansListMusician
-          dataList={dataFans?.pages?.map((page: any) => page.data).flat() ?? []}
+          dataList={dataFans?.data}
           isLoading={isLoading}
           isRefetching={isRefetching}
         />

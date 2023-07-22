@@ -37,6 +37,26 @@ export type ListSearchFansResponseType = {
   status: number;
 };
 
+export type ListDataFans = {
+  uuid: string;
+  fullname: string;
+  image: imageTypes[];
+  totalPoint: number;
+  userType: 'fans' | 'musician';
+};
+
+export type ListFansResponseType = {
+  code: number;
+  data: ListDataFans[];
+  message: string;
+  meta: {
+    page: number;
+    perPage: number;
+    total: number;
+  };
+  status: number;
+};
+
 export type ListDataSearchMusician = {
   uuid: string;
   username: string;
