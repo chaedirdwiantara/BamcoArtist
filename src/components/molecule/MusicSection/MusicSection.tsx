@@ -1,5 +1,11 @@
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, Text, View, ViewStyle} from 'react-native';
+import {
+  InteractionManager,
+  StyleSheet,
+  Text,
+  View,
+  ViewStyle,
+} from 'react-native';
 import {useTranslation} from 'react-i18next';
 import {ms, mvs} from 'react-native-size-matters';
 import {useNavigation} from '@react-navigation/native';
@@ -16,6 +22,8 @@ import {useCreditHook} from '../../../hooks/use-credit.hook';
 import {ModalSuccessDonate} from '../Modal/ModalSuccessDonate';
 import {BottomSheetGuest} from '../GuestComponent/BottomSheetGuest';
 import {heightPercentage, normalize, widthResponsive} from '../../../utils';
+import {useShareHook} from '../../../hooks/use-share.hook';
+import Clipboard from '@react-native-community/clipboard';
 
 interface DataMore {
   label: string;
@@ -53,6 +61,7 @@ export const MusicSection: React.FC<ListProps> = (props: ListProps) => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
   const {creditCount, getCreditCount} = useCreditHook();
+  const {shareLink, getShareLink, successGetLink} = useShareHook();
 
   const dataMore = [
     {label: t('Home.Tab.TopSong.Playlist'), value: '1'},
@@ -97,8 +106,11 @@ export const MusicSection: React.FC<ListProps> = (props: ListProps) => {
   };
 
   const onPressCopy = () => {
-    setToastVisible(true);
-    setTextToast(t('General.LinkCopied') || '');
+    InteractionManager.runAfterInteractions(() => {
+      Clipboard.setString(shareLink);
+      setToastVisible(true);
+      setTextToast(t('General.LinkCopied') || '');
+    });
   };
 
   const resultDataMore = (dataResult: DataMore) => {
@@ -121,6 +133,17 @@ export const MusicSection: React.FC<ListProps> = (props: ListProps) => {
     }
   };
 
+  useEffect(() => {
+    if (props.songId) {
+      getShareLink({
+        scheme: `/song/${props.songId}`,
+        image: props.imgUri,
+        title: t('ShareLink.Music.Title', {title: props.musicTitle}),
+        description: t('ShareLink.Music.Song', {owner: props.singerName}),
+      });
+    }
+  }, [props.songId]);
+
   return (
     <>
       <ListCard.MusicList
@@ -138,14 +161,13 @@ export const MusicSection: React.FC<ListProps> = (props: ListProps) => {
       />
 
       <ModalShare
-        url={
-          'https://open.ssu.io/track/19AiJfAtRiccvSU1EWcttT?si=36b9a686dad44ae0'
-        }
+        url={shareLink}
         modalVisible={modalShare}
         onPressClose={() => setModalShare(false)}
         titleModal={t('Home.Tab.TopSong.Share')}
         hideMusic={true}
         onPressCopy={onPressCopy}
+        disabled={!successGetLink}
       />
 
       <ModalSuccessDonate

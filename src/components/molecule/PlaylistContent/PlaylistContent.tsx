@@ -47,6 +47,9 @@ import {usePlayerHook} from '../../../hooks/use-player.hook';
 import DropdownMore from '../V2/DropdownFilter/DropdownMore';
 import {Playlist} from '../../../interface/playlist.interface';
 import {ListDataSearchSongs} from '../../../interface/search.interface';
+import {generateShareLink} from '../../../api/share';
+import {useShareHook} from '../../../hooks/use-share.hook';
+import Clipboard from '@react-native-community/clipboard';
 
 interface Props {
   goBackProfile: (showToast: boolean) => void;
@@ -86,6 +89,7 @@ export const PlaylistContent: React.FC<Props> = ({
 }) => {
   const {t} = useTranslation();
   const {addSong} = usePlayerHook();
+  const {shareLink, getShareLink, successGetLink} = useShareHook();
   const [isModalVisible, setModalVisible] = useState<boolean>(false);
   const [toastVisible, setToastVisible] = useState<boolean>(false);
   const [toastText, setToastText] = useState<string>('');
@@ -217,6 +221,20 @@ export const PlaylistContent: React.FC<Props> = ({
     }
   };
 
+  // SHARE LINK
+  useEffect(() => {
+    if (dataDetail) {
+      getShareLink({
+        scheme: `/playlist/${playlistId}`,
+        image: dataDetail?.thumbnailUrl,
+        title: t('ShareLink.Music.Title', {title: dataDetail?.name}),
+        description: t('ShareLink.Music.Playlist', {
+          owner: dataDetail?.playlistOwner?.fullname,
+        }),
+      });
+    }
+  }, [dataDetail]);
+
   const songIsExist = listSongs !== null && listSongs !== undefined;
   const firstSong = songIsExist ? listSongs[0] : null;
   const othersPlaylist = dataDetail.isOtherOwnerPlaylist;
@@ -343,9 +361,7 @@ export const PlaylistContent: React.FC<Props> = ({
       />
 
       <ModalShare
-        url={
-          'https://open.ssu.io/track19AiJfAtRiccvSU1EWcttTsi=36b9a686dad44ae0'
-        }
+        url={shareLink}
         modalVisible={modalShare}
         onPressClose={() => setModalShare(false)}
         titleModal={modalShareTitle}
@@ -356,9 +372,13 @@ export const PlaylistContent: React.FC<Props> = ({
         createdOn={dateLongMonth(dataDetail.createdAt)}
         artist={dataDetail?.playlistOwner?.fullname}
         onPressCopy={() => {
-          InteractionManager.runAfterInteractions(() => setToastVisible(true));
-          setToastText(t('General.LinkCopied') || '');
+          InteractionManager.runAfterInteractions(() => {
+            Clipboard.setString(shareLink);
+            setToastText(t('General.LinkCopied') || '');
+            setToastVisible(true);
+          });
         }}
+        disabled={!successGetLink}
       />
     </View>
   );

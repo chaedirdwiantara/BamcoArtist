@@ -41,6 +41,8 @@ import {dropDownHeaderSongDetails} from '../../../data/dropdown';
 import {BottomSheetGuest} from '../GuestComponent/BottomSheetGuest';
 import {DataDetailSong, SongList} from '../../../interface/song.interface';
 import {ListenersAndDonate} from '../ListenersAndDonate/ListenersAndDonate';
+import {useShareHook} from '../../../hooks/use-share.hook';
+import Clipboard from '@react-native-community/clipboard';
 
 interface Props {
   onPressGoBack: () => void;
@@ -65,6 +67,7 @@ export const SongDetailsContent: React.FC<Props> = ({
 }) => {
   const {t} = useTranslation();
   const {addSong} = usePlayerHook();
+  const {shareLink, getShareLink, successGetLink} = useShareHook();
   const isLogin = storage.getString('profile');
   const [toastVisible, setToastVisible] = useState<boolean>(false);
   const [toastText, setToastText] = useState<string>('');
@@ -114,6 +117,23 @@ export const SongDetailsContent: React.FC<Props> = ({
   const onPressSuccess = () => {
     setModalSuccessDonate(false);
   };
+
+  // SHARE LINK
+  useEffect(() => {
+    if (dataDetail) {
+      getShareLink({
+        scheme: `/song/${dataDetail.id}`,
+        image:
+          dataDetail.album.imageUrl.length !== 0
+            ? dataDetail.album.imageUrl[0].image
+            : '',
+        title: t('ShareLink.Music.Title', {title: dataDetail.title}),
+        description: t('ShareLink.Music.Song', {
+          owner: dataDetail?.musicianName,
+        }),
+      });
+    }
+  }, [dataDetail]);
 
   const children = () => {
     return (
@@ -240,9 +260,7 @@ export const SongDetailsContent: React.FC<Props> = ({
       />
 
       <ModalShare
-        url={
-          'https://open.ssu.io/track/19AiJfAtRiccvSU1EWcttT?si=36b9a686dad44ae0'
-        }
+        url={shareLink}
         modalVisible={modalShare}
         onPressClose={() => setModalShare(false)}
         titleModal={t('General.Share.Music')}
@@ -256,9 +274,13 @@ export const SongDetailsContent: React.FC<Props> = ({
         createdOn={dataDetail.album.productionYear}
         artist={dataDetail.musicianName}
         onPressCopy={() => {
-          setToastText(t('General.LinkCopied') || '');
-          InteractionManager.runAfterInteractions(() => setToastVisible(true));
+          InteractionManager.runAfterInteractions(() => {
+            setToastVisible(true);
+            Clipboard.setString(shareLink);
+            setToastText(t('General.LinkCopied') || '');
+          });
         }}
+        disabled={!successGetLink}
       />
 
       <ModalCustom
