@@ -74,7 +74,13 @@ export const ImageSlider: React.FC<ImageSliderProps> = ({
   infoStep,
 }) => {
   const {t} = useTranslation();
-  const {isValidReferral, errorMsg, applyReferralUser} = useProfileHook();
+  const {
+    isValidReferral,
+    errorMsg,
+    applyReferralUser,
+    dataProfile,
+    getProfileUser,
+  } = useProfileHook();
   const scrollViewRef = useRef<ScrollView>(null);
   const [selectedRole, setSelectedRole] = useState<number[]>([]);
   const [selectedExpectations, setSelectedExpectations] = useState<number[]>(
@@ -107,6 +113,21 @@ export const ImageSlider: React.FC<ImageSliderProps> = ({
   const onApplyReferral = (referralCode: string) => {
     applyReferralUser(referralCode);
   };
+
+  useEffect(() => {
+    getProfileUser();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (
+      dataProfile?.data.referralFrom !== null &&
+      dataProfile?.data.referralFrom !== undefined
+    ) {
+      setIsScanSuccess(true);
+      setRefCode(dataProfile?.data.referralFrom);
+    } else setIsScanSuccess(false);
+  }, [dataProfile]);
 
   const dataArray = [
     {
@@ -208,8 +229,6 @@ export const ImageSlider: React.FC<ImageSliderProps> = ({
   };
 
   const handleSkipFailed = () => {
-    console.log('handle skip');
-
     setIsScanFailed(false);
     setIsScanning(true);
     setIsScanned(false);
@@ -311,6 +330,7 @@ export const ImageSlider: React.FC<ImageSliderProps> = ({
                         isError={errorMsg !== ''}
                         errorMsg={errorMsg}
                         isValidRef={isValidReferral}
+                        isScanFailed={isScanFailed}
                         setIsScanFailed={setIsScanFailed}
                         refCode={refCode}
                         setRefCode={setRefCode}
@@ -322,6 +342,7 @@ export const ImageSlider: React.FC<ImageSliderProps> = ({
                         setIsScanned={setIsScanned}
                         isManualEnter={isManualEnter}
                         setIsManualEnter={setIsManualEnter}
+                        referralFrom={dataProfile.data.referralFrom}
                       />
                     ) : index === 2 ? (
                       <StepProfile
@@ -344,14 +365,6 @@ export const ImageSlider: React.FC<ImageSliderProps> = ({
               );
             })}
           </ScrollView>
-          <FooterContent
-            type={type}
-            activeIndexSlide={activeIndexSlide}
-            data={type === 'Preference' ? dataArray : data}
-            onPressBack={onPressBack}
-            onPressGoTo={onPress}
-            onPressNext={onPressNext}
-          />
         </>
       ) : (
         <>

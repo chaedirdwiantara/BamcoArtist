@@ -34,7 +34,7 @@ export const FooterContent: React.FC<FooterContentProps> = ({
       style={[
         styles.containerFooterContent,
         {
-          height: type === 'Preference' ? '25%' : '35%',
+          height: type === 'Preference' ? '15%' : '35%',
         },
       ]}>
       {type !== 'Preference' &&
@@ -61,7 +61,6 @@ export const FooterContent: React.FC<FooterContentProps> = ({
 
       {type === 'Preference' ? (
         <>
-          <Gap height={heightPercentage(45)} />
           <View style={styles.footer}>
             {activeIndexSlide === 0 ? (
               <ButtonGradient
@@ -123,7 +122,6 @@ const styles = StyleSheet.create({
     width: widthPercentage(327),
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: heightPercentage(40),
   },
   btnContainer: {
     width: widthPercentage(155),
