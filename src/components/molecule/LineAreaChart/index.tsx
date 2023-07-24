@@ -51,6 +51,7 @@ const LineAreaChart: FC<LineAreaChartProps> = (props: LineAreaChartProps) => {
     noOfLines,
   } = props;
   const lang = storage.getString('lang');
+
   return (
     <View>
       {/* DROPDOWN AREA */}

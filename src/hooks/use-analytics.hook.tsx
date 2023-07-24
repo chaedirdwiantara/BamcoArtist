@@ -141,6 +141,7 @@ export const useAnalyticsHook = () => {
       return {
         data: response?.data,
         message: response?.message,
+        meta: response?.meta,
       };
     } catch (error) {
       console.log(error);

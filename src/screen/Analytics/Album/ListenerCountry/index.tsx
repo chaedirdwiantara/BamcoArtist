@@ -51,6 +51,7 @@ const ListenerCountry = () => {
       setViewAll={setViewAll}
       viewAll={viewAll}
       dataCountry={data?.data}
+      totalData={data?.meta?.total ? data.meta.total : 0}
     />
   );
 };

@@ -1,5 +1,6 @@
 import {
   FollowersProps,
+  ListFansResponseType,
   ListSearchAlbumsResponseType,
   ListSearchFansResponseType,
   ListSearchMusicianResponseType,
@@ -84,11 +85,10 @@ export const listFollowers = async (
 
 export const listFanss = async (
   props: FollowersProps,
-): Promise<ListSearchFansResponseType> => {
-  const {data} = await SsuAPI().request<ListSearchFansResponseType>({
-    url: `/fans/${props.uuid}/following`,
+): Promise<ListFansResponseType> => {
+  const {data} = await SsuAPI().request<ListFansResponseType>({
+    url: `/public/list-fans-musician/${props.uuid}`,
     method: 'GET',
-    params: props,
   });
 
   return data;

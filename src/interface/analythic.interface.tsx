@@ -35,7 +35,7 @@ export interface SongChart {
   description: string;
   fansStream: string;
   fansStreamCompared: string;
-  fansStreamPogress: 'improve' | 'regression' | 'same';
+  fansStreamProgress: 'improve' | 'regression' | 'same';
   fansAvgStream: number;
   fansAvgStreamCompared: string;
   fansAvgStreamPogress: 'improve' | 'regression' | 'same';
@@ -67,7 +67,7 @@ export type TopFansAnalyticData = {
   fullname: string;
   image: imageTypes[];
   totalPoint: number;
-  userType: string;
+  userType: 'fans' | 'musician';
 };
 
 export type EngagementTopFansResponseType = {

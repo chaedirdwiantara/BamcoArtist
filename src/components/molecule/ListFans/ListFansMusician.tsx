@@ -10,13 +10,13 @@ import {
 } from '../../../utils';
 import {font} from '../../../theme';
 import Color from '../../../theme/Color';
-import {ListDataSearchFans} from '../../../interface/search.interface';
-import {EmptyState} from '../../../components';
-import MusicianSection from '../../../components/molecule/MusicianSection/MusicianSection';
+import {ListDataFans} from '../../../interface/search.interface';
+import {EmptyState} from '../..';
+import MusicianSection from '../MusicianSection/MusicianSection';
 import {mvs} from 'react-native-size-matters';
 
 interface FansListProps {
-  dataList: ListDataSearchFans[];
+  dataList: ListDataFans[];
   isLoading: boolean;
   isRefetching: boolean;
 }
@@ -30,7 +30,7 @@ export const FansListMusician: React.FC<FansListProps> = ({
 
   return (
     <View style={styles.root}>
-      {dataList.map((item, index) => (
+      {dataList?.map((item, index) => (
         <MusicianSection
           key={index}
           musicianNum={(index + 1).toLocaleString('en-US', {
@@ -38,16 +38,12 @@ export const FansListMusician: React.FC<FansListProps> = ({
             useGrouping: false,
           })}
           musicianName={item.fullname}
-          imgUri={
-            item.imageProfileUrls.length > 0
-              ? item.imageProfileUrls[0].image
-              : ''
-          }
+          imgUri={item.image?.length > 0 ? item.image[0]?.image : ''}
           containerStyles={{marginTop: mvs(20)}}
           userId={item.uuid}
           activeMore={false}
-          type={item.followersType}
-          point={item.point}
+          type={item?.userType}
+          point={item?.totalPoint.toString()}
         />
       ))}
       {!isLoading && !isRefetching && dataList.length === 0 && (

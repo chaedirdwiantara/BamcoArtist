@@ -41,7 +41,7 @@ import {useTranslation} from 'react-i18next';
 import {DataExclusiveResponse} from '../../interface/setting.interface';
 import PostListProfile from '../ListCard/PostListProfile';
 import MainTab from '../../components/molecule/ProfileContent/MainTab/MainTab';
-import {FansScreen} from './ListFans';
+import {FansScreen} from '../../components/molecule/ListFans';
 import {storage} from '../../hooks/use-storage.hook';
 import {mvs} from 'react-native-size-matters';
 import {ArrowLeftIcon} from '../../assets/icon';
