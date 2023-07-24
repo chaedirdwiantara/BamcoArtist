@@ -1,6 +1,5 @@
 import {
   Dimensions,
-  InteractionManager,
   LogBox,
   ScrollView,
   StyleSheet,
@@ -788,32 +787,59 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
       selectedMenuPost !== undefined &&
       dataPostDetail
     ) {
-      if (t(selectedMenuPost.label) === 'Delete Post') {
-        setDeletePost({id: selectedIdPost});
-        setSelectedMenuPost(undefined);
-      }
-      if (t(selectedMenuPost.label) === 'Edit Post') {
-        const toEditPost: PostList = {
-          id: dataPostDetail.id,
-          caption: dataPostDetail.caption,
-          likesCount: dataPostDetail.likesCount,
-          commentsCount: dataPostDetail.commentsCount,
-          category: dataPostDetail.category,
-          images: dataPostDetail.images,
-          createdAt: dataPostDetail.createdAt,
-          updatedAt: dataPostDetail.updatedAt,
-          isPremiumPost: dataPostDetail.isPremium,
-          musician: dataPostDetail.musician,
-          isLiked: dataPostDetail.isLiked,
-          quoteToPost: dataPostDetail.quoteToPost,
-          video: dataPostDetail.video,
-          timeAgo: dataPostDetail.timeAgo,
-          isSubscribe: dataPostDetail.isSubscribe,
-        };
+      const selectedValue = t(selectedMenuPost.value);
+      const {
+        id,
+        caption,
+        likesCount,
+        commentsCount,
+        category,
+        images,
+        createdAt,
+        updatedAt,
+        isPremium,
+        musician,
+        isLiked,
+        quoteToPost,
+        video,
+        timeAgo,
+        isSubscribe,
+      } = dataPostDetail;
 
-        navigation.navigate('CreatePost', {postData: toEditPost});
-        setSelectedMenuPost(undefined);
+      switch (selectedValue) {
+        case '2':
+          setDeletePost({id: selectedIdPost});
+          break;
+        case '1':
+          const toEditPost: PostList = {
+            id,
+            caption,
+            likesCount,
+            commentsCount,
+            category,
+            images,
+            createdAt,
+            updatedAt,
+            isPremiumPost: isPremium,
+            musician,
+            isLiked,
+            quoteToPost,
+            video,
+            timeAgo,
+            isSubscribe,
+          };
+          navigation.navigate('CreatePost', {postData: toEditPost});
+          break;
+        case '11':
+          navigation.navigate('MusicianProfile', {id: musician.uuid});
+          break;
+        case '22':
+          console.log('REPORT', selectedIdPost);
+          break;
+        default:
+          break;
       }
+      setSelectedMenuPost(undefined);
     }
   }, [selectedIdPost, selectedMenuPost]);
 
@@ -991,11 +1017,14 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
                 commentOnPress={() => commentOnPress(data.id, musicianName)}
                 commentCount={commentCountLvl1}
                 myPost={dataPostDetail.musician.uuid === dataProfile?.data.uuid}
-                selectedMenu={setSelectedMenu}
+                selectedMenu={setSelectedMenuPost}
                 idPost={dataPostDetail.id}
                 selectedIdPost={setSelectedIdPost}
                 isPremium={data.isPremiumPost}
                 disableComment={false}
+                showDropdown={
+                  dataPostDetail.musician.uuid !== dataProfile?.data.uuid
+                }
                 children={
                   <DetailChildrenCard
                     data={dataPostDetail}

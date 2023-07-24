@@ -930,6 +930,10 @@
       "Quote": "Quote Music",
       "Media": "Upload Media",
       "Preview": "Add Preview"
+    },
+    "Dropdown":{
+      "Visit": "Visit Profile",
+      "Report": "Report"
     }
   },
   "Notification": {
