@@ -271,7 +271,7 @@
           "TopFans": {
             "Title": "Your Top Fans",
             "Link": "View All",
-            "Hide" : "Hide",
+            "Hide": "Hide",
             "FullScreen": "Your Fans",
             "EmptyState": "Oops! We couldn't find any Top fans for you. Post some story or release album to make your own cult!"
           },
@@ -288,12 +288,12 @@
         },
         "Post": {
           "Title": "Post",
-          "Popular":{
-            "Title" : "Popular Post",
-            "EmptyState":"Oops! We couldn't find your popular post. Post your story and interact to make your own cult!"
+          "Popular": {
+            "Title": "Popular Post",
+            "EmptyState": "Oops! We couldn't find your popular post. Post your story and interact to make your own cult!"
           },
           "Engagement": {
-            "Title" : "Post Engagement Rate",
+            "Title": "Post Engagement Rate",
             "AvgView": "Avg view per post",
             "AvgLiked": "Avg liked per post",
             "AvgReply": "Avg reply per post",
@@ -324,7 +324,7 @@
             "EmptyState": "Oops! We couldn't find your popular album. Release song or album to make your own cult!"
           },
           "TopSongs": {
-            "Title" : "Your Top Song",
+            "Title": "Your Top Song",
             "EmptyState": "Oops! We couldn't find your top song. Publish your song and interact to make your own cult!"
           },
           "Listener": {
@@ -333,7 +333,7 @@
           },
           "ListenerLikes": {
             "Title": "Listener Also Like",
-            "EmptyState":"Oops! We couldn't find any of your listener. Release song or album to make your own cult!"
+            "EmptyState": "Oops! We couldn't find any of your listener. Release song or album to make your own cult!"
           },
           "MySong": {
             "Title": "My Song",
@@ -934,6 +934,10 @@
       "Quote": "Quote Music",
       "Media": "Upload Media",
       "Preview": "Add Preview"
+    },
+    "Dropdown":{
+      "Visit": "Visit Profile",
+      "Report": "Report"
     }
   },
   "Notification": {
@@ -1225,5 +1229,21 @@
     },
     "SubtitleTooltip": "To finish this step, you need to fulfill this information below:",
     "SubtitleTooltipFinish": "You have already completed your account information"
+  },
+  "ShareLink": {
+    "Music": {
+      "Title": "Listen To {{title}}",
+      "Playlist": "Playlist by {{owner}}",
+      "Song": "Song by {{owner}}",
+      "Album": "Album by {{owner}}"
+    },
+    "Feed": {
+      "Title": "{{musician}}'s post",
+      "Subtitle": "Get the Latest Updates from Your Favorite Musician!"
+    },
+    "Profile": {
+      "Title": "Get in touch with {{name}}",
+      "Subtitle": "Discover Attention-Grabbing Musicians to Explore!"
+    }
   }
 }

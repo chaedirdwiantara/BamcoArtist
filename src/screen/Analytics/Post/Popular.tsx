@@ -14,7 +14,7 @@ import {useFeedHook} from '../../../hooks/use-feed.hook';
 import {usePlayerHook} from '../../../hooks/use-player.hook';
 import {DataDropDownType, dropDownAlbumRange} from '../../../data/dropdown';
 import {useTranslation} from 'react-i18next';
-import {PostList} from '../../../interface/feed.interface';
+import {AnalyticPostData, PostList} from '../../../interface/feed.interface';
 import {
   DropDownFilter,
   EmptyStateAnalytic,
@@ -23,11 +23,14 @@ import {
   ModalShare,
   SsuToast,
 } from '../../../components';
-import {heightPercentage, widthResponsive} from '../../../utils';
+import {elipsisText, heightPercentage, widthResponsive} from '../../../utils';
 import ChildrenCard from '../../ListCard/ChildrenCard';
 import {StarPinkIcon, TickCircleIcon} from '../../../assets/icon';
 import {color, font, typography} from '../../../theme';
 import {mvs} from 'react-native-size-matters';
+import {imageShare} from '../../../utils/share';
+import {useShareHook} from '../../../hooks/use-share.hook';
+import Clipboard from '@react-native-community/clipboard';
 
 interface PopularPostProps {
   uuidMusician: string;
@@ -56,6 +59,14 @@ const PopularPost: FC<PopularPostProps> = (props: PopularPostProps) => {
     playerProgress,
     addPlaylistFeed,
   } = usePlayerHook();
+
+  const {
+    shareLink,
+    getShareLink,
+    successGetLink,
+    setSelectedSharePost,
+    selectedSharePost,
+  } = useShareHook();
 
   const [recorder, setRecorder] = useState<string[]>([]);
   const [selectedId, setSelectedId] = useState<string[]>();
@@ -176,8 +187,9 @@ const PopularPost: FC<PopularPostProps> = (props: PopularPostProps) => {
     }
   };
 
-  const shareOnPress = () => {
+  const shareOnPress = (content: AnalyticPostData) => {
     setModalShare(true);
+    setSelectedSharePost(content);
   };
 
   const handlePausePlay = () => {
@@ -221,6 +233,22 @@ const PopularPost: FC<PopularPostProps> = (props: PopularPostProps) => {
         timeAgo: analyticPostData.timeAgo,
       }
     : undefined;
+
+  // SHARE LINK
+  useEffect(() => {
+    if (selectedSharePost) {
+      getShareLink({
+        scheme: `/feed/${selectedSharePost.id}`,
+        image: imageShare(selectedSharePost),
+        title: t('ShareLink.Feed.Title', {
+          musician: selectedSharePost.musician.fullname,
+        }),
+        description: selectedSharePost.caption
+          ? elipsisText(selectedSharePost.caption, 50)
+          : t('ShareLink.Feed.Subtitle'),
+      });
+    }
+  }, [selectedSharePost]);
 
   return (
     <TouchableOpacity
@@ -299,7 +327,7 @@ const PopularPost: FC<PopularPostProps> = (props: PopularPostProps) => {
                 : analyticPostData.likesCount
             }
             viewCount={analyticPostData.viewsCount}
-            shareOnPress={shareOnPress}
+            shareOnPress={() => shareOnPress(analyticPostData)}
             commentCount={analyticPostData.commentsCount}
             children={
               TranslatePostList ? (
@@ -328,16 +356,18 @@ const PopularPost: FC<PopularPostProps> = (props: PopularPostProps) => {
 
       <ModalShare
         //TODO: CHANGE DUMMY URL
-        url={
-          'https://open.ssu.io/track/19AiJfAtRiccvSU1EWcttT?si=36b9a686dad44ae0'
-        }
+        url={shareLink}
         modalVisible={modalShare}
         onPressClose={() => setModalShare(false)}
         titleModal={t('General.Share.Feed')}
         hideMusic
         onPressCopy={() =>
-          InteractionManager.runAfterInteractions(() => setToastVisible(true))
+          InteractionManager.runAfterInteractions(() => {
+            Clipboard.setString(shareLink);
+            setToastVisible(true);
+          })
         }
+        disabled={!successGetLink}
       />
       <SsuToast
         modalVisible={toastVisible}
