@@ -24,6 +24,7 @@ import {BottomSheetGuest} from '../GuestComponent/BottomSheetGuest';
 import {heightPercentage, normalize, widthResponsive} from '../../../utils';
 import {useShareHook} from '../../../hooks/use-share.hook';
 import Clipboard from '@react-native-community/clipboard';
+import {profileStorage} from '../../../hooks/use-storage.hook';
 
 interface DataMore {
   label: string;
@@ -63,13 +64,22 @@ export const MusicSection: React.FC<ListProps> = (props: ListProps) => {
   const {creditCount, getCreditCount} = useCreditHook();
   const {shareLink, getShareLink, successGetLink} = useShareHook();
 
-  const dataMore = [
-    {label: t('Home.Tab.TopSong.Playlist'), value: '1'},
-    {label: t('Home.Tab.TopSong.Tip'), value: '2'},
-    {label: t('Home.Tab.TopSong.Queue'), value: '3'},
-    {label: t('Home.Tab.TopSong.Share'), value: '4'},
-    {label: t('Home.Tab.TopSong.Details'), value: '5'},
-  ];
+  const dataMore =
+    singerId !== profileStorage()?.uuid
+      ? [
+          {label: t('Home.Tab.TopSong.Playlist'), value: '1'},
+          {label: t('Home.Tab.TopSong.Tip'), value: '2'},
+          {label: t('Home.Tab.TopSong.Queue'), value: '3'},
+          {label: t('Home.Tab.TopSong.Share'), value: '4'},
+          {label: t('Home.Tab.TopSong.Details'), value: '5'},
+        ]
+      : [
+          {label: t('Home.Tab.TopSong.Playlist'), value: '1'},
+          {label: t('Home.Tab.TopSong.Queue'), value: '3'},
+          {label: t('Home.Tab.TopSong.Share'), value: '4'},
+          {label: t('Home.Tab.TopSong.Details'), value: '5'},
+        ];
+
   const [textToast, setTextToast] = useState<string>('');
   const [toastVisible, setToastVisible] = useState<boolean>(false);
   const [modalDonate, setModalDonate] = useState<boolean>(false);
