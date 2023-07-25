@@ -84,7 +84,10 @@ const PostListCardOld: React.FC<ListProps> = (props: ListProps) => {
         </View>
         {/* share section */}
         <View>
-          <TouchableOpacity onPress={shareOnPress} style={styles.socialIcon}>
+          <TouchableOpacity
+            onPress={() => {}}
+            style={styles.socialIcon}
+            disabled>
             <DiagramIcon fill={color.Dark[100]} />
             <Gap width={5.5} />
             <Text style={styles.regularText}>{viewCount ?? 0}</Text>

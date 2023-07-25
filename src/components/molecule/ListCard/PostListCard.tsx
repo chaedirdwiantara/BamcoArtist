@@ -246,7 +246,8 @@ const PostListCard: React.FC<ListProps> = (props: ListProps) => {
                 ) : (
                   <View>
                     <TouchableOpacity
-                      onPress={shareOnPress}
+                      onPress={() => {}}
+                      disabled
                       style={styles.socialIcon}>
                       <DiagramIcon fill={color.Dark[100]} />
                       <Gap width={5.5} />
@@ -259,7 +260,8 @@ const PostListCard: React.FC<ListProps> = (props: ListProps) => {
               {!myPost ? (
                 <View>
                   <TouchableOpacity
-                    onPress={shareOnPress}
+                    onPress={() => {}}
+                    disabled
                     style={styles.socialIcon}>
                     <DiagramIcon fill={color.Dark[100]} />
                     <Gap width={5.5} />
