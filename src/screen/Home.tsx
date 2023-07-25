@@ -9,7 +9,6 @@ import {
   Text,
   RefreshControl,
   Platform,
-  FlatList,
 } from 'react-native';
 import {useNavigation, useFocusEffect} from '@react-navigation/native';
 import {
@@ -65,6 +64,13 @@ import Income from './Analytics/Income';
 import AlbumAnalytic from './Analytics/Album';
 import PostAnalytic from './Analytics/Post';
 import Explore from './Analytics/Explore';
+import {
+  DataTotalCountPropsType,
+  TotalPostAndFansResponseType,
+} from '../interface/profile.interface';
+import {TotalIncome} from '../interface/analythic.interface';
+import {useQuery} from 'react-query';
+import {useAnalyticsHook} from '../hooks/use-analytics.hook';
 
 type OnScrollEventHandler = (
   event: NativeSyntheticEvent<NativeScrollEvent>,
@@ -84,13 +90,20 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
   const {i18n, t} = useTranslation();
   const currentLanguage = i18n.language;
   const {isLoadingBanner, dataBanner, getListDataBanner} = useBannerHook();
-  const {dataProfile, profileProgress, getProfileUser, getProfileProgress} =
-    useProfileHook();
+  const {
+    dataProfile,
+    profileProgress,
+    getProfileUser,
+    getProfileProgress,
+    getTotalSongAndAlbum,
+    getTotalPostAndFans,
+  } = useProfileHook();
   const {addFcmToken} = useFcmHook();
   const {hidePlayer} = usePlayerHook();
   const {counter, getCountNotification} = useNotificationHook();
   const {creditCount, getCreditCount} = useCreditHook();
   const {dataExclusiveContent, getExclusiveContent} = useSettingHook();
+  const {getIncome} = useAnalyticsHook();
 
   const {uriVideo, setUriVideo} = useVideoStore();
 
@@ -104,6 +117,24 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
   const [postChoice, setPostChoice] = useState<
     'choiceA' | 'choiceB' | undefined
   >();
+
+  const [dataSongAlbum, setDataSongAlbum] = useState<DataTotalCountPropsType>();
+  const [dataFansPost, setDataFansPost] =
+    useState<TotalPostAndFansResponseType>();
+  const [dataIncome, setDataIncome] = useState<TotalIncome>();
+
+  const {data: songAndAlbumData, refetch: refetchTotalSongAlbum} = useQuery(
+    'overview-totalSongAlbum',
+    () => getTotalSongAndAlbum({uuid}),
+  );
+  const {data: fansAndPostData, refetch: refetchTotalFansPost} = useQuery(
+    'overview-totalFansPost',
+    () => getTotalPostAndFans(),
+  );
+  const {data: incomeData, refetch: refetchIncome} = useQuery(
+    'overview-income',
+    () => getIncome('monthly'),
+  );
 
   const JSONProfile = storage.getString('profile');
   let uuid: string = '';
@@ -131,10 +162,25 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
   useEffect(() => {
     getCountNotification();
     getCreditCount();
+    refetchTotalSongAlbum();
+    refetchTotalFansPost();
+    refetchIncome();
     setTimeout(() => {
       setRefreshing(false);
     }, 1000);
   }, [refreshing]);
+
+  useEffect(() => {
+    setDataFansPost(fansAndPostData?.data);
+  }, [fansAndPostData]);
+
+  useEffect(() => {
+    setDataSongAlbum(songAndAlbumData?.data);
+  }, [songAndAlbumData]);
+
+  useEffect(() => {
+    setDataIncome(incomeData);
+  }, [incomeData]);
 
   // Doesn't trigger the banner when pull refresh
   useEffect(() => {
@@ -382,22 +428,27 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
         />
 
         <Text style={styles.titleOverview}>{t('Home.OverviewCard.Title')}</Text>
-        <FlatList
-          data={listOverviewCard}
-          showsVerticalScrollIndicator={false}
-          numColumns={2}
-          keyExtractor={item => item.id.toString()}
-          contentContainerStyle={{alignItems: 'center'}}
-          renderItem={({item}) => (
-            <OverviewCard
-              key={item.id}
-              amount={item.amount}
-              path={item.path}
-              title={t(item.title)}
-              type={item.id === 1 || item.id === 2 ? 'black' : 'white'}
-            />
-          )}
-        />
+        <View style={styles.containerOverview}>
+          {listOverviewCard.map((item, index) => {
+            const newData = [
+              dataFansPost?.totalFans,
+              dataFansPost?.totalPublicPost,
+              dataFansPost?.totalExclusivePost,
+              dataSongAlbum?.countAlbumReleased,
+              dataSongAlbum?.countSong,
+              dataIncome?.totalIncome,
+            ];
+            return (
+              <OverviewCard
+                key={item.id}
+                amount={newData[index] || 0}
+                path={item.path}
+                title={t(item.title)}
+                type={item.id === 1 || item.id === 2 ? 'black' : 'white'}
+              />
+            );
+          })}
+        </View>
         <Text style={[styles.titleOverview, {paddingVertical: mvs(20)}]}>
           {t('Home.CreateNewPost')}
         </Text>
@@ -542,5 +593,11 @@ const styles = StyleSheet.create({
     fontFamily: font.InterMedium,
     fontWeight: '600',
     paddingVertical: mvs(15),
+  },
+  containerOverview: {
+    flexWrap: 'wrap',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
