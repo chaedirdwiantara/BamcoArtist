@@ -79,12 +79,15 @@ const DetailChildrenCard: FC<ChildrenCardProps> = (
     images: data.images,
     createdAt: data.createdAt,
     updatedAt: data.updatedAt,
-    isPremiumPost: data.isPremium,
+    isPremiumPost: data.isPremiumPost,
     musician: data.musician,
     isLiked: data.isLiked,
     quoteToPost: data.quoteToPost,
     video: data.video,
     timeAgo: data.timeAgo,
+    viewsCount: data.viewsCount,
+    shareCount: data.shareCount,
+    isSubscribe: data.isSubscribe,
   };
 
   return (

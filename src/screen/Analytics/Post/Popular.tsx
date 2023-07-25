@@ -219,6 +219,8 @@ const PopularPost: FC<PopularPostProps> = (props: PopularPostProps) => {
         quoteToPost: analyticPostData?.quoteToPost,
         video: analyticPostData?.video,
         timeAgo: analyticPostData.timeAgo,
+        viewsCount: analyticPostData.viewsCount,
+        shareCount: analyticPostData.shareCount,
       }
     : undefined;
 

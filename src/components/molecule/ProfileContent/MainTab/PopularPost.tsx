@@ -301,6 +301,9 @@ const PopularPost: FC<PopularPostProps> = (props: PopularPostProps) => {
             idPost={dataPostList[0].id}
             selectedIdPost={setSelectedIdPost}
             isPremium={dataPostList[0].isPremiumPost}
+            viewCount={dataPostList[0].viewsCount}
+            shareCount={dataPostList[0].shareCount}
+            showDropdown
             children={
               <ChildrenCard
                 data={dataPostList[0]}
