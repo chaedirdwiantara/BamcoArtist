@@ -125,6 +125,8 @@ export type PostList = {
   quoteToPost: QuoteToPost;
   video: VideoResponseType;
   timeAgo: string;
+  viewsCount: number;
+  shareCount: number;
 };
 
 export type ListPostResponseType = {
@@ -176,10 +178,12 @@ export type DetailPostData = {
   musician: MusicianData;
   isLiked: boolean;
   quoteToPost: QuoteToPost;
-  isPremium: boolean;
+  isPremiumPost: boolean;
   video: VideoResponseType;
   timeAgo: string;
   isSubscribe: boolean;
+  viewsCount: number;
+  shareCount: number;
 };
 
 export type DetailPostResponseType = {

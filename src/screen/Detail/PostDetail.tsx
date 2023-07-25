@@ -797,13 +797,15 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
         images,
         createdAt,
         updatedAt,
-        isPremium,
+        isPremiumPost,
         musician,
         isLiked,
         quoteToPost,
         video,
         timeAgo,
         isSubscribe,
+        viewsCount,
+        shareCount,
       } = dataPostDetail;
 
       switch (selectedValue) {
@@ -820,13 +822,15 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
             images,
             createdAt,
             updatedAt,
-            isPremiumPost: isPremium,
+            isPremiumPost,
             musician,
             isLiked,
             quoteToPost,
             video,
             timeAgo,
             isSubscribe,
+            viewsCount,
+            shareCount,
           };
           navigation.navigate('CreatePost', {postData: toEditPost});
           break;
@@ -1022,9 +1026,9 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
                 selectedIdPost={setSelectedIdPost}
                 isPremium={data.isPremiumPost}
                 disableComment={false}
-                showDropdown={
-                  dataPostDetail.musician.uuid !== dataProfile?.data.uuid
-                }
+                viewCount={dataPostDetail.viewsCount}
+                shareCount={dataPostDetail.shareCount}
+                showDropdown
                 children={
                   <DetailChildrenCard
                     data={dataPostDetail}

@@ -311,6 +311,9 @@ const PostListProfile: FC<PostListProps> = (props: PostListProps) => {
                   idPost={item.id}
                   selectedIdPost={() => {}}
                   isPremium={item.isPremiumPost}
+                  viewCount={item.viewsCount}
+                  shareCount={item.shareCount}
+                  showDropdown
                   noNavigate
                   children={
                     <ChildrenCard
