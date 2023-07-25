@@ -17,13 +17,14 @@ import {
 } from '../../../../utils';
 import {mvs} from 'react-native-size-matters';
 import {AvatarProfile} from '../..';
-import {ButtonGradient} from '../../../atom';
+import {ButtonGradient, Gap} from '../../../atom';
 import Typography from '../../../../theme/Typography';
 import {
   ArrowLeftIcon,
   CameraIcon,
   GalleryEditIcon,
   SettingIcon,
+  ShareIcon,
 } from '../../../../assets/icon';
 import {color, font} from '../../../../theme';
 import initialname from '../../../../utils/initialname';
@@ -32,6 +33,7 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParams} from '../../../../navigations';
 import {useTranslation} from 'react-i18next';
 import LoadingSpinner from '../../../atom/Loading/LoadingSpinner';
+import QRCodeIcon from '../../../../assets/icon/QRCode.icon';
 
 export interface ProfileHeaderProps {
   avatarUri?: string;
@@ -74,26 +76,40 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = (
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
 
+  const toMyQrCode = () => {
+    navigation.navigate('MyQRCode');
+  };
+
   const iconRight = () => {
     return (
-      <TouchableOpacity
-        onPress={() => iconPress('backgroundUri')}
-        style={styles.iconRight}>
-        {type === '' ? (
-          !scrollEffect && <SettingIcon style={styles.settingIcon} />
-        ) : (
-          <GalleryEditIcon />
-        )}
-      </TouchableOpacity>
+      <View style={[styles.iconRight, {flex: 1, flexDirection: 'row'}]}>
+        <TouchableOpacity onPress={() => iconPress('backgroundUri')}>
+          {type === '' ? (
+            !scrollEffect && <ShareIcon style={styles.shareIcon} />
+          ) : (
+            <GalleryEditIcon />
+          )}
+        </TouchableOpacity>
+        <Gap width={12} />
+        <TouchableOpacity onPress={() => iconPress('backgroundUri')}>
+          {type === '' ? (
+            !scrollEffect && <SettingIcon style={styles.settingIcon} />
+          ) : (
+            <GalleryEditIcon />
+          )}
+        </TouchableOpacity>
+      </View>
     );
   };
 
   const iconLeft = () => {
     return (
-      <TouchableOpacity
-        onPress={() => navigation.goBack()}
-        style={styles.iconLeft}>
-        <ArrowLeftIcon style={styles.settingIcon} />
+      <TouchableOpacity onPress={toMyQrCode} style={styles.iconLeft}>
+        {type === '' ? (
+          !scrollEffect && <QRCodeIcon style={styles.settingIcon} />
+        ) : (
+          <GalleryEditIcon />
+        )}
       </TouchableOpacity>
     );
   };
@@ -106,7 +122,8 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = (
   const newHeight = showLoading ? heightPercentage(390) : heightPercentage(350);
 
   return (
-    <View style={[styles.root, {height: newHeight}, containerStyles]}>
+    <View
+      style={[styles.root, {height: newHeight, marginTop: 8}, containerStyles]}>
       <TouchableOpacity
         activeOpacity={backgroundPress ? 1 : 0.7}
         onPress={() =>
@@ -153,7 +170,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = (
             )}
 
             {noEdit ? null : iconRight()}
-            {backIcon ? iconLeft() : null}
+            {backIcon ? iconLeft() : iconLeft()}
           </View>
         </ImageBackground>
       </TouchableOpacity>
@@ -218,6 +235,11 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: heightPercentage(20),
     left: widthPercentage(20),
+  },
+  shareIcon: {
+    marginTop: heightPercentage(25),
+    width: widthPercentage(24),
+    height: widthPercentage(24),
   },
   settingIcon: {
     marginTop: heightPercentage(25),
