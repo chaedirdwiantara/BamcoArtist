@@ -295,7 +295,12 @@ export const MusicianDetail: React.FC<MusicianDetailProps> = ({
             ) : // TODO: DISABLE FOR NOW
             // : filter[selectedIndex].filterName === 'Musician.Tab.Main' ? (
             //   <View style={{paddingHorizontal: widthResponsive(20)}}>
-            //     <MainTab uuid={uuid} />
+            //    <MainTab
+            //       uuid={uuid}
+            //       coverImage={exclusiveContent?.coverImage ?? ''}
+            //       title={exclusiveContent?.title ?? ''}
+            //       description={exclusiveContent?.description ?? ''}
+            //     />
             //   </View>
             // )
             null}

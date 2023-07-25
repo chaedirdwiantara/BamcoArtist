@@ -142,6 +142,11 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
   const [pauseModeOn, setPauseModeOn] = useState<boolean>(false);
   const [idNowPlaying, setIdNowPlaing] = useState<string>();
 
+  // * REPORT HOOKS
+  const [selectedIdPost, setSelectedIdPost] = useState<string>();
+  const [selectedMenuPost, setSelectedMenuPost] = useState<DataDropDownType>();
+  const [selectedUserUuid, setSelectedUserUuid] = useState<string>();
+
   const {
     feedIsLoading,
     feedIsError,
@@ -378,6 +383,28 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
   };
   // ! END OF MUSIC AREA
 
+  // ! REPORT POST AREA
+  useEffect(() => {
+    if (selectedIdPost && selectedMenuPost && selectedUserUuid && dataMain) {
+      const selectedValue = t(selectedMenuPost.value);
+
+      switch (selectedValue) {
+        case '11':
+          navigation.navigate('MusicianProfile', {
+            id: selectedUserUuid,
+          });
+          break;
+        case '22':
+          console.log('REPORT', selectedIdPost);
+          break;
+        default:
+          break;
+      }
+      setSelectedMenuPost(undefined);
+    }
+  }, [selectedIdPost, selectedMenuPost, selectedUserUuid]);
+  // ! END OF REPORT POST AREA
+
   // SHARE LINK
   useEffect(() => {
     if (selectedSharePost) {
@@ -521,9 +548,11 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
                   shareOnPress={() => shareOnPress(item)}
                   commentCount={item.commentsCount}
                   myPost={item.musician.uuid === MyUuid}
-                  selectedMenu={() => {}}
+                  musicianUuid={item.musician.uuid}
                   idPost={item.id}
-                  selectedIdPost={() => {}}
+                  selectedMenu={setSelectedMenuPost}
+                  selectedIdPost={setSelectedIdPost}
+                  selectedUserUuid={setSelectedUserUuid}
                   isPremium={item.isPremiumPost}
                   viewCount={item.viewsCount}
                   shareCount={item.shareCount}

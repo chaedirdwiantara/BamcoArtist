@@ -816,9 +816,11 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
       } = dataPostDetail;
 
       switch (selectedValue) {
+        //? Delete Post
         case '2':
           setDeletePost({id: selectedIdPost});
           break;
+        //? Edit Post
         case '1':
           const toEditPost: PostList = {
             id,
@@ -841,9 +843,11 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
           };
           navigation.navigate('CreatePost', {postData: toEditPost});
           break;
+        //? To Musician Profile
         case '11':
           navigation.navigate('MusicianProfile', {id: musician.uuid});
           break;
+        //? Report Post
         case '22':
           console.log('REPORT', selectedIdPost);
           break;
