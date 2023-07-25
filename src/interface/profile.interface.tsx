@@ -215,3 +215,16 @@ export type GetProfileProgressResponseType = {
   message: string;
   status: number;
 };
+
+export type TotalPostAndFansResponseType = {
+  totalPublicPost: number;
+  totalExclusivePost: number;
+  totalFans: number;
+};
+
+export type GetTotalPostAndFansResponseType = {
+  code: number;
+  data: TotalPostAndFansResponseType;
+  message: string;
+  status: number;
+};
