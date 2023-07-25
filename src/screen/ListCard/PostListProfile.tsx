@@ -371,7 +371,14 @@ const PostListProfile: FC<PostListProps> = (props: PostListProps) => {
                   isPremium={item.isPremiumPost}
                   viewCount={item.viewsCount}
                   shareCount={item.shareCount}
-                  showDropdown
+                  showDropdown={
+                    item.isPremiumPost &&
+                    item.musician.uuid !== MyUuid &&
+                    !item.isSubscribe
+                      ? false
+                      : true
+                  }
+                  onProfile
                   noNavigate
                   children={
                     <ChildrenCard
