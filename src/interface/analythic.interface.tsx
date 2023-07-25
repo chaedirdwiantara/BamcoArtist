@@ -171,6 +171,10 @@ export interface IncomeData {
   totalTips: number;
 }
 
+export interface TotalIncome {
+  totalIncome: number;
+}
+
 export interface IncomeDataJoin {
   description: string;
   maxValue: number;

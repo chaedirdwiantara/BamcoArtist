@@ -26,7 +26,12 @@ import {
   DropDownSortType,
 } from '../../data/dropdown';
 import {color, font, typography} from '../../theme';
-import {heightPercentage, heightResponsive, widthResponsive} from '../../utils';
+import {
+  elipsisText,
+  heightPercentage,
+  heightResponsive,
+  widthResponsive,
+} from '../../utils';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {MainTabParams, RootStackParams} from '../../navigations';
@@ -65,6 +70,8 @@ import {useQuery} from 'react-query';
 import {useVideoStore} from '../../store/video.store';
 import {useUploadImageHook} from '../../hooks/use-uploadImage.hook';
 import {useHeaderAnimation} from '../../hooks/use-header-animation.hook';
+import {useShareHook} from '../../hooks/use-share.hook';
+import {imageShare} from '../../utils/share';
 
 const {height} = Dimensions.get('screen');
 const {StatusBarManager} = NativeModules;
@@ -78,9 +85,6 @@ interface PostListProps {
   uriVideo?: string;
   allowRefresh?: boolean;
 }
-
-const urlText =
-  'https://open.ssu.io/track/19AiJfAtRiccvSU1EWcttT?si=36b9a686dad44ae0';
 
 const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
   const {t} = useTranslation();
@@ -98,6 +102,13 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
   } = props;
 
   const {handleScroll, compCTranslateY} = useHeaderAnimation();
+  const {
+    shareLink,
+    getShareLink,
+    successGetLink,
+    setSelectedSharePost,
+    selectedSharePost,
+  } = useShareHook();
 
   const [recorder, setRecorder] = useState<string[]>([]);
   const [selectedId, setSelectedId] = useState<string[]>();
@@ -288,8 +299,9 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
     );
   };
 
-  const shareOnPress = () => {
+  const shareOnPress = (content: PostList) => {
     setModalShare(true);
+    setSelectedSharePost(content);
   };
 
   //Credit onPress
@@ -328,7 +340,7 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
   const onPressCopy = () => {
     setIsCopied(true);
     if (Clipboard && Clipboard.setString) {
-      Clipboard.setString(urlText);
+      Clipboard.setString(shareLink);
     }
   };
 
@@ -376,6 +388,22 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
     }
   };
   // ! END OF MUSIC AREA
+
+  // SHARE LINK
+  useEffect(() => {
+    if (selectedSharePost) {
+      getShareLink({
+        scheme: `/feed/${selectedSharePost.id}`,
+        image: imageShare(selectedSharePost),
+        title: t('ShareLink.Feed.Title', {
+          musician: selectedSharePost.musician.fullname,
+        }),
+        description: selectedSharePost.caption
+          ? elipsisText(selectedSharePost.caption, 50)
+          : t('ShareLink.Feed.Subtitle'),
+      });
+    }
+  }, [selectedSharePost]);
 
   return (
     <>
@@ -499,7 +527,7 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
                   likePressed={likePressedInFeed(selectedId, item, recorder)}
                   likeCount={likesCountInFeed(selectedId, item, recorder)}
                   tokenOnPress={() => tokenOnPress(item.musician.uuid)}
-                  shareOnPress={shareOnPress}
+                  shareOnPress={() => shareOnPress(item)}
                   commentCount={item.commentsCount}
                   myPost={item.musician.uuid === uuid}
                   selectedMenu={setSelectedMenu}
@@ -563,7 +591,7 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
         </>
       ) : null}
       <ModalShare
-        url={urlText}
+        url={shareLink}
         modalVisible={modalShare}
         onPressClose={() => setModalShare(false)}
         titleModal={t('General.Share.Feed')}
@@ -574,6 +602,7 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
             ? onModalShareHide
             : () => console.log(modalShare, 'modal is hide')
         }
+        disabled={!successGetLink}
       />
       <SsuToast
         modalVisible={toastVisible}

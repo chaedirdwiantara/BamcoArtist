@@ -21,7 +21,7 @@ import {
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {MainTabParams, RootStackParams} from '../../navigations';
-import {heightPercentage, widthResponsive} from '../../utils';
+import {elipsisText, heightPercentage, widthResponsive} from '../../utils';
 import {ms, mvs} from 'react-native-size-matters';
 import CommentSection from './CommentSection';
 import ImageModal from './ImageModal';
@@ -32,6 +32,7 @@ import {
   CommentList,
   CommentList2,
   CommentList3,
+  DetailPostData,
   PostList,
 } from '../../interface/feed.interface';
 import {useProfileHook} from '../../hooks/use-profile.hook';
@@ -47,6 +48,8 @@ import {profileStorage} from '../../hooks/use-storage.hook';
 import DetailChildrenCard from './DetailChildrenCard';
 import {usePlayerStore} from '../../store/player.store';
 import Clipboard from '@react-native-community/clipboard';
+import {imageShare} from '../../utils/share';
+import {useShareHook} from '../../hooks/use-share.hook';
 
 export const {width} = Dimensions.get('screen');
 
@@ -58,10 +61,6 @@ type cmntToCmnt = {
 };
 
 type PostDetailProps = NativeStackScreenProps<RootStackParams, 'PostDetail'>;
-
-//? Dummy url waiting update from BE
-const urlText =
-  'https://open.ssu.io/track/19AiJfAtRiccvSU1EWcttT?si=36b9a686dad44ae0';
 
 export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   const {t} = useTranslation();
@@ -110,6 +109,14 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
     dataProfile,
     getProfileUser,
   } = useProfileHook();
+
+  const {
+    shareLink,
+    getShareLink,
+    successGetLink,
+    setSelectedSharePost,
+    selectedSharePost,
+  } = useShareHook();
 
   const {creditCount, getCreditCount} = useCreditHook();
 
@@ -883,8 +890,13 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
     setModalDonate(true);
   };
 
-  const shareOnPress = (musicianId: string, MyPost: boolean) => {
+  const shareOnPress = (
+    musicianId: string,
+    MyPost: boolean,
+    content: DetailPostData,
+  ) => {
     setModalShare(true);
+    setSelectedSharePost(content);
     if (MyPost) {
       setSelectedMusicianId(musicianId);
     }
@@ -898,7 +910,7 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   const onPressCopy = () => {
     setIsCopied(true);
     if (Clipboard && Clipboard.setString) {
-      Clipboard.setString(urlText);
+      Clipboard.setString(shareLink);
       sendLogShare({id: selectedMusicianId});
     }
   };
@@ -955,6 +967,22 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
     show && setWithoutBottomTab(false);
     navigation.goBack();
   };
+
+  // SHARE LINK
+  useEffect(() => {
+    if (selectedSharePost) {
+      getShareLink({
+        scheme: `/feed/${selectedSharePost.id}`,
+        image: imageShare(selectedSharePost),
+        title: t('ShareLink.Feed.Title', {
+          musician: selectedSharePost.musician.fullname,
+        }),
+        description: selectedSharePost.caption
+          ? elipsisText(selectedSharePost.caption, 50)
+          : t('ShareLink.Feed.Subtitle'),
+      });
+    }
+  }, [selectedSharePost]);
 
   return (
     <View style={styles.root}>
@@ -1016,6 +1044,7 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
                   shareOnPress(
                     data.id,
                     dataPostDetail.musician.uuid === dataProfile?.data.uuid,
+                    dataPostDetail,
                   )
                 }
                 commentOnPress={() => commentOnPress(data.id, musicianName)}
@@ -1088,7 +1117,7 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
           userAvatarUri={dataProfileImg}
         />
         <ModalShare
-          url={urlText}
+          url={shareLink}
           modalVisible={modalShare}
           onPressClose={() => setModalShare(false)}
           titleModal={t('General.Share.Feed')}
@@ -1099,6 +1128,7 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
               ? onModalShareHide
               : () => console.log(modalShare, 'modal is hide')
           }
+          disabled={!successGetLink}
         />
         <SsuToast
           modalVisible={toastVisible}

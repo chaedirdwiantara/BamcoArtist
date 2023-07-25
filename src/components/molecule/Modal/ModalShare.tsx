@@ -36,6 +36,7 @@ interface ModalShareProps {
   onPressCopy: () => void;
   hideMusic?: boolean;
   onModalHide?: () => void;
+  disabled?: boolean;
 }
 
 export const ModalShare: React.FC<ModalShareProps> = ({
@@ -51,6 +52,7 @@ export const ModalShare: React.FC<ModalShareProps> = ({
   onPressCopy,
   hideMusic,
   onModalHide,
+  disabled = true,
 }) => {
   const {t} = useTranslation();
   const onPressCopyLink = () => {
@@ -93,13 +95,13 @@ export const ModalShare: React.FC<ModalShareProps> = ({
           onPress={onPressJustCopy}>
           <Text style={styles.copyLink}>{url}</Text>
           <Gap width={widthPercentage(5)} />
-          <CopyIcon />
         </TouchableOpacity>
 
         <Button
           label={t('Btn.CopyLink')}
-          containerStyles={styles.btnCopy}
+          containerStyles={disabled ? styles.btnCopyDisabled : styles.btnCopy}
           onPress={onPressCopyLink}
+          disabled={disabled}
         />
         <Button
           type="border"
@@ -150,6 +152,12 @@ const styles = StyleSheet.create({
     width: width * 0.9,
     aspectRatio: heightPercentage(327 / 38),
     marginTop: heightPercentage(20),
+  },
+  btnCopyDisabled: {
+    width: width * 0.9,
+    aspectRatio: heightPercentage(327 / 38),
+    marginTop: heightPercentage(20),
+    opacity: 0.5,
   },
   btnCancel: {
     width: width * 0.9,

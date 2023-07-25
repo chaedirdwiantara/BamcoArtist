@@ -6,6 +6,7 @@ import {
   deleteProfile,
   getLastStep,
   getOtherUserProfile,
+  getPostAndFans,
   getProfile,
   getProfileCompletion,
   getTotalCount,
@@ -256,6 +257,36 @@ export const useProfileHook = () => {
     }
   };
 
+  const getTotalSongAndAlbum = async (props: ParamsProps) => {
+    setIsLoading(true);
+    try {
+      const response = await getTotalCount(props);
+      return {
+        data: response?.data,
+        message: response?.message,
+      };
+    } catch (error) {
+      setIsError(true);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const getTotalPostAndFans = async () => {
+    setIsLoading(true);
+    try {
+      const response = await getPostAndFans();
+      return {
+        data: response?.data,
+        message: response?.message,
+      };
+    } catch (error) {
+      setIsError(true);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return {
     isLoading,
     isLoadingStep,
@@ -286,5 +317,7 @@ export const useProfileHook = () => {
     setLastStepWizard,
     getLastStepWizard,
     getProfileProgress,
+    getTotalSongAndAlbum,
+    getTotalPostAndFans,
   };
 };
