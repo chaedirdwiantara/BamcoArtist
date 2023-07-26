@@ -69,6 +69,7 @@ import {SecurityScreen} from '../screen/Setting/Security';
 import {TnCAndPPScreen} from '../screen/Setting/TnCAndPP';
 import {AboutDeletionScreen} from '../screen/Setting/DeleteAccount/AboutDeletion';
 import {InputDeletionScreen} from '../screen/Setting/DeleteAccount/InputDeletion';
+import {SendAppealScreen} from '../screen/Setting/SendAppeal';
 
 // Profile
 import {ProfileScreen} from '../screen/Profile/Profile';
@@ -151,6 +152,7 @@ import {OtpEmailScreen} from '../screen/Setting/Email/OTP';
 import {SplashScreen} from '../screen/SplashScreen';
 import {SongAlbum} from '../interface/song.interface';
 import ListPlaylist from '../screen/Playlist/ListPlaylist';
+import {MyQRCode} from '../screen/Setting/MyQRCode';
 
 export type RootStackParams = {
   AboutDeletion: undefined;
@@ -245,10 +247,12 @@ export type RootStackParams = {
   RecoverAccount: undefined;
   Referral: undefined;
   ReferralCode: undefined;
+  SendAppeal: {title: string};
   SendReport: {
     title: string;
   };
   Setting: undefined;
+  MyQRCode: {uuid?: string};
   Security: {
     info?: boolean;
     message?: string;
@@ -497,8 +501,10 @@ export const RootStackScreen = () => (
       name="ExclusiveContentSetting"
       component={ExclusiveContentSetting}
     />
+    <RootStack.Screen name="SendAppeal" component={SendAppealScreen} />
     <RootStack.Screen name="SendReport" component={SendReportScreen} />
     <RootStack.Screen name="Setting" component={SettingScreen} />
+    <RootStack.Screen name="MyQRCode" component={MyQRCode} />
     <RootStack.Screen name="SongDetails" component={SongDetailsScreen} />
     <RootStack.Screen name="ShowCredit" component={ShowCreditScreen} />
     <RootStack.Screen name="Album" component={AlbumScreen} />

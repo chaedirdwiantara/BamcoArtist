@@ -110,8 +110,8 @@ export const ModalDonate: React.FC<ModalDonateProps> = ({
         ownerUserName: detailMusician?.data?.username || '',
         ownerFullName: detailMusician?.data?.fullname || '',
         ownerImage:
-          detailMusician?.data?.imageProfileUrls?.length > 0
-            ? detailMusician?.data?.imageProfileUrls[0]?.image
+          detailMusician?.data?.imageProfile?.length > 0
+            ? detailMusician?.data?.imageProfile[0]?.image
             : '',
         package: '',
         duration: Number(selectedCreditType),

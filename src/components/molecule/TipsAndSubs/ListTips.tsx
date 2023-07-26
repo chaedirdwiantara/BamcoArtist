@@ -199,7 +199,7 @@ const ListTips: React.FC<ListTipsProps> = props => {
           listTips?.map((val: TipsDataType, index: number) => (
             <DonateCardContent
               key={index}
-              avatarUri={val.ownerImage}
+              avatarUri={val.ownerImage || ''}
               name={val.ownerFullName}
               username={`@${val.ownerUserName}`}
               detail={[

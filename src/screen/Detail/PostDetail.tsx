@@ -804,19 +804,23 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
         images,
         createdAt,
         updatedAt,
-        isPremium,
+        isPremiumPost,
         musician,
         isLiked,
         quoteToPost,
         video,
         timeAgo,
         isSubscribe,
+        viewsCount,
+        shareCount,
       } = dataPostDetail;
 
       switch (selectedValue) {
+        //? Delete Post
         case '2':
           setDeletePost({id: selectedIdPost});
           break;
+        //? Edit Post
         case '1':
           const toEditPost: PostList = {
             id,
@@ -827,19 +831,23 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
             images,
             createdAt,
             updatedAt,
-            isPremiumPost: isPremium,
+            isPremiumPost,
             musician,
             isLiked,
             quoteToPost,
             video,
             timeAgo,
             isSubscribe,
+            viewsCount,
+            shareCount,
           };
           navigation.navigate('CreatePost', {postData: toEditPost});
           break;
+        //? To Musician Profile
         case '11':
           navigation.navigate('MusicianProfile', {id: musician.uuid});
           break;
+        //? Report Post
         case '22':
           console.log('REPORT', selectedIdPost);
           break;
@@ -1051,9 +1059,9 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
                 selectedIdPost={setSelectedIdPost}
                 isPremium={data.isPremiumPost}
                 disableComment={false}
-                showDropdown={
-                  dataPostDetail.musician.uuid !== dataProfile?.data.uuid
-                }
+                viewCount={dataPostDetail.viewsCount}
+                shareCount={dataPostDetail.shareCount}
+                showDropdown
                 children={
                   <DetailChildrenCard
                     data={dataPostDetail}

@@ -351,12 +351,14 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
       selectedMenu !== undefined &&
       dataMain
     ) {
-      if (t(selectedMenu.label) === 'Delete Post') {
+      //? Delete Post
+      if (selectedMenu.value === '2') {
         setDeletePost({id: selectedIdPost});
         setDataMain(dataMain.filter(data => data.id !== selectedIdPost));
         setSelectedMenu(undefined);
       }
-      if (t(selectedMenu.label) === 'Edit Post') {
+      //? Edit Post
+      if (selectedMenu.value === '1') {
         setUriVideo(null);
         setDataCreatePost(null);
         setDataVideo(undefined);
@@ -534,6 +536,9 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
                   idPost={item.id}
                   selectedIdPost={setSelectedIdPost}
                   isPremium={item.isPremiumPost}
+                  viewCount={item.viewsCount}
+                  shareCount={item.shareCount}
+                  showDropdown
                   children={
                     <ChildrenCard
                       data={item}

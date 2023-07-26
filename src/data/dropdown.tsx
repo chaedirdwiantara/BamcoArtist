@@ -246,3 +246,7 @@ export const dataReportPost: DataDropDownType[] = [
   {label: 'Post.Dropdown.Visit', value: '11'},
   {label: 'Post.Dropdown.Report', value: '22'},
 ];
+
+export const dataReportPostProfile: DataDropDownType[] = [
+  {label: 'Post.Dropdown.Report', value: '22'},
+];

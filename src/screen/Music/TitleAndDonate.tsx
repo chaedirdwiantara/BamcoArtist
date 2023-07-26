@@ -10,12 +10,14 @@ interface TitleAndDonateProps {
   albumName?: string;
   coinOnPress: () => void;
   artistOnPress: () => void;
+  showDonate?: boolean;
 }
 
 const TitleAndDonate: FC<TitleAndDonateProps> = (
   props: TitleAndDonateProps,
 ) => {
-  const {title, artist, albumName, coinOnPress, artistOnPress} = props;
+  const {title, artist, albumName, coinOnPress, artistOnPress, showDonate} =
+    props;
   return (
     <View style={styles.container}>
       <View>
@@ -33,11 +35,13 @@ const TitleAndDonate: FC<TitleAndDonateProps> = (
           </Text>
         </View>
       </View>
-      <View style={styles.iconStyle}>
-        <TouchableOpacity onPress={coinOnPress}>
-          <CoinCIcon />
-        </TouchableOpacity>
-      </View>
+      {showDonate && (
+        <View style={styles.iconStyle}>
+          <TouchableOpacity onPress={coinOnPress}>
+            <CoinCIcon />
+          </TouchableOpacity>
+        </View>
+      )}
     </View>
   );
 };

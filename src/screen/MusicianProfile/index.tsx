@@ -172,7 +172,11 @@ const MusicianProfile: FC<PostDetailProps> = ({route}: PostDetailProps) => {
         onPressDonate={onPressDonate}
         modalVisible={modalDonate}
         onPressClose={onPressCloseModalDonate}
-        onModalHide={() => setModalSuccessDonate(true)}
+        onModalHide={() =>
+          setTimeout(() => {
+            setModalSuccessDonate(true);
+          }, 1000)
+        }
       />
       <ModalSuccessDonate
         modalVisible={modalSuccessDonate && trigger2ndModal ? true : false}

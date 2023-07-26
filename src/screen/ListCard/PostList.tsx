@@ -111,7 +111,8 @@ const PostListHome: FC<PostListProps> = (props: PostListProps) => {
 
   // * UPDATE HOOKS
   const [selectedIdPost, setSelectedIdPost] = useState<string>();
-  const [selectedMenu, setSelectedMenu] = useState<DataDropDownType>();
+  const [selectedMenuPost, setSelectedMenuPost] = useState<DataDropDownType>();
+  const [selectedUserUuid, setSelectedUserUuid] = useState<string>();
   const [selectedCategoryMenu, setSelectedCategoryMenu] =
     useState<DataDropDownType>();
   const [selectedFilterMenu, setSelectedFilterMenu] =
@@ -230,26 +231,27 @@ const PostListHome: FC<PostListProps> = (props: PostListProps) => {
     }
   };
 
-  // ! UPDATE POST AREA
+  // ! REPORT POST AREA
   useEffect(() => {
-    if (
-      selectedIdPost !== undefined &&
-      selectedMenu !== undefined &&
-      dataMain
-    ) {
-      if (t(selectedMenu.label) === 'Delete Post') {
-        setDeletePost({id: selectedIdPost});
-        setDataMain(dataMain.filter(data => data.id !== selectedIdPost));
-        setSelectedMenu(undefined);
+    if (selectedIdPost && selectedMenuPost && selectedUserUuid && dataMain) {
+      const selectedValue = t(selectedMenuPost.value);
+
+      switch (selectedValue) {
+        case '11':
+          navigation.navigate('MusicianProfile', {
+            id: selectedUserUuid,
+          });
+          break;
+        case '22':
+          console.log('REPORT', selectedIdPost);
+          break;
+        default:
+          break;
       }
-      if (t(selectedMenu.label) === 'Edit Post') {
-        let dataSelected = dataMain.filter(data => data.id === selectedIdPost);
-        navigation.navigate('CreatePost', {postData: dataSelected[0]});
-        setSelectedMenu(undefined);
-      }
+      setSelectedMenuPost(undefined);
     }
-  }, [selectedIdPost, selectedMenu, dataMain]);
-  // ! END OF UPDATE POST AREA
+  }, [selectedIdPost, selectedMenuPost, selectedUserUuid]);
+  // ! END OF REPORT POST AREA
 
   // ! MUSIC AREA
   const onPressPlaySong = (val: PostList) => {
@@ -356,10 +358,15 @@ const PostListHome: FC<PostListProps> = (props: PostListProps) => {
                   shareOnPress={() => shareOnPress(item)}
                   commentCount={item.commentsCount}
                   myPost={item.musician.uuid === profileStorage()?.uuid}
-                  selectedMenu={setSelectedMenu}
+                  musicianUuid={item.musician.uuid}
                   idPost={item.id}
+                  selectedMenu={setSelectedMenuPost}
                   selectedIdPost={setSelectedIdPost}
+                  selectedUserUuid={setSelectedUserUuid}
                   isPremium={item.isPremiumPost}
+                  viewCount={item.viewsCount}
+                  shareCount={item.shareCount}
+                  showDropdown
                   children={
                     <ChildrenCard
                       data={item}

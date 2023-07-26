@@ -36,4 +36,10 @@ const kFormatter2 = (num: number = 0, fixed: number = 0) => {
     : Math.sign(num) * Math.abs(num);
 };
 
-export {toCurrency, kFormatter, kFormatter2};
+const kFormatter3 = (num: number = 0) => {
+  const numberString = ((Math.sign(num) * Math.abs(num)) / 1000).toString();
+  const value = numberString.substring(0, numberString.length - 1);
+  return Math.abs(num) > 999 ? value + 'K' : Math.sign(num) * Math.abs(num);
+};
+
+export {toCurrency, kFormatter, kFormatter2, kFormatter3};

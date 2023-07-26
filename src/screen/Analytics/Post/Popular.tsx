@@ -231,6 +231,8 @@ const PopularPost: FC<PopularPostProps> = (props: PopularPostProps) => {
         quoteToPost: analyticPostData?.quoteToPost,
         video: analyticPostData?.video,
         timeAgo: analyticPostData.timeAgo,
+        viewsCount: analyticPostData.viewsCount,
+        shareCount: analyticPostData.shareCount,
       }
     : undefined;
 
@@ -341,7 +343,7 @@ const PopularPost: FC<PopularPostProps> = (props: PopularPostProps) => {
                   duration={playerProgress.duration}
                   seekPlayer={seekPlayer}
                   isIdNowPlaying={analyticPostData.id === idNowPlaying}
-                  imgWidth={125}
+                  imgWidth={144}
                   imgWidth2={290}
                 />
               ) : null

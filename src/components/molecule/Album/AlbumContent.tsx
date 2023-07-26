@@ -246,6 +246,9 @@ export const AlbumContent: React.FC<Props> = ({
                   : 0
               }
               onPress={() => setModalDonate(true)}
+              showDonate={
+                detailAlbum?.musician?.uuid !== profileStorage()?.uuid
+              }
             />
           )}
         </View>

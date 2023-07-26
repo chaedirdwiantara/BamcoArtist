@@ -21,7 +21,9 @@ const {height} = Dimensions.get('screen');
 
 interface DropdownV2Props {
   id?: string;
+  uuid?: string;
   selectedid?: (id: string) => void;
+  selectedUserUuid?: (uuid: string) => void;
   selectedMenu: (data: DataDropDownType) => void;
   dataFilter: DataDropDownType[];
   containerStyle?: ViewStyle;
@@ -35,8 +37,10 @@ interface DropdownV2Props {
 const DropdownMore: React.FC<DropdownV2Props> = (props: DropdownV2Props) => {
   const {
     id,
+    uuid,
     selectedid,
     selectedMenu,
+    selectedUserUuid,
     dataFilter,
     containerStyle,
     iconContainerStyle,
@@ -61,6 +65,9 @@ const DropdownMore: React.FC<DropdownV2Props> = (props: DropdownV2Props) => {
       setMenuSelected(undefined);
       if (id) {
         selectedid?.(id);
+      }
+      if (uuid) {
+        selectedUserUuid?.(uuid);
       }
     }
   };

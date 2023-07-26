@@ -21,6 +21,7 @@ import {usePlayerHook} from '../../hooks/use-player.hook';
 import {RootStackParams} from '../../navigations';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {useCreditHook} from '../../hooks/use-credit.hook';
+import {profileStorage} from '../../hooks/use-storage.hook';
 
 export const {width} = Dimensions.get('screen');
 
@@ -119,6 +120,7 @@ export const MusicPlayer: FC<MusicProps> = ({navigation}: MusicProps) => {
           artist={currentTrack?.artist ?? ''}
           coinOnPress={coinOnPress}
           artistOnPress={artistOnPress}
+          showDonate={currentTrack?.musicianId !== profileStorage()?.uuid}
         />
       </View>
       {/* slider */}

@@ -8,13 +8,23 @@ import Merch from './Merch';
 
 interface MainTabProps {
   uuid?: string;
+  coverImage: string;
+  title: string;
+  description: string;
 }
 
 const MainTab: FC<MainTabProps> = (props: MainTabProps) => {
-  const {uuid} = props;
+  const {coverImage, title, description, uuid} = props;
   return (
     <View style={styles.container}>
-      {uuid && <PopularPost uuidMusician={uuid} />}
+      {uuid && (
+        <PopularPost
+          uuidMusician={uuid}
+          coverImage={coverImage}
+          title={title}
+          description={description}
+        />
+      )}
       {uuid && <MostPlayed uuidMusician={uuid} />}
       <Merch />
       {uuid && <Released uuidMusician={uuid} />}

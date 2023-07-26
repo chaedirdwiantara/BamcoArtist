@@ -32,6 +32,12 @@ interface SettingProps {
   onPressGoTo: (screenName: string, params?: any) => void;
 }
 
+interface ListReportType {
+  title: string;
+  subtitle: string;
+  disabled?: boolean;
+}
+
 export const SettingContent: React.FC<SettingProps> = ({
   onPressGoBack,
   onPressGoTo,
@@ -55,7 +61,7 @@ export const SettingContent: React.FC<SettingProps> = ({
         modalConfirm: false,
       });
     } else {
-      onPressGoTo(val.replace(/\s/g, ''));
+      onPressGoTo(val.replace(/\s/g, ''), {fromScreen: 'setting'});
     }
   };
 
@@ -65,22 +71,26 @@ export const SettingContent: React.FC<SettingProps> = ({
     );
   };
 
-  const ListReport = ({title, subtitle}: {title: string; subtitle: string}) => {
+  const ListReport = (props: ListReportType) => {
+    const {title, subtitle, disabled = false} = props;
+    const newColor = disabled ? color.Dark[100] : color.Neutral[10];
+    const nextScreen =
+      title === t('Setting.Report.Modal.SendAppeal')
+        ? 'SendAppeal'
+        : 'SendReport';
+
     return (
       <TouchableOpacity
         style={{marginTop: heightPercentage(10)}}
+        disabled={disabled}
         onPress={() => {
           title === t('Setting.Report.Modal.Help')
             ? MailTo()
-            : onPressGoTo('SendReport', {title});
+            : onPressGoTo(nextScreen, {title});
           closeModal();
         }}>
-        <Text style={[typography.Subtitle1, {color: color.Neutral[10]}]}>
-          {title}
-        </Text>
-        <Text style={[typography.Body2, {color: color.Neutral[10]}]}>
-          {subtitle}
-        </Text>
+        <Text style={[typography.Subtitle1, {color: newColor}]}>{title}</Text>
+        <Text style={[typography.Body2, {color: newColor}]}>{subtitle}</Text>
       </TouchableOpacity>
     );
   };
@@ -98,6 +108,11 @@ export const SettingContent: React.FC<SettingProps> = ({
         <ListReport
           title={t('Setting.Report.Modal.Suggest')}
           subtitle={t('Setting.Report.Modal.TextSuggest')}
+        />
+        <ListReport
+          title={t('Setting.Report.Modal.SendAppeal')}
+          subtitle={t('Setting.Report.Modal.TextSendAppeal')}
+          disabled={true}
         />
         <ListReport
           title={t('Setting.Report.Modal.Help')}
