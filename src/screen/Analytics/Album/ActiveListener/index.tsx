@@ -75,7 +75,7 @@ const ActiveListener = () => {
             'Home.Tab.Analytic.Album.Listeners.Growth.FanStream',
           )} ${t(selectedRange.label)}`}
           cardTwoAvgStreamCompare={albumTabData.fansStreamCompared}
-          cardTwoAvgProgress={albumTabData.fansStreamPogress}
+          cardTwoAvgProgress={albumTabData.fansStreamProgress}
           type={t(selectedRange.label)}
           noOfLines={2}
         />

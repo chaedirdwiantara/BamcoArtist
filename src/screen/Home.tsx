@@ -9,10 +9,8 @@ import {
   Text,
   RefreshControl,
   Platform,
-  FlatList,
 } from 'react-native';
 import {useNavigation, useFocusEffect} from '@react-navigation/native';
-import {useQuery} from 'react-query';
 import {
   NativeStackNavigationProp,
   NativeStackScreenProps,
@@ -28,7 +26,6 @@ import {
   BottomSheetGuest,
   SsuToast,
   Gap,
-  ListImageDesc,
   CreatePostShortcut,
   ModalConfirm,
   SearchBar,
@@ -36,16 +33,10 @@ import {
 } from '../components';
 import {font} from '../theme';
 import Color from '../theme/Color';
-import TopSong from './ListCard/TopSong';
-import NewSong from './ListCard/NewSong';
 import {defaultBanner, listOverviewCard} from '../data/home';
 import {useFcmHook} from '../hooks/use-fcm.hook';
-import {useSongHook} from '../hooks/use-song.hook';
-import {useHomeHook} from '../hooks/use-home.hook';
 import {dataPlaceHolder} from '../data/placeHolder';
-import {SongList} from '../interface/song.interface';
 import * as FCMService from '../service/notification';
-import {useSearchHook} from '../hooks/use-search.hook';
 import {useCreditHook} from '../hooks/use-credit.hook';
 import {usePlayerHook} from '../hooks/use-player.hook';
 import {useBannerHook} from '../hooks/use-banner.hook';
@@ -65,8 +56,6 @@ import {
   widthPercentage,
   widthResponsive,
 } from '../utils';
-import EmptyStateHome from '../components/molecule/EmptyState/EmptyStateHome';
-import ListPlaylistHome from '../components/molecule/ListCard/ListPlaylistHome';
 import {ModalConfirmChoice} from '../components/molecule/Modal/ModalConfirmChoice';
 import OverviewCard from '../components/molecule/ListCard/OverviewCard';
 import {useVideoStore} from '../store/video.store';
@@ -74,6 +63,14 @@ import Fans from './Analytics/Fans';
 import Income from './Analytics/Income';
 import AlbumAnalytic from './Analytics/Album';
 import PostAnalytic from './Analytics/Post';
+import Explore from './Analytics/Explore';
+import {
+  DataTotalCountPropsType,
+  TotalPostAndFansResponseType,
+} from '../interface/profile.interface';
+import {TotalIncome} from '../interface/analythic.interface';
+import {useQuery} from 'react-query';
+import {useAnalyticsHook} from '../hooks/use-analytics.hook';
 
 type OnScrollEventHandler = (
   event: NativeSyntheticEvent<NativeScrollEvent>,
@@ -92,33 +89,25 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
   const {i18n, t} = useTranslation();
   const currentLanguage = i18n.language;
-  const {dataAlbumComingSoon, getListDiveIn, getListComingSoon} = useHomeHook();
   const {isLoadingBanner, dataBanner, getListDataBanner} = useBannerHook();
-  const {dataProfile, profileProgress, getProfileUser, getProfileProgress} =
-    useProfileHook();
-  const {addFcmToken} = useFcmHook();
-  const {showPlayer, hidePlayer, addPlaylist} = usePlayerHook();
   const {
-    isLoadingSong,
-    dataTopSong,
-    dataNewSong,
-    getListDataTopSong,
-    getListDataNewSong,
-  } = useSongHook();
+    dataProfile,
+    profileProgress,
+    getProfileUser,
+    getProfileProgress,
+    getTotalSongAndAlbum,
+    getTotalPostAndFans,
+  } = useProfileHook();
+  const {addFcmToken} = useFcmHook();
+  const {hidePlayer} = usePlayerHook();
   const {counter, getCountNotification} = useNotificationHook();
   const {creditCount, getCreditCount} = useCreditHook();
-  const {
-    getListMoodPublic,
-    getListGenrePublic,
-    dataExclusiveContent,
-    getExclusiveContent,
-  } = useSettingHook();
-  const {getSearchPlaylists} = useSearchHook();
+  const {dataExclusiveContent, getExclusiveContent} = useSettingHook();
+  const {getIncome} = useAnalyticsHook();
 
   const {uriVideo, setUriVideo} = useVideoStore();
 
   const isLogin = storage.getBoolean('isLogin');
-  const [selectedIndexSong, setSelectedIndexSong] = useState(-0);
   const [selectedIndexAnalytic, setSelectedIndexAnalytic] = useState(-0);
   const [refreshing, setRefreshing] = useState<boolean>(false);
   const [showModalPost, setShowModalPost] = useState<ModalPostState>({
@@ -129,17 +118,30 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
     'choiceA' | 'choiceB' | undefined
   >();
 
+  const [dataSongAlbum, setDataSongAlbum] = useState<DataTotalCountPropsType>();
+  const [dataFansPost, setDataFansPost] =
+    useState<TotalPostAndFansResponseType>();
+  const [dataIncome, setDataIncome] = useState<TotalIncome>();
+
+  const {data: songAndAlbumData, refetch: refetchTotalSongAlbum} = useQuery(
+    'overview-totalSongAlbum',
+    () => getTotalSongAndAlbum({uuid}),
+  );
+  const {data: fansAndPostData, refetch: refetchTotalFansPost} = useQuery(
+    'overview-totalFansPost',
+    () => getTotalPostAndFans(),
+  );
+  const {data: incomeData, refetch: refetchIncome} = useQuery(
+    'overview-income',
+    () => getIncome('monthly'),
+  );
+
   const JSONProfile = storage.getString('profile');
   let uuid: string = '';
   if (JSONProfile) {
     const profileObject = JSON.parse(JSONProfile);
     uuid = profileObject.uuid;
   }
-
-  const {data: dataPlaylist, refetch: refetchPlaylist} = useQuery(
-    ['/search-playlist'],
-    () => getSearchPlaylists({keyword: ''}),
-  );
 
   const [randomPlaceHolder, setRandomPlaceHolder] = useState(
     dataPlaceHolder[Math.floor(Math.random() * dataPlaceHolder.length)],
@@ -160,35 +162,30 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
   useEffect(() => {
     getCountNotification();
     getCreditCount();
-    getListMoodPublic();
-    getListGenrePublic();
-    getListDiveIn();
-    refetchPlaylist();
-    getListComingSoon();
+    refetchTotalSongAlbum();
+    refetchTotalFansPost();
+    refetchIncome();
     setTimeout(() => {
       setRefreshing(false);
     }, 1000);
   }, [refreshing]);
 
+  useEffect(() => {
+    setDataFansPost(fansAndPostData?.data);
+  }, [fansAndPostData]);
+
+  useEffect(() => {
+    setDataSongAlbum(songAndAlbumData?.data);
+  }, [songAndAlbumData]);
+
+  useEffect(() => {
+    setDataIncome(incomeData);
+  }, [incomeData]);
+
   // Doesn't trigger the banner when pull refresh
   useEffect(() => {
     getListDataBanner();
   }, []);
-
-  // Triggering when click love on the same song in top & new song tab
-  useFocusEffect(
-    useCallback(() => {
-      if (selectedIndexSong === 0) {
-        getListDataTopSong();
-      } else {
-        getListDataNewSong();
-      }
-
-      setTimeout(() => {
-        setRefreshing(false);
-      }, 1000);
-    }, [refreshing, selectedIndexSong]),
-  );
 
   const [modalGuestVisible, setModalGuestVisible] = useState<boolean>(false);
   const [scrollEffect, setScrollEffect] = useState<boolean>(false);
@@ -249,11 +246,6 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
     addFcmToken(token);
   };
 
-  const [filterSong] = useState([
-    {filterName: 'Home.Tab.TopSong.Title'},
-    {filterName: 'Home.Tab.NewSong.Title'},
-  ]);
-
   const [filterAnalytic] = useState([
     {filterName: 'Home.Tab.Analytic.Fans.Title'},
     {filterName: 'Home.Tab.Analytic.Post.Title'},
@@ -262,23 +254,12 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
     {filterName: 'Home.Tab.Analytic.Explore.Title'},
   ]);
 
-  const filterDataSong = (item: any, index: any) => {
-    setSelectedIndexSong(index);
-  };
-
   const filterDataAnalytic = (item: any, index: any) => {
     setSelectedIndexAnalytic(index);
   };
 
   const handleSearchButton = () => {
     navigation.navigate('SearchScreen');
-  };
-
-  const handleWebview = (title: string, url: string) => {
-    navigation.navigate('Webview', {
-      title: title,
-      url: url,
-    });
   };
 
   const rightIconComp = () => {
@@ -303,16 +284,6 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
     setScrollEffect(scrolled);
   };
 
-  const onPressTopSong = (val: SongList) => {
-    addPlaylist({dataSong: dataTopSong, playSongId: val.id, isPlay: true});
-    showPlayer();
-  };
-
-  const onPressNewSong = (val: SongList) => {
-    addPlaylist({dataSong: dataNewSong, playSongId: val.id, isPlay: true});
-    showPlayer();
-  };
-
   const goToScreen = (screen: 'MusicPlayer' | 'TopupCoin' | 'Notification') => {
     navigation.navigate(screen);
   };
@@ -323,25 +294,6 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
 
   const onPressCoin = () => {
     isLogin ? goToScreen('TopupCoin') : setModalGuestVisible(true);
-  };
-
-  const goToListMusic = (
-    name: string,
-    type: string,
-    id?: number,
-    filterBy?: string,
-  ) => {
-    navigation.navigate('ListMusic', {
-      id,
-      type,
-      filterBy,
-      title: name,
-      fromMainTab: true,
-    });
-  };
-
-  const goToDetailAlbum = (name: string, id: number) => {
-    navigation.navigate('Album', {id, type: 'coming_soon'});
   };
 
   const handleCreatePost = () => {
@@ -400,6 +352,13 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
       isSetExclusiveSetting: false,
     });
     navigation.navigate('ExclusiveContentSetting', {type: 'navToCreatePost'});
+  };
+
+  const handleWebview = (title: string, url: string) => {
+    navigation.navigate('Webview', {
+      title: title,
+      url: url,
+    });
   };
 
   const handleMiniPlayerOnPress = () => {
@@ -469,22 +428,27 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
         />
 
         <Text style={styles.titleOverview}>{t('Home.OverviewCard.Title')}</Text>
-        <FlatList
-          data={listOverviewCard}
-          showsVerticalScrollIndicator={false}
-          numColumns={2}
-          keyExtractor={item => item.id.toString()}
-          contentContainerStyle={{alignItems: 'center'}}
-          renderItem={({item}) => (
-            <OverviewCard
-              key={item.id}
-              amount={item.amount}
-              path={item.path}
-              title={t(item.title)}
-              type={item.id === 1 || item.id === 2 ? 'black' : 'white'}
-            />
-          )}
-        />
+        <View style={styles.containerOverview}>
+          {listOverviewCard.map((item, index) => {
+            const newData = [
+              dataFansPost?.totalFans,
+              dataFansPost?.totalPublicPost,
+              dataFansPost?.totalExclusivePost,
+              dataSongAlbum?.countAlbumReleased,
+              dataSongAlbum?.countSong,
+              dataIncome?.totalIncome,
+            ];
+            return (
+              <OverviewCard
+                key={item.id}
+                amount={newData[index] || 0}
+                path={item.path}
+                title={t(item.title)}
+                type={item.id === 1 || item.id === 2 ? 'black' : 'white'}
+              />
+            );
+          })}
+        </View>
         <Text style={[styles.titleOverview, {paddingVertical: mvs(20)}]}>
           {t('Home.CreateNewPost')}
         </Text>
@@ -528,63 +492,11 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
               <Gap height={widthResponsive(15)} />
               <AlbumAnalytic />
             </View>
-          ) : null}
-        </View>
-        {/* End of Tab Analytic */}
-        {/* Tab Song */}
-        <View style={[styles.containerContent]}>
-          <TabFilter.Type3
-            filterData={filterSong}
-            onPress={filterDataSong}
-            selectedIndex={selectedIndexSong}
-            translation={true}
-          />
-          {filterSong[selectedIndexSong].filterName ===
-          'Home.Tab.TopSong.Title' ? (
-            <TopSong
-              dataSong={dataTopSong}
-              onPress={onPressTopSong}
-              type={'home'}
-              loveIcon={isLogin}
-              fromMainTab={true}
-              isLoading={isLoadingSong}
-            />
           ) : (
-            <NewSong
-              dataSong={dataNewSong}
-              onPress={onPressNewSong}
-              type={'home'}
-              loveIcon={isLogin}
-              isLoading={isLoadingSong}
-            />
+            <Explore refreshing={refreshing} />
           )}
         </View>
-        {/* End of Tab Song */}
-        {/* Playlist */}
-        <ListPlaylistHome
-          title={t('Home.Playlist.Title')}
-          data={dataPlaylist?.data}
-          onPress={() => navigation.navigate('ListPlaylist')}
-        />
-        {/* End of Playlist */}
-        <Gap height={heightPercentage(10)} />
-        {/* Coming Soon */}
-        {dataAlbumComingSoon.length > 0 ? (
-          <ListImageDesc
-            title={t('Home.ComingSoon.Title')}
-            data={dataAlbumComingSoon}
-            containerStyle={styles.containerList}
-            onPress={() => goToListMusic('Coming Soon', 'album')}
-            onPressImage={(name, id) => goToDetailAlbum(name, id)}
-          />
-        ) : (
-          <EmptyStateHome
-            title={t('Home.ComingSoon.Title')}
-            onPress={() => goToListMusic('Coming Soon', 'album')}
-          />
-        )}
-        <Gap height={heightPercentage(40)} />
-        {/* End Of Coming Soon */}
+        {/* End of Tab Analytic */}
       </ScrollView>
       <BottomSheetGuest
         modalVisible={modalGuestVisible}
@@ -681,5 +593,11 @@ const styles = StyleSheet.create({
     fontFamily: font.InterMedium,
     fontWeight: '600',
     paddingVertical: mvs(15),
+  },
+  containerOverview: {
+    flexWrap: 'wrap',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });

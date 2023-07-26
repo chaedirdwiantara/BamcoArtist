@@ -27,6 +27,7 @@ import {
 } from '../../data/dropdown';
 import {color, font, typography} from '../../theme';
 import {
+  elipsisText,
   heightPercentage,
   heightResponsive,
   widthPercentage,
@@ -65,6 +66,8 @@ import {
 } from './ListUtils/ListFunction';
 import Clipboard from '@react-native-community/clipboard';
 import {useQuery} from 'react-query';
+import {imageShare} from '../../utils/share';
+import {useShareHook} from '../../hooks/use-share.hook';
 
 const {height} = Dimensions.get('screen');
 
@@ -77,9 +80,6 @@ interface PostListProps {
   dataLeftDropdown: DropDownFilterType[] | DropDownSortType[];
   uuidMusician?: string;
 }
-
-const urlText =
-  'https://open.ssu.io/track/19AiJfAtRiccvSU1EWcttT?si=36b9a686dad44ae0';
 
 const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
   const {t} = useTranslation();
@@ -139,6 +139,14 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
     playerProgress,
     addPlaylistFeed,
   } = usePlayerHook();
+
+  const {
+    shareLink,
+    getShareLink,
+    successGetLink,
+    setSelectedSharePost,
+    selectedSharePost,
+  } = useShareHook();
 
   const {creditCount, getCreditCount} = useCreditHook();
   const MyUuid = profileStorage()?.uuid;
@@ -285,8 +293,9 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
     );
   };
 
-  const shareOnPress = () => {
+  const shareOnPress = (content: PostList) => {
     setModalShare(true);
+    setSelectedSharePost(content);
   };
 
   //Credit onPress
@@ -322,7 +331,7 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
   const onPressCopy = () => {
     setIsCopied(true);
     if (Clipboard && Clipboard.setString) {
-      Clipboard.setString(urlText);
+      Clipboard.setString(shareLink);
     }
   };
 
@@ -367,6 +376,22 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
     }
   };
   // ! END OF MUSIC AREA
+
+  // SHARE LINK
+  useEffect(() => {
+    if (selectedSharePost) {
+      getShareLink({
+        scheme: `/feed/${selectedSharePost.id}`,
+        image: imageShare(selectedSharePost),
+        title: t('ShareLink.Feed.Title', {
+          musician: selectedSharePost.musician.fullname,
+        }),
+        description: selectedSharePost.caption
+          ? elipsisText(selectedSharePost.caption, 50)
+          : t('ShareLink.Feed.Subtitle'),
+      });
+    }
+  }, [selectedSharePost]);
 
   return (
     <>
@@ -443,6 +468,9 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
                     idPost={item.id}
                     selectedIdPost={setSelectedIdPost}
                     isPremium={item.isPremiumPost}
+                    viewCount={item.viewsCount}
+                    shareCount={item.shareCount}
+                    showDropdown
                     children={
                       <ChildrenCard
                         data={item}
@@ -531,7 +559,7 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
         </>
       ) : null}
       <ModalShare
-        url={urlText}
+        url={shareLink}
         modalVisible={modalShare}
         onPressClose={() => setModalShare(false)}
         titleModal={t('General.Share.Feed')}
@@ -542,6 +570,7 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
             ? onModalShareHide
             : () => console.log(modalShare, 'modal is hide')
         }
+        disabled={!successGetLink}
       />
       <SsuToast
         modalVisible={toastVisible}

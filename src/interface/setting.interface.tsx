@@ -80,7 +80,7 @@ export type DataExclusiveResponse = {
   coverImage?: string;
   description?: string;
   packageType?: string;
-  pricingPlans: {
+  pricingPlans?: {
     ID?: string;
     duration?: number;
     durationUnit?: string;

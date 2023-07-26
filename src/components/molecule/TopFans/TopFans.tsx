@@ -56,7 +56,9 @@ const TopFans: FC<TopFansProps> = (props: TopFansProps) => {
             onPressMore={() => {}}
             activeMore={false}
             onPressImage={() =>
-              navigation.navigate('OtherUserProfile', {id: item.uuid})
+              item.userType === 'fans'
+                ? navigation.navigate('OtherUserProfile', {id: item.uuid})
+                : navigation.navigate('MusicianProfile', {id: item.uuid})
             }
             musicianName={item.fullname}
             imgUri={item.image[0]?.image}

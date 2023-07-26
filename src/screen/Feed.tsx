@@ -401,7 +401,8 @@ export const FeedScreen: React.FC = () => {
               yPosition={offsetCategoryFilter?.py}
               containerStyle={{
                 top: !visible
-                  ? offsetCategoryFilter?.py - widthResponsive(93)
+                  ? offsetCategoryFilter?.py -
+                    widthResponsive(Platform.OS === 'android' ? 106 : 93)
                   : offsetCategoryFilter?.py - widthResponsive(47),
                 left: offsetCategoryFilter?.px - widthResponsive(125),
                 width: widthResponsive(125),
@@ -464,7 +465,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     right: widthResponsive(24),
-    bottom: widthResponsive(50),
+    bottom: widthResponsive(20),
   },
   floatingIcon: {
     resizeMode: 'contain',

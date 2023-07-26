@@ -830,7 +830,9 @@
         "Suggest": "改進建議",
         "TextSuggest": "此應用程式的新想法或需要加強的功能",
         "Help": "Help",
-        "TextHelp": "If you want to know more contact us"
+        "TextHelp": "If you want to know more contact us",
+        "SendAppeal": "Send Appeal",
+        "TextSendAppeal": "Request account or content recovery"
       },
       "Placeholder": {
         "Email": "輸入你的電郵",
@@ -937,6 +939,10 @@
       "Quote": "Quote Music",
       "Media": "Upload Media",
       "Preview": "Add Preview"
+    },
+    "Dropdown":{
+      "Visit": "Visit Profile",
+      "Report": "Report"
     }
   },
   "Notification": {
@@ -1228,5 +1234,21 @@
     },
     "SubtitleTooltip": "To finish this step, you need to fulfill this information below:",
     "SubtitleTooltipFinish": "You have already completed your account information"
+  },
+  "ShareLink": {
+    "Music": {
+      "Title": "Listen To {{title}}",
+      "Playlist": "Playlist by {{owner}}",
+      "Song": "Song by {{owner}}",
+      "Album": "Album by {{owner}}"
+    },
+    "Feed": {
+      "Title": "{{musician}}'s post",
+      "Subtitle": "Get the Latest Updates from Your Favorite Musician!"
+    },
+    "Profile": {
+      "Title": "Get in touch with {{name}}",
+      "Subtitle": "Discover Attention-Grabbing Musicians to Explore!"
+    }
   }
 }

@@ -17,7 +17,12 @@ import {
   DropDownSortType,
 } from '../../data/dropdown';
 import {color, font, typography} from '../../theme';
-import {heightPercentage, heightResponsive, widthResponsive} from '../../utils';
+import {
+  elipsisText,
+  heightPercentage,
+  heightResponsive,
+  widthResponsive,
+} from '../../utils';
 import {LogBox} from 'react-native';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
@@ -41,15 +46,14 @@ import {
   playSongOnFeed,
 } from './ListUtils/ListFunction';
 import Clipboard from '@react-native-community/clipboard';
+import {imageShare} from '../../utils/share';
+import {useShareHook} from '../../hooks/use-share.hook';
 
 interface PostListProps {
   dataRightDropdown: DataDropDownType[];
   dataLeftDropdown: DropDownFilterType[] | DropDownSortType[];
   hideDropdown?: boolean;
 }
-
-const urlText =
-  'https://open.ssu.io/track/19AiJfAtRiccvSU1EWcttT?si=36b9a686dad44ae0';
 
 const PostListHome: FC<PostListProps> = (props: PostListProps) => {
   const {t} = useTranslation();
@@ -81,6 +85,14 @@ const PostListHome: FC<PostListProps> = (props: PostListProps) => {
     addPlaylistFeed,
   } = usePlayerHook();
 
+  const {
+    shareLink,
+    getShareLink,
+    successGetLink,
+    setSelectedSharePost,
+    selectedSharePost,
+  } = useShareHook();
+
   const {creditCount, getCreditCount} = useCreditHook();
 
   const [dataMain, setDataMain] = useState<PostList[]>([]);
@@ -99,7 +111,8 @@ const PostListHome: FC<PostListProps> = (props: PostListProps) => {
 
   // * UPDATE HOOKS
   const [selectedIdPost, setSelectedIdPost] = useState<string>();
-  const [selectedMenu, setSelectedMenu] = useState<DataDropDownType>();
+  const [selectedMenuPost, setSelectedMenuPost] = useState<DataDropDownType>();
+  const [selectedUserUuid, setSelectedUserUuid] = useState<string>();
   const [selectedCategoryMenu, setSelectedCategoryMenu] =
     useState<DataDropDownType>();
   const [selectedFilterMenu, setSelectedFilterMenu] =
@@ -169,9 +182,10 @@ const PostListHome: FC<PostListProps> = (props: PostListProps) => {
     );
   };
 
-  const shareOnPress = () => {
+  const shareOnPress = (content: PostList) => {
     if (isLogin) {
       setModalShare(true);
+      setSelectedSharePost(content);
     } else {
       setModalGuestVisible(true);
     }
@@ -213,30 +227,31 @@ const PostListHome: FC<PostListProps> = (props: PostListProps) => {
   const onPressCopy = () => {
     setIsCopied(true);
     if (Clipboard && Clipboard.setString) {
-      Clipboard.setString(urlText);
+      Clipboard.setString(shareLink);
     }
   };
 
-  // ! UPDATE POST AREA
+  // ! REPORT POST AREA
   useEffect(() => {
-    if (
-      selectedIdPost !== undefined &&
-      selectedMenu !== undefined &&
-      dataMain
-    ) {
-      if (t(selectedMenu.label) === 'Delete Post') {
-        setDeletePost({id: selectedIdPost});
-        setDataMain(dataMain.filter(data => data.id !== selectedIdPost));
-        setSelectedMenu(undefined);
+    if (selectedIdPost && selectedMenuPost && selectedUserUuid && dataMain) {
+      const selectedValue = t(selectedMenuPost.value);
+
+      switch (selectedValue) {
+        case '11':
+          navigation.navigate('MusicianProfile', {
+            id: selectedUserUuid,
+          });
+          break;
+        case '22':
+          console.log('REPORT', selectedIdPost);
+          break;
+        default:
+          break;
       }
-      if (t(selectedMenu.label) === 'Edit Post') {
-        let dataSelected = dataMain.filter(data => data.id === selectedIdPost);
-        navigation.navigate('CreatePost', {postData: dataSelected[0]});
-        setSelectedMenu(undefined);
-      }
+      setSelectedMenuPost(undefined);
     }
-  }, [selectedIdPost, selectedMenu, dataMain]);
-  // ! END OF UPDATE POST AREA
+  }, [selectedIdPost, selectedMenuPost, selectedUserUuid]);
+  // ! END OF REPORT POST AREA
 
   // ! MUSIC AREA
   const onPressPlaySong = (val: PostList) => {
@@ -258,6 +273,22 @@ const PostListHome: FC<PostListProps> = (props: PostListProps) => {
     }
   };
   // ! END OF MUSIC AREA
+
+  // SHARE LINK
+  useEffect(() => {
+    if (selectedSharePost) {
+      getShareLink({
+        scheme: `/feed/${selectedSharePost.id}`,
+        image: imageShare(selectedSharePost),
+        title: t('ShareLink.Feed.Title', {
+          musician: selectedSharePost.musician.fullname,
+        }),
+        description: selectedSharePost.caption
+          ? elipsisText(selectedSharePost.caption, 50)
+          : t('ShareLink.Feed.Subtitle'),
+      });
+    }
+  }, [selectedSharePost]);
 
   return (
     <>
@@ -324,13 +355,18 @@ const PostListHome: FC<PostListProps> = (props: PostListProps) => {
                   likePressed={likePressedInFeed(selectedId, item, recorder)}
                   likeCount={likesCountInFeed(selectedId, item, recorder)}
                   tokenOnPress={() => tokenOnPress(item.musician.uuid)}
-                  shareOnPress={shareOnPress}
+                  shareOnPress={() => shareOnPress(item)}
                   commentCount={item.commentsCount}
                   myPost={item.musician.uuid === profileStorage()?.uuid}
-                  selectedMenu={setSelectedMenu}
+                  musicianUuid={item.musician.uuid}
                   idPost={item.id}
+                  selectedMenu={setSelectedMenuPost}
                   selectedIdPost={setSelectedIdPost}
+                  selectedUserUuid={setSelectedUserUuid}
                   isPremium={item.isPremiumPost}
+                  viewCount={item.viewsCount}
+                  shareCount={item.shareCount}
+                  showDropdown
                   children={
                     <ChildrenCard
                       data={item}
@@ -363,7 +399,7 @@ const PostListHome: FC<PostListProps> = (props: PostListProps) => {
         onPressClose={() => setModalGuestVisible(false)}
       />
       <ModalShare
-        url={urlText}
+        url={shareLink}
         modalVisible={modalShare}
         onPressClose={() => setModalShare(false)}
         titleModal={t('General.Share.Feed')}
@@ -374,6 +410,7 @@ const PostListHome: FC<PostListProps> = (props: PostListProps) => {
             ? onModalShareHide
             : () => console.log(modalShare, 'modal is hide')
         }
+        disabled={!successGetLink}
       />
       <SsuToast
         modalVisible={toastVisible}

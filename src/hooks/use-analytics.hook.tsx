@@ -141,6 +141,7 @@ export const useAnalyticsHook = () => {
       return {
         data: response?.data,
         message: response?.message,
+        meta: response?.meta,
       };
     } catch (error) {
       console.log(error);
@@ -301,6 +302,7 @@ export const useAnalyticsHook = () => {
         subs: response?.data?.subs,
         totalTips: response?.data?.totalTips,
         totalSubs: response?.data?.totalSubs,
+        totalIncome: response?.data?.totalTips + response?.data?.totalSubs,
         meta: response?.meta,
         message: response?.message,
       };

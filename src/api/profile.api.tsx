@@ -12,6 +12,7 @@ import {
   LastStepResponseType,
   GetLastStepResponseType,
   GetProfileProgressResponseType,
+  GetTotalPostAndFansResponseType,
 } from '../interface/profile.interface';
 import SsuAPI from './baseRinjani';
 import SsuAPISemeru from './baseSemeru';
@@ -165,3 +166,13 @@ export const setLastStep = async (
 
   return data;
 };
+
+export const getPostAndFans =
+  async (): Promise<GetTotalPostAndFansResponseType> => {
+    const {data} = await SsuAPI().request<GetTotalPostAndFansResponseType>({
+      url: '/musician-app/overview/my-post-and-fans',
+      method: 'GET',
+    });
+
+    return data;
+  };

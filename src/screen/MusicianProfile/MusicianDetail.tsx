@@ -41,7 +41,7 @@ import {useTranslation} from 'react-i18next';
 import {DataExclusiveResponse} from '../../interface/setting.interface';
 import PostListProfile from '../ListCard/PostListProfile';
 import MainTab from '../../components/molecule/ProfileContent/MainTab/MainTab';
-import {FansScreen} from './ListFans';
+import {FansScreen} from '../../components/molecule/ListFans';
 import {storage} from '../../hooks/use-storage.hook';
 import {mvs} from 'react-native-size-matters';
 import {ArrowLeftIcon} from '../../assets/icon';
@@ -301,7 +301,12 @@ export const MusicianDetail: React.FC<MusicianDetailProps> = ({
             ) : // TODO: DISABLE FOR NOW
             // : filter[selectedIndex].filterName === 'Musician.Tab.Main' ? (
             //   <View style={{paddingHorizontal: widthResponsive(20)}}>
-            //     <MainTab uuid={uuid} />
+            //    <MainTab
+            //       uuid={uuid}
+            //       coverImage={exclusiveContent?.coverImage ?? ''}
+            //       title={exclusiveContent?.title ?? ''}
+            //       description={exclusiveContent?.description ?? ''}
+            //     />
             //   </View>
             // )
             null}

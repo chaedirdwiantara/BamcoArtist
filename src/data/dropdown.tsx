@@ -181,3 +181,12 @@ export const dropDownAlbumRange: DataDropDownType[] = [
   {label: 'Home.Tab.Analytic.Album.Filter.Range.Weekly', value: '3'},
   {label: 'Home.Tab.Analytic.Album.Filter.Range.Daily', value: '4'},
 ];
+
+export const dataReportPost: DataDropDownType[] = [
+  {label: 'Post.Dropdown.Visit', value: '11'},
+  {label: 'Post.Dropdown.Report', value: '22'},
+];
+
+export const dataReportPostProfile: DataDropDownType[] = [
+  {label: 'Post.Dropdown.Report', value: '22'},
+];
