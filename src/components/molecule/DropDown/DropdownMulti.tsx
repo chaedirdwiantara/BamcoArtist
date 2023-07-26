@@ -77,11 +77,23 @@ const MultiDropdown: React.FC<InputDropdownProps> = (
     );
   };
 
-  const renderItem = (item: any) => {
+  const renderItem = (item: any, selected?: boolean) => {
+    let selectedValue = [...value];
+    const newVal = selected
+      ? selectedValue.filter(val => val !== item.value)
+      : [...selectedValue, item.value];
+
     return (
       <View style={styles.item}>
         <Text style={styles.selectedTextStyle}>{item.label}</Text>
-        <CheckBox handleOnPress={() => null} active={isSelected(item)} />
+        <CheckBox
+          handleOnPress={() => {
+            setValue(newVal);
+            textTyped(newVal);
+            setValues(newVal);
+          }}
+          active={isSelected(item)}
+        />
       </View>
     );
   };

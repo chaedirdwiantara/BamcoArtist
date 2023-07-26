@@ -22,17 +22,12 @@ export const ShippingInformationScreen: React.FC<ShippingInformationProps> = ({
 
   const {
     dataAllCountry,
-    dataStateInCountry,
-    dataCitiesInState,
+    dataCitiesOfCountry,
     getDataAllCountry,
-    getStateInCountry,
-    getCitiesInState,
+    getCitiesOfCountry,
   } = useLocationHook();
-  const [selectedCountry, setSelectedCountry] = useState<string>(
-    data?.country || '',
-  );
-  const [selectedState, setSelectedState] = useState<string>(
-    data?.province || '',
+  const [selectedCountry, setSelectedCountry] = useState<number>(
+    Number(data?.country) || 0,
   );
 
   useEffect(() => {
@@ -40,23 +35,21 @@ export const ShippingInformationScreen: React.FC<ShippingInformationProps> = ({
   }, []);
 
   useEffect(() => {
-    getStateInCountry({country: selectedCountry});
-  }, [selectedCountry]);
-
-  useEffect(() => {
-    getCitiesInState({country: selectedCountry, state: selectedState});
-  }, [selectedCountry, selectedState]);
+    if (selectedCountry > 0) {
+      getCitiesOfCountry({id: selectedCountry});
+    }
+  }, [data, selectedCountry]);
 
   return (
     <View style={styles.root}>
       <ShippingInformationContent
         dataAllCountry={dataAllCountry !== undefined ? dataAllCountry : []}
-        dataState={dataStateInCountry !== undefined ? dataStateInCountry : []}
-        dataCities={dataCitiesInState !== undefined ? dataCitiesInState : []}
+        dataCities={
+          dataCitiesOfCountry !== undefined ? dataCitiesOfCountry : []
+        }
         dataShipping={data}
         onPressGoBack={onPressGoBack}
         setSelectedCountry={setSelectedCountry}
-        setSelectedState={setSelectedState}
         from={from}
       />
     </View>

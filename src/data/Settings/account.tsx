@@ -39,10 +39,9 @@ export const dataGender: PropsType[] = [
   {label: 'Male', value: 'male'},
   {label: 'Female', value: 'female'},
   {label: 'Non-binary', value: 'non_binary'},
-  {label: 'Trans', value: 'trans'},
   {
-    label: 'My gender identity is not listed',
-    value: 'my_gender_identity_is_not_listed',
+    label: 'My gender not listed',
+    value: 'my_gender_not_listed',
   },
 ];
 

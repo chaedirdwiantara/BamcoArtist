@@ -35,6 +35,66 @@ export const countryData: DataCountryType[] = [
     image: require('../assets/flags/UK.png'),
     code: '+44',
   },
+  {
+    value: '6',
+    label: 'HK',
+    image: require('../assets/flags/HK.png'),
+    code: '+852',
+  },
+  {
+    value: '7',
+    label: 'MO',
+    image: require('../assets/flags/MO.png'),
+    code: '+853',
+  },
+  {
+    value: '8',
+    label: 'TW',
+    image: require('../assets/flags/TW.png'),
+    code: '+886',
+  },
+  {
+    value: '9',
+    label: 'CN',
+    image: require('../assets/flags/CN.png'),
+    code: '+86',
+  },
+  {
+    value: '10',
+    label: 'MY',
+    image: require('../assets/flags/MY.png'),
+    code: '+60',
+  },
+  {
+    value: '11',
+    label: 'AU',
+    image: require('../assets/flags/AU.png'),
+    code: '+61',
+  },
+  {
+    value: '12',
+    label: 'PH',
+    image: require('../assets/flags/PH.png'),
+    code: '+63',
+  },
+  {
+    value: '13',
+    label: 'SG',
+    image: require('../assets/flags/SG.png'),
+    code: '+65',
+  },
+  {
+    value: '15',
+    label: 'KR',
+    image: require('../assets/flags/KR.png'),
+    code: '+82',
+  },
+  {
+    value: '16',
+    label: 'CA',
+    image: require('../assets/flags/CA.png'),
+    code: '+1',
+  },
 ];
 
 export interface DataDropDownType {

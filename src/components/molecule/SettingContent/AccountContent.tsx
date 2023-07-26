@@ -361,7 +361,7 @@ export const AccountContent: React.FC<AccountProps> = ({
 
           <Dropdown.Multi
             data={formatValueName2(genres) ?? []}
-            isRequired={true && fromScreen === 'progress'}
+            isRequired={true}
             placeHolder={t('Setting.Account.Placeholder.Genre') || ''}
             dropdownLabel={t('Setting.Account.Label.Genre') || ''}
             textTyped={(_newText: string) => null}
@@ -385,7 +385,7 @@ export const AccountContent: React.FC<AccountProps> = ({
           </View>
           <MenuText.RightIcon
             text={birthdate === '' ? 'YYYY-MM-DD' : birthdate}
-            containerStyles={{marginTop: mvs(10), marginLeft: ms(4)}}
+            containerStyles={{marginTop: mvs(8), marginLeft: ms(4)}}
             icon={
               <ChevronDownIcon
                 stroke="#7c7b7c"
@@ -397,7 +397,6 @@ export const AccountContent: React.FC<AccountProps> = ({
               />
             }
             onPress={() => setOpenPickerBirth(true)}
-            onPressTooltip={() => setOpenPickerBirth(true)}
           />
 
           <DatePicker
@@ -443,7 +442,7 @@ export const AccountContent: React.FC<AccountProps> = ({
               render={({field: {onChange, value}}) => (
                 <Dropdown.Input
                   initialValue={value}
-                  isRequired={true && fromScreen === 'progress'}
+                  isRequired={true}
                   data={dataYearsFrom}
                   placeHolder={t('Setting.Account.Placeholder.Active') || ''}
                   dropdownLabel={t('Musician.Label.Active') || ''}
@@ -497,7 +496,7 @@ export const AccountContent: React.FC<AccountProps> = ({
               render={({field: {onChange, value}}) => (
                 <Dropdown.Input
                   type="location"
-                  isRequired={true && fromScreen === 'progress'}
+                  isRequired={true}
                   initialValue={value}
                   data={dataAllCountry}
                   placeHolder={t('Setting.Account.Placeholder.Country') || ''}
@@ -548,7 +547,7 @@ export const AccountContent: React.FC<AccountProps> = ({
             render={({field: {onChange, value}}) => (
               <Dropdown.Input
                 initialValue={value}
-                isRequired={true && fromScreen === 'progress'}
+                isRequired={true}
                 data={formatValueName2(roles) ?? []}
                 placeHolder={t('Setting.Account.Label.TypeOfMusician') || ''}
                 dropdownLabel={t('Setting.Account.Label.TypeOfMusician') || ''}
@@ -574,7 +573,7 @@ export const AccountContent: React.FC<AccountProps> = ({
                 <Dropdown.Input
                   initialValue={value}
                   data={dataGender}
-                  isRequired={true && fromScreen === 'progress'}
+                  isRequired={true}
                   placeHolder={t('Setting.Account.Placeholder.Gender')}
                   dropdownLabel={t('Setting.Account.Label.Gender')}
                   textTyped={(newText: {label: string; value: string}) => {
