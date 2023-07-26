@@ -5,7 +5,7 @@ import {ms, mvs} from 'react-native-size-matters';
 import Font from '../../../theme/Font';
 import Color from '../../../theme/Color';
 import CoinIcon from '../../../assets/icon/Coin.icon';
-import {kFormatter, normalize} from '../../../utils';
+import {kFormatter3, normalize} from '../../../utils';
 
 interface ChipMoneyProps {
   balance: number;
@@ -17,7 +17,7 @@ export const ChipMoney: React.FC<ChipMoneyProps> = (props: ChipMoneyProps) => {
   return (
     <View style={[styles.root]}>
       <CoinIcon />
-      <Text style={styles.text}>{kFormatter(balance, 1)}</Text>
+      <Text style={styles.text}>{kFormatter3(balance)}</Text>
     </View>
   );
 };
