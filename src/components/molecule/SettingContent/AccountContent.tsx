@@ -174,10 +174,12 @@ export const AccountContent: React.FC<AccountProps> = ({
       const gr = getValue(formatValueName2(profile.genres));
       const md = getValue(formatValueName2(profile.moods));
       const fvgr = getValue(formatValueName2(profile.favoriteGenres));
+      const musicianType =
+        profile.rolesInIndustry.length > 0 ? profile.rolesInIndustry[0].id : -1;
       setValueGenres(gr);
       setValueMoodsPreference(md);
       setValueGenresPreference(fvgr);
-      setValueTypeOfMusician([profile.rolesInIndustry[0].id]);
+      setValueTypeOfMusician([musicianType]);
       setBirthDate(profile.birthdate);
     }
   }, [profile]);
