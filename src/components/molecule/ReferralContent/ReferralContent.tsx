@@ -6,6 +6,7 @@ import {
   Linking,
   TouchableOpacity,
   ScrollView,
+  Platform,
 } from 'react-native';
 import {Camera, useCameraDevices} from 'react-native-vision-camera';
 import {useScanBarcodes, BarcodeFormat} from 'vision-camera-code-scanner';
@@ -96,6 +97,7 @@ export const ReferralContent: React.FC<ReferralContentProps> = ({
 }) => {
   const {t} = useTranslation();
   const [focusInput, setFocusInput] = useState<string | null>(null);
+  const [isFocusInput, setIsFocusInput] = useState<boolean>(false);
 
   // Camera
   const devices = useCameraDevices();
@@ -229,9 +231,11 @@ export const ReferralContent: React.FC<ReferralContentProps> = ({
               borderColor={Color.Pink.linear}
               onChangeText={(newText: string) => setRefCode(newText)}
               onFocus={() => {
+                setIsFocusInput(true);
                 handleFocusInput('refcode');
               }}
               onBlur={() => {
+                setIsFocusInput(false);
                 handleFocusInput(null);
               }}
               isFocus={focusInput === 'refcode'}
@@ -300,6 +304,7 @@ export const ReferralContent: React.FC<ReferralContentProps> = ({
             )}
           </View>
         </View>
+        {Platform.OS === 'ios' ? <Gap height={200} /> : null}
       </View>
     </ScrollView>
   );
