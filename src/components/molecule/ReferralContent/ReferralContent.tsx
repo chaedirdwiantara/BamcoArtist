@@ -185,6 +185,7 @@ export const ReferralContent: React.FC<ReferralContentProps> = ({
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
       <View style={[styles.root, containerStyle]}>
+        <Gap height={32} />
         {isScanning && !isScanSuccess ? (
           <>
             <View style={styles.cameraContainer}>
@@ -208,6 +209,7 @@ export const ReferralContent: React.FC<ReferralContentProps> = ({
           </>
         ) : (
           <>
+            <Gap height={32} />
             <ReferralQRImage />
             <Gap height={32} />
           </>

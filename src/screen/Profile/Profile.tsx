@@ -107,7 +107,7 @@ export const ProfileScreen: React.FC<ProfileProps> = ({
 
   const profile = {
     fullname: dataProfile?.data.fullname,
-    username: '@' + dataProfile?.data.username,
+    username: dataProfile?.data.username,
     bio: dataProfile?.data.bio || t('Profile.Label.Description'),
     backgroundUri: banners,
     avatarUri: avatar,

@@ -7,7 +7,7 @@ import {SvgProps} from '../../interface/svg.interface';
 function ShareIcon({
   width = 16,
   height = 16,
-  fill = 'none',
+  fill = 'white',
   stroke = '#8794AD',
   style,
 }: SvgProps) {

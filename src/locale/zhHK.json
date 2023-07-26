@@ -799,6 +799,11 @@
         "Title": "Scan QR Code",
         "Desc": "Referral Code invalid, Scan another QR Code",
         "Btn": "Dismiss"
+      },
+      "ShareQR": {
+        "Subtitle": "Share this QR code to let others know the Beamco profile",
+        "BtnShare": "Share QR Code",
+        "BtnBack": "Back"
       }
     },
     "Language": {
@@ -825,7 +830,9 @@
         "Suggest": "改進建議",
         "TextSuggest": "此應用程式的新想法或需要加強的功能",
         "Help": "Help",
-        "TextHelp": "If you want to know more contact us"
+        "TextHelp": "If you want to know more contact us",
+        "SendAppeal": "Send Appeal",
+        "TextSendAppeal": "Request account or content recovery"
       },
       "Placeholder": {
         "Email": "輸入你的電郵",

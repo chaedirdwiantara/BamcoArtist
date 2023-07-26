@@ -156,6 +156,10 @@ export const MusicianDetail: React.FC<MusicianDetailProps> = ({
     navigation.goBack();
   };
 
+  const onPressShareQR = () => {
+    navigation.navigate('MyQRCode', {uuid});
+  };
+
   const leftIconHeader = () => {
     return (
       <View style={styles.containerLeftIcon}>
@@ -192,6 +196,7 @@ export const MusicianDetail: React.FC<MusicianDetailProps> = ({
     <View style={styles.container}>
       <SsuStatusBar type={'black'} />
       <TopNavigation.Type1
+        type="musician detail"
         title=""
         leftIcon={scrolEffect && leftIconHeader()}
         leftIconAction={handleBackAction}
@@ -199,6 +204,7 @@ export const MusicianDetail: React.FC<MusicianDetailProps> = ({
         itemStrokeColor={'white'}
         bgColor={scrolEffect ? color.Dark[800] : 'transparent'}
         containerStyles={styles.topNavStyle}
+        onPressShareQR={onPressShareQR}
       />
       <ScrollView
         showsVerticalScrollIndicator={false}

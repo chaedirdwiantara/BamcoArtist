@@ -31,7 +31,7 @@ import {TopNavigation} from '../TopNavigation';
 import {ModalDonate} from '../Modal/ModalDonate';
 import {ModalCustom} from '../Modal/ModalCustom';
 import {color, font, typography} from '../../../theme';
-import {storage} from '../../../hooks/use-storage.hook';
+import {profileStorage, storage} from '../../../hooks/use-storage.hook';
 import {dateLongMonth} from '../../../utils/date-format';
 import {usePlayerHook} from '../../../hooks/use-player.hook';
 import DropdownMore from '../V2/DropdownFilter/DropdownMore';
@@ -196,6 +196,7 @@ export const SongDetailsContent: React.FC<Props> = ({
               dataDetail.listenerCount ? dataDetail.listenerCount : 0
             }
             onPress={onPressCoin}
+            showDonate={dataDetail?.musicianUUID !== profileStorage()?.uuid}
           />
         </View>
 
