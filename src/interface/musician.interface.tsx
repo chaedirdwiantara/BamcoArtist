@@ -132,3 +132,18 @@ export type AlbumByIdResponseType = {
   meta: PaginationType;
   status: number;
 };
+
+export type DataDetailMusicianLite = {
+  uuid: string;
+  username: string;
+  fullname: string;
+  imageProfile: imageTypes[];
+  email: string;
+};
+
+export type DetailMusicianLiteResponseType = {
+  code: number;
+  data: DataDetailMusicianLite;
+  message: string;
+  status: number;
+};
