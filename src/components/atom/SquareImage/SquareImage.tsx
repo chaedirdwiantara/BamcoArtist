@@ -48,7 +48,7 @@ const SquareImage: React.FC<SquareImageProps> = (props: SquareImageProps) => {
     darkImage,
   } = props;
 
-  const blurOp = Platform.OS === 'ios' ? 8 : 3;
+  const blurOp = 10;
 
   if (type === 'add') {
     return (
