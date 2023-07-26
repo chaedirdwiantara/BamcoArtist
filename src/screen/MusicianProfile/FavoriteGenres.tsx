@@ -15,7 +15,7 @@ export const FavoriteGenres: FC<FavoriteGenresProps> = (
   const {favGenres} = props;
   return (
     <View style={styles.container}>
-      {favGenres.map((item, i) => (
+      {favGenres.map((item, _i) => (
         <View style={styles.badgeContainer}>
           <Text style={styles.textStyle}>{item.name}</Text>
         </View>
@@ -28,6 +28,7 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     marginHorizontal: widthResponsive(24),
+    flexWrap: 'wrap',
   },
   badgeContainer: {
     alignItems: 'center',
@@ -37,6 +38,7 @@ const styles = StyleSheet.create({
     backgroundColor: color.Dark[400],
     borderRadius: 2,
     marginRight: widthResponsive(4),
+    marginBottom: widthResponsive(4),
   },
   textStyle: {
     fontSize: ms(12),
