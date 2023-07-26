@@ -208,6 +208,7 @@ export const ReferralContent: React.FC<ReferralContentProps> = ({
           </>
         ) : (
           <>
+            <Gap height={32} />
             <ReferralQRImage />
             <Gap height={32} />
           </>

@@ -292,38 +292,31 @@ export const ImageSlider: React.FC<ImageSliderProps> = ({
                 index === 0 ? selectedRole : selectedExpectations;
               const setSelected =
                 index === 0 ? setSelectedRole : setSelectedExpectations;
-              const paddingTop =
-                index === 2 ? mvs(40) : index === 1 ? 0 : mvs(50);
-              const marginBottom = index === 2 ? mvs(20) : mvs(30);
 
               return (
                 <KeyboardAvoidingView
                   key={index}
                   behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
-                  {index === 1 ? (
-                    ''
-                  ) : (
-                    <TouchableOpacity
-                      style={styles.containerSkip}
-                      onPress={onPress}>
-                      <Text style={styles.textSkip}>{t('Btn.Skip')}</Text>
-                    </TouchableOpacity>
-                  )}
-                  <View style={[styles.containerStep, {paddingTop}]}>
-                    {index === 1 ? (
-                      ''
-                    ) : (
-                      <>
-                        <Text style={styles.textStep}>{item.step}</Text>
-                        <Text style={[typography.Heading4, styles.title]}>
-                          {item.title}
-                        </Text>
-                        <Text style={[styles.textSubtitle, {marginBottom}]}>
-                          {item.subtitle}
-                        </Text>
-                      </>
-                    )}
-                    {index === 1 ? (
+                  <TouchableOpacity
+                    style={styles.containerSkip}
+                    onPress={onPress}>
+                    <Text style={styles.textSkip}>{t('Btn.Skip')}</Text>
+                  </TouchableOpacity>
+
+                  <View style={styles.containerStep}>
+                    <Text style={styles.textStep}>{item.step}</Text>
+                    <Text style={[typography.Heading4, styles.title]}>
+                      {isScanSuccess && index === 1
+                        ? t('Setting.ReferralQR.OnBoard.SuccessTitle')
+                        : item.title}
+                    </Text>
+                    <Text style={styles.textSubtitle}>
+                      {isScanSuccess && index === 1
+                        ? t('Setting.ReferralQR.OnBoard.SuccessDesc')
+                        : item.title}
+                    </Text>
+
+                    {index === 1 && dataProfile ? (
                       <ReferralContent
                         onSkip={onPress}
                         onPress={onApplyReferral}
