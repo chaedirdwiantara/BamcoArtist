@@ -27,18 +27,14 @@ const Type1: React.FC<Props> = (props: Props) => {
       <TouchableOpacity
         style={topNavstyles.iconLeftContainer}
         onPress={props.leftIconAction}>
-        {props.leftIcon ? (
-          props.leftIcon
-        ) : (
-          <ShareIcon
-            stroke={color.Neutral[10]}
-            style={{
-              marginRight: widthPercentage(12),
-              width: widthPercentage(22),
-              height: widthPercentage(22),
-            }}
-          />
-        )}
+        <ShareIcon
+          stroke={color.Neutral[10]}
+          style={{
+            marginRight: widthPercentage(12),
+            width: widthPercentage(22),
+            height: widthPercentage(22),
+          }}
+        />
       </TouchableOpacity>
     );
   };
@@ -49,16 +45,12 @@ const Type1: React.FC<Props> = (props: Props) => {
       <TouchableOpacity
         style={topNavstyles.iconLeftContainer}
         onPress={props.onPressShareQR}>
-        {props.leftIcon ? (
-          props.leftIcon
-        ) : (
-          <QRCodeIcon
-            stroke={color.Neutral[10]}
-            style={{
-              marginRight: widthPercentage(24),
-            }}
-          />
-        )}
+        <QRCodeIcon
+          stroke={color.Neutral[10]}
+          style={{
+            marginRight: widthPercentage(24),
+          }}
+        />
       </TouchableOpacity>
     );
   };

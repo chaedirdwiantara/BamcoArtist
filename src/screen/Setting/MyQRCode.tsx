@@ -1,77 +1,42 @@
-import React, {useCallback, useEffect} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import React, {FC, useCallback, useEffect} from 'react';
+import {StyleSheet, View} from 'react-native';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {
+  NativeStackNavigationProp,
+  NativeStackScreenProps,
+} from '@react-navigation/native-stack';
 
 import Color from '../../theme/Color';
-import {AvatarProfile, Button, Gap, SettingContent} from '../../components';
 import {RootStackParams} from '../../navigations';
-import {useSettingHook} from '../../hooks/use-setting.hook';
 import {useProfileHook} from '../../hooks/use-profile.hook';
 import {usePlayerStore} from '../../store/player.store';
-import ReferralQRImage from '../../assets/image/ReferralQR.image';
-import ReferralQRSuccessImage from '../../assets/image/ReferralQRSuccess.image';
-import {heightPercentage} from '../../utils';
 import {mvs} from 'react-native-size-matters';
 import {useTranslation} from 'react-i18next';
 import {color, font} from '../../theme';
-import initialname from '../../utils/initialname';
-import {CameraIcon} from '../../assets/icon';
-import Typography from '../../theme/Typography';
 import {MyQRCodeContent} from '../../components/molecule/ProfileContent/MyQRCodeContent';
+import {useMusicianHook} from '../../hooks/use-musician.hook';
 
-const BtnScan = 'Setting.ReferralQR.OnBoard.BtnScan';
+type MyQRCodeProps = NativeStackScreenProps<RootStackParams, 'MyQRCode'>;
 
-export interface ProfileHeaderProps {
-  avatarUri?: string;
-  backgroundUri?: string;
-  fullname?: string;
-  username?: string;
-  bio?: string;
-  type?: string;
-  scrollEffect?: boolean;
-  onPress?: () => void;
-  iconPress: (params: string) => void;
-  containerStyles?: ViewStyle;
-  noEdit?: boolean;
-  backIcon?: boolean;
-  onPressImage?: (uri: string) => void;
-  refreshing?: boolean;
-}
-
-export const MyQRCode: React.FC<ProfileHeaderProps> = (
-  props: ProfileHeaderProps,
-) => {
-  const {
-    avatarUri = '',
-    backgroundUri = '',
-    fullname = '',
-    username,
-    bio,
-    type = '',
-    onPress,
-    iconPress,
-    containerStyles,
-    scrollEffect,
-    noEdit,
-    backIcon,
-    onPressImage,
-    refreshing,
-  } = props;
-
+export const MyQRCode: FC<MyQRCodeProps> = ({route}: MyQRCodeProps) => {
   const {t} = useTranslation();
 
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
+  const {uuid} = route.params;
 
   const {dataProfile, getProfileUser} = useProfileHook();
-  const {dataShippingInfo, getShippingInfo} = useSettingHook();
+  const {dataDetailMusician, getDetailMusician} = useMusicianHook();
   const {setWithoutBottomTab, show} = usePlayerStore();
 
   useEffect(() => {
-    getProfileUser();
+    if (uuid !== '' && uuid !== undefined) {
+      getDetailMusician({id: uuid});
+    } else {
+      getProfileUser();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [uuid]);
 
   useEffect(() => {}, [dataProfile]);
 
@@ -88,19 +53,6 @@ export const MyQRCode: React.FC<ProfileHeaderProps> = (
     navigation.goBack();
   };
 
-  const onPressGoTo = (screenName: any, params: any) => {
-    if (screenName === 'Account') {
-      navigation.navigate(screenName, {
-        data: dataProfile?.data,
-        fromScreen: 'setting',
-      });
-    } else if (screenName === 'ShippingInformation') {
-      navigation.navigate(screenName, {data: dataShippingInfo});
-    } else {
-      navigation.navigate(screenName, {...params});
-    }
-  };
-
   const avatar =
     dataProfile?.data !== undefined &&
     dataProfile?.data.imageProfileUrls?.length > 0
@@ -115,14 +67,17 @@ export const MyQRCode: React.FC<ProfileHeaderProps> = (
 
   return (
     <View style={[styles.root, styles.container]}>
-      {dataProfile?.data && (
+      {dataProfile?.data || dataDetailMusician ? (
         <MyQRCodeContent
-          fullname={profile.fullname}
-          username={profile.username}
-          avatar={profile.avatarUri}
+          type={
+            uuid !== '' && uuid !== undefined ? 'musician detail' : 'profile'
+          }
+          profile={
+            uuid !== '' && uuid !== undefined ? dataDetailMusician : profile
+          }
           onPressGoBack={onPressGoBack}
         />
-      )}
+      ) : null}
     </View>
   );
 };

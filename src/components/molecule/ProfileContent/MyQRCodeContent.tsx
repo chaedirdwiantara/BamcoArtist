@@ -1,7 +1,6 @@
 import React, {useCallback} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
-import {useFocusEffect, useNavigation} from '@react-navigation/native';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {useFocusEffect} from '@react-navigation/native';
 import {Button, Gap} from '../../atom';
 import {AvatarProfile} from '../AvatarProfile/AvatarProfile';
 import {mvs} from 'react-native-size-matters';
@@ -12,26 +11,25 @@ import {color, font} from '../../../theme';
 import Color from '../../../theme/Color';
 import {usePlayerStore} from '../../../store/player.store';
 import {useTranslation} from 'react-i18next';
-import {RootStackParams} from '../../../navigations';
 import QRCode from 'react-native-qrcode-svg';
 import {widthPercentage} from '../../../utils';
 
-export interface MyQRCodeContentzProps {
-  avatar: string;
-  fullname: string;
-  username: string;
+export interface MyQRCodeContentProps {
+  type: string;
+  profile: any;
   onPressGoBack: () => void;
 }
 
-export const MyQRCodeContent: React.FC<MyQRCodeContentzProps> = (
-  props: MyQRCodeContentzProps,
+const subTitle = 'Setting.ReferralQR.ShareQR.Subtitle';
+const btnShare = 'Setting.ReferralQR.ShareQR.BtnShare';
+const btnBack = 'Setting.ReferralQR.ShareQR.BtnBack';
+
+export const MyQRCodeContent: React.FC<MyQRCodeContentProps> = (
+  props: MyQRCodeContentProps,
 ) => {
-  const {avatar, fullname, username, onPressGoBack} = props;
+  const {type, profile, onPressGoBack} = props;
 
   const {t} = useTranslation();
-
-  const navigation =
-    useNavigation<NativeStackNavigationProp<RootStackParams>>();
 
   const {setWithoutBottomTab, show} = usePlayerStore();
 
@@ -40,6 +38,7 @@ export const MyQRCodeContent: React.FC<MyQRCodeContentzProps> = (
       if (show) {
         setWithoutBottomTab(true);
       }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [show]),
   );
 
@@ -50,16 +49,29 @@ export const MyQRCodeContent: React.FC<MyQRCodeContentzProps> = (
           style={{
             width: '70%',
           }}>
-          <Text style={[Typography.Heading4, styles.title]}>{username}</Text>
+          <Text style={[Typography.Heading4, styles.title]}>
+            {profile.username}
+          </Text>
           <Text style={[styles.textSubtitle, {marginBottom: mvs(20)}]}>
-            Share this QR code to let others know the Beamco profile
+            {t(subTitle)}
           </Text>
         </View>
-        <View style={{marginBottom: -32, zIndex: 10}}>
+        <View
+          style={{
+            marginBottom: -32,
+            zIndex: 10,
+          }}>
           <AvatarProfile
-            initialName={initialname(fullname)}
-            imgUri={avatar}
+            initialName={initialname(profile.fullname)}
+            imgUri={
+              type === 'profile'
+                ? profile.avatarUri
+                : profile.imageProfileUrls.length !== 0
+                ? profile.imageProfileUrls[1]?.image
+                : ''
+            }
             type=""
+            qrType="shareQR"
             showIcon={false}
             icon={<CameraIcon />}
           />
@@ -73,16 +85,16 @@ export const MyQRCodeContent: React.FC<MyQRCodeContentzProps> = (
               backgroundColor: 'white',
               borderRadius: 32,
               borderWidth: 16,
-              borderColor: '#617594',
+              borderColor: '#2c3444',
             },
           ]}>
-          <QRCode value="HITCS200" size={widthPercentage(200)} />
+          <QRCode value={profile.username} size={widthPercentage(180)} />
         </View>
         <Gap height={32} />
       </View>
       <View style={styles.container}>
         <Button
-          label="Share QR Code"
+          label={t(btnShare)}
           textStyles={{fontSize: mvs(14)}}
           containerStyles={{width: '80%'}}
           // onPress={handleScanning}
@@ -90,7 +102,7 @@ export const MyQRCodeContent: React.FC<MyQRCodeContentzProps> = (
         <Gap height={16} />
 
         <Button
-          label="Back"
+          label={t(btnBack)}
           type="border"
           textStyles={{fontSize: mvs(14), color: color.Success[400]}}
           containerStyles={{width: '80%'}}

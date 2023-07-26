@@ -242,7 +242,7 @@ export type RootStackParams = {
     title: string;
   };
   Setting: undefined;
-  MyQRCode: undefined;
+  MyQRCode: {uuid?: string};
   Security: {
     info?: boolean;
     message?: string;

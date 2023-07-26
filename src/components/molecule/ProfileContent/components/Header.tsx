@@ -77,26 +77,26 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = (
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
 
   const toMyQrCode = () => {
-    navigation.navigate('MyQRCode');
+    navigation.navigate('MyQRCode', {uuid: ''});
   };
 
   const iconRight = () => {
     return (
       <View style={[styles.iconRight, {flex: 1, flexDirection: 'row'}]}>
+        {type === 'profile' ? (
+          <>
+            <TouchableOpacity onPress={() => iconPress('backgroundUri')}>
+              <ShareIcon style={styles.shareIcon} />
+            </TouchableOpacity>
+            <Gap width={12} />
+          </>
+        ) : null}
         <TouchableOpacity onPress={() => iconPress('backgroundUri')}>
-          {type === '' ? (
-            !scrollEffect && <ShareIcon style={styles.shareIcon} />
-          ) : (
-            <GalleryEditIcon />
-          )}
-        </TouchableOpacity>
-        <Gap width={12} />
-        <TouchableOpacity onPress={() => iconPress('backgroundUri')}>
-          {type === '' ? (
+          {type === 'profile' ? (
             !scrollEffect && <SettingIcon style={styles.settingIcon} />
-          ) : (
+          ) : type === 'edit' ? (
             <GalleryEditIcon />
-          )}
+          ) : null}
         </TouchableOpacity>
       </View>
     );
@@ -104,13 +104,19 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = (
 
   const iconLeft = () => {
     return (
-      <TouchableOpacity onPress={toMyQrCode} style={styles.iconLeft}>
-        {type === '' ? (
-          !scrollEffect && <QRCodeIcon style={styles.settingIcon} />
+      <>
+        {type === 'profile' ? (
+          <TouchableOpacity onPress={toMyQrCode} style={styles.iconLeft}>
+            <QRCodeIcon style={styles.settingIcon} />
+          </TouchableOpacity>
         ) : (
-          <GalleryEditIcon />
+          <TouchableOpacity
+            onPress={() => navigation.goBack()}
+            style={styles.iconLeft}>
+            <ArrowLeftIcon style={styles.settingIcon} />
+          </TouchableOpacity>
         )}
-      </TouchableOpacity>
+      </>
     );
   };
 
@@ -154,7 +160,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = (
             </Text>
             <Text style={styles.username}>{username}</Text>
 
-            {type === '' && (
+            {type === 'profile' && (
               <View style={styles.containerFooter}>
                 <Text style={styles.description}>{bio}</Text>
                 {noEdit ? null : (
@@ -170,7 +176,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = (
             )}
 
             {noEdit ? null : iconRight()}
-            {backIcon ? iconLeft() : iconLeft()}
+            {backIcon || type === 'profile' ? iconLeft() : null}
           </View>
         </ImageBackground>
       </TouchableOpacity>

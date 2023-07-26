@@ -8,6 +8,7 @@ interface AvatarProps {
   imgUri: string;
   initialName?: string;
   type?: string;
+  qrType?: string;
   size?: number;
   username?: string;
   showIcon?: boolean;
@@ -23,6 +24,7 @@ export const AvatarProfile: React.FC<AvatarProps> = (props: AvatarProps) => {
     imgUri,
     size = widthPercentage(64),
     type,
+    qrType,
     showIcon,
     icon,
     activeOpacity,
@@ -30,7 +32,7 @@ export const AvatarProfile: React.FC<AvatarProps> = (props: AvatarProps) => {
     onPress,
   } = props;
 
-  const initial = imgUri === '' || imgUri === null;
+  const initial = imgUri === '' || imgUri === null || imgUri === undefined;
 
   const PressableIcon = () => {
     return (
@@ -78,7 +80,15 @@ export const AvatarProfile: React.FC<AvatarProps> = (props: AvatarProps) => {
           {showIcon && <PressableIcon />}
           <FastImage
             source={{uri: imgUri}}
-            style={[styles.root, {width: size}]}
+            style={[
+              styles.root,
+              {
+                width: size,
+                borderColor: '#F37070',
+                borderWidth: qrType === 'shareQR' ? 3 : 0,
+                borderRadius: 10000,
+              },
+            ]}
             testID={'ssu-avatar'}
           />
         </>

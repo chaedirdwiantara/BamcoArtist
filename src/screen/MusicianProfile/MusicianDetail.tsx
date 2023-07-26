@@ -157,7 +157,7 @@ export const MusicianDetail: React.FC<MusicianDetailProps> = ({
   };
 
   const onPressShareQR = () => {
-    navigation.navigate('MyQRCode');
+    navigation.navigate('MyQRCode', {uuid});
   };
 
   const leftIconHeader = () => {
