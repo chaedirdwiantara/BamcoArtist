@@ -799,6 +799,11 @@
         "Title": "Scan QR Code",
         "Desc": "Referral Code invalid, Scan another QR Code",
         "Btn": "Dismiss"
+      },
+      "ShareQR": {
+        "Subtitle": "Share this QR code to let others know the Beamco profile",
+        "BtnShare": "Share QR Code",
+        "BtnBack": "Back"
       }
     },
     "Language": {

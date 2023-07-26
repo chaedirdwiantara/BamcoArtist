@@ -154,6 +154,7 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
         }
         onScroll={handleScroll}>
         <ProfileHeader
+          type="profile"
           avatarUri={profile.avatarUri}
           backgroundUri={profile.backgroundUri}
           fullname={profile.fullname}

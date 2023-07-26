@@ -313,7 +313,7 @@ export const ImageSlider: React.FC<ImageSliderProps> = ({
                     <Text style={styles.textSubtitle}>
                       {isScanSuccess && index === 1
                         ? t('Setting.ReferralQR.OnBoard.SuccessDesc')
-                        : item.title}
+                        : item.subtitle}
                     </Text>
 
                     {index === 1 && dataProfile ? (

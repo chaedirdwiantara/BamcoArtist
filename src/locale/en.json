@@ -783,7 +783,7 @@
         "Invalid": "Referral code invalid"
       },
       "OnBoard": {
-        "Title": "Scan QR Code to Earn Bonuses!",
+        "Title": "Scan referral code by pressing scan now button, to earn some free stuff and bonuses",
         "Subtitle": "Scan referral code by pressing scan now button, to earn some free stuff and bonuses",
         "Activated": "Your 5% Comission for every transaction have been activated!",
         "SuccessTitle": "Your scan was successful!",
@@ -800,6 +800,11 @@
         "Title": "Scan QR Code",
         "Desc": "Referral Code invalid, Scan another QR Code",
         "Btn": "Dismiss"
+      },
+      "ShareQR": {
+        "Subtitle": "Share this QR code to let others know the Beamco profile",
+        "BtnShare": "Share QR Code",
+        "BtnBack": "Back"
       }
     },
     "Language": {

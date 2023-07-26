@@ -1,12 +1,14 @@
 import {Text, TouchableOpacity, View, ViewStyle} from 'react-native';
 import React from 'react';
-import {ArrowLeftIcon} from '../../../assets/icon';
+import {ArrowLeftIcon, ShareIcon} from '../../../assets/icon';
 import {elipsisText, widthPercentage} from '../../../utils';
 import topNavstyles from './topNavstyles';
 import {color, font} from '../../../theme';
+import QRCodeIcon from '../../../assets/icon/QRCode.icon';
 
 /** === INTERFACE === */
 type Props = {
+  type?: string;
   title: string;
   maxLengthTitle?: number;
   bgColor?: string;
@@ -14,10 +16,45 @@ type Props = {
   leftIcon?: React.ReactNode;
   leftIconAction: () => void;
   containerStyles?: ViewStyle;
+  onPressShareQR?: () => void;
 };
 
 /** == COMPONENT === */
 const Type1: React.FC<Props> = (props: Props) => {
+  /** => icon profile share */
+  const iconProfileShare = () => {
+    return (
+      <TouchableOpacity
+        style={topNavstyles.iconLeftContainer}
+        onPress={props.leftIconAction}>
+        <ShareIcon
+          stroke={color.Neutral[10]}
+          style={{
+            marginRight: widthPercentage(12),
+            width: widthPercentage(22),
+            height: widthPercentage(22),
+          }}
+        />
+      </TouchableOpacity>
+    );
+  };
+
+  /** => icon qr share */
+  const iconQRShare = () => {
+    return (
+      <TouchableOpacity
+        style={topNavstyles.iconLeftContainer}
+        onPress={props.onPressShareQR}>
+        <QRCodeIcon
+          stroke={color.Neutral[10]}
+          style={{
+            marginRight: widthPercentage(24),
+          }}
+        />
+      </TouchableOpacity>
+    );
+  };
+
   /** => icon left */
   const iconLeft = () => {
     return (
@@ -58,7 +95,14 @@ const Type1: React.FC<Props> = (props: Props) => {
             {elipsisText(props.title, props.maxLengthTitle ?? 20)}
           </Text>
         </View>
-        <View style={topNavstyles.rightContainer}></View>
+        <View style={topNavstyles.rightContainer}>
+          {props.type === 'musician detail' && (
+            <>
+              {iconProfileShare()}
+              {iconQRShare()}
+            </>
+          )}
+        </View>
       </View>
     );
   };
