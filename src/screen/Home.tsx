@@ -378,7 +378,7 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
     <View style={styles.root}>
       <SsuStatusBar type="black" />
       <TopNavigation.Type5
-        name={profileStorage()?.fullname ?? ''}
+        name={dataProfile?.data?.fullname ?? ''}
         profileUri={dataProfile?.data?.imageProfileUrls[1]?.image || ''}
         leftIconAction={() => null}
         rightIcon={rightIconComp()}
