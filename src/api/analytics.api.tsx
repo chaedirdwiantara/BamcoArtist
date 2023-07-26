@@ -154,7 +154,7 @@ export const WhoListenEP = async (
   props?: ParamsProps,
 ): Promise<SongChartResponseType> => {
   const {data} = await SsuApiSemeru().request<SongChartResponseType>({
-    url: `/musician-app/analytics/album-stream/${props?.songID}`,
+    url: `/musician-app/analytics/album-stream/${props?.albumID}`,
     method: 'GET',
     params: {
       interval: props?.interval,
