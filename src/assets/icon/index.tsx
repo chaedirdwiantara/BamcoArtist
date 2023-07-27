@@ -133,6 +133,7 @@ import BagTickIcon from './BagTick.icon';
 import StarIcon from './BagTick.icon';
 import {NormalCreditCard, PosCreditCard} from './CreditCard';
 import DollarSign from './DollarSign';
+import UploadIcon from './Upload.icon';
 
 export {
   AddIcon,
@@ -271,4 +272,5 @@ export {
   NormalCreditCard,
   PosCreditCard,
   DollarSign,
+  UploadIcon,
 };

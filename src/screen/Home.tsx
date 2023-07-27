@@ -71,6 +71,7 @@ import {
 import {TotalIncome} from '../interface/analythic.interface';
 import {useQuery} from 'react-query';
 import {useAnalyticsHook} from '../hooks/use-analytics.hook';
+import {UploadMusicSection} from '../components/molecule/UploadMusic';
 
 type OnScrollEventHandler = (
   event: NativeSyntheticEvent<NativeScrollEvent>,
@@ -461,7 +462,9 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
           />
         )}
 
-        <Gap height={heightPercentage(20)} />
+        <View style={styles.containerUpload}>
+          <UploadMusicSection />
+        </View>
 
         {/* Tab Analytic */}
         <View style={[styles.containerContent]}>
@@ -599,5 +602,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  containerUpload: {
+    marginVertical: mvs(25),
+    alignSelf: 'center',
   },
 });
