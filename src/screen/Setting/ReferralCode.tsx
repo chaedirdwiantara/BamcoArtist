@@ -1,5 +1,13 @@
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {useTranslation} from 'react-i18next';
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
@@ -111,6 +119,7 @@ export const ReferralCodeSetting: React.FC = () => {
       ) : (
         ''
       )}
+
       <TopNavigation.Type1
         title={t('Setting.Referral.Title')}
         leftIcon={<ArrowLeftIcon />}
@@ -123,7 +132,7 @@ export const ReferralCodeSetting: React.FC = () => {
       />
 
       {dataProfile && (
-        <>
+        <View>
           <TabFilter.Type1
             filterData={filter}
             onPress={filterData}
@@ -139,34 +148,42 @@ export const ReferralCodeSetting: React.FC = () => {
               handleWebview={handleWebview}
             />
           ) : (
-            <View
-              style={{
-                flex: 1,
-                alignItems: 'center',
-                paddingTop: 40,
-              }}>
-              <UseReferralContent
-                onPress={onApplyReferral}
-                isError={errorMsg !== ''}
-                errorMsg={errorMsg}
-                isValidRef={isValidReferral}
-                isScanFailed={isScanFailed}
-                setIsScanFailed={setIsScanFailed}
-                refCode={refCode}
-                setRefCode={setRefCode}
-                isScanning={isScanning}
-                setIsScanning={setIsScanning}
-                isScanSuccess={isScanSuccess}
-                setIsScanSuccess={setIsScanSuccess}
-                isScanned={isScanned}
-                setIsScanned={setIsScanned}
-                isManualEnter={isManualEnter}
-                setIsManualEnter={setIsManualEnter}
-                referralFrom={dataProfile.data.referralFrom}
-              />
-            </View>
+            <KeyboardAvoidingView
+              behavior={Platform.OS === 'ios' ? 'padding' : 'padding'}
+              keyboardVerticalOffset={Platform.OS === 'ios' ? 100 : 0}>
+              <ScrollView
+                decelerationRate="fast"
+                showsVerticalScrollIndicator={false}
+                keyboardShouldPersistTaps="handled">
+                <View
+                  style={{
+                    alignItems: 'center',
+                    paddingTop: 40,
+                  }}>
+                  <UseReferralContent
+                    onPress={onApplyReferral}
+                    isError={errorMsg !== ''}
+                    errorMsg={errorMsg}
+                    isValidRef={isValidReferral}
+                    isScanFailed={isScanFailed}
+                    setIsScanFailed={setIsScanFailed}
+                    refCode={refCode}
+                    setRefCode={setRefCode}
+                    isScanning={isScanning}
+                    setIsScanning={setIsScanning}
+                    isScanSuccess={isScanSuccess}
+                    setIsScanSuccess={setIsScanSuccess}
+                    isScanned={isScanned}
+                    setIsScanned={setIsScanned}
+                    isManualEnter={isManualEnter}
+                    setIsManualEnter={setIsManualEnter}
+                    referralFrom={dataProfile.data.referralFrom}
+                  />
+                </View>
+              </ScrollView>
+            </KeyboardAvoidingView>
           )}
-        </>
+        </View>
       )}
     </View>
   );
@@ -203,5 +220,8 @@ const styles = StyleSheet.create({
     marginTop: 220,
     backgroundColor: color.Dark[800],
     padding: 24,
+  },
+  containerScrollView: {
+    height: '100%',
   },
 });

@@ -5,6 +5,7 @@ import {
   StyleSheet,
   InteractionManager,
   ScrollView,
+  Platform,
 } from 'react-native';
 import {useTranslation} from 'react-i18next';
 import {ms, mvs} from 'react-native-size-matters';
@@ -186,6 +187,7 @@ export const StepProfile: React.FC<AccountProps> = ({
 
         <ModalLoading visible={imageLoading} />
       </View>
+      {Platform.OS === 'ios' ? <Gap height={100} /> : null}
     </ScrollView>
   );
 };
