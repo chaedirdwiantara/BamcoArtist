@@ -43,14 +43,14 @@ export type AddSongPropsTypeB = {
 
 export type PlaylistResponseType = {
   code: number;
-  data: Playlist[];
+  data: Playlist[] | null;
   message: string;
   status: number;
 };
 
 export type PlaylistResponseTypeB = {
   code: number;
-  data: Playlist;
+  data: Playlist | null;
   message: string;
   status: number;
 };
