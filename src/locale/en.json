@@ -792,7 +792,7 @@
         "Invalid": "Referral code invalid"
       },
       "OnBoard": {
-        "Title": "Scan referral code by pressing scan now button, to earn some free stuff and bonuses",
+        "Title": "Scan QR Code to Earn Bonuses!",
         "Subtitle": "Scan referral code by pressing scan now button, to earn some free stuff and bonuses",
         "Activated": "Your 5% Comission for every transaction have been activated!",
         "SuccessTitle": "Your scan was successful!",
@@ -949,7 +949,7 @@
       "Media": "Upload Media",
       "Preview": "Add Preview"
     },
-    "Dropdown":{
+    "Dropdown": {
       "Visit": "Visit Profile",
       "Report": "Report"
     }
