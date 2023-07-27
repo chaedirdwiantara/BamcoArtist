@@ -154,6 +154,15 @@
     }
   },
   "Home": {
+    "UploadMusic": {
+      "Title": "How to upload music",
+      "View": "View",
+      "ModalInfo": {
+        "Title": "Release Your Album!",
+        "Subtitle1": "To Release your album, you need to login to ",
+        "Subtitle2": " and fill your release information"
+      }
+    },
     "OverviewCard": {
       "Title": "My Overview",
       "FirstCard": "My Fans",
