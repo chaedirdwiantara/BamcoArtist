@@ -26,7 +26,7 @@ const PlaylistHome: FC<PlaylistProps> = (props: PlaylistProps) => {
       contentContainerStyle={{
         paddingLeft: widthResponsive(24),
       }}>
-      {dataPlaylist.length > 0 ? (
+      {dataPlaylist?.length > 0 ? (
         dataPlaylist?.map((item, index) => {
           return (
             <PlaylistHomeCard

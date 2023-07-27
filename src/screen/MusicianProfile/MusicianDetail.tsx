@@ -277,7 +277,7 @@ export const MusicianDetail: React.FC<MusicianDetailProps> = ({
                 )}
               </View>
             ) : filter[selectedIndex].filterName === 'Musician.Tab.Music' ? (
-              dataPlaylist.length > 0 ? (
+              dataPlaylist?.length > 0 ? (
                 <View style={{paddingHorizontal: widthResponsive(30)}}>
                   <ListPlaylist
                     data={dataPlaylist}
