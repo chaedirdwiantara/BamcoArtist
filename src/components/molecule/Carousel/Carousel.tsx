@@ -33,6 +33,7 @@ interface CarouselProps {
 }
 
 export const Carousel: FC<CarouselProps> = ({data, onPressBanner}) => {
+  const defaultBanner = require('../../../assets/image/default_banner.png');
   const scrollX = useRef(new Animated.Value(0)).current;
   const [dataWithPlaceholders, setDataWithPlaceholders] = useState<
     BannerList[]
@@ -101,7 +102,9 @@ export const Carousel: FC<CarouselProps> = ({data, onPressBanner}) => {
                   source={
                     item.isDefault
                       ? item.imageUrls
-                      : {uri: item.imageUrls[3].image}
+                      : item.imageUrls.length > 0
+                      ? {uri: item.imageUrls[3].image}
+                      : defaultBanner
                   }
                   style={styles.itemImage}
                 />
