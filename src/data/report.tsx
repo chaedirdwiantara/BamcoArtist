@@ -4,8 +4,8 @@ export interface DataDropDownType {
 }
 
 export const reportingMenu: DataDropDownType[] = [
-  {label: 'Home.Modal.Report.ChoiceA', value: '1'},
-  {label: 'Home.Modal.Report.ChoiceB', value: '2'},
-  {label: 'Home.Modal.Report.ChoiceC', value: '3'},
-  {label: 'Home.Modal.Report.ChoiceD', value: '4'},
+  {label: 'ModalComponent.Report.Category.OptionA', value: '1'},
+  {label: 'ModalComponent.Report.Category.OptionB', value: '2'},
+  {label: 'ModalComponent.Report.Category.OptionC', value: '3'},
+  {label: 'ModalComponent.Report.Category.OptionD', value: '4'},
 ];

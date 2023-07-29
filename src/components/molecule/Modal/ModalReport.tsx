@@ -3,16 +3,16 @@ import {Text, View, StyleSheet, TouchableOpacity} from 'react-native';
 import Modal from 'react-native-modal';
 import {mvs} from 'react-native-size-matters';
 import Font from '../../../theme/Font';
-import Color from '../../../theme/Color';
 import {width, widthResponsive} from '../../../utils';
 import {useTranslation} from 'react-i18next';
 import {DataDropDownType} from '../../../data/report';
 import {PressedRadioIcon, RadioButtonIcon} from '../../../assets/icon';
-import {Gap, SsuInput} from '../../atom';
-import {color} from '../../../theme';
+import {ErrorWarning, Gap, SsuInput} from '../../atom';
+import {color, font} from '../../../theme';
 
 interface ModalReportProps {
-  title?: string;
+  title: string;
+  secondTitle: string;
   modalVisible: boolean;
   onPressClose?: () => void;
   onPressOk?: () => void;
@@ -24,14 +24,157 @@ export const ModalReport: React.FC<ModalReportProps> = (
   props: ModalReportProps,
 ) => {
   const {t} = useTranslation();
-  const {title, modalVisible, onPressClose, onPressOk, disabled, dataReport} =
-    props;
+  const {
+    title,
+    secondTitle,
+    modalVisible,
+    onPressClose,
+    onPressOk,
+    disabled,
+    dataReport,
+  } = props;
 
   const [activeIndex, setActiveIndex] = useState<number>(-1);
+  const [selectedCategory, setSelectedCategory] = useState<string>();
+  const [reason, setReason] = useState<string>('');
+  const [nextPage, setNextPage] = useState<boolean>(false);
+  const [errorWarning, setErrorWarning] = useState<boolean>(false);
+
   const choiceOnPress = (label: string, index: number) => {
     setActiveIndex(index);
-    //TODO: WIRING AND SEND LABEL
+    setSelectedCategory(label);
+    setErrorWarning(false);
   };
+
+  const sendFirstPageOnPress = () => {
+    if (selectedCategory) {
+      setNextPage(true);
+    } else {
+      setErrorWarning(true);
+    }
+    onPressOk?.();
+  };
+
+  const sendSecondPageOnPress = () => {
+    onPressOk?.();
+  };
+
+  const editOnPress = () => {
+    setNextPage(false);
+  };
+
+  const cancelOnPress = () => {
+    setNextPage(false);
+    setSelectedCategory(undefined);
+    setActiveIndex(-1);
+    setReason('');
+    setErrorWarning(false);
+    onPressClose?.();
+  };
+
+  const modalFirstPage = () => {
+    return (
+      <View style={styles.card}>
+        <Text style={styles.title}>{title}</Text>
+        <Gap height={20} />
+        {dataReport.map((item, index) => (
+          <TouchableOpacity
+            style={styles.choiceContainer}
+            onPress={() => choiceOnPress(item.label, index)}>
+            {activeIndex === index ? (
+              <PressedRadioIcon style={styles.customIconStyle} />
+            ) : (
+              <RadioButtonIcon />
+            )}
+            <Gap width={12} />
+            <Text key={index} style={styles.category}>
+              {t(item.label)}
+            </Text>
+          </TouchableOpacity>
+        ))}
+        {errorWarning && (
+          <>
+            <ErrorWarning erroMsg={t('ModalComponent.Report.Warning')} />
+            <Gap height={12} />
+          </>
+        )}
+        <Gap height={4} />
+        <SsuInput.TextArea
+          containerStyles={styles.reportContainer}
+          numberOfLines={7}
+          maxLength={400}
+          placeholder={`${t('ModalComponent.Report.Placeholder')}`}
+          value={reason}
+          onChangeText={(newText: string) => setReason(newText)}
+        />
+        <Gap height={20} />
+        <View style={styles.containerButton}>
+          <TouchableOpacity onPress={cancelOnPress}>
+            <Text style={styles.option}>
+              {t('ModalComponent.Report.Button.Cancel')}
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity disabled={disabled} onPress={sendFirstPageOnPress}>
+            <Text style={styles.option}>
+              {t('ModalComponent.Report.Button.Send')}
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    );
+  };
+
+  const modalSecondPage = () => {
+    return (
+      <View style={styles.card}>
+        <Text style={styles.title}>{secondTitle}</Text>
+        <Gap height={20} />
+        <Text style={styles.subtitle}>
+          {t('ModalComponent.Report.Subtitle.Category')}
+        </Text>
+        <Gap height={4} />
+        <Text style={styles.category}>
+          {selectedCategory ? t(selectedCategory) : ''}
+        </Text>
+        <Gap height={16} />
+        <Text style={styles.subtitle}>
+          {t('ModalComponent.Report.Subtitle.Category')}
+        </Text>
+        <Gap height={8} />
+        <SsuInput.TextArea
+          containerStyles={styles.reportContainer}
+          numberOfLines={7}
+          maxLength={400}
+          value={reason}
+          onChangeText={(newText: string) => setReason(newText)}
+          editable={false}
+        />
+        <Gap height={20} />
+        <View style={styles.containerButtonNextPage}>
+          <TouchableOpacity onPress={editOnPress}>
+            <Text style={[styles.option, {paddingLeft: 0}]}>
+              {t('ModalComponent.Report.Button.Edit')}
+            </Text>
+          </TouchableOpacity>
+          <View style={styles.containerButtonLeft}>
+            <TouchableOpacity onPress={cancelOnPress}>
+              <Text style={styles.option}>
+                {t('ModalComponent.Report.Button.Cancel')}
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              disabled={disabled}
+              onPress={sendSecondPageOnPress}>
+              <Text style={styles.option}>
+                {t('ModalComponent.Report.Button.Send')}
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </View>
+    );
+  };
+
   return (
     <Modal
       isVisible={modalVisible}
@@ -43,40 +186,7 @@ export const ModalReport: React.FC<ModalReportProps> = (
       backdropTransitionInTiming={600}
       backdropTransitionOutTiming={600}>
       <View style={styles.root}>
-        <View style={styles.card}>
-          <Text style={styles.title}>{title}</Text>
-          <Gap height={20} />
-          {dataReport.map((item, index) => (
-            <TouchableOpacity
-              style={styles.choiceContainer}
-              onPress={() => choiceOnPress(item.label, index)}>
-              {activeIndex === index ? (
-                <PressedRadioIcon style={styles.customIconStyle} />
-              ) : (
-                <RadioButtonIcon />
-              )}
-              <Gap width={12} />
-              <Text key={index} style={styles.subtitle}>
-                {item.label}
-              </Text>
-            </TouchableOpacity>
-          ))}
-          <Gap height={4} />
-          <SsuInput.TextArea
-            containerStyles={styles.reportContainer}
-            numberOfLines={7}
-            maxLength={400}
-          />
-          <Gap height={20} />
-          <View style={styles.containerButton}>
-            <TouchableOpacity onPress={onPressClose}>
-              <Text style={styles.option}>{'Cancel'}</Text>
-            </TouchableOpacity>
-            <TouchableOpacity disabled={disabled} onPress={onPressOk}>
-              <Text style={styles.option}>{'Send'}</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
+        {!nextPage ? modalFirstPage() : modalSecondPage()}
       </View>
     </Modal>
   );
@@ -89,7 +199,7 @@ const styles = StyleSheet.create({
   },
   card: {
     width: width * 0.9,
-    backgroundColor: Color.Dark[800],
+    backgroundColor: color.Dark[800],
     justifyContent: 'center',
     borderRadius: 4,
     paddingHorizontal: widthResponsive(20),
@@ -97,24 +207,37 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: mvs(16),
-    color: Color.Neutral[10],
+    color: color.Neutral[10],
     fontFamily: Font.InterSemiBold,
   },
   subtitle: {
-    fontSize: mvs(15),
-    color: Color.Neutral[10],
+    fontSize: mvs(10),
+    color: color.Neutral[50],
     fontWeight: '400',
-    fontFamily: Font.InterRegular,
+    fontFamily: font.InterRegular,
+  },
+  category: {
+    fontSize: mvs(15),
+    color: color.Neutral[10],
+    fontWeight: '400',
+    fontFamily: font.InterRegular,
   },
   containerButton: {
     flexDirection: 'row',
     justifyContent: 'flex-end',
   },
+  containerButtonNextPage: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  containerButtonLeft: {
+    flexDirection: 'row',
+  },
   option: {
     fontSize: mvs(14),
     paddingHorizontal: widthResponsive(12),
-    color: Color.Neutral[10],
-    fontFamily: Font.InterRegular,
+    color: color.Neutral[10],
+    fontFamily: font.InterRegular,
   },
   choiceContainer: {
     flexDirection: 'row',

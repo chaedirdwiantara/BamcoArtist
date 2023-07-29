@@ -1158,7 +1158,8 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
         <ModalReport
           modalVisible={reportToast}
           onPressClose={() => setReportToast(false)}
-          title="Why are you reporting this post?"
+          title={`${t('ModalComponent.Report.Type.Post.FirstTitle')}`}
+          secondTitle={`${t('ModalComponent.Report.Type.Post.SecondTitle')}`}
           dataReport={reportingMenu}
         />
         <ModalDonate

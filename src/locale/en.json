@@ -1250,5 +1250,44 @@
       "Title": "Get in touch with {{name}}",
       "Subtitle": "Discover Attention-Grabbing Musicians to Explore!"
     }
+  },
+  "ModalComponent":{
+    "Report":{
+      "Type":{
+        "Song":{
+          "FirstTitle": "Why are you reporting this song?",
+          "SecondTitle": "Are you sure to report this song?"
+        },
+        "Album":{
+          "FirstTitle": "Why are you reporting this album?",
+          "SecondTitle": "Are you sure to report this album?"
+        },
+        "Post":{
+          "FirstTitle": "Why are you reporting this post?",
+          "SecondTitle": "Are you sure to report this post?"
+        },
+        "Replies":{
+          "FirstTitle": "Why are you reporting this replies?",
+          "SecondTitle": "Are you sure to report this replies?"
+        }
+      },
+      "Category":{
+        "OptionA":"Abusive behavior and violent threats",
+        "OptionB":"Spam and system abuse",
+        "OptionC":"Unauthorized use of copyrighted materials",
+        "OptionD":"Show sensitive or disturbing content"
+      },
+      "Button":{
+        "Cancel":"Cancel",
+        "Send":"Send",
+        "Edit":"Let me edit"
+      },
+      "Placeholder":"Add Reason",
+      "Subtitle":{
+        "Category":"Category",
+        "Reason":"Reason"
+      },
+      "Warning":"You need to select one of the report category"
+    }
   }
 }
