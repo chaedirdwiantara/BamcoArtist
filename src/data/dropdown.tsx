@@ -40,6 +40,7 @@ export const countryData: DataCountryType[] = [
 export interface DataDropDownType {
   label: string;
   value: string;
+  disabled?: boolean;
 }
 
 export const dropDownDataCategory: DataDropDownType[] = [
@@ -187,6 +188,15 @@ export const dataReportPost: DataDropDownType[] = [
   {label: 'Post.Dropdown.Report', value: '22'},
 ];
 
+export const dataAlreadyReportPost: DataDropDownType[] = [
+  {label: 'Post.Dropdown.Visit', value: '11', disabled: false},
+  {label: 'Post.Dropdown.ReportSent', value: '22', disabled: true},
+];
+
 export const dataReportPostProfile: DataDropDownType[] = [
   {label: 'Post.Dropdown.Report', value: '22'},
+];
+
+export const dataReportAlreadyPostProfile: DataDropDownType[] = [
+  {label: 'Post.Dropdown.ReportSent', value: '22', disabled: true},
 ];

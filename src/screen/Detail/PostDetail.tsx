@@ -52,6 +52,13 @@ import {imageShare} from '../../utils/share';
 import {useShareHook} from '../../hooks/use-share.hook';
 import {ModalReport} from '../../components/molecule/Modal/ModalReport';
 import {reportingMenu} from '../../data/report';
+import {
+  getLikeCount,
+  getLikePressedStatus,
+  useLikeStatus,
+} from '../../utils/detailPostUtils';
+import {useReportHook} from '../../hooks/use-report.hook';
+import {ReportParamsProps} from '../../interface/report.interface';
 
 export const {width} = Dimensions.get('screen');
 
@@ -188,8 +195,11 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   const [parentIdAddComment, setParentIdAddComment] = useState<string[]>([]);
 
   // * UPDATE HOOKS POST
-  const [selectedIdPost, setSelectedIdPost] = useState<string>();
+  const [selectedIdPost, setSelectedIdPost] = useState<string | number>();
   const [selectedMenuPost, setSelectedMenuPost] = useState<DataDropDownType>();
+  const [selectedCategory, setSelectedCategory] = useState<string>();
+  const [reason, setReason] = useState<string>('');
+  const [successReport, setSuccessReport] = useState<boolean>(false);
 
   //* MUSIC HOOKS
   const [pauseModeOn, setPauseModeOn] = useState<boolean>(false);
@@ -755,29 +765,14 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   // ! LIKE AREA
   // * Handle Like / Unlike on Post
   const likeOnPress = (id: string, isLiked: boolean) => {
-    if (isLiked === true) {
-      if (likePressed === true) {
-        setUnlikePost({id});
-        setLikePressed(false);
-      } else if (likePressed === false) {
-        setLikePost({id});
-        setLikePressed(true);
-      } else {
-        setUnlikePost({id});
-        setLikePressed(false);
-      }
-    } else if (isLiked === false) {
-      if (likePressed === true) {
-        setUnlikePost({id});
-        setLikePressed(false);
-      } else if (likePressed === false) {
-        setLikePost({id});
-        setLikePressed(true);
-      } else {
-        setLikePost({id});
-        setLikePressed(true);
-      }
-    }
+    useLikeStatus(
+      id,
+      isLiked,
+      likePressed,
+      setUnlikePost,
+      setLikePost,
+      setLikePressed,
+    );
   };
 
   // * Handle Like / Unlike on Comment Section
@@ -791,6 +786,9 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   // ! End Of LIKE AREA
 
   // ! UPDATE POST AREA
+  const {dataReport, reportIsLoading, reportIsError, setPostReport} =
+    useReportHook();
+
   useEffect(() => {
     if (
       selectedIdPost !== undefined &&
@@ -816,12 +814,13 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
         isSubscribe,
         viewsCount,
         shareCount,
+        reportSent,
       } = dataPostDetail;
 
       switch (selectedValue) {
         //? Delete Post
         case '2':
-          setDeletePost({id: selectedIdPost});
+          setDeletePost({id: selectedIdPost.toString()});
           break;
         //? Edit Post
         case '1':
@@ -843,6 +842,7 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
             isSubscribe,
             viewsCount,
             shareCount,
+            reportSent,
           };
           navigation.navigate('CreatePost', {postData: toEditPost});
           break;
@@ -852,7 +852,7 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
           break;
         //? Report Post
         case '22':
-          console.log('REPORT', selectedIdPost);
+          setReportToast(true);
           break;
         default:
           break;
@@ -867,6 +867,26 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
       navigation.goBack();
     }
   }, [dataDeletePost, show]);
+
+  useEffect(() => {
+    if (dataReport) setSuccessReport(true);
+    console.log(dataReport);
+  }, [dataReport]);
+
+  const sendOnPress = () => {
+    const reportBody: ReportParamsProps = {
+      reportType: 'post',
+      reportTypeId: selectedIdPost ?? 0,
+      reporterUuid: dataProfile?.data.uuid ?? '',
+      reportCategory: t(selectedCategory ?? ''),
+      reportReason: reason ?? '',
+    };
+    setPostReport(reportBody);
+  };
+
+  const closeModalSuccess = () => {
+    setSuccessReport(false);
+  };
   // ! END OF UPDATE POST AREA
 
   // ! MUSIC AREA
@@ -1026,26 +1046,8 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
                 likeOnPress={() =>
                   likeOnPress(dataPostDetail.id, dataPostDetail.isLiked)
                 }
-                likePressed={
-                  likePressed === undefined
-                    ? dataPostDetail.isLiked
-                    : likePressed === true
-                    ? true
-                    : false
-                }
-                likeCount={
-                  likePressed === undefined
-                    ? dataPostDetail.likesCount
-                    : likePressed === true && dataPostDetail.isLiked === true
-                    ? dataPostDetail.likesCount
-                    : likePressed === true && dataPostDetail.isLiked === false
-                    ? dataPostDetail.likesCount + 1
-                    : likePressed === false && dataPostDetail.isLiked === true
-                    ? dataPostDetail.likesCount - 1
-                    : likePressed === false && dataPostDetail.isLiked === false
-                    ? dataPostDetail.likesCount
-                    : dataPostDetail.likesCount
-                }
+                likePressed={getLikePressedStatus(likePressed, dataPostDetail)}
+                likeCount={getLikeCount(likePressed, dataPostDetail)}
                 tokenOnPress={tokenOnPress}
                 shareOnPress={() =>
                   shareOnPress(
@@ -1065,6 +1067,7 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
                 viewCount={dataPostDetail.viewsCount}
                 shareCount={dataPostDetail.shareCount}
                 showDropdown
+                reportSent={dataPostDetail.reportSent}
                 children={
                   <DetailChildrenCard
                     data={dataPostDetail}
@@ -1161,6 +1164,15 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
           title={`${t('ModalComponent.Report.Type.Post.FirstTitle')}`}
           secondTitle={`${t('ModalComponent.Report.Type.Post.SecondTitle')}`}
           dataReport={reportingMenu}
+          onPressOk={sendOnPress}
+          category={setSelectedCategory}
+          reportReason={setReason}
+        />
+        <SsuToast
+          modalVisible={successReport}
+          onBackPressed={closeModalSuccess}
+          children={<View style={[styles.modalContainer]}></View>}
+          modalStyle={{marginHorizontal: widthResponsive(24)}}
         />
         <ModalDonate
           userId={data.musician.uuid}

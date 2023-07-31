@@ -18,6 +18,8 @@ interface ModalReportProps {
   onPressOk?: () => void;
   disabled?: boolean;
   dataReport: DataDropDownType[];
+  category: (data: string) => void;
+  reportReason: (data: string) => void;
 }
 
 export const ModalReport: React.FC<ModalReportProps> = (
@@ -32,6 +34,8 @@ export const ModalReport: React.FC<ModalReportProps> = (
     onPressOk,
     disabled,
     dataReport,
+    category,
+    reportReason,
   } = props;
 
   const [activeIndex, setActiveIndex] = useState<number>(-1);
@@ -49,13 +53,20 @@ export const ModalReport: React.FC<ModalReportProps> = (
   const sendFirstPageOnPress = () => {
     if (selectedCategory) {
       setNextPage(true);
+      category?.(selectedCategory);
+      reportReason?.(reason);
     } else {
       setErrorWarning(true);
     }
-    onPressOk?.();
   };
 
   const sendSecondPageOnPress = () => {
+    setNextPage(false);
+    setSelectedCategory(undefined);
+    setActiveIndex(-1);
+    setReason('');
+    setErrorWarning(false);
+    onPressClose?.();
     onPressOk?.();
   };
 
@@ -138,7 +149,7 @@ export const ModalReport: React.FC<ModalReportProps> = (
         </Text>
         <Gap height={16} />
         <Text style={styles.subtitle}>
-          {t('ModalComponent.Report.Subtitle.Category')}
+          {t('ModalComponent.Report.Subtitle.Reason')}
         </Text>
         <Gap height={8} />
         <SsuInput.TextArea

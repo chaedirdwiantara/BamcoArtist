@@ -25,6 +25,8 @@ import {
   dataUpdatePost,
   dataReportPost,
   dataReportPostProfile,
+  dataReportAlreadyPostProfile,
+  dataAlreadyReportPost,
 } from '../../../data/dropdown';
 import DropdownMore from '../V2/DropdownFilter/DropdownMore';
 import {
@@ -62,6 +64,7 @@ interface ListProps extends TouchableOpacityProps {
   musicianUuid?: string;
   selectedUserUuid?: (uuid: string) => void;
   onProfile?: boolean;
+  reportSent?: boolean;
 }
 
 const PostListCard: React.FC<ListProps> = (props: ListProps) => {
@@ -95,9 +98,17 @@ const PostListCard: React.FC<ListProps> = (props: ListProps) => {
     musicianUuid,
     selectedUserUuid,
     onProfile,
+    reportSent,
   } = props;
 
-  const dataReport = onProfile ? dataReportPostProfile : dataReportPost;
+  const dataReport =
+    onProfile && !reportSent
+      ? dataReportPostProfile
+      : onProfile && reportSent
+      ? dataReportAlreadyPostProfile
+      : !onProfile && reportSent
+      ? dataAlreadyReportPost
+      : dataReportPost;
   const leftPosition = onProfile ? widthResponsive(55) : widthResponsive(27);
   return (
     <TouchableOpacity {...props}>
