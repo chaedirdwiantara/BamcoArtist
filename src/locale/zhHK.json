@@ -1288,7 +1288,8 @@
         "Category":"Category",
         "Reason":"Reason"
       },
-      "Warning":"You need to select one of the report category"
+      "Warning":"You need to select one of the report category",
+      "ReportSuccess":"Report have been sent!"
     }
   }
 }

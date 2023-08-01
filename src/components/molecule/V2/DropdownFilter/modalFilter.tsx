@@ -85,8 +85,13 @@ const FilterModal: FC<ModalFilterProps> = (props: ModalFilterProps) => {
             key={index.toString()}
             style={[styles.buttonContainer, buttonContainerStyle]}
             onPress={() => filterButtonHandler(item)}
-            disabled={item?.disabled ? item.disabled : false}>
-            <Text style={[styles.textFilter, textStyle]}>
+            disabled={item?.disabled ?? false}>
+            <Text
+              style={[
+                styles.textFilter,
+                {color: item?.disabled ? color.Dark[100] : color.Neutral[10]},
+                textStyle,
+              ]}>
               {translation ? t(item.label) : item.label}
             </Text>
           </TouchableOpacity>

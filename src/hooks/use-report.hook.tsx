@@ -1,10 +1,10 @@
 import {useState} from 'react';
 import {sendPostReport} from '../api/report.api';
-import {ReportData, ReportParamsProps} from '../interface/report.interface';
+import {ReportParamsProps} from '../interface/report.interface';
 
 export const useReportHook = () => {
   const [reportIsLoading, setReportIsLoading] = useState(true);
-  const [dataReport, setDataReport] = useState<ReportData>();
+  const [dataReport, setDataReport] = useState<boolean>(false);
   const [reportIsError, setReportIsError] = useState<boolean>(false);
   const [reportMessage, setReportMessage] = useState<string>('');
   const setPostReport = async (props?: ReportParamsProps) => {
@@ -12,7 +12,7 @@ export const useReportHook = () => {
     setReportIsError(false);
     try {
       const response = await sendPostReport(props);
-      setDataReport(response.data);
+      setDataReport(true);
       setReportMessage(response.message);
     } catch (error) {
       setReportIsError(true);
@@ -27,5 +27,6 @@ export const useReportHook = () => {
     reportIsError,
     reportMessage,
     setPostReport,
+    setDataReport,
   };
 };
