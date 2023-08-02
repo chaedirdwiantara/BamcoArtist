@@ -1,5 +1,5 @@
 import React, {FC, useCallback, useEffect, useState} from 'react';
-import {FlatList, Platform, StyleSheet, Text, View} from 'react-native';
+import {FlatList, Platform, StyleSheet, View} from 'react-native';
 import {mvs} from 'react-native-size-matters';
 import {
   BottomSheetGuest,
@@ -9,20 +9,15 @@ import {
   ModalDonate,
   ModalShare,
   ModalSuccessDonate,
-  SsuToast,
+  SuccessToast,
 } from '../../components';
 import {
   DataDropDownType,
   DropDownFilterType,
   DropDownSortType,
 } from '../../data/dropdown';
-import {color, font, typography} from '../../theme';
-import {
-  elipsisText,
-  heightPercentage,
-  heightResponsive,
-  widthResponsive,
-} from '../../utils';
+import {color, font} from '../../theme';
+import {elipsisText, heightResponsive, widthResponsive} from '../../utils';
 import {LogBox} from 'react-native';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
@@ -33,7 +28,6 @@ import {PostList} from '../../interface/feed.interface';
 import {useFeedHook} from '../../hooks/use-feed.hook';
 import {dateFormat} from '../../utils/date-format';
 import categoryNormalize from '../../utils/categoryNormalize';
-import {TickCircleIcon} from '../../assets/icon';
 import {profileStorage} from '../../hooks/use-storage.hook';
 import {usePlayerHook} from '../../hooks/use-player.hook';
 import {useTranslation} from 'react-i18next';
@@ -48,6 +42,16 @@ import {
 import Clipboard from '@react-native-community/clipboard';
 import {imageShare} from '../../utils/share';
 import {useShareHook} from '../../hooks/use-share.hook';
+import {useReportHook} from '../../hooks/use-report.hook';
+import {feedReportRecorded} from '../../store/idReported';
+import {ReportParamsProps} from '../../interface/report.interface';
+import {reportingMenu} from '../../data/report';
+import {ModalReport} from '../../components/molecule/Modal/ModalReport';
+
+type RenderItemProps = {
+  item: PostList;
+  index: number;
+};
 
 interface PostListProps {
   dataRightDropdown: DataDropDownType[];
@@ -94,6 +98,7 @@ const PostListHome: FC<PostListProps> = (props: PostListProps) => {
   } = useShareHook();
 
   const {creditCount, getCreditCount} = useCreditHook();
+  const MyUuid = profileStorage()?.uuid;
 
   const [dataMain, setDataMain] = useState<PostList[]>([]);
   const [modalGuestVisible, setModalGuestVisible] = useState<boolean>(false);
@@ -102,6 +107,7 @@ const PostListHome: FC<PostListProps> = (props: PostListProps) => {
   const [modalShare, setModalShare] = useState<boolean>(false);
   const [isCopied, setIsCopied] = useState<boolean>(false);
   const [toastVisible, setToastVisible] = useState(false);
+  const [reportToast, setReportToast] = useState(false);
   const [modalDonate, setModalDonate] = useState<boolean>(false);
   const [modalSuccessDonate, setModalSuccessDonate] = useState<boolean>(false);
   const [trigger2ndModal, setTrigger2ndModal] = useState<boolean>(false);
@@ -117,6 +123,8 @@ const PostListHome: FC<PostListProps> = (props: PostListProps) => {
     useState<DataDropDownType>();
   const [selectedFilterMenu, setSelectedFilterMenu] =
     useState<DataDropDownType>();
+  const [selectedCategory, setSelectedCategory] = useState<string>();
+  const [reason, setReason] = useState<string>('');
 
   //* MUSIC HOOKS
   const [pauseModeOn, setPauseModeOn] = useState<boolean>(false);
@@ -232,6 +240,16 @@ const PostListHome: FC<PostListProps> = (props: PostListProps) => {
   };
 
   // ! REPORT POST AREA
+  const {
+    dataReport,
+    reportIsLoading,
+    reportIsError,
+    setDataReport,
+    setPostReport,
+  } = useReportHook();
+
+  const {idReported, setIdReported} = feedReportRecorded();
+
   useEffect(() => {
     if (selectedIdPost && selectedMenuPost && selectedUserUuid && dataMain) {
       const selectedValue = t(selectedMenuPost.value);
@@ -243,7 +261,7 @@ const PostListHome: FC<PostListProps> = (props: PostListProps) => {
           });
           break;
         case '22':
-          console.log('REPORT', selectedIdPost);
+          setReportToast(true);
           break;
         default:
           break;
@@ -251,6 +269,31 @@ const PostListHome: FC<PostListProps> = (props: PostListProps) => {
       setSelectedMenuPost(undefined);
     }
   }, [selectedIdPost, selectedMenuPost, selectedUserUuid]);
+
+  //? set status disable after report sent to make sure the status report is updated
+  useEffect(() => {
+    if (dataReport && selectedIdPost) {
+      if (!idReported.includes(selectedIdPost)) {
+        setIdReported([...idReported, selectedIdPost]);
+      }
+    }
+  }, [dataReport]);
+
+  const sendOnPress = () => {
+    const reportBody: ReportParamsProps = {
+      reportType: 'post',
+      reportTypeId: selectedIdPost ?? 0,
+      reporterUuid: MyUuid ?? '',
+      reportedUuid: selectedUserUuid ?? '',
+      reportCategory: t(selectedCategory ?? ''),
+      reportReason: reason ?? '',
+    };
+    setPostReport(reportBody);
+  };
+
+  const closeModalSuccess = () => {
+    setDataReport(false);
+  };
   // ! END OF REPORT POST AREA
 
   // ! MUSIC AREA
@@ -332,7 +375,7 @@ const PostListHome: FC<PostListProps> = (props: PostListProps) => {
                   ? heightResponsive(25)
                   : heightResponsive(40),
             }}
-            renderItem={({item, index}) => (
+            renderItem={({item, index}: RenderItemProps) => (
               <>
                 <ListCard.PostList
                   toDetailOnPress={() =>
@@ -366,6 +409,7 @@ const PostListHome: FC<PostListProps> = (props: PostListProps) => {
                   isPremium={item.isPremiumPost}
                   viewCount={item.viewsCount}
                   shareCount={item.shareCount}
+                  reportSent={idReported.includes(item.id) ?? item.reportSent}
                   showDropdown
                   children={
                     <ChildrenCard
@@ -398,6 +442,22 @@ const PostListHome: FC<PostListProps> = (props: PostListProps) => {
         modalVisible={modalGuestVisible}
         onPressClose={() => setModalGuestVisible(false)}
       />
+      <ModalReport
+        modalVisible={reportToast}
+        onPressClose={() => setReportToast(false)}
+        title={`${t('ModalComponent.Report.Type.Post.FirstTitle')}`}
+        secondTitle={`${t('ModalComponent.Report.Type.Post.SecondTitle')}`}
+        dataReport={reportingMenu}
+        onPressOk={sendOnPress}
+        category={setSelectedCategory}
+        reportReason={setReason}
+      />
+      {/* //? When report succesfully */}
+      <SuccessToast
+        toastVisible={dataReport}
+        onBackPressed={closeModalSuccess}
+        caption={t('ModalComponent.Report.ReportSuccess')}
+      />
       <ModalShare
         url={shareLink}
         modalVisible={modalShare}
@@ -412,23 +472,11 @@ const PostListHome: FC<PostListProps> = (props: PostListProps) => {
         }
         disabled={!successGetLink}
       />
-      <SsuToast
-        modalVisible={toastVisible}
+      {/* //? When copy link done */}
+      <SuccessToast
+        toastVisible={toastVisible}
         onBackPressed={() => setToastVisible(false)}
-        children={
-          <View style={[styles.modalContainer]}>
-            <TickCircleIcon
-              width={widthResponsive(21)}
-              height={heightPercentage(20)}
-              stroke={color.Neutral[10]}
-            />
-            <Gap width={widthResponsive(7)} />
-            <Text style={[typography.Button2, styles.textStyle]}>
-              {t('General.LinkCopied')}
-            </Text>
-          </View>
-        }
-        modalStyle={{marginHorizontal: widthResponsive(24)}}
+        caption={t('General.LinkCopied')}
       />
       <ModalDonate
         userId={selectedMusicianId}
@@ -461,21 +509,6 @@ const styles = StyleSheet.create({
     fontFamily: font.InterRegular,
     fontWeight: '400',
     fontSize: mvs(13),
-    color: color.Neutral[10],
-  },
-  modalContainer: {
-    width: '100%',
-    position: 'absolute',
-    bottom: heightPercentage(22),
-    height: heightPercentage(36),
-    backgroundColor: color.Success[400],
-    paddingHorizontal: widthResponsive(12),
-    borderRadius: 4,
-    flexDirection: 'row',
-    alignItems: 'center',
-    zIndex: 1,
-  },
-  textStyle: {
     color: color.Neutral[10],
   },
   dropdownContainer: {

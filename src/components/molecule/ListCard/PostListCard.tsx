@@ -109,7 +109,8 @@ const PostListCard: React.FC<ListProps> = (props: ListProps) => {
       : !onProfile && reportSent
       ? dataAlreadyReportPost
       : dataReportPost;
-  const leftPosition = onProfile ? widthResponsive(55) : widthResponsive(27);
+  const leftPosition =
+    onProfile && !myPost ? widthResponsive(55) : widthResponsive(27);
   return (
     <TouchableOpacity {...props}>
       <View style={[styles.topContainer, containerStyles]}>

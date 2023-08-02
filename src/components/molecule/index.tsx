@@ -67,6 +67,7 @@ import Title from './Title';
 import {TopupCoinContent} from './TopupCoin';
 import {TopNavigation} from './TopNavigation';
 import TopFans from './TopFans/TopFans';
+import SuccessToast from './Toast/SuccessToast';
 import {UseReferralContent} from './SettingContent/UseReferralContent';
 import {UserInfoCard} from './UserInfoCard/UserInfoCard';
 
@@ -140,6 +141,7 @@ export {
   TopNavigation,
   TopupCoinContent,
   TopFans,
+  SuccessToast,
   UseReferralContent,
   UserInfoCard,
 };

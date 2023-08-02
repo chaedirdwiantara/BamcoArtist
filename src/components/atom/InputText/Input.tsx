@@ -214,10 +214,10 @@ const TextArea: React.FC<TextAreaProps> = props => {
           borderBottomColor: color.Pink[200],
           backgroundColor: backgroundColor ? backgroundColor : color.Dark[800],
         },
-        containerStyles,
         isFocus
           ? {borderBottomColor: color.Pink[2], borderBottomWidth: 1}
           : {borderBottomWidth: 0},
+        containerStyles,
       ]}>
       <TextInput
         style={[styles.inputTextArea(fontSize), inputStyles]}
