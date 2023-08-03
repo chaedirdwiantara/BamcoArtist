@@ -105,9 +105,23 @@ export const dropDownDataDonation: DataDropDownType[] = [
 ];
 
 export const dropDownHeaderAlbum: DataDropDownType[] = [
-  {label: 'Home.Tab.TopSong.Queue', value: '1'},
-  {label: 'General.Share.Album', value: '2'},
-  // {label: 'Music.Label.AddToMyPlaylist', value: '3'},
+  {label: 'Home.Tab.TopSong.Queue', value: '1', disabled: false},
+  {label: 'General.Share.Album', value: '2', disabled: false},
+  // {label: 'Music.Label.AddToMyPlaylist', value: '3', disabled: false},
+];
+
+export const albumReport: DataDropDownType[] = [
+  {label: 'Home.Tab.TopSong.Queue', value: '1', disabled: false},
+  {label: 'General.Share.Album', value: '2', disabled: false},
+  // {label: 'Music.Label.AddToMyPlaylist', value: '3', disabled: false},
+  {label: 'Post.Dropdown.Report', value: '22', disabled: false},
+];
+
+export const albumReportSent: DataDropDownType[] = [
+  {label: 'Home.Tab.TopSong.Queue', value: '1', disabled: false},
+  {label: 'General.Share.Album', value: '2', disabled: false},
+  // {label: 'Music.Label.AddToMyPlaylist', value: '3', disabled: false},
+  {label: 'Post.Dropdown.ReportSent', value: '22', disabled: true},
 ];
 
 export const dropDownHeaderSongDetails: DataDropDownType[] = [

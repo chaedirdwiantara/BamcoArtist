@@ -1196,8 +1196,16 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
         <ModalReport
           modalVisible={reportToast}
           onPressClose={() => setReportToast(false)}
-          title={`${t('ModalComponent.Report.Type.Post.FirstTitle')}`}
-          secondTitle={`${t('ModalComponent.Report.Type.Post.SecondTitle')}`}
+          title={
+            reportType === 'post'
+              ? `${t('ModalComponent.Report.Type.Post.FirstTitle')}`
+              : `${t('ModalComponent.Report.Type.Replies.FirstTitle')}`
+          }
+          secondTitle={
+            reportType === 'post'
+              ? `${t('ModalComponent.Report.Type.Post.SecondTitle')}`
+              : `${t('ModalComponent.Report.Type.Replies.SecondTitle')}`
+          }
           dataReport={reportingMenu}
           onPressOk={sendOnPress}
           category={setSelectedCategory}

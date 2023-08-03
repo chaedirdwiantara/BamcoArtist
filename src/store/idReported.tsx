@@ -9,3 +9,13 @@ export const feedReportRecorded = create<FeedReportRecordProps>(set => ({
   idReported: [],
   setIdReported: (value: string[]) => set({idReported: value}),
 }));
+
+interface MediaReportRecordProps {
+  idReported: number[];
+  setIdReported: (value: number[]) => void;
+}
+
+export const mediaReportRecorded = create<MediaReportRecordProps>(set => ({
+  idReported: [],
+  setIdReported: (value: number[]) => set({idReported: value}),
+}));
