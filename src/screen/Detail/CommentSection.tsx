@@ -40,6 +40,7 @@ interface CommentSectionType {
   selectedMenu: (value: DataDropDownType) => void;
   selectedIdComment: (idComment: string) => void;
   selectedLvlComment: (lvl: number) => void;
+  selectedUserUuid: (uuid: string) => void;
   profileUUID: string;
   deletedCommentParentId: string[];
   addCommentParentId: string[];
@@ -62,6 +63,7 @@ const CommentSection: FC<CommentSectionType> = (props: CommentSectionType) => {
     selectedMenu,
     selectedIdComment,
     selectedLvlComment,
+    selectedUserUuid,
     profileUUID,
     deletedCommentParentId,
     addCommentParentId,
@@ -253,7 +255,9 @@ const CommentSection: FC<CommentSectionType> = (props: CommentSectionType) => {
         selectedMenu={handleSelectedLvl3}
         idComment={id}
         selectedIdComment={selectedIdComment}
-        showEdit={profileUUID === commentOwner.UUID}
+        myComment={profileUUID === commentOwner.UUID}
+        commentOwnerUuid={commentOwner.UUID}
+        selectedUserUuid={selectedUserUuid}
       />
     );
   };
@@ -333,7 +337,9 @@ const CommentSection: FC<CommentSectionType> = (props: CommentSectionType) => {
         selectedMenu={handleSelectedLvl2}
         idComment={id}
         selectedIdComment={selectedIdComment}
-        showEdit={profileUUID === commentOwner.UUID}
+        myComment={profileUUID === commentOwner.UUID}
+        commentOwnerUuid={commentOwner.UUID}
+        selectedUserUuid={selectedUserUuid}
         childrenLvl2={
           <>
             {/* Comment Section Lvl 3 */}
@@ -481,7 +487,9 @@ const CommentSection: FC<CommentSectionType> = (props: CommentSectionType) => {
             selectedMenu={handleSelectedLvl1}
             idComment={item.id}
             selectedIdComment={selectedIdComment}
-            showEdit={profileUUID === item.commentOwner.UUID}
+            myComment={profileUUID === item.commentOwner.UUID}
+            commentOwnerUuid={item.commentOwner.UUID}
+            selectedUserUuid={selectedUserUuid}
             children={
               <>
                 {/* Comment Section Lvl 2 */}

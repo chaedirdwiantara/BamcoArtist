@@ -200,6 +200,10 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   const [selectedMenuPost, setSelectedMenuPost] = useState<DataDropDownType>();
   const [selectedCategory, setSelectedCategory] = useState<string>();
   const [reason, setReason] = useState<string>('');
+  const [reportType, setReportType] = useState<
+    'post' | 'replies' | 'album' | 'song'
+  >();
+  const [selectedUserUuid, setSelectedUserUuid] = useState<string>();
 
   //* MUSIC HOOKS
   const [pauseModeOn, setPauseModeOn] = useState<boolean>(false);
@@ -609,6 +613,11 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
       selectedMenu !== undefined &&
       selectedLvlComment !== undefined
     ) {
+      // * send report
+      if (t(selectedMenu.value) === '22') {
+        setReportToast(true);
+        setReportType('replies');
+      }
       // * delete/edit comment lvl1
       if (selectedLvlComment === 1 && commentLvl1) {
         let commentNow = commentLvl1.filter((x: CommentList) =>
@@ -860,6 +869,7 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
         //? Report Post
         case '22':
           setReportToast(true);
+          setReportType('post');
           break;
         default:
           break;
@@ -885,15 +895,24 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   }, [dataReport]);
 
   const sendOnPress = () => {
-    const reportBody: ReportParamsProps = {
-      reportType: 'post',
+    const reportBodyPost: ReportParamsProps = {
+      reportType: reportType ?? 'post',
       reportTypeId: selectedIdPost ?? 0,
       reporterUuid: dataProfile?.data.uuid ?? '',
       reportedUuid: dataPostDetail?.musician.uuid ?? '',
       reportCategory: t(selectedCategory ?? ''),
       reportReason: reason ?? '',
     };
-    setPostReport(reportBody);
+
+    const reportBodyReplies: ReportParamsProps = {
+      reportType: reportType ?? 'replies',
+      reportTypeId: idComment ?? 0,
+      reporterUuid: dataProfile?.data.uuid ?? '',
+      reportedUuid: selectedUserUuid ?? '',
+      reportCategory: t(selectedCategory ?? ''),
+      reportReason: reason ?? '',
+    };
+    setPostReport(reportType === 'post' ? reportBodyPost : reportBodyReplies);
   };
 
   const closeModalSuccess = () => {
@@ -1122,6 +1141,7 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
             profileUUID={dataProfile?.data.uuid ? dataProfile.data.uuid : ''}
             deletedCommentParentId={parentIdDeletedComment}
             addCommentParentId={parentIdAddComment}
+            selectedUserUuid={setSelectedUserUuid}
           />
         ) : null}
         <ImageModal
