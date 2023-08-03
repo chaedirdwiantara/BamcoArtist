@@ -3,6 +3,7 @@ import {
   detailMusician,
   followMusician,
   getAlbumById,
+  getAppersOnAlbum,
   listFollowing,
   listMusician,
   recommendedMusician,
@@ -10,6 +11,7 @@ import {
 } from '../api/musician.api';
 import {
   AlbumData,
+  AppearsOnDataType,
   DataDetailMusician,
   FollowMusicianPropsType,
   MusicianList,
@@ -35,6 +37,7 @@ export const useMusicianHook = () => {
     useState<DataDetailMusician>();
   const [dataFollow, setDataFollow] = useState<string | null>(null);
   const [isErrorMusician, setIsErrorMusician] = useState(false);
+  const [dataAppearsOn, setDataAppearsOn] = useState<AppearsOnDataType[]>();
 
   const getListDataMusician = async (props?: ParamsProps) => {
     setIsLoadingMusician(true);
@@ -106,6 +109,20 @@ export const useMusicianHook = () => {
     }
   };
 
+  const getDataAppearsOn = async (props?: paramsTypeUuid) => {
+    setIsLoadingMusician(true);
+    try {
+      const response = await getAppersOnAlbum(props);
+      setDataAppearsOn(response.data);
+    } catch (error) {
+      console.log(error);
+      setIsErrorMusician(true);
+      setDataAlbum([]);
+    } finally {
+      setIsLoadingMusician(false);
+    }
+  };
+
   const getAlbum = async (props?: paramsTypeUuid) => {
     setIsLoadingMusician(true);
     try {
@@ -168,6 +185,7 @@ export const useMusicianHook = () => {
     listFollowingMusician,
     dataFavoriteMusician,
     dataRecommendedMusician,
+    dataAppearsOn,
     getListDataMusician,
     setFollowMusician,
     setUnfollowMusician,
@@ -177,5 +195,6 @@ export const useMusicianHook = () => {
     getListFollowingMusician,
     getListDataFavoriteMusician,
     getListDataRecommendedMusician,
+    getDataAppearsOn,
   };
 };
