@@ -85,6 +85,9 @@ export const MusicSection: React.FC<ListProps> = (props: ListProps) => {
     setPostReport,
   } = useReportHook();
 
+  console.log('MyUuid', MyUuid);
+  console.log('singerId', singerId);
+
   const dataMore =
     singerId !== MyUuid && !idReported.includes(songId)
       ? dataListSongAlbum
