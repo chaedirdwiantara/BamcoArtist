@@ -877,6 +877,9 @@
         "Price": "Input Price (In Credit)",
         "Duration": "Select Duration"
       }
+    },
+    "Revenue": {
+      "Title": "Revenue"
     }
   },
   "Music": {
@@ -1046,7 +1049,11 @@
     "MostPlayed": "Oops! We couldn't find a most played song for you. Release your album or song and show the world your musical taste!",
     "Merch": "Oops! We couldn't find any of your merchandise. Your merchandise will be displayed here.",
     "Released": "Oops! We couldn't find any albums or songs that have been released this year. Release your album and share your musical talent with the world!",
-    "Musician": "Oops! It’s seems you don’t have any post, your post will displayed here. \nLet’s create a new post!"
+    "Musician": "Oops! It’s seems you don’t have any post, your post will displayed here. \nLet’s create a new post!",
+    "Revenue": {
+      "Tips": "You haven't received any tips from your fans. Create content to encourage receiving some tips.",
+      "Subs": "You haven't received any subscriptions from your fans. Create exclusive content to earn fans subscriptions."
+    }
   },
   "Guest": {
     "Title": "Sign Up to Interact with Musician",
