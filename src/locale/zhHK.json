@@ -200,7 +200,8 @@
         "Tip": "捐贈",
         "Queue": "加入序列",
         "Share": "分享歌曲",
-        "Details": "顯示積分"
+        "Details": "顯示積分",
+        "Credits": "Show Credits"
       },
       "TopPost": {
         "Title": "Top Post",
@@ -538,7 +539,9 @@
       "Album": "專輯",
       "Merch": "產品",
       "Exclusive": "專屬每日內容",
-      "Musicians": "People who might fit your interest"
+      "Musicians": "People who might fit your interest",
+      "MyAlbum": "My Album",
+      "AppearsOn": "Appears On"
     },
     "Tab": {
       "Profile": "人資料",
