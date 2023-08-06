@@ -122,6 +122,7 @@ export type AlbumData = {
   barcodeUpc: string;
   createdAt: string;
   updatedAt: string;
+  albumType?: string;
   type?: string;
 };
 

@@ -37,7 +37,7 @@ export const useMusicianHook = () => {
     useState<DataDetailMusician>();
   const [dataFollow, setDataFollow] = useState<string | null>(null);
   const [isErrorMusician, setIsErrorMusician] = useState(false);
-  const [dataAppearsOn, setDataAppearsOn] = useState<AppearsOnDataType[]>();
+  const [dataAppearsOn, setDataAppearsOn] = useState<AppearsOnDataType[]>([]);
 
   const getListDataMusician = async (props?: ParamsProps) => {
     setIsLoadingMusician(true);
