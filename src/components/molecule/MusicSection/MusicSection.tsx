@@ -57,7 +57,7 @@ interface ListProps {
 }
 
 export const MusicSection: React.FC<ListProps> = (props: ListProps) => {
-  const {newDataMore, newOnPressMore, singerId} = props;
+  const {newDataMore, newOnPressMore, singerId, songId} = props;
   const {t} = useTranslation();
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
@@ -139,7 +139,7 @@ export const MusicSection: React.FC<ListProps> = (props: ListProps) => {
     } else if (dataResult.value === '4') {
       setModalShare(true);
     } else {
-      navigation.navigate('ShowCredit', {songId: props.songId});
+      navigation.push('SongDetails', {songId, musicianId: singerId});
     }
   };
 
