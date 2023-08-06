@@ -294,10 +294,9 @@ export const AlbumContent: React.FC<Props> = ({
             ) : (
               <ListSongs
                 onPress={onPressSong}
-                hideDropdownMore={true}
                 dataSong={dataSong}
                 type="home"
-                disabled={comingSoon}
+                loveIcon={true}
               />
             )}
           </View>
