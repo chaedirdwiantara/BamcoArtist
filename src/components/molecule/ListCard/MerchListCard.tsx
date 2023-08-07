@@ -66,22 +66,14 @@ const MerchListCard: React.FC<ListProps> = props => {
         <Text style={styles.title} numberOfLines={2}>
           {title}
         </Text>
-        <Text style={styles.owner} numberOfLines={1}>
-          {owner}
-        </Text>
+        {owner && (
+          <Text style={styles.owner} numberOfLines={1}>
+            {owner}
+          </Text>
+        )}
+
         <Gap height={heightPercentage(5)} />
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          <View style={styles.disc}>
-            <CoinIcon
-              height={widthResponsive(16)}
-              width={widthResponsive(16)}
-            />
-            <Gap width={widthResponsive(4)} />
-            <Text style={styles.price}>
-              {toCurrency(price, {withFraction: false})}
-            </Text>
-          </View>
-          <Gap width={widthResponsive(5)} />
           <View style={styles.disc}>
             <View style={styles.discPercContainer}>
               <Text style={styles.discPerc}>25%</Text>
@@ -90,6 +82,14 @@ const MerchListCard: React.FC<ListProps> = props => {
             <Text style={styles.priceDisc}>
               {toCurrency(price, {withFraction: false})}
             </Text>
+          </View>
+          <Gap width={widthResponsive(5)} />
+          <View style={styles.disc}>
+            <Text style={styles.price}>
+              {toCurrency(price, {withFraction: false})}
+            </Text>
+            <Gap width={widthResponsive(4)} />
+            <Text style={styles.price}>HKD</Text>
           </View>
         </View>
         <Gap height={heightPercentage(7)} />
@@ -103,9 +103,10 @@ const MerchListCard: React.FC<ListProps> = props => {
             <Text style={[styles.subtitle, {marginBottom: 0}]}>4,5</Text>
             <Gap width={widthPercentage(4)} />
           </View>
-          <View style={styles.tabSpacer} />
 
-          <View style={styles.disc}>
+          {/* Hide Sold */}
+          {/* <View style={styles.tabSpacer} />
+           <View style={styles.disc}>
             <Text style={[styles.subtitle, {marginBottom: 0}]}>
               {t('Event.Merch.Sold')}
             </Text>
@@ -117,7 +118,7 @@ const MerchListCard: React.FC<ListProps> = props => {
               ]}>
               1,000
             </Text>
-          </View>
+          </View> */}
         </View>
       </View>
     </TouchableOpacity>
@@ -136,7 +137,7 @@ const styles = StyleSheet.create({
     fontSize: normalize(12),
     fontWeight: '500',
     marginBottom: heightPercentage(4),
-    minHeight: heightResponsive(42),
+    // minHeight: heightResponsive(42),
   },
   owner: {
     color: Color.Pink.linear,

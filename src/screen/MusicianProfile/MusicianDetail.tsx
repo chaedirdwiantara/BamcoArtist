@@ -46,6 +46,8 @@ import {storage} from '../../hooks/use-storage.hook';
 import {mvs} from 'react-native-size-matters';
 import {ArrowLeftIcon} from '../../assets/icon';
 import {usePlayerStore} from '../../store/player.store';
+import MerchList from '../ListCard/MerchList';
+import ConcertList from '../ListCard/ConcertList';
 
 type OnScrollEventHandler = (
   event: NativeSyntheticEvent<NativeScrollEvent>,
@@ -88,6 +90,8 @@ export const MusicianDetail: React.FC<MusicianDetailProps> = ({
     {filterName: 'Musician.Tab.Music'},
     {filterName: 'Musician.Tab.Fans'},
     {filterName: 'Musician.Tab.Profile'},
+    {filterName: 'Musician.Tab.Merchandise'},
+    {filterName: 'Musician.Tab.Ticket'},
   ]);
   const [isModalVisible, setModalVisible] = useState<boolean>(false);
   const [zoomImage, setZoomImage] = useState<string[]>([]);
@@ -309,7 +313,21 @@ export const MusicianDetail: React.FC<MusicianDetailProps> = ({
             //     />
             //   </View>
             // )
-            null}
+            filter[selectedIndex].filterName === 'Musician.Tab.Merchandise' ? (
+              <View
+                style={{
+                  paddingHorizontal: widthResponsive(20),
+                }}>
+                <MerchList />
+              </View>
+            ) : filter[selectedIndex].filterName === 'Musician.Tab.Ticket' ? (
+              <View
+                style={{
+                  paddingHorizontal: widthResponsive(20),
+                }}>
+                <ConcertList />
+              </View>
+            ) : null}
           </View>
         </View>
       </ScrollView>
