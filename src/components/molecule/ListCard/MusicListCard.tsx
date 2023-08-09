@@ -14,7 +14,6 @@ import {
   widthPercentage,
   widthResponsive,
 } from '../../../utils';
-import {Dropdown} from '../DropDown';
 import {color, font, typography} from '../../../theme';
 import {Gap, SquareImage} from '../../atom';
 import {DefaultImage, LoveIcon, SoundIcon} from '../../../assets/icon';
