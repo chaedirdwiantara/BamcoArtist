@@ -450,7 +450,11 @@
       "ChooseDate": "Choose Date",
       "Ticket": "Ticket Category",
       "Total": "Total Price",
-      "Details": "Details"
+      "Details": "Details",
+      "ComingSoon": {
+        "Title" : "Discover Ticket",
+        "Subtitle" : "When musicians list tikcet, you’ll see them here"
+      }
     },
     "Merch": {
       "Title": "Merch",
@@ -461,7 +465,11 @@
       "Variant": "Choose Variant",
       "Condition": "Condition",
       "Sold": "Sold",
-      "Product": "Product"
+      "Product": "Product",
+      "ComingSoon": {
+        "Title" : "Discover Merchandise",
+        "Subtitle" : "When musicians list merchandise, you’ll see them here"
+      }
     },
     "Dropdown": {
       "Category": {
@@ -545,7 +553,9 @@
       "Main": "MAIN",
       "Musician": "MUSICIAN",
       "Music": "MUSIC",
-      "Fans": "FANS"
+      "Fans": "FANS",
+      "Merchandise" : "MERCHANDISE",
+      "Ticket" : "TICKET"
     }
   },
   "ExclusiveContent": {

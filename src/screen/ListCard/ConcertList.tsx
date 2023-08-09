@@ -1,6 +1,6 @@
 import React, {FC} from 'react';
 import {RefreshControl, StyleSheet, View} from 'react-native';
-import {FriedEggIcon, TicketIcon} from '../../assets/icon';
+import {CrackEggIcon, FriedEggIcon, TicketIcon} from '../../assets/icon';
 import Color from '../../theme/Color';
 import {heightPercentage, heightResponsive, widthResponsive} from '../../utils';
 import {EmptyState} from '../../components';
@@ -44,17 +44,19 @@ const ConcertList: FC<ConcertListType> = props => {
 
       <EmptyState
         icon={
-          <FriedEggIcon
+          <CrackEggIcon
             fill={Color.Dark[500]}
             width={widthResponsive(150)}
             height={heightResponsive(150)}
             style={styles.iconEmpty}
           />
         }
-        text={t('Event.ComingSoon') || ''}
+        text={t('Event.Concert.ComingSoon.Title') || ''}
+        subtitle={t('Event.Concert.ComingSoon.Subtitle') || ''}
         containerStyle={styles.containerEmpty}
       />
 
+      {/* TODO: Update when API ready */}
       {/* <FlashList
         data={filterList?.data}
         showsVerticalScrollIndicator={false}
@@ -83,7 +85,7 @@ const ConcertList: FC<ConcertListType> = props => {
               index % 2 == 0 ? {marginRight: 10} : {marginLeft: 10}
             }
             image={item.pic}
-            title={item.name}
+            title={item.title}
             owner={item.organizer?.name}
             ownerImage={item.organizer?.pic}
             price={item.price}
@@ -112,7 +114,7 @@ const styles = StyleSheet.create({
   },
   containerEmpty: {
     flex: 0,
-    height: heightResponsive(500),
+    height: heightResponsive(300),
   },
   iconEmpty: {
     marginBottom: 12,
