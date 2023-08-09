@@ -45,6 +45,7 @@ import {NoMoreFeeds} from './NoMoreFeeds/NoMoreFeeds';
 import {NotificationCard} from './NotificationCard/NotificationCard';
 import {PlaylistContent} from './PlaylistContent/PlaylistContent';
 import PostComment from './DetailPost/PostComment';
+import PostAppeal from './AppealCard/PostAppeal';
 import PopUp from './PopUp/popUp';
 import {ProfileContent} from './ProfileContent/ProfileContent';
 import {ProfileHeader} from './ProfileContent/components/Header';
@@ -119,6 +120,7 @@ export {
   NotificationCard,
   PlaylistContent,
   PostComment,
+  PostAppeal,
   PopUp,
   ProfileContent,
   ProfileHeader,

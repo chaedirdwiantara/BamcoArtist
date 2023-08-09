@@ -7,7 +7,6 @@ import {
   TouchableOpacity,
   TouchableOpacityProps,
   Image,
-  Platform,
 } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import {AddIcon, DefaultImage} from '../../../assets/icon';
@@ -58,7 +57,10 @@ const SquareImage: React.FC<SquareImageProps> = (props: SquareImageProps) => {
     );
   } else {
     return (
-      <TouchableOpacity style={containerStyle} disabled={true} {...props}>
+      <TouchableOpacity
+        style={[styles.container, containerStyle]}
+        disabled={true}
+        {...props}>
         {imgUri && imgUri !== null ? (
           darkImage ? (
             <FastImage
@@ -93,7 +95,6 @@ const SquareImage: React.FC<SquareImageProps> = (props: SquareImageProps) => {
               style={[
                 styles.root,
                 {
-                  width: size,
                   height: height,
                   aspectRatio: !height ? 1 / 1 : undefined,
                   borderRadius: borderRadius ? borderRadius : undefined,
@@ -126,6 +127,9 @@ const SquareImage: React.FC<SquareImageProps> = (props: SquareImageProps) => {
 export default SquareImage;
 
 const styles = StyleSheet.create({
+  container: {
+    width: '100%',
+  },
   root: {
     height: undefined,
     aspectRatio: 1 / 1,

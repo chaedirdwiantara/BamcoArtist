@@ -7,46 +7,28 @@ import {
   View,
 } from 'react-native';
 import React, {FC, useEffect, useState} from 'react';
-import {elipsisText, widthResponsive} from '../../utils';
-import {Gap} from '../../components';
-import ImageList from '../ListCard/ImageList';
-import MusicListPreview from '../../components/molecule/MusicPreview/MusicListPreview';
-import {DetailPostData, PostList} from '../../interface/feed.interface';
-import {color, font} from '../../theme';
 import {mvs} from 'react-native-size-matters';
-import VideoComp from '../../components/molecule/VideoPlayer/videoComp';
-import ImageModal from '../Detail/ImageModal';
+import {PostList} from '../../../../interface/feed.interface';
+import {elipsisText, widthResponsive} from '../../../../utils';
+import {Gap} from '../../../atom';
+import ImageList from '../../../../screen/ListCard/ImageList';
+import VideoComp from '../../VideoPlayer/videoComp';
+import ImageModal from '../../../../screen/Detail/ImageModal';
+import {color, font} from '../../../../theme';
+import MusicListPreview from './MusicPreview';
 
 export const {width} = Dimensions.get('screen');
 
-interface ChildrenCardProps {
-  data: DetailPostData;
-  onPress: (val: PostList) => void;
-  isPlay: boolean;
-  playOrPause: () => void;
-  pauseModeOn: boolean;
-  currentProgress: number;
-  duration: number;
-  seekPlayer: (second: number) => void;
-  isIdNowPlaying: boolean;
-  blurModeOn?: boolean;
+interface ChildrenPostCardProps {
+  data: PostList;
+  imgWidth?: number;
+  imgWidth2?: number;
 }
 
-const DetailChildrenCard: FC<ChildrenCardProps> = (
-  props: ChildrenCardProps,
+const ChildrenPostCard: FC<ChildrenPostCardProps> = (
+  props: ChildrenPostCardProps,
 ) => {
-  const {
-    data,
-    onPress,
-    isPlay,
-    playOrPause,
-    pauseModeOn,
-    currentProgress,
-    duration,
-    seekPlayer,
-    isIdNowPlaying,
-    blurModeOn,
-  } = props;
+  const {data, imgWidth, imgWidth2} = props;
 
   const [isModalVisible, setModalVisible] = useState<boolean>(false);
   const [imgUrl, setImgUrl] = useState<number>(-1);
@@ -55,10 +37,6 @@ const DetailChildrenCard: FC<ChildrenCardProps> = (
   useEffect(() => {
     LogBox.ignoreAllLogs();
   }, []);
-
-  const onPressPlaySong = (val: PostList) => {
-    onPress?.(val);
-  };
 
   const toggleModalOnPress = (index: number) => {
     setModalVisible(!isModalVisible);
@@ -70,32 +48,10 @@ const DetailChildrenCard: FC<ChildrenCardProps> = (
     setModalVisible(!isModalVisible);
   };
 
-  const dataPost: PostList = {
-    id: data.id,
-    caption: data.caption,
-    likesCount: data.likesCount,
-    commentsCount: data.commentsCount,
-    category: data.category,
-    images: data.images,
-    createdAt: data.createdAt,
-    updatedAt: data.updatedAt,
-    isPremiumPost: data.isPremiumPost,
-    musician: data.musician,
-    isLiked: data.isLiked,
-    quoteToPost: data.quoteToPost,
-    video: data.video,
-    timeAgo: data.timeAgo,
-    viewsCount: data.viewsCount,
-    shareCount: data.shareCount,
-    isSubscribe: data.isSubscribe,
-  };
-
   return (
     <View style={{width: '100%'}}>
       <Text style={styles.childrenPostTitle}>
-        {blurModeOn
-          ? '[ You are not eligible to view this content, subscribe to view this content ]'
-          : elipsisText(data.caption, 600)}
+        {elipsisText(data.caption, 600)}
       </Text>
       {data.images !== null ? (
         <>
@@ -113,15 +69,11 @@ const DetailChildrenCard: FC<ChildrenCardProps> = (
                 imgData={data.images}
                 height={69.5}
                 heightType2={142}
-                onPress={blurModeOn ? () => {} : toggleModalOnPress}
-                blurModeOn={blurModeOn}
-                disabled={false}
+                onPress={() => {}}
+                disabled={true}
               />
               {data.images.length === 0 && data.quoteToPost.encodeHlsUrl ? (
                 <MusicListPreview
-                  hideClose
-                  targetId={data.quoteToPost.targetId}
-                  targetType={data.quoteToPost.targetType}
                   title={data.quoteToPost.title}
                   musician={data.quoteToPost.musician}
                   coverImage={
@@ -129,23 +81,11 @@ const DetailChildrenCard: FC<ChildrenCardProps> = (
                       ? data.quoteToPost.coverImage[1].image
                       : ''
                   }
-                  encodeDashUrl={data.quoteToPost.encodeDashUrl}
-                  encodeHlsUrl={data.quoteToPost.encodeHlsUrl}
-                  startAt={data.quoteToPost.startAt}
-                  endAt={data.quoteToPost.endAt}
-                  postList={dataPost}
-                  onPress={onPressPlaySong}
-                  isPlay={isPlay}
-                  playOrPause={playOrPause}
-                  pauseModeOn={pauseModeOn}
-                  currentProgress={currentProgress}
-                  duration={duration}
-                  seekPlayer={seekPlayer}
-                  isIdNowPlaying={isIdNowPlaying}
+                  duration={data.quoteToPost.endAt}
                 />
               ) : null}
               {data.video.encodeHlsUrl !== '' && (
-                <TouchableOpacity>
+                <TouchableOpacity disabled>
                   <VideoComp
                     id={data.id}
                     dataVideo={data.video}
@@ -163,7 +103,8 @@ const DetailChildrenCard: FC<ChildrenCardProps> = (
                       width: '100%',
                       height: width - widthResponsive(150),
                     }}
-                    blurModeOn={blurModeOn}
+                    blurModeOn
+                    disabledPlayIcon
                   />
                 </TouchableOpacity>
               )}
@@ -181,7 +122,7 @@ const DetailChildrenCard: FC<ChildrenCardProps> = (
   );
 };
 
-export default DetailChildrenCard;
+export default ChildrenPostCard;
 
 const styles = StyleSheet.create({
   childrenPostTitle: {

@@ -4,7 +4,7 @@ import {color, font} from '../../../theme';
 import {Gap, SquareImage} from '../../atom';
 import {CloseCircleIcon, PauseIcon, PlayIcon} from '../../../assets/icon';
 import {ms, mvs} from 'react-native-size-matters';
-import {heightResponsive} from '../../../utils';
+import {heightResponsive, widthResponsive} from '../../../utils';
 import {Slider} from '@miblanchard/react-native-slider';
 import {PostList} from '../../../interface/feed.interface';
 
@@ -59,8 +59,8 @@ const MusicListPreview: FC<MusicPreviewProps> = (props: MusicPreviewProps) => {
 
   return (
     <View style={styles.container}>
-      <View>
-        <SquareImage size={95} imgUri={coverImage} />
+      <View style={styles.imageContainer}>
+        <SquareImage imgUri={coverImage} size={widthResponsive(95)} />
         {isPlay &&
         isIdNowPlaying &&
         Math.floor(currentProgress) !== Math.floor(duration) ? (
@@ -153,8 +153,12 @@ const styles = StyleSheet.create({
   },
   iconOnPress: {
     position: 'absolute',
-    top: 27,
-    left: 27,
+    top: 0,
+    right: 0,
+    bottom: 0,
+    left: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   songTitle: {
     fontFamily: font.InterMedium,
@@ -189,4 +193,5 @@ const styles = StyleSheet.create({
     fontSize: mvs(10),
     color: color.Neutral[10],
   },
+  imageContainer: {width: widthResponsive(95), height: widthResponsive(95)},
 });

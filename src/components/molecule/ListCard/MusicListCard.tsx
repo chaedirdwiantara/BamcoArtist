@@ -107,12 +107,14 @@ const MusicListCard: React.FC<ListProps> = ({
         </Text>
       )}
       {imgUri ? (
-        <SquareImage
-          imgUri={imgUri}
-          size={widthPercentage(44)}
-          borderRadius={4}
-          darkImage={disabled}
-        />
+        <View style={styles.imageContainer}>
+          <SquareImage
+            imgUri={imgUri}
+            borderRadius={4}
+            darkImage={disabled}
+            size={widthPercentage(44)}
+          />
+        </View>
       ) : (
         <DefaultImage.SongCover
           width={widthPercentage(44)}
@@ -246,4 +248,5 @@ const styles = StyleSheet.create({
   analyticNum: {
     color: color.Neutral[10],
   },
+  imageContainer: {width: widthResponsive(80), height: widthResponsive(80)},
 });

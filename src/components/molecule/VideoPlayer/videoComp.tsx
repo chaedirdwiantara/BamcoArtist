@@ -37,6 +37,7 @@ interface VideoProps {
   blurModeOn?: boolean;
   dataVideo?: VideoResponseType;
   id?: string;
+  disabledPlayIcon?: boolean;
 }
 
 const VideoComp: FC<VideoProps> = (props: VideoProps) => {
@@ -50,6 +51,7 @@ const VideoComp: FC<VideoProps> = (props: VideoProps) => {
     blurModeOn,
     dataVideo,
     id,
+    disabledPlayIcon,
   } = props;
 
   const [duration, setDuration] = useState(0);
@@ -153,7 +155,9 @@ const VideoComp: FC<VideoProps> = (props: VideoProps) => {
         )}
         <View style={styles.playPausedVideo}>
           {paused && (
-            <TouchableOpacity onPress={handlePlaying}>
+            <TouchableOpacity
+              onPress={handlePlaying}
+              disabled={disabledPlayIcon}>
               <PlayVideoIcon />
             </TouchableOpacity>
           )}

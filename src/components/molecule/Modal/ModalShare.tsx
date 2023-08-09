@@ -14,6 +14,7 @@ import {
   normalize,
   width,
   widthPercentage,
+  widthResponsive,
 } from '../../../utils';
 import Font from '../../../theme/Font';
 import Color from '../../../theme/Color';
@@ -73,7 +74,9 @@ export const ModalShare: React.FC<ModalShareProps> = ({
         {!hideMusic ? (
           <View style={styles.containerSong}>
             {imgUri ? (
-              <SquareImage imgUri={imgUri} size={widthPercentage(56)} />
+              <View style={styles.imageContainer}>
+                <SquareImage imgUri={imgUri} />
+              </View>
             ) : (
               <DefaultImage.PlaylistCover
                 width={widthPercentage(56)}
@@ -195,5 +198,9 @@ const styles = StyleSheet.create({
     fontFamily: font.InterRegular,
     fontSize: normalize(12),
     color: color.Neutral[10],
+  },
+  imageContainer: {
+    width: widthResponsive(56),
+    height: widthResponsive(56),
   },
 });

@@ -36,9 +36,14 @@ export const AlbumRow: React.FC<AlbumRowProps> = ({
   const {t} = useTranslation();
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={onPress}>
+      <TouchableOpacity
+        onPress={onPress}
+        style={{
+          width: widthResponsive(imgSize),
+          height: widthResponsive(imgSize),
+        }}>
         {imgUri ? (
-          <SquareImage imgUri={imgUri} size={imgSize} />
+          <SquareImage imgUri={imgUri} />
         ) : (
           <DefaultImage.PlaylistCover
             width={widthPercentage(96)}
