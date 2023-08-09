@@ -100,6 +100,7 @@ export const countryData: DataCountryType[] = [
 export interface DataDropDownType {
   label: string;
   value: string;
+  disabled?: boolean;
 }
 
 export const dropDownDataCategory: DataDropDownType[] = [
@@ -164,9 +165,23 @@ export const dropDownDataDonation: DataDropDownType[] = [
 ];
 
 export const dropDownHeaderAlbum: DataDropDownType[] = [
-  {label: 'Home.Tab.TopSong.Queue', value: '1'},
-  {label: 'General.Share.Album', value: '2'},
-  // {label: 'Music.Label.AddToMyPlaylist', value: '3'},
+  {label: 'Home.Tab.TopSong.Queue', value: '1', disabled: false},
+  {label: 'General.Share.Album', value: '2', disabled: false},
+  // {label: 'Music.Label.AddToMyPlaylist', value: '3', disabled: false},
+];
+
+export const albumReport: DataDropDownType[] = [
+  {label: 'Home.Tab.TopSong.Queue', value: '1', disabled: false},
+  {label: 'General.Share.Album', value: '2', disabled: false},
+  // {label: 'Music.Label.AddToMyPlaylist', value: '3', disabled: false},
+  {label: 'Post.Dropdown.Report', value: '22', disabled: false},
+];
+
+export const albumReportSent: DataDropDownType[] = [
+  {label: 'Home.Tab.TopSong.Queue', value: '1', disabled: false},
+  {label: 'General.Share.Album', value: '2', disabled: false},
+  // {label: 'Music.Label.AddToMyPlaylist', value: '3', disabled: false},
+  {label: 'Post.Dropdown.ReportSent', value: '22', disabled: true},
 ];
 
 export const dropDownHeaderSongDetails: DataDropDownType[] = [
@@ -247,6 +262,40 @@ export const dataReportPost: DataDropDownType[] = [
   {label: 'Post.Dropdown.Report', value: '22'},
 ];
 
+export const dataAlreadyReportPost: DataDropDownType[] = [
+  {label: 'Post.Dropdown.Visit', value: '11', disabled: false},
+  {label: 'Post.Dropdown.ReportSent', value: '22', disabled: true},
+];
+
 export const dataReportPostProfile: DataDropDownType[] = [
   {label: 'Post.Dropdown.Report', value: '22'},
+];
+
+export const dataReportAlreadyPostProfile: DataDropDownType[] = [
+  {label: 'Post.Dropdown.ReportSent', value: '22', disabled: true},
+];
+
+export const dataListSongMoreMyAlbum: DataDropDownType[] = [
+  {label: 'Home.Tab.TopSong.Playlist', value: '1', disabled: false},
+  {label: 'Home.Tab.TopSong.Queue', value: '3', disabled: false},
+  {label: 'Home.Tab.TopSong.Share', value: '4', disabled: false},
+  {label: 'Home.Tab.TopSong.Details', value: '5', disabled: false},
+];
+
+export const dataListSongAlbum: DataDropDownType[] = [
+  {label: 'Home.Tab.TopSong.Playlist', value: '1', disabled: false},
+  {label: 'Home.Tab.TopSong.Tip', value: '2', disabled: false},
+  {label: 'Home.Tab.TopSong.Queue', value: '3', disabled: false},
+  {label: 'Home.Tab.TopSong.Share', value: '4', disabled: false},
+  {label: 'Home.Tab.TopSong.Details', value: '5', disabled: false},
+  {label: 'Post.Dropdown.Report', value: '22', disabled: false},
+];
+
+export const dataListSongAlbumReportSent: DataDropDownType[] = [
+  {label: 'Home.Tab.TopSong.Playlist', value: '1', disabled: false},
+  {label: 'Home.Tab.TopSong.Tip', value: '2', disabled: false},
+  {label: 'Home.Tab.TopSong.Queue', value: '3', disabled: false},
+  {label: 'Home.Tab.TopSong.Share', value: '4', disabled: false},
+  {label: 'Home.Tab.TopSong.Details', value: '5', disabled: false},
+  {label: 'Post.Dropdown.ReportSent', value: '22', disabled: true},
 ];

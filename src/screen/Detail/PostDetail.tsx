@@ -50,6 +50,16 @@ import {usePlayerStore} from '../../store/player.store';
 import Clipboard from '@react-native-community/clipboard';
 import {imageShare} from '../../utils/share';
 import {useShareHook} from '../../hooks/use-share.hook';
+import {ModalReport} from '../../components/molecule/Modal/ModalReport';
+import {reportingMenu} from '../../data/report';
+import {
+  getLikeCount,
+  getLikePressedStatus,
+  useLikeStatus,
+} from '../../utils/detailPostUtils';
+import {useReportHook} from '../../hooks/use-report.hook';
+import {ReportParamsProps} from '../../interface/report.interface';
+import {feedReportRecorded} from '../../store/idReported';
 
 export const {width} = Dimensions.get('screen');
 
@@ -137,6 +147,7 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   const [dataProfileImg, setDataProfileImg] = useState<string>('');
   const [modalShare, setModalShare] = useState<boolean>(false);
   const [toastVisible, setToastVisible] = useState(false);
+  const [reportToast, setReportToast] = useState(false);
   const [modalDonate, setModalDonate] = useState<boolean>(false);
   const [modalSuccessDonate, setModalSuccessDonate] = useState<boolean>(false);
   const [trigger2ndModal, setTrigger2ndModal] = useState<boolean>(false);
@@ -187,6 +198,12 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   // * UPDATE HOOKS POST
   const [selectedIdPost, setSelectedIdPost] = useState<string>();
   const [selectedMenuPost, setSelectedMenuPost] = useState<DataDropDownType>();
+  const [selectedCategory, setSelectedCategory] = useState<string>();
+  const [reason, setReason] = useState<string>('');
+  const [reportType, setReportType] = useState<
+    'post' | 'replies' | 'album' | 'song'
+  >();
+  const [selectedUserUuid, setSelectedUserUuid] = useState<string>();
 
   //* MUSIC HOOKS
   const [pauseModeOn, setPauseModeOn] = useState<boolean>(false);
@@ -596,6 +613,11 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
       selectedMenu !== undefined &&
       selectedLvlComment !== undefined
     ) {
+      // * send report
+      if (t(selectedMenu.value) === '22') {
+        setReportToast(true);
+        setReportType('replies');
+      }
       // * delete/edit comment lvl1
       if (selectedLvlComment === 1 && commentLvl1) {
         let commentNow = commentLvl1.filter((x: CommentList) =>
@@ -752,29 +774,14 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   // ! LIKE AREA
   // * Handle Like / Unlike on Post
   const likeOnPress = (id: string, isLiked: boolean) => {
-    if (isLiked === true) {
-      if (likePressed === true) {
-        setUnlikePost({id});
-        setLikePressed(false);
-      } else if (likePressed === false) {
-        setLikePost({id});
-        setLikePressed(true);
-      } else {
-        setUnlikePost({id});
-        setLikePressed(false);
-      }
-    } else if (isLiked === false) {
-      if (likePressed === true) {
-        setUnlikePost({id});
-        setLikePressed(false);
-      } else if (likePressed === false) {
-        setLikePost({id});
-        setLikePressed(true);
-      } else {
-        setLikePost({id});
-        setLikePressed(true);
-      }
-    }
+    useLikeStatus(
+      id,
+      isLiked,
+      likePressed,
+      setUnlikePost,
+      setLikePost,
+      setLikePressed,
+    );
   };
 
   // * Handle Like / Unlike on Comment Section
@@ -788,6 +795,16 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   // ! End Of LIKE AREA
 
   // ! UPDATE POST AREA
+  const {
+    dataReport,
+    reportIsLoading,
+    reportIsError,
+    setDataReport,
+    setPostReport,
+  } = useReportHook();
+
+  const {idReported, setIdReported} = feedReportRecorded();
+
   useEffect(() => {
     if (
       selectedIdPost !== undefined &&
@@ -813,12 +830,13 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
         isSubscribe,
         viewsCount,
         shareCount,
+        reportSent,
       } = dataPostDetail;
 
       switch (selectedValue) {
         //? Delete Post
         case '2':
-          setDeletePost({id: selectedIdPost});
+          setDeletePost({id: selectedIdPost.toString()});
           break;
         //? Edit Post
         case '1':
@@ -840,6 +858,7 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
             isSubscribe,
             viewsCount,
             shareCount,
+            reportSent,
           };
           navigation.navigate('CreatePost', {postData: toEditPost});
           break;
@@ -849,7 +868,8 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
           break;
         //? Report Post
         case '22':
-          console.log('REPORT', selectedIdPost);
+          setReportToast(true);
+          setReportType('post');
           break;
         default:
           break;
@@ -864,6 +884,40 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
       navigation.goBack();
     }
   }, [dataDeletePost, show]);
+
+  //? set status disable after report sent to make sure the status report is updated
+  useEffect(() => {
+    if (dataReport && selectedIdPost) {
+      if (!idReported.includes(selectedIdPost)) {
+        setIdReported([...idReported, selectedIdPost]);
+      }
+    }
+  }, [dataReport]);
+
+  const sendOnPress = () => {
+    const reportBodyPost: ReportParamsProps = {
+      reportType: reportType ?? 'post',
+      reportTypeId: selectedIdPost ?? 0,
+      reporterUuid: dataProfile?.data.uuid ?? '',
+      reportedUuid: dataPostDetail?.musician.uuid ?? '',
+      reportCategory: t(selectedCategory ?? ''),
+      reportReason: reason ?? '',
+    };
+
+    const reportBodyReplies: ReportParamsProps = {
+      reportType: reportType ?? 'replies',
+      reportTypeId: idComment ?? 0,
+      reporterUuid: dataProfile?.data.uuid ?? '',
+      reportedUuid: selectedUserUuid ?? '',
+      reportCategory: t(selectedCategory ?? ''),
+      reportReason: reason ?? '',
+    };
+    setPostReport(reportType === 'post' ? reportBodyPost : reportBodyReplies);
+  };
+
+  const closeModalSuccess = () => {
+    setDataReport(false);
+  };
   // ! END OF UPDATE POST AREA
 
   // ! MUSIC AREA
@@ -1023,26 +1077,8 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
                 likeOnPress={() =>
                   likeOnPress(dataPostDetail.id, dataPostDetail.isLiked)
                 }
-                likePressed={
-                  likePressed === undefined
-                    ? dataPostDetail.isLiked
-                    : likePressed === true
-                    ? true
-                    : false
-                }
-                likeCount={
-                  likePressed === undefined
-                    ? dataPostDetail.likesCount
-                    : likePressed === true && dataPostDetail.isLiked === true
-                    ? dataPostDetail.likesCount
-                    : likePressed === true && dataPostDetail.isLiked === false
-                    ? dataPostDetail.likesCount + 1
-                    : likePressed === false && dataPostDetail.isLiked === true
-                    ? dataPostDetail.likesCount - 1
-                    : likePressed === false && dataPostDetail.isLiked === false
-                    ? dataPostDetail.likesCount
-                    : dataPostDetail.likesCount
-                }
+                likePressed={getLikePressedStatus(likePressed, dataPostDetail)}
+                likeCount={getLikeCount(likePressed, dataPostDetail)}
                 tokenOnPress={tokenOnPress}
                 shareOnPress={() =>
                   shareOnPress(
@@ -1062,6 +1098,10 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
                 viewCount={dataPostDetail.viewsCount}
                 shareCount={dataPostDetail.shareCount}
                 showDropdown
+                reportSent={
+                  idReported.includes(dataPostDetail.id) ??
+                  dataPostDetail.reportSent
+                }
                 children={
                   <DetailChildrenCard
                     data={dataPostDetail}
@@ -1101,6 +1141,7 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
             profileUUID={dataProfile?.data.uuid ? dataProfile.data.uuid : ''}
             deletedCommentParentId={parentIdDeletedComment}
             addCommentParentId={parentIdAddComment}
+            selectedUserUuid={setSelectedUserUuid}
           />
         ) : null}
         <ImageModal
@@ -1147,6 +1188,42 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
               <Gap width={widthResponsive(7)} />
               <Text style={[typography.Button2, styles.textStyle]}>
                 {t('General.LinkCopied')}
+              </Text>
+            </View>
+          }
+          modalStyle={{marginHorizontal: widthResponsive(24)}}
+        />
+        <ModalReport
+          modalVisible={reportToast}
+          onPressClose={() => setReportToast(false)}
+          title={
+            reportType === 'post'
+              ? `${t('ModalComponent.Report.Type.Post.FirstTitle')}`
+              : `${t('ModalComponent.Report.Type.Replies.FirstTitle')}`
+          }
+          secondTitle={
+            reportType === 'post'
+              ? `${t('ModalComponent.Report.Type.Post.SecondTitle')}`
+              : `${t('ModalComponent.Report.Type.Replies.SecondTitle')}`
+          }
+          dataReport={reportingMenu}
+          onPressOk={sendOnPress}
+          category={setSelectedCategory}
+          reportReason={setReason}
+        />
+        <SsuToast
+          modalVisible={dataReport}
+          onBackPressed={closeModalSuccess}
+          children={
+            <View style={[styles.modalContainer]}>
+              <TickCircleIcon
+                width={widthResponsive(21)}
+                height={heightPercentage(20)}
+                stroke={color.Neutral[10]}
+              />
+              <Gap width={widthResponsive(7)} />
+              <Text style={[typography.Button2, styles.textStyle]}>
+                {t('ModalComponent.Report.ReportSuccess')}
               </Text>
             </View>
           }

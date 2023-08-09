@@ -3,6 +3,7 @@ import {Button} from './Button/Button';
 import {ButtonGradient} from './Button/ButtonGradient';
 import {ButtonGradientwithIcon} from './Button/ButtonGradientWithIcon';
 import CheckBox from './CheckBox';
+import ErrorWarning from './ErrorWarning/ErrorWarning';
 import {Indicator} from './Indicator/Indicator';
 import Gap from './Gap/Gap';
 import SearchBar from './SearchBar';
@@ -23,6 +24,7 @@ export {
   ButtonGradient,
   ButtonGradientwithIcon,
   CheckBox,
+  ErrorWarning,
   Gap,
   Indicator,
   SearchBar,
