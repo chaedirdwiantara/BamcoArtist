@@ -27,7 +27,7 @@ import {color, font, typography} from '../../../theme';
 import {ModalLoading} from '../ModalLoading/ModalLoading';
 import {UpdateProfilePropsType} from '../../../api/profile.api';
 import {PreferenceList} from '../../../interface/setting.interface';
-import {heightPercentage, width, widthPercentage} from '../../../utils';
+import {width, widthPercentage} from '../../../utils';
 import {useProfileHook} from '../../../hooks/use-profile.hook';
 
 type OnScrollEventHandler = (
@@ -292,6 +292,8 @@ export const ImageSlider: React.FC<ImageSliderProps> = ({
                 index === 0 ? selectedRole : selectedExpectations;
               const setSelected =
                 index === 0 ? setSelectedRole : setSelectedExpectations;
+              const marginBottom =
+                index === 1 ? 0 : index === 2 ? mvs(15) : mvs(20);
 
               return (
                 <>
@@ -316,7 +318,7 @@ export const ImageSlider: React.FC<ImageSliderProps> = ({
                             ? t('Setting.ReferralQR.OnBoard.SuccessTitle')
                             : item.title}
                         </Text>
-                        <Text style={styles.textSubtitle}>
+                        <Text style={[styles.textSubtitle, {marginBottom}]}>
                           {isScanSuccess && index === 1
                             ? t('Setting.ReferralQR.OnBoard.SuccessDesc')
                             : item.subtitle}
@@ -435,7 +437,7 @@ const styles = StyleSheet.create({
     marginVertical: mvs(10),
   },
   containerStep: {
-    paddingTop: heightPercentage(50),
+    paddingTop: mvs(40),
     justifyContent: 'center',
     alignItems: 'center',
   },
