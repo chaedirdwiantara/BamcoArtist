@@ -310,7 +310,7 @@
           }
         },
         "Album": {
-          "Title": "Album",
+          "Title": "My Music",
           "Filter": {
             "Range": {
               "Alltime": "All Time",

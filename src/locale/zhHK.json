@@ -310,7 +310,7 @@
           }
         },
         "Album": {
-          "Title": "專輯",
+          "Title": "My Music",
           "Filter": {
             "Range": {
               "Alltime": "All Time",
