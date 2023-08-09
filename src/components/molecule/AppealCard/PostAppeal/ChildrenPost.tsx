@@ -15,7 +15,7 @@ import ImageList from '../../../../screen/ListCard/ImageList';
 import VideoComp from '../../VideoPlayer/videoComp';
 import ImageModal from '../../../../screen/Detail/ImageModal';
 import {color, font} from '../../../../theme';
-import MusicListPreview from './MusicPreview';
+import MusicPreviewAppeal from '../ChildrenCard/MusicPreview';
 
 export const {width} = Dimensions.get('screen');
 
@@ -73,7 +73,7 @@ const ChildrenPostCard: FC<ChildrenPostCardProps> = (
                 disabled={true}
               />
               {data.images.length === 0 && data.quoteToPost.encodeHlsUrl ? (
-                <MusicListPreview
+                <MusicPreviewAppeal
                   title={data.quoteToPost.title}
                   musician={data.quoteToPost.musician}
                   coverImage={

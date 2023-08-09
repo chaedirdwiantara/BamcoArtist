@@ -6,14 +6,15 @@ import {color, font} from '../../../theme';
 interface DividerProps {
   text?: string;
   containerStyle?: ViewStyle;
+  lineStyle?: ViewStyle;
 }
 
-const SsuDivider: FC<DividerProps> = ({text, containerStyle}) => {
+const SsuDivider: FC<DividerProps> = ({text, containerStyle, lineStyle}) => {
   return (
     <View style={[styles.container, containerStyle]}>
-      <View style={styles.lineStyle} />
+      <View style={[styles.lineStyle, lineStyle]} />
       {text ? <Text style={styles.textStyle}>{text}</Text> : null}
-      <View style={styles.lineStyle} />
+      <View style={[styles.lineStyle, lineStyle]} />
     </View>
   );
 };

@@ -6,14 +6,16 @@ import {PlayIcon} from '../../../../assets/icon';
 import {color, font} from '../../../../theme';
 import {widthResponsive} from '../../../../utils';
 
-interface MusicPreviewProps {
+interface MusicPreviewAppealProps {
   title: string;
   musician: string;
   coverImage: string;
   duration: string;
 }
 
-const MusicListPreview: FC<MusicPreviewProps> = (props: MusicPreviewProps) => {
+const MusicPreviewAppeal: FC<MusicPreviewAppealProps> = (
+  props: MusicPreviewAppealProps,
+) => {
   const {title, musician, coverImage, duration} = props;
 
   return (
@@ -51,7 +53,7 @@ const MusicListPreview: FC<MusicPreviewProps> = (props: MusicPreviewProps) => {
   );
 };
 
-export default MusicListPreview;
+export default MusicPreviewAppeal;
 
 const styles = StyleSheet.create({
   container: {

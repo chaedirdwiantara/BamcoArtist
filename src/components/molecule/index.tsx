@@ -40,6 +40,7 @@ import {ModalImagePicker} from './Modal/ModalImagePicker';
 import {ModalShare} from './Modal/ModalShare';
 import {ModalSuccessDonate} from './Modal/ModalSuccessDonate';
 import {MusicSection} from './MusicSection/MusicSection';
+import MusicAppeal from './AppealCard/MusicAppeal';
 import NewPostAvail from './NewPostAvail/newPostAvail';
 import {NoMoreFeeds} from './NoMoreFeeds/NoMoreFeeds';
 import {NotificationCard} from './NotificationCard/NotificationCard';
@@ -115,6 +116,7 @@ export {
   ModalShare,
   ModalSuccessDonate,
   MusicSection,
+  MusicAppeal,
   NewPostAvail,
   NoMoreFeeds,
   NotificationCard,
