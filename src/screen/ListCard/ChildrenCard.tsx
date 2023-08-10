@@ -30,8 +30,6 @@ interface ChildrenCardProps {
   seekPlayer: (second: number) => void;
   isIdNowPlaying: boolean;
   blurModeOn?: boolean;
-  imgWidth?: number;
-  imgWidth2?: number;
 }
 
 const ChildrenCard: FC<ChildrenCardProps> = (props: ChildrenCardProps) => {
@@ -46,8 +44,6 @@ const ChildrenCard: FC<ChildrenCardProps> = (props: ChildrenCardProps) => {
     seekPlayer,
     isIdNowPlaying,
     blurModeOn,
-    imgWidth,
-    imgWidth2,
   } = props;
 
   const [isModalVisible, setModalVisible] = useState<boolean>(false);

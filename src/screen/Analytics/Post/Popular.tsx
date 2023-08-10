@@ -343,8 +343,6 @@ const PopularPost: FC<PopularPostProps> = (props: PopularPostProps) => {
                   duration={playerProgress.duration}
                   seekPlayer={seekPlayer}
                   isIdNowPlaying={analyticPostData.id === idNowPlaying}
-                  imgWidth={144}
-                  imgWidth2={290}
                 />
               ) : null
             }
