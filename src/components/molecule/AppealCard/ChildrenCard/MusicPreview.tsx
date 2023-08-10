@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, View, ViewStyle} from 'react-native';
 import React, {FC} from 'react';
 import {ms, mvs} from 'react-native-size-matters';
 import {Gap, SquareImage, SsuDivider} from '../../../atom';
@@ -11,22 +11,23 @@ interface MusicPreviewAppealProps {
   musician: string;
   coverImage: string;
   duration: string;
+  containerStyle?: ViewStyle;
 }
 
 const MusicPreviewAppeal: FC<MusicPreviewAppealProps> = (
   props: MusicPreviewAppealProps,
 ) => {
-  const {title, musician, coverImage, duration} = props;
+  const {title, musician, coverImage, duration, containerStyle} = props;
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, containerStyle]}>
       <View style={styles.imageContainer}>
         <SquareImage imgUri={coverImage} size={widthResponsive(80)} />
         <View style={styles.iconOnPress}>
           <PlayIcon stroke={color.Neutral[10]} />
         </View>
       </View>
-      <Gap width={7} />
+      <Gap width={10} />
       <View
         style={{
           flex: 1,
@@ -42,7 +43,10 @@ const MusicPreviewAppeal: FC<MusicPreviewAppealProps> = (
           </Text>
         </View>
         <View style={styles.sliderStyle}>
-          <SsuDivider />
+          <SsuDivider
+            lineStyle={{height: 2, backgroundColor: color.Dark[600]}}
+          />
+          <Gap height={3} />
           <View style={styles.progresTextContainer}>
             <Text style={styles.progresText}>0:00</Text>
             <Text style={styles.progresText}>{duration ?? '0:00'}</Text>
@@ -74,15 +78,15 @@ const styles = StyleSheet.create({
   songTitle: {
     fontFamily: font.InterMedium,
     fontWeight: '500',
-    fontSize: mvs(15),
+    fontSize: mvs(13),
     color: color.Neutral[10],
     maxWidth: '100%',
   },
   musicianName: {
     fontFamily: font.InterMedium,
     fontWeight: '500',
-    fontSize: mvs(12),
-    color: color.Dark[50],
+    fontSize: mvs(11),
+    color: color.Dark[100],
     maxWidth: '75%',
   },
   sliderStyle: {
@@ -99,5 +103,9 @@ const styles = StyleSheet.create({
     fontSize: mvs(10),
     color: color.Neutral[10],
   },
-  imageContainer: {width: widthResponsive(80), height: widthResponsive(80)},
+  imageContainer: {
+    width: widthResponsive(80),
+    height: widthResponsive(80),
+    borderRadius: 4,
+  },
 });
