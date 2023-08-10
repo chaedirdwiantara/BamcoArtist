@@ -1,8 +1,10 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import React, {FC} from 'react';
 import MusicListPreview from '../ChildrenCard/MusicPreview';
 import {widthResponsive} from '../../../../utils';
 import {color} from '../../../../theme';
+import {Gap} from '../../../atom';
+import ChoiceIconAppeal from '../ChildrenCard/ChoiceIcon';
 
 interface MusicAppealProps {
   title: string;
@@ -24,20 +26,29 @@ const MusicAppeal: FC<MusicAppealProps> = (props: MusicAppealProps) => {
   };
 
   return (
-    <MusicListPreview
-      title={dummyData.title}
-      musician={dummyData.musician}
-      coverImage={dummyData.coverImage}
-      duration={dummyData.duration}
-      containerStyle={styles.componentStyle}
-    />
+    <View style={styles.container}>
+      <ChoiceIconAppeal choiceOnPress={() => {}} selected={false} />
+      <Gap width={12} />
+      <MusicListPreview
+        title={dummyData.title}
+        musician={dummyData.musician}
+        coverImage={dummyData.coverImage}
+        duration={dummyData.duration}
+        containerStyle={styles.componentStyle}
+      />
+    </View>
   );
 };
 
 export default MusicAppeal;
 
 const styles = StyleSheet.create({
+  container: {
+    flexDirection: 'row',
+    width: '100%',
+  },
   componentStyle: {
+    flex: 1,
     paddingVertical: widthResponsive(8),
     paddingHorizontal: widthResponsive(7),
     backgroundColor: color.Dark[500],

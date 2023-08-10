@@ -1,6 +1,6 @@
 import {StyleSheet, Text, View, ViewStyle} from 'react-native';
 import React, {FC} from 'react';
-import {ms, mvs} from 'react-native-size-matters';
+import {mvs} from 'react-native-size-matters';
 import {Gap, SquareImage, SsuDivider} from '../../../atom';
 import {PlayIcon} from '../../../../assets/icon';
 import {color, font} from '../../../../theme';

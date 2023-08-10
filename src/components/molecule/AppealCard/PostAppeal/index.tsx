@@ -1,9 +1,12 @@
-import {StyleSheet} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import React, {FC} from 'react';
 import PostCard from './PostCardAppeal';
 import ChildrenPostCard from './ChildrenPost';
 import {PostList} from '../../../../interface/feed.interface';
+import ChoiceIconAppeal from '../ChildrenCard/ChoiceIcon';
+import {Gap} from '../../../atom';
 
+// TODO: CHANGE THE DUMMY DATA LATER YA BAMBANG
 const dataDummy: PostList = {
   id: '6wvXjK34g',
   caption: 'beatiful nature🍃',
@@ -11,74 +14,6 @@ const dataDummy: PostList = {
   commentsCount: 0,
   category: 'day_in_life',
   images: [],
-  // images: [
-  //   [
-  //     {
-  //       image:
-  //         'https://storage.googleapis.com/media-storage-81b162d8/823377-thumbnail.jpeg',
-  //       presetName: 'thumbnail',
-  //     },
-  //     {
-  //       image:
-  //         'https://storage.googleapis.com/media-storage-81b162d8/823377-small.jpeg',
-  //       presetName: 'small',
-  //     },
-  //     {
-  //       image:
-  //         'https://storage.googleapis.com/media-storage-81b162d8/823377-medium.jpeg',
-  //       presetName: 'medium',
-  //     },
-  //     {
-  //       image:
-  //         'https://storage.googleapis.com/media-storage-81b162d8/823377-large.jpeg',
-  //       presetName: 'large',
-  //     },
-  //   ],
-  //   [
-  //     {
-  //       image:
-  //         'https://storage.googleapis.com/media-storage-81b162d8/823377-thumbnail.jpeg',
-  //       presetName: 'thumbnail',
-  //     },
-  //     {
-  //       image:
-  //         'https://storage.googleapis.com/media-storage-81b162d8/823377-small.jpeg',
-  //       presetName: 'small',
-  //     },
-  //     {
-  //       image:
-  //         'https://storage.googleapis.com/media-storage-81b162d8/823377-medium.jpeg',
-  //       presetName: 'medium',
-  //     },
-  //     {
-  //       image:
-  //         'https://storage.googleapis.com/media-storage-81b162d8/823377-large.jpeg',
-  //       presetName: 'large',
-  //     },
-  //   ],
-  //   [
-  //     {
-  //       image:
-  //         'https://storage.googleapis.com/media-storage-81b162d8/823377-thumbnail.jpeg',
-  //       presetName: 'thumbnail',
-  //     },
-  //     {
-  //       image:
-  //         'https://storage.googleapis.com/media-storage-81b162d8/823377-small.jpeg',
-  //       presetName: 'small',
-  //     },
-  //     {
-  //       image:
-  //         'https://storage.googleapis.com/media-storage-81b162d8/823377-medium.jpeg',
-  //       presetName: 'medium',
-  //     },
-  //     {
-  //       image:
-  //         'https://storage.googleapis.com/media-storage-81b162d8/823377-large.jpeg',
-  //       presetName: 'large',
-  //     },
-  //   ],
-  // ],
   musician: {
     uuid: 'dc24c143-b6df-48a8-a5bb-ae296e66ccc8',
     username: 'dzik',
@@ -166,22 +101,35 @@ interface PostAppeal {
 const PostAppeal: FC<PostAppeal> = (props: PostAppeal) => {
   const {data} = props;
   return (
-    // TODO: CHANGE THE DUMMY DATA LATER YA BAMBANG
-    <PostCard
-      musicianName={dataDummy.musician.fullname}
-      musicianId="123"
-      postDate="27 Des 2022"
-      likeCount={20}
-      commentCount={21}
-      category="Backstate"
-      isPremium
-      viewCount={3}
-      shareCount={9}
-      children={<ChildrenPostCard data={dataDummy} />}
-    />
+    <View style={styles.container}>
+      <ChoiceIconAppeal choiceOnPress={() => {}} selected={false} />
+      <Gap width={12} />
+      <View style={styles.componentStyle}>
+        <PostCard
+          musicianName={dataDummy.musician.fullname}
+          musicianId="123"
+          postDate="27 Des 2022"
+          likeCount={20}
+          commentCount={21}
+          category="Backstate"
+          isPremium
+          viewCount={3}
+          shareCount={9}
+          children={<ChildrenPostCard data={dataDummy} />}
+        />
+      </View>
+    </View>
   );
 };
 
 export default PostAppeal;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: 'row',
+    width: '100%',
+  },
+  componentStyle: {
+    flex: 1,
+  },
+});
