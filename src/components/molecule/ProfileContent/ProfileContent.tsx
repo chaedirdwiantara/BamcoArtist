@@ -23,7 +23,6 @@ import {
 import {font} from '../../../theme';
 import {TabFilter} from '../TabFilter';
 import {FansScreen} from '../ListFans';
-import MainTab from './MainTab/MainTab';
 import Color from '../../../theme/Color';
 import {Gap, SsuToast} from '../../atom';
 import {
@@ -47,7 +46,6 @@ import {DataExclusiveResponse} from '../../../interface/setting.interface';
 import {ProfileFansResponseType} from '../../../interface/profile.interface';
 import {dropDownDataCategory, dropDownDataSort} from '../../../data/dropdown';
 import ExclusiveDailyContent from '../../../screen/MusicianProfile/ExclusiveDailyContent';
-import {FansScreen} from '../ListFans';
 import MerchList from '../../../screen/ListCard/MerchList';
 import ConcertList from '../../../screen/ListCard/ConcertList';
 
