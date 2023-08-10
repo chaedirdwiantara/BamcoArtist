@@ -47,6 +47,9 @@ import {DataExclusiveResponse} from '../../../interface/setting.interface';
 import {ProfileFansResponseType} from '../../../interface/profile.interface';
 import {dropDownDataCategory, dropDownDataSort} from '../../../data/dropdown';
 import ExclusiveDailyContent from '../../../screen/MusicianProfile/ExclusiveDailyContent';
+import {FansScreen} from '../ListFans';
+import MerchList from '../../../screen/ListCard/MerchList';
+import ConcertList from '../../../screen/ListCard/ConcertList';
 
 type OnScrollEventHandler = (
   event: NativeSyntheticEvent<NativeScrollEvent>,
@@ -112,6 +115,8 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
     {filterName: 'Musician.Tab.Music'},
     {filterName: 'Musician.Tab.Fans'},
     {filterName: 'Musician.Tab.Profile'},
+    {filterName: 'Musician.Tab.Merchandise'},
+    {filterName: 'Musician.Tab.Ticket'},
   ]);
   const [isModalVisible, setModalVisible] = useState<boolean>(false);
   const [zoomImage, setZoomImage] = useState<string[]>([]);
@@ -197,13 +202,18 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
           <Gap height={heightPercentage(70)} />
         )}
 
+        <TabFilter.Type1
+          filterData={ownProfile ? filter2 : filter}
+          onPress={filterData}
+          selectedIndex={selectedIndex}
+          translation={true}
+          flatlistContainerStyle={{
+            paddingHorizontal: widthResponsive(20),
+            width: 'auto',
+          }}
+        />
+
         <View style={styles.containerContent}>
-          <TabFilter.Type1
-            filterData={ownProfile ? filter2 : filter}
-            onPress={filterData}
-            selectedIndex={selectedIndex}
-            translation={true}
-          />
           {!ownProfile &&
           dataPlaylist !== null &&
           filter[selectedIndex].filterName === 'Profile.Tab.Playlist' ? (
@@ -286,6 +296,21 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
           ) : filter2[selectedIndex].filterName === 'Musician.Tab.Fans' ? (
             <View style={{paddingHorizontal: widthResponsive(20)}}>
               {uuid && <FansScreen uuid={uuid} />}
+            </View>
+          ) : filter2[selectedIndex].filterName ===
+            'Musician.Tab.Merchandise' ? (
+            <View
+              style={{
+                paddingHorizontal: widthResponsive(20),
+              }}>
+              <MerchList />
+            </View>
+          ) : filter2[selectedIndex].filterName === 'Musician.Tab.Ticket' ? (
+            <View
+              style={{
+                paddingHorizontal: widthResponsive(20),
+              }}>
+              <ConcertList />
             </View>
           ) : (
             // TODO: DISABLE FOR NOW
