@@ -75,6 +75,14 @@ const MerchListCard: React.FC<ListProps> = props => {
         <Gap height={heightPercentage(5)} />
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
           <View style={styles.disc}>
+            <Text style={styles.price}>
+              {toCurrency(price, {withFraction: false})}
+            </Text>
+            <Gap width={widthResponsive(4)} />
+            <Text style={styles.price}>HKD</Text>
+          </View>
+          <View style={styles.tabSpacer} />
+          <View style={styles.disc}>
             <View style={styles.discPercContainer}>
               <Text style={styles.discPerc}>25%</Text>
             </View>
@@ -82,14 +90,6 @@ const MerchListCard: React.FC<ListProps> = props => {
             <Text style={styles.priceDisc}>
               {toCurrency(price, {withFraction: false})}
             </Text>
-          </View>
-          <Gap width={widthResponsive(5)} />
-          <View style={styles.disc}>
-            <Text style={styles.price}>
-              {toCurrency(price, {withFraction: false})}
-            </Text>
-            <Gap width={widthResponsive(4)} />
-            <Text style={styles.price}>HKD</Text>
           </View>
         </View>
         <Gap height={heightPercentage(7)} />
@@ -100,7 +100,7 @@ const MerchListCard: React.FC<ListProps> = props => {
               height={heightPercentage(14)}
             />
             <Gap width={widthPercentage(4)} />
-            <Text style={[styles.subtitle, {marginBottom: 0}]}>4,5</Text>
+            <Text style={[styles.subtitle, {marginBottom: 0}]}>4,5 (1K)</Text>
             <Gap width={widthPercentage(4)} />
           </View>
 
@@ -146,6 +146,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   price: {
+    fontSize: mvs(12),
     color: Color.Neutral[10],
     fontWeight: '500',
   },
@@ -154,10 +155,10 @@ const styles = StyleSheet.create({
     color: Color.Neutral[50],
     fontWeight: '500',
     textDecorationLine: 'line-through',
-    fontSize: mvs(10),
+    fontSize: mvs(8),
   },
   discPerc: {
-    fontSize: mvs(7),
+    fontSize: mvs(6),
     fontFamily: 'Inter-Semibold',
     color: '#F94D63',
   },

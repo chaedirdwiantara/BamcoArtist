@@ -299,3 +299,14 @@ export const dataListSongAlbumReportSent: DataDropDownType[] = [
   {label: 'Home.Tab.TopSong.Details', value: '5', disabled: false},
   {label: 'Post.Dropdown.ReportSent', value: '22', disabled: true},
 ];
+
+export const dropDownTransactionCategory: DataDropDownType[] = [
+  {label: 'Transaction.Dropdown.Category.All', value: '1'},
+  {label: 'Transaction.Dropdown.Category.Merchandise', value: '2'},
+  {label: 'Transaction.Dropdown.Category.Ticket', value: '2'},
+];
+
+export const dropDownTransactionSort: DataDropDownType[] = [
+  {label: 'Transaction.Dropdown.Sort.Newest', value: '1'},
+  {label: 'Transaction.Dropdown.Sort.Oldest', value: '2'},
+];

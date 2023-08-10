@@ -453,8 +453,8 @@
       "Total": "Total Price",
       "Details": "Details",
       "ComingSoon": {
-        "Title" : "Discover Ticket",
-        "Subtitle" : "When musicians list tikcet, you’ll see them here"
+        "Title": "Discover Ticket",
+        "Subtitle": "When musicians list ticket, you’ll see them here"
       }
     },
     "Merch": {
@@ -468,8 +468,8 @@
       "Sold": "Sold",
       "Product": "Product",
       "ComingSoon": {
-        "Title" : "Discover Merchandise",
-        "Subtitle" : "When musicians list merchandise, you’ll see them here"
+        "Title": "Discover Merchandise",
+        "Subtitle": "When musicians list merchandise, you’ll see them here"
       }
     },
     "Dropdown": {
@@ -557,8 +557,8 @@
       "Musician": "MUSICIAN",
       "Music": "MUSIC",
       "Fans": "樂迷",
-      "Merchandise" : "MERCHANDISE",
-      "Ticket" : "TICKET"
+      "Merchandise": "MERCHANDISE",
+      "Ticket": "TICKET"
     }
   },
   "ExclusiveContent": {
@@ -892,6 +892,9 @@
     },
     "Revenue": {
       "Title": "Revenue"
+    },
+    "Transaction": {
+      "Title": "Transaction"
     }
   },
   "Music": {
@@ -1201,7 +1204,9 @@
   "Transaction": {
     "Title": "Transaction",
     "Merch": {
+      "All": "All",
       "Unpaid": "Unpaid",
+      "Paid": "Paid",
       "ToShip": "To Ship",
       "Shipped": "Shipped",
       "Review": "Review",
@@ -1237,6 +1242,19 @@
       "Title": "Finish Order",
       "Confirm": "Are you sure to finish this order?",
       "Finish": "Order Finished!"
+    },
+    "Dropdown": {
+      "Category": {
+        "Placeholder": "Category",
+        "All": "All",
+        "Merchandise": "Merchandise",
+        "Ticket": "Ticket"
+      },
+      "Sort": {
+        "Placeholder": "Sort By",
+        "Newest": "Newest",
+        "Oldest": "Oldest"
+      }
     }
   },
   "Tracking": {
@@ -1281,44 +1299,44 @@
       "Subtitle": "Discover Attention-Grabbing Musicians to Explore!"
     }
   },
-  "ModalComponent":{
-    "Report":{
-      "Type":{
-        "Song":{
+  "ModalComponent": {
+    "Report": {
+      "Type": {
+        "Song": {
           "FirstTitle": "Why are you reporting this song?",
           "SecondTitle": "Are you sure to report this song?"
         },
-        "Album":{
+        "Album": {
           "FirstTitle": "Why are you reporting this album?",
           "SecondTitle": "Are you sure to report this album?"
         },
-        "Post":{
+        "Post": {
           "FirstTitle": "Why are you reporting this post?",
           "SecondTitle": "Are you sure to report this post?"
         },
-        "Replies":{
+        "Replies": {
           "FirstTitle": "Why are you reporting this replies?",
           "SecondTitle": "Are you sure to report this replies?"
         }
       },
-      "Category":{
-        "OptionA":"Abusive behavior and violent threats",
-        "OptionB":"Spam and system abuse",
-        "OptionC":"Unauthorized use of copyrighted materials",
-        "OptionD":"Show sensitive or disturbing content"
+      "Category": {
+        "OptionA": "Abusive behavior and violent threats",
+        "OptionB": "Spam and system abuse",
+        "OptionC": "Unauthorized use of copyrighted materials",
+        "OptionD": "Show sensitive or disturbing content"
       },
-      "Button":{
-        "Cancel":"Cancel",
-        "Send":"Send",
-        "Edit":"Let me edit"
+      "Button": {
+        "Cancel": "Cancel",
+        "Send": "Send",
+        "Edit": "Let me edit"
       },
-      "Placeholder":"Add Reason",
-      "Subtitle":{
-        "Category":"Category",
-        "Reason":"Reason"
+      "Placeholder": "Add Reason",
+      "Subtitle": {
+        "Category": "Category",
+        "Reason": "Reason"
       },
-      "Warning":"You need to select one of the report category",
-      "ReportSuccess":"Report have been sent!"
+      "Warning": "You need to select one of the report category",
+      "ReportSuccess": "Report have been sent!"
     }
   }
 }
