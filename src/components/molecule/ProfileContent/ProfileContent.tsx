@@ -299,19 +299,9 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
             </View>
           ) : filter2[selectedIndex].filterName ===
             'Musician.Tab.Merchandise' ? (
-            <View
-              style={{
-                paddingHorizontal: widthResponsive(20),
-              }}>
-              <MerchList />
-            </View>
+            <MerchList />
           ) : filter2[selectedIndex].filterName === 'Musician.Tab.Ticket' ? (
-            <View
-              style={{
-                paddingHorizontal: widthResponsive(20),
-              }}>
-              <ConcertList />
-            </View>
+            <ConcertList />
           ) : (
             // TODO: DISABLE FOR NOW
             // : filter2[selectedIndex].filterName === 'Musician.Tab.Main' ? (

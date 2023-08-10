@@ -132,7 +132,7 @@ import WalletIcon from './Wallet.icon';
 import LocationIcon from './Location.icon';
 import TruckIcon from './Truck.icon';
 import BagTickIcon from './BagTick.icon';
-import StarIcon from './BagTick.icon';
+import StarIcon from './Star.icon';
 import {NormalCreditCard, PosCreditCard} from './CreditCard';
 import DollarSign from './DollarSign';
 import UploadIcon from './Upload.icon';
