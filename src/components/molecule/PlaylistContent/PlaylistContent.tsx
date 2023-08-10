@@ -64,7 +64,7 @@ interface Props {
   playlistId: number;
   setFetchListSong: () => void;
   goToAlbum: (id: number) => void;
-  goToDetailSong: (id: number) => void;
+  goToDetailSong: (id: number, musicianId: string) => void;
   otherPlaylist: boolean;
   goToAddToPlaylist: (id: number) => void;
   goToProfile: (uuid: string, type: string) => void;
@@ -191,7 +191,7 @@ export const PlaylistContent: React.FC<Props> = ({
     if (dataResult?.value === 'RemoveFromPlaylist') {
       onPressRemoveSong(item.id, item.title);
     } else if (dataResult?.value === 'ShowDetails') {
-      goToDetailSong(item.id);
+      goToDetailSong(item.id, item.musicianId);
     } else if (dataResult?.value === 'AddToQueue') {
       addSong(item);
       setToastVisible(true);
