@@ -72,7 +72,7 @@ export const ReferAFriend: React.FC<ReferralProps> = ({
           onPress={() =>
             handleWebview(
               'Terms Conditions',
-              'https://sunnysideup.io/marketplace/tos',
+              'https://www.thebeam.co/termsandcondition',
             )
           }
         />
