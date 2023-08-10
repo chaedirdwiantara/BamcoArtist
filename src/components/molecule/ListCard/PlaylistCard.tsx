@@ -47,7 +47,9 @@ const PlaylistCard: React.FC<ListProps> = ({
       )}
 
       {imgUri ? (
-        <SquareImage imgUri={imgUri} size={widthResponsive(44)} />
+        <View style={styles.imageContainer}>
+          <SquareImage imgUri={imgUri} size={widthResponsive(44)} />
+        </View>
       ) : (
         <DefaultImage.PlaylistCover
           width={widthResponsive(44)}
@@ -106,4 +108,5 @@ const styles = StyleSheet.create({
     fontSize: mvs(12),
     color: color.Dark[50],
   },
+  imageContainer: {width: widthResponsive(44), height: widthResponsive(44)},
 });

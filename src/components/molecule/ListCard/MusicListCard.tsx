@@ -8,12 +8,7 @@ import {
 } from 'react-native';
 import {ms, mvs} from 'react-native-size-matters';
 
-import {
-  heightPercentage,
-  normalize,
-  widthPercentage,
-  widthResponsive,
-} from '../../../utils';
+import {normalize, widthPercentage, widthResponsive} from '../../../utils';
 import {color, font, typography} from '../../../theme';
 import {Gap, SquareImage} from '../../atom';
 import {DefaultImage, LoveIcon, SoundIcon} from '../../../assets/icon';
@@ -42,6 +37,8 @@ interface ListProps {
   disabled?: boolean;
   likeAnalytics?: number;
   streamAnalytics?: number;
+  size?: number;
+  appeal?: boolean;
 }
 
 const MusicListCard: React.FC<ListProps> = ({
@@ -65,6 +62,8 @@ const MusicListCard: React.FC<ListProps> = ({
   disabled,
   likeAnalytics,
   streamAnalytics,
+  size,
+  appeal,
 }) => {
   const {t} = useTranslation();
   // ? Dropdown Menu Example
@@ -86,7 +85,7 @@ const MusicListCard: React.FC<ListProps> = ({
 
   return (
     <TouchableOpacity
-      disabled={disabled}
+      disabled={appeal ?? disabled}
       activeOpacity={activeOpacity}
       style={[styles.container, containerStyles]}
       onPress={onPressCard}>
@@ -107,17 +106,20 @@ const MusicListCard: React.FC<ListProps> = ({
         </Text>
       )}
       {imgUri ? (
-        <SquareImage
-          imgUri={imgUri}
-          size={widthPercentage(44)}
-          borderRadius={4}
-          darkImage={disabled}
-        />
+        <View
+          style={{
+            width: widthResponsive(size ?? 44),
+            height: widthResponsive(size ?? 44),
+          }}>
+          <SquareImage
+            imgUri={imgUri}
+            borderRadius={4}
+            darkImage={disabled}
+            size={widthPercentage(size ?? 44)}
+          />
+        </View>
       ) : (
-        <DefaultImage.SongCover
-          width={widthPercentage(44)}
-          height={heightPercentage(44)}
-        />
+        <DefaultImage.SongCover width={size ?? 44} height={size ?? 44} />
       )}
 
       <View style={styles.textContainer}>
@@ -214,7 +216,7 @@ const styles = StyleSheet.create({
   },
   songTitle: {
     fontFamily: font.InterRegular,
-    fontSize: mvs(14),
+    fontSize: mvs(13),
     fontWeight: '500',
     color: color.Neutral[10],
   },

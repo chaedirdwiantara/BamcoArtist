@@ -40,11 +40,13 @@ import {ModalImagePicker} from './Modal/ModalImagePicker';
 import {ModalShare} from './Modal/ModalShare';
 import {ModalSuccessDonate} from './Modal/ModalSuccessDonate';
 import {MusicSection} from './MusicSection/MusicSection';
+import MusicAppeal from './AppealCard/MusicAppeal';
 import NewPostAvail from './NewPostAvail/newPostAvail';
 import {NoMoreFeeds} from './NoMoreFeeds/NoMoreFeeds';
 import {NotificationCard} from './NotificationCard/NotificationCard';
 import {PlaylistContent} from './PlaylistContent/PlaylistContent';
 import PostComment from './DetailPost/PostComment';
+import PostAppeal from './AppealCard/PostAppeal';
 import PopUp from './PopUp/popUp';
 import {ProfileContent} from './ProfileContent/ProfileContent';
 import {ProfileHeader} from './ProfileContent/components/Header';
@@ -114,11 +116,13 @@ export {
   ModalShare,
   ModalSuccessDonate,
   MusicSection,
+  MusicAppeal,
   NewPostAvail,
   NoMoreFeeds,
   NotificationCard,
   PlaylistContent,
   PostComment,
+  PostAppeal,
   PopUp,
   ProfileContent,
   ProfileHeader,

@@ -6,7 +6,11 @@ import {mvs} from 'react-native-size-matters';
 import {SquareImage} from '../../atom';
 import {DefaultImage} from '../../../assets/icon';
 import {color, font, typography} from '../../../theme';
-import {heightPercentage, widthPercentage} from '../../../utils';
+import {
+  heightPercentage,
+  widthPercentage,
+  widthResponsive,
+} from '../../../utils';
 
 interface ListAlbumProps {
   title: string;
@@ -31,9 +35,14 @@ export const ListAlbum: React.FC<ListAlbumProps> = ({
       {title && (
         <Text style={[typography.Subtitle1, styles.titleContent]}>{title}</Text>
       )}
-      <TouchableOpacity onPress={onPress}>
+      <TouchableOpacity
+        onPress={onPress}
+        style={{
+          width: widthResponsive(imgSize),
+          height: widthResponsive(imgSize),
+        }}>
         {imgUri ? (
-          <SquareImage imgUri={imgUri} size={imgSize} />
+          <SquareImage imgUri={imgUri} />
         ) : (
           <DefaultImage.PlaylistCover
             width={widthPercentage(96)}
