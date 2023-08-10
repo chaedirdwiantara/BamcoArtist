@@ -4,6 +4,10 @@ export const menuSetting: {text: string; value: string}[] = [
     value: 'Account',
   },
   {
+    text: 'Setting.Transaction.Title',
+    value: 'Transaction',
+  },
+  {
     text: 'Setting.Exclusive.Title',
     value: 'Exclusive Content Setting',
   },

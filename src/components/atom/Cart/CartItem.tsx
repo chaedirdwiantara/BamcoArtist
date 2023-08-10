@@ -95,7 +95,7 @@ const CartItem: React.FC<CartItemProps> = props => {
             <Text
               style={[Typography.Subtitle3, {color: Color.Pink.linear}]}
               numberOfLines={1}>
-              {toCurrency(price, {withFraction: false})} Credits
+              {toCurrency(price, {withFraction: false})} HKD
             </Text>
             {detail ? null : editable ? (
               <View style={[styles.row, styles.alignCenter]}>
@@ -113,7 +113,7 @@ const CartItem: React.FC<CartItemProps> = props => {
               </View>
             ) : (
               <Text style={[Typography.Subtitle3, {color: Color.Neutral[10]}]}>
-                {qty} Product
+                x{qty}
               </Text>
             )}
           </View>
