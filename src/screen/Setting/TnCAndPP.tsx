@@ -30,8 +30,11 @@ export const TnCAndPPScreen: React.FC = () => {
   };
 
   const onPress = (val: string) => {
-    const path = val === t('Setting.TnC.Title') ? 'tos' : 'privacy-policy';
-    handleWebview(val, `https://sunnysideup.io/marketplace/${path}`);
+    const path =
+      val === t('Setting.TnC.Title')
+        ? 'https://www.thebeam.co/termsandcondition'
+        : 'https://www.thebeam.co/privacy-policy';
+    handleWebview(val, `${path}`);
   };
 
   return (

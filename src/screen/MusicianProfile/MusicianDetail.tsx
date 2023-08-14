@@ -272,7 +272,10 @@ export const MusicianDetail: React.FC<MusicianDetailProps> = ({
               filterData={filter}
               onPress={filterData}
               selectedIndex={selectedIndex}
-              flatlistContainerStyle={{paddingHorizontal: widthResponsive(24)}}
+              flatlistContainerStyle={{
+                paddingHorizontal: widthResponsive(24),
+                width: 'auto',
+              }}
               translation={true}
             />
             {filter[selectedIndex].filterName === 'Musician.Tab.Profile' ? (

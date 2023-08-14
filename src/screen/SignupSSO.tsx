@@ -228,13 +228,13 @@ export const SignupSSOScreen: React.FC<RegisterProps> = ({
                   onTncPress={() =>
                     handleWebview(
                       'Terms Conditions',
-                      'https://sunnysideup.io/marketplace/tos',
+                      'https://www.thebeam.co/termsandcondition',
                     )
                   }
                   onPrivacyPress={() => {
                     handleWebview(
                       'Privacy Policy',
-                      'https://sunnysideup.io/marketplace/privacy-policy',
+                      'https://www.thebeam.co/privacy-policy',
                     );
                   }}
                 />
