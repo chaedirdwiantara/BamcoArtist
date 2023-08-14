@@ -361,11 +361,11 @@ export const AccountContent: React.FC<AccountProps> = ({
 
           <Dropdown.Multi
             data={formatValueName2(genres) ?? []}
-            isRequired={true && fromScreen === 'progress'}
+            isRequired={true}
             placeHolder={t('Setting.Account.Placeholder.Genre') || ''}
             dropdownLabel={t('Setting.Account.Label.Genre') || ''}
             textTyped={(_newText: string) => null}
-            containerStyles={{marginTop: heightPercentage(15)}}
+            containerStyles={{marginTop: mvs(15), marginBottom: mvs(5)}}
             initialValue={valueGenres}
             setValues={val => {
               setValueGenres(val);
@@ -397,7 +397,6 @@ export const AccountContent: React.FC<AccountProps> = ({
               />
             }
             onPress={() => setOpenPickerBirth(true)}
-            onPressTooltip={() => setOpenPickerBirth(true)}
           />
 
           <DatePicker
@@ -443,7 +442,7 @@ export const AccountContent: React.FC<AccountProps> = ({
               render={({field: {onChange, value}}) => (
                 <Dropdown.Input
                   initialValue={value}
-                  isRequired={true && fromScreen === 'progress'}
+                  isRequired={true}
                   data={dataYearsFrom}
                   placeHolder={t('Setting.Account.Placeholder.Active') || ''}
                   dropdownLabel={t('Musician.Label.Active') || ''}
@@ -497,7 +496,7 @@ export const AccountContent: React.FC<AccountProps> = ({
               render={({field: {onChange, value}}) => (
                 <Dropdown.Input
                   type="location"
-                  isRequired={true && fromScreen === 'progress'}
+                  isRequired={true}
                   initialValue={value}
                   data={dataAllCountry}
                   placeHolder={t('Setting.Account.Placeholder.Country') || ''}
@@ -548,7 +547,7 @@ export const AccountContent: React.FC<AccountProps> = ({
             render={({field: {onChange, value}}) => (
               <Dropdown.Input
                 initialValue={value}
-                isRequired={true && fromScreen === 'progress'}
+                isRequired={true}
                 data={formatValueName2(roles) ?? []}
                 placeHolder={t('Setting.Account.Label.TypeOfMusician') || ''}
                 dropdownLabel={t('Setting.Account.Label.TypeOfMusician') || ''}
@@ -574,7 +573,7 @@ export const AccountContent: React.FC<AccountProps> = ({
                 <Dropdown.Input
                   initialValue={value}
                   data={dataGender}
-                  isRequired={true && fromScreen === 'progress'}
+                  isRequired={true}
                   placeHolder={t('Setting.Account.Placeholder.Gender')}
                   dropdownLabel={t('Setting.Account.Label.Gender')}
                   textTyped={(newText: {label: string; value: string}) => {
@@ -636,7 +635,7 @@ export const AccountContent: React.FC<AccountProps> = ({
             placeHolder={t('Setting.Preference.Placeholder.Genre')}
             dropdownLabel={t('Setting.Preference.Label.GenrePreference')}
             textTyped={(_newText: string) => null}
-            containerStyles={{marginTop: heightPercentage(20)}}
+            containerStyles={{marginTop: mvs(20), marginBottom: mvs(5)}}
             initialValue={valueGenresPreference}
             setValues={val => {
               setValueGenresPreference(val);
@@ -649,7 +648,7 @@ export const AccountContent: React.FC<AccountProps> = ({
             placeHolder={t('Setting.Preference.Placeholder.Mood')}
             dropdownLabel={t('Setting.Preference.Label.MoodPreference')}
             textTyped={(_newText: string) => null}
-            containerStyles={{marginTop: heightPercentage(15)}}
+            containerStyles={{marginTop: mvs(15), marginBottom: mvs(5)}}
             initialValue={valueMoodsPreference}
             setValues={val => {
               setValueMoodsPreference(val);

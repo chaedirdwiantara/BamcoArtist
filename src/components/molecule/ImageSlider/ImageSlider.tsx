@@ -27,7 +27,7 @@ import {color, font, typography} from '../../../theme';
 import {ModalLoading} from '../ModalLoading/ModalLoading';
 import {UpdateProfilePropsType} from '../../../api/profile.api';
 import {PreferenceList} from '../../../interface/setting.interface';
-import {heightPercentage, width, widthPercentage} from '../../../utils';
+import {width, widthPercentage} from '../../../utils';
 import {useProfileHook} from '../../../hooks/use-profile.hook';
 
 type OnScrollEventHandler = (
@@ -292,69 +292,79 @@ export const ImageSlider: React.FC<ImageSliderProps> = ({
                 index === 0 ? selectedRole : selectedExpectations;
               const setSelected =
                 index === 0 ? setSelectedRole : setSelectedExpectations;
+              const marginBottom =
+                index === 1 ? 0 : index === 2 ? mvs(15) : mvs(20);
 
               return (
-                <KeyboardAvoidingView
-                  key={index}
-                  behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
-                  <TouchableOpacity
-                    style={styles.containerSkip}
-                    onPress={onPress}>
-                    <Text style={styles.textSkip}>{t('Btn.Skip')}</Text>
-                  </TouchableOpacity>
+                <>
+                  <KeyboardAvoidingView
+                    key={index}
+                    behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+                    keyboardVerticalOffset={Platform.OS === 'ios' ? 100 : 0}>
+                    <TouchableOpacity
+                      style={styles.containerSkip}
+                      onPress={onPress}>
+                      <Text style={styles.textSkip}>{t('Btn.Skip')}</Text>
+                    </TouchableOpacity>
 
-                  <View style={styles.containerStep}>
-                    <Text style={styles.textStep}>{item.step}</Text>
-                    <Text style={[typography.Heading4, styles.title]}>
-                      {isScanSuccess && index === 1
-                        ? t('Setting.ReferralQR.OnBoard.SuccessTitle')
-                        : item.title}
-                    </Text>
-                    <Text style={styles.textSubtitle}>
-                      {isScanSuccess && index === 1
-                        ? t('Setting.ReferralQR.OnBoard.SuccessDesc')
-                        : item.subtitle}
-                    </Text>
+                    <ScrollView
+                      decelerationRate="fast"
+                      showsVerticalScrollIndicator={false}
+                      keyboardShouldPersistTaps="handled">
+                      <View style={styles.containerStep}>
+                        <Text style={styles.textStep}>{item.step}</Text>
+                        <Text style={[typography.Heading4, styles.title]}>
+                          {isScanSuccess && index === 1
+                            ? t('Setting.ReferralQR.OnBoard.SuccessTitle')
+                            : item.title}
+                        </Text>
+                        <Text style={[styles.textSubtitle, {marginBottom}]}>
+                          {isScanSuccess && index === 1
+                            ? t('Setting.ReferralQR.OnBoard.SuccessDesc')
+                            : item.subtitle}
+                        </Text>
 
-                    {index === 1 && dataProfile ? (
-                      <ReferralContent
-                        onSkip={onPress}
-                        onPress={onApplyReferral}
-                        isError={errorMsg !== ''}
-                        errorMsg={errorMsg}
-                        isValidRef={isValidReferral}
-                        isScanFailed={isScanFailed}
-                        setIsScanFailed={setIsScanFailed}
-                        refCode={refCode}
-                        setRefCode={setRefCode}
-                        isScanning={isScanning}
-                        setIsScanning={setIsScanning}
-                        isScanSuccess={isScanSuccess}
-                        setIsScanSuccess={setIsScanSuccess}
-                        isScanned={isScanned}
-                        setIsScanned={setIsScanned}
-                        isManualEnter={isManualEnter}
-                        setIsManualEnter={setIsManualEnter}
-                        referralFrom={dataProfile.data.referralFrom}
-                      />
-                    ) : index === 2 ? (
-                      <StepProfile
-                        genres={genres}
-                        stateProfile={stateProfile}
-                        setStateProfile={setStateProfile}
-                        errorProfile={errorProfile}
-                        setErrorProfile={setErrorProfile}
-                      />
-                    ) : (
-                      <SelectBox
-                        selected={selected}
-                        setSelected={setSelected}
-                        data={item.list}
-                        type={index === 0 ? 'single' : 'multiple'}
-                      />
-                    )}
-                  </View>
-                </KeyboardAvoidingView>
+                        {index === 1 && dataProfile ? (
+                          <ReferralContent
+                            onSkip={onPress}
+                            onPress={onApplyReferral}
+                            isError={errorMsg !== ''}
+                            errorMsg={errorMsg}
+                            isValidRef={isValidReferral}
+                            isScanFailed={isScanFailed}
+                            setIsScanFailed={setIsScanFailed}
+                            refCode={refCode}
+                            setRefCode={setRefCode}
+                            isScanning={isScanning}
+                            setIsScanning={setIsScanning}
+                            isScanSuccess={isScanSuccess}
+                            setIsScanSuccess={setIsScanSuccess}
+                            isScanned={isScanned}
+                            setIsScanned={setIsScanned}
+                            isManualEnter={isManualEnter}
+                            setIsManualEnter={setIsManualEnter}
+                            referralFrom={dataProfile.data.referralFrom}
+                          />
+                        ) : index === 2 ? (
+                          <StepProfile
+                            genres={genres}
+                            stateProfile={stateProfile}
+                            setStateProfile={setStateProfile}
+                            errorProfile={errorProfile}
+                            setErrorProfile={setErrorProfile}
+                          />
+                        ) : (
+                          <SelectBox
+                            selected={selected}
+                            setSelected={setSelected}
+                            data={item.list}
+                            type={index === 0 ? 'single' : 'multiple'}
+                          />
+                        )}
+                      </View>
+                    </ScrollView>
+                  </KeyboardAvoidingView>
+                </>
               );
             })}
           </ScrollView>
@@ -427,7 +437,7 @@ const styles = StyleSheet.create({
     marginVertical: mvs(10),
   },
   containerStep: {
-    paddingTop: heightPercentage(50),
+    paddingTop: mvs(40),
     justifyContent: 'center',
     alignItems: 'center',
   },

@@ -2,6 +2,8 @@ import SsuAPI from './baseRinjani';
 import SsuAPISemeruPublic from './baseSemeru';
 import {
   AlbumByIdResponseType,
+  AppearsOnResponseType,
+  DetailMusicianLiteResponseType,
   DetailMusicianResponseType,
   FollowMusicianPropsType,
   FollowMusicianResponseType,
@@ -95,9 +97,20 @@ export const recommendedMusician = async (
 
 export const detailMusicianLite = async (
   props?: PostPropsTypeA,
-): Promise<DetailMusicianResponseType> => {
-  const {data} = await SsuAPI().request<DetailMusicianResponseType>({
+): Promise<DetailMusicianLiteResponseType> => {
+  const {data} = await SsuAPI().request<DetailMusicianLiteResponseType>({
     url: `/public/musicians/${props?.id}/detail`,
+    method: 'GET',
+  });
+
+  return data;
+};
+
+export const getAppersOnAlbum = async (
+  props?: paramsTypeUuid,
+): Promise<AppearsOnResponseType> => {
+  const {data} = await SsuAPISemeruPublic().request<AppearsOnResponseType>({
+    url: `/albums/appears-on/${props?.uuid}`,
     method: 'GET',
   });
 

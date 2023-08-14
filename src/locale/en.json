@@ -154,6 +154,15 @@
     }
   },
   "Home": {
+    "UploadMusic": {
+      "Title": "How to upload music",
+      "View": "View",
+      "ModalInfo": {
+        "Title": "Release Your Album!",
+        "Subtitle1": "To Release your album, you need to login to ",
+        "Subtitle2": " and fill your release information"
+      }
+    },
     "OverviewCard": {
       "Title": "My Overview",
       "FirstCard": "My Fans",
@@ -191,7 +200,8 @@
         "Tip": "Send Tip",
         "Queue": "Add to Queue",
         "Share": "Share Music",
-        "Details": "Show Details"
+        "Details": "Show Details",
+        "Credits": "Show Credits"
       },
       "TopPost": {
         "Title": "Top Post",
@@ -301,7 +311,7 @@
           }
         },
         "Album": {
-          "Title": "Album",
+          "Title": "My Music",
           "Filter": {
             "Range": {
               "Alltime": "All Time",
@@ -441,7 +451,11 @@
       "ChooseDate": "Choose Date",
       "Ticket": "Ticket Category",
       "Total": "Total Price",
-      "Details": "Details"
+      "Details": "Details",
+      "ComingSoon": {
+        "Title" : "Discover Ticket",
+        "Subtitle" : "When musicians list tikcet, you’ll see them here"
+      }
     },
     "Merch": {
       "Title": "Merch",
@@ -452,7 +466,11 @@
       "Variant": "Choose Variant",
       "Condition": "Condition",
       "Sold": "Sold",
-      "Product": "Product"
+      "Product": "Product",
+      "ComingSoon": {
+        "Title" : "Discover Merchandise",
+        "Subtitle" : "When musicians list merchandise, you’ll see them here"
+      }
     },
     "Dropdown": {
       "Category": {
@@ -529,14 +547,18 @@
       "Album": "Album",
       "Merch": "Merch",
       "Exclusive": "Exclusive Daily Content",
-      "Musicians": "People who might fit your interest"
+      "Musicians": "People who might fit your interest",
+      "MyAlbum": "My Album",
+      "AppearsOn": "Appears On"
     },
     "Tab": {
       "Profile": "PROFILE",
       "Main": "MAIN",
       "Musician": "MUSICIAN",
       "Music": "MUSIC",
-      "Fans": "FANS"
+      "Fans": "FANS",
+      "Merchandise" : "MERCHANDISE",
+      "Ticket" : "TICKET"
     }
   },
   "ExclusiveContent": {
@@ -783,7 +805,7 @@
         "Invalid": "Referral code invalid"
       },
       "OnBoard": {
-        "Title": "Scan referral code by pressing scan now button, to earn some free stuff and bonuses",
+        "Title": "Scan QR Code to Earn Bonuses!",
         "Subtitle": "Scan referral code by pressing scan now button, to earn some free stuff and bonuses",
         "Activated": "Your 5% Comission for every transaction have been activated!",
         "SuccessTitle": "Your scan was successful!",
@@ -868,6 +890,9 @@
         "Price": "Input Price (In Credit)",
         "Duration": "Select Duration"
       }
+    },
+    "Revenue": {
+      "Title": "Revenue"
     }
   },
   "Music": {
@@ -940,7 +965,7 @@
       "Media": "Upload Media",
       "Preview": "Add Preview"
     },
-    "Dropdown":{
+    "Dropdown": {
       "Visit": "Visit Profile",
       "Report": "Report",
       "ReportSent": "Report Sent!"
@@ -1038,7 +1063,11 @@
     "MostPlayed": "Oops! We couldn't find a most played song for you. Release your album or song and show the world your musical taste!",
     "Merch": "Oops! We couldn't find any of your merchandise. Your merchandise will be displayed here.",
     "Released": "Oops! We couldn't find any albums or songs that have been released this year. Release your album and share your musical talent with the world!",
-    "Musician": "Oops! It’s seems you don’t have any post, your post will displayed here. \nLet’s create a new post!"
+    "Musician": "Oops! It’s seems you don’t have any post, your post will displayed here. \nLet’s create a new post!",
+    "Revenue": {
+      "Tips": "You haven't received any tips from your fans. Create content to encourage receiving some tips.",
+      "Subs": "You haven't received any subscriptions from your fans. Create exclusive content to earn fans subscriptions."
+    }
   },
   "Guest": {
     "Title": "Sign Up to Interact with Musician",

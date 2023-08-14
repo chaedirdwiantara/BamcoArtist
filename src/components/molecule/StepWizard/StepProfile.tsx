@@ -5,6 +5,7 @@ import {
   StyleSheet,
   InteractionManager,
   ScrollView,
+  Platform,
 } from 'react-native';
 import {useTranslation} from 'react-i18next';
 import {ms, mvs} from 'react-native-size-matters';
@@ -134,7 +135,7 @@ export const StepProfile: React.FC<AccountProps> = ({
           placeHolder={t('Setting.Account.Placeholder.Genre') || ''}
           dropdownLabel={t('Setting.Account.Label.Genre') || ''}
           textTyped={(_newText: string) => null}
-          containerStyles={{marginTop: heightPercentage(10)}}
+          containerStyles={{marginVertical: heightPercentage(10)}}
           initialValue={stateProfile.favoriteGeneres}
           setValues={val => onChangeText(val, 'favoriteGeneres')}
         />
@@ -186,6 +187,7 @@ export const StepProfile: React.FC<AccountProps> = ({
 
         <ModalLoading visible={imageLoading} />
       </View>
+      {Platform.OS === 'ios' ? <Gap height={100} /> : null}
     </ScrollView>
   );
 };

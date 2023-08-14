@@ -82,6 +82,7 @@ export type TipsDataType = {
   fromId: string;
   fromType: number;
   fromUserName: string;
+  fromUserImage: string;
   id: string;
   ownerFullName: string;
   ownerId: string;
@@ -90,6 +91,7 @@ export type TipsDataType = {
   ownerUserName: string;
   package: string;
   updatedAt: Date | string;
+  timeAgo: string;
 };
 
 export interface ListTipsDataType extends BaseResponseApi {

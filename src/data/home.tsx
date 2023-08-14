@@ -7,7 +7,7 @@ export const defaultBanner: BannerList[] = [
     imageUrls: require('../assets/image/default_banner.png'),
     title: '',
     description: '',
-    linkUrl: 'https://sunnysideup.io',
+    linkUrl: 'https://www.thebeam.co/',
     isDefault: true,
   },
 ];

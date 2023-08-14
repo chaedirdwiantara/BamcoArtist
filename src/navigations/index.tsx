@@ -15,7 +15,6 @@ import {
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {Image} from 'react-native-image-crop-picker';
 // Screen
-import {EventScreen} from '../screen/Event';
 import {MerchScreen} from '../screen/Merch';
 import {TicketScreen} from '../screen/Ticket';
 import {FeedScreen} from '../screen/Feed';
@@ -70,6 +69,7 @@ import {TnCAndPPScreen} from '../screen/Setting/TnCAndPP';
 import {AboutDeletionScreen} from '../screen/Setting/DeleteAccount/AboutDeletion';
 import {InputDeletionScreen} from '../screen/Setting/DeleteAccount/InputDeletion';
 import {SendAppealScreen} from '../screen/Setting/SendAppeal';
+import {RevenueScreen} from '../screen/Setting/Revenue';
 
 // Profile
 import {ProfileScreen} from '../screen/Profile/Profile';
@@ -330,13 +330,14 @@ export type RootStackParams = {
   SongDetailAnalytic: {
     songId: string;
   };
+  Revenue: undefined;
 };
 
 export type MainTabParams = {
   Collection: undefined;
   Event: undefined;
   Merch: undefined;
-  Ticket: undefined;
+  Events: undefined;
   Feed: undefined;
   Home: {
     showToast?: boolean;
@@ -414,13 +415,13 @@ const TabScreen = () => {
         }}
       />
       <MainTab.Screen
-        name="Ticket"
+        name="Events"
         component={TicketScreen}
         options={{
           tabBarIcon: ({color}) => (
             <View style={styles.root}>
               <TicketDefaultIcon fill={color} />
-              <Text style={[styles.label, {color}]}>{'Ticket'}</Text>
+              <Text style={[styles.label, {color}]}>{'Events'}</Text>
             </View>
           ),
         }}
@@ -584,6 +585,7 @@ export const RootStackScreen = () => (
       name="SongDetailAnalytic"
       component={SongDetailAnalytic}
     />
+    <RootStack.Screen name="Revenue" component={RevenueScreen} />
   </RootStack.Navigator>
 );
 

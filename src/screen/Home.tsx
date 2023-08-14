@@ -71,6 +71,7 @@ import {
 import {TotalIncome} from '../interface/analythic.interface';
 import {useQuery} from 'react-query';
 import {useAnalyticsHook} from '../hooks/use-analytics.hook';
+import {UploadMusicSection} from '../components/molecule/UploadMusic';
 
 type OnScrollEventHandler = (
   event: NativeSyntheticEvent<NativeScrollEvent>,
@@ -248,9 +249,9 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
 
   const [filterAnalytic] = useState([
     {filterName: 'Home.Tab.Analytic.Fans.Title'},
+    {filterName: 'Home.Tab.Analytic.Income.Title'},
     {filterName: 'Home.Tab.Analytic.Post.Title'},
     {filterName: 'Home.Tab.Analytic.Album.Title'},
-    {filterName: 'Home.Tab.Analytic.Income.Title'},
     {filterName: 'Home.Tab.Analytic.Explore.Title'},
   ]);
 
@@ -461,8 +462,13 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
           />
         )}
 
-        <Gap height={heightPercentage(20)} />
+        {dataSongAlbum?.countAlbumReleased === 0 && (
+          <View style={styles.containerUpload}>
+            <UploadMusicSection />
+          </View>
+        )}
 
+        <Gap height={mvs(25)} />
         {/* Tab Analytic */}
         <View style={[styles.containerContent]}>
           <TabFilter.Type3
@@ -599,5 +605,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  containerUpload: {
+    marginTop: mvs(25),
+    alignSelf: 'center',
   },
 });

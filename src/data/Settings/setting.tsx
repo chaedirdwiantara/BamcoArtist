@@ -16,6 +16,10 @@ export const menuSetting: {text: string; value: string}[] = [
     value: 'Shipping Information',
   },
   {
+    text: 'Setting.Revenue.Title',
+    value: 'Revenue',
+  },
+  {
     text: 'Setting.Tips.Title',
     value: 'DonationAndSubscription',
   },

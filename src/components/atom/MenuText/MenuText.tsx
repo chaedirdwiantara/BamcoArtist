@@ -67,7 +67,7 @@ const RightIcon: React.FC<Props> = (props: Props) => {
       <TouchableOpacity
         activeOpacity={1}
         style={{flexDirection: 'row', alignItems: 'center'}}
-        onPress={onPressTooltip}>
+        onPress={onPressTooltip ? onPressTooltip : onPress}>
         <Text style={[Typography.Button2, styles.text, textStyles]}>
           {text}
         </Text>
