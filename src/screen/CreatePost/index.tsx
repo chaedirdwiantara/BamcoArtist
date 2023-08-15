@@ -628,7 +628,6 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
                 <ImageList
                   imgData={uri}
                   disabled={true}
-                  width={162}
                   height={79}
                   onPress={closeImage}
                 />
