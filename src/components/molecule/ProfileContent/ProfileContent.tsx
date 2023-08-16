@@ -297,9 +297,9 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
             </View>
           ) : filter2[selectedIndex].filterName ===
             'Musician.Tab.Merchandise' ? (
-            <MerchList />
+            <MerchList musicianId={uuid} />
           ) : filter2[selectedIndex].filterName === 'Musician.Tab.Ticket' ? (
-            <ConcertList />
+            <ConcertList musicianId={uuid} />
           ) : (
             // TODO: DISABLE FOR NOW
             // : filter2[selectedIndex].filterName === 'Musician.Tab.Main' ? (

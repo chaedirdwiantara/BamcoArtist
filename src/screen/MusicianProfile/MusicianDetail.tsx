@@ -351,14 +351,14 @@ export const MusicianDetail: React.FC<MusicianDetailProps> = ({
                 style={{
                   paddingHorizontal: widthResponsive(20),
                 }}>
-                <MerchList />
+                <MerchList musicianId={uuid} />
               </View>
             ) : filter[selectedIndex].filterName === 'Musician.Tab.Ticket' ? (
               <View
                 style={{
                   paddingHorizontal: widthResponsive(20),
                 }}>
-                <ConcertList />
+                <ConcertList musicianId={uuid} />
               </View>
             ) : null}
           </View>

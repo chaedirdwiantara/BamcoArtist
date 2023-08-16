@@ -1,318 +1,62 @@
-import {useFocusEffect, useNavigation} from '@react-navigation/native';
-import {
-  NativeStackNavigationProp,
-  NativeStackScreenProps,
-} from '@react-navigation/native-stack';
-import React, {useCallback, useEffect, useState} from 'react';
-import {useTranslation} from 'react-i18next';
-import {
-  View,
-  StyleSheet,
-  Text,
-  ScrollView,
-  KeyboardAvoidingView,
-  Platform,
-  TouchableOpacity,
-} from 'react-native';
-import FastImage from 'react-native-fast-image';
-import Swiper from 'react-native-swiper';
-import {ArrowLeftIcon, CoinIcon, DefaultAvatar} from '../../assets/icon';
-import {
-  Avatar,
-  ButtonGradient,
-  Gap,
-  SsuDivider,
-  TopNavigation,
-} from '../../components';
-import QuantityInput from '../../components/molecule/EventDetail/QuantityInput';
-import {SelectColorType} from '../../components/molecule/EventDetail/SelectColor';
-import SelectSize, {
-  SelectSizeType,
-} from '../../components/molecule/EventDetail/SelectSize';
-import {useMusicianHook} from '../../hooks/use-musician.hook';
-import {RootStackParams} from '../../navigations';
+import React, {useCallback, useState} from 'react';
+import {StyleSheet, SafeAreaView} from 'react-native';
+import {SsuStatusBar, TopNavigation} from '../../components';
 import Color from '../../theme/Color';
-import Font from '../../theme/Font';
-import {
-  heightPercentage,
-  heightResponsive,
-  normalize,
-  toCurrency,
-  widthPercentage,
-  widthResponsive,
-} from '../../utils';
-import TopMusician from '../ListCard/TopMusician';
-import {usePlayerStore} from '../../store/player.store';
-import {mvs} from 'react-native-size-matters';
-import Typography from '../../theme/Typography';
-import LineUp from '../../components/molecule/EventDetail/LineUp';
-import SelectDate from '../../components/molecule/EventDetail/SelectDate';
-import TicketCategory, {
-  TicketCategoryType,
-} from '../../components/molecule/EventDetail/TicketCategory';
-import TicketDescription from '../../components/molecule/EventDetail/TicketDescription';
+import WebView from 'react-native-webview';
+import {width, widthPercentage} from '../../utils';
+import {profileStorage} from '../../hooks/use-storage.hook';
+import {useFocusEffect} from '@react-navigation/native';
+import {getBookyayToken} from '../../service/refreshBookyayToken';
+import {ModalLoading} from '../../components/molecule/ModalLoading/ModalLoading';
+import {RootStackParams} from '../../navigations';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {useTranslation} from 'react-i18next';
+import {ArrowLeftIcon} from '../../assets/icon';
 
-type MerchDetailProps = NativeStackScreenProps<
+type ConcertDetailProps = NativeStackScreenProps<
   RootStackParams,
   'ConcertDetail'
 >;
 
-const renderPagination = (index: number, total: number) => {
-  return (
-    <View style={styles.paginationStyle}>
-      <Text style={styles.paginationText}>
-        {index + 1}/{total}
-      </Text>
-    </View>
-  );
-};
-
-export const ConcertDetail: React.FC<MerchDetailProps> = ({
+export const ConcertDetail: React.FC<ConcertDetailProps> = ({
   route,
-}: MerchDetailProps) => {
-  const {t} = useTranslation();
+  navigation,
+}: ConcertDetailProps) => {
   const data = route.params;
-  const {getListDataMusician} = useMusicianHook();
-  const navigation =
-    useNavigation<NativeStackNavigationProp<RootStackParams>>();
-  const {setWithoutBottomTab, show} = usePlayerStore();
-  const [selectedDate, setSelectedDate] = useState<
-    SelectSizeType | undefined
-  >();
-  const [selectedTicket, setSelectedTicket] = useState<
-    TicketCategoryType | undefined
-  >();
-  const [quantity, setQuantity] = useState<number>(0);
+  const {t} = useTranslation();
+  const [loading, setLoading] = useState<boolean>(true);
 
   useFocusEffect(
     useCallback(() => {
-      if (show) {
-        setWithoutBottomTab(true);
-      }
-    }, [show]),
+      getBookyayToken();
+      setLoading(false);
+    }, []),
   );
 
-  const handleBackAction = () => {
-    show && setWithoutBottomTab(false);
-    navigation.goBack();
-  };
+  const bookyayToken = profileStorage()?.bookyayToken;
 
-  const handleQuantity = (type: string) => {
-    type === 'increment'
-      ? setQuantity(quantity + 1)
-      : setQuantity(quantity - 1);
-  };
-
-  const handleChangeQuantity = (value: string) => {
-    const newValue = value.replace(/[^0-9]/g, '');
-    setQuantity(Number(newValue));
-  };
-
-  const dates: SelectSizeType[] = [
-    {
-      id: 1,
-      name: '3 March',
-    },
-    {
-      id: 2,
-      name: '4 March',
-    },
-    {
-      id: 3,
-      name: '5 March',
-    },
-    {
-      id: 4,
-      name: '6 March',
-    },
-    {
-      id: 5,
-      name: '7 March',
-    },
-  ];
-
-  const tickets: TicketCategoryType[] = [
-    {
-      id: 1,
-      title: 'Festival (Standing)',
-      desc: 'Price already included tax and admin fee (20%)',
-      price: '2,500',
-      qty: 0,
-    },
-    {
-      id: 2,
-      title: 'Tribune Silver (Seated Row 3)',
-      desc: 'Price already included tax and admin fee (20%)',
-      price: '3,000',
-      qty: 2,
-    },
-    {
-      id: 3,
-      title: 'Tribune Gold  (Seated Row 2)',
-      desc: 'Price already included tax and admin fee (20%)',
-      price: '3,500',
-      qty: 4,
-    },
-    {
-      id: 4,
-      title: 'Tribune Platinum  (Seated Row 1)',
-      desc: 'Price already included tax and admin fee (20%)',
-      price: '4.000',
-      qty: 2,
-    },
-  ];
-
-  useEffect(() => {
-    getListDataMusician({filterBy: 'top'});
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const merchantUrl = `https://uat.yeah-yeah.com/events/${data.id}/?token=${bookyayToken}`;
 
   return (
-    <KeyboardAvoidingView
-      style={{flex: 1}}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-      <View style={styles.root}>
-        <TopNavigation.Type1
-          title={t('Event.Concert.Detail')}
-          maxLengthTitle={20}
-          itemStrokeColor={'white'}
-          leftIcon={<ArrowLeftIcon />}
-          leftIconAction={handleBackAction}
-          containerStyles={{paddingHorizontal: widthPercentage(20)}}
-        />
-        <ScrollView>
-          <View style={{height: heightResponsive(400)}}>
-            <Swiper
-              loop={false}
-              renderPagination={renderPagination}
-              style={styles.swiperContainer}>
-              <View style={styles.slide}>
-                <FastImage
-                  source={{uri: data.image}}
-                  style={[
-                    {
-                      height: heightResponsive(400),
-                    },
-                  ]}
-                />
-              </View>
-            </Swiper>
-          </View>
+    <>
+      <TopNavigation.Type1
+        title={t('Event.Concert.Detail')}
+        maxLengthTitle={20}
+        itemStrokeColor={'white'}
+        leftIcon={<ArrowLeftIcon />}
+        leftIconAction={() => navigation.goBack()}
+        containerStyles={{
+          paddingHorizontal: widthPercentage(20),
+          backgroundColor: Color.Dark[800],
+        }}
+      />
+      <SafeAreaView style={styles.root}>
+        <SsuStatusBar type="black" />
+        <ModalLoading visible={loading} />
 
-          <View style={styles.descContainer}>
-            <Text style={styles.title}>{data.title}</Text>
-            <Text style={styles.title2}>Jakarta Velodrome</Text>
-
-            <TouchableOpacity
-              style={styles.owner}
-              onPress={() => navigation.navigate('Shop')}>
-              <View style={{marginHorizontal: 5}}>
-                {data?.ownerImage ? (
-                  <Avatar
-                    imgUri={data?.ownerImage}
-                    size={widthResponsive(24)}
-                  />
-                ) : (
-                  <DefaultAvatar.ProfileIcon width={widthResponsive(24)} />
-                )}
-              </View>
-
-              <Text style={styles.ownerLabel}>{data.owner}</Text>
-            </TouchableOpacity>
-
-            <View style={styles.disc}>
-              <CoinIcon
-                height={widthResponsive(24)}
-                width={widthResponsive(24)}
-              />
-              <Gap width={widthResponsive(4)} />
-              <Text style={styles.price}>
-                {toCurrency(data.price, {withFraction: false})}
-              </Text>
-            </View>
-            <View style={styles.disc}>
-              <View style={styles.discPercContainer}>
-                <Text style={styles.discPerc}>25%</Text>
-              </View>
-              <Gap width={widthResponsive(4)} />
-              <Text style={styles.priceDisc}>
-                {toCurrency(data.price, {withFraction: false})}
-              </Text>
-            </View>
-          </View>
-
-          <SsuDivider />
-          <View style={styles.descContainer}>
-            <TicketDescription />
-          </View>
-          <SsuDivider />
-          <View style={styles.descContainer}>
-            <View style={styles.attribute}>
-              <View style={[styles.row, {justifyContent: 'space-between'}]}>
-                <Text style={[styles.subtitle, {marginBottom: 0}]}>
-                  {t('Event.Concert.LineUp')}
-                </Text>
-                <TouchableOpacity>
-                  <Text
-                    style={[
-                      styles.subtitle,
-                      {marginBottom: 0, color: Color.Pink.linear},
-                    ]}>
-                    View More
-                  </Text>
-                </TouchableOpacity>
-              </View>
-
-              <LineUp />
-            </View>
-            <View style={styles.attribute}>
-              <Text style={styles.subtitle}>
-                {t('Event.Concert.ChooseDate')}
-              </Text>
-              <SelectDate
-                selected={selectedDate}
-                data={dates}
-                onPressSize={date => setSelectedDate(date)}
-              />
-            </View>
-            <View>
-              <Text style={styles.subtitle}>{t('Event.Concert.Ticket')}</Text>
-              <TicketCategory
-                selected={selectedTicket}
-                data={tickets}
-                onPressSize={ticket => setSelectedTicket(ticket)}
-                onPressDetail={() => navigation.navigate('TicketDetail')}
-              />
-            </View>
-          </View>
-          <SsuDivider />
-          <View style={[styles.descContainer, styles.priceContainer]}>
-            <View>
-              <Text style={styles.subtitle}>{t('Event.Concert.Total')}</Text>
-              <Text style={styles.totalPrice}>3,500 Credits</Text>
-            </View>
-            <View>
-              <Text style={styles.subtitle}>{t('Event.Quantity')}</Text>
-              <QuantityInput
-                value={quantity.toString()}
-                onPress={handleQuantity}
-                onChangeQuantity={(value: string) =>
-                  handleChangeQuantity(value)
-                }
-              />
-            </View>
-          </View>
-          <View style={styles.descContainer}>
-            <ButtonGradient
-              label={t('Btn.BuyNow')}
-              gradientStyles={{width: '100%'}}
-              containerStyles={{marginBottom: 8}}
-              onPress={() => null}
-            />
-          </View>
-        </ScrollView>
-      </View>
-    </KeyboardAvoidingView>
+        {!loading && <WebView source={{uri: merchantUrl}} />}
+      </SafeAreaView>
+    </>
   );
 };
 
@@ -320,104 +64,16 @@ const styles = StyleSheet.create({
   root: {
     flex: 1,
     backgroundColor: Color.Dark[800],
-    position: 'relative',
   },
-  swiperContainer: {
-    position: 'relative',
-  },
-  slide: {
-    position: 'relative',
-  },
-  paginationStyle: {
-    backgroundColor: '#141921B2',
-    position: 'absolute',
-    bottom: 24,
-    left: 24,
-    paddingVertical: 2,
-    paddingHorizontal: widthResponsive(8),
-    borderRadius: 4,
-  },
-  paginationText: {
-    color: 'white',
-    fontSize: normalize(12),
-  },
-  title: {
-    color: 'white',
-    fontSize: normalize(16),
-    marginBottom: heightPercentage(4),
-    fontFamily: Font.InterSemiBold,
-  },
-  title2: {
-    ...Typography.Subtitle2,
-    color: Color.Dark[50],
-    marginBottom: heightPercentage(12),
-  },
-  subtitle: {
-    color: 'white',
-    fontFamily: Font.InterMedium,
-    fontSize: normalize(12),
-    marginBottom: heightResponsive(12),
-  },
-  descContainer: {
-    paddingHorizontal: widthPercentage(24),
-    paddingVertical: heightPercentage(20),
-  },
-  desc: {
-    ...Typography.Subtitle3,
-    color: Color.Neutral[50],
-  },
-  owner: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 8,
-  },
-  ownerLabel: {
-    color: 'white',
-    fontFamily: Font.InterMedium,
-    fontSize: normalize(12),
-  },
-  price: {
-    color: Color.Pink[2],
-    fontSize: normalize(20),
-    fontFamily: Font.InterBold,
-  },
-  attribute: {
-    marginBottom: heightResponsive(24),
-  },
-  disc: {flexDirection: 'row', alignItems: 'center', marginTop: 5},
-  priceDisc: {
-    color: Color.Neutral[50],
-    fontWeight: '500',
-    textDecorationLine: 'line-through',
-  },
-  discPerc: {
-    fontSize: mvs(8),
-    fontFamily: 'Inter-Semibold',
-    color: '#F94D63',
-  },
-  discPercContainer: {
-    backgroundColor: '#FFB8C6',
-    padding: 4,
-    alignItems: 'center',
+  header: {
+    backgroundColor: Color.Dark[800],
+    width: width,
+    height: undefined,
+    aspectRatio: 375 / 64,
     justifyContent: 'center',
-    borderRadius: 4,
-  },
-  row: {
+    alignItems: 'center',
+    borderBottomColor: Color.Dark[500],
+    borderBottomWidth: 1,
     flexDirection: 'row',
-  },
-  descLeft: {
-    width: '35%',
-  },
-  descRight: {
-    flex: 1,
-  },
-  priceContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  totalPrice: {
-    ...Typography.Heading6,
-    color: Color.Success[400],
-    paddingTop: heightPercentage(6),
   },
 });
