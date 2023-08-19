@@ -45,14 +45,16 @@ export type GetCitiesResponseType = {
 };
 
 export type ListCountryType = {
-  value: number;
+  value: number | string;
   label: string;
+  id?: number;
 };
 
 export type DataCountryType = {
   id: number;
   name: string;
   imageUrl: string[];
+  countryCode: string;
   createdAt: string;
 };
 
