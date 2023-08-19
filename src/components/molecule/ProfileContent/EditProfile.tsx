@@ -333,7 +333,7 @@ export const EditProfile: React.FC<EditProfileProps> = ({
             style={[
               styles.length,
               {color: newColorAbout},
-            ]}>{`${about.length}/600`}</Text>
+            ]}>{`${website.length}/600`}</Text>
         </View>
 
         <View style={styles.textAreaContainer}>

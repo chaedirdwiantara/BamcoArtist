@@ -3,7 +3,6 @@ import {
   NativeModules,
   Platform,
   StyleSheet,
-  Text,
   TouchableOpacity,
   View,
   ViewStyle,

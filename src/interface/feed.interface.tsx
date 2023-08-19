@@ -127,6 +127,7 @@ export type PostList = {
   timeAgo: string;
   viewsCount: number;
   shareCount: number;
+  reportSent?: boolean;
 };
 
 export type ListPostResponseType = {
@@ -184,6 +185,7 @@ export type DetailPostData = {
   isSubscribe: boolean;
   viewsCount: number;
   shareCount: number;
+  reportSent: boolean;
 };
 
 export type DetailPostResponseType = {

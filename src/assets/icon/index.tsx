@@ -96,8 +96,10 @@ import PlayIcon2 from './Play2.icon';
 import PlayIcon3 from './PlayRadius.icon';
 import PlayVideoIcon from './PlayVideo.icon';
 import PreviousIcon from './Previous.icon';
+import PressedRadioIcon from './PressedRadio.icon';
 import ProcessingIcon from './Processing.icon';
 import PublicIcon from './Public.icon';
+import RadioButtonIcon from './RadioButton.icon';
 import SaveIcon from './Save.icon';
 import SearchIcon from './Search.icon';
 import SettingIcon from './Setting.icon';
@@ -130,10 +132,11 @@ import WalletIcon from './Wallet.icon';
 import LocationIcon from './Location.icon';
 import TruckIcon from './Truck.icon';
 import BagTickIcon from './BagTick.icon';
-import StarIcon from './BagTick.icon';
+import StarIcon from './Star.icon';
 import {NormalCreditCard, PosCreditCard} from './CreditCard';
 import DollarSign from './DollarSign';
 import UploadIcon from './Upload.icon';
+import CalendarIcon from './Calendar.icon';
 
 export {
   AddIcon,
@@ -231,9 +234,11 @@ export {
   PlayIcon3,
   PlayPinkIcon,
   PlayVideoIcon,
+  PressedRadioIcon,
   PreviousIcon,
   ProcessingIcon,
   PublicIcon,
+  RadioButtonIcon,
   RepeatIcon,
   RepeatOneIcon,
   SaveIcon,
@@ -273,4 +278,5 @@ export {
   PosCreditCard,
   DollarSign,
   UploadIcon,
+  CalendarIcon,
 };

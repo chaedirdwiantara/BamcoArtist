@@ -20,6 +20,7 @@ const CountryCard: FC<CountryCardProps> = (props: CountryCardProps) => {
         <View style={styles.idContainer}>
           <Text style={styles.number}>{countryId}</Text>
         </View>
+        <Gap width={6} />
         <View style={styles.imageContainer}>
           <FastImage style={styles.image} source={{uri: flagUri}} />
         </View>

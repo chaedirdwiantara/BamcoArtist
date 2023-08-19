@@ -1,9 +1,9 @@
 import {InteractionManager, StyleSheet, Text, View} from 'react-native';
 import React, {FC, useEffect, useState} from 'react';
-import {color, font, typography} from '../../../../theme';
+import {color, font} from '../../../../theme';
 import {mvs} from 'react-native-size-matters';
 import {ListCard} from '../../ListCard';
-import {Gap, SsuToast} from '../../../atom';
+import {Gap} from '../../../atom';
 import {useFeedHook} from '../../../../hooks/use-feed.hook';
 import categoryNormalize from '../../../../utils/categoryNormalize';
 import {useNavigation} from '@react-navigation/native';
@@ -20,14 +20,19 @@ import {ModalDonate} from '../../Modal/ModalDonate';
 import {ModalSuccessDonate} from '../../Modal/ModalSuccessDonate';
 import {ModalShare} from '../../Modal/ModalShare';
 import {useTranslation} from 'react-i18next';
-import {TickCircleIcon} from '../../../../assets/icon';
-import {
-  heightPercentage,
-  heightResponsive,
-  widthResponsive,
-} from '../../../../utils';
+import {heightPercentage, heightResponsive} from '../../../../utils';
 import {ModalConfirm} from '../../Modal/ModalConfirm';
 import {BottomSheetGuest} from '../../GuestComponent/BottomSheetGuest';
+import {useReportHook} from '../../../../hooks/use-report.hook';
+import {feedReportRecorded} from '../../../../store/idReported';
+import {ReportParamsProps} from '../../../../interface/report.interface';
+import {
+  likePressedInFeed,
+  likesCountInFeed,
+} from '../../../../screen/ListCard/ListUtils/ListFunction';
+import {ModalReport} from '../../Modal/ModalReport';
+import {reportingMenu} from '../../../../data/report';
+import SuccessToast from '../../Toast/SuccessToast';
 
 interface PopularPostProps {
   uuidMusician: string;
@@ -74,10 +79,13 @@ const PopularPost: FC<PopularPostProps> = (props: PopularPostProps) => {
   const [trigger2ndModal, setTrigger2ndModal] = useState<boolean>(false);
   const [modalSuccessDonate, setModalSuccessDonate] = useState<boolean>(false);
   const [toastVisible, setToastVisible] = useState(false);
+  const [reportToast, setReportToast] = useState(false);
   const [modalGuestVisible, setModalGuestVisible] = useState(false);
   const [modalConfirm, setModalConfirm] = useState(false);
   const [selectedMenuPost, setSelectedMenuPost] = useState<DataDropDownType>();
   const [selectedUserUuid, setSelectedUserUuid] = useState<string>();
+  const [selectedCategory, setSelectedCategory] = useState<string>();
+  const [reason, setReason] = useState<string>('');
 
   const {t} = useTranslation();
 
@@ -238,14 +246,51 @@ const PopularPost: FC<PopularPostProps> = (props: PopularPostProps) => {
   };
 
   // ! REPORT POST AREA
+  const {
+    dataReport,
+    reportIsLoading,
+    reportIsError,
+    setDataReport,
+    setPostReport,
+  } = useReportHook();
+
+  const {idReported, setIdReported} = feedReportRecorded();
+
   useEffect(() => {
     if (selectedIdPost && selectedMenuPost && selectedUserUuid) {
       const selectedValue = t(selectedMenuPost.value);
 
-      if (selectedValue) console.log('REPORT', selectedIdPost);
+      if (selectedValue) {
+        setReportToast(true);
+      }
       setSelectedMenuPost(undefined);
     }
   }, [selectedIdPost, selectedMenuPost, selectedUserUuid]);
+
+  //? set status disable after report sent to make sure the status report is updated
+  useEffect(() => {
+    if (dataReport && selectedIdPost) {
+      if (!idReported.includes(selectedIdPost)) {
+        setIdReported([...idReported, selectedIdPost]);
+      }
+    }
+  }, [dataReport]);
+
+  const sendOnPress = () => {
+    const reportBody: ReportParamsProps = {
+      reportType: 'post',
+      reportTypeId: selectedIdPost ?? 0,
+      reporterUuid: MyUuid ?? '',
+      reportedUuid: selectedUserUuid ?? '',
+      reportCategory: t(selectedCategory ?? ''),
+      reportReason: reason ?? '',
+    };
+    setPostReport(reportBody);
+  };
+
+  const closeModalSuccess = () => {
+    setDataReport(false);
+  };
   // ! END OF REPORT POST AREA
 
   const item = dataPostList[0];
@@ -272,38 +317,8 @@ const PopularPost: FC<PopularPostProps> = (props: PopularPostProps) => {
             category={categoryNormalize(item.category)}
             onPress={() => cardOnPress(item)}
             likeOnPress={() => likeOnPress(item.id, item.isLiked)}
-            likePressed={
-              selectedId === undefined
-                ? item.isLiked
-                : selectedId.includes(item.id) && recorder.includes(item.id)
-                ? true
-                : !selectedId.includes(item.id) && recorder.includes(item.id)
-                ? false
-                : !selectedId.includes(item.id) && !recorder.includes(item.id)
-                ? item.isLiked
-                : item.isLiked
-            }
-            likeCount={
-              selectedId === undefined
-                ? item.likesCount
-                : selectedId.includes(item.id) &&
-                  recorder.includes(item.id) &&
-                  item.isLiked === true
-                ? item.likesCount
-                : selectedId.includes(item.id) &&
-                  recorder.includes(item.id) &&
-                  item.isLiked === false
-                ? item.likesCount + 1
-                : !selectedId.includes(item.id) &&
-                  recorder.includes(item.id) &&
-                  item.isLiked === true
-                ? item.likesCount - 1
-                : !selectedId.includes(item.id) &&
-                  recorder.includes(item.id) &&
-                  item.isLiked === false
-                ? item.likesCount
-                : item.likesCount
-            }
+            likePressed={likePressedInFeed(selectedId, item, recorder)}
+            likeCount={likesCountInFeed(selectedId, item, recorder)}
             tokenOnPress={tokenOnPress}
             shareOnPress={shareOnPress}
             commentCount={item.commentsCount}
@@ -323,6 +338,7 @@ const PopularPost: FC<PopularPostProps> = (props: PopularPostProps) => {
                 ? false
                 : true
             }
+            reportSent={idReported.includes(item.id) ?? item.reportSent}
             onProfile
             noNavigate
             children={
@@ -374,6 +390,22 @@ const PopularPost: FC<PopularPostProps> = (props: PopularPostProps) => {
       ) : (
         <Text style={styles.emptyState}>{t('EmptyState.PopularPost')}</Text>
       )}
+      <ModalReport
+        modalVisible={reportToast}
+        onPressClose={() => setReportToast(false)}
+        title={`${t('ModalComponent.Report.Type.Post.FirstTitle')}`}
+        secondTitle={`${t('ModalComponent.Report.Type.Post.SecondTitle')}`}
+        dataReport={reportingMenu}
+        onPressOk={sendOnPress}
+        category={setSelectedCategory}
+        reportReason={setReason}
+      />
+      {/* //? When report succesfully */}
+      <SuccessToast
+        toastVisible={dataReport}
+        onBackPressed={closeModalSuccess}
+        caption={t('ModalComponent.Report.ReportSuccess')}
+      />
       <ModalShare
         url={
           'https://open.ssu.io/track/19AiJfAtRiccvSU1EWcttT?si=36b9a686dad44ae0'
@@ -386,23 +418,11 @@ const PopularPost: FC<PopularPostProps> = (props: PopularPostProps) => {
           InteractionManager.runAfterInteractions(() => setToastVisible(true))
         }
       />
-      <SsuToast
-        modalVisible={toastVisible}
+      {/* //? When copy link done */}
+      <SuccessToast
+        toastVisible={toastVisible}
         onBackPressed={() => setToastVisible(false)}
-        children={
-          <View style={[styles.modalContainer]}>
-            <TickCircleIcon
-              width={widthResponsive(21)}
-              height={heightPercentage(20)}
-              stroke={color.Neutral[10]}
-            />
-            <Gap width={widthResponsive(7)} />
-            <Text style={[typography.Button2, styles.textStyle]}>
-              {t('General.LinkCopied')}
-            </Text>
-          </View>
-        }
-        modalStyle={{marginHorizontal: widthResponsive(24)}}
+        caption={t('General.LinkCopied')}
       />
       <ModalDonate
         userId={uuidMusician}
@@ -439,21 +459,6 @@ const styles = StyleSheet.create({
     fontFamily: font.InterRegular,
     fontSize: mvs(16),
     fontWeight: '600',
-    color: color.Neutral[10],
-  },
-  modalContainer: {
-    width: '100%',
-    position: 'absolute',
-    bottom: heightPercentage(22),
-    height: heightPercentage(36),
-    backgroundColor: color.Success[400],
-    paddingHorizontal: widthResponsive(12),
-    borderRadius: 4,
-    flexDirection: 'row',
-    alignItems: 'center',
-    zIndex: 1,
-  },
-  textStyle: {
     color: color.Neutral[10],
   },
   emptyState: {

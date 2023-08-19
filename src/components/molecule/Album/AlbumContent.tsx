@@ -18,6 +18,7 @@ import {
   ModalShare,
   ModalSuccessDonate,
   MusicSection,
+  SuccessToast,
 } from '../';
 import {
   heightPercentage,
@@ -37,7 +38,11 @@ import {TopNavigation} from '../TopNavigation';
 import {color, font, typography} from '../../../theme';
 import {dateLongMonth} from '../../../utils/date-format';
 import ListSongs from '../../../screen/ListCard/ListSongs';
-import {dropDownHeaderAlbum} from '../../../data/dropdown';
+import {
+  albumReport,
+  albumReportSent,
+  dropDownHeaderAlbum,
+} from '../../../data/dropdown';
 import {usePlayerHook} from '../../../hooks/use-player.hook';
 import DropdownMore from '../V2/DropdownFilter/DropdownMore';
 import {profileStorage} from '../../../hooks/use-storage.hook';
@@ -51,6 +56,11 @@ import {
 import LoadingSpinner from '../../atom/Loading/LoadingSpinner';
 import {useShareHook} from '../../../hooks/use-share.hook';
 import Clipboard from '@react-native-community/clipboard';
+import {useReportHook} from '../../../hooks/use-report.hook';
+import {mediaReportRecorded} from '../../../store/idReported';
+import {ReportParamsProps} from '../../../interface/report.interface';
+import {ModalReport} from '../Modal/ModalReport';
+import {reportingMenu} from '../../../data/report';
 
 interface Props {
   dataSong: SongList[];
@@ -72,6 +82,7 @@ export const AlbumContent: React.FC<Props> = ({
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
   const navigation2 = useNavigation<NativeStackNavigationProp<MainTabParams>>();
+  const MyUuid = profileStorage()?.uuid;
 
   const {
     isPlaying,
@@ -81,6 +92,16 @@ export const AlbumContent: React.FC<Props> = ({
     addPlaylist,
     addSong,
   } = usePlayerHook();
+
+  const {
+    dataReport,
+    reportIsLoading,
+    reportIsError,
+    setDataReport,
+    setPostReport,
+  } = useReportHook();
+
+  const {idReported, setIdReported} = mediaReportRecorded();
 
   const {t} = useTranslation();
   const isFocused = useIsFocused();
@@ -92,6 +113,9 @@ export const AlbumContent: React.FC<Props> = ({
   const [modalSuccessDonate, setModalSuccessDonate] = useState<boolean>(false);
   const [trigger2ndModal, setTrigger2ndModal] = useState<boolean>(false);
   const [songIdList, setSongIdList] = useState<number[]>([]);
+  const [reportToast, setReportToast] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState<string>();
+  const [reason, setReason] = useState<string>('');
 
   useEffect(() => {
     if (isFocused && isPlaying) {
@@ -125,6 +149,15 @@ export const AlbumContent: React.FC<Props> = ({
     }
   }, [dataSong]);
 
+  //? set status disable after report sent to make sure the status report is updated
+  useEffect(() => {
+    if (dataReport && detailAlbum?.id) {
+      if (!idReported.includes(detailAlbum.id)) {
+        setIdReported([...idReported, detailAlbum.id]);
+      }
+    }
+  }, [dataReport]);
+
   const resultDataMore = (dataResult: any) => {
     if (dataResult.value === '1') {
       if (dataSong !== null) {
@@ -136,7 +169,25 @@ export const AlbumContent: React.FC<Props> = ({
       setModalShare(true);
     } else if (dataResult.value === '3') {
       navigation.navigate('AddToPlaylist', {id: songIdList, type: 'album'});
+    } else if (dataResult.value === '22') {
+      setReportToast(true);
     }
+  };
+
+  const sendOnPress = () => {
+    const reportBody: ReportParamsProps = {
+      reportType: 'album',
+      reportTypeId: detailAlbum.id ?? 0,
+      reporterUuid: MyUuid ?? '',
+      reportedUuid: detailAlbum.musician.uuid ?? '',
+      reportCategory: t(selectedCategory ?? ''),
+      reportReason: reason ?? '',
+    };
+    setPostReport(reportBody);
+  };
+
+  const closeModalSuccess = () => {
+    setDataReport(false);
   };
 
   const onPressDonate = () => {
@@ -186,6 +237,10 @@ export const AlbumContent: React.FC<Props> = ({
     }
   }, [detailAlbum]);
 
+  const dropDownAlbumReport = !idReported.includes(detailAlbum?.id)
+    ? albumReport
+    : albumReportSent;
+
   return (
     <View style={styles.root}>
       <TopNavigation.Type4
@@ -195,7 +250,11 @@ export const AlbumContent: React.FC<Props> = ({
             <></>
           ) : (
             <DropdownMore
-              dataFilter={dropDownHeaderAlbum}
+              dataFilter={
+                detailAlbum?.musician.uuid === MyUuid
+                  ? dropDownHeaderAlbum
+                  : dropDownAlbumReport
+              }
               selectedMenu={resultDataMore}
             />
           )
@@ -294,10 +353,9 @@ export const AlbumContent: React.FC<Props> = ({
             ) : (
               <ListSongs
                 onPress={onPressSong}
-                hideDropdownMore={true}
                 dataSong={dataSong}
                 type="home"
-                disabled={comingSoon}
+                loveIcon={true}
               />
             )}
           </View>
@@ -356,6 +414,23 @@ export const AlbumContent: React.FC<Props> = ({
           </View>
         }
         modalStyle={{marginHorizontal: widthPercentage(24)}}
+      />
+
+      <ModalReport
+        modalVisible={reportToast}
+        onPressClose={() => setReportToast(false)}
+        title={`${t('ModalComponent.Report.Type.Album.FirstTitle')}`}
+        secondTitle={`${t('ModalComponent.Report.Type.Album.SecondTitle')}`}
+        dataReport={reportingMenu}
+        onPressOk={sendOnPress}
+        category={setSelectedCategory}
+        reportReason={setReason}
+      />
+      {/* //? When report succesfully */}
+      <SuccessToast
+        toastVisible={dataReport}
+        onBackPressed={closeModalSuccess}
+        caption={t('ModalComponent.Report.ReportSuccess')}
       />
     </View>
   );

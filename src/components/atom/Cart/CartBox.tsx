@@ -5,10 +5,17 @@ import Typography from '../../../theme/Typography';
 import Color from '../../../theme/Color';
 import {Avatar} from '../Avatar/Avatar';
 import Gap from '../Gap/Gap';
-import {heightPercentage, normalize, widthPercentage} from '../../../utils';
-import {ArrowRightIcon, TruckIcon} from '../../../assets/icon';
-import {useTranslation} from 'react-i18next';
+import {
+  heightPercentage,
+  heightResponsive,
+  normalize,
+  widthPercentage,
+  widthResponsive,
+} from '../../../utils';
+import {ArrowRightIcon, CalendarIcon, TruckIcon} from '../../../assets/icon';
 import {EventType} from '../../../interface/event.interface';
+import Font from '../../../theme/Font';
+import {mvs} from 'react-native-size-matters';
 
 interface CartBoxProps {
   seller: string;
@@ -29,6 +36,8 @@ interface CartBoxProps {
   coDelivery?: any;
   coCourier?: any;
   isEmpty?: boolean;
+  totalItem?: number;
+  totalPrice?: number;
 }
 
 const CartBox: React.FC<CartBoxProps> = props => {
@@ -44,163 +53,17 @@ const CartBox: React.FC<CartBoxProps> = props => {
     transaction,
     arrival,
     onPressDetail,
-    date,
-    category,
     isChecked = false,
     onChecked = () => null,
     coDelivery,
     coCourier,
     isEmpty = false,
+    totalItem,
+    totalPrice,
   } = props;
 
-  const {t} = useTranslation();
-
-  if (type === EventType.Merch) {
-    return (
-      <View style={[styles.root, {opacity: isEmpty ? 0.5 : 1}]}>
-        <View
-          style={[
-            styles.rowCenter,
-            {
-              marginBottom: 10,
-            },
-          ]}>
-          {editable && (
-            <>
-              <CheckBox handleOnPress={onChecked} active={isChecked} />
-              <Gap width={widthPercentage(10)} />
-            </>
-          )}
-
-          {transaction ? (
-            <View style={{flex: 1}}>
-              <TouchableOpacity
-                onPress={onPressDetail}
-                style={[styles.rowCenter, {justifyContent: 'space-between'}]}>
-                <View style={[styles.rowCenter]}>
-                  <Avatar imgUri={sellerImage} />
-                  <Gap width={widthPercentage(6)} />
-                  <Text
-                    style={[
-                      Typography.Subtitle3,
-                      {color: Color.Neutral[10], fontSize: normalize(12)},
-                    ]}
-                    numberOfLines={1}>
-                    {seller}
-                  </Text>
-                  <Gap width={widthPercentage(16)} />
-                  <ArrowRightIcon stroke={Color.Success[400]} />
-                </View>
-                <Text
-                  style={[
-                    Typography.Subtitle3,
-                    {color: Color.Neutral[10], fontSize: normalize(12)},
-                  ]}>
-                  {transaction}
-                </Text>
-              </TouchableOpacity>
-              <View style={[styles.rowCenter, styles.arrival]}>
-                <TruckIcon stroke={Color.Neutral[10]} />
-                <Gap width={widthPercentage(8)} />
-                <Text
-                  style={[
-                    Typography.Caption,
-                    {color: Color.Dark[50], fontSize: normalize(12)},
-                  ]}>
-                  {t('Transaction.Merch.Estimated')} : {arrival}
-                </Text>
-              </View>
-            </View>
-          ) : (
-            <View style={[styles.rowCenter]}>
-              <Avatar imgUri="https://picsum.photos/200" />
-              <Gap width={widthPercentage(6)} />
-              <Text
-                style={[
-                  Typography.Subtitle3,
-                  {color: Color.Neutral[10], fontSize: normalize(12)},
-                ]}
-                numberOfLines={1}>
-                {seller}
-              </Text>
-            </View>
-          )}
-        </View>
-
-        {children}
-
-        {delivery && (
-          <View style={[styles.box]}>
-            <TouchableOpacity
-              style={[styles.rowCenter, styles.between, {width: '100%'}]}
-              onPress={onPressDelivery}>
-              <View style={[styles.rowCenter]}>
-                {coDelivery ? (
-                  <>
-                    <Text
-                      style={[
-                        Typography.Subtitle3,
-                        {color: Color.Neutral[10]},
-                      ]}>
-                      {coDelivery.name}
-                    </Text>
-                  </>
-                ) : (
-                  <>
-                    <TruckIcon />
-                    <Gap width={widthPercentage(5)} />
-                    <Text
-                      style={[
-                        Typography.Subtitle3,
-                        {color: Color.Neutral[10]},
-                      ]}>
-                      Choose Delivery
-                    </Text>
-                  </>
-                )}
-              </View>
-
-              <ArrowRightIcon />
-            </TouchableOpacity>
-            {coCourier && (
-              <>
-                <View style={styles.border} />
-                <TouchableOpacity
-                  style={[
-                    styles.rowCenter,
-                    styles.between,
-                    {
-                      width: '100%',
-                    },
-                  ]}
-                  onPress={onPressAgent}>
-                  <View>
-                    <Text
-                      style={[
-                        Typography.Subtitle3,
-                        {color: Color.Neutral[10]},
-                      ]}>
-                      {coCourier.name} ({coCourier.price})
-                    </Text>
-                    <Gap height={heightPercentage(4)} />
-                    <Text
-                      style={[Typography.Subtitle3, {color: Color.Dark[50]}]}>
-                      Estimated time {coCourier.estimated}
-                    </Text>
-                  </View>
-
-                  <ArrowRightIcon />
-                </TouchableOpacity>
-              </>
-            )}
-          </View>
-        )}
-      </View>
-    );
-  }
-
   return (
-    <View style={styles.root}>
+    <View style={[styles.root, {opacity: isEmpty ? 0.5 : 1}]}>
       <View
         style={[
           styles.rowCenter,
@@ -210,52 +73,152 @@ const CartBox: React.FC<CartBoxProps> = props => {
         ]}>
         {editable && (
           <>
-            <CheckBox handleOnPress={() => null} active={false} />
+            <CheckBox handleOnPress={onChecked} active={isChecked} />
             <Gap width={widthPercentage(10)} />
           </>
         )}
 
-        <View style={{flex: 1}}>
-          <TouchableOpacity
-            onPress={onPressDetail}
-            style={[styles.rowCenter, {justifyContent: 'space-between'}]}>
-            <View style={[styles.rowCenter]}>
-              <Avatar imgUri={sellerImage} />
-              <Gap width={widthPercentage(6)} />
+        {transaction ? (
+          <View style={{flex: 1}}>
+            <TouchableOpacity
+              onPress={onPressDetail}
+              style={[styles.rowCenter, {justifyContent: 'space-between'}]}>
+              <View style={[styles.rowCenter]}>
+                <Avatar imgUri={sellerImage} />
+                <Gap width={widthPercentage(6)} />
+                <Text
+                  style={[
+                    Typography.Subtitle3,
+                    {color: Color.Neutral[10], fontSize: normalize(12)},
+                  ]}
+                  numberOfLines={1}>
+                  {seller}
+                </Text>
+                <Gap width={widthPercentage(16)} />
+                <ArrowRightIcon stroke={Color.Success[400]} />
+              </View>
               <Text
                 style={[
                   Typography.Subtitle3,
                   {color: Color.Neutral[10], fontSize: normalize(12)},
-                ]}
-                numberOfLines={1}>
-                {seller}
+                ]}>
+                {transaction}
               </Text>
-              <Gap width={widthPercentage(16)} />
-              <ArrowRightIcon stroke={Color.Success[400]} />
+            </TouchableOpacity>
+            <View style={[styles.rowCenter, styles.arrival]}>
+              {type === EventType.Merch ? (
+                <TruckIcon stroke={Color.Neutral[10]} />
+              ) : (
+                <CalendarIcon stroke={Color.Neutral[10]} />
+              )}
+
+              <Gap width={widthPercentage(8)} />
+              <Text
+                style={[
+                  Typography.Caption,
+                  {color: Color.Dark[50], fontSize: normalize(12), flex: 1},
+                ]}>
+                {arrival}
+              </Text>
+              <View style={styles.badgeWrapper}>
+                <Text style={[Typography.Caption, styles.badgeText]}>
+                  {type === EventType.Merch ? 'Merchandise' : 'Ticket'}
+                </Text>
+              </View>
             </View>
-          </TouchableOpacity>
-        </View>
+          </View>
+        ) : (
+          <View style={[styles.rowCenter]}>
+            <Avatar imgUri="https://picsum.photos/200" />
+            <Gap width={widthPercentage(6)} />
+            <Text
+              style={[
+                Typography.Subtitle3,
+                {color: Color.Neutral[10], fontSize: normalize(12)},
+              ]}
+              numberOfLines={1}>
+              {seller}
+            </Text>
+          </View>
+        )}
       </View>
 
       {children}
 
-      <View style={styles.concertDetail}>
-        <Text style={[Typography.Subtitle3, {color: Color.Neutral[10]}]}>
-          Date
-        </Text>
-        <Text style={[Typography.Subtitle3, {color: Color.Dark[50]}]}>
-          {date}
-        </Text>
-      </View>
-      <View style={styles.concertDetail}>
-        <Text style={[Typography.Subtitle3, {color: Color.Neutral[10]}]}>
-          Ticket Category
-        </Text>
-        <Text style={[Typography.Subtitle3, {color: Color.Dark[50]}]}>
-          {category}
-        </Text>
-      </View>
-      <Gap height={heightPercentage(12)} />
+      {transaction && (
+        <View
+          style={{
+            justifyContent: 'flex-end',
+            flex: 1,
+            flexDirection: 'row',
+            marginBottom: heightResponsive(24),
+            marginTop: heightResponsive(10),
+          }}>
+          <Text style={[Typography.Subtitle3, {color: Color.Neutral[10]}]}>
+            {totalItem} Item :{' '}
+          </Text>
+          <Text style={[Typography.Subtitle3, {color: Color.Pink.linear}]}>
+            {totalPrice} HKD
+          </Text>
+        </View>
+      )}
+
+      {delivery && (
+        <View style={[styles.box]}>
+          <TouchableOpacity
+            style={[styles.rowCenter, styles.between, {width: '100%'}]}
+            onPress={onPressDelivery}>
+            <View style={[styles.rowCenter]}>
+              {coDelivery ? (
+                <>
+                  <Text
+                    style={[Typography.Subtitle3, {color: Color.Neutral[10]}]}>
+                    {coDelivery.name}
+                  </Text>
+                </>
+              ) : (
+                <>
+                  <TruckIcon />
+                  <Gap width={widthPercentage(5)} />
+                  <Text
+                    style={[Typography.Subtitle3, {color: Color.Neutral[10]}]}>
+                    Choose Delivery
+                  </Text>
+                </>
+              )}
+            </View>
+
+            <ArrowRightIcon />
+          </TouchableOpacity>
+          {coCourier && (
+            <>
+              <View style={styles.border} />
+              <TouchableOpacity
+                style={[
+                  styles.rowCenter,
+                  styles.between,
+                  {
+                    width: '100%',
+                  },
+                ]}
+                onPress={onPressAgent}>
+                <View>
+                  <Text
+                    style={[Typography.Subtitle3, {color: Color.Neutral[10]}]}>
+                    {coCourier.name} ({coCourier.price})
+                  </Text>
+                  <Gap height={heightPercentage(4)} />
+                  <Text style={[Typography.Subtitle3, {color: Color.Dark[50]}]}>
+                    Estimated time {coCourier.estimated}
+                  </Text>
+                </View>
+
+                <ArrowRightIcon />
+              </TouchableOpacity>
+            </>
+          )}
+        </View>
+      )}
     </View>
   );
 };
@@ -302,5 +265,17 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginBottom: heightPercentage(4),
+  },
+  badgeWrapper: {
+    backgroundColor: Color.Pink.linear,
+    paddingHorizontal: widthResponsive(6),
+    paddingVertical: heightResponsive(1),
+    borderRadius: widthResponsive(4),
+    marginRight: widthResponsive(6),
+  },
+  badgeText: {
+    color: Color.Neutral[10],
+    fontFamily: Font.InterMedium,
+    fontSize: mvs(8),
   },
 });

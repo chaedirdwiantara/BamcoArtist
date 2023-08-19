@@ -111,10 +111,8 @@ const DetailChildrenCard: FC<ChildrenCardProps> = (
               }}>
               <ImageList
                 imgData={data.images}
-                width={132}
                 height={69.5}
                 heightType2={142}
-                widthType2={269}
                 onPress={blurModeOn ? () => {} : toggleModalOnPress}
                 blurModeOn={blurModeOn}
                 disabled={false}

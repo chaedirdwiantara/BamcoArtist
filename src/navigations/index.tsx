@@ -15,7 +15,6 @@ import {
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {Image} from 'react-native-image-crop-picker';
 // Screen
-import {EventScreen} from '../screen/Event';
 import {MerchScreen} from '../screen/Merch';
 import {TicketScreen} from '../screen/Ticket';
 import {FeedScreen} from '../screen/Feed';
@@ -71,6 +70,7 @@ import {InputDeletionScreen} from '../screen/Setting/DeleteAccount/InputDeletion
 import {SendAppealScreen} from '../screen/Setting/SendAppeal';
 import {ListAddressScreen} from '../screen/Setting/ShippingInfo/ListAddress';
 import {AddNewAddressScreen} from '../screen/Setting/ShippingInfo/AddNewAddress';
+import {RevenueScreen} from '../screen/Setting/Revenue';
 
 // Profile
 import {ProfileScreen} from '../screen/Profile/Profile';
@@ -334,13 +334,14 @@ export type RootStackParams = {
     data?: DataShippingProps;
     from?: string;
   };
+  Revenue: undefined;
 };
 
 export type MainTabParams = {
   Collection: undefined;
   Event: undefined;
   Merch: undefined;
-  Ticket: undefined;
+  Events: undefined;
   Feed: undefined;
   Home: {
     showToast?: boolean;
@@ -405,7 +406,7 @@ const TabScreen = () => {
           ),
         }}
       />
-      <MainTab.Screen
+      {/* <MainTab.Screen
         name="Merch"
         component={MerchScreen}
         options={{
@@ -418,17 +419,17 @@ const TabScreen = () => {
         }}
       />
       <MainTab.Screen
-        name="Ticket"
+        name="Events"
         component={TicketScreen}
         options={{
           tabBarIcon: ({color}) => (
             <View style={styles.root}>
               <TicketDefaultIcon fill={color} />
-              <Text style={[styles.label, {color}]}>{'Ticket'}</Text>
+              <Text style={[styles.label, {color}]}>{'Events'}</Text>
             </View>
           ),
         }}
-      />
+      /> */}
       <MainTab.Screen
         name="Profile"
         component={ProfileScreen}
@@ -586,6 +587,7 @@ export const RootStackScreen = () => (
       name="SongDetailAnalytic"
       component={SongDetailAnalytic}
     />
+    <RootStack.Screen name="Revenue" component={RevenueScreen} />
   </RootStack.Navigator>
 );
 

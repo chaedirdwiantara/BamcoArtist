@@ -150,3 +150,29 @@ export const createIapApple = async (
 
   return data;
 };
+
+export const getListRevenue = async ({
+  page,
+  perPage,
+  filterValue,
+}: {
+  page: number;
+  perPage: number;
+  filterValue: number;
+}): Promise<any> => {
+  const {data} = await SsuAPI().request<any>({
+    url: '/contribution',
+    method: 'GET',
+    headers: {
+      'X-Timezone-Offset': 8,
+    },
+    params: {
+      page: page,
+      per_page: perPage,
+      filter_column: 'contribution_type',
+      filter_value: filterValue,
+    },
+  });
+
+  return data;
+};

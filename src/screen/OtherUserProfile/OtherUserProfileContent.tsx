@@ -163,18 +163,18 @@ export const OtherUserProfileContent: React.FC<ProfileContentProps> = ({
             ) : (
               <EmptyState
                 text={t('Profile.Label.NoPlaylist') || ''}
-                containerStyle={{marginTop: heightPercentage(30)}}
+                containerStyle={{marginVertical: heightPercentage(30)}}
               />
             )
           ) : filter[selectedIndex].filterName === 'Profile.Tab.TopMusician' ? (
             <EmptyState
               text={t('Profile.Label.NoMusicianOther') || ''}
-              containerStyle={{marginTop: heightPercentage(30)}}
+              containerStyle={{marginVertical: heightPercentage(30)}}
             />
           ) : (
             <EmptyState
               text={t('Profile.Label.NoBadgeOther') || ''}
-              containerStyle={{marginTop: heightPercentage(30)}}
+              containerStyle={{marginVertical: heightPercentage(30)}}
             />
           )}
         </View>

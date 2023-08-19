@@ -249,9 +249,9 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
 
   const [filterAnalytic] = useState([
     {filterName: 'Home.Tab.Analytic.Fans.Title'},
+    {filterName: 'Home.Tab.Analytic.Income.Title'},
     {filterName: 'Home.Tab.Analytic.Post.Title'},
     {filterName: 'Home.Tab.Analytic.Album.Title'},
-    {filterName: 'Home.Tab.Analytic.Income.Title'},
     {filterName: 'Home.Tab.Analytic.Explore.Title'},
   ]);
 
@@ -462,10 +462,13 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
           />
         )}
 
-        <View style={styles.containerUpload}>
-          <UploadMusicSection />
-        </View>
+        {dataSongAlbum?.countAlbumReleased === 0 && (
+          <View style={styles.containerUpload}>
+            <UploadMusicSection />
+          </View>
+        )}
 
+        <Gap height={mvs(25)} />
         {/* Tab Analytic */}
         <View style={[styles.containerContent]}>
           <TabFilter.Type3
@@ -604,7 +607,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   containerUpload: {
-    marginVertical: mvs(25),
+    marginTop: mvs(25),
     alignSelf: 'center',
   },
 });

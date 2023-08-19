@@ -88,7 +88,7 @@ export const ModalImagePicker: React.FC<ModalImagePickerProps> = ({
     ImagePicker.openCamera({
       mediaType: 'video',
     }).then(image => {
-      sendUri(image);
+      sendUriVideo?.(image);
       onPressClose();
     });
   };

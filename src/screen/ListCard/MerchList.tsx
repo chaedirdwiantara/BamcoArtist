@@ -5,7 +5,7 @@ import {FlashList} from '@shopify/flash-list';
 import MerchListCard from '../../components/molecule/ListCard/MerchListCard';
 import {useEventHook} from '../../hooks/use-event.hook';
 import {DropDownFilter, EmptyState} from '../../components';
-import {BoxStore, FriedEggIcon} from '../../assets/icon';
+import {BoxStore, CrackEggIcon, FriedEggIcon} from '../../assets/icon';
 import Color from '../../theme/Color';
 import {useQuery} from 'react-query';
 import {MerchData} from '../../interface/event.interface';
@@ -53,14 +53,15 @@ const MerchList: FC<MerchListType> = props => {
 
       <EmptyState
         icon={
-          <FriedEggIcon
+          <CrackEggIcon
             fill={Color.Dark[500]}
             width={widthResponsive(150)}
             height={heightResponsive(150)}
             style={styles.iconEmpty}
           />
         }
-        text={t('Event.ComingSoon') || ''}
+        text={t('Event.Merch.ComingSoon.Title') || ''}
+        subtitle={t('Event.Merch.ComingSoon.Subtitle') || ''}
         containerStyle={styles.containerEmpty}
       />
 
@@ -90,6 +91,8 @@ const MerchList: FC<MerchListType> = props => {
         </View>
       )} */}
 
+      {/* TODO: Update when API ready */}
+
       {/* <FlashList
         data={filterList?.data}
         showsVerticalScrollIndicator={false}
@@ -118,7 +121,7 @@ const MerchList: FC<MerchListType> = props => {
               index % 2 == 0 ? {marginRight: 10} : {marginLeft: 10}
             }
             image={item.pic}
-            title={item.name}
+            title={item.title}
             owner={item.organizer?.name}
             ownerImage={item.organizer?.pic}
             price={item.price}
@@ -147,7 +150,7 @@ const styles = StyleSheet.create({
   },
   containerEmpty: {
     flex: 0,
-    height: heightResponsive(500),
+    height: heightResponsive(300),
   },
   iconEmpty: {
     marginBottom: 12,

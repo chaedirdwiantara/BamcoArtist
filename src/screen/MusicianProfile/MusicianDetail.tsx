@@ -31,6 +31,7 @@ import {color, font} from '../../theme';
 import ExclusiveDailyContent from './ExclusiveDailyContent';
 import {
   AlbumData,
+  AppearsOnDataType,
   DataDetailMusician,
 } from '../../interface/musician.interface';
 import DataMusician from './DataMusician';
@@ -46,6 +47,9 @@ import {storage} from '../../hooks/use-storage.hook';
 import {mvs} from 'react-native-size-matters';
 import {ArrowLeftIcon} from '../../assets/icon';
 import {usePlayerStore} from '../../store/player.store';
+import ListAlbum from './ListAlbum';
+import MerchList from '../ListCard/MerchList';
+import ConcertList from '../ListCard/ConcertList';
 
 type OnScrollEventHandler = (
   event: NativeSyntheticEvent<NativeScrollEvent>,
@@ -54,6 +58,7 @@ interface MusicianDetailProps {
   profile: DataDetailMusician;
   uuid: string;
   dataAlbum: AlbumData[];
+  dataAppearsOn: AppearsOnDataType[];
   dataPlaylist: Playlist[];
   followOnPress: () => void;
   unfollowOnPress: () => void;
@@ -76,6 +81,7 @@ export const MusicianDetail: React.FC<MusicianDetailProps> = ({
   goToPlaylist,
   exclusiveContent,
   subsEC,
+  dataAppearsOn,
 }) => {
   const {t} = useTranslation();
   const navigation =
@@ -88,6 +94,8 @@ export const MusicianDetail: React.FC<MusicianDetailProps> = ({
     {filterName: 'Musician.Tab.Music'},
     {filterName: 'Musician.Tab.Fans'},
     {filterName: 'Musician.Tab.Profile'},
+    {filterName: 'Musician.Tab.Merchandise'},
+    {filterName: 'Musician.Tab.Ticket'},
   ]);
   const [isModalVisible, setModalVisible] = useState<boolean>(false);
   const [zoomImage, setZoomImage] = useState<string[]>([]);
@@ -192,6 +200,11 @@ export const MusicianDetail: React.FC<MusicianDetailProps> = ({
     rank: profile.rank,
   };
 
+  const showContentMusic =
+    dataPlaylist?.length > 0 ||
+    dataAlbum.length > 0 ||
+    dataAppearsOn.length > 0;
+
   return (
     <View style={styles.container}>
       <SsuStatusBar type={'black'} />
@@ -259,7 +272,10 @@ export const MusicianDetail: React.FC<MusicianDetailProps> = ({
               filterData={filter}
               onPress={filterData}
               selectedIndex={selectedIndex}
-              flatlistContainerStyle={{paddingHorizontal: widthResponsive(24)}}
+              flatlistContainerStyle={{
+                paddingHorizontal: widthResponsive(24),
+                width: 'auto',
+              }}
               translation={true}
             />
             {filter[selectedIndex].filterName === 'Musician.Tab.Profile' ? (
@@ -277,25 +293,46 @@ export const MusicianDetail: React.FC<MusicianDetailProps> = ({
                 )}
               </View>
             ) : filter[selectedIndex].filterName === 'Musician.Tab.Music' ? (
-              dataPlaylist?.length > 0 ? (
-                <View style={{paddingHorizontal: widthResponsive(30)}}>
+              showContentMusic ? (
+                <View style={{paddingHorizontal: widthResponsive(20)}}>
                   <ListPlaylist
                     data={dataPlaylist}
                     onPress={goToPlaylist}
                     scrollable={false}
                   />
+                  <Gap height={mvs(20)} />
+                  {/* List Album Horizontal */}
+                  {dataAlbum && dataAlbum?.length > 0 && (
+                    <ListAlbum
+                      data={dataAlbum}
+                      title={t('Musician.Label.Album')}
+                      containerStyles={{marginBottom: mvs(30)}}
+                    />
+                  )}
+                  {/* List Appears On */}
+                  {dataAppearsOn && dataAppearsOn?.length > 0 && (
+                    <ListAlbum
+                      data={dataAppearsOn}
+                      title={t('Musician.Label.AppearsOn')}
+                      containerStyles={{marginBottom: mvs(30)}}
+                    />
+                  )}
                 </View>
               ) : (
                 <EmptyState
                   text={t('Profile.Label.NoPlaylist') || ''}
                   containerStyle={{
                     alignSelf: 'center',
-                    marginTop: heightPercentage(30),
+                    marginVertical: heightPercentage(30),
                   }}
                 />
               )
             ) : filter[selectedIndex].filterName === 'Musician.Tab.Fans' ? (
-              <View style={{paddingHorizontal: widthResponsive(20)}}>
+              <View
+                style={{
+                  paddingHorizontal: widthResponsive(20),
+                  marginBottom: mvs(20),
+                }}>
                 <FansScreen uuid={uuid} />
               </View>
             ) : // TODO: DISABLE FOR NOW
@@ -309,7 +346,21 @@ export const MusicianDetail: React.FC<MusicianDetailProps> = ({
             //     />
             //   </View>
             // )
-            null}
+            filter[selectedIndex].filterName === 'Musician.Tab.Merchandise' ? (
+              <View
+                style={{
+                  paddingHorizontal: widthResponsive(20),
+                }}>
+                <MerchList />
+              </View>
+            ) : filter[selectedIndex].filterName === 'Musician.Tab.Ticket' ? (
+              <View
+                style={{
+                  paddingHorizontal: widthResponsive(20),
+                }}>
+                <ConcertList />
+              </View>
+            ) : null}
           </View>
         </View>
       </ScrollView>

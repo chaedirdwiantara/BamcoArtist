@@ -31,8 +31,14 @@ export const ProfileScreen: React.FC<ProfileProps> = ({
   const isFetching = storage.getBoolean('fetchingProfile');
   const {dataPlaylist, getPlaylist} = usePlaylistHook();
   const {dataExclusiveContent, getExclusiveContent} = useSettingHook();
-  const {dataDetailMusician, dataAlbum, getDetailMusician, getAlbum} =
-    useMusicianHook();
+  const {
+    dataDetailMusician,
+    dataAlbum,
+    dataAppearsOn,
+    getDetailMusician,
+    getAlbum,
+    getDataAppearsOn,
+  } = useMusicianHook();
 
   const [refreshing, setRefreshing] = useState<boolean>(false);
   const [toastText, setToastText] = useState<string>('');
@@ -48,6 +54,7 @@ export const ProfileScreen: React.FC<ProfileProps> = ({
       getAlbum({uuid});
       getPlaylist({uuid});
       getExclusiveContent({uuid});
+      getDataAppearsOn({uuid});
     }
     setTimeout(() => {
       setRefreshing(false);
@@ -129,6 +136,7 @@ export const ProfileScreen: React.FC<ProfileProps> = ({
           goToEditProfile={goToEditProfile}
           uuid={uuid}
           dataAlbum={dataAlbum}
+          dataAppearsOn={dataAppearsOn}
           dataDetailMusician={dataDetailMusician}
           ownProfile
           goToFollowers={goToFollowers}

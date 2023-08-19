@@ -24,7 +24,9 @@ const PlaylistHomeCard: React.FC<ListProps> = ({
   return (
     <TouchableOpacity style={styles.container} onPress={onPressCard}>
       {imgUri ? (
-        <SquareImage imgUri={imgUri} size={'100%'} />
+        <View style={styles.imageContainer}>
+          <SquareImage imgUri={imgUri} />
+        </View>
       ) : (
         <DefaultImage.PlaylistHomeCover
           width={widthResponsive(138)}
@@ -88,4 +90,5 @@ const styles = StyleSheet.create({
     color: color.Dark[50],
     paddingTop: mvs(5),
   },
+  imageContainer: {width: widthResponsive(138), height: widthResponsive(138)},
 });

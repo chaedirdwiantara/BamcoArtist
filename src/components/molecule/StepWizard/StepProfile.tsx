@@ -135,7 +135,7 @@ export const StepProfile: React.FC<AccountProps> = ({
           placeHolder={t('Setting.Account.Placeholder.Genre') || ''}
           dropdownLabel={t('Setting.Account.Label.Genre') || ''}
           textTyped={(_newText: string) => null}
-          containerStyles={{marginTop: heightPercentage(10)}}
+          containerStyles={{marginVertical: heightPercentage(10)}}
           initialValue={stateProfile.favoriteGeneres}
           setValues={val => onChangeText(val, 'favoriteGeneres')}
         />

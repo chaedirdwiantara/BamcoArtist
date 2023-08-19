@@ -11,6 +11,7 @@ import {
   Platform,
 } from 'react-native';
 import {useTranslation} from 'react-i18next';
+import {mvs} from 'react-native-size-matters';
 
 import {
   width,
@@ -21,11 +22,12 @@ import {
 } from '../../../utils';
 import {font} from '../../../theme';
 import {TabFilter} from '../TabFilter';
-import MainTab from './MainTab/MainTab';
+import {FansScreen} from '../ListFans';
 import Color from '../../../theme/Color';
 import {Gap, SsuToast} from '../../atom';
 import {
   AlbumData,
+  AppearsOnDataType,
   DataDetailMusician,
 } from '../../../interface/musician.interface';
 import {ProfileHeader} from './components/Header';
@@ -35,6 +37,7 @@ import ImageModal from '../../../screen/Detail/ImageModal';
 import {CreateNewCard} from '../CreateNewCard/CreateNewCard';
 import {Playlist} from '../../../interface/playlist.interface';
 import ListPlaylist from '../../../screen/ListCard/ListPlaylist';
+import ListAlbum from '../../../screen/MusicianProfile/ListAlbum';
 import {CheckCircle2Icon, SettingIcon} from '../../../assets/icon';
 import PostListPublic from '../../../screen/ListCard/PostListPublic';
 import PostListProfile from '../../../screen/ListCard/PostListProfile';
@@ -43,7 +46,8 @@ import {DataExclusiveResponse} from '../../../interface/setting.interface';
 import {ProfileFansResponseType} from '../../../interface/profile.interface';
 import {dropDownDataCategory, dropDownDataSort} from '../../../data/dropdown';
 import ExclusiveDailyContent from '../../../screen/MusicianProfile/ExclusiveDailyContent';
-import {FansScreen} from '../ListFans';
+import MerchList from '../../../screen/ListCard/MerchList';
+import ConcertList from '../../../screen/ListCard/ConcertList';
 
 type OnScrollEventHandler = (
   event: NativeSyntheticEvent<NativeScrollEvent>,
@@ -56,6 +60,7 @@ interface ProfileContentProps {
   dataPlaylist?: Playlist[];
   uuid?: string;
   dataAlbum?: AlbumData[];
+  dataAppearsOn?: AppearsOnDataType[];
   dataDetailMusician?: DataDetailMusician;
   selfProfile?: ProfileFansResponseType;
   ownProfile?: boolean;
@@ -91,6 +96,7 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
   setRefreshing,
   goToSetting,
   goToCreatePlaylist,
+  dataAppearsOn,
 }) => {
   const {t} = useTranslation();
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -107,6 +113,8 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
     {filterName: 'Musician.Tab.Music'},
     {filterName: 'Musician.Tab.Fans'},
     {filterName: 'Musician.Tab.Profile'},
+    // {filterName: 'Musician.Tab.Merchandise'},
+    // {filterName: 'Musician.Tab.Ticket'},
   ]);
   const [isModalVisible, setModalVisible] = useState<boolean>(false);
   const [zoomImage, setZoomImage] = useState<string[]>([]);
@@ -192,13 +200,18 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
           <Gap height={heightPercentage(70)} />
         )}
 
+        <TabFilter.Type1
+          filterData={ownProfile ? filter2 : filter}
+          onPress={filterData}
+          selectedIndex={selectedIndex}
+          translation={true}
+          flatlistContainerStyle={{
+            paddingHorizontal: widthResponsive(20),
+            width: 'auto',
+          }}
+        />
+
         <View style={styles.containerContent}>
-          <TabFilter.Type1
-            filterData={ownProfile ? filter2 : filter}
-            onPress={filterData}
-            selectedIndex={selectedIndex}
-            translation={true}
-          />
           {!ownProfile &&
           dataPlaylist !== null &&
           filter[selectedIndex].filterName === 'Profile.Tab.Playlist' ? (
@@ -260,11 +273,33 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
                 onPress={goToPlaylist}
                 scrollable={false}
               />
+              <Gap height={mvs(30)} />
+              {/* List Album Horizontal */}
+              {dataAlbum && dataAlbum?.length > 0 && (
+                <ListAlbum
+                  data={dataAlbum}
+                  title={t('Musician.Label.MyAlbum')}
+                  containerStyles={{marginBottom: mvs(30)}}
+                />
+              )}
+              {/* List Appears On */}
+              {dataAppearsOn && dataAppearsOn?.length > 0 && (
+                <ListAlbum
+                  data={dataAppearsOn}
+                  title={t('Musician.Label.AppearsOn')}
+                  containerStyles={{marginBottom: mvs(30)}}
+                />
+              )}
             </View>
           ) : filter2[selectedIndex].filterName === 'Musician.Tab.Fans' ? (
             <View style={{paddingHorizontal: widthResponsive(20)}}>
               {uuid && <FansScreen uuid={uuid} />}
             </View>
+          ) : filter2[selectedIndex].filterName ===
+            'Musician.Tab.Merchandise' ? (
+            <MerchList />
+          ) : filter2[selectedIndex].filterName === 'Musician.Tab.Ticket' ? (
+            <ConcertList />
           ) : (
             // TODO: DISABLE FOR NOW
             // : filter2[selectedIndex].filterName === 'Musician.Tab.Main' ? (

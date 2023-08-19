@@ -12,30 +12,39 @@ import {elipsisText, heightPercentage, widthResponsive} from '../../../utils';
 import {color, font} from '../../../theme';
 import {CommentIcon, LoveIcon} from '../../../assets/icon';
 import {ms} from 'react-native-size-matters';
-import {dataUpdateComment} from '../../../data/dropdown';
+import {
+  dataAlreadyReportPost,
+  dataReportPost,
+  dataUpdateComment,
+} from '../../../data/dropdown';
 import {DataDropDownType} from '../../../data/dropdown';
 import {useTranslation} from 'react-i18next';
 import DropdownMore from '../V2/DropdownFilter/DropdownMore';
+import {feedReportRecorded} from '../../../store/idReported';
 
 interface ListProps extends TouchableOpacityProps {
-  imgUri: string;
+  imgUri?: string;
   fullName: string;
   userName: string;
   postDate: string;
   artistPostId: string;
   commentCaption: string;
-  likeOnPress: () => void;
-  commentOnPress: () => void;
-  likePressed: boolean;
+  likeOnPress?: () => void;
+  commentOnPress?: () => void;
+  likePressed?: boolean;
   likeCount: number;
   commentCount: number;
   containerStyles?: ViewStyle;
   children?: React.ReactNode;
   toDetailOnPress?: () => void;
-  selectedMenu: (value: DataDropDownType) => void;
-  idComment: string;
-  selectedIdComment: (idComment: string) => void;
-  showEdit: boolean;
+  selectedMenu?: (value: DataDropDownType) => void;
+  idComment?: string;
+  selectedIdComment?: (idComment: string) => void;
+  selectedUserUuid?: (uuid: string) => void;
+  myComment?: boolean;
+  commentOwnerUuid?: string;
+  hideDropDown?: boolean;
+  appeal?: boolean;
 }
 
 const PostComment: React.FC<ListProps> = (props: ListProps) => {
@@ -58,19 +67,31 @@ const PostComment: React.FC<ListProps> = (props: ListProps) => {
     selectedMenu,
     idComment,
     selectedIdComment,
-    showEdit,
+    selectedUserUuid,
+    myComment,
+    commentOwnerUuid,
+    hideDropDown,
+    appeal,
   } = props;
+
+  const {idReported} = feedReportRecorded();
+  const dataReport = idReported.includes(idComment!)
+    ? dataAlreadyReportPost
+    : dataReportPost;
+
   return (
     <View style={[styles.root, containerStyles]}>
-      <TouchableOpacity onPress={toDetailOnPress}>
-        <Avatar imgUri={imgUri} size={widthResponsive(32)} />
-      </TouchableOpacity>
+      {!appeal && (
+        <TouchableOpacity onPress={toDetailOnPress}>
+          <Avatar imgUri={imgUri} size={widthResponsive(32)} />
+        </TouchableOpacity>
+      )}
       <View
         style={{
           flex: 1,
-          marginLeft: widthResponsive(6),
+          marginLeft: widthResponsive(appeal ? 0 : 6),
         }}>
-        <View style={[styles.topSection, {marginTop: showEdit ? ms(-7) : 0}]}>
+        <View style={[styles.topSection, {marginTop: ms(appeal ? 0 : -7)}]}>
           {userName !== 'accountdeactivated' ? (
             <Text style={styles.fullname} onPress={toDetailOnPress}>
               {fullName}
@@ -85,27 +106,29 @@ const PostComment: React.FC<ListProps> = (props: ListProps) => {
               10,
             )}`}</Text>
           )}
+
           <View
             style={{
               flexDirection: 'row',
               justifyContent: 'space-between',
               alignItems: 'center',
-              marginRight: showEdit ? ms(-7) : 0,
+              marginRight: ms(appeal ? 0 : -7),
             }}>
             <Text style={styles.postDateStyle}>{postDate}</Text>
-            {showEdit ? (
+            {!hideDropDown && (
               <DropdownMore
                 id={idComment}
+                uuid={commentOwnerUuid}
                 selectedid={selectedIdComment}
-                selectedMenu={selectedMenu}
-                dataFilter={dataUpdateComment}
+                selectedMenu={selectedMenu!}
+                selectedUserUuid={selectedUserUuid}
+                dataFilter={myComment ? dataUpdateComment : dataReport}
               />
-            ) : null}
+            )}
           </View>
         </View>
         <Gap height={2} />
-        <View
-          style={[styles.bottomSection, {marginTop: showEdit ? ms(-8) : 0}]}>
+        <View style={[styles.bottomSection, {marginTop: ms(appeal ? 0 : -8)}]}>
           <Text style={styles.reply}>
             {t('Post.Label.RepliedTo')}{' '}
             <Text style={[styles.reply, {color: color.Pink[100]}]}>
@@ -117,13 +140,16 @@ const PostComment: React.FC<ListProps> = (props: ListProps) => {
         <View>
           <Text style={styles.commentCaption}>{commentCaption}</Text>
         </View>
-        <Gap height={6} />
+        <Gap height={!appeal ? 6 : 10} />
         {/* SOCIAL SECTION */}
         <View style={styles.bottomContainer}>
           <View style={styles.socialContainer}>
             {/* like section */}
             <View>
-              <TouchableOpacity onPress={likeOnPress} style={styles.socialIcon}>
+              <TouchableOpacity
+                onPress={likeOnPress}
+                style={styles.socialIcon}
+                disabled={appeal}>
                 <LoveIcon
                   fill={likePressed ? color.Pink[100] : 'none'}
                   stroke={likePressed ? 'none' : color.Dark[100]}
@@ -137,7 +163,8 @@ const PostComment: React.FC<ListProps> = (props: ListProps) => {
             <View>
               <TouchableOpacity
                 onPress={commentOnPress}
-                style={styles.socialIcon}>
+                style={styles.socialIcon}
+                disabled={appeal}>
                 <CommentIcon stroke={color.Dark[100]} />
                 <Gap width={3} />
                 <Text style={styles.regularText}>{commentCount}</Text>
