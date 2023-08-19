@@ -1,12 +1,14 @@
 import {AccountContent} from './SettingContent/AccountContent';
 import {AddSongContent} from './PlaylistContent/AddSongContent';
 import {AddToPlaylistContent} from './PlaylistContent/AddToPlaylistContent';
+import AlbumAppeal from './AppealCard/AlbumAppeal';
 import {AlbumContent} from './Album/AlbumContent';
 import {AvatarProfile} from './AvatarProfile/AvatarProfile';
 import {BottomSheetGuest} from './GuestComponent/BottomSheetGuest';
 import {Carousel} from './Carousel/Carousel';
 import {ChangeEmailContent} from './SettingContent/ChangeEmailContent';
 import {ChangePasswordContent} from './SettingContent/ChangePasswordContent';
+import CommentAppeal from './AppealCard/CommentAppeal';
 import CommentInputModal from './CommentInputModal/CommentInputModal';
 import {CreateNewCard} from './CreateNewCard/CreateNewCard';
 import {CreateNewPlaylistContent} from './PlaylistContent/CreateNewPlaylistContent';
@@ -54,6 +56,7 @@ import ProgressBar from './ProgressBar/progressBar';
 import {ReferralContent} from './ReferralContent/ReferralContent';
 import {RadioButton} from './RadioButton/RadioButton';
 import {ReferAFriend} from './SettingContent/ReferAFriend';
+import {SendAppealContent} from './SettingContent/SendAppealContent';
 import {SendReportContent} from './SettingContent/SendReportContent';
 import {SettingContent} from './SettingContent/SettingContent';
 import {SignInGuestContent} from './SignInGuestContent/SignInGuestContent';
@@ -77,12 +80,14 @@ export {
   AccountContent,
   AddSongContent,
   AddToPlaylistContent,
+  AlbumAppeal,
   AlbumContent,
   AvatarProfile,
   BottomSheetGuest,
   Carousel,
   ChangeEmailContent,
   ChangePasswordContent,
+  CommentAppeal,
   CommentInputModal,
   CreateNewCard,
   CreateNewPlaylistContent,
@@ -130,6 +135,7 @@ export {
   RadioButton,
   ReferralContent,
   ReferAFriend,
+  SendAppealContent,
   SendReportContent,
   SettingContent,
   SignInGuestContent,

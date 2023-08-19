@@ -1,28 +1,63 @@
-import {StyleSheet, View} from 'react-native';
 import React from 'react';
-import PostComment from '../../DetailPost/PostComment';
-import {widthResponsive} from '../../../../utils';
-import {color} from '../../../../theme';
-import ChoiceIconAppeal from '../ChildrenCard/ChoiceIcon';
-import {Gap} from '../../../atom';
+import {StyleSheet, TouchableOpacity, View, ViewStyle} from 'react-native';
 
-const CommentAppeal = () => {
+import {Gap} from '../../../atom';
+import {color} from '../../../../theme';
+import {widthResponsive} from '../../../../utils';
+import PostComment from '../../DetailPost/PostComment';
+import ChoiceIconAppeal from '../ChildrenCard/ChoiceIcon';
+
+interface CommentAppealPropsType {
+  fullname: string;
+  username: string;
+  repliedTo: string;
+  postDate: string;
+  caption: string;
+  likesCount: number;
+  commentsCount: number;
+  onPressSelected?: () => void;
+  isSelected?: boolean;
+  hideChoiceIcon?: boolean;
+  containerStyles?: ViewStyle;
+}
+
+const CommentAppeal: React.FC<CommentAppealPropsType> = ({
+  isSelected,
+  fullname,
+  username,
+  repliedTo,
+  postDate,
+  caption,
+  likesCount,
+  commentsCount,
+  onPressSelected,
+  hideChoiceIcon,
+  containerStyles,
+}) => {
   return (
-    <View style={styles.container}>
-      <ChoiceIconAppeal choiceOnPress={() => {}} selected={false} />
-      <Gap width={12} />
-      <PostComment
-        fullName="Sam"
-        userName="Samsibar"
-        artistPostId="Hamzahaz"
-        postDate="21 Jun 2014"
-        commentCaption="Pucek"
-        likeCount={0}
-        commentCount={100}
-        hideDropDown
-        appeal
-        containerStyles={styles.componentStyle}
-      />
+    <View style={[styles.container, containerStyles]}>
+      {!hideChoiceIcon && (
+        <>
+          <ChoiceIconAppeal
+            choiceOnPress={() => onPressSelected && onPressSelected()}
+            selected={isSelected || false}
+          />
+          <Gap width={12} />
+        </>
+      )}
+      <TouchableOpacity style={styles.componentStyle} onPress={onPressSelected}>
+        <PostComment
+          fullName={fullname}
+          userName={username}
+          artistPostId={repliedTo}
+          postDate={postDate}
+          commentCaption={caption}
+          likeCount={likesCount}
+          commentCount={commentsCount}
+          hideDropDown
+          appeal
+        />
+      </TouchableOpacity>
     </View>
   );
 };
