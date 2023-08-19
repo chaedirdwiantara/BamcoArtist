@@ -692,7 +692,9 @@
         "Country": "Country",
         "Postal": "Postal Code",
         "City": "City",
-        "Address": "Address"
+        "Address": "Address",
+        "FirstName": "First Name",
+        "LastName": "Last Name"
       },
       "Placeholder": {
         "Email": "Add Email",
@@ -702,7 +704,9 @@
         "Country": "Select Country",
         "Postal": "Add Postal Code",
         "City": "Select City",
-        "Address": "Add Address"
+        "Address": "Add Address",
+        "FirstName": "Add First Name",
+        "LastName": "Add Last Name"
       },
       "EmptyState": "You need to provide shipping information to receive your purchased merchandise. Please add a new address to your shipping information."
     },

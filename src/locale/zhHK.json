@@ -691,7 +691,9 @@
         "Country": "國家",
         "Postal": "郵政編碼",
         "City": "城市",
-        "Address": "地址"
+        "Address": "地址",
+        "FirstName": "First Name",
+        "LastName": "Last Name"
       },
       "Placeholder": {
         "Email": "Add Email",
@@ -701,7 +703,9 @@
         "Country": "Select Country",
         "Postal": "Add Postal Code",
         "City": "Select City",
-        "Address": "Add Address"
+        "Address": "Add Address",
+        "FirstName": "Add First Name",
+        "LastName": "Add Last Name"
       },
       "EmptyState": "You need to provide shipping information to receive your purchased merchandise. Please add a new address to your shipping information."
     },
