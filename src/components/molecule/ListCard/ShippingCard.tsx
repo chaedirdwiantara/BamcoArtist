@@ -16,7 +16,7 @@ import {TrashIcon} from '../../../assets/icon';
 import {DataShippingProps} from '../../../interface/setting.interface';
 
 export interface ShippingCardProps {
-  id: string;
+  id?: string;
   value?: DataShippingProps;
   name: string;
   phoneNumber: string;
@@ -26,6 +26,7 @@ export interface ShippingCardProps {
   onPressEdit: () => void;
   onPressRemove: () => void;
   newAddress?: string;
+  disabled?: boolean;
   containerStyle?: ViewStyle;
 }
 
@@ -44,6 +45,7 @@ export const ShippingCard: React.FC<ShippingCardProps> = (
     onPressEdit,
     onPressRemove,
     newAddress,
+    disabled,
     containerStyle,
   } = props;
   const isNewAddress = newAddress === id;
@@ -53,7 +55,7 @@ export const ShippingCard: React.FC<ShippingCardProps> = (
   const activeColor =
     id === value?.bookyayShipmentID ? color.Pink.linear : color.Dark[300];
   const widthBtnEdit = isMainAddress ? width * 0.8 : width * 0.68;
-  const heightBtnEdit = isMainAddress ? mvs(295 / 36) : mvs(251 / 36);
+  const heightBtnEdit = isMainAddress ? mvs(295 / 40) : mvs(251 / 38);
 
   return (
     <TouchableOpacity
@@ -62,6 +64,7 @@ export const ShippingCard: React.FC<ShippingCardProps> = (
         {borderColor: activeColor},
         containerStyle,
       ]}
+      disabled={disabled}
       onPress={onPressCard}>
       <View style={{width: width * 0.8}}>
         {/* Flag Section: Main / New */}
@@ -165,16 +168,16 @@ const styles = StyleSheet.create({
   },
   btnEdit: {
     width: width * 0.68,
-    aspectRatio: mvs(251 / 36),
     marginTop: mvs(20),
   },
   trashIcon: {
-    width: width * 0.08,
+    width: width * 0.09,
     aspectRatio: 1 / 1,
     borderWidth: mvs(1),
     borderColor: color.Pink.linear,
     borderRadius: 4,
     justifyContent: 'center',
     alignItems: 'center',
+    marginTop: mvs(20),
   },
 });

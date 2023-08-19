@@ -13,59 +13,53 @@ import {useTranslation} from 'react-i18next';
 import {mvs} from 'react-native-size-matters';
 import {yupResolver} from '@hookform/resolvers/yup';
 import {Controller, useForm} from 'react-hook-form';
+import {useNavigation} from '@react-navigation/native';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
 import {
-  heightPercentage,
   width,
   widthPercentage,
   widthResponsive,
+  heightPercentage,
 } from '../../../utils';
-import {
-  ArrowLeftIcon,
-  CloseCircleIcon,
-  TickCircleIcon,
-} from '../../../assets/icon';
 import {Dropdown} from '../DropDown';
 import Color from '../../../theme/Color';
 import {typography} from '../../../theme';
 import {TopNavigation} from '../TopNavigation';
 import {ModalConfirm} from '../Modal/ModalConfirm';
-import {updateShipping} from '../../../api/setting.api';
-import {Button, Gap, SsuInput, SsuToast} from '../../atom';
-import {DataDropDownType, countryData} from '../../../data/dropdown';
-import {DataShippingProps} from '../../../interface/setting.interface';
-import {useNavigation} from '@react-navigation/native';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParams} from '../../../navigations';
+import {storage} from '../../../hooks/use-storage.hook';
+import {Button, Gap, SsuInput, SsuToast} from '../../atom';
+import {ArrowLeftIcon, TickCircleIcon} from '../../../assets/icon';
+import {DataDropDownType, countryData} from '../../../data/dropdown';
 import {ListCountryType} from '../../../interface/location.interface';
+import {DataShippingProps} from '../../../interface/setting.interface';
+import {createShipping, updateShipping} from '../../../api/setting.api';
 
-interface ShippingInformationProps {
-  dataShipping: DataShippingProps | null;
+interface AddShippingAddressProps {
+  dataShipping: DataShippingProps | undefined;
   onPressGoBack: () => void;
   dataAllCountry: ListCountryType[];
   dataCities: DataDropDownType[];
-  setSelectedCountry: (value: number) => void;
+  setSelectedCountry: (value: string) => void;
   from?: string;
 }
 
 const validation = yup.object({
-  email: yup
-    .string()
-    .required('This field is required')
-    .email('Please use valid email'),
-  fullname: yup
-    .string()
-    .strict(true)
-    .trim('Full name cannot include leading and trailing spaces')
-    .matches(/^.{3,50}$/, 'Fullname allowed 3 to 50 character'),
+  phoneNumber: yup.string().required('This field is required'),
+  receiverFirstname: yup.string().required('This field is required'),
+  receiverLastname: yup.string().required('This field is required'),
+  address: yup.string().required('This field is required'),
 });
 
 interface InputProps {
-  email: string;
-  fullname: string;
+  phoneNumber: string;
+  receiverFirstname: string;
+  receiverLastname: string;
+  address: string;
 }
 
-export const ShippingInformationContent: React.FC<ShippingInformationProps> = ({
+export const AddShippingAddress: React.FC<AddShippingAddressProps> = ({
   dataShipping,
   onPressGoBack,
   dataAllCountry,
@@ -75,12 +69,12 @@ export const ShippingInformationContent: React.FC<ShippingInformationProps> = ({
 }) => {
   const {t} = useTranslation();
   const [state, setState] = useState({
-    phoneNumber: dataShipping?.phoneNumber || '',
+    bookyayShipmentID: dataShipping?.bookyayShipmentID,
+    phoneNumberCode: dataShipping?.phoneNumberCode || '',
+    country: dataShipping?.country || '',
     province: dataShipping?.province || '',
-    country: Number(dataShipping?.country) || -1,
     city: dataShipping?.city || '',
     postalCode: dataShipping?.postalCode?.toString() || '',
-    address: dataShipping?.address || '',
   });
 
   const {
@@ -91,20 +85,18 @@ export const ShippingInformationContent: React.FC<ShippingInformationProps> = ({
     resolver: yupResolver(validation),
     mode: 'onChange',
     defaultValues: {
-      email: dataShipping?.email || '',
-      fullname: dataShipping?.fullname || '',
+      phoneNumber: dataShipping?.phoneNumber || '',
+      receiverFirstname: dataShipping?.receiverFirstname || '',
+      receiverLastname: dataShipping?.receiverLastname || '',
+      address: dataShipping?.address || '',
     },
   });
 
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
 
-  const [countryNumber, setCountryNumber] = useState<string>(
-    dataShipping?.phoneNumberCode || '',
-  );
   const [focusInput, setFocusInput] = useState<string | null>(null);
   const [toastVisible, setToastVisible] = useState<boolean>(false);
-  const [toastError, setToastError] = useState<boolean>(false);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [disabledButton, setDisabledButton] = useState<boolean>(true);
 
@@ -123,10 +115,6 @@ export const ShippingInformationContent: React.FC<ShippingInformationProps> = ({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isValidating, isValid]);
-
-  const resultData = (dataResult: string) => {
-    setCountryNumber(dataResult);
-  };
 
   const handleFocusInput = (focus: string | null) => {
     setFocusInput(focus);
@@ -150,32 +138,37 @@ export const ShippingInformationContent: React.FC<ShippingInformationProps> = ({
     try {
       const payload = {
         ...state,
-        email: getValues('email'),
-        fullname: getValues('fullname'),
-        phoneNumber: state.phoneNumber,
-        phoneNumberCode: countryNumber || '',
+        phoneNumber: getValues('phoneNumber'),
+        receiverFirstname: getValues('receiverFirstname'),
+        receiverLastname: getValues('receiverLastname'),
         postalCode: Number(state.postalCode),
-        country: state.country.toString(),
+        country: state.country,
+        address: getValues('address'),
       };
-      await updateShipping(payload);
-      if (from === 'checkout') return navigation.goBack();
-      setShowModal(false);
-      setToastError(false);
-      InteractionManager.runAfterInteractions(() => setToastVisible(true));
+
+      // create new address, if data shipping is undefined
+      if (dataShipping === undefined) {
+        const response = await createShipping(payload);
+
+        // send id to list address screen, for "new" flag
+        if (response.data.bookyayShipmentID !== undefined) {
+          storage.set('newIdShipping', response.data.bookyayShipmentID);
+        }
+      } else {
+        await updateShipping(payload);
+      }
+      navigation.goBack();
+      // setShowModal(false);
+      // setToastError(false);
+      // InteractionManager.runAfterInteractions(() => setToastVisible(true));
     } catch (error) {
-      setShowModal(false);
-      setToastError(true);
-      InteractionManager.runAfterInteractions(() => setToastVisible(true));
+      // setShowModal(false);
+      // setToastError(true);
+      // InteractionManager.runAfterInteractions(() => setToastVisible(true));
     }
   };
 
-  const toastText = toastError
-    ? 'Shipping Information failed to save!'
-    : 'Shipping Information have been saved!';
-
-  const toastBg = toastError ? Color.Error[400] : Color.Success[400];
   const checkValue = checkEmptyProperties(state);
-
   const disabledBg =
     disabledButton || checkValue ? Color.Dark[50] : Color.Success[400];
 
@@ -199,55 +192,60 @@ export const ShippingInformationContent: React.FC<ShippingInformationProps> = ({
           style={{
             paddingHorizontal: widthResponsive(20),
           }}>
-          <Controller
-            name="email"
-            control={control}
-            render={({field: {onChange, value}}) => (
-              <SsuInput.InputLabel
-                label={t('Setting.Shipping.Label.Email') || ''}
-                value={value}
-                onChangeText={text => {
-                  onChange(text);
-                }}
-                placeholder={t('Setting.Shipping.Placeholder.Email') || ''}
-                isError={errors?.email ? true : false}
-                errorMsg={errors?.email?.message}
-              />
-            )}
-          />
-
           <View style={{marginTop: heightPercentage(15)}}>
-            <Dropdown.PhoneShipping
-              type="label"
-              labelText={t('Setting.Shipping.Label.Phone') || ''}
-              placeholder={t('Setting.Shipping.Label.Phone') || ''}
-              value={state.phoneNumber}
-              valuePrefix={countryNumber}
-              onChangeText={(newText: string) =>
-                onChangeText('phoneNumber', newText)
-              }
-              countryData={countryData}
-              numberTyped={resultData}
-              onFocus={() => handleFocusInput('newPhoneNumber')}
-              isFocus={focusInput === 'newPhoneNumber'}
-              onBlur={() => handleFocusInput('')}
-              onSelectCountry={(val: string) => setCountryNumber(val)}
+            <Controller
+              name="phoneNumber"
+              control={control}
+              render={({field: {onChange, value}}) => (
+                <Dropdown.PhoneShipping
+                  type="label"
+                  labelText={t('Setting.Shipping.Label.Phone') || ''}
+                  placeholder={t('Setting.Shipping.Label.Phone') || ''}
+                  value={value}
+                  valuePrefix={state.phoneNumberCode}
+                  onChangeText={(newText: string) => onChange(newText)}
+                  countryData={countryData}
+                  numberTyped={val => onChangeText('phoneNumberCode', val)}
+                  onFocus={() => handleFocusInput('newPhoneNumber')}
+                  isFocus={focusInput === 'newPhoneNumber'}
+                  onBlur={() => handleFocusInput('')}
+                  onSelectCountry={val => onChangeText('phoneNumberCode', val)}
+                />
+              )}
             />
           </View>
 
           <Controller
-            name="fullname"
+            name="receiverFirstname"
             control={control}
             render={({field: {onChange, value}}) => (
               <SsuInput.InputLabel
-                label={t('Setting.Shipping.Label.Fullname') || ''}
+                label={t('Setting.Shipping.Label.FirstName') || ''}
                 value={value}
                 onChangeText={text => {
                   onChange(text);
                 }}
-                placeholder={t('Setting.Shipping.Placeholder.Fullname') || ''}
-                isError={errors?.fullname ? true : false}
-                errorMsg={errors?.fullname?.message}
+                placeholder={t('Setting.Shipping.Placeholder.FirstName') || ''}
+                isError={errors?.receiverFirstname ? true : false}
+                errorMsg={errors?.receiverFirstname?.message}
+                containerStyles={{marginTop: heightPercentage(15)}}
+              />
+            )}
+          />
+
+          <Controller
+            name="receiverLastname"
+            control={control}
+            render={({field: {onChange, value}}) => (
+              <SsuInput.InputLabel
+                label={t('Setting.Shipping.Label.LastName') || ''}
+                value={value}
+                onChangeText={text => {
+                  onChange(text);
+                }}
+                placeholder={t('Setting.Shipping.Placeholder.LastName') || ''}
+                isError={errors?.receiverLastname ? true : false}
+                errorMsg={errors?.receiverLastname?.message}
                 containerStyles={{marginTop: heightPercentage(15)}}
               />
             )}
@@ -260,7 +258,7 @@ export const ShippingInformationContent: React.FC<ShippingInformationProps> = ({
               placeHolder={t('Setting.Shipping.Placeholder.Country') || ''}
               initialValue={state.country}
               dropdownLabel={t('Setting.Shipping.Label.Country')}
-              textTyped={(newText: {label: string; value: number}) => {
+              textTyped={(newText: {label: string; value: string}) => {
                 setSelectedCountry(newText.value);
                 setState({
                   ...state,
@@ -268,10 +266,12 @@ export const ShippingInformationContent: React.FC<ShippingInformationProps> = ({
                   province: '',
                   city: '',
                   postalCode: '',
-                  address: '',
                 });
               }}
-              containerStyles={{marginTop: heightPercentage(15), width: '45%'}}
+              containerStyles={{
+                marginTop: heightPercentage(15),
+                width: '45%',
+              }}
               dropdownPosition="top"
             />
 
@@ -280,9 +280,17 @@ export const ShippingInformationContent: React.FC<ShippingInformationProps> = ({
               placeholder={t('Setting.Shipping.Placeholder.State') || ''}
               value={state.province}
               onChangeText={(newText: string) =>
-                onChangeText('province', newText)
+                setState({
+                  ...state,
+                  province: newText,
+                  city: '',
+                  postalCode: '',
+                })
               }
-              containerStyles={{marginTop: heightPercentage(15), width: '45%'}}
+              containerStyles={{
+                marginTop: heightPercentage(15),
+                width: '45%',
+              }}
             />
           </View>
 
@@ -298,10 +306,12 @@ export const ShippingInformationContent: React.FC<ShippingInformationProps> = ({
                   ...state,
                   city: newText.value,
                   postalCode: '',
-                  address: '',
                 });
               }}
-              containerStyles={{marginTop: heightPercentage(15), width: '45%'}}
+              containerStyles={{
+                marginTop: heightPercentage(15),
+                width: '45%',
+              }}
               dropdownPosition="top"
             />
 
@@ -313,16 +323,27 @@ export const ShippingInformationContent: React.FC<ShippingInformationProps> = ({
               onChangeText={(newText: string) =>
                 onChangeText('postalCode', newText)
               }
-              containerStyles={{marginTop: heightPercentage(15), width: '45%'}}
+              containerStyles={{
+                marginTop: heightPercentage(15),
+                width: '45%',
+              }}
             />
           </View>
 
-          <SsuInput.InputLabel
-            label={t('Setting.Shipping.Label.Address') || ''}
-            placeholder={t('Setting.Shipping.Placeholder.Address') || ''}
-            value={state.address}
-            onChangeText={(newText: string) => onChangeText('address', newText)}
-            containerStyles={{marginTop: heightPercentage(15)}}
+          <Controller
+            name="address"
+            control={control}
+            render={({field: {onChange, value}}) => (
+              <SsuInput.InputLabel
+                label={t('Setting.Shipping.Label.Address') || ''}
+                placeholder={t('Setting.Shipping.Placeholder.Address') || ''}
+                value={value}
+                onChangeText={(newText: string) => onChange(newText)}
+                containerStyles={{marginTop: heightPercentage(15)}}
+                isError={errors?.address ? true : false}
+                errorMsg={errors?.address?.message}
+              />
+            )}
           />
 
           <Button
@@ -357,23 +378,19 @@ export const ShippingInformationContent: React.FC<ShippingInformationProps> = ({
         modalVisible={toastVisible}
         onBackPressed={() => setToastVisible(false)}
         children={
-          <View style={[styles.modalContainer, {backgroundColor: toastBg}]}>
-            {toastError ? (
-              <CloseCircleIcon
-                width={widthResponsive(21)}
-                height={heightPercentage(20)}
-                stroke={Color.Neutral[10]}
-              />
-            ) : (
-              <TickCircleIcon
-                width={widthResponsive(21)}
-                height={heightPercentage(20)}
-                stroke={Color.Neutral[10]}
-              />
-            )}
+          <View
+            style={[
+              styles.modalContainer,
+              {backgroundColor: Color.Success[400]},
+            ]}>
+            <TickCircleIcon
+              width={widthResponsive(21)}
+              height={heightPercentage(20)}
+              stroke={Color.Neutral[10]}
+            />
             <Gap width={widthResponsive(7)} />
             <Text style={[typography.Button2, styles.textStyle]}>
-              {toastText}
+              {'Shipping Information have been saved!'}
             </Text>
           </View>
         }
