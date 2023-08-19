@@ -59,7 +59,6 @@ import {ChangePasswordScreen} from '../screen/Setting/ChangePassword';
 import {LanguageScreen} from '../screen/Setting/Language';
 import {ReferralCodeSetting} from '../screen/Setting/ReferralCode';
 import {PhoneNumberScreen} from '../screen/Setting/PhoneNumber/PhoneNumber';
-import {ShippingInformationScreen} from '../screen/Setting/ShippingInformation';
 import {DonationAndSubscription} from '../screen/Setting/DonationAndSubscription';
 import {SendReportScreen} from '../screen/Setting/SendReport';
 import {PushNotificationScreen} from '../screen/Setting/PushNotification';
@@ -268,10 +267,6 @@ export type RootStackParams = {
   SignInGuest: {
     showToastDelete?: boolean;
   };
-  ShippingInformation: {
-    data: DataShippingProps | null;
-    from?: string;
-  };
   ShowCredit: {
     songId: number;
   };
@@ -336,6 +331,7 @@ export type RootStackParams = {
     from?: string;
   };
   AddNewAddress: {
+    data?: DataShippingProps;
     from?: string;
   };
 };
@@ -497,10 +493,6 @@ export const RootStackScreen = () => (
     <RootStack.Screen name="ChangePassword" component={ChangePasswordScreen} />
     <RootStack.Screen name="ReferralCode" component={ReferralCodeSetting} />
     <RootStack.Screen name="Language" component={LanguageScreen} />
-    <RootStack.Screen
-      name="ShippingInformation"
-      component={ShippingInformationScreen}
-    />
     <RootStack.Screen name="ListAddress" component={ListAddressScreen} />
     <RootStack.Screen name="AddNewAddress" component={AddNewAddressScreen} />
     <RootStack.Screen
