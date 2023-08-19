@@ -18,6 +18,7 @@ import {
   verifPasswordSetting,
   listReason,
   getListRole,
+  listViolations,
 } from '../api/setting.api';
 import {
   ChangePasswordProps,
@@ -29,6 +30,7 @@ import {
   ListAllStepWizard,
   ListReasonType,
   ListRoleType,
+  ListViolationsType,
   PreferenceList,
   PreferenceProps,
   VerifPasswordSetting,
@@ -62,6 +64,7 @@ export const useSettingHook = () => {
   const [listReasonDelete, setListReasonDelete] = useState<ListReasonType[]>(
     [],
   );
+  const [listViolation, setListViolation] = useState<ListViolationsType>();
 
   const getVerificationCode = async (props?: EmailPhoneVerifProps) => {
     setIsLoading(true);
@@ -475,6 +478,15 @@ export const useSettingHook = () => {
     }
   };
 
+  const getListViolations = async () => {
+    try {
+      const response = await listViolations();
+      setListViolation(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return {
     isLoading,
     isError,
@@ -490,6 +502,7 @@ export const useSettingHook = () => {
     listReasonDelete,
     listStepWizard,
     listRoles,
+    listViolation,
     changeEmail,
     changePhoneNumber,
     getVerificationCode,
@@ -509,5 +522,6 @@ export const useSettingHook = () => {
     getListStepWizard,
     getListGenreSong,
     getListRolesInIndustry,
+    getListViolations,
   };
 };
