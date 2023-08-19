@@ -9,13 +9,15 @@ import {RootStackParams} from '../../navigations';
 import {useSettingHook} from '../../hooks/use-setting.hook';
 import {useProfileHook} from '../../hooks/use-profile.hook';
 import {usePlayerStore} from '../../store/player.store';
+import {dummyViolations} from '../../data/Settings/setting';
 
 export const SettingScreen: React.FC = () => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
 
   const {dataProfile, getProfileUser} = useProfileHook();
-  const {dataShippingInfo, getShippingInfo} = useSettingHook();
+  const {dataShippingInfo, listViolation, getShippingInfo, getListViolations} =
+    useSettingHook();
   const {setWithoutBottomTab, show} = usePlayerStore();
 
   useFocusEffect(
@@ -30,6 +32,7 @@ export const SettingScreen: React.FC = () => {
     useCallback(() => {
       getProfileUser();
       getShippingInfo();
+      getListViolations();
     }, []),
   );
 
@@ -53,7 +56,12 @@ export const SettingScreen: React.FC = () => {
 
   return (
     <View style={styles.root}>
-      <SettingContent onPressGoBack={onPressGoBack} onPressGoTo={onPressGoTo} />
+      <SettingContent
+        dataProfile={dataProfile}
+        listViolation={dummyViolations}
+        onPressGoBack={onPressGoBack}
+        onPressGoTo={onPressGoTo}
+      />
     </View>
   );
 };
