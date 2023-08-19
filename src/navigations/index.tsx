@@ -68,7 +68,8 @@ import {SecurityScreen} from '../screen/Setting/Security';
 import {TnCAndPPScreen} from '../screen/Setting/TnCAndPP';
 import {AboutDeletionScreen} from '../screen/Setting/DeleteAccount/AboutDeletion';
 import {InputDeletionScreen} from '../screen/Setting/DeleteAccount/InputDeletion';
-import {SendAppealScreen} from '../screen/Setting/SendAppeal';
+import {SendAppealScreen} from '../screen/Setting/SendAppeal/SendAppeal';
+import {ReportedContentScreen} from '../screen/Setting/SendAppeal/ReportedContent';
 import {RevenueScreen} from '../screen/Setting/Revenue';
 
 // Profile
@@ -143,10 +144,15 @@ import {OtpPNScreen} from '../screen/Setting/PhoneNumber/OTP';
 import {useNavigation} from '@react-navigation/native';
 import {ListDataSearchSongs} from '../interface/search.interface';
 import {
+  AlbumReportedType,
+  CommentReportedType,
   DataExclusiveResponse,
   DataShippingProps,
+  ListViolationsType,
   OtpEmailScreen as OtpEmailProps,
   OtpPhoneScreen,
+  PostReportedType,
+  SongReportedType,
 } from '../interface/setting.interface';
 import {OtpEmailScreen} from '../screen/Setting/Email/OTP';
 import {SplashScreen} from '../screen/SplashScreen';
@@ -247,7 +253,18 @@ export type RootStackParams = {
   RecoverAccount: undefined;
   Referral: undefined;
   ReferralCode: undefined;
-  SendAppeal: {title: string};
+  ReportedContent: {
+    title: string;
+    dataViolation: ListViolationsType;
+  };
+  SendAppeal: {
+    title: string;
+    selectedViolation?:
+      | PostReportedType
+      | CommentReportedType
+      | SongReportedType
+      | AlbumReportedType;
+  };
   SendReport: {
     title: string;
   };
@@ -503,6 +520,10 @@ export const RootStackScreen = () => (
       component={ExclusiveContentSetting}
     />
     <RootStack.Screen name="SendAppeal" component={SendAppealScreen} />
+    <RootStack.Screen
+      name="ReportedContent"
+      component={ReportedContentScreen}
+    />
     <RootStack.Screen name="SendReport" component={SendReportScreen} />
     <RootStack.Screen name="Setting" component={SettingScreen} />
     <RootStack.Screen name="MyQRCode" component={MyQRCode} />
