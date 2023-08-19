@@ -1,24 +1,32 @@
-import React, {useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {
+  Text,
+  View,
   ScrollView,
   StyleSheet,
-  Text,
   TouchableOpacity,
-  View,
 } from 'react-native';
 import {useQuery} from 'react-query';
 import {useTranslation} from 'react-i18next';
-import {mvs} from 'react-native-size-matters';
+import {ms, mvs} from 'react-native-size-matters';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 
-import {color, font} from '../../../theme';
-import {ArrowLeftIcon} from '../../../assets/icon';
+import {
+  Button,
+  EmptyState,
+  Gap,
+  SsuToast,
+  TopNavigation,
+} from '../../../components';
 import {RootStackParams} from '../../../navigations';
 import {width, widthResponsive} from '../../../utils';
+import {color, font, typography} from '../../../theme';
+import {deleteShipping, updateShipping} from '../../../api/setting.api';
 import {useSettingHook} from '../../../hooks/use-setting.hook';
-import {Button, EmptyState, TopNavigation} from '../../../components';
+import {ArrowLeftIcon, TickCircleIcon} from '../../../assets/icon';
 import {DataShippingProps} from '../../../interface/setting.interface';
 import {ShippingCard} from '../../../components/molecule/ListCard/ShippingCard';
+import {useFocusEffect} from '@react-navigation/native';
 
 type ListAddressProps = NativeStackScreenProps<RootStackParams, 'ListAddress'>;
 export const ListAddressScreen: React.FC<ListAddressProps> = ({
@@ -29,34 +37,67 @@ export const ListAddressScreen: React.FC<ListAddressProps> = ({
   const {from} = route.params;
 
   const {getShippingInfo} = useSettingHook();
-  const {data: listAddress} = useQuery('list-addressShipping', () =>
+  const {data: listAddress, refetch} = useQuery('list-addressShipping', () =>
     getShippingInfo(),
   );
   const [selectedAddress, setSelectedAddress] = useState<DataShippingProps>();
+  const [toastVisible, setToastVisible] = useState<boolean>(false);
+
+  useFocusEffect(
+    useCallback(() => {
+      // fetch when go back from add address & when toast is visible
+      refetch();
+    }, [toastVisible]),
+  );
+
+  useEffect(() => {
+    if (toastVisible) {
+      toastVisible &&
+        setTimeout(() => {
+          setToastVisible(false);
+        }, 3000);
+    }
+  }, [toastVisible]);
 
   const onPressGoBack = () => {
     navigation.goBack();
   };
 
-  const goToAddNewAddress = () => {
-    navigation.navigate('AddNewAddress', {from});
+  const goToAddNewAddress = (id?: string) => {
+    const dataAddress = listAddress?.data.filter(
+      val => val.bookyayShipmentID === id,
+    )[0];
+    const params = id !== undefined ? {from, data: dataAddress} : {from};
+    navigation.navigate('AddNewAddress', params);
   };
 
   const setActiveAddress = (val: DataShippingProps) => {
     if (selectedAddress?.bookyayShipmentID !== val.bookyayShipmentID) {
-      setSelectedAddress(val);
+      // change the state of the main address
+      // by changing the default value to the opposite
+      const data = {
+        ...val,
+        isDefault: !val.isDefault,
+      };
+      setSelectedAddress(data);
     } else {
       setSelectedAddress(undefined);
     }
   };
 
-  const changeMainAddress = () => {};
-
-  const goToEditAddress = () => {
-    navigation.navigate('AddNewAddress', {from});
+  const changeMainAddress = async (val?: DataShippingProps) => {
+    try {
+      await updateShipping(val);
+      setToastVisible(true);
+    } catch (error) {}
   };
 
-  const removeAddress = () => {};
+  const removeAddress = async (val: DataShippingProps) => {
+    try {
+      await deleteShipping(val);
+      setToastVisible(true);
+    } catch (error) {}
+  };
 
   return (
     <View style={styles.root}>
@@ -70,7 +111,9 @@ export const ListAddressScreen: React.FC<ListAddressProps> = ({
         }}
       />
 
-      <TouchableOpacity style={styles.containerAdd} onPress={goToAddNewAddress}>
+      <TouchableOpacity
+        style={styles.containerAdd}
+        onPress={() => goToAddNewAddress(undefined)}>
         <Text style={styles.addAddress}>
           {t('Setting.Shipping.AddNewAddress')}
         </Text>
@@ -88,9 +131,10 @@ export const ListAddressScreen: React.FC<ListAddressProps> = ({
               address={val.address}
               isMainAddress={val.isDefault}
               onPressCard={() => setActiveAddress(val)}
-              onPressEdit={goToEditAddress}
-              onPressRemove={removeAddress}
+              onPressEdit={() => goToAddNewAddress(val.bookyayShipmentID)}
+              onPressRemove={() => removeAddress(val)}
               containerStyle={{marginBottom: mvs(15)}}
+              disabled={val.isDefault}
             />
           ))}
         </ScrollView>
@@ -105,12 +149,31 @@ export const ListAddressScreen: React.FC<ListAddressProps> = ({
 
       <Button
         label={t('Setting.Shipping.ChangeMainAddress') || ''}
-        onPress={changeMainAddress}
+        onPress={() => changeMainAddress(selectedAddress)}
         textStyles={{fontSize: mvs(13)}}
         containerStyles={
           !selectedAddress ? styles.buttonDisabled : styles.button
         }
         disabled={!selectedAddress}
+      />
+
+      <SsuToast
+        modalVisible={toastVisible}
+        onBackPressed={() => setToastVisible(false)}
+        children={
+          <View style={[styles.modalContainer]}>
+            <TickCircleIcon
+              width={ms(21)}
+              height={mvs(20)}
+              stroke={color.Neutral[10]}
+            />
+            <Gap width={ms(7)} />
+            <Text style={[typography.Button2, styles.textStyle]}>
+              {'Address has been deleted!'}
+            </Text>
+          </View>
+        }
+        modalStyle={{marginHorizontal: ms(24)}}
       />
     </View>
   );
@@ -155,5 +218,19 @@ const styles = StyleSheet.create({
     marginVertical: mvs(25),
     alignSelf: 'center',
     backgroundColor: color.Dark[50],
+  },
+  modalContainer: {
+    width: '100%',
+    position: 'absolute',
+    bottom: mvs(22),
+    height: mvs(36),
+    backgroundColor: color.Success[400],
+    paddingHorizontal: ms(12),
+    borderRadius: 4,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  textStyle: {
+    color: color.Neutral[10],
   },
 });

@@ -4,7 +4,7 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 
 import Color from '../../../theme/Color';
 import {RootStackParams} from '../../../navigations';
-import {ShippingInformationContent} from '../../../components';
+import {AddShippingAddress} from '../../../components';
 import {useLocationHook} from '../../../hooks/use-location.hook';
 
 type AddNewAddressProps = NativeStackScreenProps<
@@ -23,26 +23,31 @@ export const AddNewAddressScreen: React.FC<AddNewAddressProps> = ({
   const {
     dataAllCountry,
     dataCitiesOfCountry,
-    getDataAllCountry,
+    getDataAllCountryShipping,
     getCitiesOfCountry,
   } = useLocationHook();
-  const [selectedCountry, setSelectedCountry] = useState<number>(
-    Number(data?.country) || 0,
+  const [selectedCountry, setSelectedCountry] = useState<string>(
+    data?.country || '',
   );
 
   useEffect(() => {
-    getDataAllCountry();
+    getDataAllCountryShipping();
   }, []);
 
   useEffect(() => {
-    if (selectedCountry > 0) {
-      getCitiesOfCountry({id: selectedCountry});
+    if (selectedCountry && dataAllCountry.length > 0) {
+      // get id of selected country & send to get data city by country
+      const filteredCountry = dataAllCountry.filter(
+        val => val.value === selectedCountry,
+      )[0].id;
+
+      getCitiesOfCountry({id: filteredCountry});
     }
-  }, [data, selectedCountry]);
+  }, [data, selectedCountry, dataAllCountry]);
 
   return (
     <View style={styles.root}>
-      <ShippingInformationContent
+      <AddShippingAddress
         dataAllCountry={dataAllCountry !== undefined ? dataAllCountry : []}
         dataCities={
           dataCitiesOfCountry !== undefined ? dataCitiesOfCountry : []
