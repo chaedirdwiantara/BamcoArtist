@@ -138,7 +138,7 @@ export const EditPlaylistContent: React.FC<EditPlaylistProps> = ({
         isPublic: state.isPublic === 'Public',
       };
       const response = await updatePlaylist(playlist, payload);
-      goToPlaylist(response.data.id);
+      response.data !== null && goToPlaylist(response.data.id);
       storage.set('fetchingProfile', true);
       closeModal();
     } catch (error) {
