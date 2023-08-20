@@ -209,3 +209,16 @@ export interface RequestPropsListMerch {
   referId: string;
   limit?: number;
 }
+
+export interface EventCardInterface {
+  title: string;
+  date: string;
+  place: string;
+  isLive: boolean;
+}
+
+export interface EventMusicianInterface {
+  id: string;
+  date: string;
+  item: EventCardInterface[];
+}
