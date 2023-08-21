@@ -20,11 +20,10 @@ import FastImage from 'react-native-fast-image';
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParams} from '../../../navigations';
-import {CoinIcon, StarIcon} from '../../../assets/icon';
 import {Gap} from '../../atom';
 import {mvs} from 'react-native-size-matters';
 import Font from '../../../theme/Font';
-import {useTranslation} from 'react-i18next';
+import {getPercentage} from '../../../utils/percentage';
 
 interface ListProps extends MerchListType {
   onPressCard?: () => void;
@@ -32,8 +31,16 @@ interface ListProps extends MerchListType {
 }
 
 const MerchListCard: React.FC<ListProps> = props => {
-  const {t} = useTranslation();
-  const {title, image, owner, price, containerStyles, type} = props;
+  const {
+    title,
+    image,
+    owner,
+    price,
+    containerStyles,
+    type,
+    priceBeforeDisc,
+    currencyCode,
+  } = props;
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
 
@@ -79,46 +86,24 @@ const MerchListCard: React.FC<ListProps> = props => {
               {toCurrency(price, {withFraction: false})}
             </Text>
             <Gap width={widthResponsive(4)} />
-            <Text style={styles.price}>HKD</Text>
+            <Text style={styles.price}>{currencyCode}</Text>
           </View>
-          <View style={styles.tabSpacer} />
-          <View style={styles.disc}>
-            <View style={styles.discPercContainer}>
-              <Text style={styles.discPerc}>25%</Text>
-            </View>
-            <Gap width={widthResponsive(4)} />
-            <Text style={styles.priceDisc}>
-              {toCurrency(price, {withFraction: false})}
-            </Text>
-          </View>
-        </View>
-        <Gap height={heightPercentage(7)} />
-        <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          <View style={styles.disc}>
-            <StarIcon
-              width={widthPercentage(14)}
-              height={heightPercentage(14)}
-            />
-            <Gap width={widthPercentage(4)} />
-            <Text style={[styles.subtitle, {marginBottom: 0}]}>4,5 (1K)</Text>
-            <Gap width={widthPercentage(4)} />
-          </View>
-
-          {/* Hide Sold */}
-          {/* <View style={styles.tabSpacer} />
-           <View style={styles.disc}>
-            <Text style={[styles.subtitle, {marginBottom: 0}]}>
-              {t('Event.Merch.Sold')}
-            </Text>
-            <Gap width={widthPercentage(4)} />
-            <Text
-              style={[
-                styles.subtitle,
-                {marginBottom: 0, fontFamily: 'Inter-Regular'},
-              ]}>
-              1,000
-            </Text>
-          </View> */}
+          {priceBeforeDisc !== price && (
+            <>
+              <View style={styles.tabSpacer} />
+              <View style={styles.disc}>
+                <View style={styles.discPercContainer}>
+                  <Text style={styles.discPerc}>
+                    {getPercentage(priceBeforeDisc as number, price)}
+                  </Text>
+                </View>
+                <Gap width={widthResponsive(4)} />
+                <Text style={styles.priceDisc}>
+                  {toCurrency(priceBeforeDisc, {withFraction: false})}
+                </Text>
+              </View>
+            </>
+          )}
         </View>
       </View>
     </TouchableOpacity>

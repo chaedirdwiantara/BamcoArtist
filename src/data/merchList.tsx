@@ -9,6 +9,8 @@ export interface MerchListType {
   ownerImage?: string;
   type?: 'merch' | 'concert';
   charge?: '' | 'no_tickets' | 'free_event';
+  priceBeforeDisc?: number;
+  currencyCode?: string;
 }
 
 export const MerchListItem: MerchListType[] = [

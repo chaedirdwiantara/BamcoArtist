@@ -48,6 +48,7 @@ import {dropDownDataCategory, dropDownDataSort} from '../../../data/dropdown';
 import ExclusiveDailyContent from '../../../screen/MusicianProfile/ExclusiveDailyContent';
 import MerchList from '../../../screen/ListCard/MerchList';
 import ConcertList from '../../../screen/ListCard/ConcertList';
+import EventMusician from '../EventMusician';
 
 type OnScrollEventHandler = (
   event: NativeSyntheticEvent<NativeScrollEvent>,
@@ -112,6 +113,7 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
     {filterName: 'Musician.Tab.Musician'},
     {filterName: 'Musician.Tab.Music'},
     {filterName: 'Musician.Tab.Fans'},
+    // {filterName: 'Musician.Tab.Event'},
     {filterName: 'Musician.Tab.Profile'},
     // {filterName: 'Musician.Tab.Merchandise'},
     // {filterName: 'Musician.Tab.Ticket'},
@@ -297,9 +299,11 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
             </View>
           ) : filter2[selectedIndex].filterName ===
             'Musician.Tab.Merchandise' ? (
-            <MerchList />
+            <MerchList musicianId={uuid} />
           ) : filter2[selectedIndex].filterName === 'Musician.Tab.Ticket' ? (
-            <ConcertList />
+            <ConcertList musicianId={uuid} />
+          ) : filter2[selectedIndex].filterName === 'Musician.Tab.Event' ? (
+            <EventMusician />
           ) : (
             // TODO: DISABLE FOR NOW
             // : filter2[selectedIndex].filterName === 'Musician.Tab.Main' ? (

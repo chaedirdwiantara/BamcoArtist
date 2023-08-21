@@ -1,9 +1,10 @@
-import {listConcert, listMerch} from '../api/event.api';
+import {listConcert, listMerch, searchEvent} from '../api/event.api';
+import {RequestPropsListMerch} from '../interface/event.interface';
 
 export const useEventHook = () => {
-  const getListDataMerch = async () => {
+  const getListDataMerch = async (props: RequestPropsListMerch) => {
     try {
-      const response = await listMerch();
+      const response = await listMerch(props);
       return {
         data: response?.data,
       };
@@ -23,8 +24,34 @@ export const useEventHook = () => {
     }
   };
 
+  const searchListDataMerch = async (props: RequestPropsListMerch) => {
+    try {
+      const response = await searchEvent({...props, type: 'product'});
+      return {
+        data: response?.data,
+        total: response?.total,
+      };
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const searchListDataTicket = async (props: RequestPropsListMerch) => {
+    try {
+      const response = await searchEvent({...props, type: 'event'});
+      return {
+        data: response?.data,
+        total: response?.total,
+      };
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return {
     getListDataMerch,
     getListDataConcert,
+    searchListDataMerch,
+    searchListDataTicket,
   };
 };

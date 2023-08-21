@@ -4,7 +4,8 @@ let API: AxiosInstance;
 
 const setupAPIClient = () => {
   API = axios.create({
-    baseURL: 'https://api.bookyay.com/gpi/v1/',
+    // baseURL: 'https://api.bookyay.com/gpi/v1/',
+    baseURL: 'https://uat-api.yeah-yeah.com/gpi/v1/',
   });
 
   API.interceptors.response.use(

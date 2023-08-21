@@ -558,7 +558,8 @@
       "Music": "MUSIC",
       "Fans": "樂迷",
       "Merchandise": "MERCHANDISE",
-      "Ticket": "TICKET"
+      "Ticket": "TICKET",
+      "Event": "EVENT"
     }
   },
   "ExclusiveContent": {
