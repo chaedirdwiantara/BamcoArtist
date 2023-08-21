@@ -73,11 +73,11 @@ export const ExclusiveContent: React.FC<ExclusiveProps> = ({
     if (response.code === 200) {
       setTimeout(() => {
         setSuccessSubs(true);
-      }, 500);
+      }, 2000);
     } else
       setTimeout(() => {
         setSuccessSubs(false);
-      }, 500);
+      }, 2000);
   };
 
   const onPressSuccess = () => {
@@ -126,7 +126,7 @@ export const ExclusiveContent: React.FC<ExclusiveProps> = ({
                       coin={kFormatter(data?.pricingPlans[0].price) + '/'}
                       time={val.time}
                       isError={
-                        credit ? credit < data?.pricingPlans[0].price : false
+                        credit ? credit < data?.pricingPlans[0].price : true
                       }
                       onPressSelected={() => onPressSelected(data)}
                       selected={selectedPlan?.ID === data?.ID}
