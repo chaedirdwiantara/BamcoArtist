@@ -1,6 +1,7 @@
 import AddIcon from './Add.icon';
 import AddCircleIcon from './AddCircle.icon';
 import AddPostIcon from './AddPost.icon';
+import AddVoteIcon from './AddVote.icon';
 import ArrowLeftIcon from './ArrowLeft.icon';
 import ArrowRightIcon from './ArrowRight.icon';
 import ArrowRightIcon2 from './ArrowRight2.icon';
@@ -142,6 +143,7 @@ export {
   AddIcon,
   AddCircleIcon,
   AddPostIcon,
+  AddVoteIcon,
   ArrowLeftIcon,
   ArrowRightIcon,
   ArrowRightIcon2,

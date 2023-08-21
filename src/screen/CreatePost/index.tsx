@@ -42,7 +42,7 @@ import {editPostUtils} from './UtilsPost/editPostUtils';
 import {usePlayerHook} from '../../hooks/use-player.hook';
 import {createOrUpdate} from './UtilsPost/createOrUpdatePost';
 import {heightResponsive, widthResponsive} from '../../utils';
-import {ImportMusicIcon, ImportPhotoIcon} from '../../assets/icon';
+import {AddVoteIcon, ImportMusicIcon, ImportPhotoIcon} from '../../assets/icon';
 import {useTriggerUploadImage} from './UtilsPost/uploadImageUtils';
 import {useUploadImageHook} from '../../hooks/use-uploadImage.hook';
 import {ListDataSearchSongs} from '../../interface/search.interface';
@@ -52,6 +52,7 @@ import {convertCategoryValue, createAddMusicObject} from './UtilsPost/utils';
 import MusicPreview from '../../components/molecule/MusicPreview/MusicPreview';
 import {ModalLoading} from '../../components/molecule/ModalLoading/ModalLoading';
 import FilterModal from '../../components/molecule/V2/DropdownFilter/modalFilter';
+import VoteComponent from './VotePost';
 
 type PostDetailProps = NativeStackScreenProps<RootStackParams, 'CreatePost'>;
 
@@ -105,6 +106,9 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   const [modalConfirm, setModalConfirm] = useState<boolean>(false);
   const [musicData, setMusicData] = useState<ListDataSearchSongs>();
   const [dataResponseImg, setDataResponseImg] = useState<string[]>([]);
+  const [showIcon, setShowIcon] = useState<
+    'All' | 'ImageVideo' | 'Music' | 'Vote'
+  >('All');
 
   // * Hooks for uploading
   const [uri, setUri] = useState<Image[]>([]);
@@ -381,6 +385,25 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
     navigation.goBack();
   };
 
+  //* Icon Order
+  useEffect(() => {
+    if (uri.length !== 0 || uriVideo !== null) {
+      setShowIcon('ImageVideo');
+    } else if (musicData) {
+      setShowIcon('Music');
+    } else {
+      setShowIcon('All');
+    }
+  }, [uri, uriVideo, musicData]);
+
+  const voteIconOnPress = () => {
+    setShowIcon('Vote');
+  };
+
+  const cancelVoteOnPress = () => {
+    setShowIcon('All');
+  };
+
   return (
     <KeyboardAvoidingView
       style={{flex: 1}}
@@ -444,6 +467,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
                   seekPlayer={seekPlayer}
                 />
               ) : null}
+              {showIcon === 'Vote' && <VoteComponent />}
             </View>
 
             {/* // ! VIDEO AREA */}
@@ -476,7 +500,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
             </Text>
             <View style={styles.iconsAndCategory}>
               <View style={styles.iconsContainer}>
-                {!musicData && (
+                {showIcon === 'All' || showIcon === 'ImageVideo' ? (
                   <>
                     <TouchableOpacity
                       onPress={() =>
@@ -490,13 +514,26 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
                     </TouchableOpacity>
                     <Gap width={16} />
                   </>
-                )}
-                {uri.length == 0 && uriVideo == null ? (
-                  <TouchableOpacity
-                    onPress={() => navigation.navigate('QuoteMusic')}>
-                    <ImportMusicIcon />
-                  </TouchableOpacity>
                 ) : null}
+                {showIcon === 'All' || showIcon === 'Music' ? (
+                  <>
+                    <TouchableOpacity
+                      onPress={() => navigation.navigate('QuoteMusic')}>
+                      <ImportMusicIcon />
+                    </TouchableOpacity>
+                    <Gap width={16} />
+                  </>
+                ) : null}
+                {showIcon === 'All' && (
+                  <TouchableOpacity onPress={voteIconOnPress}>
+                    <AddVoteIcon />
+                  </TouchableOpacity>
+                )}
+                {showIcon === 'Vote' && (
+                  <TouchableOpacity onPress={cancelVoteOnPress}>
+                    <Text style={styles.cancelVote}>Cancel</Text>
+                  </TouchableOpacity>
+                )}
               </View>
 
               <View
@@ -713,5 +750,11 @@ const styles = StyleSheet.create({
   videoStyle: {
     width: '100%',
     height: width - widthResponsive(48),
+  },
+  cancelVote: {
+    fontFamily: font.InterRegular,
+    fontSize: mvs(13),
+    fontWeight: '400',
+    color: color.Error[900],
   },
 });
