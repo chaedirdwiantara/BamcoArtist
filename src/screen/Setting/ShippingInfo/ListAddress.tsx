@@ -5,28 +5,32 @@ import {
   ScrollView,
   StyleSheet,
   TouchableOpacity,
+  InteractionManager,
 } from 'react-native';
 import {useQuery} from 'react-query';
 import {useTranslation} from 'react-i18next';
 import {ms, mvs} from 'react-native-size-matters';
+import {useFocusEffect} from '@react-navigation/native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 
 import {
-  Button,
-  EmptyState,
   Gap,
+  Button,
   SsuToast,
+  EmptyState,
+  ModalConfirm,
   TopNavigation,
 } from '../../../components';
 import {RootStackParams} from '../../../navigations';
 import {width, widthResponsive} from '../../../utils';
 import {color, font, typography} from '../../../theme';
-import {deleteShipping, updateShipping} from '../../../api/setting.api';
+import {storage} from '../../../hooks/use-storage.hook';
 import {useSettingHook} from '../../../hooks/use-setting.hook';
 import {ArrowLeftIcon, TickCircleIcon} from '../../../assets/icon';
 import {DataShippingProps} from '../../../interface/setting.interface';
+import {deleteShipping, updateShipping} from '../../../api/setting.api';
 import {ShippingCard} from '../../../components/molecule/ListCard/ShippingCard';
-import {useFocusEffect} from '@react-navigation/native';
+import {TextConfirmProps} from '../../../components/molecule/SettingContent/AddShippingAddress';
 
 type ListAddressProps = NativeStackScreenProps<RootStackParams, 'ListAddress'>;
 export const ListAddressScreen: React.FC<ListAddressProps> = ({
@@ -41,22 +45,46 @@ export const ListAddressScreen: React.FC<ListAddressProps> = ({
     getShippingInfo(),
   );
   const [selectedAddress, setSelectedAddress] = useState<DataShippingProps>();
+  const [deleteAddress, setDeleteAddress] = useState<DataShippingProps>();
   const [toastVisible, setToastVisible] = useState<boolean>(false);
+  const [newAddress, setNewAddress] = useState<string>('');
+  const [textToast, setTextToast] = useState<string>('');
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const [textConfirm, setTextConfirm] = useState<TextConfirmProps>({
+    title: '',
+    subtitle: '',
+  });
 
   useFocusEffect(
     useCallback(() => {
-      // fetch when go back from add address & when toast is visible
+      // fetch when go back from add address
       refetch();
+
+      // set flag new address, if it contains an id
+      const newId = storage.getString('newIdShipping');
+      newId && setNewAddress(newId);
+      // remove flag new address, if go out from this screen
+      storage.delete('newIdShipping');
+
+      // show toast add/update success from add address screen
+      const type = storage.getString('toastType');
+      if (type) {
+        setToastVisible(true);
+        type === 'add'
+          ? setTextToast('Setting.Shipping.ToastAddAddress')
+          : setTextToast('Setting.Shipping.ToastChangeAddress');
+
+        // remove toast after shown
+        storage.delete('toastType');
+      }
     }, [toastVisible]),
   );
 
   useEffect(() => {
-    if (toastVisible) {
-      toastVisible &&
-        setTimeout(() => {
-          setToastVisible(false);
-        }, 3000);
-    }
+    toastVisible &&
+      setTimeout(() => {
+        setToastVisible(false);
+      }, 3000);
   }, [toastVisible]);
 
   const onPressGoBack = () => {
@@ -86,17 +114,50 @@ export const ListAddressScreen: React.FC<ListAddressProps> = ({
   };
 
   const changeMainAddress = async (val?: DataShippingProps) => {
+    setShowModal(false);
     try {
       await updateShipping(val);
-      setToastVisible(true);
+      setTextToast('Setting.Shipping.ToastMainAddress');
+      InteractionManager.runAfterInteractions(() => setToastVisible(true));
+
+      // unselect after change to main address
+      setSelectedAddress(undefined);
     } catch (error) {}
   };
 
   const removeAddress = async (val: DataShippingProps) => {
+    setShowModal(false);
     try {
       await deleteShipping(val);
-      setToastVisible(true);
+      setTextToast('Setting.Shipping.ToastDeleteAddress');
+      InteractionManager.runAfterInteractions(() => setToastVisible(true));
+
+      // unselect after change to remove address
+      setDeleteAddress(undefined);
     } catch (error) {}
+  };
+
+  const openModalConfirm = (val: string) => {
+    if (val === 'delete') {
+      setTextConfirm({
+        title: 'Setting.Shipping.DeleteAddress',
+        subtitle: 'Setting.Shipping.ConfirmDeleteAddress',
+      });
+    } else {
+      setTextConfirm({
+        title: 'Setting.Shipping.ChangeMainAddress',
+        subtitle: 'Setting.Shipping.ConfirmChangeMainAddress',
+      });
+    }
+    setShowModal(true);
+  };
+
+  const onPressConfirm = () => {
+    if (textConfirm.title === 'Setting.Shipping.DeleteAddress') {
+      deleteAddress !== undefined && removeAddress(deleteAddress);
+    } else {
+      changeMainAddress(selectedAddress);
+    }
   };
 
   return (
@@ -132,9 +193,13 @@ export const ListAddressScreen: React.FC<ListAddressProps> = ({
               isMainAddress={val.isDefault}
               onPressCard={() => setActiveAddress(val)}
               onPressEdit={() => goToAddNewAddress(val.bookyayShipmentID)}
-              onPressRemove={() => removeAddress(val)}
+              onPressRemove={() => {
+                setDeleteAddress(val);
+                openModalConfirm('delete');
+              }}
               containerStyle={{marginBottom: mvs(15)}}
               disabled={val.isDefault}
+              newAddress={newAddress}
             />
           ))}
         </ScrollView>
@@ -149,12 +214,20 @@ export const ListAddressScreen: React.FC<ListAddressProps> = ({
 
       <Button
         label={t('Setting.Shipping.ChangeMainAddress') || ''}
-        onPress={() => changeMainAddress(selectedAddress)}
+        onPress={() => openModalConfirm('main')}
         textStyles={{fontSize: mvs(13)}}
         containerStyles={
           !selectedAddress ? styles.buttonDisabled : styles.button
         }
         disabled={!selectedAddress}
+      />
+
+      <ModalConfirm
+        modalVisible={showModal}
+        title={t(textConfirm.title) || ''}
+        subtitle={t(textConfirm.subtitle) || ''}
+        onPressClose={() => setShowModal(false)}
+        onPressOk={onPressConfirm}
       />
 
       <SsuToast
@@ -169,7 +242,7 @@ export const ListAddressScreen: React.FC<ListAddressProps> = ({
             />
             <Gap width={ms(7)} />
             <Text style={[typography.Button2, styles.textStyle]}>
-              {'Address has been deleted!'}
+              {t(textToast)}
             </Text>
           </View>
         }

@@ -5,6 +5,7 @@ import {
   ViewStyle,
   StyleSheet,
   TouchableOpacity,
+  Platform,
 } from 'react-native';
 import {useTranslation} from 'react-i18next';
 import {ms, mvs} from 'react-native-size-matters';
@@ -171,7 +172,7 @@ const styles = StyleSheet.create({
     marginTop: mvs(20),
   },
   trashIcon: {
-    width: width * 0.09,
+    width: Platform.OS === 'ios' ? width * 0.09 : width * 0.1,
     aspectRatio: 1 / 1,
     borderWidth: mvs(1),
     borderColor: color.Pink.linear,

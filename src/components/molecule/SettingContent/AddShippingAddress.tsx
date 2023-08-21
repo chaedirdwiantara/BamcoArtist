@@ -1,12 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import {
-  StyleSheet,
   View,
-  KeyboardAvoidingView,
   Platform,
   ScrollView,
-  Text,
-  InteractionManager,
+  StyleSheet,
+  KeyboardAvoidingView,
 } from 'react-native';
 import * as yup from 'yup';
 import {useTranslation} from 'react-i18next';
@@ -24,13 +22,12 @@ import {
 } from '../../../utils';
 import {Dropdown} from '../DropDown';
 import Color from '../../../theme/Color';
-import {typography} from '../../../theme';
+import {Button, SsuInput} from '../../atom';
 import {TopNavigation} from '../TopNavigation';
+import {ArrowLeftIcon} from '../../../assets/icon';
 import {ModalConfirm} from '../Modal/ModalConfirm';
 import {RootStackParams} from '../../../navigations';
 import {storage} from '../../../hooks/use-storage.hook';
-import {Button, Gap, SsuInput, SsuToast} from '../../atom';
-import {ArrowLeftIcon, TickCircleIcon} from '../../../assets/icon';
 import {DataDropDownType, countryData} from '../../../data/dropdown';
 import {ListCountryType} from '../../../interface/location.interface';
 import {DataShippingProps} from '../../../interface/setting.interface';
@@ -57,6 +54,11 @@ interface InputProps {
   receiverFirstname: string;
   receiverLastname: string;
   address: string;
+}
+
+export interface TextConfirmProps {
+  title: string;
+  subtitle: string;
 }
 
 export const AddShippingAddress: React.FC<AddShippingAddressProps> = ({
@@ -96,16 +98,26 @@ export const AddShippingAddress: React.FC<AddShippingAddressProps> = ({
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
 
   const [focusInput, setFocusInput] = useState<string | null>(null);
-  const [toastVisible, setToastVisible] = useState<boolean>(false);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [disabledButton, setDisabledButton] = useState<boolean>(true);
+  const [textConfirm, setTextConfirm] = useState<TextConfirmProps>({
+    title: '',
+    subtitle: '',
+  });
 
   useEffect(() => {
-    toastVisible &&
-      setTimeout(() => {
-        setToastVisible(false);
-      }, 3000);
-  }, [toastVisible]);
+    if (dataShipping === undefined) {
+      setTextConfirm({
+        title: 'Setting.Shipping.AddAddress',
+        subtitle: 'Setting.Shipping.ConfirmAddAddress',
+      });
+    } else {
+      setTextConfirm({
+        title: 'Setting.Shipping.ChangeAddress',
+        subtitle: 'Setting.Shipping.ConfirmChangeAddress',
+      });
+    }
+  }, [dataShipping]);
 
   useEffect(() => {
     if (isValid) {
@@ -154,17 +166,17 @@ export const AddShippingAddress: React.FC<AddShippingAddressProps> = ({
         if (response.data.bookyayShipmentID !== undefined) {
           storage.set('newIdShipping', response.data.bookyayShipmentID);
         }
+        // to show toast add success in list address screen
+        storage.set('toastType', 'add');
       } else {
         await updateShipping(payload);
+        // to show toast update success in list address screen
+        storage.set('toastType', 'update');
       }
       navigation.goBack();
-      // setShowModal(false);
-      // setToastError(false);
-      // InteractionManager.runAfterInteractions(() => setToastVisible(true));
+      setShowModal(false);
     } catch (error) {
-      // setShowModal(false);
-      // setToastError(true);
-      // InteractionManager.runAfterInteractions(() => setToastVisible(true));
+      setShowModal(false);
     }
   };
 
@@ -364,37 +376,14 @@ export const AddShippingAddress: React.FC<AddShippingAddressProps> = ({
 
       <ModalConfirm
         modalVisible={showModal}
-        title={t('Setting.Shipping.Title') || ''}
+        title={t(textConfirm.title) || ''}
         subtitle={
           from === 'checkout'
             ? t('Setting.Shipping.Confirm2') || ''
-            : t('Setting.Shipping.Confirm') || ''
+            : t(textConfirm.subtitle) || ''
         }
         onPressClose={() => setShowModal(false)}
         onPressOk={onPressConfirm}
-      />
-
-      <SsuToast
-        modalVisible={toastVisible}
-        onBackPressed={() => setToastVisible(false)}
-        children={
-          <View
-            style={[
-              styles.modalContainer,
-              {backgroundColor: Color.Success[400]},
-            ]}>
-            <TickCircleIcon
-              width={widthResponsive(21)}
-              height={heightPercentage(20)}
-              stroke={Color.Neutral[10]}
-            />
-            <Gap width={widthResponsive(7)} />
-            <Text style={[typography.Button2, styles.textStyle]}>
-              {'Shipping Information have been saved!'}
-            </Text>
-          </View>
-        }
-        modalStyle={{marginHorizontal: widthResponsive(24)}}
       />
     </KeyboardAvoidingView>
   );
