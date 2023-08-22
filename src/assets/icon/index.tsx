@@ -77,6 +77,7 @@ import LoveIcon from './Love.icon';
 import MedalIcon from './Medal.icon';
 import MenuIcon from './Menu.icon';
 import MinusCircleIcon from './MinusCircle.icon';
+import MinusCircleWhiteIcon from './MinusCircleWhite.icon';
 import MusicPlaylistIcon from './MusicPlaylist.icon';
 import MusicSquareIcon from './MusicSquare.icon';
 import MusicSquareAddIcon from './MusicSquareAdd.icon';
@@ -218,6 +219,7 @@ export {
   MedalIcon,
   MenuIcon,
   MinusCircleIcon,
+  MinusCircleWhiteIcon,
   MusicPlaylistIcon,
   MusicSquareIcon,
   MusicSquareAddIcon,
