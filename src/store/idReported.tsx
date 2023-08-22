@@ -11,11 +11,11 @@ export const feedReportRecorded = create<FeedReportRecordProps>(set => ({
 }));
 
 interface MediaReportRecordProps {
-  idReported: number[];
-  setIdReported: (value: number[]) => void;
+  idReported: string[];
+  setIdReported: (value: string[]) => void;
 }
 
 export const mediaReportRecorded = create<MediaReportRecordProps>(set => ({
   idReported: [],
-  setIdReported: (value: number[]) => set({idReported: value}),
+  setIdReported: (value: string[]) => set({idReported: value}),
 }));
