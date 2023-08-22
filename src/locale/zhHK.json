@@ -20,7 +20,8 @@
       "Playlist": "Share Playlist"
     },
     "NoDescription": "No Description Given",
-    "Required": "Required"
+    "Required": "Required",
+    "Dismiss": "Dismiss"
   },
   "Onboarding": {
     "Step1": {
@@ -484,6 +485,13 @@
         "LowestPrice": "Lowest Price",
         "MostSold": "Most Sold"
       }
+    },
+    "Detail": {
+      "Title": "Event Detail",
+      "LineUp": "LINE UP",
+      "TopTiper": "TOP TIPER",
+      "TipDistribution": "Tip Distribution",
+      "MusicianTipped": "Musician Tipped"
     }
   },
   "Profile": {

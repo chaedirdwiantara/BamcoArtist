@@ -41,6 +41,7 @@ import AddPreview from '../screen/CreatePost/MusicPost/AddPreview';
 import YourTopFansScreen from '../screen/Analytics/Fans/YourTopFans/FullScreen';
 import AlbumAnalyticScreen from '../screen/Analytics/Album/AlbumFullScreen';
 import SongDetailAnalytic from '../screen/Analytics/Album/DetailSong';
+import {EventDetail} from '../screen/EventDetail';
 
 // Home
 import {HomeScreen} from '../screen/Home';
@@ -335,6 +336,9 @@ export type RootStackParams = {
     from?: string;
   };
   Revenue: undefined;
+  EventDetail: {
+    id: string;
+  };
 };
 
 export type MainTabParams = {
@@ -588,6 +592,7 @@ export const RootStackScreen = () => (
       component={SongDetailAnalytic}
     />
     <RootStack.Screen name="Revenue" component={RevenueScreen} />
+    <RootStack.Screen name="EventDetail" component={EventDetail} />
   </RootStack.Navigator>
 );
 

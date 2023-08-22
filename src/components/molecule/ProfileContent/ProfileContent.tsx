@@ -113,7 +113,7 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
     {filterName: 'Musician.Tab.Musician'},
     {filterName: 'Musician.Tab.Music'},
     {filterName: 'Musician.Tab.Fans'},
-    // {filterName: 'Musician.Tab.Event'},
+    {filterName: 'Musician.Tab.Event'},
     {filterName: 'Musician.Tab.Profile'},
     // {filterName: 'Musician.Tab.Merchandise'},
     // {filterName: 'Musician.Tab.Ticket'},

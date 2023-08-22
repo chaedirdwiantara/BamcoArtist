@@ -32,6 +32,9 @@ interface MusicianProps {
   followOnPress?: () => void;
   activeMore?: boolean;
   type?: string;
+  isLive?: boolean;
+  showCredit?: boolean;
+  creditCount: number;
 }
 
 interface DataMore {
