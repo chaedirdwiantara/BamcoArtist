@@ -3,6 +3,7 @@ import {
   KeyboardAvoidingView,
   NativeModules,
   Platform,
+  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -421,7 +422,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
         />
         <View style={styles.mainContainer}>
           {/* //! TOP AREA */}
-          <View style={styles.topBody}>
+          <ScrollView style={styles.topBody}>
             <View style={{}}>
               <SsuInput.InputText
                 onFocus={() => setKeybrdIsActive(true)}
@@ -434,6 +435,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
                 }}
                 multiline={true}
                 maxLength={400}
+                autoFocus
               />
               {uri[0]?.mime !== 'video/mp4' && (
                 <ImageList
@@ -479,7 +481,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
                 dontShowText={false}
               />
             )}
-          </View>
+          </ScrollView>
           {/* //! END OF TOP AREA */}
 
           {/* //! BOTTOM AREA */}

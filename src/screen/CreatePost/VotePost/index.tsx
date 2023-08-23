@@ -3,8 +3,10 @@ import React, {FC, useState} from 'react';
 import {color, font} from '../../../theme';
 import {mvs} from 'react-native-size-matters';
 import {widthResponsive} from '../../../utils';
-import {Gap, SsuInput} from '../../../components';
+import {DropDownFilter, Gap, SsuInput} from '../../../components';
 import {AddCircleIcon, MinusCircleWhiteIcon} from '../../../assets/icon';
+import {DataDropDownType, dataDurationVote} from '../../../data/dropdown';
+import {useTranslation} from 'react-i18next';
 
 interface VoteProps {}
 
@@ -20,8 +22,11 @@ const initialChoices: dataVoteProps[] = [
 
 const VoteComponent: FC<VoteProps> = (props: VoteProps) => {
   const [selectedChoice, setSelectedChoice] = useState<number>(-1);
-  const [pollDuration, setPollDuration] = useState<string>('1 Day');
   const [dataVote, setDataVote] = useState<dataVoteProps[]>(initialChoices);
+  const [selectedFilterMenu, setSelectedFilterMenu] =
+    useState<DataDropDownType>();
+
+  const {t} = useTranslation();
 
   const inputOnFocus = (id: number) => {
     setSelectedChoice(id);
@@ -99,8 +104,26 @@ const VoteComponent: FC<VoteProps> = (props: VoteProps) => {
         ))}
       </View>
       <View style={styles.durationContainer}>
-        <Text style={styles.duration}>Poll Duration</Text>
-        <Text style={styles.duration}>{pollDuration}</Text>
+        <Text style={styles.duration}>{t('Vote.Duration')}</Text>
+        <DropDownFilter
+          labelCaption={
+            selectedFilterMenu
+              ? t(selectedFilterMenu.label)
+              : t('Vote.Dropdown.OptionA')
+          }
+          dataFilter={dataDurationVote}
+          selectedMenu={setSelectedFilterMenu}
+          leftPosition={widthResponsive(-70)}
+          topPosition={widthResponsive(3)}
+          containerStyle={{
+            marginTop: widthResponsive(0),
+            marginBottom: widthResponsive(0),
+          }}
+          textCustomStyle={{fontSize: mvs(13), color: color.Pink[100]}}
+          iconColor={color.Neutral[10]}
+          gapTextToIcon={10}
+          iconSize={19}
+        />
       </View>
     </View>
   );

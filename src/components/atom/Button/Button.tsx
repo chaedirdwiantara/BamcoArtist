@@ -25,6 +25,8 @@ interface ButtonProps {
   onPress?: () => void;
   typeOfButton?: 'withIcon' | undefined;
   iconColor?: string;
+  iconSize?: number;
+  gapTextToIcon?: number;
 }
 
 export const Button: React.FC<ButtonProps> = (props: ButtonProps) => {
@@ -38,6 +40,8 @@ export const Button: React.FC<ButtonProps> = (props: ButtonProps) => {
     onPress,
     typeOfButton,
     iconColor = Color.Pink[200],
+    gapTextToIcon,
+    iconSize,
   } = props;
 
   const withBorder = type === 'border' && {
@@ -61,8 +65,12 @@ export const Button: React.FC<ButtonProps> = (props: ButtonProps) => {
         <Text style={[styles.labelStyle, textStyles]}>{label}</Text>
         {typeOfButton === 'withIcon' && (
           <View style={{flexDirection: 'row'}}>
-            <Gap width={4} />
-            <ChevronDownIcon width={16} height={16} stroke={iconColor} />
+            <Gap width={gapTextToIcon ?? 4} />
+            <ChevronDownIcon
+              width={iconSize ?? 16}
+              height={iconSize ?? 16}
+              stroke={iconColor}
+            />
           </View>
         )}
       </View>
