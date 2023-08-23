@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import React, {FC, useEffect, useState} from 'react';
 import {elipsisText, widthResponsive} from '../../utils';
-import {Gap} from '../../components';
+import {Gap, VoteCard} from '../../components';
 import ImageList from './ImageList';
 import MusicListPreview from '../../components/molecule/MusicPreview/MusicListPreview';
 import {PostList} from '../../interface/feed.interface';
@@ -145,6 +145,8 @@ const ChildrenCard: FC<ChildrenCardProps> = (props: ChildrenCardProps) => {
                   />
                 </TouchableOpacity>
               )}
+              {/*// TODO: UPDATE HERE*/}
+              {/* <VoteCard /> */}
             </View>
           </View>
         </>

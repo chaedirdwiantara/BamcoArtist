@@ -72,6 +72,7 @@ import TopFans from './TopFans/TopFans';
 import SuccessToast from './Toast/SuccessToast';
 import {UseReferralContent} from './SettingContent/UseReferralContent';
 import {UserInfoCard} from './UserInfoCard/UserInfoCard';
+import VoteCard from './Vote';
 
 export {
   AccountContent,
@@ -148,4 +149,5 @@ export {
   SuccessToast,
   UseReferralContent,
   UserInfoCard,
+  VoteCard,
 };
