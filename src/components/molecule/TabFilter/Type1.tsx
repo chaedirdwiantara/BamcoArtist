@@ -26,6 +26,7 @@ interface TabFilterProps {
   flatlistContainerStyle?: ViewStyle;
   TouchableStyle?: ViewStyle;
   translation?: boolean;
+  animation?: boolean;
 }
 
 const SelectedColor = color.Pink[200];
@@ -39,6 +40,7 @@ const Type1: React.FC<TabFilterProps> = ({
   flatlistContainerStyle,
   TouchableStyle,
   translation,
+  animation,
 }) => {
   const {t} = useTranslation();
   const {compBTranslateY} = useScrollStore();
@@ -48,9 +50,10 @@ const Type1: React.FC<TabFilterProps> = ({
       style={[
         styles.tab,
         {
-          transform: compBTranslateY
-            ? [{translateY: compBTranslateY}]
-            : undefined,
+          transform:
+            animation && compBTranslateY
+              ? [{translateY: compBTranslateY}]
+              : undefined,
         },
         containerStyle,
       ]}>

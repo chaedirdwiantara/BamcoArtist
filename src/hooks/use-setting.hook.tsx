@@ -19,6 +19,9 @@ import {
   listReason,
   getListRole,
   listViolations,
+  createShipping,
+  updateShipping,
+  deleteShipping,
 } from '../api/setting.api';
 import {
   ChangePasswordProps,
@@ -44,8 +47,9 @@ export const useSettingHook = () => {
   const [errorMsg, setErrorMsg] = useState<string>('');
   const [successMsg, setSuccessMsg] = useState<string>('');
   const [fetchData, setFetchData] = useState(true);
-  const [dataShippingInfo, setDataShippingInfo] =
-    useState<DataShippingProps | null>(null);
+  const [dataShippingInfo, setDataShippingInfo] = useState<DataShippingProps[]>(
+    [],
+  );
   const [dataExclusiveContent, setDataExclusiveContent] =
     useState<DataExclusiveResponse | null>(null);
   const [listMood, setListMood] = useState<PreferenceList[]>([]);
@@ -292,12 +296,49 @@ export const useSettingHook = () => {
     setIsLoading(true);
     try {
       const response = await getShipping();
-      setDataShippingInfo(response.data);
-      setFetchData(false);
+      return {
+        data: response?.data,
+        message: response?.message,
+      };
     } catch (error) {
       setIsError(true);
-      setDataShippingInfo(null);
-      setFetchData(false);
+      setDataShippingInfo([]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const createShippingInfo = async (props: DataShippingProps) => {
+    setIsLoading(true);
+    try {
+      await createShipping(props);
+    } catch (error) {
+      setIsError(true);
+      setDataShippingInfo([]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const updateShippingInfo = async (props: DataShippingProps) => {
+    setIsLoading(true);
+    try {
+      await updateShipping(props);
+    } catch (error) {
+      setIsError(true);
+      setDataShippingInfo([]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const deleteShippingInfo = async (props: DataShippingProps) => {
+    setIsLoading(true);
+    try {
+      await deleteShipping(props);
+    } catch (error) {
+      setIsError(true);
+      setDataShippingInfo([]);
     } finally {
       setIsLoading(false);
     }
@@ -523,5 +564,8 @@ export const useSettingHook = () => {
     getListGenreSong,
     getListRolesInIndustry,
     getListViolations,
+    createShippingInfo,
+    updateShippingInfo,
+    deleteShippingInfo,
   };
 };

@@ -558,7 +558,8 @@
       "Music": "MUSIC",
       "Fans": "樂迷",
       "Merchandise": "MERCHANDISE",
-      "Ticket": "TICKET"
+      "Ticket": "TICKET",
+      "Event": "EVENT"
     }
   },
   "ExclusiveContent": {
@@ -689,8 +690,23 @@
     },
     "Shipping": {
       "Title": "運送信息",
-      "Confirm": "Are you sure you want to save your shipping information?",
+      "AddNewAddress": "+ Add New Address",
+      "MainAddress": "Main Address",
+      "New": "New",
+      "EditAddress": "Edit Address",
+      "ChangeMainAddress": "Change Main Address",
       "Confirm2": "Are you sure you want to save your shipping information and continue your progress?",
+      "ConfirmChangeMainAddress": "Are you sure you want to change your main address?",
+      "AddAddress": "Add New Address",
+      "ConfirmAddAddress": "Are you sure you want to add new address?",
+      "ChangeAddress": "Change Address",
+      "ConfirmChangeAddress": "Are you sure you want to change your address?",
+      "DeleteAddress": "Delete Address",
+      "ConfirmDeleteAddress": "Are you sure you want to delete your address?",
+      "ToastMainAddress": "Your main address has been updated!",
+      "ToastAddAddress": "Address has been added!",
+      "ToastChangeAddress": "Address has been updated!",
+      "ToastDeleteAddress": "Address has been deleted!",
       "Label": {
         "Email": "電子郵件",
         "Phone": "電話號碼",
@@ -699,7 +715,9 @@
         "Country": "國家",
         "Postal": "郵政編碼",
         "City": "城市",
-        "Address": "地址"
+        "Address": "地址",
+        "FirstName": "First Name",
+        "LastName": "Last Name"
       },
       "Placeholder": {
         "Email": "Add Email",
@@ -709,8 +727,11 @@
         "Country": "Select Country",
         "Postal": "Add Postal Code",
         "City": "Select City",
-        "Address": "Add Address"
-      }
+        "Address": "Add Address",
+        "FirstName": "Add First Name",
+        "LastName": "Add Last Name"
+      },
+      "EmptyState": "You need to provide shipping information to receive your purchased merchandise. Please add a new address to your shipping information."
     },
     "Preference": {
       "Title": "偏好",

@@ -6,18 +6,17 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import Color from '../../theme/Color';
 import {SettingContent} from '../../components';
 import {RootStackParams} from '../../navigations';
-import {useSettingHook} from '../../hooks/use-setting.hook';
-import {useProfileHook} from '../../hooks/use-profile.hook';
 import {usePlayerStore} from '../../store/player.store';
+import {useProfileHook} from '../../hooks/use-profile.hook';
 import {dummyViolations} from '../../data/Settings/setting';
+import {useSettingHook} from '../../hooks/use-setting.hook';
 
 export const SettingScreen: React.FC = () => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
 
   const {dataProfile, getProfileUser} = useProfileHook();
-  const {dataShippingInfo, listViolation, getShippingInfo, getListViolations} =
-    useSettingHook();
+  const {listViolation, getListViolations} = useSettingHook();
   const {setWithoutBottomTab, show} = usePlayerStore();
 
   useFocusEffect(
@@ -31,7 +30,6 @@ export const SettingScreen: React.FC = () => {
   useFocusEffect(
     useCallback(() => {
       getProfileUser();
-      getShippingInfo();
       getListViolations();
     }, []),
   );
@@ -48,7 +46,7 @@ export const SettingScreen: React.FC = () => {
         fromScreen: 'setting',
       });
     } else if (screenName === 'ShippingInformation') {
-      navigation.navigate(screenName, {data: dataShippingInfo});
+      navigation.navigate('ListAddress', {from: ''});
     } else {
       navigation.navigate(screenName, {...params});
     }

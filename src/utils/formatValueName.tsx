@@ -1,5 +1,6 @@
 import {
   CitiesCountryResponseType,
+  DataCountryType,
   DataStatePropsType,
 } from '../interface/location.interface';
 import {ListRoleType, PreferenceList} from '../interface/setting.interface';
@@ -43,9 +44,20 @@ const formatValueNameCity = (data: string[]) => {
   });
 };
 
+const formatValueNameCountry = (data: DataCountryType[]) => {
+  return data.map(item => {
+    return {
+      label: item.name,
+      value: item.countryCode,
+      id: item.id,
+    };
+  });
+};
+
 export {
   formatValueName,
   formatValueName2,
   formatValueNameState,
   formatValueNameCity,
+  formatValueNameCountry,
 };

@@ -8,6 +8,7 @@ import {
 import {
   formatValueName2,
   formatValueNameCity,
+  formatValueNameCountry,
   formatValueNameState,
 } from '../utils/formatValueName';
 import {DataStateProps, ListCountryType} from '../interface/location.interface';
@@ -34,6 +35,23 @@ export const useLocationHook = () => {
         order: 'asc',
       });
       const newResp = formatValueName2(response.data);
+      setDataAllCountry(newResp);
+    } catch (error) {
+      setIsError(true);
+      setDataAllCountry([]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const getDataAllCountryShipping = async () => {
+    setIsLoading(true);
+    try {
+      const response = await getAllCountry({
+        perPage: 300,
+        order: 'asc',
+      });
+      const newResp = formatValueNameCountry(response.data);
       setDataAllCountry(newResp);
     } catch (error) {
       setIsError(true);
@@ -100,5 +118,6 @@ export const useLocationHook = () => {
     getStateInCountry,
     getCitiesInState,
     getCitiesOfCountry,
+    getDataAllCountryShipping,
   };
 };

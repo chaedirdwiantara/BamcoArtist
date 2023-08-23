@@ -1,10 +1,18 @@
 import React from 'react';
-import {Text, View, StyleSheet, Dimensions} from 'react-native';
+import {
+  Text,
+  View,
+  StyleSheet,
+  Dimensions,
+  TouchableWithoutFeedback,
+} from 'react-native';
 import {color, font} from '../../../theme';
-import Color from '../../../theme/Color';
-import Font from '../../../theme/Font';
-import {normalize, widthPercentage, widthResponsive} from '../../../utils';
+import {normalize, widthResponsive} from '../../../utils';
 import {Avatar, Gap} from '../../atom';
+import {WordReplacerType} from '../../../interface/notification.interface';
+import {useNavigation} from '@react-navigation/native';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {RootStackParams} from '../../../navigations';
 
 const {width} = Dimensions.get('screen');
 
@@ -17,13 +25,74 @@ interface ListAvatarProps {
   data?: AvatarItem[];
   size?: number;
   desc?: string;
+  wordReplacer?: WordReplacerType[];
 }
 
 export const ListAvatar: React.FC<ListAvatarProps> = (
   props: ListAvatarProps,
 ) => {
-  const {data = [], size = width * 0.08, desc} = props;
+  const {data = [], size = width * 0.08, desc, wordReplacer} = props;
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParams>>();
   const moreThanThree = `+${data.length - 3}`;
+  const linkTNC =
+    wordReplacer && wordReplacer?.length > 0
+      ? wordReplacer[0].link
+      : 'https://www.thebeam.co/termsandcondition';
+  const colorLinkTNC =
+    wordReplacer && wordReplacer?.length > 0
+      ? wordReplacer[0].color
+      : color.Pink[200];
+  const linkSettings =
+    wordReplacer && wordReplacer?.length > 0 ? wordReplacer[1].link : 'Setting';
+  const colorLinkSettings =
+    wordReplacer && wordReplacer?.length > 0
+      ? wordReplacer[1].color
+      : color.Pink[200];
+
+  const onPressFirstSpecialText = () => {
+    navigation.navigate('Webview', {
+      title: 'Terms and Conditions',
+      url: linkTNC,
+    });
+  };
+
+  const onPressSecondSpecialText = () => {
+    navigation.navigate('SendAppeal', {title: 'Send Appeal'});
+  };
+
+  const renderDesc = (text: string | undefined) => {
+    return text?.split(' ').map((word, index) => {
+      if (word.includes('#0')) {
+        return (
+          <TouchableWithoutFeedback
+            key={index}
+            onPress={() => onPressFirstSpecialText()}>
+            <Text style={[styles.fullname, {color: colorLinkTNC}]}>
+              {wordReplacer && wordReplacer?.length > 0
+                ? wordReplacer[0].text
+                : word}{' '}
+            </Text>
+          </TouchableWithoutFeedback>
+        );
+      } else if (word.includes('#1')) {
+        return (
+          <TouchableWithoutFeedback
+            key={index}
+            onPress={() => onPressSecondSpecialText()}>
+            <Text style={[styles.fullname, {color: colorLinkSettings}]}>
+              {wordReplacer && wordReplacer?.length > 0
+                ? wordReplacer[1].text
+                : word}{' '}
+            </Text>
+          </TouchableWithoutFeedback>
+        );
+      } else {
+        return word + ' ';
+      }
+    });
+  };
+
   return (
     <>
       {data.length !== 0 && (
@@ -47,8 +116,8 @@ export const ListAvatar: React.FC<ListAvatarProps> = (
       )}
 
       <View style={{width: '100%', maxWidth: '90%'}}>
-        <Text style={styles.fullname} numberOfLines={2}>
-          {desc}
+        <Text style={styles.fullname} numberOfLines={4}>
+          {renderDesc(desc)}
         </Text>
       </View>
     </>

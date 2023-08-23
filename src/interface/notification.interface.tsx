@@ -11,6 +11,12 @@ export type PaginationType = {
   total: number;
 };
 
+export type WordReplacerType = {
+  text: string;
+  link: string;
+  color: string;
+};
+
 export type ListNotificationData = {
   id: string;
   notifImage: null | string;
@@ -18,6 +24,7 @@ export type ListNotificationData = {
   action: string;
   isRead: number;
   createdAt: string;
+  wordReplacer: WordReplacerType[];
 };
 
 export type ListNotificationResponseType = {

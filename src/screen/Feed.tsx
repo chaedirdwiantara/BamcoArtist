@@ -337,6 +337,7 @@ export const FeedScreen: React.FC = () => {
                     : heightResponsive(barHeight + 60),
                 left: widthResponsive(24),
               }}
+              animation
             />
             {filter[selectedIndex].filterName === 'Feed.Public' ? (
               <PostListPublic

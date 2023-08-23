@@ -1,79 +1,96 @@
-import React, {FC} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import {RefreshControl, StyleSheet, View} from 'react-native';
-import {CrackEggIcon, FriedEggIcon, TicketIcon} from '../../assets/icon';
-import Color from '../../theme/Color';
 import {heightPercentage, heightResponsive, widthResponsive} from '../../utils';
-import {EmptyState} from '../../components';
 import {FlashList} from '@shopify/flash-list';
 import MerchListCard from '../../components/molecule/ListCard/MerchListCard';
 import {useEventHook} from '../../hooks/use-event.hook';
+import {EmptyState} from '../../components';
+import {CrackEggIcon} from '../../assets/icon';
+import Color from '../../theme/Color';
+import {useInfiniteQuery} from 'react-query';
 import {MerchData} from '../../interface/event.interface';
-import {useQuery} from 'react-query';
 import {useTranslation} from 'react-i18next';
 import LoadingSpinner from '../../components/atom/Loading/LoadingSpinner';
-
 type ConcertListType = {
   type?: string;
+  musicianId?: string;
 };
 
 const ConcertList: FC<ConcertListType> = props => {
   const {t} = useTranslation();
-  const {type = 'action'} = props;
-  const {getListDataConcert} = useEventHook();
+  const {type = 'action', musicianId = ''} = props;
+  const {searchListDataTicket} = useEventHook();
+  const [dataConcert, setDataConcert] = useState<MerchData[] | undefined>([]);
+  const [totalPage, setTotalPage] = useState<number>(1);
 
   const {
     data: dataConcertList,
     isLoading,
     refetch,
     isRefetching,
-  } = useQuery([`/concert/${type}`], () => getListDataConcert());
-
-  const filterList: MerchData | undefined = dataConcertList?.data.find(
-    concert => {
-      return concert.name === 'event_latest';
+    fetchNextPage,
+    isFetchingNextPage,
+    hasNextPage,
+  } = useInfiniteQuery(
+    [`/ticket/${type}/${musicianId}`],
+    ({pageParam = 1}) =>
+      searchListDataTicket({
+        pageNo: pageParam,
+        pageSize: 10,
+        referer: 'beamco',
+        referId: musicianId,
+      }),
+    {
+      getNextPageParam: lastPage => {
+        if ((lastPage?.data?.length as number) < totalPage) {
+          const nextPage = (lastPage?.data?.length as number) + 1;
+          return nextPage;
+        }
+        return null;
+      },
     },
   );
 
+  useEffect(() => {
+    if (dataConcertList?.pages?.[0] !== undefined) {
+      setDataConcert(
+        dataConcertList?.pages?.map((page: any) => page.data).flat() ?? [],
+      );
+      const total = Math.ceil(dataConcertList?.pages?.[0]?.total ?? 1);
+      setTotalPage(total);
+    } else {
+      setDataConcert([]);
+      setTotalPage(1);
+    }
+  }, [dataConcertList]);
+
+  const loadMore = () => {
+    if (hasNextPage) {
+      fetchNextPage();
+    }
+  };
+
   return (
     <>
-      {(isLoading || isRefetching) && (
-        <View style={styles.loadingContainer}>
-          <LoadingSpinner />
-        </View>
-      )}
-
-      <EmptyState
-        icon={
-          <CrackEggIcon
-            fill={Color.Dark[500]}
-            width={widthResponsive(150)}
-            height={heightResponsive(150)}
-            style={styles.iconEmpty}
-          />
-        }
-        text={t('Event.Concert.ComingSoon.Title') || ''}
-        subtitle={t('Event.Concert.ComingSoon.Subtitle') || ''}
-        containerStyle={styles.containerEmpty}
-      />
-
-      {/* TODO: Update when API ready */}
-      {/* <FlashList
-        data={filterList?.data}
+      <FlashList
+        data={dataConcert}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.ListContainer}
-        // keyExtractor={item => item.id.toString()}
+        keyExtractor={item => item?.id.toString()}
+        onTouchEnd={loadMore}
         ListEmptyComponent={
           !isLoading && !isRefetching ? (
             <EmptyState
               icon={
-                <TicketIcon
+                <CrackEggIcon
                   fill={Color.Dark[500]}
                   width={widthResponsive(150)}
                   height={heightResponsive(150)}
                   style={styles.iconEmpty}
                 />
               }
-              text={t('Event.Concert.NoConcert') || ''}
+              text={t('Event.Concert.ComingSoon.Title') || ''}
+              subtitle={t('Event.Concert.ComingSoon.Subtitle') || ''}
               containerStyle={styles.containerEmpty}
             />
           ) : null
@@ -82,25 +99,32 @@ const ConcertList: FC<ConcertListType> = props => {
           <MerchListCard
             id={item.id}
             containerStyles={
-              index % 2 == 0 ? {marginRight: 10} : {marginLeft: 10}
+              index % 2 === 0 ? {marginRight: 10} : {marginLeft: 10}
             }
             image={item.pic}
             title={item.title}
             owner={item.organizer?.name}
             ownerImage={item.organizer?.pic}
-            price={item.price}
+            price={item.price / 100}
+            priceBeforeDisc={item.originalPrice / 100}
             desc={item.content}
             currency={item.currencyCode}
             type={'concert'}
             charge={item.charge}
+            currencyCode={item.currencyCode}
           />
         )}
         estimatedItemSize={150}
         numColumns={2}
         refreshControl={
-          <RefreshControl refreshing={isRefetching} onRefresh={refetch} />
+          <RefreshControl refreshing={false} onRefresh={refetch} />
         }
-      /> */}
+      />
+      {(isLoading || isRefetching || isFetchingNextPage) && (
+        <View style={styles.loadingContainer}>
+          <LoadingSpinner />
+        </View>
+      )}
     </>
   );
 };
@@ -109,7 +133,7 @@ export default ConcertList;
 
 const styles = StyleSheet.create({
   ListContainer: {
-    paddingVertical: heightPercentage(25),
+    paddingTop: heightPercentage(15),
     paddingBottom: heightPercentage(200),
   },
   containerEmpty: {

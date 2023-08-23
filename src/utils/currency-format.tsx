@@ -38,7 +38,7 @@ const kFormatter2 = (num: number = 0, fixed: number = 0) => {
 
 const kFormatter3 = (num: number = 0) => {
   const numberString = ((Math.sign(num) * Math.abs(num)) / 1000).toString();
-  const value = numberString.substring(0, numberString.length - 1);
+  const value = numberString.substring(0);
   return Math.abs(num) > 999 ? value + 'K' : Math.sign(num) * Math.abs(num);
 };
 

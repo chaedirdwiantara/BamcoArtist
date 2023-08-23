@@ -46,18 +46,27 @@ export type ChangePasswordResponseType = {
 };
 
 export type DataShippingProps = {
-  email: string;
-  phoneNumber: string;
+  bookyayShipmentID?: string;
   phoneNumberCode: string;
-  fullname: string;
+  phoneNumber: string;
+  receiverFirstname: string;
+  receiverLastname: string;
   province: string;
   country: string;
   postalCode: number;
   city: string;
   address: string;
+  isDefault?: boolean;
 };
 
 export type ShippingResponseType = {
+  code: number;
+  data: DataShippingProps[];
+  message: string;
+  status: number;
+};
+
+export type UpdateShippingResponseType = {
   code: number;
   data: DataShippingProps;
   message: string;
