@@ -45,7 +45,10 @@ const CommentAppeal: React.FC<CommentAppealPropsType> = ({
           <Gap width={12} />
         </>
       )}
-      <TouchableOpacity style={styles.componentStyle} onPress={onPressSelected}>
+      <TouchableOpacity
+        activeOpacity={hideChoiceIcon ? 1 : 0}
+        style={styles.componentStyle}
+        onPress={onPressSelected}>
         <PostComment
           fullName={fullname}
           userName={username}

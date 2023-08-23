@@ -259,11 +259,10 @@ export type RootStackParams = {
   };
   SendAppeal: {
     title: string;
-    selectedViolation?:
-      | PostReportedType
-      | CommentReportedType
-      | SongReportedType
-      | AlbumReportedType;
+    selectedViolation?: PostReportedType &
+      CommentReportedType &
+      SongReportedType &
+      AlbumReportedType;
   };
   SendReport: {
     title: string;

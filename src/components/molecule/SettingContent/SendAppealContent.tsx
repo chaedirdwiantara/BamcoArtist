@@ -24,11 +24,10 @@ import {useUploadImageHook} from '../../../hooks/use-uploadImage.hook';
 
 interface SendAppealProps {
   title: string;
-  selectedViolation?:
-    | PostReportedType
-    | CommentReportedType
-    | SongReportedType
-    | AlbumReportedType;
+  selectedViolation?: PostReportedType &
+    CommentReportedType &
+    SongReportedType &
+    AlbumReportedType;
   onPressGoBack: () => void;
   goToSetting: () => void;
 }

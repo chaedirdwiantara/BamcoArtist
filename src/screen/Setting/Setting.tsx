@@ -58,7 +58,7 @@ export const SettingScreen: React.FC = () => {
     <View style={styles.root}>
       <SettingContent
         dataProfile={dataProfile}
-        listViolation={dummyViolations}
+        listViolation={listViolation}
         onPressGoBack={onPressGoBack}
         onPressGoTo={onPressGoTo}
       />

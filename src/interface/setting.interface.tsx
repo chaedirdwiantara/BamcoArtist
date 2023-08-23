@@ -240,10 +240,20 @@ export type CommentReportedType = {
 
 export type SongReportedType = {
   reportedViolationId: number;
+  songId: number;
+  image: string;
+  title: string;
+  musicianName: string;
+  songDuration: string;
 };
 
 export type AlbumReportedType = {
   reportedViolationId: number;
+  albumId: number;
+  image: string;
+  title: string;
+  productionYear: string;
+  songTotal: number;
 };
 
 export type ListViolationsType = {
