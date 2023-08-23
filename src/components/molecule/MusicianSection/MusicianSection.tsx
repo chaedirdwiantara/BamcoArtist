@@ -34,7 +34,7 @@ interface MusicianProps {
   type?: string;
   isLive?: boolean;
   showCredit?: boolean;
-  creditCount: number;
+  creditCount?: number;
 }
 
 interface DataMore {
