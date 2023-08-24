@@ -4,6 +4,7 @@ import {
   CreateIapPropsType,
   CreateIapResponseType,
   CreditResponseType,
+  GetTransactionHistoryResponseType,
   SessionPurchaseProps,
   SessionPurchaseResponseType,
   SubsECParams,
@@ -176,3 +177,13 @@ export const getListRevenue = async ({
 
   return data;
 };
+
+export const getHistoryTransaction =
+  async (): Promise<GetTransactionHistoryResponseType> => {
+    const {data} = await SsuAPI().request<GetTransactionHistoryResponseType>({
+      url: '/trx/record',
+      method: 'GET',
+    });
+
+    return data;
+  };

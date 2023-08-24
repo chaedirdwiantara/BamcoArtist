@@ -154,3 +154,37 @@ export interface CreateIapResponseType extends BaseResponseApi {
     deletedAt: string;
   };
 }
+
+export type TransactionHistoryPropsType = {
+  id: string;
+  owner: string;
+  ownerType: number;
+  trxType: number;
+  trxTypeString: string;
+  trxMethod: number;
+  trxMethodString: string;
+  trxReferenceId: string;
+  credit: number;
+  creditAfterTrx: number;
+  packageId: string;
+  currency: string;
+  packagePrice: number;
+  trxStatus: number;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: string;
+};
+
+export type GetTransactionHistoryResponseType = {
+  code: number;
+  data: TransactionHistoryPropsType[];
+  message: string;
+  meta: {
+    Page: number;
+    DataOffset: number;
+    PerPage: number;
+    TotalData: number;
+    TotalPage: number;
+  };
+  status: number;
+};
