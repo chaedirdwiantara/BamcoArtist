@@ -7,7 +7,7 @@ import Color from '../../theme/Color';
 import {RootStackParams} from '../../navigations';
 import {TopUpCreditContent} from '../../components';
 import {usePlayerStore} from '../../store/player.store';
-import { TransactionHistoryPropsType } from '../../interface/credit.interface';
+import {TransactionHistoryPropsType} from '../../interface/credit.interface';
 
 export const TopUpCreditScreen: React.FC = () => {
   const navigation =

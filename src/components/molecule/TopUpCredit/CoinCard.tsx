@@ -9,7 +9,7 @@ import {
 
 import {Gap} from '../../atom';
 import {CoinIcon} from '../../../assets/icon';
-import {color, typography} from '../../../theme/';
+import {color, typography} from '../../../theme';
 import {
   getCoinFromProductId,
   heightPercentage,
