@@ -46,9 +46,7 @@ const styles = StyleSheet.create({
     width: widthResponsive(20),
     height: widthResponsive(15),
   },
-  idContainer: {
-    width: widthResponsive(15),
-  },
+  idContainer: {},
   childOne: {
     flexDirection: 'row',
     alignItems: 'center',
