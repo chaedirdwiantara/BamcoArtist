@@ -146,7 +146,7 @@ const ChildrenCard: FC<ChildrenCardProps> = (props: ChildrenCardProps) => {
                 </TouchableOpacity>
               )}
               {/*// TODO: UPDATE HERE*/}
-              <VoteCard />
+              {/* <VoteCard /> */}
             </View>
           </View>
         </>
