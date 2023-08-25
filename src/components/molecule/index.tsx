@@ -69,7 +69,7 @@ import {ShowCreditContent} from './SongDetailsContent/ShowCreditContent';
 import {TabFilter} from './TabFilter';
 import TermAndConditions from './Tnc';
 import Title from './Title';
-import {TopupCoinContent} from './TopupCoin';
+import {TopUpCreditContent} from './TopUpCredit';
 import {TopNavigation} from './TopNavigation';
 import TopFans from './TopFans/TopFans';
 import SuccessToast from './Toast/SuccessToast';
@@ -149,7 +149,7 @@ export {
   TermAndConditions,
   Title,
   TopNavigation,
-  TopupCoinContent,
+  TopUpCreditContent,
   TopFans,
   SuccessToast,
   UseReferralContent,

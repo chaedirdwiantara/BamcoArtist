@@ -95,12 +95,13 @@ import {SongDetailsScreen} from '../screen/SongDetails/SongDetails';
 import {AlbumScreen} from '../screen/Album/Album';
 
 // TopUp
-import {TopupCoinScreen} from '../screen/TopupCoin';
+import {TopUpCreditScreen} from '../screen/TopUpCredit/TopUpCredit';
 import {WithdrawalScreen} from '../screen/Withdrawal';
 import {InputWithdrawalScreen} from '../screen/Withdrawal/InputWithdrawal';
 import {AddBankAccountScreen} from '../screen/Withdrawal/AddBankAccount';
 import {EditBankAccountScreen} from '../screen/Withdrawal/EditBankAccount';
 import {VerifCodeWithdrawalScreen} from '../screen/Withdrawal/VerifCodeWithdrawal';
+import {DetailHistoryTransactionScreen} from '../screen/TopUpCredit/DetailHistoryTransaction';
 
 // Action
 import Cart from '../screen/Action/Cart';
@@ -160,6 +161,7 @@ import {SplashScreen} from '../screen/SplashScreen';
 import {SongAlbum} from '../interface/song.interface';
 import ListPlaylist from '../screen/Playlist/ListPlaylist';
 import {MyQRCode} from '../screen/Setting/MyQRCode';
+import {TransactionHistoryPropsType} from '../interface/credit.interface';
 
 export type RootStackParams = {
   AboutDeletion: undefined;
@@ -184,6 +186,9 @@ export type RootStackParams = {
   };
   OtpPhoneNumber: OtpPhoneScreen;
   CreateNewPlaylist: {id?: number[]; type?: string};
+  DetailHistoryTransaction: {
+    dataDetail: TransactionHistoryPropsType;
+  };
   DonationAndSubscription: undefined;
   EditProfile: {data: ProfileResponseData};
   EditPlaylist: Playlist;
@@ -294,7 +299,7 @@ export type RootStackParams = {
   PostDetail: PostList;
   SearchScreen: undefined;
   TnCAndPP: undefined;
-  TopupCoin: undefined;
+  TopUpCredit: undefined;
   MusicianProfile: {
     id: string;
   };
@@ -551,7 +556,11 @@ export const RootStackScreen = () => (
     <RootStack.Screen name="MusicianProfile" component={MusicianProfile} />
     <RootStack.Screen name="Webview" component={WebviewPage} />
     <RootStack.Screen name="MusicPlayer" component={MusicPlayer} />
-    <RootStack.Screen name="TopupCoin" component={TopupCoinScreen} />
+    <RootStack.Screen name="TopUpCredit" component={TopUpCreditScreen} />
+    <RootStack.Screen
+      name="DetailHistoryTransaction"
+      component={DetailHistoryTransactionScreen}
+    />
     <RootStack.Screen name="Withdrawal" component={WithdrawalScreen} />
     <RootStack.Screen
       name="InputWithdrawal"

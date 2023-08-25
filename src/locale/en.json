@@ -1131,6 +1131,25 @@
       "Transaction": "Transaction",
       "Withdrawal": "Withdrawal"
     },
+    "Transaction": {
+      "SuccessPurchased": "{{credit}} Coin have been purchased",
+      "Detail": {
+        "Title": "Transaction Details",
+        "StatusInfo": "Credit added successfully!",
+        "ReferenceNumber": "Reference Number",
+        "Status": "Status",
+        "Success": "Success",
+        "Failed": "Failed",
+        "Date": "Date",
+        "Time": "Time",
+        "PaymentMethods": "Payment Methods",
+        "Total": "Total",
+        "Credit": "Credit",
+        "Bonus": "Bonus",
+        "NeedHelp": "Need Help?",
+        "ContactSupport": "Contact our support"
+      }
+    },
     "Withdrawal": {
       "TransactionAmount": "Transaction Amount",
       "ConversionAmount": "Conversion Amount to HKD",
