@@ -6,8 +6,18 @@ import Typography from '../../../theme/Typography';
 import {heightResponsive, widthResponsive} from '../../../utils';
 import {Gap} from '../../atom';
 import {mvs} from 'react-native-size-matters';
+import {useTranslation} from 'react-i18next';
 
-const LiveTippingNav = () => {
+type Props = {
+  credit: number | string;
+  onPressCredit: () => void;
+  onPressGift: () => void;
+  isNewGift?: boolean;
+};
+
+const LiveTippingNav = (props: Props) => {
+  const {credit, onPressCredit, onPressGift, isNewGift} = props;
+  const {t} = useTranslation();
   return (
     <View
       style={{
@@ -23,27 +33,31 @@ const LiveTippingNav = () => {
               Typography.Overline,
               {color: Color.Neutral[10], fontWeight: '600'},
             ]}>
-            121.000
+            {credit}
           </Text>
         </View>
-        <TouchableOpacity style={styles.plusWrapper}>
+        <TouchableOpacity onPress={onPressCredit} style={styles.plusWrapper}>
           <AddIcon width={widthResponsive(14)} height={heightResponsive(14)} />
         </TouchableOpacity>
       </View>
       <Gap width={widthResponsive(20)} />
-      <View style={styles.rowCenter}>
+      <TouchableOpacity onPress={onPressGift} style={styles.rowCenter}>
         <GiftIcon
           stroke="#FFF"
           width={widthResponsive(18)}
           height={heightResponsive(18)}
         />
-        <View style={styles.talkBubble}>
-          <View style={styles.talkBubbleSquare}>
-            <Text style={[Typography.Overline, styles.claim]}>Claim</Text>
+        {isNewGift && (
+          <View style={styles.talkBubble}>
+            <View style={styles.talkBubbleSquare}>
+              <Text style={[Typography.Overline, styles.claim]}>
+                {t('ClaimReward.Claim')}
+              </Text>
+            </View>
+            <View style={styles.talkBubbleTriangle} />
           </View>
-          <View style={styles.talkBubbleTriangle} />
-        </View>
-      </View>
+        )}
+      </TouchableOpacity>
     </View>
   );
 };

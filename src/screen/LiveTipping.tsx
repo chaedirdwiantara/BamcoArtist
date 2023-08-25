@@ -20,7 +20,7 @@ export const LiveTipping = () => {
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
 
   const [showModalEmpty, setShowModalEmpty] = useState<boolean>(false);
-  const [showModalSession, setShowModalSession] = useState<boolean>(true);
+  const [showModalSession, setShowModalSession] = useState<boolean>(false);
 
   const handleBackAction = () => {
     navigation.goBack();
@@ -76,7 +76,13 @@ export const LiveTipping = () => {
         itemStrokeColor={'white'}
         leftIcon={<ArrowLeftIcon />}
         leftIconAction={handleBackAction}
-        rightIcon={<TopNavigation.LiveTippingNav />}
+        rightIcon={
+          <TopNavigation.LiveTippingNav
+            credit={'12.000'}
+            onPressCredit={() => navigation.navigate('TopUpCredit')}
+            onPressGift={() => navigation.navigate('ClaimReward', {id: '1'})}
+          />
+        }
         rightIconAction={() => null}
         containerStyles={{
           paddingHorizontal: widthResponsive(20),
@@ -185,10 +191,17 @@ export const LiveTipping = () => {
             </View>
             <Gap height={heightResponsive(16)} />
             <Text
-              style={[Typography.Body2, {fontWeight: '700', color: '#FFF'}]}>
+              style={[
+                Typography.Body2,
+                {fontWeight: '700', color: '#FFF', textAlign: 'center'},
+              ]}>
               {t('Modal.CreditEmpty.Title')}
             </Text>
-            <Text style={[Typography.Overline, {color: '#BDBDBD'}]}>
+            <Text
+              style={[
+                Typography.Overline,
+                {color: '#BDBDBD', textAlign: 'center'},
+              ]}>
               {t('Modal.CreditEmpty.Subtitle')}
             </Text>
             <Gap height={heightResponsive(20)} />
@@ -231,10 +244,17 @@ export const LiveTipping = () => {
             </View>
             <Gap height={heightResponsive(16)} />
             <Text
-              style={[Typography.Body2, {fontWeight: '700', color: '#FFF'}]}>
+              style={[
+                Typography.Body2,
+                {fontWeight: '700', color: '#FFF', textAlign: 'center'},
+              ]}>
               {t('Modal.SessionEnd.Title')}
             </Text>
-            <Text style={[Typography.Overline, {color: '#BDBDBD'}]}>
+            <Text
+              style={[
+                Typography.Overline,
+                {color: '#BDBDBD', textAlign: 'center'},
+              ]}>
               {t('Modal.SessionEnd.Subtitle')}
             </Text>
             <Gap height={heightResponsive(20)} />

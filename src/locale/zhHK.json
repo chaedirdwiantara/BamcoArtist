@@ -1470,5 +1470,11 @@
         "unblock": "Unblock"
       }
     }
+  },
+  "ClaimReward": {
+    "Title": "Reward Detail",
+    "ValidUntil": "Valid until",
+    "Claim": "Claim",
+    "Claimed": "Claimed"
   }
 }
