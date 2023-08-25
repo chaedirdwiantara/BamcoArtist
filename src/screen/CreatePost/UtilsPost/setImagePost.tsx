@@ -3,7 +3,7 @@ import {Image} from 'react-native-image-crop-picker';
 import {CreatePostProps, PostList} from '../../../interface/feed.interface';
 import {UploadVideoDataResponseType} from '../../../interface/uploadImage.interface';
 
-export const createOrUpdate = (
+export const setImagePost = (
   active: boolean,
   uri: Image[],
   dataResponseImg: string[],

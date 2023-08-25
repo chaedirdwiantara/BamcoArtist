@@ -28,22 +28,24 @@ import {
 } from '../../components';
 import {
   DataDropDownType,
+  dataDurationVote,
   dropdownCategoryMusician,
   dropDownSetAudience,
 } from '../../data/dropdown';
 import ImageList from './showImage';
+import VoteComponent from './VotePost';
 import {color, font} from '../../theme';
 import {useTranslation} from 'react-i18next';
 import {dummySongImg} from '../../data/image';
 import {RootStackParams} from '../../navigations';
 import {ms, mvs} from 'react-native-size-matters';
 import {useFeedHook} from '../../hooks/use-feed.hook';
+import {setImagePost} from './UtilsPost/setImagePost';
 import {usePlayerStore} from '../../store/player.store';
 import {editPostUtils} from './UtilsPost/editPostUtils';
 import {usePlayerHook} from '../../hooks/use-player.hook';
-import {createOrUpdate} from './UtilsPost/createOrUpdatePost';
+import {dataVoteProps} from '../../interface/vote.interface';
 import {heightResponsive, widthResponsive} from '../../utils';
-import {AddVoteIcon, ImportMusicIcon, ImportPhotoIcon} from '../../assets/icon';
 import {useTriggerUploadImage} from './UtilsPost/uploadImageUtils';
 import {useUploadImageHook} from '../../hooks/use-uploadImage.hook';
 import {ListDataSearchSongs} from '../../interface/search.interface';
@@ -51,15 +53,19 @@ import VideoComp from '../../components/molecule/VideoPlayer/videoComp';
 import {useDataVideoForPost, useVideoStore} from '../../store/video.store';
 import {convertCategoryValue, createAddMusicObject} from './UtilsPost/utils';
 import MusicPreview from '../../components/molecule/MusicPreview/MusicPreview';
+import {AddVoteIcon, ImportMusicIcon, ImportPhotoIcon} from '../../assets/icon';
 import {ModalLoading} from '../../components/molecule/ModalLoading/ModalLoading';
 import FilterModal from '../../components/molecule/V2/DropdownFilter/modalFilter';
-import VoteComponent from './VotePost';
 
 type PostDetailProps = NativeStackScreenProps<RootStackParams, 'CreatePost'>;
 
 const {StatusBarManager} = NativeModules;
 const barHeight = StatusBarManager.HEIGHT;
 export const {width} = Dimensions.get('screen');
+const vooteInitialChoices: dataVoteProps[] = [
+  {id: '1', text: ''},
+  {id: '2', text: ''},
+];
 
 const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   const {t} = useTranslation();
@@ -110,6 +116,12 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   const [showIcon, setShowIcon] = useState<
     'All' | 'ImageVideo' | 'Music' | 'Vote'
   >('All');
+  const [dataVote, setDataVote] =
+    useState<dataVoteProps[]>(vooteInitialChoices);
+  const [pollDuration, setPollDuration] = useState<DataDropDownType>(
+    dataDurationVote[0],
+  );
+  const [voteCompleted, setVoteCompleted] = useState<boolean>(true);
 
   // * Hooks for uploading
   const [uri, setUri] = useState<Image[]>([]);
@@ -232,18 +244,20 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   //  * 3. trigger hook to hit upload image api
   useTriggerUploadImage(
     active,
+    showIcon,
     uri,
     musicData,
     updateOn,
     uriVideo,
     updateToUpload,
     dataUpdatePostProps,
-    dataVideo,
     inputText,
     valueFilter,
     dataAudience,
     userId,
     show,
+    dataVote,
+    pollDuration,
     setCreatePost,
     setUpdatePost,
     setUploadImage,
@@ -264,7 +278,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   }, [dataImage]);
 
   // * 5. hook to hit create post api when all data uploaded has beed received
-  createOrUpdate(
+  setImagePost(
     active,
     uri,
     dataResponseImg,
@@ -399,10 +413,12 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
 
   const voteIconOnPress = () => {
     setShowIcon('Vote');
+    setVoteCompleted(false);
   };
 
   const cancelVoteOnPress = () => {
     setShowIcon('All');
+    setVoteCompleted(true);
   };
 
   return (
@@ -469,7 +485,15 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
                   seekPlayer={seekPlayer}
                 />
               ) : null}
-              {showIcon === 'Vote' && <VoteComponent />}
+              {showIcon === 'Vote' && (
+                <VoteComponent
+                  dataVote={dataVote}
+                  setDataVote={setDataVote}
+                  setVoteCompleted={setVoteCompleted}
+                  pollDuration={pollDuration}
+                  setPollDuration={setPollDuration}
+                />
+              )}
             </View>
 
             {/* // ! VIDEO AREA */}
@@ -583,7 +607,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
               </View>
             </View>
             <View style={styles.textCounter}>
-              {inputText.length > 0 ? (
+              {inputText.length > 0 && voteCompleted ? (
                 <ButtonGradient
                   label={t('Post.Title')}
                   containerStyles={{
@@ -608,8 +632,6 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
                     aspectRatio: undefined,
                     backgroundColor: color.Dark[50],
                   }}
-                  textStyles={{}}
-                  // onPress={handlePostOnPress}
                   disabled
                 />
               )}

@@ -1,5 +1,5 @@
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import React, {FC, useState} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import {color, font} from '../../../theme';
 import {mvs} from 'react-native-size-matters';
 import {widthResponsive} from '../../../utils';
@@ -7,24 +7,27 @@ import {DropDownFilter, Gap, SsuInput} from '../../../components';
 import {AddCircleIcon, MinusCircleWhiteIcon} from '../../../assets/icon';
 import {DataDropDownType, dataDurationVote} from '../../../data/dropdown';
 import {useTranslation} from 'react-i18next';
+import {dataVoteProps} from '../../../interface/vote.interface';
 
-interface VoteProps {}
-
-interface dataVoteProps {
-  id: number;
-  caption: string;
+interface VoteProps {
+  dataVote: dataVoteProps[];
+  pollDuration: DataDropDownType;
+  setPollDuration: React.Dispatch<React.SetStateAction<DataDropDownType>>;
+  setDataVote: React.Dispatch<React.SetStateAction<dataVoteProps[]>>;
+  setVoteCompleted: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const initialChoices: dataVoteProps[] = [
-  {id: 1, caption: ''},
-  {id: 2, caption: ''},
-];
-
 const VoteComponent: FC<VoteProps> = (props: VoteProps) => {
+  const {
+    dataVote,
+    setDataVote,
+    setVoteCompleted,
+    pollDuration,
+    setPollDuration,
+  } = props;
   const [selectedChoice, setSelectedChoice] = useState<number>(-1);
-  const [dataVote, setDataVote] = useState<dataVoteProps[]>(initialChoices);
-  const [selectedFilterMenu, setSelectedFilterMenu] =
-    useState<DataDropDownType>();
+  // const [selectedFilterMenu, setSelectedFilterMenu] =
+  //   useState<DataDropDownType>();
 
   const {t} = useTranslation();
 
@@ -34,14 +37,14 @@ const VoteComponent: FC<VoteProps> = (props: VoteProps) => {
 
   const handleCaptionChange = (newText: string, index: number) => {
     const updatedChoices = [...dataVote];
-    updatedChoices[index] = {...updatedChoices[index], caption: newText};
+    updatedChoices[index] = {...updatedChoices[index], text: newText};
     setDataVote(updatedChoices);
   };
 
   const handleAddChoice = () => {
     if (dataVote.length < 4) {
       const newId = dataVote.length + 1;
-      const newChoice = {id: newId, caption: ''};
+      const newChoice = {id: newId.toString(), text: ''};
       setDataVote([...dataVote, newChoice]);
     }
   };
@@ -54,6 +57,14 @@ const VoteComponent: FC<VoteProps> = (props: VoteProps) => {
     }
   };
 
+  useEffect(() => {
+    if (dataVote.some(item => item.text === '')) {
+      setVoteCompleted(false);
+    } else {
+      setVoteCompleted(true);
+    }
+  }, [dataVote]);
+
   return (
     <View>
       <View style={styles.TopContainer}>
@@ -62,7 +73,7 @@ const VoteComponent: FC<VoteProps> = (props: VoteProps) => {
             {index !== 0 && <Gap height={12} />}
             <View style={styles.inputContainer}>
               <SsuInput.InputText
-                value={item.caption}
+                value={item.text}
                 onChangeText={(newText: string) =>
                   handleCaptionChange(newText, index)
                 }
@@ -106,14 +117,10 @@ const VoteComponent: FC<VoteProps> = (props: VoteProps) => {
       <View style={styles.durationContainer}>
         <Text style={styles.duration}>{t('Vote.Duration')}</Text>
         <DropDownFilter
-          labelCaption={
-            selectedFilterMenu
-              ? t(selectedFilterMenu.label)
-              : t('Vote.Dropdown.OptionA')
-          }
+          labelCaption={t(pollDuration.label)}
           dataFilter={dataDurationVote}
-          selectedMenu={setSelectedFilterMenu}
-          leftPosition={widthResponsive(-70)}
+          selectedMenu={setPollDuration}
+          leftPosition={widthResponsive(-90)}
           topPosition={widthResponsive(3)}
           containerStyle={{
             marginTop: widthResponsive(0),
@@ -123,6 +130,7 @@ const VoteComponent: FC<VoteProps> = (props: VoteProps) => {
           iconColor={color.Neutral[10]}
           gapTextToIcon={10}
           iconSize={19}
+          dropdownStyle={{width: 105}}
         />
       </View>
     </View>

@@ -1,4 +1,5 @@
 import {PaginationType} from './base.interface';
+import {dataVoteProps} from './vote.interface';
 
 export type PostPropsTypeA = {
   id: string;
@@ -46,6 +47,9 @@ export type CreatePostProps = {
     encodeHlsUrl: string;
     duration: number;
   };
+  isPolling?: boolean;
+  pollingOptions?: dataVoteProps[];
+  pollDuration?: number;
 };
 
 export type DataComment = {
