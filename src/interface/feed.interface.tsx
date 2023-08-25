@@ -113,6 +113,13 @@ export type VideoResponseType = {
   duration: string;
 };
 
+export type PollingOptions = {
+  id: string;
+  text: string;
+  votes: number;
+  isVoted: boolean;
+};
+
 export type PostList = {
   id: string;
   caption: string;
@@ -132,6 +139,13 @@ export type PostList = {
   viewsCount: number;
   shareCount: number;
   reportSent?: boolean;
+  isPolling: boolean;
+  pollingOptions: PollingOptions[];
+  pollDuration: number;
+  pollCount: number;
+  isOwner: boolean;
+  isVoted: boolean;
+  pollTimeLeft: string;
 };
 
 export type ListPostResponseType = {

@@ -129,14 +129,7 @@ const ChildrenCard: FC<ChildrenCardProps> = (props: ChildrenCardProps) => {
                     dataVideo={data.video}
                     sourceUri={data.video.encodeHlsUrl}
                     onPress={() => {}}
-                    buttonIconsStyle={{
-                      position: 'absolute',
-                      bottom: widthResponsive(-5),
-                      width: width - widthResponsive(104),
-                      flexDirection: 'row',
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
-                    }}
+                    buttonIconsStyle={styles.videoIconStyle}
                     videoContainer={{
                       width: '100%',
                       height: width - widthResponsive(150),
@@ -145,8 +138,16 @@ const ChildrenCard: FC<ChildrenCardProps> = (props: ChildrenCardProps) => {
                   />
                 </TouchableOpacity>
               )}
-              {/*// TODO: UPDATE HERE*/}
-              {/* <VoteCard /> */}
+              {data.isPolling && (
+                <VoteCard
+                  pollingOptions={data.pollingOptions}
+                  pollTimeLeft={data.pollTimeLeft}
+                  pollCount={data.pollCount}
+                  isOwner={data.isOwner}
+                  isVoted={data.isVoted} //TODO: UPDATE FROM RESPONSE SET POST
+                  setGiveVote={() => {}}
+                />
+              )}
             </View>
           </View>
         </>
@@ -176,5 +177,13 @@ const styles = StyleSheet.create({
   videoStyle: {
     width: '100%',
     height: 300,
+  },
+  videoIconStyle: {
+    position: 'absolute',
+    bottom: widthResponsive(-5),
+    width: width - widthResponsive(104),
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
 });

@@ -1,53 +1,87 @@
 import {StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import React, {FC} from 'react';
 import * as Progress from 'react-native-progress';
 import {widthResponsive} from '../../../utils';
 import {color, font} from '../../../theme';
 import {mvs} from 'react-native-size-matters';
 import {Button, Gap} from '../../atom';
 import {CheckCircle2Icon} from '../../../assets/icon';
+import {PollingOptions} from '../../../interface/feed.interface';
 
-const VoteCard = () => {
+interface VoteCardProps {
+  pollingOptions: PollingOptions[];
+  pollTimeLeft: string;
+  pollCount: number;
+  isOwner: boolean;
+  isVoted: boolean;
+  setGiveVote?: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const VoteCard: FC<VoteCardProps> = (props: VoteCardProps) => {
+  const {
+    pollingOptions,
+    pollTimeLeft,
+    pollCount,
+    isOwner,
+    isVoted,
+    setGiveVote,
+  } = props;
   return (
     <View>
-      <View style={styles.voteTopContainer}>
-        <View style={styles.progressBarContainer}>
-          <Progress.Bar
-            progress={100 / 100}
-            width={null}
-            height={widthResponsive(27)}
-            borderWidth={0}
-            color={color.Pink[200]}
-            unfilledColor={color.DarkBlue[800]}
-            borderRadius={4}
-            animated={true}
-            animationType={'timing'}
-          />
-          <View style={styles.progressBarText}>
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <Text style={styles.progressBarChild}>Sweet Child katanya</Text>
-              <Gap width={4} />
-              <CheckCircle2Icon width={14} height={14} />
+      {pollingOptions?.map((item, i) => (
+        <>
+          {i !== 0 && <Gap height={6} />}
+          <View style={styles.voteTopContainer}>
+            <View style={styles.progressBarContainer}>
+              {/* // TODO: NEED TO UPDATE THE SOURCE AFTER SET POST */}
+              <Progress.Bar
+                progress={item.votes / 100}
+                width={null}
+                height={widthResponsive(27)}
+                borderWidth={0}
+                color={color.Pink[200]}
+                unfilledColor={color.DarkBlue[800]}
+                borderRadius={4}
+                animated={true}
+                animationType={'timing'}
+              />
+              <View style={styles.progressBarText}>
+                <View style={styles.textAreaProgress}>
+                  {/* // TODO: NEED TO UPDATE THE SOURCE AFTER SET POST */}
+                  <Text style={styles.progressBarChild}>{item.text}</Text>
+                  <Gap width={4} />
+                  {/* // TODO: NEED TO UPDATE THE SOURCE AFTER SET POST */}
+                  {item.isVoted && <CheckCircle2Icon width={14} height={14} />}
+                </View>
+                {/* // TODO: NEED TO UPDATE THE SOURCE AFTER SET POST */}
+                <Text style={styles.progressBarChild}>{`${item.votes}%`}</Text>
+              </View>
             </View>
-            <Text style={styles.progressBarChild}>70%</Text>
-          </View>
-        </View>
-        <View style={{flexDirection: 'row'}}>
-          <Gap width={4} />
-          <Button
-            label={'Vote'}
-            containerStyles={styles.buttonContainer}
-            textStyles={styles.textButton}
-          />
-        </View>
-      </View>
 
+            <View style={{flexDirection: 'row'}}>
+              <Gap width={4} />
+              {isOwner ||
+                (isVoted && (
+                  <Button
+                    label={'Vote'}
+                    containerStyles={styles.buttonContainer}
+                    textStyles={styles.textButton}
+                    // TODO: HANDLE SET GIVE VOTE
+                    onPress={() => setGiveVote}
+                  />
+                ))}
+            </View>
+          </View>
+        </>
+      ))}
       <Gap height={12} />
       <View style={styles.desc}>
-        <Text style={[styles.descText, {color: color.Pink[800]}]}>1 votes</Text>
+        <Text style={[styles.descText, {color: color.Pink[800]}]}>
+          {pollCount} votes
+        </Text>
         <Gap width={4} />
         <Text style={[styles.descText, {color: color.Dark[50]}]}>
-          6 day left
+          {pollTimeLeft ?? 'Failed to get data'}
         </Text>
       </View>
     </View>
@@ -102,4 +136,5 @@ const styles = StyleSheet.create({
     fontSize: mvs(10),
     fontWeight: '700',
   },
+  textAreaProgress: {flexDirection: 'row', alignItems: 'center'},
 });

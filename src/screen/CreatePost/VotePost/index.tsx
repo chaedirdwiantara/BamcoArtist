@@ -26,8 +26,6 @@ const VoteComponent: FC<VoteProps> = (props: VoteProps) => {
     setPollDuration,
   } = props;
   const [selectedChoice, setSelectedChoice] = useState<number>(-1);
-  // const [selectedFilterMenu, setSelectedFilterMenu] =
-  //   useState<DataDropDownType>();
 
   const {t} = useTranslation();
 
