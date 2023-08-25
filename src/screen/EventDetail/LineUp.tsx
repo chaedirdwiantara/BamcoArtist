@@ -1,7 +1,7 @@
 import React, {FC, useEffect, useState} from 'react';
 import {ScrollView, StyleSheet, View} from 'react-native';
 import {useTranslation} from 'react-i18next';
-import {ms, mvs} from 'react-native-size-matters';
+import {mvs} from 'react-native-size-matters';
 import {
   FollowMusicianPropsType,
   MusicianList,
@@ -10,9 +10,12 @@ import {heightResponsive, widthResponsive} from '../../utils';
 import {ParamsProps} from '../../interface/base.interface';
 import {ListDataSearchMusician} from '../../interface/search.interface';
 import LoadingSpinner from '../../components/atom/Loading/LoadingSpinner';
-import MusicianSection from '../../components/molecule/MusicianSection/MusicianSection';
 import {EmptyStateSongMusician} from '../../components/molecule/EmptyState/EmptyStateSongMusician';
 import Color from '../../theme/Color';
+import {useNavigation} from '@react-navigation/native';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {RootStackParams} from '../../navigations';
+import MusiciansListCard from '../../components/molecule/ListCard/MusiciansListCard';
 
 interface LineUpProps {
   type?: string;
@@ -30,8 +33,10 @@ interface LineUpProps {
   isLoading?: boolean;
 }
 
-const LineUp: FC<LineUpProps> = ({type, dataMusician, isLoading}) => {
+const LineUp: FC<LineUpProps> = ({dataMusician, isLoading}) => {
   const {t} = useTranslation();
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParams>>();
   const [listMusician, setListMusician] = useState(dataMusician);
 
   useEffect(() => {
@@ -45,9 +50,8 @@ const LineUp: FC<LineUpProps> = ({type, dataMusician, isLoading}) => {
     <ScrollView showsHorizontalScrollIndicator={false}>
       {listMusician?.map((item, index) => {
         return (
-          <MusicianSection
+          <MusiciansListCard
             key={item.uuid}
-            userId={item.uuid}
             musicianNum={(index + 1).toLocaleString('en-US', {
               minimumIntegerDigits: 2,
               useGrouping: false,
@@ -62,6 +66,9 @@ const LineUp: FC<LineUpProps> = ({type, dataMusician, isLoading}) => {
             followersCount={item.followers}
             activeMore={false}
             isLive={index === 0}
+            onClickTip={() => navigation.navigate('LiveTipping', {id: '1'})}
+            onPressImage={() => navigation.navigate('EventDetail', {id: '1'})}
+            onPressMore={() => null}
           />
         );
       })}

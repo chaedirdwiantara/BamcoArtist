@@ -42,6 +42,7 @@ import YourTopFansScreen from '../screen/Analytics/Fans/YourTopFans/FullScreen';
 import AlbumAnalyticScreen from '../screen/Analytics/Album/AlbumFullScreen';
 import SongDetailAnalytic from '../screen/Analytics/Album/DetailSong';
 import {EventDetail} from '../screen/EventDetail';
+import {LiveTipping} from '../screen/LiveTipping';
 
 // Home
 import {HomeScreen} from '../screen/Home';
@@ -364,6 +365,7 @@ export type RootStackParams = {
   EventDetail: {
     id: string;
   };
+  LiveTipping: {id: string};
 };
 
 export type MainTabParams = {
@@ -631,6 +633,7 @@ export const RootStackScreen = () => (
     />
     <RootStack.Screen name="Revenue" component={RevenueScreen} />
     <RootStack.Screen name="EventDetail" component={EventDetail} />
+    <RootStack.Screen name="LiveTipping" component={LiveTipping} />
   </RootStack.Navigator>
 );
 
