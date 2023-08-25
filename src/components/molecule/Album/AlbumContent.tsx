@@ -152,8 +152,8 @@ export const AlbumContent: React.FC<Props> = ({
   //? set status disable after report sent to make sure the status report is updated
   useEffect(() => {
     if (dataReport && detailAlbum?.id) {
-      if (!idReported.includes(detailAlbum.id)) {
-        setIdReported([...idReported, detailAlbum.id]);
+      if (!idReported.includes(detailAlbum.id.toString())) {
+        setIdReported([...idReported, detailAlbum.id.toString()]);
       }
     }
   }, [dataReport]);
@@ -177,7 +177,7 @@ export const AlbumContent: React.FC<Props> = ({
   const sendOnPress = () => {
     const reportBody: ReportParamsProps = {
       reportType: 'album',
-      reportTypeId: detailAlbum.id ?? 0,
+      reportTypeId: detailAlbum.id.toString() ?? '',
       reporterUuid: MyUuid ?? '',
       reportedUuid: detailAlbum.musician.uuid ?? '',
       reportCategory: t(selectedCategory ?? ''),
@@ -237,7 +237,7 @@ export const AlbumContent: React.FC<Props> = ({
     }
   }, [detailAlbum]);
 
-  const dropDownAlbumReport = !idReported.includes(detailAlbum?.id)
+  const dropDownAlbumReport = !idReported.includes(detailAlbum?.id.toString())
     ? albumReport
     : albumReportSent;
 

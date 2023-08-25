@@ -1,6 +1,6 @@
 export type ReportParamsProps = {
   reportType: 'post' | 'replies' | 'album' | 'song';
-  reportTypeId: number | string; //? id album / id post / id reply(Comment)
+  reportTypeId: string; //? id album / id post / id reply(Comment)
   reporterUuid: string; //? uuid of the reporter
   reportedUuid: string; //? uuid of the being reported
   reportCategory: string; //? category of the report
@@ -9,7 +9,7 @@ export type ReportParamsProps = {
 
 export type ReportData = {
   reportType: 'post' | 'replies' | 'album' | 'song';
-  reportTypeId: number | string;
+  reportTypeId: string;
   reporterUuid: string;
   reportCategory: string;
   reportReason: string;
