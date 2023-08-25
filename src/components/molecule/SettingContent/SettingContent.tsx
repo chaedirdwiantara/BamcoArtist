@@ -26,8 +26,12 @@ import * as FCMService from '../../../service/notification';
 import {ArrowLeftIcon, LogOutIcon} from '../../../assets/icon';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {height, heightPercentage, width, widthPercentage} from '../../../utils';
+import {ProfileResponseType} from '../../../interface/profile.interface';
+import {ListViolationsType} from '../../../interface/setting.interface';
 
 interface SettingProps {
+  dataProfile: ProfileResponseType | undefined;
+  listViolation: ListViolationsType | undefined;
   onPressGoBack: () => void;
   onPressGoTo: (screenName: string, params?: any) => void;
 }
@@ -39,6 +43,8 @@ interface ListReportType {
 }
 
 export const SettingContent: React.FC<SettingProps> = ({
+  dataProfile,
+  listViolation,
   onPressGoBack,
   onPressGoTo,
 }) => {
@@ -74,9 +80,13 @@ export const SettingContent: React.FC<SettingProps> = ({
   const ListReport = (props: ListReportType) => {
     const {title, subtitle, disabled = false} = props;
     const newColor = disabled ? color.Dark[100] : color.Neutral[10];
+    // Go directly to send appeal if user is just banned
+    const goToAppeal = listViolation?.isAnyViolation
+      ? 'ReportedContent'
+      : 'SendAppeal';
     const nextScreen =
       title === t('Setting.Report.Modal.SendAppeal')
-        ? 'SendAppeal'
+        ? goToAppeal
         : 'SendReport';
 
     return (
@@ -86,6 +96,8 @@ export const SettingContent: React.FC<SettingProps> = ({
         onPress={() => {
           title === t('Setting.Report.Modal.Help')
             ? MailTo()
+            : title === t('Setting.Report.Modal.SendAppeal')
+            ? onPressGoTo(nextScreen, {title, dataViolation: listViolation})
             : onPressGoTo(nextScreen, {title});
           closeModal();
         }}>
@@ -112,7 +124,9 @@ export const SettingContent: React.FC<SettingProps> = ({
         <ListReport
           title={t('Setting.Report.Modal.SendAppeal')}
           subtitle={t('Setting.Report.Modal.TextSendAppeal')}
-          disabled={true}
+          disabled={
+            !dataProfile?.data.isBanned && !listViolation?.isAnyViolation
+          }
         />
         <ListReport
           title={t('Setting.Report.Modal.Help')}

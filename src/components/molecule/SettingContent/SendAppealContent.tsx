@@ -1,33 +1,45 @@
 import React, {useEffect, useState} from 'react';
-import {View, StyleSheet, Platform} from 'react-native';
+import {View, StyleSheet, Platform, Text} from 'react-native';
 import {useTranslation} from 'react-i18next';
+import {mvs} from 'react-native-size-matters';
 import ImagePicker, {Image} from 'react-native-image-crop-picker';
 
-import {color} from '../../../theme';
+import {color, font} from '../../../theme';
 import {Button, SsuInput} from '../../atom';
+import {
+  AlbumReportedType,
+  CommentReportedType,
+  PostReportedType,
+  SongReportedType,
+} from '../../../interface/setting.interface';
 import {ModalLimit} from '../Modal/ModalLimit';
 import {TopNavigation} from '../TopNavigation';
 import {ArrowLeftIcon} from '../../../assets/icon';
-import {sendReport} from '../../../api/setting.api';
+import {width, widthPercentage} from '../../../utils';
+import {requestAppeal} from '../../../api/setting.api';
+import CommentAppeal from '../AppealCard/CommentAppeal';
 import {ModalLoading} from '../ModalLoading/ModalLoading';
 import {ModalSuccessDonate} from '../Modal/ModalSuccessDonate';
 import {useUploadImageHook} from '../../../hooks/use-uploadImage.hook';
-import {heightPercentage, width, widthPercentage} from '../../../utils';
 
-interface SendReportProps {
+interface SendAppealProps {
   title: string;
+  selectedViolation?: PostReportedType &
+    CommentReportedType &
+    SongReportedType &
+    AlbumReportedType;
   onPressGoBack: () => void;
+  goToSetting: () => void;
 }
 
-export const SendReportContent: React.FC<SendReportProps> = ({
+export const SendAppealContent: React.FC<SendAppealProps> = ({
   title,
+  selectedViolation,
   onPressGoBack,
+  goToSetting,
 }) => {
   const {t} = useTranslation();
-  const [state, setState] = useState({
-    email: '',
-    message: '',
-  });
+  const [description, setDescription] = useState<string>('');
   const [listImage, setListImage] = useState<Image[]>([]);
   const [dataResponseImg, setDataResponseImg] = useState<string[]>([]);
   const {isLoadingImage, dataImage, setUploadImage} = useUploadImageHook();
@@ -53,20 +65,17 @@ export const SendReportContent: React.FC<SendReportProps> = ({
     }
   }, [dataImage]);
 
-  const onChangeText = (key: string, value: string) => {
-    setState({
-      ...state,
-      [key]: value,
-    });
-  };
-
   const onPressSend = async () => {
     try {
+      const selectedId = selectedViolation
+        ? {id: selectedViolation.reportedViolationId}
+        : {};
       const payload = {
-        ...state,
-        imageUrl: dataResponseImg,
+        ...selectedId,
+        description,
+        images: dataResponseImg,
       };
-      await sendReport(payload);
+      await requestAppeal(payload);
       setShowModalSuccess(true);
     } catch (error) {}
   };
@@ -161,17 +170,31 @@ export const SendReportContent: React.FC<SendReportProps> = ({
         containerStyles={{paddingHorizontal: widthPercentage(12)}}
       />
 
-      <SsuInput.InputLabel
-        value={state.email}
-        onChangeText={(newText: string) => onChangeText('email', newText)}
-        placeholder={t('Setting.Report.Placeholder.Email') || ''}
-        containerStyles={styles.textInput}
-        inputStyles={{paddingHorizontal: widthPercentage(10)}}
-      />
+      {selectedViolation ? (
+        <>
+          <View style={styles.containerViolation}>
+            <Text style={styles.title}>
+              {t('Setting.SendAppeal.ContentToRecover')}
+            </Text>
+            <CommentAppeal
+              fullname={selectedViolation.commentOwner.fullname}
+              username={selectedViolation.commentOwner.username}
+              repliedTo={selectedViolation.repliedTo}
+              postDate={selectedViolation.timeAgo}
+              caption={selectedViolation.caption}
+              likesCount={selectedViolation.likesCount}
+              commentsCount={selectedViolation.commentsCount}
+              containerStyles={{marginBottom: mvs(15)}}
+              hideChoiceIcon={true}
+            />
+          </View>
+          <View style={styles.separator} />
+        </>
+      ) : null}
 
       <SsuInput.InputLabel
-        value={state.message}
-        onChangeText={(newText: string) => onChangeText('message', newText)}
+        value={description}
+        onChangeText={(newText: string) => setDescription(newText)}
         placeholder={t('Setting.Report.Placeholder.Text') || ''}
         containerStyles={styles.textArea}
         multiline
@@ -188,11 +211,11 @@ export const SendReportContent: React.FC<SendReportProps> = ({
       <ModalLoading visible={isLoadingImage} />
 
       <ModalSuccessDonate
-        title={t('General.Thanks') || ''}
-        subtitle={t('Modal.Report.Success') || ''}
-        buttonText={t('Modal.Report.Back') || ''}
+        title={t('Setting.SendAppeal.ModalSuccess.Title') || ''}
+        subtitle={t('Setting.SendAppeal.ModalSuccess.Subtitle') || ''}
+        buttonText={t('Setting.SendAppeal.ModalSuccess.Button') || ''}
         modalVisible={showModalSuccess}
-        toggleModal={onPressGoBack}
+        toggleModal={goToSetting}
       />
 
       <ModalLimit
@@ -220,11 +243,11 @@ const styles = StyleSheet.create({
     backgroundColor: color.Dark[800],
   },
   textInput: {
-    marginTop: heightPercentage(10),
+    marginTop: mvs(10),
   },
   textArea: {
-    paddingHorizontal: 0,
-    marginTop: heightPercentage(10),
+    paddingHorizontal: widthPercentage(10),
+    marginTop: mvs(10),
   },
   inputDesc: {
     width: width * 0.9,
@@ -235,7 +258,28 @@ const styles = StyleSheet.create({
   button: {
     width: width * 0.9,
     aspectRatio: widthPercentage(327 / 36),
-    marginTop: heightPercentage(25),
+    position: 'absolute',
+    bottom: 0,
     alignSelf: 'center',
+    marginBottom: mvs(30),
+  },
+  title: {
+    color: color.Neutral[10],
+    fontFamily: font.InterRegular,
+    fontWeight: '600',
+    fontSize: mvs(15),
+    lineHeight: mvs(20),
+    marginBottom: mvs(10),
+  },
+  containerViolation: {
+    width: width * 0.9,
+    alignSelf: 'center',
+    marginTop: mvs(20),
+    marginBottom: mvs(15),
+  },
+  separator: {
+    width,
+    height: mvs(1),
+    backgroundColor: color.Dark[500],
   },
 });

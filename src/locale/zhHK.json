@@ -882,6 +882,24 @@
         "Text": "我們如何改善您使用此應用程式的體驗？"
       }
     },
+    "SendAppeal": {
+      "ReportedContent": {
+        "Title": "Send Appeal to recover your account and content",
+        "Subtitle": "Select content to recover : "
+      },
+      "ContentToRecover": "Content to recover",
+      "ModalBanned": {
+        "Title": "You’ve been banned",
+        "Subtitle": "Are you sure to send this appeal?",
+        "Button1": "Let me think",
+        "Button2": "Send"
+      },
+      "ModalSuccess": {
+        "Title": "Your Appeal has been sent!",
+        "Subtitle": "Kindly wait for the review. Once your appeal approved your penalty will removed",
+        "Button": "Back to Settings"
+      }
+    },
     "Helps": {
       "Title": "幫助"
     },
