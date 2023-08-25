@@ -1,4 +1,4 @@
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import React from 'react';
 import {heightResponsive, widthResponsive} from '../../../utils';
 import {Circle, Svg} from 'react-native-svg';
@@ -6,11 +6,17 @@ import {Gap} from '../../atom';
 import Typography from '../../../theme/Typography';
 import Color from '../../../theme/Color';
 import {EventCardInterface} from '../../../interface/event.interface';
+import {useNavigation} from '@react-navigation/native';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {RootStackParams} from '../../../navigations';
 
 const EventCard = (props: EventCardInterface) => {
   const {title, date, place, isLive} = props;
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParams>>();
   return (
-    <View
+    <TouchableOpacity
+      onPress={() => navigation.navigate('EventDetail', {id: '1'})}
       style={[styles.root, {backgroundColor: isLive ? '#541947' : '#1A2333'}]}>
       <View
         style={[
@@ -44,7 +50,7 @@ const EventCard = (props: EventCardInterface) => {
           </Text>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 
