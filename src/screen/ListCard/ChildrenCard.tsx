@@ -16,6 +16,7 @@ import {color, font} from '../../theme';
 import {mvs} from 'react-native-size-matters';
 import VideoComp from '../../components/molecule/VideoPlayer/videoComp';
 import ImageModal from '../Detail/ImageModal';
+import {useVoteHook} from '../../hooks/use-vote.hook';
 
 export const {width} = Dimensions.get('screen');
 
@@ -48,6 +49,9 @@ const ChildrenCard: FC<ChildrenCardProps> = (props: ChildrenCardProps) => {
 
   const [isModalVisible, setModalVisible] = useState<boolean>(false);
   const [imgUrl, setImgUrl] = useState<number>(-1);
+  const [localIsVoted, setLocalIsvoted] = useState<boolean>(false);
+
+  const {voteIsLoading, voteIsError, dataVote, setVotePost} = useVoteHook();
 
   // ignore warning
   useEffect(() => {
@@ -66,6 +70,11 @@ const ChildrenCard: FC<ChildrenCardProps> = (props: ChildrenCardProps) => {
   const toggleImageModal = () => {
     setImgUrl(-1);
     setModalVisible(!isModalVisible);
+  };
+
+  const setGiveVote = (optionId: string) => {
+    setLocalIsvoted(true);
+    setVotePost({postId: data.id, optionId: optionId});
   };
 
   return (
@@ -145,7 +154,7 @@ const ChildrenCard: FC<ChildrenCardProps> = (props: ChildrenCardProps) => {
                   pollCount={data.pollCount}
                   isOwner={data.isOwner}
                   isVoted={data.isVoted} //TODO: UPDATE FROM RESPONSE SET POST
-                  setGiveVote={() => {}}
+                  setGiveVote={setGiveVote}
                 />
               )}
             </View>

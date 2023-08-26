@@ -14,7 +14,7 @@ interface VoteCardProps {
   pollCount: number;
   isOwner: boolean;
   isVoted: boolean;
-  setGiveVote?: React.Dispatch<React.SetStateAction<boolean>>;
+  setGiveVote: (optionId: string) => void;
 }
 
 const VoteCard: FC<VoteCardProps> = (props: VoteCardProps) => {
@@ -66,8 +66,7 @@ const VoteCard: FC<VoteCardProps> = (props: VoteCardProps) => {
                     label={'Vote'}
                     containerStyles={styles.buttonContainer}
                     textStyles={styles.textButton}
-                    // TODO: HANDLE SET GIVE VOTE
-                    onPress={() => setGiveVote}
+                    onPress={() => setGiveVote(item.id)}
                   />
                 ))}
             </View>
