@@ -33,9 +33,8 @@ const VoteCard: FC<VoteCardProps> = (props: VoteCardProps) => {
           {i !== 0 && <Gap height={6} />}
           <View style={styles.voteTopContainer}>
             <View style={styles.progressBarContainer}>
-              {/* // TODO: NEED TO UPDATE THE SOURCE AFTER SET POST */}
               <Progress.Bar
-                progress={item.votes / 100}
+                progress={item.percent / 100}
                 width={null}
                 height={widthResponsive(27)}
                 borderWidth={0}
@@ -47,28 +46,25 @@ const VoteCard: FC<VoteCardProps> = (props: VoteCardProps) => {
               />
               <View style={styles.progressBarText}>
                 <View style={styles.textAreaProgress}>
-                  {/* // TODO: NEED TO UPDATE THE SOURCE AFTER SET POST */}
                   <Text style={styles.progressBarChild}>{item.text}</Text>
                   <Gap width={4} />
-                  {/* // TODO: NEED TO UPDATE THE SOURCE AFTER SET POST */}
                   {item.isVoted && <CheckCircle2Icon width={14} height={14} />}
                 </View>
-                {/* // TODO: NEED TO UPDATE THE SOURCE AFTER SET POST */}
-                <Text style={styles.progressBarChild}>{`${item.votes}%`}</Text>
+                <Text
+                  style={styles.progressBarChild}>{`${item.percent}%`}</Text>
               </View>
             </View>
 
             <View style={{flexDirection: 'row'}}>
               <Gap width={4} />
-              {isOwner ||
-                (isVoted && (
-                  <Button
-                    label={'Vote'}
-                    containerStyles={styles.buttonContainer}
-                    textStyles={styles.textButton}
-                    onPress={() => setGiveVote(item.id)}
-                  />
-                ))}
+              {!isOwner && !isVoted ? (
+                <Button
+                  label={'Vote'}
+                  containerStyles={styles.buttonContainer}
+                  textStyles={styles.textButton}
+                  onPress={() => setGiveVote(item.id)}
+                />
+              ) : null}
             </View>
           </View>
         </>

@@ -8,7 +8,7 @@ export const postVote = async (
   props?: VoteParamsProps,
 ): Promise<VoteDataResponseType> => {
   const {data} = await SsuAPI().request<VoteDataResponseType>({
-    url: '/musician-app/posts/poll',
+    url: '/musician-app/post/poll',
     method: 'POST',
     params: props,
   });

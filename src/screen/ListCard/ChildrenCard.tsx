@@ -49,7 +49,6 @@ const ChildrenCard: FC<ChildrenCardProps> = (props: ChildrenCardProps) => {
 
   const [isModalVisible, setModalVisible] = useState<boolean>(false);
   const [imgUrl, setImgUrl] = useState<number>(-1);
-  const [localIsVoted, setLocalIsvoted] = useState<boolean>(false);
 
   const {voteIsLoading, voteIsError, dataVote, setVotePost} = useVoteHook();
 
@@ -73,9 +72,20 @@ const ChildrenCard: FC<ChildrenCardProps> = (props: ChildrenCardProps) => {
   };
 
   const setGiveVote = (optionId: string) => {
-    setLocalIsvoted(true);
     setVotePost({postId: data.id, optionId: optionId});
   };
+
+  const isCurrentVote = dataVote && dataVote.id === data.id;
+
+  const pollingOptions = isCurrentVote
+    ? dataVote?.pollingOptions
+    : data.pollingOptions;
+  const pollTimeLeft = isCurrentVote
+    ? dataVote?.pollTimeLeft
+    : data.pollTimeLeft;
+  const pollCount = isCurrentVote ? dataVote?.pollCount : data.pollCount;
+  const isOwner = isCurrentVote ? dataVote?.isOwner : data.isOwner;
+  const isVoted = isCurrentVote ? dataVote?.isVoted : data.isVoted;
 
   return (
     <View style={{width: '100%'}}>
@@ -149,11 +159,11 @@ const ChildrenCard: FC<ChildrenCardProps> = (props: ChildrenCardProps) => {
               )}
               {data.isPolling && (
                 <VoteCard
-                  pollingOptions={data.pollingOptions}
-                  pollTimeLeft={data.pollTimeLeft}
-                  pollCount={data.pollCount}
-                  isOwner={data.isOwner}
-                  isVoted={data.isVoted} //TODO: UPDATE FROM RESPONSE SET POST
+                  pollingOptions={pollingOptions}
+                  pollTimeLeft={pollTimeLeft}
+                  pollCount={pollCount}
+                  isOwner={isOwner}
+                  isVoted={isVoted}
                   setGiveVote={setGiveVote}
                 />
               )}

@@ -118,6 +118,7 @@ export type PollingOptions = {
   text: string;
   votes: number;
   isVoted: boolean;
+  percent: number;
 };
 
 export type PostList = {
