@@ -233,6 +233,13 @@ const PopularPost: FC<PopularPostProps> = (props: PopularPostProps) => {
         timeAgo: analyticPostData.timeAgo,
         viewsCount: analyticPostData.viewsCount,
         shareCount: analyticPostData.shareCount,
+        isPolling: analyticPostData.isPolling,
+        pollingOptions: analyticPostData.pollingOptions,
+        pollDuration: analyticPostData.pollDuration,
+        pollCount: analyticPostData.pollCount,
+        isOwner: analyticPostData.isOwner,
+        isVoted: analyticPostData.isVoted,
+        pollTimeLeft: analyticPostData.pollTimeLeft,
       }
     : undefined;
 

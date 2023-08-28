@@ -99,7 +99,12 @@ export const countryData: DataCountryType[] = [
 
 export interface DataDropDownType {
   label: string;
-  value: string | number;
+  value: string;
+  disabled?: boolean;
+}
+export interface DataDropDownNumberType {
+  label: string;
+  value: number;
   disabled?: boolean;
 }
 
@@ -311,7 +316,7 @@ export const dropDownTransactionSort: DataDropDownType[] = [
   {label: 'Transaction.Dropdown.Sort.Oldest', value: '2'},
 ];
 
-export const dataDurationVote: DataDropDownType[] = [
+export const dataDurationVote: DataDropDownNumberType[] = [
   {label: 'Vote.Dropdown.OptionA', value: 1},
   {label: 'Vote.Dropdown.OptionB', value: 3},
   {label: 'Vote.Dropdown.OptionC', value: 7},

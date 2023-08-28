@@ -175,6 +175,13 @@ export type AnalyticPostData = {
   updatedAt: string;
   video: VideoResponseType;
   viewsCount: number;
+  isPolling: boolean;
+  pollingOptions: PollingOptions[];
+  pollDuration: number;
+  pollCount: number;
+  isOwner: boolean;
+  isVoted: boolean;
+  pollTimeLeft: string;
 };
 
 export type AnalyticPostResponseType = {
@@ -205,6 +212,13 @@ export type DetailPostData = {
   viewsCount: number;
   shareCount: number;
   reportSent: boolean;
+  isPolling: boolean;
+  pollingOptions: PollingOptions[];
+  pollDuration: number;
+  pollCount: number;
+  isOwner: boolean;
+  isVoted: boolean;
+  pollTimeLeft: string;
 };
 
 export type DetailPostResponseType = {
