@@ -43,7 +43,6 @@ export const ListAlbum: React.FC<ListAlbumProps> = ({
                 onPressAddToQueue={() => null}
                 key={index}
                 containerStyles={{marginTop: mvs(20), marginLeft: ms(5)}}
-                disabled={true}
                 hideDropdownMore={true}
                 onPressCard={() => goToDetailAlbum(item.id)}
                 singerId={item.musician.uuid}

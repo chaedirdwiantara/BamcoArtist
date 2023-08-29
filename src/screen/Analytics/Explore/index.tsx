@@ -58,12 +58,10 @@ const Explore = (props: ExploreProps) => {
   );
 
   useEffect(() => {
-    if (refreshing) {
-      listMood.length === 0 && getListMoodPublic();
-      listGenre.length === 0 && getListGenrePublic();
-      refetchPlaylist();
-      getListComingSoon();
-    }
+    listMood.length === 0 && getListMoodPublic();
+    listGenre.length === 0 && getListGenrePublic();
+    refetchPlaylist();
+    getListComingSoon();
   }, [refreshing]);
 
   // Triggering when click love on the same song in top & new song tab
@@ -141,7 +139,7 @@ const Explore = (props: ExploreProps) => {
           onPress={() => goToListMusic('Coming Soon', 'album')}
         />
       )}
-      <Gap height={heightPercentage(10)} />
+      <Gap height={heightPercentage(20)} />
       {/* End of Coming Soon */}
       {/* Tab Song */}
       <View style={[styles.containerContent]}>
