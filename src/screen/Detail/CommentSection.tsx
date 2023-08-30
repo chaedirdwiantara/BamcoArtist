@@ -199,6 +199,8 @@ const CommentSection: FC<CommentSectionType> = (props: CommentSectionType) => {
       commentOwner,
       commentLevel,
       parentID,
+      blockIs,
+      isBlock,
     } = props;
     return (
       <CommentLvlThree
@@ -258,6 +260,8 @@ const CommentSection: FC<CommentSectionType> = (props: CommentSectionType) => {
         myComment={profileUUID === commentOwner.UUID}
         commentOwnerUuid={commentOwner.UUID}
         selectedUserUuid={selectedUserUuid}
+        isBlock={isBlock ? true : false}
+        blockIs={blockIs ? true : false}
       />
     );
   };
@@ -277,6 +281,8 @@ const CommentSection: FC<CommentSectionType> = (props: CommentSectionType) => {
       commentLevel,
       parentID,
       commentTotal,
+      isBlock,
+      blockIs,
     } = props;
     return (
       <CommentLvlTwo
@@ -340,6 +346,8 @@ const CommentSection: FC<CommentSectionType> = (props: CommentSectionType) => {
         myComment={profileUUID === commentOwner.UUID}
         commentOwnerUuid={commentOwner.UUID}
         selectedUserUuid={selectedUserUuid}
+        isBlock={isBlock ? true : false}
+        blockIs={blockIs ? true : false}
         childrenLvl2={
           <>
             {/* Comment Section Lvl 3 */}
@@ -364,6 +372,8 @@ const CommentSection: FC<CommentSectionType> = (props: CommentSectionType) => {
                         timeAgo={item.timeAgo}
                         commentOwner={item.commentOwner}
                         commentLevel={item.commentLevel}
+                        blockIs={item.blockIs}
+                        isBlock={item.isBlock}
                       />
                       <Gap height={12} />
                     </>
@@ -490,6 +500,8 @@ const CommentSection: FC<CommentSectionType> = (props: CommentSectionType) => {
             myComment={profileUUID === item.commentOwner.UUID}
             commentOwnerUuid={item.commentOwner.UUID}
             selectedUserUuid={selectedUserUuid}
+            isBlock={item.isBlock ? true : false}
+            blockIs={item.blockIs ? true : false}
             children={
               <>
                 {/* Comment Section Lvl 2 */}
@@ -515,6 +527,8 @@ const CommentSection: FC<CommentSectionType> = (props: CommentSectionType) => {
                           commentOwner={item.commentOwner}
                           commentLevel={item.commentLevel}
                           commentTotal={item.commentTotal}
+                          isBlock={item.isBlock}
+                          blockIs={item.blockIs}
                         />
                       )}
                     />

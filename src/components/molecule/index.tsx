@@ -3,6 +3,7 @@ import {AddSongContent} from './PlaylistContent/AddSongContent';
 import {AddToPlaylistContent} from './PlaylistContent/AddToPlaylistContent';
 import {AlbumContent} from './Album/AlbumContent';
 import {AvatarProfile} from './AvatarProfile/AvatarProfile';
+import BlockUser from './BlockUserUI';
 import {BottomSheetGuest} from './GuestComponent/BottomSheetGuest';
 import {Carousel} from './Carousel/Carousel';
 import {ChangeEmailContent} from './SettingContent/ChangeEmailContent';
@@ -80,6 +81,7 @@ export {
   AddToPlaylistContent,
   AlbumContent,
   AvatarProfile,
+  BlockUser,
   BottomSheetGuest,
   Carousel,
   ChangeEmailContent,

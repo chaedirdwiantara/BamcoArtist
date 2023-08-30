@@ -24,6 +24,7 @@ interface DropdownV2Props {
   selectedid?: (id: string) => void;
   selectedUserUuid?: (uuid: string) => void;
   selectedMenu: (data: DataDropDownType) => void;
+  selectedUserName?: (name: string) => void;
   dataFilter: DataDropDownType[];
   containerStyle?: ViewStyle;
   iconContainerStyle?: ViewStyle;
@@ -31,15 +32,18 @@ interface DropdownV2Props {
   iconChildren?: React.ReactNode;
   topPosition?: number;
   leftPosition?: number;
+  userName?: string;
 }
 
 const DropdownMore: React.FC<DropdownV2Props> = (props: DropdownV2Props) => {
   const {
     id,
     uuid,
+    userName,
     selectedid,
     selectedMenu,
     selectedUserUuid,
+    selectedUserName,
     dataFilter,
     containerStyle,
     iconContainerStyle,
@@ -67,6 +71,9 @@ const DropdownMore: React.FC<DropdownV2Props> = (props: DropdownV2Props) => {
       }
       if (uuid) {
         selectedUserUuid?.(uuid);
+      }
+      if (userName) {
+        selectedUserName?.(userName);
       }
     }
   };

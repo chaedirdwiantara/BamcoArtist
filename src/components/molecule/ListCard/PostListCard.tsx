@@ -63,6 +63,7 @@ interface ListProps extends TouchableOpacityProps {
   shareCount: number;
   musicianUuid?: string;
   selectedUserUuid?: (uuid: string) => void;
+  selectedUserName?: (name: string) => void;
   onProfile?: boolean;
   reportSent?: boolean;
 }
@@ -97,6 +98,7 @@ const PostListCard: React.FC<ListProps> = (props: ListProps) => {
     shareCount,
     musicianUuid,
     selectedUserUuid,
+    selectedUserName,
     onProfile,
     reportSent,
   } = props;
@@ -167,9 +169,11 @@ const PostListCard: React.FC<ListProps> = (props: ListProps) => {
                 <DropdownMore
                   id={idPost}
                   uuid={musicianUuid}
+                  userName={musicianName}
                   selectedid={selectedIdPost}
                   selectedMenu={selectedMenu}
                   selectedUserUuid={selectedUserUuid}
+                  selectedUserName={selectedUserName}
                   dataFilter={myPost ? dataUpdatePost : dataReport}
                   iconChildren={<ThreeDotsHorizonIcon />}
                   containerStyle={{marginTop: 0, marginBottom: 0}}

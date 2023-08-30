@@ -971,7 +971,8 @@
     "Dropdown": {
       "Visit": "Visit Profile",
       "Report": "Report",
-      "ReportSent": "Report Sent!"
+      "ReportSent": "Report Sent!",
+      "Block": "Block"
     }
   },
   "Notification": {
@@ -1347,5 +1348,18 @@
       "OptionD":"1 Month"
     },
     "Duration":"Poll Duration"
+  },
+  "Block":{
+    "Modal":{
+      "Title":"Block",
+      "Subtitle":"They will not be able to follow you or view your content, and you will not see content from",
+      "LeftButton":"Cancel",
+      "RightButton":"Block"
+    },
+    "BlockUI":{
+      "isBlockCaption":"This comment is from the people you've been blocked visit user profile",
+      "blockIsCaption":"You've been blocked by the people who replies this content visit user profile",
+      "linkCaption":"visit user profile"
+    }
   }
 }

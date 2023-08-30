@@ -265,11 +265,13 @@ export const dropDownAlbumRange: DataDropDownType[] = [
 export const dataReportPost: DataDropDownType[] = [
   {label: 'Post.Dropdown.Visit', value: '11'},
   {label: 'Post.Dropdown.Report', value: '22'},
+  {label: 'Post.Dropdown.Block', value: '33'},
 ];
 
 export const dataAlreadyReportPost: DataDropDownType[] = [
   {label: 'Post.Dropdown.Visit', value: '11', disabled: false},
   {label: 'Post.Dropdown.ReportSent', value: '22', disabled: true},
+  {label: 'Post.Dropdown.Block', value: '33', disabled: false},
 ];
 
 export const dataReportPostProfile: DataDropDownType[] = [

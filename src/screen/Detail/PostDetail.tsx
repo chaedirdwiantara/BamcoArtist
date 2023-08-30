@@ -12,6 +12,7 @@ import {
   CommentInputModal,
   Gap,
   ListCard,
+  ModalConfirm,
   ModalDonate,
   ModalShare,
   ModalSuccessDonate,
@@ -154,6 +155,8 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   const [idUserTonavigate, setIdUserTonavigate] = useState<string>();
   const [selectedMusicianId, setSelectedMusicianId] = useState<string>('');
   const [isCopied, setIsCopied] = useState<boolean>(false);
+  const [modalConfirm, setModalConfirm] = useState<boolean>(false);
+  const [selectedUserName, setSelectedUserName] = useState<string>('');
 
   // * VIEW MORE HOOKS
   const [viewMore, setViewMore] = useState<string>('');
@@ -885,6 +888,9 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
           setReportToast(true);
           setReportType('post');
           break;
+        case '33':
+          setModalConfirm(true);
+          break;
         default:
           break;
       }
@@ -1107,6 +1113,7 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
                 selectedMenu={setSelectedMenuPost}
                 idPost={dataPostDetail.id}
                 selectedIdPost={setSelectedIdPost}
+                selectedUserName={setSelectedUserName}
                 isPremium={data.isPremiumPost}
                 disableComment={false}
                 viewCount={dataPostDetail.viewsCount}
@@ -1255,6 +1262,20 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
           toggleModal={onPressSuccess}
         />
         <ModalLoading visible={feedIsLoading} />
+
+        {/* //? Block user modal */}
+        {modalConfirm && (
+          <ModalConfirm
+            modalVisible={modalConfirm}
+            title={`${t('Block.Modal.Title')} @${selectedUserName} ?`}
+            subtitle={`${t('Block.Modal.Subtitle')} @${selectedUserName}`}
+            yesText={`${t('Block.Modal.RightButton')}`}
+            noText={`${t('Block.Modal.LeftButton')}`}
+            onPressClose={() => setModalConfirm(false)}
+            onPressOk={() => {}}
+            rightButtonStyle={styles.rightButtonStyle}
+          />
+        )}
       </ScrollView>
     </View>
   );
@@ -1301,5 +1322,11 @@ const styles = StyleSheet.create({
   },
   textStyle: {
     color: color.Neutral[10],
+  },
+  rightButtonStyle: {
+    backgroundColor: color.Error.block,
+    borderRadius: 4,
+    paddingHorizontal: widthResponsive(16),
+    paddingVertical: widthResponsive(6),
   },
 });
