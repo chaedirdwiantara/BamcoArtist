@@ -494,6 +494,12 @@
       "TopTiper": "TOP TIPER",
       "TipDistribution": "Tip Distribution",
       "MusicianTipped": "Musician Tipped"
+    },
+    "EmptyState": {
+      "Home": "No live events are currently available at this time.\nStay tuned for exciting upcoming experiences!",
+      "Title": "Discover Live Event",
+      "Profile": "You have no events, your events will be displayed here",
+      "Other": "Currently, this musician don’t have any event."
     }
   },
   "Profile": {

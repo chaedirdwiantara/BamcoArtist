@@ -1,23 +1,22 @@
-import React, {FC, useEffect, useState} from 'react';
-import {RefreshControl, StyleSheet, Text, View} from 'react-native';
+import React, {FC, useEffect} from 'react';
+import {StyleSheet, Text, View} from 'react-native';
 import {
   heightPercentage,
   heightResponsive,
   widthResponsive,
 } from '../../../utils';
 import {FlashList} from '@shopify/flash-list';
-import MerchListCard from '../../components/molecule/ListCard/MerchListCard';
-import {useEventHook} from '../../hooks/use-event.hook';
 import {EmptyState, Gap} from '../../../components';
 import {CrackEggIcon} from '../../../assets/icon';
-import {useInfiniteQuery} from 'react-query';
-import {MerchData} from '../../interface/event.interface';
 import {useTranslation} from 'react-i18next';
-import LoadingSpinner from '../../components/atom/Loading/LoadingSpinner';
-import {dataEventMusician} from '../../../data/event';
 import Color from '../../../theme/Color';
 import Typography from '../../../theme/Typography';
 import EventCard from '../ListCard/EventCard';
+import {useEventMusician} from '../../../api/event.api';
+import LoadingSpinner from '../../atom/Loading/LoadingSpinner';
+import {profileStorage} from '../../../hooks/use-storage.hook';
+import {EventListData} from '../../../interface/event.interface';
+
 type EventMusicianProps = {
   musicianId?: string;
 };
@@ -25,13 +24,27 @@ type EventMusicianProps = {
 const EventMusician: FC<EventMusicianProps> = props => {
   const {t} = useTranslation();
 
+  const MyUuid = profileStorage()?.uuid;
+  const isOwner = props?.musicianId === MyUuid;
+
+  const {
+    data: dataEvent,
+    isLoading: isLoadingEvent,
+    refetch: refetchEvent,
+    isRefetching: isRefetchingEvent,
+  } = useEventMusician(props?.musicianId ?? '');
+
+  useEffect(() => {
+    refetchEvent();
+  }, []);
+
   return (
     <>
       <FlashList
-        data={dataEventMusician}
+        data={dataEvent?.data}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.ListContainer}
-        keyExtractor={item => item?.id.toString()}
+        keyExtractor={item => item?.month ?? ''}
         onTouchEnd={() => null}
         ListEmptyComponent={
           <EmptyState
@@ -43,22 +56,26 @@ const EventMusician: FC<EventMusicianProps> = props => {
                 style={styles.iconEmpty}
               />
             }
-            text={t('Event.Merch.ComingSoon.Title') || ''}
-            subtitle={t('Event.Merch.ComingSoon.Subtitle') || ''}
+            text={t('Event.EmptyState.Title') || ''}
+            subtitle={
+              (isOwner
+                ? t('Event.EmptyState.Profile')
+                : t('Event.EmptyState.Other')) || ''
+            }
             containerStyle={styles.containerEmpty}
           />
         }
-        renderItem={({item, index}: any) => (
+        renderItem={({item, _index}: any) => (
           <View>
             <Text style={[Typography.Heading6, {color: Color.Neutral[10]}]}>
-              {item?.date}
+              {item?.month}
             </Text>
             <Gap height={heightResponsive(12)} />
             <View>
-              {item?.item.map((v, i) => {
+              {item?.events.map((v: EventListData, i: number) => {
                 return (
                   <React.Fragment key={i}>
-                    <EventCard {...v} />
+                    <EventCard {...v} isLive={item?.month === 'Live'} />
                     <Gap height={heightResponsive(12)} />
                   </React.Fragment>
                 );
@@ -68,6 +85,12 @@ const EventMusician: FC<EventMusicianProps> = props => {
         )}
         estimatedItemSize={150}
       />
+
+      {(isLoadingEvent || isRefetchingEvent) && (
+        <View style={styles.loadingContainer}>
+          <LoadingSpinner />
+        </View>
+      )}
     </>
   );
 };

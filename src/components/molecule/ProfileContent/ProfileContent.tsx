@@ -126,7 +126,7 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
     {filterName: 'Musician.Tab.Musician'},
     {filterName: 'Musician.Tab.Music'},
     {filterName: 'Musician.Tab.Fans'},
-    // {filterName: 'Musician.Tab.Event'},
+    {filterName: 'Musician.Tab.Event'},
     {filterName: 'Musician.Tab.Profile'},
     // {filterName: 'Musician.Tab.Merchandise'},
     // {filterName: 'Musician.Tab.Ticket'},
@@ -366,7 +366,7 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
                 'Musician.Tab.Ticket' ? (
                 <ConcertList musicianId={uuid} />
               ) : filter2[selectedIndex].filterName === 'Musician.Tab.Event' ? (
-                <EventMusician />
+                <EventMusician musicianId={uuid} />
               ) : (
                 // TODO: DISABLE FOR NOW
                 // : filter2[selectedIndex].filterName === 'Musician.Tab.Main' ? (

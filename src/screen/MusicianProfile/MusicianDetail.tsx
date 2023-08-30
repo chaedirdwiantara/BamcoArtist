@@ -115,7 +115,7 @@ export const MusicianDetail: React.FC<MusicianDetailProps> = ({
     {filterName: 'Musician.Tab.Musician'},
     {filterName: 'Musician.Tab.Music'},
     {filterName: 'Musician.Tab.Fans'},
-    // {filterName: 'Musician.Tab.Event'},
+    {filterName: 'Musician.Tab.Event'},
     {filterName: 'Musician.Tab.Profile'},
     // {filterName: 'Musician.Tab.Merchandise'},
     // {filterName: 'Musician.Tab.Ticket'},
@@ -485,7 +485,7 @@ export const MusicianDetail: React.FC<MusicianDetailProps> = ({
                     style={{
                       paddingHorizontal: widthResponsive(20),
                     }}>
-                    <EventMusician />
+                    <EventMusician musicianId={uuid} />
                   </View>
                 ) : null}
               </View>
