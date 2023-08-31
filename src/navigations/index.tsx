@@ -53,6 +53,8 @@ import {ProfileProgressScreen} from '../screen/ProfileProgress';
 // Setting
 import {SettingScreen} from '../screen/Setting/Setting';
 import {AccountScreen} from '../screen/Setting/Account';
+import {AccountInformationScreen} from '../screen/Setting/Account/AccountInformation';
+import {BlockedUserScreen} from '../screen/Setting/Account/BlockedUser';
 import {EmailScreen} from '../screen/Setting/Email/Email';
 import {ChangeEmailScreen} from '../screen/Setting/Email/ChangeEmail';
 import {ChangePasswordScreen} from '../screen/Setting/ChangePassword';
@@ -166,7 +168,8 @@ import {TransactionHistoryPropsType} from '../interface/credit.interface';
 
 export type RootStackParams = {
   AboutDeletion: undefined;
-  Account: {
+  Account: {data: ProfileResponseData};
+  AccountInformation: {
     data: ProfileResponseData;
     fromScreen: string;
   };
@@ -174,6 +177,7 @@ export type RootStackParams = {
   AddSong: Playlist;
   AddPreview: ListDataSearchSongs;
   Album: AlbumData | SongAlbum | {id: number; type?: string};
+  BlockedUser: undefined;
   Boarding: undefined;
   ChangeEmail: {
     type: 'Add' | 'Change';
@@ -498,6 +502,11 @@ export const RootStackScreen = () => (
     <RootStack.Screen name="Preference" component={PreferenceScreen} />
     <RootStack.Screen name="Referral" component={ReferralScreen} />
     <RootStack.Screen name="Account" component={AccountScreen} />
+    <RootStack.Screen
+      name="AccountInformation"
+      component={AccountInformationScreen}
+    />
+    <RootStack.Screen name="BlockedUser" component={BlockedUserScreen} />
     <RootStack.Screen name="ChangeEmail" component={ChangeEmailScreen} />
     <RootStack.Screen name="Email" component={EmailScreen} />
     <RootStack.Screen name="OtpEmail" component={OtpEmailScreen} />
