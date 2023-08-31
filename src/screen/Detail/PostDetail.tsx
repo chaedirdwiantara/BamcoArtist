@@ -831,6 +831,13 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
         viewsCount,
         shareCount,
         reportSent,
+        isPolling,
+        pollingOptions,
+        pollDuration,
+        pollCount,
+        isOwner,
+        isVoted,
+        pollTimeLeft,
       } = dataPostDetail;
 
       switch (selectedValue) {
@@ -859,6 +866,13 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
             viewsCount,
             shareCount,
             reportSent,
+            isPolling,
+            pollingOptions,
+            pollDuration,
+            pollCount,
+            isOwner,
+            isVoted,
+            pollTimeLeft,
           };
           navigation.navigate('CreatePost', {postData: toEditPost});
           break;

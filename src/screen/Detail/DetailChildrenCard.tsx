@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import React, {FC, useEffect, useState} from 'react';
 import {elipsisText, widthResponsive} from '../../utils';
-import {Gap} from '../../components';
+import {Gap, VoteCard} from '../../components';
 import ImageList from '../ListCard/ImageList';
 import MusicListPreview from '../../components/molecule/MusicPreview/MusicListPreview';
 import {DetailPostData, PostList} from '../../interface/feed.interface';
@@ -16,6 +16,7 @@ import {color, font} from '../../theme';
 import {mvs} from 'react-native-size-matters';
 import VideoComp from '../../components/molecule/VideoPlayer/videoComp';
 import ImageModal from '../Detail/ImageModal';
+import {useVoteHook} from '../../hooks/use-vote.hook';
 
 export const {width} = Dimensions.get('screen');
 
@@ -50,6 +51,8 @@ const DetailChildrenCard: FC<ChildrenCardProps> = (
 
   const [isModalVisible, setModalVisible] = useState<boolean>(false);
   const [imgUrl, setImgUrl] = useState<number>(-1);
+
+  const {voteIsLoading, voteIsError, dataVote, setVotePost} = useVoteHook();
 
   // ignore warning
   useEffect(() => {
@@ -88,7 +91,30 @@ const DetailChildrenCard: FC<ChildrenCardProps> = (
     viewsCount: data.viewsCount,
     shareCount: data.shareCount,
     isSubscribe: data.isSubscribe,
+    isPolling: data.isPolling,
+    pollingOptions: data.pollingOptions,
+    pollDuration: data.pollDuration,
+    pollCount: data.pollCount,
+    isOwner: data.isOwner,
+    isVoted: data.isVoted,
+    pollTimeLeft: data.pollTimeLeft,
   };
+
+  const setGiveVote = (optionId: string) => {
+    setVotePost({postId: data.id, optionId: optionId});
+  };
+
+  const isCurrentVote = dataVote && dataVote.id === data.id;
+
+  const pollingOptions = isCurrentVote
+    ? dataVote?.pollingOptions
+    : data.pollingOptions;
+  const pollTimeLeft = isCurrentVote
+    ? dataVote?.pollTimeLeft
+    : data.pollTimeLeft;
+  const pollCount = isCurrentVote ? dataVote?.pollCount : data.pollCount;
+  const isOwner = isCurrentVote ? dataVote?.isOwner : data.isOwner;
+  const isVoted = isCurrentVote ? dataVote?.isVoted : data.isVoted;
 
   return (
     <View style={{width: '100%'}}>
@@ -166,6 +192,16 @@ const DetailChildrenCard: FC<ChildrenCardProps> = (
                     blurModeOn={blurModeOn}
                   />
                 </TouchableOpacity>
+              )}
+              {data.isPolling && (
+                <VoteCard
+                  pollingOptions={pollingOptions}
+                  pollTimeLeft={pollTimeLeft}
+                  pollCount={pollCount}
+                  isOwner={isOwner}
+                  isVoted={isVoted}
+                  setGiveVote={setGiveVote}
+                />
               )}
             </View>
           </View>

@@ -28,6 +28,8 @@ interface DropdownV2Props {
   textCustomStyle?: TextStyle;
   iconColor?: string;
   dropdownStyle?: ViewStyle;
+  gapTextToIcon?: number;
+  iconSize?: number;
 }
 
 const DropDownFilter: React.FC<DropdownV2Props> = (props: DropdownV2Props) => {
@@ -42,6 +44,8 @@ const DropDownFilter: React.FC<DropdownV2Props> = (props: DropdownV2Props) => {
     textCustomStyle,
     iconColor,
     dropdownStyle,
+    gapTextToIcon,
+    iconSize,
   } = props;
   const [offsetSortFilter, setOffsetSortFilter] = useState<{
     px: number;
@@ -91,6 +95,8 @@ const DropDownFilter: React.FC<DropdownV2Props> = (props: DropdownV2Props) => {
         typeOfButton={'withIcon'}
         onPress={() => setIsModalVisible(true)}
         iconColor={iconColor}
+        iconSize={iconSize}
+        gapTextToIcon={gapTextToIcon}
       />
       {offsetSortFilter !== undefined && (
         <FilterModal

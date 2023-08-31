@@ -3,13 +3,19 @@ import {
   KeyboardAvoidingView,
   NativeModules,
   Platform,
+  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
 import React, {FC, useCallback, useEffect, useState} from 'react';
-import {color, font} from '../../theme';
+import {Image, Video} from 'react-native-image-crop-picker';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
+import {
+  NativeStackNavigationProp,
+  NativeStackScreenProps,
+} from '@react-navigation/native-stack';
 import {
   Button,
   ButtonGradient,
@@ -20,42 +26,46 @@ import {
   SsuInput,
   TopNavigation,
 } from '../../components';
-import {useFocusEffect, useNavigation} from '@react-navigation/native';
-import {
-  NativeStackNavigationProp,
-  NativeStackScreenProps,
-} from '@react-navigation/native-stack';
-import {RootStackParams} from '../../navigations';
-import {heightResponsive, widthResponsive} from '../../utils';
-import {ms, mvs} from 'react-native-size-matters';
-import {ImportMusicIcon, ImportPhotoIcon} from '../../assets/icon';
 import {
   DataDropDownType,
+  dataDurationVote,
   dropdownCategoryMusician,
   dropDownSetAudience,
 } from '../../data/dropdown';
-import FilterModal from '../../components/molecule/V2/DropdownFilter/modalFilter';
 import ImageList from './showImage';
-import {useFeedHook} from '../../hooks/use-feed.hook';
-import {useUploadImageHook} from '../../hooks/use-uploadImage.hook';
-import {ModalLoading} from '../../components/molecule/ModalLoading/ModalLoading';
-import {Image, Video} from 'react-native-image-crop-picker';
-import MusicPreview from '../../components/molecule/MusicPreview/MusicPreview';
-import {ListDataSearchSongs, Transcode} from '../../interface/search.interface';
-import {usePlayerHook} from '../../hooks/use-player.hook';
-import {dummySongImg} from '../../data/image';
-import {SongList, TranscodedSongType} from '../../interface/song.interface';
+import VoteComponent from './VotePost';
+import {color, font} from '../../theme';
 import {useTranslation} from 'react-i18next';
+import {dummySongImg} from '../../data/image';
+import {RootStackParams} from '../../navigations';
+import {ms, mvs} from 'react-native-size-matters';
+import {useFeedHook} from '../../hooks/use-feed.hook';
+import {setImagePost} from './UtilsPost/setImagePost';
+import {usePlayerStore} from '../../store/player.store';
+import {editPostUtils} from './UtilsPost/editPostUtils';
+import {usePlayerHook} from '../../hooks/use-player.hook';
+import {dataVoteProps} from '../../interface/vote.interface';
+import {heightResponsive, widthResponsive} from '../../utils';
+import {useTriggerUploadImage} from './UtilsPost/uploadImageUtils';
+import {useUploadImageHook} from '../../hooks/use-uploadImage.hook';
+import {ListDataSearchSongs} from '../../interface/search.interface';
 import VideoComp from '../../components/molecule/VideoPlayer/videoComp';
 import {useDataVideoForPost, useVideoStore} from '../../store/video.store';
-import {convertCategoryValue} from './UtilsPost/utils';
-import {usePlayerStore} from '../../store/player.store';
+import {convertCategoryValue, createAddMusicObject} from './UtilsPost/utils';
+import MusicPreview from '../../components/molecule/MusicPreview/MusicPreview';
+import {AddVoteIcon, ImportMusicIcon, ImportPhotoIcon} from '../../assets/icon';
+import {ModalLoading} from '../../components/molecule/ModalLoading/ModalLoading';
+import FilterModal from '../../components/molecule/V2/DropdownFilter/modalFilter';
 
 type PostDetailProps = NativeStackScreenProps<RootStackParams, 'CreatePost'>;
 
 const {StatusBarManager} = NativeModules;
 const barHeight = StatusBarManager.HEIGHT;
 export const {width} = Dimensions.get('screen');
+const vooteInitialChoices: dataVoteProps[] = [
+  {id: '1', text: ''},
+  {id: '2', text: ''},
+];
 
 const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   const {t} = useTranslation();
@@ -94,15 +104,24 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   const {setWithoutBottomTab, show} = usePlayerStore();
 
   const [label, setLabel] = useState<string>();
-  const [valueFilter, setValueFilter] = useState<string>();
-  const [dataAudience, setDataAudience] = useState<string>('');
-  const [dataResponseImg, setDataResponseImg] = useState<string[]>([]);
-  const [musicData, setMusicData] = useState<ListDataSearchSongs>();
-  const [pauseModeOn, setPauseModeOn] = useState<boolean>(false);
-  const [updateOn, setUpdateOn] = useState<boolean>(false);
   const [userId, setUserId] = useState<string>('');
-  const [modalConfirm, setModalConfirm] = useState<boolean>(false);
+  const [valueFilter, setValueFilter] = useState<string>();
+  const [updateOn, setUpdateOn] = useState<boolean>(false);
+  const [dataAudience, setDataAudience] = useState<string>('');
+  const [pauseModeOn, setPauseModeOn] = useState<boolean>(false);
   const [allowToBack, setAllowToBack] = useState<boolean>(false);
+  const [modalConfirm, setModalConfirm] = useState<boolean>(false);
+  const [musicData, setMusicData] = useState<ListDataSearchSongs>();
+  const [dataResponseImg, setDataResponseImg] = useState<string[]>([]);
+  const [showIcon, setShowIcon] = useState<
+    'All' | 'ImageVideo' | 'Music' | 'Vote'
+  >('All');
+  const [dataVote, setDataVote] =
+    useState<dataVoteProps[]>(vooteInitialChoices);
+  const [pollDuration, setPollDuration] = useState<DataDropDownType>(
+    dataDurationVote[0],
+  );
+  const [voteCompleted, setVoteCompleted] = useState<boolean>(true);
 
   // * Hooks for uploading
   const [uri, setUri] = useState<Image[]>([]);
@@ -176,68 +195,20 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   }, [uriVideo, updateOn]);
 
   // ! EDIT POST AREA
-  useEffect(() => {
-    if (dataUpdatePostProps !== undefined && !updateOn) {
-      setUpdateOn(true);
-      setUserId(dataUpdatePostProps.id);
-      setLabel(dataUpdatePostProps.category);
-      setValueFilter(dataUpdatePostProps.category);
-      setInputText(dataUpdatePostProps.caption);
-      setDataAudience(
-        (dataUpdatePostProps.isPremiumPost
-          ? t('Feed.Exclusive')
-          : t('Feed.Public')) || '',
-      );
-      if (dataUpdatePostProps.images.length !== 0) {
-        let dataForSet = [];
-        for (let i = 0; i < dataUpdatePostProps.images.length; i++) {
-          dataForSet.push({
-            path: dataUpdatePostProps.images[i][3]?.image,
-            sourceURL: dataUpdatePostProps.images[i][3]?.image,
-            mime: 'image/jpeg',
-          });
-        }
-        //@ts-ignore
-        setUri(dataForSet);
-      }
-      if (dataUpdatePostProps.quoteToPost.encodeHlsUrl !== null) {
-        let transcode: Transcode = {
-          trackId: dataUpdatePostProps.quoteToPost.targetId,
-          songId: Number(dataUpdatePostProps.quoteToPost.targetId),
-          sessionId: dataUpdatePostProps.quoteToPost.targetId,
-          encodedDashUrl: dataUpdatePostProps.quoteToPost.encodeDashUrl,
-          encodedHlsUrl: dataUpdatePostProps.quoteToPost.encodeHlsUrl,
-          quality: 1,
-          bitrate: '320k',
-          presetName: 'high',
-          encodeStatus: 'FINISHED',
-        };
-        let dataMusicProps: ListDataSearchSongs = {
-          id: Number(dataUpdatePostProps.quoteToPost.targetId),
-          musicianUUID: dataUpdatePostProps.musician.uuid,
-          musicianName: dataUpdatePostProps.musician.fullname,
-          title: dataUpdatePostProps.quoteToPost.title,
-          imageUrl: dataUpdatePostProps.quoteToPost.coverImage,
-          lyrics:
-            dataUpdatePostProps.quoteToPost.lyrics !== undefined
-              ? dataUpdatePostProps.quoteToPost.lyrics
-              : '',
-          originalSongUrl: dataUpdatePostProps.quoteToPost.originalSongUrl
-            ? dataUpdatePostProps.quoteToPost.originalSongUrl
-            : '',
-          songDuration: 60,
-          transcodedSongUrl: [transcode, transcode],
-          musicianId: '',
-          album: {id: -1},
-        };
-        setMusicData(dataMusicProps);
-      }
-      //* step to edit/update video
-      if (dataUpdatePostProps.video.encodeHlsUrl.length > 0) {
-        setUriVideo(dataUpdatePostProps.video);
-      }
-    }
-  }, [dataUpdatePostProps, updateOn]);
+  editPostUtils(
+    dataUpdatePostProps,
+    updateOn,
+    setUpdateOn,
+    setUserId,
+    setLabel,
+    setValueFilter,
+    setInputText,
+    setDataAudience,
+    setMusicData,
+    setUriVideo,
+    setUri,
+    t,
+  );
 
   useEffect(() => {
     if (dataUpdatePost) {
@@ -271,134 +242,33 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   };
 
   //  * 3. trigger hook to hit upload image api
-  useEffect(() => {
-    if (
-      active == true &&
-      uri.length == 0 &&
-      musicData == undefined &&
-      dataUpdatePostProps === undefined &&
-      dataVideo === undefined
-    ) {
-      setCreatePost({
-        caption: inputText,
-        category: valueFilter ? valueFilter : 'highlight',
-        isPremium: dataAudience === 'Feed.Exclusive' ? true : false,
-      });
-    }
-
-    // ? for UPDATE POST text only
-    if (
-      active == true &&
-      uri.length == 0 &&
-      musicData == undefined &&
-      dataUpdatePostProps !== undefined &&
-      !uriVideo
-    ) {
-      setUpdatePost({
-        id: dataUpdatePostProps.id,
-        caption: inputText,
-        category: valueFilter ? valueFilter : 'highlight',
-        isPremium: dataAudience === 'Feed.Exclusive' ? true : false,
-      });
-    }
-
-    if (active == true && uri.length !== 0 && uri[0]?.mime !== 'video/mp4') {
-      for (let i = 0; i < uri.length; i++) {
-        setUploadImage(uri[i], 'medium');
-      }
-    }
-
-    if (
-      active == true &&
-      uri.length == 0 &&
-      musicData !== undefined &&
-      updateOn === false &&
-      dataVideo === undefined
-    ) {
-      setCreatePost({
-        caption: inputText,
-        category: valueFilter ? valueFilter : 'highlight',
-        isPremium: dataAudience === 'Feed.Exclusive' ? true : false,
-        quoteToPost:
-          musicData !== undefined && musicData?.transcodedSongUrl !== undefined
-            ? {
-                targetId: musicData.id?.toString(),
-                targetType: 'song',
-                title: musicData.title,
-                musician: musicData.musicianName,
-                coverImage:
-                  musicData.imageUrl.length !== 0
-                    ? musicData.imageUrl[1].image
-                    : dummySongImg,
-                encodeDashUrl: musicData.transcodedSongUrl[0].encodedDashUrl,
-                encodeHlsUrl: musicData.transcodedSongUrl[0].encodedHlsUrl,
-                startAt: '00:00',
-                endAt: musicData.songDuration.toString(),
-              }
-            : undefined,
-      });
-    }
-
-    // ? for EDIT UPLOAD MUSIC only
-    if (
-      active == true &&
-      uri.length == 0 &&
-      musicData !== undefined &&
-      updateOn === true &&
-      !uriVideo
-    ) {
-      setUpdatePost({
-        id: userId,
-        caption: inputText,
-        category: valueFilter ? valueFilter : 'highlight',
-        isPremium: dataAudience === 'Feed.Exclusive' ? true : false,
-        quoteToPost:
-          musicData !== undefined && musicData?.transcodedSongUrl !== undefined
-            ? {
-                targetId: musicData.id?.toString(),
-                targetType: 'song',
-                title: musicData.title,
-                musician: musicData.musicianName,
-                coverImage:
-                  musicData.imageUrl.length !== 0
-                    ? musicData.imageUrl[1].image
-                    : dummySongImg,
-                encodeDashUrl: musicData.transcodedSongUrl[0].encodedDashUrl,
-                encodeHlsUrl: musicData.transcodedSongUrl[0].encodedHlsUrl,
-              }
-            : undefined,
-      });
-    }
-
-    // ? for EDIT UPLOAD VIDEO only
-    if (active == true && updateOn && uriVideo) {
-      if (!updateToUpload) {
-        const video = {
-          targetType: 'video',
-          coverImage: uriVideo.sourceURL ?? '',
-          encodeDashUrl: uriVideo.localIdentifier ?? '',
-          encodeHlsUrl: uriVideo.path,
-          duration: uriVideo.duration ?? 0,
-        };
-
-        setUpdatePost({
-          id: userId,
-          caption: inputText,
-          category: valueFilter ? valueFilter : 'highlight',
-          isPremium: dataAudience === 'Feed.Exclusive',
-          video,
-        });
-      } else {
-        setStoredIdForUpdate(userId);
-        setStoredInputText(inputText);
-        setStoredValueFilter(valueFilter ? valueFilter : 'highlight');
-        setStoredDataAudience(dataAudience);
-        setAllowToUpdate(true);
-        show && setWithoutBottomTab(false);
-        navigation.goBack();
-      }
-    }
-  }, [active, uri, musicData, updateOn, uriVideo, updateToUpload]);
+  useTriggerUploadImage(
+    active,
+    showIcon,
+    uri,
+    musicData,
+    updateOn,
+    uriVideo,
+    updateToUpload,
+    dataUpdatePostProps,
+    inputText,
+    valueFilter,
+    dataAudience,
+    userId,
+    show,
+    dataVote,
+    pollDuration,
+    setCreatePost,
+    setUpdatePost,
+    setUploadImage,
+    setStoredIdForUpdate,
+    setStoredInputText,
+    setStoredValueFilter,
+    setStoredDataAudience,
+    setAllowToUpdate,
+    setWithoutBottomTab,
+    navigation,
+  );
 
   // * 4. set to hook state when response upload image has received
   useEffect(() => {
@@ -408,38 +278,19 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   }, [dataImage]);
 
   // * 5. hook to hit create post api when all data uploaded has beed received
-  useEffect(() => {
-    active &&
-    uri.length !== 0 &&
-    dataResponseImg.length === uri.length &&
-    dataUpdatePostProps === undefined &&
-    dataVideo === undefined
-      ? (setCreatePost({
-          caption: inputText,
-          category: valueFilter ? valueFilter : 'highlight',
-          image: dataResponseImg,
-          isPremium: dataAudience === 'Feed.Exclusive' ? true : false,
-        }),
-        setActive(false))
-      : null;
-  }, [dataResponseImg, uri, active]);
-
-  // ? update api for UPDATE POST only
-  useEffect(() => {
-    active &&
-    uri.length !== 0 &&
-    dataResponseImg.length === uri.length &&
-    dataUpdatePostProps !== undefined
-      ? (setUpdatePost({
-          id: dataUpdatePostProps.id,
-          caption: inputText,
-          category: valueFilter ? valueFilter : 'highlight',
-          image: dataResponseImg,
-          isPremium: dataAudience === 'Feed.Exclusive' ? true : false,
-        }),
-        setActive(false))
-      : null;
-  }, [dataResponseImg, uri, active]);
+  setImagePost(
+    active,
+    uri,
+    dataResponseImg,
+    dataUpdatePostProps,
+    dataVideo,
+    inputText,
+    valueFilter,
+    dataAudience,
+    setCreatePost,
+    setUpdatePost,
+    setActive,
+  );
 
   // * 6. go back after successful create post
   useEffect(() => {
@@ -461,54 +312,10 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
 
   const onPressPlaySong = () => {
     const dataMusic = [dataSongNavigation];
-    const transcode: TranscodedSongType = {
-      id: dataMusic[0]?.transcodedSongUrl
-        ? dataMusic[0].transcodedSongUrl[1].songId
-        : 1,
-      songId: dataMusic[0]?.transcodedSongUrl
-        ? dataMusic[0].transcodedSongUrl[1].songId
-        : 1,
-      encodedDashUrl: dataMusic[0]?.transcodedSongUrl
-        ? dataMusic[0].transcodedSongUrl[1].encodedDashUrl
-        : '',
-      encodedHlsUrl: dataMusic[0]?.transcodedSongUrl
-        ? dataMusic[0].transcodedSongUrl[1].encodedHlsUrl
-        : '',
-      quality: dataMusic[0]?.transcodedSongUrl
-        ? dataMusic[0].transcodedSongUrl[1].quality
-        : 1,
-      presetName: dataMusic[0]?.transcodedSongUrl
-        ? dataMusic[0].transcodedSongUrl[1].presetName
-        : 'low',
-      encodeStatus: dataMusic[0]?.transcodedSongUrl
-        ? dataMusic[0].transcodedSongUrl[1].encodeStatus
-        : 'ON_PROCESS',
-    };
-
-    const addMusic: SongList = {
-      isAddedToThisPlaylist: true,
-      played: true,
-      id: dataMusic[0] ? dataMusic[0].id : 1,
-      title: dataMusic[0] ? dataMusic[0].title : '',
-      musicianId: dataMusic[0] ? dataMusic[0].musicianUUID : '',
-      musicianName: dataMusic[0] ? dataMusic[0].musicianName : '',
-      imageUrl: dataMusic[0]?.imageUrl ?? [],
-      songDuration:
-        dataMusic[0] && dataMusic[0].songDuration !== null
-          ? dataMusic[0].songDuration
-          : 60,
-      lyrics: dataMusic[0] ? dataMusic[0].lyrics : '',
-      transcodedSongUrl: [transcode, transcode],
-      originalSongUrl: dataMusic[0] ? dataMusic[0].originalSongUrl : '',
-      isLiked:
-        dataMusic[0]?.isLiked !== undefined ? dataMusic[0].isLiked : false,
-      album: {id: -1},
-      musician: {name: dataMusic[0] ? dataMusic[0].musicianName : ''},
-      musicianUUID: '',
-    };
+    const addMusicObject = createAddMusicObject(dataMusic);
 
     addPlaylist({
-      dataSong: [addMusic],
+      dataSong: [addMusicObject],
       playSongId: dataSongNavigation?.id,
       isPlay: true,
     });
@@ -593,6 +400,27 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
     navigation.goBack();
   };
 
+  //* Icon Order
+  useEffect(() => {
+    if (uri.length !== 0 || uriVideo !== null) {
+      setShowIcon('ImageVideo');
+    } else if (musicData) {
+      setShowIcon('Music');
+    } else {
+      setShowIcon('All');
+    }
+  }, [uri, uriVideo, musicData]);
+
+  const voteIconOnPress = () => {
+    setShowIcon('Vote');
+    setVoteCompleted(false);
+  };
+
+  const cancelVoteOnPress = () => {
+    setShowIcon('All');
+    setVoteCompleted(true);
+  };
+
   return (
     <KeyboardAvoidingView
       style={{flex: 1}}
@@ -610,7 +438,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
         />
         <View style={styles.mainContainer}>
           {/* //! TOP AREA */}
-          <View style={styles.topBody}>
+          <ScrollView style={styles.topBody}>
             <View style={{}}>
               <SsuInput.InputText
                 onFocus={() => setKeybrdIsActive(true)}
@@ -623,6 +451,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
                 }}
                 multiline={true}
                 maxLength={400}
+                autoFocus
               />
               {uri[0]?.mime !== 'video/mp4' && (
                 <ImageList
@@ -656,6 +485,15 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
                   seekPlayer={seekPlayer}
                 />
               ) : null}
+              {showIcon === 'Vote' && (
+                <VoteComponent
+                  dataVote={dataVote}
+                  setDataVote={setDataVote}
+                  setVoteCompleted={setVoteCompleted}
+                  pollDuration={pollDuration}
+                  setPollDuration={setPollDuration}
+                />
+              )}
             </View>
 
             {/* // ! VIDEO AREA */}
@@ -667,7 +505,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
                 dontShowText={false}
               />
             )}
-          </View>
+          </ScrollView>
           {/* //! END OF TOP AREA */}
 
           {/* //! BOTTOM AREA */}
@@ -688,7 +526,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
             </Text>
             <View style={styles.iconsAndCategory}>
               <View style={styles.iconsContainer}>
-                {!musicData && (
+                {showIcon === 'All' || showIcon === 'ImageVideo' ? (
                   <>
                     <TouchableOpacity
                       onPress={() =>
@@ -702,11 +540,24 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
                     </TouchableOpacity>
                     <Gap width={16} />
                   </>
+                ) : null}
+                {showIcon === 'All' || showIcon === 'Music' ? (
+                  <>
+                    <TouchableOpacity
+                      onPress={() => navigation.navigate('QuoteMusic')}>
+                      <ImportMusicIcon />
+                    </TouchableOpacity>
+                    <Gap width={16} />
+                  </>
+                ) : null}
+                {showIcon === 'All' && (
+                  <TouchableOpacity onPress={voteIconOnPress}>
+                    <AddVoteIcon />
+                  </TouchableOpacity>
                 )}
-                {uri.length == 0 && (
-                  <TouchableOpacity
-                    onPress={() => navigation.navigate('QuoteMusic')}>
-                    <ImportMusicIcon />
+                {showIcon === 'Vote' && (
+                  <TouchableOpacity onPress={cancelVoteOnPress}>
+                    <Text style={styles.cancelVote}>Cancel</Text>
                   </TouchableOpacity>
                 )}
               </View>
@@ -756,7 +607,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
               </View>
             </View>
             <View style={styles.textCounter}>
-              {inputText.length > 0 ? (
+              {inputText.length > 0 && voteCompleted ? (
                 <ButtonGradient
                   label={t('Post.Title')}
                   containerStyles={{
@@ -781,8 +632,6 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
                     aspectRatio: undefined,
                     backgroundColor: color.Dark[50],
                   }}
-                  textStyles={{}}
-                  // onPress={handlePostOnPress}
                   disabled
                 />
               )}
@@ -925,5 +774,11 @@ const styles = StyleSheet.create({
   videoStyle: {
     width: '100%',
     height: width - widthResponsive(48),
+  },
+  cancelVote: {
+    fontFamily: font.InterRegular,
+    fontSize: mvs(13),
+    fontWeight: '400',
+    color: color.Error[900],
   },
 });

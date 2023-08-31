@@ -22,7 +22,7 @@ const Diagram: FC<DiagramProps> = (props: DiagramProps) => {
       <Gap height={8} />
       <Progress.Bar
         progress={value / 100}
-        width={widthResponsive(292)}
+        width={null}
         height={widthResponsive(6)}
         animated={true}
         borderWidth={0}

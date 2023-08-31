@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import React, {FC, useEffect, useState} from 'react';
 import {elipsisText, widthResponsive} from '../../utils';
-import {Gap} from '../../components';
+import {Gap, VoteCard} from '../../components';
 import ImageList from './ImageList';
 import MusicListPreview from '../../components/molecule/MusicPreview/MusicListPreview';
 import {PostList} from '../../interface/feed.interface';
@@ -16,6 +16,7 @@ import {color, font} from '../../theme';
 import {mvs} from 'react-native-size-matters';
 import VideoComp from '../../components/molecule/VideoPlayer/videoComp';
 import ImageModal from '../Detail/ImageModal';
+import {useVoteHook} from '../../hooks/use-vote.hook';
 
 export const {width} = Dimensions.get('screen');
 
@@ -49,6 +50,8 @@ const ChildrenCard: FC<ChildrenCardProps> = (props: ChildrenCardProps) => {
   const [isModalVisible, setModalVisible] = useState<boolean>(false);
   const [imgUrl, setImgUrl] = useState<number>(-1);
 
+  const {voteIsLoading, voteIsError, dataVote, setVotePost} = useVoteHook();
+
   // ignore warning
   useEffect(() => {
     LogBox.ignoreAllLogs();
@@ -67,6 +70,22 @@ const ChildrenCard: FC<ChildrenCardProps> = (props: ChildrenCardProps) => {
     setImgUrl(-1);
     setModalVisible(!isModalVisible);
   };
+
+  const setGiveVote = (optionId: string) => {
+    setVotePost({postId: data.id, optionId: optionId});
+  };
+
+  const isCurrentVote = dataVote && dataVote.id === data.id;
+
+  const pollingOptions = isCurrentVote
+    ? dataVote?.pollingOptions
+    : data.pollingOptions;
+  const pollTimeLeft = isCurrentVote
+    ? dataVote?.pollTimeLeft
+    : data.pollTimeLeft;
+  const pollCount = isCurrentVote ? dataVote?.pollCount : data.pollCount;
+  const isOwner = isCurrentVote ? dataVote?.isOwner : data.isOwner;
+  const isVoted = isCurrentVote ? dataVote?.isVoted : data.isVoted;
 
   return (
     <View style={{width: '100%'}}>
@@ -129,14 +148,7 @@ const ChildrenCard: FC<ChildrenCardProps> = (props: ChildrenCardProps) => {
                     dataVideo={data.video}
                     sourceUri={data.video.encodeHlsUrl}
                     onPress={() => {}}
-                    buttonIconsStyle={{
-                      position: 'absolute',
-                      bottom: widthResponsive(-5),
-                      width: width - widthResponsive(104),
-                      flexDirection: 'row',
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
-                    }}
+                    buttonIconsStyle={styles.videoIconStyle}
                     videoContainer={{
                       width: '100%',
                       height: width - widthResponsive(150),
@@ -144,6 +156,16 @@ const ChildrenCard: FC<ChildrenCardProps> = (props: ChildrenCardProps) => {
                     blurModeOn={blurModeOn}
                   />
                 </TouchableOpacity>
+              )}
+              {data.isPolling && (
+                <VoteCard
+                  pollingOptions={pollingOptions}
+                  pollTimeLeft={pollTimeLeft}
+                  pollCount={pollCount}
+                  isOwner={isOwner}
+                  isVoted={isVoted}
+                  setGiveVote={setGiveVote}
+                />
               )}
             </View>
           </View>
@@ -174,5 +196,13 @@ const styles = StyleSheet.create({
   videoStyle: {
     width: '100%',
     height: 300,
+  },
+  videoIconStyle: {
+    position: 'absolute',
+    bottom: widthResponsive(-5),
+    width: width - widthResponsive(104),
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
 });
