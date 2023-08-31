@@ -102,6 +102,11 @@ export interface DataDropDownType {
   value: string;
   disabled?: boolean;
 }
+export interface DataDropDownNumberType {
+  label: string;
+  value: number;
+  disabled?: boolean;
+}
 
 export const dropDownDataCategory: DataDropDownType[] = [
   {label: 'Home.Tab.TopPost.Category.All', value: ''},
@@ -309,4 +314,11 @@ export const dropDownTransactionCategory: DataDropDownType[] = [
 export const dropDownTransactionSort: DataDropDownType[] = [
   {label: 'Transaction.Dropdown.Sort.Newest', value: '1'},
   {label: 'Transaction.Dropdown.Sort.Oldest', value: '2'},
+];
+
+export const dataDurationVote: DataDropDownNumberType[] = [
+  {label: 'Vote.Dropdown.OptionA', value: 1},
+  {label: 'Vote.Dropdown.OptionB', value: 3},
+  {label: 'Vote.Dropdown.OptionC', value: 7},
+  {label: 'Vote.Dropdown.OptionD', value: 30},
 ];

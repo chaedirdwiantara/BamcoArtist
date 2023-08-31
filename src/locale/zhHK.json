@@ -1416,5 +1416,14 @@
       "Warning": "You need to select one of the report category",
       "ReportSuccess": "Report have been sent!"
     }
+  },
+  "Vote":{
+    "Dropdown": {
+      "OptionA": "1 Day",
+      "OptionB": "3 Day",
+      "OptionC": "1 Week",
+      "OptionD":"1 Month"
+    },
+    "Duration":"Poll Duration"
   }
 }

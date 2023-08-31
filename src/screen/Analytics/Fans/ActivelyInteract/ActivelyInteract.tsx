@@ -27,7 +27,7 @@ const FansActiveInteract = () => {
     <View style={styles.container}>
       <ChatIcon />
       <Gap width={12} />
-      <View>
+      <View style={{flex: 1}}>
         <Text style={styles.value}>
           {interactData?.data ? interactData.data.percentage : 0}%
         </Text>
@@ -39,7 +39,7 @@ const FansActiveInteract = () => {
         {interactData?.data && (
           <Progress.Bar
             progress={interactData?.data.percentage / 100}
-            width={widthResponsive(248)}
+            width={null}
             height={widthResponsive(12)}
             animated={true}
             borderWidth={0}
