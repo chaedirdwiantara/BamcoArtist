@@ -173,7 +173,7 @@ const MusiciansListCard: React.FC<ListProps> = (props: ListProps) => {
           <Text style={styles.pointStyle}>{`${pointV} pts`}</Text>
         ) : null}
         {activeMore && moreMenu()}
-        {self && (
+        {self && !isLive && (
           <Text
             style={[
               typography.Subtitle1,
@@ -193,7 +193,7 @@ const MusiciansListCard: React.FC<ListProps> = (props: ListProps) => {
           <Gap width={8} />
           <Button
             onPress={onClickTip}
-            label={t('Home.Tab.TopMusician.Tip')}
+            label={self ? t('Btn.MyProfile') : t('Home.Tab.TopMusician.Tip')}
             containerStyles={styles.button}
             textStyles={styles.buttonText}
           />
