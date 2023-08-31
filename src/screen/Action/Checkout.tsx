@@ -110,8 +110,7 @@ export const Checkout: React.FC<CheckoutProps> = ({
         ) : (
           <TouchableOpacity
             onPress={() =>
-              navigation.navigate('ShippingInformation', {
-                data: dataShippingInfo,
+              navigation.navigate('ListAddress', {
                 from: 'checkout',
               })
             }>

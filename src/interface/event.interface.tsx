@@ -122,7 +122,7 @@ export interface SearchEventInput {
   query?: string;
 }
 
-export type TypeEvent = 'event' | 'merch';
+export type TypeEvent = 'event' | 'merch' | string;
 
 export interface SearchItem {
   category: string;
@@ -200,4 +200,25 @@ export interface SearchResponse {
 export enum EventType {
   Merch = 'Merch',
   Concert = 'Concert',
+}
+
+export interface RequestPropsListMerch {
+  pageSize: number;
+  pageNo: number;
+  referer: string;
+  referId: string;
+  limit?: number;
+}
+
+export interface EventCardInterface {
+  title: string;
+  date: string;
+  place: string;
+  isLive: boolean;
+}
+
+export interface EventMusicianInterface {
+  id: string;
+  date: string;
+  item: EventCardInterface[];
 }

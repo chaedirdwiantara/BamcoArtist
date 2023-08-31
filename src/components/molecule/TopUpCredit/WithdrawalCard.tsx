@@ -10,7 +10,7 @@ import {mvs} from 'react-native-size-matters';
 
 import {Gap} from '../../atom';
 import {ButtonStatus} from './ButtonStatus';
-import {color, typography} from '../../../theme/';
+import {color, typography} from '../../../theme';
 import {MenuText} from '../../atom/MenuText/MenuText';
 import {heightPercentage, width, widthPercentage} from '../../../utils';
 import {ChevronDownIcon, ChevronUp, CopyIcon} from '../../../assets/icon';

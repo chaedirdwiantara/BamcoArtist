@@ -125,8 +125,10 @@ export const CreateNewPlaylistContent: React.FC<Props> = ({
       };
       const response = await createPlaylist(payload);
       // to add song to new created playlist
-      addSongToPlaylist(response.data.id);
-      goToPlaylist(response.data.id);
+      if (response.data !== null) {
+        addSongToPlaylist(response.data.id);
+        goToPlaylist(response.data.id);
+      }
       storage.set('fetchingProfile', true);
       closeModal();
     } catch (error) {

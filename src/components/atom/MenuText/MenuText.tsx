@@ -20,7 +20,7 @@ import Font from '../../../theme/Font';
 import Color from '../../../theme/Color';
 import Typography from '../../../theme/Typography';
 import {ArrowRightIcon} from '../../../assets/icon';
-import {ButtonStatus} from '../../molecule/TopupCoin/ButtonStatus';
+import {ButtonStatus} from '../../molecule/TopUpCredit/ButtonStatus';
 
 interface Props {
   text: string;

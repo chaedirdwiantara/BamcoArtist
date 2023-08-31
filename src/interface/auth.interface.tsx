@@ -22,6 +22,8 @@ export interface AuthType {
   accessTokenExpiresAt: string;
   refreshToken: string;
   refreshTokenExpiresAt: string;
+  bookyayToken: string;
+  bookyayOrganizerToken: string;
 }
 export interface RegisterResponseType {
   code: number;
@@ -53,6 +55,8 @@ export interface LoginResponseType {
     refreshTokenExpiresAt: string;
     lastLoginAt: string | null;
     deletedAt: string | null;
+    bookyayToken: string;
+    bookyayOrganizerToken: string;
   };
   message: string;
   status: number;
@@ -77,6 +81,8 @@ export interface ConfirmEmailOTPRegisterResponseType {
     refreshToken: string;
     refreshTokenExpiresAt: string;
     lastLoginAt: string | null;
+    bookyayToken: string;
+    bookyayOrganizerToken: string;
   };
   message: string;
   status: number;
@@ -136,6 +142,8 @@ export interface RefreshTokenResponseType {
     lastLoginAt: string | null;
     deletedAt: string | null;
     fcmToken: string | null;
+    bookyayToken: string;
+    bookyayOrganizerToken: string;
   };
   message: string;
   status: number;
@@ -147,4 +155,15 @@ export interface DecodeTokenType {
   exp: number;
   extra: string;
   platform: string;
+}
+
+export interface TokenBookyayDecodeType {
+  id: string;
+  oid: string;
+  sid: string;
+  cc: string;
+  isTest: boolean;
+  iat: number;
+  exp: number;
+  iss: string;
 }

@@ -41,6 +41,7 @@ import AddPreview from '../screen/CreatePost/MusicPost/AddPreview';
 import YourTopFansScreen from '../screen/Analytics/Fans/YourTopFans/FullScreen';
 import AlbumAnalyticScreen from '../screen/Analytics/Album/AlbumFullScreen';
 import SongDetailAnalytic from '../screen/Analytics/Album/DetailSong';
+import {EventDetail} from '../screen/EventDetail';
 
 // Home
 import {HomeScreen} from '../screen/Home';
@@ -58,7 +59,6 @@ import {ChangePasswordScreen} from '../screen/Setting/ChangePassword';
 import {LanguageScreen} from '../screen/Setting/Language';
 import {ReferralCodeSetting} from '../screen/Setting/ReferralCode';
 import {PhoneNumberScreen} from '../screen/Setting/PhoneNumber/PhoneNumber';
-import {ShippingInformationScreen} from '../screen/Setting/ShippingInformation';
 import {DonationAndSubscription} from '../screen/Setting/DonationAndSubscription';
 import {SendReportScreen} from '../screen/Setting/SendReport';
 import {PushNotificationScreen} from '../screen/Setting/PushNotification';
@@ -68,7 +68,10 @@ import {SecurityScreen} from '../screen/Setting/Security';
 import {TnCAndPPScreen} from '../screen/Setting/TnCAndPP';
 import {AboutDeletionScreen} from '../screen/Setting/DeleteAccount/AboutDeletion';
 import {InputDeletionScreen} from '../screen/Setting/DeleteAccount/InputDeletion';
-import {SendAppealScreen} from '../screen/Setting/SendAppeal';
+import {SendAppealScreen} from '../screen/Setting/SendAppeal/SendAppeal';
+import {ReportedContentScreen} from '../screen/Setting/SendAppeal/ReportedContent';
+import {ListAddressScreen} from '../screen/Setting/ShippingInfo/ListAddress';
+import {AddNewAddressScreen} from '../screen/Setting/ShippingInfo/AddNewAddress';
 import {RevenueScreen} from '../screen/Setting/Revenue';
 
 // Profile
@@ -93,12 +96,13 @@ import {SongDetailsScreen} from '../screen/SongDetails/SongDetails';
 import {AlbumScreen} from '../screen/Album/Album';
 
 // TopUp
-import {TopupCoinScreen} from '../screen/TopupCoin';
+import {TopUpCreditScreen} from '../screen/TopUpCredit/TopUpCredit';
 import {WithdrawalScreen} from '../screen/Withdrawal';
 import {InputWithdrawalScreen} from '../screen/Withdrawal/InputWithdrawal';
 import {AddBankAccountScreen} from '../screen/Withdrawal/AddBankAccount';
 import {EditBankAccountScreen} from '../screen/Withdrawal/EditBankAccount';
 import {VerifCodeWithdrawalScreen} from '../screen/Withdrawal/VerifCodeWithdrawal';
+import {DetailHistoryTransactionScreen} from '../screen/TopUpCredit/DetailHistoryTransaction';
 
 // Action
 import Cart from '../screen/Action/Cart';
@@ -143,16 +147,22 @@ import {OtpPNScreen} from '../screen/Setting/PhoneNumber/OTP';
 import {useNavigation} from '@react-navigation/native';
 import {ListDataSearchSongs} from '../interface/search.interface';
 import {
+  AlbumReportedType,
+  CommentReportedType,
   DataExclusiveResponse,
   DataShippingProps,
+  ListViolationsType,
   OtpEmailScreen as OtpEmailProps,
   OtpPhoneScreen,
+  PostReportedType,
+  SongReportedType,
 } from '../interface/setting.interface';
 import {OtpEmailScreen} from '../screen/Setting/Email/OTP';
 import {SplashScreen} from '../screen/SplashScreen';
 import {SongAlbum} from '../interface/song.interface';
 import ListPlaylist from '../screen/Playlist/ListPlaylist';
 import {MyQRCode} from '../screen/Setting/MyQRCode';
+import {TransactionHistoryPropsType} from '../interface/credit.interface';
 
 export type RootStackParams = {
   AboutDeletion: undefined;
@@ -177,6 +187,9 @@ export type RootStackParams = {
   };
   OtpPhoneNumber: OtpPhoneScreen;
   CreateNewPlaylist: {id?: number[]; type?: string};
+  DetailHistoryTransaction: {
+    dataDetail: TransactionHistoryPropsType;
+  };
   DonationAndSubscription: undefined;
   EditProfile: {data: ProfileResponseData};
   EditPlaylist: Playlist;
@@ -247,7 +260,17 @@ export type RootStackParams = {
   RecoverAccount: undefined;
   Referral: undefined;
   ReferralCode: undefined;
-  SendAppeal: {title: string};
+  ReportedContent: {
+    title: string;
+    dataViolation: ListViolationsType;
+  };
+  SendAppeal: {
+    title: string;
+    selectedViolation?: PostReportedType &
+      CommentReportedType &
+      SongReportedType &
+      AlbumReportedType;
+  };
   SendReport: {
     title: string;
   };
@@ -266,10 +289,6 @@ export type RootStackParams = {
   SignInGuest: {
     showToastDelete?: boolean;
   };
-  ShippingInformation: {
-    data: DataShippingProps | null;
-    from?: string;
-  };
   ShowCredit: {
     songId: number;
   };
@@ -281,7 +300,7 @@ export type RootStackParams = {
   PostDetail: PostList;
   SearchScreen: undefined;
   TnCAndPP: undefined;
-  TopupCoin: undefined;
+  TopUpCredit: undefined;
   MusicianProfile: {
     id: string;
   };
@@ -330,7 +349,17 @@ export type RootStackParams = {
   SongDetailAnalytic: {
     songId: string;
   };
+  ListAddress: {
+    from?: string;
+  };
+  AddNewAddress: {
+    data?: DataShippingProps;
+    from?: string;
+  };
   Revenue: undefined;
+  EventDetail: {
+    id: string;
+  };
 };
 
 export type MainTabParams = {
@@ -402,7 +431,7 @@ const TabScreen = () => {
           ),
         }}
       />
-      <MainTab.Screen
+      {/* <MainTab.Screen
         name="Merch"
         component={MerchScreen}
         options={{
@@ -425,7 +454,7 @@ const TabScreen = () => {
             </View>
           ),
         }}
-      />
+      /> */}
       <MainTab.Screen
         name="Profile"
         component={ProfileScreen}
@@ -490,10 +519,8 @@ export const RootStackScreen = () => (
     <RootStack.Screen name="ChangePassword" component={ChangePasswordScreen} />
     <RootStack.Screen name="ReferralCode" component={ReferralCodeSetting} />
     <RootStack.Screen name="Language" component={LanguageScreen} />
-    <RootStack.Screen
-      name="ShippingInformation"
-      component={ShippingInformationScreen}
-    />
+    <RootStack.Screen name="ListAddress" component={ListAddressScreen} />
+    <RootStack.Screen name="AddNewAddress" component={AddNewAddressScreen} />
     <RootStack.Screen
       name="DonationAndSubscription"
       component={DonationAndSubscription}
@@ -503,6 +530,10 @@ export const RootStackScreen = () => (
       component={ExclusiveContentSetting}
     />
     <RootStack.Screen name="SendAppeal" component={SendAppealScreen} />
+    <RootStack.Screen
+      name="ReportedContent"
+      component={ReportedContentScreen}
+    />
     <RootStack.Screen name="SendReport" component={SendReportScreen} />
     <RootStack.Screen name="Setting" component={SettingScreen} />
     <RootStack.Screen name="MyQRCode" component={MyQRCode} />
@@ -529,7 +560,11 @@ export const RootStackScreen = () => (
     <RootStack.Screen name="MusicianProfile" component={MusicianProfile} />
     <RootStack.Screen name="Webview" component={WebviewPage} />
     <RootStack.Screen name="MusicPlayer" component={MusicPlayer} />
-    <RootStack.Screen name="TopupCoin" component={TopupCoinScreen} />
+    <RootStack.Screen name="TopUpCredit" component={TopUpCreditScreen} />
+    <RootStack.Screen
+      name="DetailHistoryTransaction"
+      component={DetailHistoryTransactionScreen}
+    />
     <RootStack.Screen name="Withdrawal" component={WithdrawalScreen} />
     <RootStack.Screen
       name="InputWithdrawal"
@@ -586,6 +621,7 @@ export const RootStackScreen = () => (
       component={SongDetailAnalytic}
     />
     <RootStack.Screen name="Revenue" component={RevenueScreen} />
+    <RootStack.Screen name="EventDetail" component={EventDetail} />
   </RootStack.Navigator>
 );
 

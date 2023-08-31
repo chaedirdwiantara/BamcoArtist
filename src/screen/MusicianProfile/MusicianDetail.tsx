@@ -50,6 +50,7 @@ import {usePlayerStore} from '../../store/player.store';
 import ListAlbum from './ListAlbum';
 import MerchList from '../ListCard/MerchList';
 import ConcertList from '../ListCard/ConcertList';
+import EventMusician from '../../components/molecule/EventMusician';
 
 type OnScrollEventHandler = (
   event: NativeSyntheticEvent<NativeScrollEvent>,
@@ -93,9 +94,10 @@ export const MusicianDetail: React.FC<MusicianDetailProps> = ({
     {filterName: 'Musician.Tab.Musician'},
     {filterName: 'Musician.Tab.Music'},
     {filterName: 'Musician.Tab.Fans'},
+    // {filterName: 'Musician.Tab.Event'},
     {filterName: 'Musician.Tab.Profile'},
-    {filterName: 'Musician.Tab.Merchandise'},
-    {filterName: 'Musician.Tab.Ticket'},
+    // {filterName: 'Musician.Tab.Merchandise'},
+    // {filterName: 'Musician.Tab.Ticket'},
   ]);
   const [isModalVisible, setModalVisible] = useState<boolean>(false);
   const [zoomImage, setZoomImage] = useState<string[]>([]);
@@ -351,14 +353,21 @@ export const MusicianDetail: React.FC<MusicianDetailProps> = ({
                 style={{
                   paddingHorizontal: widthResponsive(20),
                 }}>
-                <MerchList />
+                <MerchList musicianId={uuid} />
               </View>
             ) : filter[selectedIndex].filterName === 'Musician.Tab.Ticket' ? (
               <View
                 style={{
                   paddingHorizontal: widthResponsive(20),
                 }}>
-                <ConcertList />
+                <ConcertList musicianId={uuid} />
+              </View>
+            ) : filter[selectedIndex].filterName === 'Musician.Tab.Event' ? (
+              <View
+                style={{
+                  paddingHorizontal: widthResponsive(20),
+                }}>
+                <EventMusician />
               </View>
             ) : null}
           </View>

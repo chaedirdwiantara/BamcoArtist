@@ -1,38 +1,33 @@
 import React from 'react';
-import {StyleSheet, View, Text, ViewStyle} from 'react-native';
+import {StyleSheet, Text, ViewStyle, TouchableOpacity} from 'react-native';
 
 import {Gap} from '../../atom';
-import {color, typography} from '../../../theme/';
+import {color, typography} from '../../../theme';
 import {heightPercentage, width, widthPercentage} from '../../../utils';
 
 interface TransactionCardProps {
   title: string;
   date: string;
-  from?: string;
+  onPress: () => void;
   containerStyle?: ViewStyle;
 }
 
 export const TransactionCard: React.FC<TransactionCardProps> = ({
   title,
   date,
-  from,
+  onPress,
   containerStyle,
 }) => {
   return (
-    <View style={[styles.root, containerStyle]}>
-      <View style={styles.containerTitle}>
-        <Text style={[typography.Button2, {color: color.Neutral[10]}]}>
-          {title}
-        </Text>
-        <Text style={[typography.Button2, {color: color.Pink[2]}]}>
-          {' ' + from}
-        </Text>
-      </View>
+    <TouchableOpacity onPress={onPress} style={[styles.root, containerStyle]}>
+      <Text style={[typography.Button2, {color: color.Neutral[10]}]}>
+        {title}
+      </Text>
       <Gap height={heightPercentage(2)} />
       <Text style={[typography.Overline, {color: color.Success[400]}]}>
         {date}
       </Text>
-    </View>
+    </TouchableOpacity>
   );
 };
 
@@ -45,9 +40,5 @@ const styles = StyleSheet.create({
     paddingHorizontal: widthPercentage(20),
     paddingVertical: heightPercentage(15),
     marginTop: heightPercentage(10),
-  },
-  containerTitle: {
-    flexDirection: 'row',
-    alignItems: 'center',
   },
 });

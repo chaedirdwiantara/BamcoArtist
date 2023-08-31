@@ -65,6 +65,14 @@ const dateFormatSubscribe = (ISOStringDate: string | Date) => {
   return month + ' ' + day + ', ' + year;
 };
 
+const dateFormatHoursMinutes = (date: string) => {
+  const today = new Date(date);
+  const hours = today.getHours();
+  const minutes = today.getMinutes();
+
+  return hours + ':' + minutes;
+};
+
 export {
   dateFormat,
   dateFormatBirth,
@@ -74,4 +82,5 @@ export {
   dateFormatDayOnly,
   dateFormatMonthOnly,
   dateFormatSubscribe,
+  dateFormatHoursMinutes,
 };

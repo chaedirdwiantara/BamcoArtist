@@ -1,6 +1,7 @@
 import {AccountContent} from './SettingContent/AccountContent';
 import {AddSongContent} from './PlaylistContent/AddSongContent';
 import {AddToPlaylistContent} from './PlaylistContent/AddToPlaylistContent';
+import AlbumAppeal from './AppealCard/AlbumAppeal';
 import {AlbumContent} from './Album/AlbumContent';
 import {AvatarProfile} from './AvatarProfile/AvatarProfile';
 import BlockUser from './BlockUserUI';
@@ -8,6 +9,7 @@ import {BottomSheetGuest} from './GuestComponent/BottomSheetGuest';
 import {Carousel} from './Carousel/Carousel';
 import {ChangeEmailContent} from './SettingContent/ChangeEmailContent';
 import {ChangePasswordContent} from './SettingContent/ChangePasswordContent';
+import CommentAppeal from './AppealCard/CommentAppeal';
 import CommentInputModal from './CommentInputModal/CommentInputModal';
 import {CreateNewCard} from './CreateNewCard/CreateNewCard';
 import {CreateNewPlaylistContent} from './PlaylistContent/CreateNewPlaylistContent';
@@ -55,10 +57,11 @@ import ProgressBar from './ProgressBar/progressBar';
 import {ReferralContent} from './ReferralContent/ReferralContent';
 import {RadioButton} from './RadioButton/RadioButton';
 import {ReferAFriend} from './SettingContent/ReferAFriend';
+import {SendAppealContent} from './SettingContent/SendAppealContent';
 import {SendReportContent} from './SettingContent/SendReportContent';
 import {SettingContent} from './SettingContent/SettingContent';
 import {SignInGuestContent} from './SignInGuestContent/SignInGuestContent';
-import {ShippingInformationContent} from './SettingContent/ShippingInformation';
+import {AddShippingAddress} from './SettingContent/AddShippingAddress';
 import {SongDetailsContent} from './SongDetailsContent/SongDetailContent';
 import {SongTitlePlay} from './SongTitlePlay/SongTitlePlay';
 import SsuOTPInput from './OtpInput';
@@ -67,7 +70,7 @@ import {ShowCreditContent} from './SongDetailsContent/ShowCreditContent';
 import {TabFilter} from './TabFilter';
 import TermAndConditions from './Tnc';
 import Title from './Title';
-import {TopupCoinContent} from './TopupCoin';
+import {TopUpCreditContent} from './TopUpCredit';
 import {TopNavigation} from './TopNavigation';
 import TopFans from './TopFans/TopFans';
 import SuccessToast from './Toast/SuccessToast';
@@ -79,6 +82,7 @@ export {
   AccountContent,
   AddSongContent,
   AddToPlaylistContent,
+  AlbumAppeal,
   AlbumContent,
   AvatarProfile,
   BlockUser,
@@ -86,6 +90,7 @@ export {
   Carousel,
   ChangeEmailContent,
   ChangePasswordContent,
+  CommentAppeal,
   CommentInputModal,
   CreateNewCard,
   CreateNewPlaylistContent,
@@ -133,10 +138,11 @@ export {
   RadioButton,
   ReferralContent,
   ReferAFriend,
+  SendAppealContent,
   SendReportContent,
   SettingContent,
   SignInGuestContent,
-  ShippingInformationContent,
+  AddShippingAddress,
   SongDetailsContent,
   SongTitlePlay,
   SsuOTPInput,
@@ -146,7 +152,7 @@ export {
   TermAndConditions,
   Title,
   TopNavigation,
-  TopupCoinContent,
+  TopUpCreditContent,
   TopFans,
   SuccessToast,
   UseReferralContent,

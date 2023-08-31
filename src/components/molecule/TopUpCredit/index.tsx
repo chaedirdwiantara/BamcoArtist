@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {StyleSheet, View, Text, ScrollView} from 'react-native';
+import {useQuery} from 'react-query';
 import {useTranslation} from 'react-i18next';
 import {mvs} from 'react-native-size-matters';
 
@@ -24,22 +25,26 @@ import {TopNavigation} from '../TopNavigation';
 import {WithdrawalCard} from './WithdrawalCard';
 import {TransactionCard} from './TransactionCard';
 import {EmptyState} from '../EmptyState/EmptyState';
-import {color, font, typography} from '../../../theme/';
+import {color, font, typography} from '../../../theme';
+import {useIapHook} from '../../../hooks/use-iap.hook';
+import {dateLongMonth} from '../../../utils/date-format';
 import {useCreditHook} from '../../../hooks/use-credit.hook';
 import {ArrowLeftIcon, CoinDIcon} from '../../../assets/icon';
-import {useIapHook} from '../../../hooks/use-iap.hook';
+import {TransactionHistoryPropsType} from '../../../interface/credit.interface';
 
-interface TopupCoinProps {
+interface TopUpCreditProps {
   onPressGoBack: () => void;
   onPressWithdrawal: () => void;
+  goToDetailTransaction: (data: TransactionHistoryPropsType) => void;
 }
 
-export const TopupCoinContent: React.FC<TopupCoinProps> = ({
+export const TopUpCreditContent: React.FC<TopUpCreditProps> = ({
   onPressGoBack,
+  goToDetailTransaction,
   onPressWithdrawal,
 }) => {
   const {t} = useTranslation();
-  const {creditCount, getCreditCount} = useCreditHook();
+  const {creditCount, getCreditCount, getTransactionHistory} = useCreditHook();
   const {
     iapProduct,
     initIAP,
@@ -50,6 +55,10 @@ export const TopupCoinContent: React.FC<TopupCoinProps> = ({
     purchaseUpdateListener,
     purchaseErrorListener,
   } = useIapHook();
+  const {data: dataHistory, isLoading} = useQuery(
+    ['/transaction-history'],
+    () => getTransactionHistory(),
+  );
   const [selectedIndex, setSelectedIndex] = useState<number>(0);
   const [listTransaction] = useState<ListTransactionProps[]>([]);
   const [listWithdrawal, setListWithdrawal] = useState<ListWithdrawalProps[]>(
@@ -169,16 +178,17 @@ export const TopupCoinContent: React.FC<TopupCoinProps> = ({
             </View>
           </View>
         ) : filter[selectedIndex].filterName === 'TopUp.Filter.Transaction' ? (
-          // TODO: Need to be wired with API history transaction
           <>
-            {listTransaction.length > 0 ? (
+            {isLoading ? null : dataHistory && dataHistory.data.length > 0 ? (
               <View style={styles.containerContent}>
-                {listTransaction.map((val, i) => (
+                {dataHistory.data.map((val, i) => (
                   <TransactionCard
                     key={i}
-                    title={val.text}
-                    date={val.date}
-                    from={val.from}
+                    title={t('TopUp.Transaction.SuccessPurchased', {
+                      credit: toCurrency(val.credit, {withFraction: false}),
+                    })}
+                    date={dateLongMonth(val.createdAt)}
+                    onPress={() => goToDetailTransaction(val)}
                   />
                 ))}
               </View>

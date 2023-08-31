@@ -146,18 +146,18 @@ const ListSubs: React.FC<ListSubsProps> = props => {
           listSubs?.map((val: any, index: number) => (
             <DonateCardContent
               key={index}
-              avatarUri={val.musician.imageProfileUrls[0].image}
-              name={val.musician.fullname}
-              username={`@${val.musician.username}`}
+              avatarUri={val?.musician?.imageProfileUrls?.[0]?.image ?? ''}
+              name={val?.musician?.fullname}
+              username={`@${val?.musician?.username}`}
               detail={[
-                val.status,
-                val.nextPaymentDate,
-                val.price,
-                val.duration,
+                val?.status,
+                val?.nextPaymentDate,
+                val?.price,
+                val?.duration,
               ]}
               onPressMore={data => resultDataMore(data, val)}
               type="subs"
-              next={val.status === 'ongoing' ? true : false}
+              next={val?.status === 'ongoing' ? true : false}
             />
           ))
         ) : (

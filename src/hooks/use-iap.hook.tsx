@@ -80,7 +80,7 @@ export const useIapHook = () => {
             if (selectedProduct.length > 0) {
               await createIapApple({
                 owner: ownerId,
-                ownerType: 1, //1 fans, 2 musician
+                ownerType: 2, //1 fans, 2 musician
                 trxReferenceId: purchase.transactionId ?? '',
                 credit: parseInt(
                   getCoinFromProductId({

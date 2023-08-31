@@ -86,9 +86,9 @@ export const MusicSection: React.FC<ListProps> = (props: ListProps) => {
   } = useReportHook();
 
   const dataMore =
-    singerId !== MyUuid && !idReported.includes(songId)
+    singerId !== MyUuid && !idReported.includes(songId.toString())
       ? dataListSongAlbum
-      : singerId !== MyUuid && idReported.includes(songId)
+      : singerId !== MyUuid && idReported.includes(songId.toString())
       ? dataListSongAlbumReportSent
       : dataListSongMoreMyAlbum;
 
@@ -124,8 +124,8 @@ export const MusicSection: React.FC<ListProps> = (props: ListProps) => {
   //? set status disable after report sent to make sure the status report is updated
   useEffect(() => {
     if (dataReport && songId) {
-      if (!idReported.includes(songId)) {
-        setIdReported([...idReported, songId]);
+      if (!idReported.includes(songId.toString())) {
+        setIdReported([...idReported, songId.toString()]);
       }
     }
   }, [dataReport]);
@@ -172,7 +172,7 @@ export const MusicSection: React.FC<ListProps> = (props: ListProps) => {
   const sendOnPress = () => {
     const reportBody: ReportParamsProps = {
       reportType: 'song',
-      reportTypeId: songId ?? 0,
+      reportTypeId: songId.toString() ?? '',
       reporterUuid: MyUuid ?? '',
       reportedUuid: singerId ?? '',
       reportCategory: t(selectedCategory ?? ''),

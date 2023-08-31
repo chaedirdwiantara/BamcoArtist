@@ -46,18 +46,27 @@ export type ChangePasswordResponseType = {
 };
 
 export type DataShippingProps = {
-  email: string;
-  phoneNumber: string;
+  bookyayShipmentID?: string;
   phoneNumberCode: string;
-  fullname: string;
+  phoneNumber: string;
+  receiverFirstname: string;
+  receiverLastname: string;
   province: string;
   country: string;
   postalCode: number;
   city: string;
   address: string;
+  isDefault?: boolean;
 };
 
 export type ShippingResponseType = {
+  code: number;
+  data: DataShippingProps[];
+  message: string;
+  status: number;
+};
+
+export type UpdateShippingResponseType = {
   code: number;
   data: DataShippingProps;
   message: string;
@@ -189,6 +198,115 @@ export type ListRoleType = {
 export type ListRoleResponseType = {
   code: number;
   data: ListRoleType[];
+  message: string;
+  status: number;
+};
+
+export type PostReportedType = {
+  reportedViolationId: number;
+  postId: string;
+  caption: string;
+  likesCount: number;
+  commentsCount: number;
+  viewsCount: number;
+  shareCount: number;
+  timeAgo: string;
+  category: string;
+  images: {
+    image: string;
+    presetName: string;
+  }[][];
+  musician: {
+    uuid: string;
+    username: string;
+    fullname: string;
+    email: string;
+    imageProfileUrls: {
+      image: string;
+      presetName: string;
+    }[];
+    followers: number;
+  };
+};
+
+export type CommentReportedType = {
+  reportedViolationId: number;
+  commentId: string;
+  caption: string;
+  likesCount: number;
+  commentsCount: number;
+  createdAt: string;
+  timeAgo: string;
+  commentOwner: {
+    UUID: string;
+    fullname: string;
+    username: string;
+    image: string;
+    isMusician: boolean;
+  };
+  repliedTo: string;
+};
+
+export type SongReportedType = {
+  reportedViolationId: number;
+  songId: number;
+  image: string;
+  title: string;
+  musicianName: string;
+  songDuration: string;
+};
+
+export type AlbumReportedType = {
+  reportedViolationId: number;
+  albumId: number;
+  image: string;
+  title: string;
+  productionYear: string;
+  songTotal: number;
+};
+
+export type ListViolationsType = {
+  isAnyViolation: boolean;
+  postReported: PostReportedType[];
+  commentReported: CommentReportedType[];
+  songReported: SongReportedType[];
+  albumReported: AlbumReportedType[];
+};
+
+export type ListViolationsResponseType = {
+  code: number;
+  data: ListViolationsType;
+  message: string;
+  status: number;
+  meta: {
+    page: number;
+    perPage: number;
+    total: number;
+  };
+};
+
+export type SendAppealPropsType = {
+  reportedViolationId?: number;
+  description: string;
+  images?: string[];
+};
+
+export type RequestAppealType = {
+  id: number;
+  userUUID: string;
+  reportedViolationId: number;
+  description: string;
+  appealType: string;
+  createdAt: string;
+  images: {
+    image: string;
+    presetName: string;
+  }[][];
+};
+
+export type RequestAppealResponseType = {
+  code: number;
+  data: RequestAppealType[];
   message: string;
   status: number;
 };

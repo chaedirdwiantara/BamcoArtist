@@ -146,6 +146,9 @@ export const SendReportContent: React.FC<SendReportProps> = ({
   const removeImage = (id: number) => {
     setActive(false);
     setListImage(listImage.filter((x: Image) => x.path !== listImage[id].path));
+    const newImage = [...dataResponseImg];
+    newImage.splice(id, 1);
+    setDataResponseImg(newImage);
   };
 
   return (

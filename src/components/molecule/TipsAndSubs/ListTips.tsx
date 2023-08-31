@@ -199,18 +199,18 @@ const ListTips: React.FC<ListTipsProps> = props => {
           listTips?.map((val: TipsDataType, index: number) => (
             <DonateCardContent
               key={index}
-              avatarUri={val.ownerImage || ''}
-              name={val.ownerFullName}
-              username={`@${val.ownerUserName}`}
+              avatarUri={val?.ownerImage || ''}
+              name={val?.ownerFullName}
+              username={`@${val?.ownerUserName}`}
               detail={[
-                val.contributionRepeatStatus === 1 ? 'Ongoing' : 'Ended',
-                dateFormatSubscribe(val.contributionEndAt),
-                val.credit + ' Credit',
-                tippingDuration(val.duration),
+                val?.contributionRepeatStatus === 1 ? 'Ongoing' : 'Ended',
+                dateFormatSubscribe(val?.contributionEndAt),
+                val?.credit + ' Credit',
+                tippingDuration(val?.duration),
               ]}
               onPressMore={data => resultDataMore(data, val)}
               type="tip"
-              next={val.contributionRepeatStatus === 1 ? true : false}
+              next={val?.contributionRepeatStatus === 1 ? true : false}
             />
           ))
         ) : (

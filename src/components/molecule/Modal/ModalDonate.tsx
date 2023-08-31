@@ -82,7 +82,7 @@ export const ModalDonate: React.FC<ModalDonateProps> = ({
 
   const goToScreenCoin = () => {
     onPressClose();
-    navigation.navigate('TopupCoin');
+    navigation.navigate('TopUpCredit');
   };
 
   const resetForm = () => {

@@ -1,115 +1,97 @@
-import React, {FC, useState} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import {RefreshControl, StyleSheet, View} from 'react-native';
 import {heightPercentage, heightResponsive, widthResponsive} from '../../utils';
 import {FlashList} from '@shopify/flash-list';
 import MerchListCard from '../../components/molecule/ListCard/MerchListCard';
 import {useEventHook} from '../../hooks/use-event.hook';
-import {DropDownFilter, EmptyState} from '../../components';
-import {BoxStore, CrackEggIcon, FriedEggIcon} from '../../assets/icon';
+import {EmptyState} from '../../components';
+import {CrackEggIcon} from '../../assets/icon';
 import Color from '../../theme/Color';
-import {useQuery} from 'react-query';
+import {useInfiniteQuery} from 'react-query';
 import {MerchData} from '../../interface/event.interface';
 import {useTranslation} from 'react-i18next';
 import LoadingSpinner from '../../components/atom/Loading/LoadingSpinner';
-import {
-  DataDropDownType,
-  dataUpdatePost,
-  dropDownActionCategory,
-  dropDownActionSort,
-} from '../../data/dropdown';
-import DropdownMore from '../../components/molecule/V2/DropdownFilter/DropdownMore';
-
 type MerchListType = {
   type?: string;
+  musicianId?: string;
 };
 
 const MerchList: FC<MerchListType> = props => {
   const {t} = useTranslation();
-  const {type = 'action'} = props;
-  const {getListDataMerch} = useEventHook();
+  const {type = 'action', musicianId = ''} = props;
+  const {searchListDataMerch} = useEventHook();
 
-  const [selectedCategories, setSelectedCategories] =
-    useState<DataDropDownType>();
-  const [selectedSort, setSelectedSort] = useState<DataDropDownType>();
+  const [dataMerch, setDataMerch] = useState<MerchData[] | undefined>([]);
+  const [totalPage, setTotalPage] = useState<number>(1);
 
   const {
     data: dataMerchList,
     isLoading,
     refetch,
     isRefetching,
-  } = useQuery([`/merch/${type}`], () => getListDataMerch());
+    fetchNextPage,
+    isFetchingNextPage,
+    hasNextPage,
+  } = useInfiniteQuery(
+    [`/merch/${type}/${musicianId}`],
+    ({pageParam = 1}) =>
+      searchListDataMerch({
+        pageNo: pageParam,
+        pageSize: 10,
+        referer: 'beamco',
+        referId: musicianId,
+      }),
+    {
+      getNextPageParam: lastPage => {
+        if ((lastPage?.data?.length as number) < totalPage) {
+          const nextPage = (lastPage?.data?.length as number) + 1;
+          return nextPage;
+        }
+        return null;
+      },
+    },
+  );
 
-  const filterList: MerchData | undefined = dataMerchList?.data.find(merch => {
-    return merch.name === 'product_latest';
-  });
+  useEffect(() => {
+    if (dataMerchList?.pages?.[0] !== undefined) {
+      setDataMerch(
+        dataMerchList?.pages?.map((page: any) => page?.data).flat() ?? [],
+      );
+      const total = Math.ceil(dataMerchList?.pages?.[0]?.total ?? 1);
+      setTotalPage(total);
+    } else {
+      setDataMerch([]);
+      setTotalPage(1);
+    }
+  }, [dataMerchList]);
+
+  const loadMore = () => {
+    if (hasNextPage) {
+      fetchNextPage();
+    }
+  };
 
   return (
     <>
-      {(isLoading || isRefetching) && (
-        <View style={styles.loadingContainer}>
-          <LoadingSpinner />
-        </View>
-      )}
-
-      <EmptyState
-        icon={
-          <CrackEggIcon
-            fill={Color.Dark[500]}
-            width={widthResponsive(150)}
-            height={heightResponsive(150)}
-            style={styles.iconEmpty}
-          />
-        }
-        text={t('Event.Merch.ComingSoon.Title') || ''}
-        subtitle={t('Event.Merch.ComingSoon.Subtitle') || ''}
-        containerStyle={styles.containerEmpty}
-      />
-
-      {/* {!isLoading && (
-        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-          <DropDownFilter
-            labelCaption={
-              selectedCategories
-                ? t(selectedCategories.label)
-                : t('Event.Dropdown.Category.All')
-            }
-            dataFilter={dropDownActionCategory}
-            selectedMenu={setSelectedCategories}
-            leftPosition={widthResponsive(-90)}
-          />
-
-          <DropDownFilter
-            labelCaption={
-              selectedSort
-                ? t(selectedSort.label)
-                : t('Event.Dropdown.Sort.Placeholder')
-            }
-            dataFilter={dropDownActionSort}
-            selectedMenu={setSelectedSort}
-            leftPosition={widthResponsive(-100)}
-          />
-        </View>
-      )} */}
-
-      {/* TODO: Update when API ready */}
-
-      {/* <FlashList
-        data={filterList?.data}
+      <FlashList
+        data={dataMerch}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.ListContainer}
         keyExtractor={item => item?.id.toString()}
+        onTouchEnd={loadMore}
         ListEmptyComponent={
           !isLoading && !isRefetching ? (
             <EmptyState
               icon={
-                <BoxStore
-                  stroke={Color.Dark[500]}
+                <CrackEggIcon
+                  fill={Color.Dark[500]}
                   width={widthResponsive(150)}
                   height={heightResponsive(150)}
                   style={styles.iconEmpty}
                 />
               }
-              text={t('Event.Merch.NoMerch') || ''}
+              text={t('Event.Merch.ComingSoon.Title') || ''}
+              subtitle={t('Event.Merch.ComingSoon.Subtitle') || ''}
               containerStyle={styles.containerEmpty}
             />
           ) : null
@@ -118,17 +100,19 @@ const MerchList: FC<MerchListType> = props => {
           <MerchListCard
             id={item.id}
             containerStyles={
-              index % 2 == 0 ? {marginRight: 10} : {marginLeft: 10}
+              index % 2 === 0 ? {marginRight: 10} : {marginLeft: 10}
             }
             image={item.pic}
             title={item.title}
             owner={item.organizer?.name}
             ownerImage={item.organizer?.pic}
-            price={item.price}
+            price={item.price / 100}
+            priceBeforeDisc={item.originalPrice / 100}
             desc={item.content}
             currency={item.currencyCode}
             type={'merch'}
             charge={item.charge}
+            currencyCode={item.currencyCode}
           />
         )}
         estimatedItemSize={150}
@@ -136,7 +120,12 @@ const MerchList: FC<MerchListType> = props => {
         refreshControl={
           <RefreshControl refreshing={false} onRefresh={refetch} />
         }
-      /> */}
+      />
+      {(isLoading || isRefetching || isFetchingNextPage) && (
+        <View style={styles.loadingContainer}>
+          <LoadingSpinner />
+        </View>
+      )}
     </>
   );
 };

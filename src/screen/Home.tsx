@@ -285,7 +285,9 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
     setScrollEffect(scrolled);
   };
 
-  const goToScreen = (screen: 'MusicPlayer' | 'TopupCoin' | 'Notification') => {
+  const goToScreen = (
+    screen: 'MusicPlayer' | 'TopUpCredit' | 'Notification',
+  ) => {
     navigation.navigate(screen);
   };
 
@@ -294,7 +296,7 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
   };
 
   const onPressCoin = () => {
-    isLogin ? goToScreen('TopupCoin') : setModalGuestVisible(true);
+    isLogin ? goToScreen('TopUpCredit') : setModalGuestVisible(true);
   };
 
   const handleCreatePost = () => {

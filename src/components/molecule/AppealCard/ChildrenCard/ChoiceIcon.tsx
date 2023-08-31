@@ -1,6 +1,6 @@
-import {StyleSheet, TouchableOpacity} from 'react-native';
 import React, {FC} from 'react';
-import {widthResponsive} from '../../../../utils';
+import {StyleSheet, TouchableOpacity} from 'react-native';
+import {widthPercentage, widthResponsive} from '../../../../utils';
 import {PressedRadioIcon, RadioButtonIcon} from '../../../../assets/icon';
 
 interface ChoiceProps {
@@ -13,12 +13,14 @@ const ChoiceIconAppeal: FC<ChoiceProps> = (props: ChoiceProps) => {
   return (
     <TouchableOpacity
       style={styles.choiceContainer}
-      // TODO: CHANGE IT LATER YA BANG
       onPress={() => choiceOnPress()}>
       {selected ? (
         <PressedRadioIcon style={styles.customIconStyle} />
       ) : (
-        <RadioButtonIcon width={24} height={24} />
+        <RadioButtonIcon
+          width={widthPercentage(24)}
+          height={widthPercentage(24)}
+        />
       )}
     </TouchableOpacity>
   );
@@ -35,5 +37,7 @@ const styles = StyleSheet.create({
     marginLeft: widthResponsive(-2),
     marginRight: widthResponsive(-2.8),
     marginBottom: widthResponsive(-1),
+    width: widthPercentage(29),
+    height: widthPercentage(29),
   },
 });

@@ -139,6 +139,7 @@ import {NormalCreditCard, PosCreditCard} from './CreditCard';
 import DollarSign from './DollarSign';
 import UploadIcon from './Upload.icon';
 import CalendarIcon from './Calendar.icon';
+import LiveIcon from './Live.icon';
 
 export {
   AddIcon,
@@ -283,4 +284,5 @@ export {
   DollarSign,
   UploadIcon,
   CalendarIcon,
+  LiveIcon,
 };
