@@ -284,7 +284,6 @@ export const AddShippingAddress: React.FC<AddShippingAddressProps> = ({
                 marginTop: heightPercentage(15),
                 width: '45%',
               }}
-              dropdownPosition="top"
             />
 
             <SsuInput.InputLabel
@@ -324,7 +323,6 @@ export const AddShippingAddress: React.FC<AddShippingAddressProps> = ({
                 marginTop: heightPercentage(15),
                 width: '45%',
               }}
-              dropdownPosition="top"
             />
 
             <SsuInput.InputLabel
