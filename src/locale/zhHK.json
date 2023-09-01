@@ -1436,6 +1436,14 @@
       "unBlockCaptionB":"They will be able view your content, and you will see content or notification from",
       "unblockButtonYes":"Unblock",
       "unblockSuccess":"have been unblocked!"
+    },
+    "Dropdown" :{
+      "Profile":{
+        "qr":"QR Code",
+        "share": "Share Profile",
+        "block":"Block",
+        "unblock": "Unblock"
+      }
     }
   }
 }

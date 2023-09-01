@@ -1437,5 +1437,13 @@
       "unblockButtonYes":"Unblock",
       "unblockSuccess":"have been unblocked!"
     }
+  },
+  "Dropdown" :{
+    "Profile":{
+      "qr":"QR Code",
+      "share": "Share Profile",
+      "block":"Block",
+      "unblock": "Unblock"
+    }
   }
 }

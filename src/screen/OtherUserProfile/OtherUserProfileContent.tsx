@@ -19,6 +19,7 @@ import {
   ProfileHeader,
   ModalConfirm,
   SuccessToast,
+  TopNavigation,
 } from '../../components';
 import {color, font} from '../../theme';
 import Color from '../../theme/Color';
@@ -40,6 +41,15 @@ import {ProfileFansResponseType} from '../../interface/profile.interface';
 import {useBlockHook} from '../../hooks/use-block.hook';
 import {blockUserRecorded} from '../../store/blockUser.store';
 import BlockProfileUI from '../../components/molecule/BlockOnProfile';
+import {usePlayerStore} from '../../store/player.store';
+import {useNavigation} from '@react-navigation/native';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {RootStackParams} from '../../navigations';
+import {
+  DataDropDownType,
+  dataProfileDropdown,
+  dataProfileDropdownBlocked,
+} from '../../data/dropdown';
 
 type OnScrollEventHandler = (
   event: NativeSyntheticEvent<NativeScrollEvent>,
@@ -91,14 +101,19 @@ export const OtherUserProfileContent: React.FC<ProfileContentProps> = ({
   setRefreshing,
 }) => {
   const {t} = useTranslation();
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParams>>();
   const {
     blockLoading,
     blockError,
+    blockResponse,
     unblockResponse,
-    setUnblockResponse,
+    setBlockUser,
     setUnblockUser,
   } = useBlockHook();
+  const {setWithoutBottomTab, show} = usePlayerStore();
   const {uuidBlocked, setuuidBlocked} = blockUserRecorded();
+
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [scrollEffect, setScrollEffect] = useState(false);
   const [filter] = useState([
@@ -108,8 +123,10 @@ export const OtherUserProfileContent: React.FC<ProfileContentProps> = ({
   ]);
   const [isModalVisible, setModalVisible] = useState<boolean>(false);
   const [zoomImage, setZoomImage] = useState<string[]>([]);
-  const [modalConfirm, setModalConfirm] = useState<boolean>(false);
+  const [modalUnblock, setModalUnblock] = useState<boolean>(false);
+  const [modalBlock, setModalBlock] = useState<boolean>(false);
   const [toastUnblock, settoastUnblock] = useState<boolean>(false);
+  const [toastBlockSucceed, setToastBlockSucceed] = useState<boolean>(false);
 
   const filterData = (item: string, index: number) => {
     setSelectedIndex(index);
@@ -126,7 +143,23 @@ export const OtherUserProfileContent: React.FC<ProfileContentProps> = ({
     setZoomImage([uri]);
   };
 
+  const handleBackAction = () => {
+    show && setWithoutBottomTab(false);
+    navigation.goBack();
+  };
+
+  const onPressShareQR = () => {
+    // navigation.navigate('MyQRCode', {uuid: profile.uuid});
+  };
+
   //! BLOCK/UNBLOCK AREA
+  useEffect(() => {
+    if (blockResponse === 'Success') {
+      setToastBlockSucceed(true);
+      setRefreshing!();
+    }
+  }, [blockResponse]);
+
   useEffect(() => {
     if (unblockResponse === 'Success') {
       settoastUnblock(true);
@@ -135,36 +168,78 @@ export const OtherUserProfileContent: React.FC<ProfileContentProps> = ({
   }, [unblockResponse]);
 
   const handleUnblock = () => {
-    setModalConfirm(true);
+    setModalUnblock(true);
   };
 
   const unblockModalOnPress = () => {
     setUnblockUser({uuid: profile.uuid});
-    setModalConfirm(false);
+    setModalUnblock(false);
   };
 
   const handleToastUnblock = () => {
     setuuidBlocked(uuidBlocked.filter(x => x !== profile.uuid));
     settoastUnblock(false);
   };
+
+  const blockModalOnPress = () => {
+    setBlockUser({uuid: profile.uuid});
+    setModalBlock(false);
+  };
   //! END OF BLOCK/UNBLOCK AREA
+
+  const resultDataDropdown = (selectedMenu: DataDropDownType) => {
+    const value = t(selectedMenu.value);
+
+    switch (value) {
+      case '1':
+        onPressShareQR();
+        break;
+      case '2':
+        console.log('SHARE CHOOSEN');
+        break;
+      case '3':
+        setModalBlock(true);
+        break;
+      case '4':
+        setModalUnblock(true);
+        break;
+      default:
+        break;
+    }
+  };
+
+  const leftIconHeader = () => {
+    return (
+      <View style={styles.containerLeftIcon}>
+        <TouchableOpacity onPress={onPressGoBack}>
+          <ArrowLeftIcon
+            stroke={color.Neutral[10]}
+            style={{marginLeft: widthPercentage(24)}}
+          />
+        </TouchableOpacity>
+        <Gap width={widthPercentage(20)} />
+        <Text style={styles.name}>{profile.fullname}</Text>
+      </View>
+    );
+  };
 
   return (
     <View style={{flex: 1}}>
-      {scrollEffect && (
-        <View style={styles.containerLeftIcon}>
-          <View style={styles.containerArrowName}>
-            <TouchableOpacity onPress={onPressGoBack}>
-              <ArrowLeftIcon
-                stroke={Color.Neutral[10]}
-                style={{marginLeft: widthPercentage(24)}}
-              />
-            </TouchableOpacity>
-            <Gap width={widthPercentage(20)} />
-            <Text style={styles.name}>{profile.fullname}</Text>
-          </View>
-        </View>
-      )}
+      <TopNavigation.Type1
+        type="user detail"
+        title=""
+        leftIcon={scrollEffect && leftIconHeader()}
+        leftIconAction={handleBackAction}
+        maxLengthTitle={20}
+        itemStrokeColor={'white'}
+        bgColor={scrollEffect ? color.Dark[800] : 'transparent'}
+        containerStyles={styles.topNavStyle}
+        dropdownData={
+          profile.isBlock ? dataProfileDropdownBlocked : dataProfileDropdown
+        }
+        resultDataDropdown={resultDataDropdown}
+        beingBlocked={profile.blockIs}
+      />
       <ScrollView
         showsVerticalScrollIndicator={false}
         scrollEventThrottle={16}
@@ -258,17 +333,37 @@ export const OtherUserProfileContent: React.FC<ProfileContentProps> = ({
         type={'zoomProfile'}
       />
 
-      {/* //? Unblock user modal */}
-      {modalConfirm && (
+      {/* //? Block user modal */}
+      {modalBlock && (
         <ModalConfirm
-          modalVisible={modalConfirm}
+          modalVisible={modalBlock}
+          title={`${t('Block.Modal.Title')} @${profile.fullname} ?`}
+          subtitle={`${t('Block.Modal.Subtitle')} @${profile.fullname}`}
+          yesText={`${t('Block.Modal.RightButton')}`}
+          noText={`${t('Block.Modal.LeftButton')}`}
+          onPressClose={() => setModalBlock(false)}
+          onPressOk={blockModalOnPress}
+          rightButtonStyle={styles.rightButtonStyle}
+        />
+      )}
+      {/* //? When block succeed */}
+      <SuccessToast
+        toastVisible={toastBlockSucceed}
+        onBackPressed={() => setToastBlockSucceed(false)}
+        caption={`${t('General.BlockSucceed')} @${profile.fullname}`}
+      />
+
+      {/* //? Unblock user modal */}
+      {modalUnblock && (
+        <ModalConfirm
+          modalVisible={modalUnblock}
           title={`${t('Block.BlockUI.unBlockTitle')} @${profile.fullname} ?`}
           subtitle={`${t('Block.BlockUI.unBlockCaptionA')} @${
             profile.fullname
           } ${t('Block.BlockUI.unBlockCaptionB')} @${profile.fullname}`}
           yesText={`${t('Block.BlockUI.unblockButtonYes')}`}
           noText={`${t('Block.Modal.LeftButton')}`}
-          onPressClose={() => setModalConfirm(false)}
+          onPressClose={() => setModalUnblock(false)}
           onPressOk={unblockModalOnPress}
           rightButtonStyle={styles.rightButtonStyle}
         />
@@ -313,6 +408,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: widthPercentage(20),
     backgroundColor: Color.Dark[800],
     height: heightPercentage(85),
+  },
+  topNavStyle: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    zIndex: 100,
+    borderBottomWidth: 0,
+    paddingBottom: heightPercentage(15),
   },
   containerLeftIcon: {
     width: width,
