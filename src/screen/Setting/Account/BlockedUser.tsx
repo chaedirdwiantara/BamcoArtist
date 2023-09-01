@@ -5,6 +5,7 @@ import {
   StyleSheet,
   ScrollView,
   InteractionManager,
+  TouchableOpacity,
 } from 'react-native';
 import {useQuery} from 'react-query';
 import {useTranslation} from 'react-i18next';
@@ -18,8 +19,8 @@ import {
   Button,
   SsuToast,
   EmptyState,
-  ModalConfirm,
   TopNavigation,
+  ModalCustom,
 } from '../../../components';
 import {
   ArrowLeftIcon,
@@ -70,6 +71,36 @@ export const BlockedUserScreen: React.FC = () => {
       // refetch after unblock success
       refetch();
     } catch (error) {}
+  };
+
+  const children = () => {
+    return (
+      <View style={styles.card}>
+        <Text style={styles.title}>
+          {t('Setting.BlockedUser.ModalConfirm.Title', {
+            username: selectedUser?.username,
+          })}
+        </Text>
+        <Text style={styles.subtitle}>
+          {t('Setting.BlockedUser.ModalConfirm.Subtitle', {
+            username: selectedUser?.username,
+          })}
+        </Text>
+        <View style={styles.containerButton}>
+          <TouchableOpacity
+            style={styles.optionBtn}
+            onPress={() => setShowModal(false)}>
+            <Text style={styles.option}>{t('Setting.BlockedUser.Cancel')}</Text>
+          </TouchableOpacity>
+          <Button
+            label={t('Setting.BlockedUser.Unblock')}
+            containerStyles={{...styles.optionBtn, backgroundColor: '#F4212E'}}
+            textStyles={{fontSize: mvs(13)}}
+            onPress={onPressConfirm}
+          />
+        </View>
+      </View>
+    );
   };
 
   return (
@@ -143,21 +174,7 @@ export const BlockedUserScreen: React.FC = () => {
         />
       )}
 
-      <ModalConfirm
-        modalVisible={showModal}
-        title={
-          t('Setting.BlockedUser.ModalConfirm.Title', {
-            username: selectedUser?.username,
-          }) || ''
-        }
-        subtitle={
-          t('Setting.BlockedUser.ModalConfirm.Subtitle', {
-            username: selectedUser?.username,
-          }) || ''
-        }
-        onPressClose={() => setShowModal(false)}
-        onPressOk={onPressConfirm}
-      />
+      <ModalCustom modalVisible={showModal} children={children()} />
 
       <SsuToast
         modalVisible={toastVisible}
@@ -259,5 +276,43 @@ const styles = StyleSheet.create({
     width: ms(70),
     aspectRatio: mvs(70 / 30),
     backgroundColor: '#F4212E',
+  },
+  card: {
+    width: width * 0.9,
+    backgroundColor: color.Dark[900],
+    justifyContent: 'center',
+    borderRadius: 4,
+    paddingHorizontal: widthPercentage(20),
+    paddingVertical: mvs(15),
+  },
+  title: {
+    fontSize: mvs(16),
+    color: color.Neutral[10],
+    fontFamily: font.InterSemiBold,
+  },
+  subtitle: {
+    fontSize: mvs(14),
+    color: color.Dark[50],
+    fontFamily: font.InterRegular,
+    marginTop: mvs(12),
+  },
+  containerButton: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    marginTop: mvs(25),
+  },
+  option: {
+    fontSize: mvs(14),
+    paddingHorizontal: widthPercentage(12),
+    color: color.Neutral[10],
+    fontFamily: font.InterRegular,
+  },
+  optionBtn: {
+    height: undefined,
+    width: ms(100),
+    aspectRatio: mvs(100 / 32),
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
