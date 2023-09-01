@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   StyleSheet,
@@ -20,7 +20,7 @@ import {
   heightPercentage,
   widthResponsive,
 } from '../../../utils';
-import {font} from '../../../theme';
+import {color, font} from '../../../theme';
 import {TabFilter} from '../TabFilter';
 import {FansScreen} from '../ListFans';
 import Color from '../../../theme/Color';
@@ -49,6 +49,11 @@ import ExclusiveDailyContent from '../../../screen/MusicianProfile/ExclusiveDail
 import MerchList from '../../../screen/ListCard/MerchList';
 import ConcertList from '../../../screen/ListCard/ConcertList';
 import EventMusician from '../EventMusician';
+import BlockProfileUI from '../BlockOnProfile';
+import {ModalConfirm} from '../Modal/ModalConfirm';
+import SuccessToast from '../Toast/SuccessToast';
+import {useBlockHook} from '../../../hooks/use-block.hook';
+import {blockUserRecorded} from '../../../store/blockUser.store';
 
 type OnScrollEventHandler = (
   event: NativeSyntheticEvent<NativeScrollEvent>,
@@ -100,6 +105,14 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
   dataAppearsOn,
 }) => {
   const {t} = useTranslation();
+  const {
+    blockLoading,
+    blockError,
+    unblockResponse,
+    setUnblockResponse,
+    setUnblockUser,
+  } = useBlockHook();
+  const {uuidBlocked, setuuidBlocked} = blockUserRecorded();
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [scrollEffect, setScrollEffect] = useState(false);
   const [filter] = useState([
@@ -120,6 +133,8 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
   ]);
   const [isModalVisible, setModalVisible] = useState<boolean>(false);
   const [zoomImage, setZoomImage] = useState<string[]>([]);
+  const [modalConfirm, setModalConfirm] = useState<boolean>(false);
+  const [toastUnblock, settoastUnblock] = useState<boolean>(false);
 
   const showImage = (uri: string) => {
     setModalVisible(!isModalVisible);
@@ -140,6 +155,29 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
     Platform.OS === 'ios' && refreshing
       ? heightPercentage(360)
       : heightPercentage(310);
+
+  //! BLOCK/UNBLOCK AREA
+  useEffect(() => {
+    if (unblockResponse === 'Success') {
+      settoastUnblock(true);
+      setRefreshing();
+    }
+  }, [unblockResponse]);
+
+  const handleUnblock = () => {
+    setModalConfirm(true);
+  };
+
+  const unblockModalOnPress = () => {
+    setUnblockUser({uuid: profile.uuid});
+    setModalConfirm(false);
+  };
+
+  const handleToastUnblock = () => {
+    setuuidBlocked(uuidBlocked.filter(x => x !== profile.uuid));
+    settoastUnblock(false);
+  };
+  //! END OF BLOCK/UNBLOCK AREA
 
   return (
     <View style={{flex: 1}}>
@@ -192,129 +230,156 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
           totalCountlikedSong={totalCountlikedSong}
           followersCount={profile.totalFollowers}
         />
-        {exclusiveContent ? (
-          <>
-            <Gap height={heightPercentage(50)} />
-            <ExclusiveDailyContent {...exclusiveContent} edit={true} />
-            <Gap height={heightPercentage(20)} />
-          </>
+
+        {profile.isBlock ? (
+          <BlockProfileUI
+            title={`@${profile.fullname} ${t(
+              'Block.BlockUI.isBlockedProfTitle',
+            )}`}
+            caption={`${t('Block.BlockUI.isBlockedProfCaption')} @${
+              profile.fullname
+            }`}
+            buttonOnPress={handleUnblock}
+          />
+        ) : profile.blockIs ? (
+          <BlockProfileUI
+            title={`${t('Block.BlockUI.blockIsProfTitle')}`}
+            caption={`${t('Block.BlockUI.blockIsProfCaption')} @${
+              profile.fullname
+            }`}
+          />
         ) : (
-          <Gap height={heightPercentage(70)} />
-        )}
+          <>
+            {exclusiveContent ? (
+              <>
+                <Gap height={heightPercentage(50)} />
+                <ExclusiveDailyContent {...exclusiveContent} edit={true} />
+                <Gap height={heightPercentage(20)} />
+              </>
+            ) : (
+              <Gap height={heightPercentage(70)} />
+            )}
 
-        <TabFilter.Type1
-          filterData={ownProfile ? filter2 : filter}
-          onPress={filterData}
-          selectedIndex={selectedIndex}
-          translation={true}
-          flatlistContainerStyle={{
-            paddingHorizontal: widthResponsive(20),
-            width: 'auto',
-          }}
-        />
-
-        <View style={styles.containerContent}>
-          {!ownProfile &&
-          dataPlaylist !== null &&
-          filter[selectedIndex].filterName === 'Profile.Tab.Playlist' ? (
-            <View>
-              <ListPlaylist
-                data={dataPlaylist}
-                onPress={goToPlaylist}
-                scrollable={false}
-              />
-            </View>
-          ) : !ownProfile &&
-            filter[selectedIndex].filterName ===
-              t('Profile.Tab.TopMusician') ? (
-            <EmptyState
-              text={t('Profile.Label.NoMusician') || ''}
-              containerStyle={{marginTop: heightPercentage(30)}}
+            <TabFilter.Type1
+              filterData={ownProfile ? filter2 : filter}
+              onPress={filterData}
+              selectedIndex={selectedIndex}
+              translation={true}
+              flatlistContainerStyle={{
+                paddingHorizontal: widthResponsive(20),
+                width: 'auto',
+              }}
             />
-          ) : null}
-          {ownProfile &&
-          dataDetailMusician &&
-          dataAlbum &&
-          filter2[selectedIndex].filterName === 'Musician.Tab.Profile' ? (
-            <View style={{marginHorizontal: widthResponsive(-23)}}>
-              <DataMusician
-                profile={dataDetailMusician}
-                dataAlbum={dataAlbum}
-              />
-            </View>
-          ) : filter2[selectedIndex].filterName === 'Musician.Tab.Musician' ? (
-            <View
-              style={{
-                width: '100%',
-              }}>
-              {ownProfile ? (
-                exclusiveContent ? (
-                  <PostListProfile uuidMusician={uuid} {...exclusiveContent} />
-                ) : (
-                  <PostListProfile uuidMusician={uuid} pricingPlans={[]} />
-                )
+
+            <View style={styles.containerContent}>
+              {!ownProfile &&
+              dataPlaylist !== null &&
+              filter[selectedIndex].filterName === 'Profile.Tab.Playlist' ? (
+                <View>
+                  <ListPlaylist
+                    data={dataPlaylist}
+                    onPress={goToPlaylist}
+                    scrollable={false}
+                  />
+                </View>
+              ) : !ownProfile &&
+                filter[selectedIndex].filterName ===
+                  t('Profile.Tab.TopMusician') ? (
+                <EmptyState
+                  text={t('Profile.Label.NoMusician') || ''}
+                  containerStyle={{marginTop: heightPercentage(30)}}
+                />
+              ) : null}
+              {ownProfile &&
+              dataDetailMusician &&
+              dataAlbum &&
+              filter2[selectedIndex].filterName === 'Musician.Tab.Profile' ? (
+                <View style={{marginHorizontal: widthResponsive(-23)}}>
+                  <DataMusician
+                    profile={dataDetailMusician}
+                    dataAlbum={dataAlbum}
+                  />
+                </View>
+              ) : filter2[selectedIndex].filterName ===
+                'Musician.Tab.Musician' ? (
+                <View
+                  style={{
+                    width: '100%',
+                  }}>
+                  {ownProfile ? (
+                    exclusiveContent ? (
+                      <PostListProfile
+                        uuidMusician={uuid}
+                        {...exclusiveContent}
+                      />
+                    ) : (
+                      <PostListProfile uuidMusician={uuid} pricingPlans={[]} />
+                    )
+                  ) : (
+                    <PostListPublic
+                      uuidMusician={uuid}
+                      dataRightDropdown={dropDownDataCategory}
+                      dataLeftDropdown={dropDownDataSort}
+                    />
+                  )}
+                </View>
+              ) : filter2[selectedIndex].filterName === 'Musician.Tab.Music' ? (
+                <View>
+                  {ownProfile && (
+                    <CreateNewCard
+                      num="00"
+                      text={t('Profile.Button.CreatePlaylist')}
+                      onPress={goToCreatePlaylist}
+                    />
+                  )}
+                  <ListPlaylist
+                    data={dataPlaylist === null ? [] : dataPlaylist}
+                    onPress={goToPlaylist}
+                    scrollable={false}
+                  />
+                  <Gap height={mvs(30)} />
+                  {/* List Album Horizontal */}
+                  {dataAlbum && dataAlbum?.length > 0 && (
+                    <ListAlbum
+                      data={dataAlbum}
+                      title={t('Musician.Label.MyAlbum')}
+                      containerStyles={{marginBottom: mvs(30)}}
+                    />
+                  )}
+                  {/* List Appears On */}
+                  {dataAppearsOn && dataAppearsOn?.length > 0 && (
+                    <ListAlbum
+                      data={dataAppearsOn}
+                      title={t('Musician.Label.AppearsOn')}
+                      containerStyles={{marginBottom: mvs(30)}}
+                    />
+                  )}
+                </View>
+              ) : filter2[selectedIndex].filterName === 'Musician.Tab.Fans' ? (
+                <View style={{paddingHorizontal: widthResponsive(20)}}>
+                  {uuid && <FansScreen uuid={uuid} />}
+                </View>
+              ) : filter2[selectedIndex].filterName ===
+                'Musician.Tab.Merchandise' ? (
+                <MerchList musicianId={uuid} />
+              ) : filter2[selectedIndex].filterName ===
+                'Musician.Tab.Ticket' ? (
+                <ConcertList musicianId={uuid} />
+              ) : filter2[selectedIndex].filterName === 'Musician.Tab.Event' ? (
+                <EventMusician />
               ) : (
-                <PostListPublic
-                  uuidMusician={uuid}
-                  dataRightDropdown={dropDownDataCategory}
-                  dataLeftDropdown={dropDownDataSort}
+                // TODO: DISABLE FOR NOW
+                // : filter2[selectedIndex].filterName === 'Musician.Tab.Main' ? (
+                //   <MainTab uuid={uuid} />
+                // )
+                <EmptyState
+                  text={t('EmptyState.NoData') || ''}
+                  containerStyle={{marginTop: heightPercentage(30)}}
                 />
               )}
             </View>
-          ) : filter2[selectedIndex].filterName === 'Musician.Tab.Music' ? (
-            <View>
-              {ownProfile && (
-                <CreateNewCard
-                  num="00"
-                  text={t('Profile.Button.CreatePlaylist')}
-                  onPress={goToCreatePlaylist}
-                />
-              )}
-              <ListPlaylist
-                data={dataPlaylist === null ? [] : dataPlaylist}
-                onPress={goToPlaylist}
-                scrollable={false}
-              />
-              <Gap height={mvs(30)} />
-              {/* List Album Horizontal */}
-              {dataAlbum && dataAlbum?.length > 0 && (
-                <ListAlbum
-                  data={dataAlbum}
-                  title={t('Musician.Label.MyAlbum')}
-                  containerStyles={{marginBottom: mvs(30)}}
-                />
-              )}
-              {/* List Appears On */}
-              {dataAppearsOn && dataAppearsOn?.length > 0 && (
-                <ListAlbum
-                  data={dataAppearsOn}
-                  title={t('Musician.Label.AppearsOn')}
-                  containerStyles={{marginBottom: mvs(30)}}
-                />
-              )}
-            </View>
-          ) : filter2[selectedIndex].filterName === 'Musician.Tab.Fans' ? (
-            <View style={{paddingHorizontal: widthResponsive(20)}}>
-              {uuid && <FansScreen uuid={uuid} />}
-            </View>
-          ) : filter2[selectedIndex].filterName ===
-            'Musician.Tab.Merchandise' ? (
-            <MerchList musicianId={uuid} />
-          ) : filter2[selectedIndex].filterName === 'Musician.Tab.Ticket' ? (
-            <ConcertList musicianId={uuid} />
-          ) : filter2[selectedIndex].filterName === 'Musician.Tab.Event' ? (
-            <EventMusician />
-          ) : (
-            // TODO: DISABLE FOR NOW
-            // : filter2[selectedIndex].filterName === 'Musician.Tab.Main' ? (
-            //   <MainTab uuid={uuid} />
-            // )
-            <EmptyState
-              text={t('EmptyState.NoData') || ''}
-              containerStyle={{marginTop: heightPercentage(30)}}
-            />
-          )}
-        </View>
+          </>
+        )}
       </ScrollView>
 
       <SsuToast
@@ -337,6 +402,28 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
         imageIdx={0}
         dataImage={zoomImage}
         type={'zoomProfile'}
+      />
+
+      {/* //? Unblock user modal */}
+      {modalConfirm && (
+        <ModalConfirm
+          modalVisible={modalConfirm}
+          title={`${t('Block.BlockUI.unBlockTitle')} @${profile.fullname} ?`}
+          subtitle={`${t('Block.BlockUI.unBlockCaptionA')} @${
+            profile.fullname
+          } ${t('Block.BlockUI.unBlockCaptionB')} @${profile.fullname}`}
+          yesText={`${t('Block.BlockUI.unblockButtonYes')}`}
+          noText={`${t('Block.Modal.LeftButton')}`}
+          onPressClose={() => setModalConfirm(false)}
+          onPressOk={unblockModalOnPress}
+          rightButtonStyle={styles.rightButtonStyle}
+        />
+      )}
+      {/* //? When unblock succeed */}
+      <SuccessToast
+        toastVisible={toastUnblock}
+        onBackPressed={handleToastUnblock}
+        caption={`@${profile.fullname} ${t('Block.BlockUI.unblockSuccess')}`}
       />
     </View>
   );
@@ -393,5 +480,11 @@ const styles = StyleSheet.create({
   loadingContainer: {
     alignItems: 'center',
     paddingVertical: heightPercentage(20),
+  },
+  rightButtonStyle: {
+    backgroundColor: color.Error.block,
+    borderRadius: 4,
+    paddingHorizontal: widthResponsive(16),
+    paddingVertical: widthResponsive(6),
   },
 });

@@ -42,6 +42,7 @@ interface ListProps extends TouchableOpacityProps {
   idComment?: string;
   selectedIdComment?: (idComment: string) => void;
   selectedUserUuid?: (uuid: string) => void;
+  selectedUserName: (name: string) => void;
   myComment?: boolean;
   commentOwnerUuid?: string;
   hideDropDown?: boolean;
@@ -71,6 +72,7 @@ const PostComment: React.FC<ListProps> = (props: ListProps) => {
     idComment,
     selectedIdComment,
     selectedUserUuid,
+    selectedUserName,
     myComment,
     commentOwnerUuid,
     hideDropDown,
@@ -94,7 +96,7 @@ const PostComment: React.FC<ListProps> = (props: ListProps) => {
       <View
         style={{
           flex: 1,
-          marginLeft: widthResponsive(appeal ? 0 : 6),
+          marginLeft: widthResponsive(appeal || isBlock || blockIs ? 0 : 6),
         }}>
         {isBlock ? (
           <BlockUser
@@ -110,7 +112,11 @@ const PostComment: React.FC<ListProps> = (props: ListProps) => {
           />
         ) : (
           <>
-            <View style={[styles.topSection, {marginTop: ms(appeal ? 0 : -7)}]}>
+            <View
+              style={[
+                styles.topSection,
+                {marginTop: ms(appeal || isBlock || blockIs ? 0 : -7)},
+              ]}>
               {userName !== 'accountdeactivated' ? (
                 <Text style={styles.fullname} onPress={toDetailOnPress}>
                   {fullName}
@@ -138,9 +144,11 @@ const PostComment: React.FC<ListProps> = (props: ListProps) => {
                   <DropdownMore
                     id={idComment}
                     uuid={commentOwnerUuid}
+                    userName={fullName}
                     selectedid={selectedIdComment}
                     selectedMenu={selectedMenu!}
                     selectedUserUuid={selectedUserUuid}
+                    selectedUserName={selectedUserName}
                     dataFilter={myComment ? dataUpdateComment : dataReport}
                   />
                 )}

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   StyleSheet,
@@ -17,8 +17,10 @@ import {
   EmptyState,
   UserInfoCard,
   ProfileHeader,
+  ModalConfirm,
+  SuccessToast,
 } from '../../components';
-import {font} from '../../theme';
+import {color, font} from '../../theme';
 import Color from '../../theme/Color';
 import {
   AlbumData,
@@ -28,8 +30,16 @@ import ImageModal from '../Detail/ImageModal';
 import {ArrowLeftIcon} from '../../assets/icon';
 import {Playlist} from '../../interface/playlist.interface';
 import ListPlaylist from '../../screen/ListCard/ListPlaylist';
-import {width, widthPercentage, heightPercentage} from '../../utils';
+import {
+  width,
+  widthPercentage,
+  heightPercentage,
+  widthResponsive,
+} from '../../utils';
 import {ProfileFansResponseType} from '../../interface/profile.interface';
+import {useBlockHook} from '../../hooks/use-block.hook';
+import {blockUserRecorded} from '../../store/blockUser.store';
+import BlockProfileUI from '../../components/molecule/BlockOnProfile';
 
 type OnScrollEventHandler = (
   event: NativeSyntheticEvent<NativeScrollEvent>,
@@ -43,6 +53,9 @@ type profile = {
   avatarUri: string;
   totalFollowing: number;
   totalPoint: number;
+  isBlock: boolean | undefined;
+  blockIs: boolean | undefined;
+  uuid: string | undefined;
 };
 
 interface ProfileContentProps {
@@ -62,6 +75,7 @@ interface ProfileContentProps {
   playerVisible?: boolean;
   otherUserProfile?: boolean;
   onPressGoBack: () => void;
+  setRefreshing: () => void;
 }
 
 export const OtherUserProfileContent: React.FC<ProfileContentProps> = ({
@@ -74,8 +88,17 @@ export const OtherUserProfileContent: React.FC<ProfileContentProps> = ({
   totalCountlikedSong,
   ownProfile = false,
   onPressGoBack,
+  setRefreshing,
 }) => {
   const {t} = useTranslation();
+  const {
+    blockLoading,
+    blockError,
+    unblockResponse,
+    setUnblockResponse,
+    setUnblockUser,
+  } = useBlockHook();
+  const {uuidBlocked, setuuidBlocked} = blockUserRecorded();
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [scrollEffect, setScrollEffect] = useState(false);
   const [filter] = useState([
@@ -85,6 +108,8 @@ export const OtherUserProfileContent: React.FC<ProfileContentProps> = ({
   ]);
   const [isModalVisible, setModalVisible] = useState<boolean>(false);
   const [zoomImage, setZoomImage] = useState<string[]>([]);
+  const [modalConfirm, setModalConfirm] = useState<boolean>(false);
+  const [toastUnblock, settoastUnblock] = useState<boolean>(false);
 
   const filterData = (item: string, index: number) => {
     setSelectedIndex(index);
@@ -100,6 +125,29 @@ export const OtherUserProfileContent: React.FC<ProfileContentProps> = ({
     setModalVisible(!isModalVisible);
     setZoomImage([uri]);
   };
+
+  //! BLOCK/UNBLOCK AREA
+  useEffect(() => {
+    if (unblockResponse === 'Success') {
+      settoastUnblock(true);
+      setRefreshing();
+    }
+  }, [unblockResponse]);
+
+  const handleUnblock = () => {
+    setModalConfirm(true);
+  };
+
+  const unblockModalOnPress = () => {
+    setUnblockUser({uuid: profile.uuid});
+    setModalConfirm(false);
+  };
+
+  const handleToastUnblock = () => {
+    setuuidBlocked(uuidBlocked.filter(x => x !== profile.uuid));
+    settoastUnblock(false);
+  };
+  //! END OF BLOCK/UNBLOCK AREA
 
   return (
     <View style={{flex: 1}}>
@@ -145,37 +193,59 @@ export const OtherUserProfileContent: React.FC<ProfileContentProps> = ({
           totalPoint={profile.totalPoint}
         />
         <View style={styles.containerContent}>
-          <TabFilter.Type1
-            filterData={filter}
-            onPress={filterData}
-            selectedIndex={selectedIndex}
-            translation={true}
-          />
-          {filter[selectedIndex].filterName === 'Profile.Tab.Playlist' ? (
-            dataPlaylist !== undefined && dataPlaylist?.length > 0 ? (
-              <View>
-                <ListPlaylist
-                  data={dataPlaylist === null ? [] : dataPlaylist}
-                  onPress={goToPlaylist}
-                  scrollable={false}
-                />
-              </View>
-            ) : (
-              <EmptyState
-                text={t('Profile.Label.NoPlaylist') || ''}
-                containerStyle={{marginVertical: heightPercentage(30)}}
-              />
-            )
-          ) : filter[selectedIndex].filterName === 'Profile.Tab.TopMusician' ? (
-            <EmptyState
-              text={t('Profile.Label.NoMusicianOther') || ''}
-              containerStyle={{marginVertical: heightPercentage(30)}}
+          {profile.isBlock ? (
+            <BlockProfileUI
+              title={`@${profile.fullname} ${t(
+                'Block.BlockUI.isBlockedProfTitle',
+              )}`}
+              caption={`${t('Block.BlockUI.isBlockedProfCaption')} @${
+                profile.fullname
+              }`}
+              buttonOnPress={handleUnblock}
+            />
+          ) : profile.blockIs ? (
+            <BlockProfileUI
+              title={`${t('Block.BlockUI.blockIsProfTitle')}`}
+              caption={`${t('Block.BlockUI.blockIsProfCaption')} @${
+                profile.fullname
+              }`}
             />
           ) : (
-            <EmptyState
-              text={t('Profile.Label.NoBadgeOther') || ''}
-              containerStyle={{marginVertical: heightPercentage(30)}}
-            />
+            <>
+              <TabFilter.Type1
+                filterData={filter}
+                onPress={filterData}
+                selectedIndex={selectedIndex}
+                translation={true}
+              />
+              {filter[selectedIndex].filterName === 'Profile.Tab.Playlist' ? (
+                dataPlaylist !== undefined && dataPlaylist?.length > 0 ? (
+                  <View>
+                    <ListPlaylist
+                      data={dataPlaylist === null ? [] : dataPlaylist}
+                      onPress={goToPlaylist}
+                      scrollable={false}
+                    />
+                  </View>
+                ) : (
+                  <EmptyState
+                    text={t('Profile.Label.NoPlaylist') || ''}
+                    containerStyle={{marginVertical: heightPercentage(30)}}
+                  />
+                )
+              ) : filter[selectedIndex].filterName ===
+                'Profile.Tab.TopMusician' ? (
+                <EmptyState
+                  text={t('Profile.Label.NoMusicianOther') || ''}
+                  containerStyle={{marginVertical: heightPercentage(30)}}
+                />
+              ) : (
+                <EmptyState
+                  text={t('Profile.Label.NoBadgeOther') || ''}
+                  containerStyle={{marginVertical: heightPercentage(30)}}
+                />
+              )}
+            </>
           )}
         </View>
       </ScrollView>
@@ -186,6 +256,28 @@ export const OtherUserProfileContent: React.FC<ProfileContentProps> = ({
         imageIdx={0}
         dataImage={zoomImage}
         type={'zoomProfile'}
+      />
+
+      {/* //? Unblock user modal */}
+      {modalConfirm && (
+        <ModalConfirm
+          modalVisible={modalConfirm}
+          title={`${t('Block.BlockUI.unBlockTitle')} @${profile.fullname} ?`}
+          subtitle={`${t('Block.BlockUI.unBlockCaptionA')} @${
+            profile.fullname
+          } ${t('Block.BlockUI.unBlockCaptionB')} @${profile.fullname}`}
+          yesText={`${t('Block.BlockUI.unblockButtonYes')}`}
+          noText={`${t('Block.Modal.LeftButton')}`}
+          onPressClose={() => setModalConfirm(false)}
+          onPressOk={unblockModalOnPress}
+          rightButtonStyle={styles.rightButtonStyle}
+        />
+      )}
+      {/* //? When unblock succeed */}
+      <SuccessToast
+        toastVisible={toastUnblock}
+        onBackPressed={handleToastUnblock}
+        caption={`@${profile.fullname} ${t('Block.BlockUI.unblockSuccess')}`}
       />
     </View>
   );
@@ -244,5 +336,11 @@ const styles = StyleSheet.create({
   },
   topIos: {
     top: heightPercentage(15),
+  },
+  rightButtonStyle: {
+    backgroundColor: color.Error.block,
+    borderRadius: 4,
+    paddingHorizontal: widthResponsive(16),
+    paddingVertical: widthResponsive(6),
   },
 });

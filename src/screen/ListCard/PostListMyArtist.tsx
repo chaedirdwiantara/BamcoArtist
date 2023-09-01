@@ -338,7 +338,7 @@ const PostListMyArtist: FC<PostListProps> = (props: PostListProps) => {
   const sendOnPress = () => {
     const reportBody: ReportParamsProps = {
       reportType: 'post',
-      reportTypeId: selectedIdPost ?? 0,
+      reportTypeId: selectedIdPost ?? '0',
       reporterUuid: MyUuid ?? '',
       reportedUuid: selectedUserUuid ?? '',
       reportCategory: t(selectedCategory ?? ''),

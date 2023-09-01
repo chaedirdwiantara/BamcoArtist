@@ -15,6 +15,7 @@ import {filterParentIDLvl2, filterParentIDLvl3} from './function';
 import {DataDropDownType} from '../../data/dropdown';
 import {dummyProfile} from '../../data/image';
 import {useTranslation} from 'react-i18next';
+import {blockUserRecorded} from '../../store/blockUser.store';
 interface CommentSectionType {
   postCommentCount: number;
   postId: string;
@@ -41,6 +42,7 @@ interface CommentSectionType {
   selectedIdComment: (idComment: string) => void;
   selectedLvlComment: (lvl: number) => void;
   selectedUserUuid: (uuid: string) => void;
+  selectedUserName: (name: string) => void;
   profileUUID: string;
   deletedCommentParentId: string[];
   addCommentParentId: string[];
@@ -64,10 +66,14 @@ const CommentSection: FC<CommentSectionType> = (props: CommentSectionType) => {
     selectedIdComment,
     selectedLvlComment,
     selectedUserUuid,
+    selectedUserName,
     profileUUID,
     deletedCommentParentId,
     addCommentParentId,
   } = props;
+
+  const {uuidBlocked} = blockUserRecorded();
+
   const [recorder, setRecorder] = useState<string[]>([]);
   const [selectedId, setSelectedId] = useState<string[]>();
 
@@ -260,7 +266,8 @@ const CommentSection: FC<CommentSectionType> = (props: CommentSectionType) => {
         myComment={profileUUID === commentOwner.UUID}
         commentOwnerUuid={commentOwner.UUID}
         selectedUserUuid={selectedUserUuid}
-        isBlock={isBlock ? true : false}
+        selectedUserName={selectedUserName}
+        isBlock={uuidBlocked.includes(commentOwner.UUID) ? true : isBlock!}
         blockIs={blockIs ? true : false}
       />
     );
@@ -346,7 +353,8 @@ const CommentSection: FC<CommentSectionType> = (props: CommentSectionType) => {
         myComment={profileUUID === commentOwner.UUID}
         commentOwnerUuid={commentOwner.UUID}
         selectedUserUuid={selectedUserUuid}
-        isBlock={isBlock ? true : false}
+        selectedUserName={selectedUserName}
+        isBlock={uuidBlocked.includes(commentOwner.UUID) ? true : isBlock!}
         blockIs={blockIs ? true : false}
         childrenLvl2={
           <>
@@ -372,8 +380,12 @@ const CommentSection: FC<CommentSectionType> = (props: CommentSectionType) => {
                         timeAgo={item.timeAgo}
                         commentOwner={item.commentOwner}
                         commentLevel={item.commentLevel}
+                        isBlock={
+                          uuidBlocked.includes(item.commentOwner.UUID)
+                            ? true
+                            : item.isBlock
+                        }
                         blockIs={item.blockIs}
-                        isBlock={item.isBlock}
                       />
                       <Gap height={12} />
                     </>
@@ -500,7 +512,12 @@ const CommentSection: FC<CommentSectionType> = (props: CommentSectionType) => {
             myComment={profileUUID === item.commentOwner.UUID}
             commentOwnerUuid={item.commentOwner.UUID}
             selectedUserUuid={selectedUserUuid}
-            isBlock={item.isBlock ? true : false}
+            selectedUserName={selectedUserName}
+            isBlock={
+              uuidBlocked.includes(item.commentOwner.UUID)
+                ? true
+                : item.isBlock!
+            }
             blockIs={item.blockIs ? true : false}
             children={
               <>
@@ -527,7 +544,11 @@ const CommentSection: FC<CommentSectionType> = (props: CommentSectionType) => {
                           commentOwner={item.commentOwner}
                           commentLevel={item.commentLevel}
                           commentTotal={item.commentTotal}
-                          isBlock={item.isBlock}
+                          isBlock={
+                            uuidBlocked.includes(item.commentOwner.UUID)
+                              ? true
+                              : item.isBlock
+                          }
                           blockIs={item.blockIs}
                         />
                       )}

@@ -42,6 +42,7 @@ interface ListProps extends TouchableOpacityProps {
   idComment: string;
   selectedIdComment: (idComment: string) => void;
   selectedUserUuid: (uuid: string) => void;
+  selectedUserName: (name: string) => void;
   myComment: boolean;
   commentOwnerUuid: string;
   isBlock: boolean;
@@ -69,6 +70,7 @@ const CommentLvlTwo: React.FC<ListProps> = (props: ListProps) => {
     idComment,
     selectedIdComment,
     selectedUserUuid,
+    selectedUserName,
     myComment,
     commentOwnerUuid,
     isBlock,
@@ -90,7 +92,7 @@ const CommentLvlTwo: React.FC<ListProps> = (props: ListProps) => {
       <View
         style={{
           flex: 1,
-          marginLeft: widthResponsive(6),
+          marginLeft: widthResponsive(isBlock || blockIs ? 0 : 6),
         }}>
         {isBlock ? (
           <BlockUser
@@ -106,7 +108,11 @@ const CommentLvlTwo: React.FC<ListProps> = (props: ListProps) => {
           />
         ) : (
           <>
-            <View style={[styles.topSection, {marginTop: ms(-7)}]}>
+            <View
+              style={[
+                styles.topSection,
+                {marginTop: ms(isBlock || blockIs ? 0 : -7)},
+              ]}>
               {userIdLvl2 !== 'accountdeactivated' ? (
                 <Text style={styles.userName} onPress={toDetailOnPress}>
                   {elipsisText(userNameLvl2, 21)}
@@ -132,9 +138,11 @@ const CommentLvlTwo: React.FC<ListProps> = (props: ListProps) => {
                 <DropdownMore
                   id={idComment}
                   uuid={commentOwnerUuid}
+                  userName={userNameLvl2}
                   selectedid={selectedIdComment}
                   selectedMenu={selectedMenu}
                   selectedUserUuid={selectedUserUuid}
+                  selectedUserName={selectedUserName}
                   dataFilter={myComment ? dataUpdateComment : dataReport}
                 />
               </View>
