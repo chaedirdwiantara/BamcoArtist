@@ -22,10 +22,10 @@ import {RootStackParams} from '../../navigations';
 import {useTranslation} from 'react-i18next';
 import LineUp from './LineUp';
 import TopTiper from './TopTiper';
-import {useEventDetail, useEventLineUp} from '../../api/event.api';
 import dayjs from 'dayjs';
 import LoadingSpinner from '../../components/atom/Loading/LoadingSpinner';
 import {ModalLoading} from '../../components/molecule/ModalLoading/ModalLoading';
+import {useEventHook} from '../../hooks/use-event.hook';
 
 type OnScrollEventHandler = (
   event: NativeSyntheticEvent<NativeScrollEvent>,
@@ -38,6 +38,7 @@ export const EventDetail: React.FC<EventDetailProps> = ({
 }: EventDetailProps) => {
   const {id} = route.params;
   const {t} = useTranslation();
+  const {useEventDetail, useEventLineUp} = useEventHook();
 
   const [scrollEffect, setScrollEffect] = useState<boolean>(false);
   const [selectedIndex, setSelectedIndex] = useState(-0);

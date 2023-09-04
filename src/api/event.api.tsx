@@ -1,4 +1,3 @@
-import {UseInfiniteQueryOptions, useInfiniteQuery, useQuery} from 'react-query';
 import {ParamsProps} from '../interface/base.interface';
 import {
   EventDetailResponse,
@@ -10,7 +9,6 @@ import {
 } from '../interface/event.interface';
 import BookYayAPI from './baseBookYay';
 import RinjaniAPI from './baseRinjani';
-import {AxiosError} from 'axios';
 
 export const listMerch = async (
   props?: ParamsProps,
@@ -64,16 +62,6 @@ export const listEventMusician = async (
   return data;
 };
 
-export function useEventMusician(uuid: string, params?: ParamsProps) {
-  return useQuery(
-    [`event/musician/${uuid}`],
-    () => listEventMusician(uuid, params),
-    {
-      enabled: false,
-    },
-  );
-}
-
 export const getEventDetail = async (
   id: string,
   props?: ParamsProps,
@@ -88,12 +76,6 @@ export const getEventDetail = async (
 
   return data;
 };
-
-export function useEventDetail(id: string, params?: ParamsProps) {
-  return useQuery([`event/detail/${id}`], () => getEventDetail(id, params), {
-    enabled: false,
-  });
-}
 
 export const getEventLineUp = async (
   id: string,
@@ -110,52 +92,14 @@ export const getEventLineUp = async (
   return data;
 };
 
-export function useEventLineUp(id: string, params?: ParamsProps) {
-  return useQuery(
-    [`event/detail/lineup/${id}`],
-    () => getEventLineUp(id, params),
-    {
-      enabled: false,
-    },
-  );
-}
-
-export default async function fetchListOrder(
+export const fetchListOrder = async (
   token: string,
   params: ParamsProps,
-): Promise<OrderListBookyay> {
+): Promise<OrderListBookyay> => {
   return await BookYayAPI()
     .get(`orders`, {headers: {Authorization: `Bearer ${token}`}, params})
     .then((res: any) => res.data)
     .catch(err => {
       return err;
     });
-}
-
-export function useOrderListBookYay(
-  token: string,
-  totalPage: number,
-  params?: ParamsProps,
-  options?: UseInfiniteQueryOptions<
-    OrderListBookyay,
-    AxiosError,
-    OrderListBookyay
-  >,
-) {
-  return useInfiniteQuery({
-    queryKey: ['bookyay-order-' + token],
-    enabled: false,
-    queryFn: ({pageParam = 1}) =>
-      fetchListOrder(token, {...params, page: pageParam, pageSize: 10}),
-    keepPreviousData: true,
-    ...options,
-    getNextPageParam: lastPage => {
-      if ((lastPage?.data?.length as number) < totalPage) {
-        const nextPage = (lastPage?.data?.length as number) + 1;
-        return nextPage;
-      }
-      return null;
-    },
-    getPreviousPageParam: () => null,
-  });
-}
+};

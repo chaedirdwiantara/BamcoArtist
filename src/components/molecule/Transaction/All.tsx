@@ -10,11 +10,11 @@ import Color from '../../../theme/Color';
 import {useTranslation} from 'react-i18next';
 import TransactionBox from '../../atom/Cart/TransactionBox';
 import TransactionItem from '../../atom/Cart/TransactionItem';
-import {useOrderListBookYay} from '../../../api/event.api';
 import dayjs from 'dayjs';
 import LoadingSpinner from '../../atom/Loading/LoadingSpinner';
 import {FlashList} from '@shopify/flash-list';
 import {EmptyStateSongMusician} from '../EmptyState/EmptyStateSongMusician';
+import {useEventHook} from '../../../hooks/use-event.hook';
 
 interface TransactionProps {
   token: string;
@@ -25,6 +25,7 @@ const AllTransaction: React.FC<TransactionProps> = (
 ) => {
   const {token} = props;
   const {t} = useTranslation();
+  const {useOrderListBookYay} = useEventHook();
 
   const [dataOrder, setDataOrder] = useState<any>([]);
   const [totalPage, setTotalPage] = useState<number>(1);

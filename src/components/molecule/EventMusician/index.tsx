@@ -12,10 +12,10 @@ import {useTranslation} from 'react-i18next';
 import Color from '../../../theme/Color';
 import Typography from '../../../theme/Typography';
 import EventCard from '../ListCard/EventCard';
-import {useEventMusician} from '../../../api/event.api';
 import LoadingSpinner from '../../atom/Loading/LoadingSpinner';
 import {profileStorage} from '../../../hooks/use-storage.hook';
 import {EventListData} from '../../../interface/event.interface';
+import {useEventHook} from '../../../hooks/use-event.hook';
 
 type EventMusicianProps = {
   musicianId?: string;
@@ -23,6 +23,7 @@ type EventMusicianProps = {
 
 const EventMusician: FC<EventMusicianProps> = props => {
   const {t} = useTranslation();
+  const {useEventMusician} = useEventHook();
 
   const MyUuid = profileStorage()?.uuid;
   const isOwner = props?.musicianId === MyUuid;
