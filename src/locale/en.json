@@ -22,7 +22,8 @@
     "NoDescription": "No Description Given",
     "Required": "Required",
     "Dismiss": "Dismiss",
-    "BlockSucceed": "You've been blocked"
+    "BlockSucceed": "You've been blocked",
+    "Topup": "Top Up"
   },
   "Onboarding": {
     "Step1": {
@@ -112,7 +113,8 @@
     "Unset": "Unset",
     "Dismiss": "Dismiss",
     "Update": "Update",
-    "Continue": "Continue"
+    "Continue": "Continue",
+    "MyProfile": "My Profile"
   },
   "ForgotPassword": {
     "Title": "Update Your Password",
@@ -493,6 +495,16 @@
       "TopTiper": "TOP TIPER",
       "TipDistribution": "Tip Distribution",
       "MusicianTipped": "Musician Tipped"
+    },
+    "EmptyState": {
+      "Home": "No live events are currently available at this time.\nStay tuned for exciting upcoming experiences!",
+      "Title": "Discover Live Event",
+      "Profile": "You have no events, your events will be displayed here",
+      "Other": "Currently, this musician don’t have any event.",
+      "TopTipper": {
+        "Title": "Top Tipper Will Displayed Here",
+        "Subtitle": "Wait until event goes live to view the top tipper"
+      }
     }
   },
   "Profile": {
@@ -1097,6 +1109,18 @@
     "StopDonation": {
       "Title": "Stop Tipping",
       "Subtitle": "Are you sure you want to stop donation to {{musician}}?"
+    },
+    "CreditEmpty": {
+      "Title": "Aw, your credit is empty!",
+      "Subtitle": "Let’s top up credits to continue tipping"
+    },
+    "SessionEnd": {
+      "Title": "Session has been end!",
+      "Subtitle": "Let’s view other musician performer"
+    },
+    "ClaimReward": {
+      "Title": "You have claimed your reward!",
+      "Subtitle": "Thank you for supporting the community!"
     }
   },
   "EmptyState": {
@@ -1419,43 +1443,49 @@
       "ReportSuccess": "Report have been sent!"
     }
   },
-  "Vote":{
+  "Vote": {
     "Dropdown": {
       "OptionA": "1 Day",
       "OptionB": "3 Day",
       "OptionC": "1 Week",
-      "OptionD":"1 Month"
+      "OptionD": "1 Month"
     },
-    "Duration":"Poll Duration"
+    "Duration": "Poll Duration"
   },
-  "Block":{
-    "Modal":{
-      "Title":"Block",
-      "Subtitle":"They will not be able to follow you or view your content, and you will not see content from",
-      "LeftButton":"Cancel",
-      "RightButton":"Block"
+  "Block": {
+    "Modal": {
+      "Title": "Block",
+      "Subtitle": "They will not be able to follow you or view your content, and you will not see content from",
+      "LeftButton": "Cancel",
+      "RightButton": "Block"
     },
-    "BlockUI":{
-      "isBlockCaption":"This comment is from the people you've been blocked visit user profile",
-      "blockIsCaption":"You've been blocked by the people who replies this content visit user profile",
-      "linkCaption":"visit user profile",
+    "BlockUI": {
+      "isBlockCaption": "This comment is from the people you've been blocked visit user profile",
+      "blockIsCaption": "You've been blocked by the people who replies this content visit user profile",
+      "linkCaption": "visit user profile",
       "isBlockedProfTitle": "is Blocked",
-      "isBlockedProfCaption":"They can't follow or view your post and you can't see replies or notification from",
-      "blockIsProfTitle":"You have been Blocked",
-      "blockIsProfCaption":"You can't see replies or notification from",
-      "unBlockTitle":"Are you sure to ublock",
-      "unBlockCaptionA":"by unblocking",
-      "unBlockCaptionB":"They will be able view your content, and you will see content or notification from",
-      "unblockButtonYes":"Unblock",
-      "unblockSuccess":"have been unblocked!"
+      "isBlockedProfCaption": "They can't follow or view your post and you can't see replies or notification from",
+      "blockIsProfTitle": "You have been Blocked",
+      "blockIsProfCaption": "You can't see replies or notification from",
+      "unBlockTitle": "Are you sure to ublock",
+      "unBlockCaptionA": "by unblocking",
+      "unBlockCaptionB": "They will be able view your content, and you will see content or notification from",
+      "unblockButtonYes": "Unblock",
+      "unblockSuccess": "have been unblocked!"
     }
   },
-  "Dropdown" :{
-    "Profile":{
-      "qr":"QR Code",
+  "Dropdown": {
+    "Profile": {
+      "qr": "QR Code",
       "share": "Share Profile",
-      "block":"Block",
+      "block": "Block",
       "unblock": "Unblock"
     }
+  },
+  "ClaimReward": {
+    "Title": "Reward Detail",
+    "ValidUntil": "Valid until",
+    "Claim": "Claim",
+    "Claimed": "Claimed"
   }
 }

@@ -1,79 +1,85 @@
 import React, {FC, useEffect, useState} from 'react';
 import {ScrollView, StyleSheet, View} from 'react-native';
 import {useTranslation} from 'react-i18next';
-import {ms, mvs} from 'react-native-size-matters';
-import {
-  FollowMusicianPropsType,
-  MusicianList,
-} from '../../interface/musician.interface';
+import {mvs} from 'react-native-size-matters';
 import {heightResponsive, widthResponsive} from '../../utils';
-import {ParamsProps} from '../../interface/base.interface';
-import {ListDataSearchMusician} from '../../interface/search.interface';
 import LoadingSpinner from '../../components/atom/Loading/LoadingSpinner';
-import MusicianSection from '../../components/molecule/MusicianSection/MusicianSection';
 import {EmptyStateSongMusician} from '../../components/molecule/EmptyState/EmptyStateSongMusician';
 import Color from '../../theme/Color';
+import {useNavigation} from '@react-navigation/native';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {MainTabParams, RootStackParams} from '../../navigations';
+import MusiciansListCard from '../../components/molecule/ListCard/MusiciansListCard';
+import {EventLineUp} from '../../interface/event.interface';
+import {profileStorage} from '../../hooks/use-storage.hook';
 
-interface LineUpProps {
-  type?: string;
-  scrollable?: boolean;
-  dataMusician?: MusicianList[] | ListDataSearchMusician[];
-  setFollowMusician: (
-    props?: FollowMusicianPropsType,
-    params?: ParamsProps,
-  ) => void;
-  setUnfollowMusician: (
-    props?: FollowMusicianPropsType,
-    params?: ParamsProps,
-  ) => void;
-  emptyState?: React.ComponentType;
+interface EventLineUpInterface {
+  dataLineUp?: EventLineUp[];
   isLoading?: boolean;
 }
 
-const LineUp: FC<LineUpProps> = ({type, dataMusician, isLoading}) => {
+const LineUp: FC<EventLineUpInterface> = ({dataLineUp, isLoading}) => {
   const {t} = useTranslation();
-  const [listMusician, setListMusician] = useState(dataMusician);
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParams>>();
+  const navigation2 = useNavigation<NativeStackNavigationProp<MainTabParams>>();
+  const [listLineUp, setListLineUp] = useState(dataLineUp);
 
   useEffect(() => {
-    if (dataMusician !== undefined) {
-      setListMusician(dataMusician);
-      console.log(dataMusician);
+    if (dataLineUp !== undefined) {
+      setListLineUp(dataLineUp);
     }
-  }, [dataMusician]);
+  }, [dataLineUp]);
 
-  return listMusician && listMusician?.length > 0 ? (
+  return listLineUp && listLineUp?.length > 0 ? (
     <ScrollView showsHorizontalScrollIndicator={false}>
-      {listMusician?.map((item, index) => {
+      {isLoading && (
+        <View
+          style={{
+            alignItems: 'center',
+            paddingVertical: mvs(20),
+          }}>
+          <LoadingSpinner />
+        </View>
+      )}
+
+      {listLineUp?.map((item, index) => {
+        const self = item?.musician?.UUID === profileStorage()?.uuid;
         return (
-          <MusicianSection
-            key={item.uuid}
-            userId={item.uuid}
+          <MusiciansListCard
+            key={item?.musician?.UUID}
             musicianNum={(index + 1).toLocaleString('en-US', {
               minimumIntegerDigits: 2,
               useGrouping: false,
             })}
-            musicianName={item.fullname}
-            imgUri={item.imageProfileUrls[1]?.image || ''}
+            musicianName={item?.musician?.fullname}
+            imgUri={item?.musician?.image?.[1]?.image || ''}
             containerStyles={
-              // TODO: get response from api isLive
-              index === 0 ? styles.musicianLive : {marginTop: mvs(18)}
+              item?.statusLineUpEvent === 'live'
+                ? styles.musicianLive
+                : {marginTop: mvs(18)}
             }
             followerMode
-            followersCount={item.followers}
+            followersCount={item?.musician?.followers}
             activeMore={false}
-            isLive={index === 0}
+            isLive={item?.statusLineUpEvent === 'live'}
+            onClickTip={() =>
+              self
+                ? navigation2.navigate('Profile', {})
+                : navigation.push('LiveTipping', {id: '1'})
+            }
+            onPressImage={() =>
+              self
+                ? navigation2.navigate('Profile', {})
+                : navigation.push('MusicianProfile', {id: item?.musician?.UUID})
+            }
+            onPressMore={() => null}
+            self={self}
+            isLineUp={true}
           />
         );
       })}
     </ScrollView>
-  ) : isLoading ? (
-    <View
-      style={{
-        alignItems: 'center',
-        paddingVertical: mvs(20),
-      }}>
-      <LoadingSpinner />
-    </View>
   ) : (
     <EmptyStateSongMusician
       text={t('Home.Musician.EmptyState', {title: 'Top Musician'})}
