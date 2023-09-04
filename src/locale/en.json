@@ -21,7 +21,8 @@
     },
     "NoDescription": "No Description Given",
     "Required": "Required",
-    "Dismiss": "Dismiss"
+    "Dismiss": "Dismiss",
+    "BlockSucceed": "You've been blocked"
   },
   "Onboarding": {
     "Step1": {
@@ -1030,7 +1031,8 @@
     "Dropdown": {
       "Visit": "Visit Profile",
       "Report": "Report",
-      "ReportSent": "Report Sent!"
+      "ReportSent": "Report Sent!",
+      "Block": "Block"
     }
   },
   "Notification": {
@@ -1425,5 +1427,35 @@
       "OptionD":"1 Month"
     },
     "Duration":"Poll Duration"
+  },
+  "Block":{
+    "Modal":{
+      "Title":"Block",
+      "Subtitle":"They will not be able to follow you or view your content, and you will not see content from",
+      "LeftButton":"Cancel",
+      "RightButton":"Block"
+    },
+    "BlockUI":{
+      "isBlockCaption":"This comment is from the people you've been blocked visit user profile",
+      "blockIsCaption":"You've been blocked by the people who replies this content visit user profile",
+      "linkCaption":"visit user profile",
+      "isBlockedProfTitle": "is Blocked",
+      "isBlockedProfCaption":"They can't follow or view your post and you can't see replies or notification from",
+      "blockIsProfTitle":"You have been Blocked",
+      "blockIsProfCaption":"You can't see replies or notification from",
+      "unBlockTitle":"Are you sure to ublock",
+      "unBlockCaptionA":"by unblocking",
+      "unBlockCaptionB":"They will be able view your content, and you will see content or notification from",
+      "unblockButtonYes":"Unblock",
+      "unblockSuccess":"have been unblocked!"
+    }
+  },
+  "Dropdown" :{
+    "Profile":{
+      "qr":"QR Code",
+      "share": "Share Profile",
+      "block":"Block",
+      "unblock": "Unblock"
+    }
   }
 }

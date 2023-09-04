@@ -1,10 +1,17 @@
-import {Text, TouchableOpacity, View, ViewStyle} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  ViewStyle,
+} from 'react-native';
 import React from 'react';
-import {ArrowLeftIcon, ShareIcon} from '../../../assets/icon';
-import {elipsisText, widthPercentage} from '../../../utils';
+import {ArrowLeftIcon, DropDownIcon} from '../../../assets/icon';
+import {elipsisText, widthPercentage, widthResponsive} from '../../../utils';
 import topNavstyles from './topNavstyles';
 import {color, font} from '../../../theme';
-import QRCodeIcon from '../../../assets/icon/QRCode.icon';
+import DropdownMore from '../V2/DropdownFilter/DropdownMore';
+import {DataDropDownType, albumReportSent} from '../../../data/dropdown';
 
 /** === INTERFACE === */
 type Props = {
@@ -17,43 +24,14 @@ type Props = {
   leftIconAction: () => void;
   containerStyles?: ViewStyle;
   onPressShareQR?: () => void;
+  resultDataDropdown?: (dataResult: DataDropDownType) => void;
+  dropdownData?: DataDropDownType[];
+  beingBlocked?: boolean;
 };
 
 /** == COMPONENT === */
 const Type1: React.FC<Props> = (props: Props) => {
-  /** => icon profile share */
-  const iconProfileShare = () => {
-    return (
-      <TouchableOpacity
-        style={topNavstyles.iconLeftContainer}
-        onPress={props.leftIconAction}>
-        <ShareIcon
-          stroke={color.Neutral[10]}
-          style={{
-            marginRight: widthPercentage(12),
-            width: widthPercentage(22),
-            height: widthPercentage(22),
-          }}
-        />
-      </TouchableOpacity>
-    );
-  };
-
-  /** => icon qr share */
-  const iconQRShare = () => {
-    return (
-      <TouchableOpacity
-        style={topNavstyles.iconLeftContainer}
-        onPress={props.onPressShareQR}>
-        <QRCodeIcon
-          stroke={color.Neutral[10]}
-          style={{
-            marginRight: widthPercentage(24),
-          }}
-        />
-      </TouchableOpacity>
-    );
-  };
+  const {dropdownData, resultDataDropdown, beingBlocked} = props;
 
   /** => icon left */
   const iconLeft = () => {
@@ -96,11 +74,16 @@ const Type1: React.FC<Props> = (props: Props) => {
           </Text>
         </View>
         <View style={topNavstyles.rightContainer}>
-          {props.type === 'musician detail' && (
-            <>
-              {iconProfileShare()}
-              {iconQRShare()}
-            </>
+          {props.type === 'user detail' && !beingBlocked && (
+            <View style={styles.dropdownContainer}>
+              <DropdownMore
+                dataFilter={dropdownData ?? albumReportSent}
+                selectedMenu={resultDataDropdown!}
+                iconChildren={<DropDownIcon />}
+                topPosition={widthResponsive(5)}
+                leftPosition={widthResponsive(-3)}
+              />
+            </View>
           )}
         </View>
       </View>
@@ -111,3 +94,9 @@ const Type1: React.FC<Props> = (props: Props) => {
 };
 
 export default Type1;
+
+const styles = StyleSheet.create({
+  dropdownContainer: {
+    marginRight: widthResponsive(10),
+  },
+});

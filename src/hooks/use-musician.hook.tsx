@@ -95,7 +95,7 @@ export const useMusicianHook = () => {
     }
   };
 
-  const getDetailMusician = async (props?: PostPropsTypeA) => {
+  const getDetailMusician = async (props?: ParamsProps) => {
     setIsLoadingMusician(true);
     try {
       const response = await detailMusician(props);

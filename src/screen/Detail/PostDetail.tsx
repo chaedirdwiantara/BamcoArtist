@@ -12,10 +12,12 @@ import {
   CommentInputModal,
   Gap,
   ListCard,
+  ModalConfirm,
   ModalDonate,
   ModalShare,
   ModalSuccessDonate,
   SsuToast,
+  SuccessToast,
   TopNavigation,
 } from '../../components';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
@@ -60,6 +62,8 @@ import {
 import {useReportHook} from '../../hooks/use-report.hook';
 import {ReportParamsProps} from '../../interface/report.interface';
 import {feedReportRecorded} from '../../store/idReported';
+import {blockUserRecorded} from '../../store/blockUser.store';
+import {useBlockHook} from '../../hooks/use-block.hook';
 
 export const {width} = Dimensions.get('screen');
 
@@ -128,6 +132,11 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
     selectedSharePost,
   } = useShareHook();
 
+  const {uuidBlocked, setuuidBlocked} = blockUserRecorded();
+
+  const {blockLoading, blockError, blockResponse, setBlockUser} =
+    useBlockHook();
+
   const {creditCount, getCreditCount} = useCreditHook();
 
   const MyUuid = profileStorage()?.uuid;
@@ -154,6 +163,9 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   const [idUserTonavigate, setIdUserTonavigate] = useState<string>();
   const [selectedMusicianId, setSelectedMusicianId] = useState<string>('');
   const [isCopied, setIsCopied] = useState<boolean>(false);
+  const [modalConfirm, setModalConfirm] = useState<boolean>(false);
+  const [selectedUserName, setSelectedUserName] = useState<string>('');
+  const [toastBlockSucceed, setToastBlockSucceed] = useState<boolean>(false);
 
   // * VIEW MORE HOOKS
   const [viewMore, setViewMore] = useState<string>('');
@@ -613,6 +625,14 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
       selectedMenu !== undefined &&
       selectedLvlComment !== undefined
     ) {
+      // * to block
+      if (t(selectedMenu.value) === '33') {
+        setModalConfirm(true);
+      }
+      // * to profile
+      if (t(selectedMenu.value) === '11') {
+        handleToDetailCommentator(selectedUserUuid ?? '');
+      }
       // * send report
       if (t(selectedMenu.value) === '22') {
         setReportToast(true);
@@ -885,6 +905,9 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
           setReportToast(true);
           setReportType('post');
           break;
+        case '33':
+          setModalConfirm(true);
+          break;
         default:
           break;
       }
@@ -911,7 +934,7 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   const sendOnPress = () => {
     const reportBodyPost: ReportParamsProps = {
       reportType: reportType ?? 'post',
-      reportTypeId: selectedIdPost ?? 0,
+      reportTypeId: selectedIdPost ?? '0',
       reporterUuid: dataProfile?.data.uuid ?? '',
       reportedUuid: dataPostDetail?.musician.uuid ?? '',
       reportCategory: t(selectedCategory ?? ''),
@@ -920,7 +943,7 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
 
     const reportBodyReplies: ReportParamsProps = {
       reportType: reportType ?? 'replies',
-      reportTypeId: idComment ?? 0,
+      reportTypeId: idComment ?? '0',
       reporterUuid: dataProfile?.data.uuid ?? '',
       reportedUuid: selectedUserUuid ?? '',
       reportCategory: t(selectedCategory ?? ''),
@@ -1056,6 +1079,28 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
     }
   }, [selectedSharePost]);
 
+  // ! BLOCK USER AREA
+  const blockModalOnPress = () => {
+    setBlockUser({uuid: selectedUserUuid});
+    setModalConfirm(false);
+  };
+
+  useEffect(() => {
+    if (blockResponse === 'Success' && selectedUserUuid) {
+      setToastBlockSucceed(true);
+      if (!uuidBlocked.includes(selectedUserUuid)) {
+        setuuidBlocked([...uuidBlocked, selectedUserUuid]);
+      }
+    }
+  }, [blockResponse]);
+
+  const toastOnclose = () => {
+    setToastBlockSucceed(false);
+    if (dataPostDetail?.musician.uuid === selectedUserUuid) {
+      navigation.goBack();
+    }
+  };
+
   return (
     <View style={styles.root}>
       {/* Header Section */}
@@ -1106,7 +1151,10 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
                 myPost={dataPostDetail.musician.uuid === dataProfile?.data.uuid}
                 selectedMenu={setSelectedMenuPost}
                 idPost={dataPostDetail.id}
+                musicianUuid={dataPostDetail.musician.uuid}
                 selectedIdPost={setSelectedIdPost}
+                selectedUserName={setSelectedUserName}
+                selectedUserUuid={setSelectedUserUuid}
                 isPremium={data.isPremiumPost}
                 disableComment={false}
                 viewCount={dataPostDetail.viewsCount}
@@ -1156,6 +1204,7 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
             deletedCommentParentId={parentIdDeletedComment}
             addCommentParentId={parentIdAddComment}
             selectedUserUuid={setSelectedUserUuid}
+            selectedUserName={setSelectedUserName}
           />
         ) : null}
         <ImageModal
@@ -1255,6 +1304,26 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
           toggleModal={onPressSuccess}
         />
         <ModalLoading visible={feedIsLoading} />
+
+        {/* //? Block user modal */}
+        {modalConfirm && (
+          <ModalConfirm
+            modalVisible={modalConfirm}
+            title={`${t('Block.Modal.Title')} @${selectedUserName} ?`}
+            subtitle={`${t('Block.Modal.Subtitle')} @${selectedUserName}`}
+            yesText={`${t('Block.Modal.RightButton')}`}
+            noText={`${t('Block.Modal.LeftButton')}`}
+            onPressClose={() => setModalConfirm(false)}
+            onPressOk={blockModalOnPress}
+            rightButtonStyle={styles.rightButtonStyle}
+          />
+        )}
+        {/* //? When block succeed */}
+        <SuccessToast
+          toastVisible={toastBlockSucceed}
+          onBackPressed={toastOnclose}
+          caption={`${t('General.BlockSucceed')} @${selectedUserName}`}
+        />
       </ScrollView>
     </View>
   );
@@ -1301,5 +1370,11 @@ const styles = StyleSheet.create({
   },
   textStyle: {
     color: color.Neutral[10],
+  },
+  rightButtonStyle: {
+    backgroundColor: color.Error.block,
+    borderRadius: 4,
+    paddingHorizontal: widthResponsive(16),
+    paddingVertical: widthResponsive(6),
   },
 });
