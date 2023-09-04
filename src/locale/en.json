@@ -1359,7 +1359,8 @@
         "Newest": "Newest",
         "Oldest": "Oldest"
       }
-    }
+    },
+    "EmptyState": "Oops! you don’t have any transaction.\nYour transaction will be displayed here"
   },
   "Tracking": {
     "Title": "Track Status"

@@ -31,6 +31,7 @@ export type ParamsProps = {
   songID?: string;
   genreID?: number[];
   myUUID?: string;
+  pageSize?: number;
 };
 
 export type imageTypes = {
