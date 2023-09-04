@@ -217,8 +217,13 @@ export const dataUpdateComment: DataDropDownType[] = [
 ];
 
 export const dataUpdatePost: DataDropDownType[] = [
-  {label: 'Post.Label.EditPost', value: '1'},
-  {label: 'Post.Label.DeletePost', value: '2'},
+  {label: 'Post.Label.EditPost', value: '1', disabled: false},
+  {label: 'Post.Label.DeletePost', value: '2', disabled: false},
+];
+
+export const dataUpdatePostDisable: DataDropDownType[] = [
+  {label: 'Post.Label.EditPost', value: '1', disabled: true},
+  {label: 'Post.Label.DeletePost', value: '2', disabled: false},
 ];
 
 export const dataStatusPost: DataDropDownType[] = [

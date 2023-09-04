@@ -30,8 +30,6 @@ import {RootStackParams} from '../../navigations';
 import ListToFollowMusician from './ListToFollowMusician';
 import {useFeedHook} from '../../hooks/use-feed.hook';
 import {PostList} from '../../interface/feed.interface';
-import {dateFormat} from '../../utils/date-format';
-import categoryNormalize from '../../utils/categoryNormalize';
 import {ModalLoading} from '../../components/molecule/ModalLoading/ModalLoading';
 import {usePlayerHook} from '../../hooks/use-player.hook';
 import {useTranslation} from 'react-i18next';
@@ -374,6 +372,7 @@ const PostListProfile: FC<PostListProps> = (props: PostListProps) => {
             renderItem={({item, index}: RenderItemProps) => (
               <>
                 <ListCard.PostList
+                  data={item}
                   toDetailOnPress={
                     item.isPremiumPost &&
                     item.musician.uuid !== MyUuid &&
@@ -383,18 +382,6 @@ const PostListProfile: FC<PostListProps> = (props: PostListProps) => {
                           handleToDetailMusician(item.musician.uuid);
                         }
                   }
-                  musicianName={item.musician.fullname}
-                  musicianId={`@${item.musician.username}`}
-                  imgUri={
-                    item.musician.imageProfileUrls.length !== 0
-                      ? item.musician.imageProfileUrls[0]?.image
-                      : ''
-                  }
-                  postDate={
-                    item?.timeAgo ? item.timeAgo : dateFormat(item.createdAt)
-                  }
-                  postDate2={item.createdAt}
-                  category={categoryNormalize(item.category)}
                   onPress={
                     item.isPremiumPost &&
                     item.musician.uuid !== MyUuid &&
@@ -407,16 +394,9 @@ const PostListProfile: FC<PostListProps> = (props: PostListProps) => {
                   likeCount={likesCountInFeed(selectedId, item, recorder)}
                   tokenOnPress={tokenOnPress}
                   shareOnPress={() => shareOnPress(item)}
-                  commentCount={item.commentsCount}
-                  myPost={item.musician.uuid === MyUuid}
-                  musicianUuid={item.musician.uuid}
-                  idPost={item.id}
                   selectedMenu={setSelectedMenuPost}
                   selectedIdPost={setSelectedIdPost}
                   selectedUserUuid={setSelectedUserUuid}
-                  isPremium={item.isPremiumPost}
-                  viewCount={item.viewsCount}
-                  shareCount={item.shareCount}
                   showDropdown={
                     item.isPremiumPost &&
                     item.musician.uuid !== MyUuid &&

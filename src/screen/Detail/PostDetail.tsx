@@ -1116,22 +1116,11 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
           {dataPostDetail ? (
             <>
               <ListCard.PostList
+                data={data}
                 disabled
                 toDetailOnPress={() =>
                   handleToDetailMusician(data.musician.uuid)
                 }
-                musicianName={musicianName}
-                musicianId={`@${data.musician.username}`}
-                imgUri={
-                  data.musician.imageProfileUrls.length !== 0
-                    ? data.musician.imageProfileUrls[0]?.image
-                    : ''
-                }
-                postDate={
-                  data?.timeAgo ? data.timeAgo : dateFormat(data.createdAt)
-                }
-                postDate2={data.createdAt}
-                category={categoryNormalize(data.category)}
                 onPress={() => {}}
                 likeOnPress={() =>
                   likeOnPress(dataPostDetail.id, dataPostDetail.isLiked)
@@ -1147,18 +1136,11 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
                   )
                 }
                 commentOnPress={() => commentOnPress(data.id, musicianName)}
-                commentCount={commentCountLvl1}
-                myPost={dataPostDetail.musician.uuid === dataProfile?.data.uuid}
                 selectedMenu={setSelectedMenuPost}
-                idPost={dataPostDetail.id}
-                musicianUuid={dataPostDetail.musician.uuid}
                 selectedIdPost={setSelectedIdPost}
                 selectedUserName={setSelectedUserName}
                 selectedUserUuid={setSelectedUserUuid}
-                isPremium={data.isPremiumPost}
                 disableComment={false}
-                viewCount={dataPostDetail.viewsCount}
-                shareCount={dataPostDetail.shareCount}
                 showDropdown
                 reportSent={
                   idReported.includes(dataPostDetail.id) ??

@@ -54,6 +54,7 @@ import {ModalConfirm} from '../Modal/ModalConfirm';
 import SuccessToast from '../Toast/SuccessToast';
 import {useBlockHook} from '../../../hooks/use-block.hook';
 import {blockUserRecorded} from '../../../store/blockUser.store';
+import {profileStorage} from '../../../hooks/use-storage.hook';
 
 type OnScrollEventHandler = (
   event: NativeSyntheticEvent<NativeScrollEvent>,
@@ -112,6 +113,7 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
     setUnblockResponse,
     setUnblockUser,
   } = useBlockHook();
+
   const {uuidBlocked, setuuidBlocked} = blockUserRecorded();
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [scrollEffect, setScrollEffect] = useState(false);
@@ -202,7 +204,7 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
         }
         onScroll={handleScroll}>
         <ProfileHeader
-          type="profile"
+          type={!ownProfile ? 'user detail' : 'profile'}
           avatarUri={profile.avatarUri}
           backgroundUri={profile.backgroundUri}
           fullname={profile.fullname}
@@ -212,7 +214,7 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
           iconPress={goToSetting}
           scrollEffect={scrollEffect}
           noEdit={!ownProfile}
-          backIcon={!ownProfile}
+          backIcon={ownProfile}
           onPressImage={showImage}
           refreshing={refreshing}
         />
