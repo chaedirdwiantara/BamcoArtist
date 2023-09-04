@@ -75,6 +75,7 @@ const LineUp: FC<EventLineUpInterface> = ({dataLineUp, isLoading}) => {
             }
             onPressMore={() => null}
             self={self}
+            isLineUp={true}
           />
         );
       })}

@@ -43,6 +43,7 @@ export interface ListProps {
   onClickTip?: () => void;
   showCredit?: boolean;
   creditCount?: number;
+  isLineUp?: true;
 }
 
 const MusiciansListCard: React.FC<ListProps> = (props: ListProps) => {
@@ -65,6 +66,7 @@ const MusiciansListCard: React.FC<ListProps> = (props: ListProps) => {
     onClickTip,
     showCredit = false,
     creditCount,
+    isLineUp = false,
   } = props;
 
   // ? Dropdown Menu Example
@@ -173,7 +175,7 @@ const MusiciansListCard: React.FC<ListProps> = (props: ListProps) => {
           <Text style={styles.pointStyle}>{`${pointV} pts`}</Text>
         ) : null}
         {activeMore && moreMenu()}
-        {self && !isLive && (
+        {self && !isLineUp && (
           <Text
             style={[
               typography.Subtitle1,
