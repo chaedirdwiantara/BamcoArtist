@@ -2,18 +2,20 @@ import React, {useEffect, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 
-import Color from '../../theme/Color';
-import {AccountContent} from '../../components';
-import {RootStackParams} from '../../navigations';
-import {useSettingHook} from '../../hooks/use-setting.hook';
-import {useLocationHook} from '../../hooks/use-location.hook';
+import Color from '../../../theme/Color';
+import {AccountContent} from '../../../components';
+import {RootStackParams} from '../../../navigations';
+import {useSettingHook} from '../../../hooks/use-setting.hook';
+import {useLocationHook} from '../../../hooks/use-location.hook';
 
-type AccountProps = NativeStackScreenProps<RootStackParams, 'Account'>;
-
-export const AccountScreen: React.FC<AccountProps> = ({
+type AccountInformationProps = NativeStackScreenProps<
+  RootStackParams,
+  'AccountInformation'
+>;
+export const AccountInformationScreen: React.FC<AccountInformationProps> = ({
   navigation,
   route,
-}: AccountProps) => {
+}: AccountInformationProps) => {
   const {data, fromScreen} = route.params;
   const {
     dataAllCountry,

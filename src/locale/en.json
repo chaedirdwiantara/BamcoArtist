@@ -596,6 +596,7 @@
     "EnterVerifCode": "Enter Verification Code",
     "Account": {
       "Title": "Account",
+      "AccountInformation": "Account Information",
       "Confirm": "Are you sure you want to update your account?",
       "Label": {
         "Username": "Username",
@@ -629,6 +630,17 @@
         "Fullname": "Fullname allowed 3 to 50 character",
         "Username": "Username should be between 3 to 30 alphanumeric characters"
       }
+    },
+    "BlockedUser": {
+      "Title": "Blocked User",
+      "Unblock": "Unblock",
+      "Cancel": "Cancel",
+      "ModalConfirm": {
+        "Title": "Are you sure to unblock @{{username}}?",
+        "Subtitle": "By unblocking @{{username}} they will be able view your content, and you will see content or notification from @{{username}}"
+      },
+      "EmptyState": "There are no blocked users at the moment.\nAny blocked users will appear here.",
+      "ToastSuccess": "@{{username}} have been unblocked!"
     },
     "Security": {
       "Title": "Security"
