@@ -1,10 +1,10 @@
-import {useQuery} from 'react-query';
 import {ParamsProps} from '../interface/base.interface';
 import {
   EventDetailResponse,
   EventLineUpResponse,
   EventMusicianResponse,
   MerchListResponse,
+  OrderListBookyay,
   SearchEventInput,
 } from '../interface/event.interface';
 import BookYayAPI from './baseBookYay';
@@ -62,16 +62,6 @@ export const listEventMusician = async (
   return data;
 };
 
-export function useEventMusician(uuid: string, params?: ParamsProps) {
-  return useQuery(
-    [`event/musician/${uuid}`],
-    () => listEventMusician(uuid, params),
-    {
-      enabled: false,
-    },
-  );
-}
-
 export const getEventDetail = async (
   id: string,
   props?: ParamsProps,
@@ -86,12 +76,6 @@ export const getEventDetail = async (
 
   return data;
 };
-
-export function useEventDetail(id: string, params?: ParamsProps) {
-  return useQuery([`event/detail/${id}`], () => getEventDetail(id, params), {
-    enabled: false,
-  });
-}
 
 export const getEventLineUp = async (
   id: string,
@@ -108,12 +92,14 @@ export const getEventLineUp = async (
   return data;
 };
 
-export function useEventLineUp(id: string, params?: ParamsProps) {
-  return useQuery(
-    [`event/detail/lineup/${id}`],
-    () => getEventLineUp(id, params),
-    {
-      enabled: false,
-    },
-  );
-}
+export const fetchListOrder = async (
+  token: string,
+  params: ParamsProps,
+): Promise<OrderListBookyay> => {
+  return await BookYayAPI()
+    .get(`orders`, {headers: {Authorization: `Bearer ${token}`}, params})
+    .then((res: any) => res.data)
+    .catch(err => {
+      return err;
+    });
+};
