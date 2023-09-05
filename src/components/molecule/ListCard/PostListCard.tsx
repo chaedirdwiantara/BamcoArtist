@@ -7,10 +7,6 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
-import {ms, mvs} from 'react-native-size-matters';
-import {Avatar, Gap} from '../../atom';
-import {heightResponsive, widthResponsive} from '../../../utils';
-import {color, font} from '../../../theme';
 import {
   CommentIcon,
   DiagramIcon,
@@ -19,7 +15,6 @@ import {
   ShareIcon,
   ThreeDotsHorizonIcon,
 } from '../../../assets/icon';
-import CoinB from '../../../assets/icon/CoinB.icon';
 import {
   DataDropDownType,
   dataUpdatePost,
@@ -27,40 +22,39 @@ import {
   dataReportPostProfile,
   dataReportAlreadyPostProfile,
   dataAlreadyReportPost,
+  dataUpdatePostDisable,
 } from '../../../data/dropdown';
-import DropdownMore from '../V2/DropdownFilter/DropdownMore';
 import {
+  dateFormat,
   dateFormatDayOnly,
   dateFormatMonthOnly,
 } from '../../../utils/date-format';
+import {Avatar, Gap} from '../../atom';
+import {color, font} from '../../../theme';
+import {ms, mvs} from 'react-native-size-matters';
+import CoinB from '../../../assets/icon/CoinB.icon';
+import {PostList} from '../../../interface/feed.interface';
+import DropdownMore from '../V2/DropdownFilter/DropdownMore';
+import {profileStorage} from '../../../hooks/use-storage.hook';
+import categoryNormalize from '../../../utils/categoryNormalize';
+import {heightResponsive, widthResponsive} from '../../../utils';
 
 interface ListProps extends TouchableOpacityProps {
-  imgUri: string;
-  musicianName: string;
-  musicianId: string;
-  postDate: string;
-  postDate2: string;
+  data: PostList;
   children: React.ReactNode;
   likeOnPress: () => void;
   tokenOnPress: () => void;
   shareOnPress: () => void;
   likePressed: boolean;
   likeCount: number;
-  commentCount: number;
   containerStyles?: ViewStyle;
-  category: string;
   toDetailOnPress: () => void;
-  myPost: boolean;
   selectedMenu: (value: DataDropDownType) => void;
-  idPost: string;
   selectedIdPost: (idPost: string) => void;
-  isPremium: boolean;
   noNavigate?: boolean;
   disableComment?: boolean;
   commentOnPress?: () => void;
   showDropdown?: boolean;
-  viewCount: number;
-  shareCount: number;
   musicianUuid?: string;
   selectedUserUuid?: (uuid: string) => void;
   selectedUserName?: (name: string) => void;
@@ -70,32 +64,21 @@ interface ListProps extends TouchableOpacityProps {
 
 const PostListCard: React.FC<ListProps> = (props: ListProps) => {
   const {
-    imgUri,
-    musicianName,
-    musicianId,
-    postDate,
-    postDate2,
+    data,
     children,
     likeOnPress,
     tokenOnPress,
     shareOnPress,
     likePressed,
     likeCount,
-    commentCount,
     containerStyles,
-    category,
     toDetailOnPress,
-    myPost,
     selectedMenu,
-    idPost,
     selectedIdPost,
-    isPremium,
     noNavigate,
     disableComment = true,
     commentOnPress,
     showDropdown,
-    viewCount,
-    shareCount,
     musicianUuid,
     selectedUserUuid,
     selectedUserName,
@@ -103,6 +86,24 @@ const PostListCard: React.FC<ListProps> = (props: ListProps) => {
     reportSent,
   } = props;
 
+  const myUuid = profileStorage()?.uuid;
+
+  const fullName = data?.musician.fullname;
+  const userName = `@${data?.musician.username}`;
+  const imgUri =
+    data?.musician.imageProfileUrls.length !== 0
+      ? data?.musician.imageProfileUrls[0]?.image
+      : '';
+  const postDate = data?.timeAgo ? data?.timeAgo : dateFormat(data?.createdAt);
+  const postDate2 = data?.createdAt;
+  const category = categoryNormalize(data?.category);
+  const commentCount = data?.commentsCount;
+  const myPost = data?.musician.uuid === myUuid;
+  const idPost = data?.id;
+  const isPremium = data?.isPremiumPost;
+  const viewCount = data?.viewsCount;
+  const shareCount = data?.shareCount;
+  const dataMyFilter = !data?.isVoted ? dataUpdatePost : dataUpdatePostDisable;
   const dataReport =
     onProfile && !reportSent
       ? dataReportPostProfile
@@ -111,6 +112,7 @@ const PostListCard: React.FC<ListProps> = (props: ListProps) => {
       : !onProfile && reportSent
       ? dataAlreadyReportPost
       : dataReportPost;
+
   const leftPosition =
     onProfile && !myPost ? widthResponsive(55) : widthResponsive(27);
   return (
@@ -159,7 +161,7 @@ const PostListCard: React.FC<ListProps> = (props: ListProps) => {
           ]}>
           <View style={styles.topSection}>
             <Text style={styles.songTitle} onPress={toDetailOnPress}>
-              {musicianName}
+              {fullName}
             </Text>
             {showDropdown ? (
               <View style={{flexDirection: 'row', alignItems: 'center'}}>
@@ -169,12 +171,12 @@ const PostListCard: React.FC<ListProps> = (props: ListProps) => {
                 <DropdownMore
                   id={idPost}
                   uuid={musicianUuid}
-                  userName={musicianName}
+                  userName={fullName}
                   selectedid={selectedIdPost}
                   selectedMenu={selectedMenu}
                   selectedUserUuid={selectedUserUuid}
                   selectedUserName={selectedUserName}
-                  dataFilter={myPost ? dataUpdatePost : dataReport}
+                  dataFilter={myPost ? dataMyFilter : dataReport}
                   iconChildren={<ThreeDotsHorizonIcon />}
                   containerStyle={{marginTop: 0, marginBottom: 0}}
                   iconContainerStyle={{
@@ -192,7 +194,7 @@ const PostListCard: React.FC<ListProps> = (props: ListProps) => {
           </View>
           <Gap height={4} />
           <View style={styles.bottomSection}>
-            <Text style={styles.songDesc}>{musicianId}</Text>
+            <Text style={styles.songDesc}>{userName}</Text>
             <Text style={[styles.songDesc, {color: color.Dark[100]}]}>
               {postDate}
             </Text>

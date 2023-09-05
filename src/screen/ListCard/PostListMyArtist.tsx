@@ -10,6 +10,7 @@ import {mvs} from 'react-native-size-matters';
 import {
   DropDownFilter,
   ListCard,
+  ModalConfirm,
   ModalDonate,
   ModalShare,
   ModalSuccessDonate,
@@ -33,8 +34,6 @@ import {RootStackParams} from '../../navigations';
 import {EmptyState} from '../../components/molecule/EmptyState/EmptyState';
 import {useFeedHook} from '../../hooks/use-feed.hook';
 import {PostList} from '../../interface/feed.interface';
-import {dateFormat} from '../../utils/date-format';
-import categoryNormalize from '../../utils/categoryNormalize';
 import {usePlayerHook} from '../../hooks/use-player.hook';
 import {useTranslation} from 'react-i18next';
 import {useCreditHook} from '../../hooks/use-credit.hook';
@@ -63,6 +62,7 @@ import {feedReportRecorded} from '../../store/idReported';
 import {ReportParamsProps} from '../../interface/report.interface';
 import {reportingMenu} from '../../data/report';
 import {ModalReport} from '../../components/molecule/Modal/ModalReport';
+import {useBlockHook} from '../../hooks/use-block.hook';
 
 const {height} = Dimensions.get('screen');
 
@@ -86,6 +86,9 @@ const PostListMyArtist: FC<PostListProps> = (props: PostListProps) => {
     uuidMusician = '',
     hideDropdown,
   } = props;
+
+  const {blockLoading, blockError, blockResponse, setBlockUser} =
+    useBlockHook();
 
   const [recorder, setRecorder] = useState<string[]>([]);
   const [selectedId, setSelectedId] = useState<string[]>();
@@ -114,6 +117,9 @@ const PostListMyArtist: FC<PostListProps> = (props: PostListProps) => {
   const [selectedUserUuid, setSelectedUserUuid] = useState<string>();
   const [selectedCategory, setSelectedCategory] = useState<string>();
   const [reason, setReason] = useState<string>('');
+  const [modalConfirm, setModalConfirm] = useState<boolean>(false);
+  const [selectedUserName, setSelectedUserName] = useState<string>('');
+  const [toastBlockSucceed, setToastBlockSucceed] = useState<boolean>(false);
 
   //* MUSIC HOOKS
   const [pauseModeOn, setPauseModeOn] = useState<boolean>(false);
@@ -319,6 +325,9 @@ const PostListMyArtist: FC<PostListProps> = (props: PostListProps) => {
         case '22':
           setReportToast(true);
           break;
+        case '33':
+          setModalConfirm(true);
+          break;
         default:
           break;
       }
@@ -367,6 +376,21 @@ const PostListMyArtist: FC<PostListProps> = (props: PostListProps) => {
       });
     }
   }, [selectedSharePost]);
+
+  // ! BLOCK USER AREA
+  const blockModalOnPress = () => {
+    setBlockUser({uuid: selectedUserUuid});
+    setModalConfirm(false);
+  };
+
+  useEffect(() => {
+    if (blockResponse === 'Success') {
+      setDataMain(
+        dataMain.filter(data => data.musician.uuid !== selectedUserUuid),
+      );
+      setToastBlockSucceed(true);
+    }
+  }, [blockResponse]);
 
   return (
     <>
@@ -425,21 +449,10 @@ const PostListMyArtist: FC<PostListProps> = (props: PostListProps) => {
             renderItem={({item, index}: RenderItemProps) => (
               <>
                 <ListCard.PostList
+                  data={item}
                   toDetailOnPress={() =>
                     handleToDetailMusician(item.musician.uuid)
                   }
-                  musicianName={item.musician.fullname}
-                  musicianId={`@${item.musician.username}`}
-                  imgUri={
-                    item.musician.imageProfileUrls?.length !== 0
-                      ? item.musician.imageProfileUrls[0]?.image
-                      : ''
-                  }
-                  postDate={
-                    item?.timeAgo ? item.timeAgo : dateFormat(item.createdAt)
-                  }
-                  postDate2={item.createdAt}
-                  category={categoryNormalize(item.category)}
                   onPress={() => cardOnPress(item)}
                   likeOnPress={() => likeOnPress(item.id, item.isLiked)}
                   likePressed={likePressedInFeed(selectedId, item, recorder)}
@@ -447,16 +460,10 @@ const PostListMyArtist: FC<PostListProps> = (props: PostListProps) => {
                   tokenOnPress={() => tokenOnPress(item.musician.uuid)}
                   shareOnPress={() => shareOnPress(item)}
                   containerStyles={{marginTop: mvs(16)}}
-                  commentCount={item.commentsCount}
-                  myPost={item.musician.uuid === MyUuid}
-                  musicianUuid={item.musician.uuid}
-                  idPost={item.id}
                   selectedMenu={setSelectedMenuPost}
                   selectedIdPost={setSelectedIdPost}
                   selectedUserUuid={setSelectedUserUuid}
-                  isPremium={item.isPremiumPost}
-                  viewCount={item.viewsCount}
-                  shareCount={item.shareCount}
+                  selectedUserName={setSelectedUserName}
                   showDropdown
                   reportSent={idReported.includes(item.id) ?? item.reportSent}
                   children={
@@ -532,6 +539,25 @@ const PostListMyArtist: FC<PostListProps> = (props: PostListProps) => {
         modalVisible={modalSuccessDonate && trigger2ndModal ? true : false}
         toggleModal={onPressSuccess}
       />
+      {/* //? Block user modal */}
+      {modalConfirm && (
+        <ModalConfirm
+          modalVisible={modalConfirm}
+          title={`${t('Block.Modal.Title')} @${selectedUserName} ?`}
+          subtitle={`${t('Block.Modal.Subtitle')} @${selectedUserName}`}
+          yesText={`${t('Block.Modal.RightButton')}`}
+          noText={`${t('Block.Modal.LeftButton')}`}
+          onPressClose={() => setModalConfirm(false)}
+          onPressOk={blockModalOnPress}
+          rightButtonStyle={styles.rightButtonStyle}
+        />
+      )}
+      {/* //? When block succeed */}
+      <SuccessToast
+        toastVisible={toastBlockSucceed}
+        onBackPressed={() => setToastBlockSucceed(false)}
+        caption={`${t('General.BlockSucceed')} @${selectedUserName}`}
+      />
     </>
   );
 };
@@ -578,5 +604,11 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: color.Neutral[10],
     lineHeight: mvs(16),
+  },
+  rightButtonStyle: {
+    backgroundColor: color.Error.block,
+    borderRadius: 4,
+    paddingHorizontal: widthResponsive(16),
+    paddingVertical: widthResponsive(6),
   },
 });
