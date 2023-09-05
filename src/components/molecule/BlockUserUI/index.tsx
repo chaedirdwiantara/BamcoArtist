@@ -41,6 +41,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   },
   caption: {
+    flex: 1,
     color: color.Dark[50],
     fontSize: mvs(12),
     fontFamily: font.InterRegular,
