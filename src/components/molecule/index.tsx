@@ -4,6 +4,7 @@ import {AddToPlaylistContent} from './PlaylistContent/AddToPlaylistContent';
 import AlbumAppeal from './AppealCard/AlbumAppeal';
 import {AlbumContent} from './Album/AlbumContent';
 import {AvatarProfile} from './AvatarProfile/AvatarProfile';
+import BlockUser from './BlockUserUI';
 import {BottomSheetGuest} from './GuestComponent/BottomSheetGuest';
 import {Carousel} from './Carousel/Carousel';
 import {ChangeEmailContent} from './SettingContent/ChangeEmailContent';
@@ -84,6 +85,7 @@ export {
   AlbumAppeal,
   AlbumContent,
   AvatarProfile,
+  BlockUser,
   BottomSheetGuest,
   Carousel,
   ChangeEmailContent,

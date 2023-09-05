@@ -5,14 +5,16 @@ import {heightResponsive, width} from '../../../utils';
 import Color from '../../../theme/Color';
 
 interface Props {
+  title?: string;
   text: string;
   height?: number;
 }
 
 export const EmptyStateSongMusician: React.FC<Props> = (props: Props) => {
-  const {text, height = 250} = props;
+  const {title = '', text, height = 250} = props;
   return (
     <View style={[styles.root, {height: heightResponsive(height)}]}>
+      {title !== '' && <Text style={[styles.title]}>{title}</Text>}
       <Text style={[styles.text]}>{text}</Text>
     </View>
   );
@@ -31,5 +33,13 @@ const styles = StyleSheet.create({
     fontSize: mvs(12),
     fontFamily: 'Inter-Regular',
     lineHeight: mvs(14),
+  },
+  title: {
+    color: Color.Neutral[10],
+    textAlign: 'center',
+    maxWidth: width * 0.84,
+    fontSize: mvs(14),
+    fontFamily: 'Inter-Medium',
+    lineHeight: mvs(20),
   },
 });

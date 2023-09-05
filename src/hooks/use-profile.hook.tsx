@@ -67,7 +67,7 @@ export const useProfileHook = () => {
     }
   };
 
-  const getOtherProfileUser = async (props?: PostPropsTypeA) => {
+  const getOtherProfileUser = async (props?: ParamsProps) => {
     setIsLoading(true);
     try {
       const response = await getOtherUserProfile(props);

@@ -13,7 +13,7 @@ import {
   ModalDonate,
   ModalSuccessDonate,
 } from '../../components';
-import {storage} from '../../hooks/use-storage.hook';
+import {profileStorage, storage} from '../../hooks/use-storage.hook';
 import {useCreditHook} from '../../hooks/use-credit.hook';
 import {useProfileHook} from '../../hooks/use-profile.hook';
 import {usePlaylistHook} from '../../hooks/use-playlist.hook';
@@ -29,7 +29,7 @@ const MusicianProfile: FC<PostDetailProps> = ({route}: PostDetailProps) => {
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
 
   const uuid = route.params.id;
-
+  const MyUuid = profileStorage()?.uuid;
   const isLogin = storage.getString('profile');
 
   const {dataCountProfile, getTotalCountProfile} = useProfileHook();
@@ -70,7 +70,7 @@ const MusicianProfile: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   useFocusEffect(
     useCallback(() => {
       getTotalCountProfile({uuid});
-      getDetailMusician({id: uuid});
+      getDetailMusician({id: uuid, myUUID: MyUuid});
       getPlaylist({uuid});
       getExclusiveContent({uuid: uuid});
     }, [uuid]),
@@ -143,6 +143,10 @@ const MusicianProfile: FC<PostDetailProps> = ({route}: PostDetailProps) => {
     navigation.push('Playlist', {id, from: 'other'});
   };
 
+  const handleRefreshing = () => {
+    getDetailMusician({id: uuid, myUUID: MyUuid});
+  };
+
   const musicianPlaylist =
     dataPlaylist !== undefined && dataPlaylist !== null
       ? dataPlaylist?.filter(val => !val.isDefaultPlaylist && val.isPublic)
@@ -168,6 +172,7 @@ const MusicianProfile: FC<PostDetailProps> = ({route}: PostDetailProps) => {
               : undefined
           }
           subsEC={alreadySubsEC}
+          setRefreshing={handleRefreshing}
         />
       )}
       <ModalLoading visible={isLoadingMusician} />

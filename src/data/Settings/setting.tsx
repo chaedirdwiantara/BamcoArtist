@@ -56,6 +56,17 @@ export const menuTnCAndPP: {text: string; value: string}[] = [
   },
 ];
 
+export const menuAccount: {text: string; value: string}[] = [
+  {
+    text: 'Setting.Account.AccountInformation',
+    value: 'AccountInformation',
+  },
+  {
+    text: 'Setting.BlockedUser.Title',
+    value: 'BlockedUser',
+  },
+];
+
 export const dummyViolations = {
   isAnyViolation: true,
   postReported: [

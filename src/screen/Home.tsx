@@ -72,6 +72,7 @@ import {TotalIncome} from '../interface/analythic.interface';
 import {useQuery} from 'react-query';
 import {useAnalyticsHook} from '../hooks/use-analytics.hook';
 import {UploadMusicSection} from '../components/molecule/UploadMusic';
+import {randomString} from '../utils/randomString';
 
 type OnScrollEventHandler = (
   event: NativeSyntheticEvent<NativeScrollEvent>,
@@ -186,6 +187,10 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
   // Doesn't trigger the banner when pull refresh
   useEffect(() => {
     getListDataBanner();
+    const uniqueId = storage.getString('uniqueId');
+    if (uniqueId === undefined) {
+      storage.set('uniqueId', Date.now() + randomString(10)); //unix timestamp + random string (10)
+    }
   }, []);
 
   const [modalGuestVisible, setModalGuestVisible] = useState<boolean>(false);

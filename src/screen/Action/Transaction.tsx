@@ -1,5 +1,5 @@
 import {View, StyleSheet} from 'react-native';
-import React from 'react';
+import React, {useCallback, useState} from 'react';
 import {TopNavigation} from '../../components';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {RootStackParams} from '../../navigations';
@@ -7,6 +7,10 @@ import Color from '../../theme/Color';
 import {useTranslation} from 'react-i18next';
 import {heightPercentage, widthPercentage} from '../../utils';
 import AllTransaction from '../../components/molecule/Transaction/All';
+import {profileStorage} from '../../hooks/use-storage.hook';
+import {useFocusEffect} from '@react-navigation/native';
+import {getBookyayToken} from '../../service/refreshBookyayToken';
+import {ModalLoading} from '../../components/molecule/ModalLoading/ModalLoading';
 
 type TransactionProps = NativeStackScreenProps<RootStackParams, 'Transaction'>;
 
@@ -14,6 +18,17 @@ export const Transaction: React.FC<TransactionProps> = ({
   navigation,
 }: TransactionProps) => {
   const {t} = useTranslation();
+
+  const [loading, setLoading] = useState<boolean>(true);
+
+  useFocusEffect(
+    useCallback(() => {
+      getBookyayToken();
+      setLoading(false);
+    }, []),
+  );
+
+  const bookyayToken = profileStorage()?.bookyayToken;
 
   return (
     <View style={styles.root}>
@@ -24,7 +39,11 @@ export const Transaction: React.FC<TransactionProps> = ({
         itemStrokeColor={Color.Neutral[10]}
       />
 
-      <AllTransaction />
+      {loading ? (
+        <ModalLoading visible={loading} />
+      ) : (
+        <AllTransaction token={bookyayToken || ''} />
+      )}
     </View>
   );
 };

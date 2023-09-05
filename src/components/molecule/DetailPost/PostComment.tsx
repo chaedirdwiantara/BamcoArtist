@@ -21,6 +21,7 @@ import {DataDropDownType} from '../../../data/dropdown';
 import {useTranslation} from 'react-i18next';
 import DropdownMore from '../V2/DropdownFilter/DropdownMore';
 import {feedReportRecorded} from '../../../store/idReported';
+import BlockUser from '../BlockUserUI';
 
 interface ListProps extends TouchableOpacityProps {
   imgUri?: string;
@@ -41,10 +42,13 @@ interface ListProps extends TouchableOpacityProps {
   idComment?: string;
   selectedIdComment?: (idComment: string) => void;
   selectedUserUuid?: (uuid: string) => void;
+  selectedUserName: (name: string) => void;
   myComment?: boolean;
   commentOwnerUuid?: string;
   hideDropDown?: boolean;
   appeal?: boolean;
+  isBlock: boolean;
+  blockIs: boolean;
 }
 
 const PostComment: React.FC<ListProps> = (props: ListProps) => {
@@ -68,10 +72,13 @@ const PostComment: React.FC<ListProps> = (props: ListProps) => {
     idComment,
     selectedIdComment,
     selectedUserUuid,
+    selectedUserName,
     myComment,
     commentOwnerUuid,
     hideDropDown,
     appeal,
+    isBlock,
+    blockIs,
   } = props;
 
   const {idReported} = feedReportRecorded();
@@ -81,7 +88,7 @@ const PostComment: React.FC<ListProps> = (props: ListProps) => {
 
   return (
     <View style={[styles.root, containerStyles]}>
-      {!appeal && (
+      {!appeal && !isBlock && !blockIs && (
         <TouchableOpacity onPress={toDetailOnPress}>
           <Avatar imgUri={imgUri} size={widthResponsive(32)} />
         </TouchableOpacity>
@@ -89,89 +96,112 @@ const PostComment: React.FC<ListProps> = (props: ListProps) => {
       <View
         style={{
           flex: 1,
-          marginLeft: widthResponsive(appeal ? 0 : 6),
+          marginLeft: widthResponsive(appeal || isBlock || blockIs ? 0 : 6),
         }}>
-        <View style={[styles.topSection, {marginTop: ms(appeal ? 0 : -7)}]}>
-          {userName !== 'accountdeactivated' ? (
-            <Text style={styles.fullname} onPress={toDetailOnPress}>
-              {fullName}
-              <Text style={styles.regularText}>
-                {' '}
-                {`@${elipsisText(userName, 10)}`}
-              </Text>
-            </Text>
-          ) : (
-            <Text style={styles.regularText}>{`@${elipsisText(
-              userName,
-              10,
-            )}`}</Text>
-          )}
+        {isBlock ? (
+          <BlockUser
+            caption={t('Block.BlockUI.isBlockCaption')}
+            linkCaption={t('Block.BlockUI.linkCaption')}
+            linkOnPress={toDetailOnPress}
+          />
+        ) : blockIs ? (
+          <BlockUser
+            caption={t('Block.BlockUI.blockIsCaption')}
+            linkCaption={t('Block.BlockUI.linkCaption')}
+            linkOnPress={toDetailOnPress}
+          />
+        ) : (
+          <>
+            <View
+              style={[
+                styles.topSection,
+                {marginTop: ms(appeal || isBlock || blockIs ? 0 : -7)},
+              ]}>
+              {userName !== 'accountdeactivated' ? (
+                <Text style={styles.fullname} onPress={toDetailOnPress}>
+                  {fullName}
+                  <Text style={styles.regularText}>
+                    {' '}
+                    {`@${elipsisText(userName, 10)}`}
+                  </Text>
+                </Text>
+              ) : (
+                <Text style={styles.regularText}>{`@${elipsisText(
+                  userName,
+                  10,
+                )}`}</Text>
+              )}
 
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              marginRight: ms(appeal ? 0 : -7),
-            }}>
-            <Text style={styles.postDateStyle}>{postDate}</Text>
-            {!hideDropDown && (
-              <DropdownMore
-                id={idComment}
-                uuid={commentOwnerUuid}
-                selectedid={selectedIdComment}
-                selectedMenu={selectedMenu!}
-                selectedUserUuid={selectedUserUuid}
-                dataFilter={myComment ? dataUpdateComment : dataReport}
-              />
-            )}
-          </View>
-        </View>
-        <Gap height={2} />
-        <View style={[styles.bottomSection, {marginTop: ms(appeal ? 0 : -8)}]}>
-          <Text style={styles.reply}>
-            {t('Post.Label.RepliedTo')}{' '}
-            <Text style={[styles.reply, {color: color.Pink[100]}]}>
-              {artistPostId}
-            </Text>
-          </Text>
-        </View>
-        <Gap height={7} />
-        <View>
-          <Text style={styles.commentCaption}>{commentCaption}</Text>
-        </View>
-        <Gap height={!appeal ? 6 : 10} />
-        {/* SOCIAL SECTION */}
-        <View style={styles.bottomContainer}>
-          <View style={styles.socialContainer}>
-            {/* like section */}
-            <View>
-              <TouchableOpacity
-                onPress={likeOnPress}
-                style={styles.socialIcon}
-                disabled={appeal}>
-                <LoveIcon
-                  fill={likePressed ? color.Pink[100] : 'none'}
-                  stroke={likePressed ? 'none' : color.Dark[100]}
-                />
-                <Gap width={3} />
-                <Text style={styles.regularText}>{likeCount}</Text>
-              </TouchableOpacity>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  marginRight: ms(appeal ? 0 : -7),
+                }}>
+                <Text style={styles.postDateStyle}>{postDate}</Text>
+                {!hideDropDown && (
+                  <DropdownMore
+                    id={idComment}
+                    uuid={commentOwnerUuid}
+                    userName={fullName}
+                    selectedid={selectedIdComment}
+                    selectedMenu={selectedMenu!}
+                    selectedUserUuid={selectedUserUuid}
+                    selectedUserName={selectedUserName}
+                    dataFilter={myComment ? dataUpdateComment : dataReport}
+                  />
+                )}
+              </View>
             </View>
-            <Gap width={15} />
-            {/* comment section */}
-            <View>
-              <TouchableOpacity
-                onPress={commentOnPress}
-                style={styles.socialIcon}
-                disabled={appeal}>
-                <CommentIcon stroke={color.Dark[100]} />
-                <Gap width={3} />
-                <Text style={styles.regularText}>{commentCount}</Text>
-              </TouchableOpacity>
+            <Gap height={2} />
+            <View
+              style={[styles.bottomSection, {marginTop: ms(appeal ? 0 : -8)}]}>
+              <Text style={styles.reply}>
+                {t('Post.Label.RepliedTo')}{' '}
+                <Text style={[styles.reply, {color: color.Pink[100]}]}>
+                  {artistPostId}
+                </Text>
+              </Text>
             </View>
-          </View>
-        </View>
+            <Gap height={7} />
+            <View>
+              <Text style={styles.commentCaption}>{commentCaption}</Text>
+            </View>
+            <Gap height={!appeal ? 6 : 10} />
+            {/* SOCIAL SECTION */}
+            <View style={styles.bottomContainer}>
+              <View style={styles.socialContainer}>
+                {/* like section */}
+                <View>
+                  <TouchableOpacity
+                    onPress={likeOnPress}
+                    style={styles.socialIcon}
+                    disabled={appeal}>
+                    <LoveIcon
+                      fill={likePressed ? color.Pink[100] : 'none'}
+                      stroke={likePressed ? 'none' : color.Dark[100]}
+                    />
+                    <Gap width={3} />
+                    <Text style={styles.regularText}>{likeCount}</Text>
+                  </TouchableOpacity>
+                </View>
+                <Gap width={15} />
+                {/* comment section */}
+                <View>
+                  <TouchableOpacity
+                    onPress={commentOnPress}
+                    style={styles.socialIcon}
+                    disabled={appeal}>
+                    <CommentIcon stroke={color.Dark[100]} />
+                    <Gap width={3} />
+                    <Text style={styles.regularText}>{commentCount}</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </View>
+          </>
+        )}
         {/* COMMENT LVL 2 SECTION */}
         {children}
       </View>

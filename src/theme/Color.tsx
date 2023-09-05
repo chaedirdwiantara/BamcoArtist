@@ -63,6 +63,7 @@ const Color = {
     100: '#FFCCD2',
     50: '#FFEBEE',
     focused: 'rgba(243, 78, 78, 0.15)',
+    block: '#F4212E',
   },
   Neutral: {
     100: '#0A0A0A',

@@ -30,6 +30,8 @@ export type ParamsProps = {
   order?: 'asc' | 'desc';
   songID?: string;
   genreID?: number[];
+  myUUID?: string;
+  pageSize?: number;
 };
 
 export type imageTypes = {

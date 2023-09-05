@@ -104,19 +104,9 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = (
 
   const iconLeft = () => {
     return (
-      <>
-        {type === 'profile' ? (
-          <TouchableOpacity onPress={toMyQrCode} style={styles.iconLeft}>
-            <QRCodeIcon style={styles.settingIcon} />
-          </TouchableOpacity>
-        ) : (
-          <TouchableOpacity
-            onPress={() => navigation.goBack()}
-            style={styles.iconLeft}>
-            <ArrowLeftIcon style={styles.settingIcon} />
-          </TouchableOpacity>
-        )}
-      </>
+      <TouchableOpacity onPress={toMyQrCode} style={styles.iconLeft}>
+        <QRCodeIcon style={styles.settingIcon} />
+      </TouchableOpacity>
     );
   };
 
@@ -176,7 +166,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = (
             )}
 
             {noEdit ? null : iconRight()}
-            {backIcon || type === 'profile' ? iconLeft() : null}
+            {backIcon && type === 'profile' ? iconLeft() : null}
           </View>
         </ImageBackground>
       </TouchableOpacity>

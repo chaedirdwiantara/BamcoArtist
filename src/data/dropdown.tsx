@@ -217,8 +217,13 @@ export const dataUpdateComment: DataDropDownType[] = [
 ];
 
 export const dataUpdatePost: DataDropDownType[] = [
-  {label: 'Post.Label.EditPost', value: '1'},
-  {label: 'Post.Label.DeletePost', value: '2'},
+  {label: 'Post.Label.EditPost', value: '1', disabled: false},
+  {label: 'Post.Label.DeletePost', value: '2', disabled: false},
+];
+
+export const dataUpdatePostDisable: DataDropDownType[] = [
+  {label: 'Post.Label.EditPost', value: '1', disabled: true},
+  {label: 'Post.Label.DeletePost', value: '2', disabled: false},
 ];
 
 export const dataStatusPost: DataDropDownType[] = [
@@ -265,11 +270,13 @@ export const dropDownAlbumRange: DataDropDownType[] = [
 export const dataReportPost: DataDropDownType[] = [
   {label: 'Post.Dropdown.Visit', value: '11'},
   {label: 'Post.Dropdown.Report', value: '22'},
+  {label: 'Post.Dropdown.Block', value: '33'},
 ];
 
 export const dataAlreadyReportPost: DataDropDownType[] = [
   {label: 'Post.Dropdown.Visit', value: '11', disabled: false},
   {label: 'Post.Dropdown.ReportSent', value: '22', disabled: true},
+  {label: 'Post.Dropdown.Block', value: '33', disabled: false},
 ];
 
 export const dataReportPostProfile: DataDropDownType[] = [
@@ -321,4 +328,16 @@ export const dataDurationVote: DataDropDownNumberType[] = [
   {label: 'Vote.Dropdown.OptionB', value: 3},
   {label: 'Vote.Dropdown.OptionC', value: 7},
   {label: 'Vote.Dropdown.OptionD', value: 30},
+];
+
+export const dataProfileDropdown: DataDropDownType[] = [
+  {label: 'Dropdown.Profile.qr', value: '1', disabled: false},
+  {label: 'Dropdown.Profile.share', value: '2', disabled: false},
+  {label: 'Dropdown.Profile.block', value: '3', disabled: false},
+];
+
+export const dataProfileDropdownBlocked: DataDropDownType[] = [
+  {label: 'Dropdown.Profile.qr', value: '1', disabled: false},
+  {label: 'Dropdown.Profile.share', value: '2', disabled: false},
+  {label: 'Dropdown.Profile.unblock', value: '4', disabled: false},
 ];

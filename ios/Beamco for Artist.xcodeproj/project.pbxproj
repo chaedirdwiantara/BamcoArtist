@@ -229,6 +229,7 @@
 				5501A94566F2BA05D285F464 /* [CP] Embed Pods Frameworks */,
 				50C489329C0BCBBCEEF4C926 /* [CP] Copy Pods Resources */,
 				1A49BBDA358618CCFA76D96B /* [CP-User] [RNFB] Core Configuration */,
+				37CA25F182074F1FB63B0F66 /* Upload Debug Symbols to Sentry */,
 			);
 			buildRules = (
 			);
@@ -319,7 +320,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "set -e\n\nWITH_ENVIRONMENT=\"../node_modules/react-native/scripts/xcode/with-environment.sh\"\nREACT_NATIVE_XCODE=\"../node_modules/react-native/scripts/react-native-xcode.sh\"\n\n/bin/sh -c \"$WITH_ENVIRONMENT $REACT_NATIVE_XCODE\"\n";
+			shellScript = "export SENTRY_PROPERTIES=sentry.properties\nexport EXTRA_PACKAGER_ARGS=\"--sourcemap-output $DERIVED_FILE_DIR/main.jsbundle.map\"\nset -e\n\nWITH_ENVIRONMENT=\"../node_modules/react-native/scripts/xcode/with-environment.sh\"\nREACT_NATIVE_XCODE=\"../node_modules/react-native/scripts/react-native-xcode.sh\"\n\n/bin/sh -c \"$WITH_ENVIRONMENT \\\"../node_modules/@sentry/cli/bin/sentry-cli react-native xcode $REACT_NATIVE_XCODE\\\"\"\n\n/bin/sh -c \"$WITH_ENVIRONMENT ../node_modules/@sentry/react-native/scripts/collect-modules.sh\"\n";
 		};
 		1A49BBDA358618CCFA76D96B /* [CP-User] [RNFB] Core Configuration */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -350,6 +351,20 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Beamco for Artist-Beamco for ArtistTests/Pods-Beamco for Artist-Beamco for ArtistTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
+		};
+		37CA25F182074F1FB63B0F66 /* Upload Debug Symbols to Sentry */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Upload Debug Symbols to Sentry";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\nWITH_ENVIRONMENT=\"../node_modules/react-native/scripts/xcode/with-environment.sh\"\nif [ -f \"$WITH_ENVIRONMENT\" ]; then\n    . \"$WITH_ENVIRONMENT\"\nfi \nexport SENTRY_PROPERTIES=sentry.properties\n[ \"$SENTRY_INCLUDE_NATIVE_SOURCES\" = \"true\" ] && INCLUDE_SOURCES_FLAG=\"--include-sources\" || INCLUDE_SOURCES_FLAG=\"\"\n../node_modules/@sentry/cli/bin/sentry-cli debug-files upload \"$INCLUDE_SOURCES_FLAG\" \"$DWARF_DSYM_FOLDER_PATH\"\n";
 		};
 		50C489329C0BCBBCEEF4C926 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -554,7 +569,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = SsuMusician/SsuMusician.entitlements;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 2385WX7747;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = SsuMusician/Info.plist;
@@ -564,7 +579,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1;
+				MARKETING_VERSION = 1.1;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -585,7 +600,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = SsuMusician/SsuMusician.entitlements;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 2385WX7747;
 				INFOPLIST_FILE = SsuMusician/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Artist;
@@ -594,7 +609,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1;
+				MARKETING_VERSION = 1.1;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",

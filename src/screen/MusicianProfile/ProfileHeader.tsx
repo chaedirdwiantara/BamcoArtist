@@ -33,6 +33,7 @@ export interface ProfileHeaderProps {
   unfollowOnPress?: () => void;
   donateOnPress?: () => void;
   onPressImage?: (uri: string) => void;
+  blocked?: boolean;
 }
 
 export const ProfileHeader: React.FC<ProfileHeaderProps> = (
@@ -52,6 +53,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = (
     unfollowOnPress,
     donateOnPress,
     onPressImage,
+    blocked,
   } = props;
 
   const followOnPressed = () => {
@@ -102,39 +104,41 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = (
               <View style={styles.containerFooter}>
                 <Text style={styles.description}>{bio}</Text>
                 <Gap height={16} />
-                <View style={styles.buttonContainer}>
-                  {isFollowed ? (
-                    <>
-                      <Button
-                        type="border"
-                        label={t('Musician.Label.Following')}
-                        containerStyles={styles.btnContainerFollowed}
-                        textStyles={{color: color.Pink.linear}}
-                        onPress={unFollowOnPressed}
-                      />
-                      <Gap width={11} />
-                      <Button
-                        label={t('Musician.Label.Tip')}
-                        containerStyles={styles.btnContainer2}
-                        onPress={donate}
-                      />
-                    </>
-                  ) : (
-                    <>
-                      <Button
-                        label={t('Musician.Label.Follow')}
-                        containerStyles={styles.btnContainer}
-                        onPress={followOnPressed}
-                      />
-                      <Gap width={11} />
-                      <Button
-                        label={t('Musician.Label.Tip')}
-                        containerStyles={styles.btnContainer2}
-                        onPress={donate}
-                      />
-                    </>
-                  )}
-                </View>
+                {!blocked && (
+                  <View style={styles.buttonContainer}>
+                    {isFollowed ? (
+                      <>
+                        <Button
+                          type="border"
+                          label={t('Musician.Label.Following')}
+                          containerStyles={styles.btnContainerFollowed}
+                          textStyles={{color: color.Pink.linear}}
+                          onPress={unFollowOnPressed}
+                        />
+                        <Gap width={11} />
+                        <Button
+                          label={t('Musician.Label.Tip')}
+                          containerStyles={styles.btnContainer2}
+                          onPress={donate}
+                        />
+                      </>
+                    ) : (
+                      <>
+                        <Button
+                          label={t('Musician.Label.Follow')}
+                          containerStyles={styles.btnContainer}
+                          onPress={followOnPressed}
+                        />
+                        <Gap width={11} />
+                        <Button
+                          label={t('Musician.Label.Tip')}
+                          containerStyles={styles.btnContainer2}
+                          onPress={donate}
+                        />
+                      </>
+                    )}
+                  </View>
+                )}
               </View>
             )}
           </View>

@@ -41,6 +41,7 @@ import CrownIcon from './Crown.icon';
 import {DefaultAvatar} from './DefaultAvatar.icon';
 import {DefaultImage} from './DefaultImage.icon';
 import DiagramIcon from './Diagram.icon';
+import DropDownIcon from './Dropdown.icon';
 import DonateCoinIcon from './DonateCoin.icon';
 import EditIcon from './Edit.icon';
 import EmailIcon from './Email.icon';
@@ -185,6 +186,7 @@ export {
   DefaultAvatar,
   DefaultImage,
   DiagramIcon,
+  DropDownIcon,
   DonateCoinIcon,
   EditIcon,
   EmailIcon,

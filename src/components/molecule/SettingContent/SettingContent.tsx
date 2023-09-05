@@ -171,7 +171,6 @@ export const SettingContent: React.FC<SettingProps> = ({
             key={i}
             text={t(val.text) || ''}
             containerStyles={{marginTop: heightPercentage(15)}}
-            textStyles={{fontSize: mvs(14)}}
             onPress={() => onPress(val.value)}
           />
         ))}
