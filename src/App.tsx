@@ -5,6 +5,9 @@ import {AppProvider} from './context/app.context';
 import {PortalProvider} from '@gorhom/portal';
 import {RootStackScreen} from './navigations';
 import {QueryClient, QueryClientProvider} from 'react-query';
+import codePush from 'react-native-code-push';
+
+let codePushOptions = {checkFrequency: codePush.CheckFrequency.ON_APP_RESUME};
 
 import * as Sentry from '@sentry/react-native';
 
@@ -27,4 +30,4 @@ const App = () => {
   );
 };
 
-export default Sentry.wrap(App);
+export default codePush(codePushOptions)(App);
