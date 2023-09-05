@@ -12,7 +12,7 @@ import {
 
 import Color from '../../theme/Color';
 import {RootStackParams} from '../../navigations';
-import {storage} from '../../hooks/use-storage.hook';
+import {profileStorage, storage} from '../../hooks/use-storage.hook';
 import {usePlayerHook} from '../../hooks/use-player.hook';
 import {useProfileHook} from '../../hooks/use-profile.hook';
 import {usePlaylistHook} from '../../hooks/use-playlist.hook';
@@ -32,6 +32,9 @@ type profile = {
   avatarUri: string;
   totalFollowing: number;
   totalPoint: number;
+  isBlock: boolean | undefined;
+  blockIs: boolean | undefined;
+  uuid: string | undefined;
 };
 
 export const OtherUserProfile: FC<OtherProfileProps> = ({
@@ -47,6 +50,8 @@ export const OtherUserProfile: FC<OtherProfileProps> = ({
     dataCountLiked,
     getUserCountLikedSong,
   } = useProfileHook();
+  const MyUuid = profileStorage()?.uuid;
+
   const {dataPlaylist, getPlaylist} = usePlaylistHook();
   const isLogin = storage.getString('profile');
   const isFocused = useIsFocused();
@@ -68,7 +73,7 @@ export const OtherUserProfile: FC<OtherProfileProps> = ({
   useFocusEffect(
     useCallback(() => {
       getPlaylist({uuid: data.id});
-      getOtherProfileUser({id: data.id});
+      getOtherProfileUser({id: data.id, myUUID: MyUuid});
       getUserCountLikedSong({uuid: data.id});
     }, []),
   );
@@ -96,6 +101,9 @@ export const OtherUserProfile: FC<OtherProfileProps> = ({
       dataFansProfile && dataFansProfile.data.point.daily
         ? dataFansProfile.data.point.daily
         : 0,
+    isBlock: dataFansProfile && dataFansProfile.data.isBlock,
+    blockIs: dataFansProfile && dataFansProfile.data.blockIs,
+    uuid: dataFansProfile && dataFansProfile.data.uuid,
   };
 
   const goToPlaylist = (id: number, name: string) => {
@@ -108,6 +116,10 @@ export const OtherUserProfile: FC<OtherProfileProps> = ({
 
   const onPressGoBack = () => {
     navigation.goBack();
+  };
+
+  const handleRefreshing = () => {
+    getOtherProfileUser({id: data.id, myUUID: MyUuid});
   };
 
   return (
@@ -123,6 +135,7 @@ export const OtherUserProfile: FC<OtherProfileProps> = ({
           totalCountlikedSong={dataCountLiked?.countLikedSong}
           playerVisible={playerVisible}
           otherUserProfile={true}
+          setRefreshing={handleRefreshing}
           onPressGoBack={onPressGoBack}
         />
       )}

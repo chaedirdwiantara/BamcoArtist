@@ -1,4 +1,5 @@
 import {PaginationType} from './base.interface';
+import {dataVoteProps} from './vote.interface';
 
 export type PostPropsTypeA = {
   id: string;
@@ -46,6 +47,9 @@ export type CreatePostProps = {
     encodeHlsUrl: string;
     duration: number;
   };
+  isPolling?: boolean;
+  pollingOptions?: dataVoteProps[];
+  pollDuration?: number;
 };
 
 export type DataComment = {
@@ -109,6 +113,14 @@ export type VideoResponseType = {
   duration: string;
 };
 
+export type PollingOptions = {
+  id: string;
+  text: string;
+  votes: number;
+  isVoted: boolean;
+  percent: number;
+};
+
 export type PostList = {
   id: string;
   caption: string;
@@ -128,6 +140,13 @@ export type PostList = {
   viewsCount: number;
   shareCount: number;
   reportSent?: boolean;
+  isPolling: boolean;
+  pollingOptions: PollingOptions[];
+  pollDuration: number;
+  pollCount: number;
+  isOwner: boolean;
+  isVoted: boolean;
+  pollTimeLeft: string;
 };
 
 export type ListPostResponseType = {
@@ -156,6 +175,13 @@ export type AnalyticPostData = {
   updatedAt: string;
   video: VideoResponseType;
   viewsCount: number;
+  isPolling: boolean;
+  pollingOptions: PollingOptions[];
+  pollDuration: number;
+  pollCount: number;
+  isOwner: boolean;
+  isVoted: boolean;
+  pollTimeLeft: string;
 };
 
 export type AnalyticPostResponseType = {
@@ -186,6 +212,15 @@ export type DetailPostData = {
   viewsCount: number;
   shareCount: number;
   reportSent: boolean;
+  isPolling: boolean;
+  pollingOptions: PollingOptions[];
+  pollDuration: number;
+  pollCount: number;
+  isOwner: boolean;
+  isVoted: boolean;
+  pollTimeLeft: string;
+  blockIs: boolean; // pov i being blocked by that user
+  isBlock: boolean; // pov i blocked that user
 };
 
 export type DetailPostResponseType = {
@@ -230,6 +265,8 @@ export type CommentList = {
     username: string;
     image: string;
   };
+  blockIs?: boolean; // pov i being blocked by that user
+  isBlock?: boolean; // pov i blocked that user
 };
 
 export type CommentList2 = {
@@ -251,6 +288,8 @@ export type CommentList2 = {
     username: string;
     image: string;
   };
+  blockIs?: boolean; // pov i being blocked by that user
+  isBlock?: boolean; // pov i blocked that user
 };
 
 export type CommentList3 = {
@@ -270,6 +309,8 @@ export type CommentList3 = {
     username: string;
     image: string;
   };
+  blockIs?: boolean; // pov i being blocked by that user
+  isBlock?: boolean; // pov i blocked that user
 };
 
 export type ListCommentResponseType = {

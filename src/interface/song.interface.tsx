@@ -34,10 +34,10 @@ export type SongList = {
   likesCount: number;
   shareCount: number;
   listenerCount: number;
-  copyright: string;
-  originalSongURL: string;
-  originalFilename: string;
-  barcodeISRC: string;
+  copyright?: string;
+  originalSongURL?: string;
+  originalFilename?: string;
+  barcodeISRC?: string;
 };
 
 export type TranscodedSongType = {

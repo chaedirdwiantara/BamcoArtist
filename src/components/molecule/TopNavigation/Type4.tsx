@@ -6,7 +6,7 @@ import {HomeIcon} from '../../../assets/icon';
 
 /** === INTERFACE === */
 type Props = {
-  title: string;
+  title?: string;
   maxLengthTitle?: number;
   bgColor?: string;
   itemStrokeColor?: string;
@@ -30,7 +30,12 @@ const Type4: React.FC<Props> = (props: Props) => {
     );
   };
   /** => icon right */
-  const iconRight = () => {
+  const iconRight = (title?: string) => {
+    if (title === '') {
+      return (
+        <View style={topNavstyles.iconRightContainer}>{props.rightIcon}</View>
+      );
+    }
     return (
       <TouchableOpacity
         style={topNavstyles.iconRightContainer}
@@ -51,17 +56,22 @@ const Type4: React.FC<Props> = (props: Props) => {
           props.containerStyles,
         ]}>
         <View style={topNavstyles.leftContainer}>{iconLeft()}</View>
-        <View style={topNavstyles.centerContainer}>
-          <Text
-            numberOfLines={1}
-            style={[
-              topNavstyles.centerTitle,
-              {color: props.itemStrokeColor, fontFamily: font.InterSemiBold},
-            ]}>
-            {props.title}
-          </Text>
+        {props?.title && (
+          <View style={topNavstyles.centerContainer}>
+            <Text
+              numberOfLines={1}
+              style={[
+                topNavstyles.centerTitle,
+                {color: props.itemStrokeColor, fontFamily: font.InterSemiBold},
+              ]}>
+              {props.title}
+            </Text>
+          </View>
+        )}
+
+        <View style={topNavstyles.rightContainer}>
+          {iconRight(props.title)}
         </View>
-        <View style={topNavstyles.rightContainer}>{iconRight()}</View>
       </View>
     );
   };

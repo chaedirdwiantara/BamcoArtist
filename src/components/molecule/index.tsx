@@ -4,6 +4,7 @@ import {AddToPlaylistContent} from './PlaylistContent/AddToPlaylistContent';
 import AlbumAppeal from './AppealCard/AlbumAppeal';
 import {AlbumContent} from './Album/AlbumContent';
 import {AvatarProfile} from './AvatarProfile/AvatarProfile';
+import BlockUser from './BlockUserUI';
 import {BottomSheetGuest} from './GuestComponent/BottomSheetGuest';
 import {Carousel} from './Carousel/Carousel';
 import {ChangeEmailContent} from './SettingContent/ChangeEmailContent';
@@ -75,6 +76,7 @@ import TopFans from './TopFans/TopFans';
 import SuccessToast from './Toast/SuccessToast';
 import {UseReferralContent} from './SettingContent/UseReferralContent';
 import {UserInfoCard} from './UserInfoCard/UserInfoCard';
+import VoteCard from './Vote';
 
 export {
   AccountContent,
@@ -83,6 +85,7 @@ export {
   AlbumAppeal,
   AlbumContent,
   AvatarProfile,
+  BlockUser,
   BottomSheetGuest,
   Carousel,
   ChangeEmailContent,
@@ -154,4 +157,5 @@ export {
   SuccessToast,
   UseReferralContent,
   UserInfoCard,
+  VoteCard,
 };

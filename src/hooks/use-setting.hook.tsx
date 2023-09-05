@@ -22,6 +22,7 @@ import {
   createShipping,
   updateShipping,
   deleteShipping,
+  listBlockedUser,
 } from '../api/setting.api';
 import {
   ChangePasswordProps,
@@ -528,6 +529,21 @@ export const useSettingHook = () => {
     }
   };
 
+  const getListBlockedUser = async () => {
+    setIsLoading(true);
+    try {
+      const response = await listBlockedUser();
+      return {
+        data: response?.data,
+        message: response?.message,
+      };
+    } catch (error) {
+      setIsError(true);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return {
     isLoading,
     isError,
@@ -567,5 +583,6 @@ export const useSettingHook = () => {
     createShippingInfo,
     updateShippingInfo,
     deleteShippingInfo,
+    getListBlockedUser,
   };
 };

@@ -1,6 +1,7 @@
 import AddIcon from './Add.icon';
 import AddCircleIcon from './AddCircle.icon';
 import AddPostIcon from './AddPost.icon';
+import AddVoteIcon from './AddVote.icon';
 import ArrowLeftIcon from './ArrowLeft.icon';
 import ArrowRightIcon from './ArrowRight.icon';
 import ArrowRightIcon2 from './ArrowRight2.icon';
@@ -40,6 +41,7 @@ import CrownIcon from './Crown.icon';
 import {DefaultAvatar} from './DefaultAvatar.icon';
 import {DefaultImage} from './DefaultImage.icon';
 import DiagramIcon from './Diagram.icon';
+import DropDownIcon from './Dropdown.icon';
 import DonateCoinIcon from './DonateCoin.icon';
 import EditIcon from './Edit.icon';
 import EmailIcon from './Email.icon';
@@ -76,6 +78,7 @@ import LoveIcon from './Love.icon';
 import MedalIcon from './Medal.icon';
 import MenuIcon from './Menu.icon';
 import MinusCircleIcon from './MinusCircle.icon';
+import MinusCircleWhiteIcon from './MinusCircleWhite.icon';
 import MusicPlaylistIcon from './MusicPlaylist.icon';
 import MusicSquareIcon from './MusicSquare.icon';
 import MusicSquareAddIcon from './MusicSquareAdd.icon';
@@ -143,6 +146,7 @@ export {
   AddIcon,
   AddCircleIcon,
   AddPostIcon,
+  AddVoteIcon,
   ArrowLeftIcon,
   ArrowRightIcon,
   ArrowRightIcon2,
@@ -182,6 +186,7 @@ export {
   DefaultAvatar,
   DefaultImage,
   DiagramIcon,
+  DropDownIcon,
   DonateCoinIcon,
   EditIcon,
   EmailIcon,
@@ -217,6 +222,7 @@ export {
   MedalIcon,
   MenuIcon,
   MinusCircleIcon,
+  MinusCircleWhiteIcon,
   MusicPlaylistIcon,
   MusicSquareIcon,
   MusicSquareAddIcon,

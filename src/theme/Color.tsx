@@ -63,6 +63,7 @@ const Color = {
     100: '#FFCCD2',
     50: '#FFEBEE',
     focused: 'rgba(243, 78, 78, 0.15)',
+    block: '#F4212E',
   },
   Neutral: {
     100: '#0A0A0A',
@@ -100,6 +101,7 @@ const Color = {
     600: '#9E3882',
     700: '#D656D9',
     new: '#FF72E0',
+    800: '#FF62C9',
   },
   Green: {
     100: '#43A671',
@@ -107,6 +109,7 @@ const Color = {
   },
   DarkBlue: {
     100: '#15233A',
+    800: '#0F1A2C',
   },
   RedVelvet: {
     100: '#541947',

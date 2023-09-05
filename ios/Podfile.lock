@@ -683,6 +683,9 @@ PODS:
   - RNScreens (3.18.2):
     - React-Core
     - React-RCTImage
+  - RNSentry (5.9.1):
+    - React-Core
+    - Sentry/HybridSDK (= 8.10.0)
   - RNSVG (13.9.0):
     - React-Core
   - SDWebImage (5.11.1):
@@ -691,6 +694,9 @@ PODS:
   - SDWebImageWebPCoder (0.8.5):
     - libwebp (~> 1.0)
     - SDWebImage/Core (~> 5.10)
+  - Sentry/HybridSDK (8.10.0):
+    - SentryPrivate (= 8.10.0)
+  - SentryPrivate (8.10.0)
   - SocketRocket (0.6.0)
   - SSZipArchive (2.2.3)
   - SwiftAudioEx (0.15.3)
@@ -794,6 +800,7 @@ DEPENDENCIES:
   - "RNNotifee (from `../node_modules/@notifee/react-native`)"
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
+  - "RNSentry (from `../node_modules/@sentry/react-native`)"
   - RNSVG (from `../node_modules/react-native-svg`)
   - vision-camera-code-scanner (from `../node_modules/vision-camera-code-scanner`)
   - VisionCamera (from `../node_modules/react-native-vision-camera`)
@@ -853,6 +860,8 @@ SPEC REPOS:
     - PromisesSwift
     - SDWebImage
     - SDWebImageWebPCoder
+    - Sentry
+    - SentryPrivate
     - SocketRocket
     - SSZipArchive
     - SwiftAudioEx
@@ -974,6 +983,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-reanimated"
   RNScreens:
     :path: "../node_modules/react-native-screens"
+  RNSentry:
+    :path: "../node_modules/@sentry/react-native"
   RNSVG:
     :path: "../node_modules/react-native-svg"
   vision-camera-code-scanner:
@@ -1091,9 +1102,12 @@ SPEC CHECKSUMS:
   RNNotifee: d585266dd69e1f355d26d074cbfdbdfa6c94b7d5
   RNReanimated: 6668b0587bebd4b15dd849b99e5a9c70fc12ed95
   RNScreens: 34cc502acf1b916c582c60003dc3089fa01dc66d
+  RNSentry: 0a1daa8ee81e2776f977ae8c66e67c8d85587828
   RNSVG: 53c661b76829783cdaf9b7a57258f3d3b4c28315
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
   SDWebImageWebPCoder: 908b83b6adda48effe7667cd2b7f78c897e5111d
+  Sentry: 71cd4427146ac56eab6e70401ac7a24384c3d3b5
+  SentryPrivate: 9334613897c85a9e30f2c9d7a331af8aaa4fe71f
   SocketRocket: fccef3f9c5cedea1353a9ef6ada904fde10d6608
   SSZipArchive: 62d4947b08730e4cda640473b0066d209ff033c9
   SwiftAudioEx: 83eabba2940924fc1c0d5cb0896049921365229c

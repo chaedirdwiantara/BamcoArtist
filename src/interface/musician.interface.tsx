@@ -80,6 +80,8 @@ export type DataDetailMusician = {
   countAlbumReleased?: number;
   countPlaylist?: number;
   countSong?: number;
+  blockIs: boolean; // pov i being blocked by that user
+  isBlock: boolean; // pov i blocked that user
 };
 
 export type DetailMusicianResponseType = {
