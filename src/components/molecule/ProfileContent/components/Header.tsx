@@ -14,6 +14,7 @@ import {
   normalize,
   width,
   widthPercentage,
+  widthResponsive,
 } from '../../../../utils';
 import {mvs} from 'react-native-size-matters';
 import {AvatarProfile} from '../..';
@@ -233,7 +234,7 @@ const styles = StyleSheet.create({
     left: widthPercentage(20),
   },
   shareIcon: {
-    marginTop: heightPercentage(25),
+    marginTop: widthResponsive(23),
     width: widthPercentage(24),
     height: widthPercentage(24),
   },
