@@ -22,10 +22,6 @@ export const WithdrawalScreen: React.FC = () => {
     navigation.goBack();
   };
 
-  const onPressSelectedBank = (index: number) => {
-    index === selectedBank ? setSelectedBank(-1) : setSelectedBank(index);
-  };
-
   const goToAddBankAccount = () => {
     navigation.navigate('AddBankAccount');
   };
@@ -54,8 +50,6 @@ export const WithdrawalScreen: React.FC = () => {
         number={'50352657444'}
         bankName={'Bank Central Asia (BCA)'}
         selectedBank={selectedBank}
-        onPressSelectedBank={onPressSelectedBank}
-        goToAddBankAccount={goToAddBankAccount}
         goToEditBankAccount={goToEditBankAccount}
         containerStyles={{marginTop: mvs(20)}}
       />

@@ -137,13 +137,12 @@ export const TopUpCreditContent: React.FC<TopUpCreditProps> = ({
           </View>
         </View>
 
-        {/* // hide until API's ready
         <Button
           label={t('TopUp.ButtonWithdraw')}
           textStyles={{fontSize: mvs(13), fontFamily: font.InterMedium}}
           containerStyles={styles.btnContainer}
           onPress={onPressWithdrawal}
-        /> */}
+        />
 
         <TabFilter.Type1
           filterData={filter}
