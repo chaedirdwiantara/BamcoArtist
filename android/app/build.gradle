@@ -136,6 +136,7 @@ ext.versionPatch = 6
 ext.versionClassifier = null
 ext.isSnapshot = false
 
+apply from: "../../node_modules/@sentry/react-native/sentry.gradle"
 android {
     ndkVersion rootProject.ext.ndkVersion
 

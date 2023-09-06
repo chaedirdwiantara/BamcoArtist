@@ -90,14 +90,14 @@ export const ProfileProgressScreen: React.FC = () => {
   };
 
   const onPressGoTo = (
-    screenName: 'Account' | 'EditProfile',
+    screenName: 'AccountInformation' | 'EditProfile',
     isCompleted: boolean,
   ) => {
     if (isCompleted) {
       null;
     } else {
       if (dataProfile) {
-        if (screenName === 'Account') {
+        if (screenName === 'AccountInformation') {
           navigation.navigate(screenName, {
             data: dataProfile?.data,
             fromScreen: 'progress',
@@ -185,7 +185,7 @@ export const ProfileProgressScreen: React.FC = () => {
           icon={iconRight(completed.account)}
           tooltip={<TooltipIcon style={{marginLeft: ms(5)}} />}
           activeOpacity={completed.account ? 1 : 0}
-          onPress={() => onPressGoTo('Account', completed.account)}
+          onPress={() => onPressGoTo('AccountInformation', completed.account)}
           onPressTooltip={() =>
             setModalInfo({
               show: true,

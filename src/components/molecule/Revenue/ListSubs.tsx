@@ -36,8 +36,8 @@ const ListSubs: React.FC = () => {
         filterValue: 1,
       }),
     {
-      getNextPageParam: lastPage => {
-        if (lastPage?.data?.length > 0) {
+      getNextPageParam: (lastPage, pages: any) => {
+        if (lastPage?.meta?.TotalPage > pages?.meta?.Page) {
           const nextPage = lastPage?.meta?.page + 1;
           return nextPage;
         }

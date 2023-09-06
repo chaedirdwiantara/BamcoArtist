@@ -3,7 +3,7 @@ import * as IAP from 'react-native-iap';
 import {createIapApple, generateSessionPurchase} from '../api/credit.api';
 import {getCoinFromProductId} from '../utils';
 import {useIapStore} from '../store/iap.store';
-import {profileStorage, storage} from './use-storage.hook';
+import {storage} from './use-storage.hook';
 import {AuthType} from '../interface/auth.interface';
 import {useCreditHook} from './use-credit.hook';
 
