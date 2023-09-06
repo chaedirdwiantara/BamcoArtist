@@ -1,6 +1,7 @@
 import {
   Dimensions,
   LogBox,
+  RefreshControl,
   ScrollView,
   StyleSheet,
   Text,
@@ -29,7 +30,6 @@ import CommentSection from './CommentSection';
 import ImageModal from './ImageModal';
 import {useFeedHook} from '../../hooks/use-feed.hook';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {dateFormat} from '../../utils/date-format';
 import {
   CommentList,
   CommentList2,
@@ -41,7 +41,6 @@ import {useProfileHook} from '../../hooks/use-profile.hook';
 import {TickCircleIcon} from '../../assets/icon';
 import {makeId} from './function';
 import {ModalLoading} from '../../components/molecule/ModalLoading/ModalLoading';
-import categoryNormalize from '../../utils/categoryNormalize';
 import {DataDropDownType} from '../../data/dropdown';
 import {usePlayerHook} from '../../hooks/use-player.hook';
 import {useTranslation} from 'react-i18next';
@@ -206,6 +205,7 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
     string[]
   >([]);
   const [parentIdAddComment, setParentIdAddComment] = useState<string[]>([]);
+  const [refreshing, setRefreshing] = useState<boolean>(false);
 
   // * UPDATE HOOKS POST
   const [selectedIdPost, setSelectedIdPost] = useState<string>();
@@ -216,6 +216,12 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
     'post' | 'replies' | 'album' | 'song'
   >();
   const [selectedUserUuid, setSelectedUserUuid] = useState<string>();
+
+  useEffect(() => {
+    if (refreshing) {
+      getDetailPost({id: data.id});
+    }
+  }, [refreshing]);
 
   //* MUSIC HOOKS
   const [pauseModeOn, setPauseModeOn] = useState<boolean>(false);
@@ -256,9 +262,16 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
 
   // ? Set data comment lvl 1 when dataPostDetail is there
   useEffect(() => {
-    if (dataPostDetail !== null) {
+    if (dataPostDetail) {
       if (commentLvl1 == undefined) {
         return setCommentLvl1(dataPostDetail?.comments);
+      }
+      if (blockResponse === 'Success' && selectedUserUuid) {
+        return setCommentLvl1(dataPostDetail?.comments);
+      }
+      if (refreshing) {
+        setCommentLvl1(dataPostDetail?.comments);
+        setRefreshing(false);
       }
     }
   }, [dataPostDetail]);
@@ -898,6 +911,10 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
           break;
         //? To Musician Profile
         case '11':
+          setActivePage(1);
+          setCommentLvl2(undefined);
+          setCommentLvl3(undefined);
+          setDataParent([]);
           navigation.navigate('MusicianProfile', {id: musician.uuid});
           break;
         //? Report Post
@@ -1030,6 +1047,10 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
 
   // ! Navigate to Fans / Musician Area
   const handleToDetailMusician = (id: string) => {
+    setActivePage(1);
+    setCommentLvl2(undefined);
+    setCommentLvl3(undefined);
+    setDataParent([]);
     navigation.navigate('MusicianProfile', {id});
   };
   const handleToDetailCommentator = (id: string) => {
@@ -1049,6 +1070,10 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
         );
       } else if (dataUserCheck === 'Fans') {
         return (
+          setActivePage(1),
+          setCommentLvl2(undefined),
+          setCommentLvl3(undefined),
+          setDataParent([]),
           navigation.navigate('OtherUserProfile', {id: idUserTonavigate}),
           setDataUserCheck(''),
           setIdUserTonavigate(undefined)
@@ -1111,7 +1136,15 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
         itemStrokeColor={color.Neutral[10]}
       />
       {/* Post Detail Section */}
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={() => setRefreshing(true)}
+            tintColor={'transparent'}
+          />
+        }>
         <View style={styles.bodyContainer}>
           {dataPostDetail ? (
             <>

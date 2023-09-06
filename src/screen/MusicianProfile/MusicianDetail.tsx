@@ -103,6 +103,8 @@ export const MusicianDetail: React.FC<MusicianDetailProps> = ({
     blockError,
     blockResponse,
     unblockResponse,
+    setBlockResponse,
+    setUnblockResponse,
     setBlockUser,
     setUnblockUser,
   } = useBlockHook();
@@ -126,7 +128,7 @@ export const MusicianDetail: React.FC<MusicianDetailProps> = ({
   const [modalUnblock, setModalUnblock] = useState<boolean>(false);
   const [modalBlock, setModalBlock] = useState<boolean>(false);
   const [toastUnblock, settoastUnblock] = useState<boolean>(false);
-  const [toastBlockSucceed, setToastBlockSucceed] = useState<boolean>(false);
+  const [toastBlock, setToastBlock] = useState<boolean>(false);
 
   const showPopUp: boolean | undefined = storage.getBoolean('showPopUp');
 
@@ -198,15 +200,17 @@ export const MusicianDetail: React.FC<MusicianDetailProps> = ({
   //! BLOCK/UNBLOCK AREA
   useEffect(() => {
     if (blockResponse === 'Success') {
-      setToastBlockSucceed(true);
       setRefreshing!();
+      setToastBlock(true);
+      setBlockResponse(undefined);
     }
   }, [blockResponse]);
 
   useEffect(() => {
     if (unblockResponse === 'Success') {
-      settoastUnblock(true);
       setRefreshing!();
+      settoastUnblock(true);
+      setUnblockResponse(undefined);
     }
   }, [unblockResponse]);
 
@@ -222,6 +226,10 @@ export const MusicianDetail: React.FC<MusicianDetailProps> = ({
   const handleToastUnblock = () => {
     setuuidBlocked(uuidBlocked.filter(x => x !== profile.uuid));
     settoastUnblock(false);
+  };
+
+  const handleToastBlock = () => {
+    setToastBlock(false);
   };
 
   const blockModalOnPress = () => {
@@ -517,8 +525,8 @@ export const MusicianDetail: React.FC<MusicianDetailProps> = ({
       )}
       {/* //? When block succeed */}
       <SuccessToast
-        toastVisible={toastBlockSucceed}
-        onBackPressed={() => setToastBlockSucceed(false)}
+        toastVisible={toastBlock}
+        onBackPressed={handleToastBlock}
         caption={`${t('General.BlockSucceed')} @${profile.fullname}`}
       />
 

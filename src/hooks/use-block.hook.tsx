@@ -37,6 +37,7 @@ export const useBlockHook = () => {
     blockResponse,
     unblockResponse,
     blockError,
+    setBlockResponse,
     setUnblockResponse,
     setBlockUser,
     setUnblockUser,
