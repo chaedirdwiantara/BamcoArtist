@@ -53,7 +53,6 @@ import MerchList from '../ListCard/MerchList';
 import ConcertList from '../ListCard/ConcertList';
 import EventMusician from '../../components/molecule/EventMusician';
 import {useBlockHook} from '../../hooks/use-block.hook';
-import {blockUserRecorded} from '../../store/blockUser.store';
 import BlockProfileUI from '../../components/molecule/BlockOnProfile';
 import {
   DataDropDownType,
@@ -108,7 +107,6 @@ export const MusicianDetail: React.FC<MusicianDetailProps> = ({
     setBlockUser,
     setUnblockUser,
   } = useBlockHook();
-  const {uuidBlocked, setuuidBlocked} = blockUserRecorded();
 
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [scrolEffect, setScrollEffect] = useState(false);
@@ -224,7 +222,6 @@ export const MusicianDetail: React.FC<MusicianDetailProps> = ({
   };
 
   const handleToastUnblock = () => {
-    setuuidBlocked(uuidBlocked.filter(x => x !== profile.uuid));
     settoastUnblock(false);
   };
 

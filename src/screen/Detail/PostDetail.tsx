@@ -61,7 +61,6 @@ import {
 import {useReportHook} from '../../hooks/use-report.hook';
 import {ReportParamsProps} from '../../interface/report.interface';
 import {feedReportRecorded} from '../../store/idReported';
-import {blockUserRecorded} from '../../store/blockUser.store';
 import {useBlockHook} from '../../hooks/use-block.hook';
 
 export const {width} = Dimensions.get('screen');
@@ -130,8 +129,6 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
     setSelectedSharePost,
     selectedSharePost,
   } = useShareHook();
-
-  const {uuidBlocked, setuuidBlocked} = blockUserRecorded();
 
   const {blockLoading, blockError, blockResponse, setBlockUser} =
     useBlockHook();
@@ -915,6 +912,8 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
           setCommentLvl2(undefined);
           setCommentLvl3(undefined);
           setDataParent([]);
+          setSelectedMenuPost(undefined);
+          setSelectedIdPost(undefined);
           navigation.navigate('MusicianProfile', {id: musician.uuid});
           break;
         //? Report Post
@@ -929,6 +928,7 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
           break;
       }
       setSelectedMenuPost(undefined);
+      setSelectedIdPost(undefined);
     }
   }, [selectedIdPost, selectedMenuPost]);
 
@@ -1051,6 +1051,8 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
     setCommentLvl2(undefined);
     setCommentLvl3(undefined);
     setDataParent([]);
+    setSelectedMenuPost(undefined);
+    setSelectedIdPost(undefined);
     navigation.navigate('MusicianProfile', {id});
   };
   const handleToDetailCommentator = (id: string) => {
@@ -1074,6 +1076,8 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
           setCommentLvl2(undefined),
           setCommentLvl3(undefined),
           setDataParent([]),
+          setSelectedMenuPost(undefined),
+          setSelectedIdPost(undefined),
           navigation.navigate('OtherUserProfile', {id: idUserTonavigate}),
           setDataUserCheck(''),
           setIdUserTonavigate(undefined)
@@ -1113,9 +1117,6 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   useEffect(() => {
     if (blockResponse === 'Success' && selectedUserUuid) {
       setToastBlockSucceed(true);
-      if (!uuidBlocked.includes(selectedUserUuid)) {
-        setuuidBlocked([...uuidBlocked, selectedUserUuid]);
-      }
     }
   }, [blockResponse]);
 

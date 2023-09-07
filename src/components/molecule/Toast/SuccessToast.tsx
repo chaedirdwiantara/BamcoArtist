@@ -17,6 +17,7 @@ const SuccessToast: FC<SuccessToastProps> = (props: SuccessToastProps) => {
     <SsuToast
       modalVisible={toastVisible}
       onBackPressed={onBackPressed}
+      modalOnHide={onBackPressed}
       children={
         <View style={[styles.modalContainer]}>
           <TickCircleIcon

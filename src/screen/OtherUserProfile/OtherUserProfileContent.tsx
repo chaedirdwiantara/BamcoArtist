@@ -39,7 +39,6 @@ import {
 } from '../../utils';
 import {ProfileFansResponseType} from '../../interface/profile.interface';
 import {useBlockHook} from '../../hooks/use-block.hook';
-import {blockUserRecorded} from '../../store/blockUser.store';
 import BlockProfileUI from '../../components/molecule/BlockOnProfile';
 import {usePlayerStore} from '../../store/player.store';
 import {useNavigation} from '@react-navigation/native';
@@ -114,7 +113,6 @@ export const OtherUserProfileContent: React.FC<ProfileContentProps> = ({
     setUnblockResponse,
   } = useBlockHook();
   const {setWithoutBottomTab, show} = usePlayerStore();
-  const {uuidBlocked, setuuidBlocked} = blockUserRecorded();
 
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [scrollEffect, setScrollEffect] = useState(false);
@@ -181,7 +179,6 @@ export const OtherUserProfileContent: React.FC<ProfileContentProps> = ({
   };
 
   const handleToastUnblock = () => {
-    setuuidBlocked(uuidBlocked.filter(x => x !== profile.uuid));
     settoastUnblock(false);
   };
 
