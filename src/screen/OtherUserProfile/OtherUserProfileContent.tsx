@@ -110,6 +110,8 @@ export const OtherUserProfileContent: React.FC<ProfileContentProps> = ({
     unblockResponse,
     setBlockUser,
     setUnblockUser,
+    setBlockResponse,
+    setUnblockResponse,
   } = useBlockHook();
   const {setWithoutBottomTab, show} = usePlayerStore();
   const {uuidBlocked, setuuidBlocked} = blockUserRecorded();
@@ -126,7 +128,7 @@ export const OtherUserProfileContent: React.FC<ProfileContentProps> = ({
   const [modalUnblock, setModalUnblock] = useState<boolean>(false);
   const [modalBlock, setModalBlock] = useState<boolean>(false);
   const [toastUnblock, settoastUnblock] = useState<boolean>(false);
-  const [toastBlockSucceed, setToastBlockSucceed] = useState<boolean>(false);
+  const [toastBlock, setToastBlock] = useState<boolean>(false);
 
   const filterData = (item: string, index: number) => {
     setSelectedIndex(index);
@@ -155,15 +157,17 @@ export const OtherUserProfileContent: React.FC<ProfileContentProps> = ({
   //! BLOCK/UNBLOCK AREA
   useEffect(() => {
     if (blockResponse === 'Success') {
-      setToastBlockSucceed(true);
       setRefreshing!();
+      setToastBlock(true);
+      setBlockResponse(undefined);
     }
   }, [blockResponse]);
 
   useEffect(() => {
     if (unblockResponse === 'Success') {
+      setRefreshing!();
       settoastUnblock(true);
-      setRefreshing();
+      setUnblockResponse(undefined);
     }
   }, [unblockResponse]);
 
@@ -179,6 +183,10 @@ export const OtherUserProfileContent: React.FC<ProfileContentProps> = ({
   const handleToastUnblock = () => {
     setuuidBlocked(uuidBlocked.filter(x => x !== profile.uuid));
     settoastUnblock(false);
+  };
+
+  const handleToastBlock = () => {
+    setToastBlock(false);
   };
 
   const blockModalOnPress = () => {
@@ -348,8 +356,8 @@ export const OtherUserProfileContent: React.FC<ProfileContentProps> = ({
       )}
       {/* //? When block succeed */}
       <SuccessToast
-        toastVisible={toastBlockSucceed}
-        onBackPressed={() => setToastBlockSucceed(false)}
+        toastVisible={toastBlock}
+        onBackPressed={handleToastBlock}
         caption={`${t('General.BlockSucceed')} @${profile.fullname}`}
       />
 
