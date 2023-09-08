@@ -1,6 +1,6 @@
+import * as yup from 'yup';
 import React, {useState} from 'react';
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
-import * as yup from 'yup';
 import {useTranslation} from 'react-i18next';
 import {ms, mvs} from 'react-native-size-matters';
 import {yupResolver} from '@hookform/resolvers/yup';
@@ -19,6 +19,8 @@ import {
 } from '../../components';
 import {RootStackParams} from '../../navigations';
 import {color, font, typography} from '../../theme';
+import {storage} from '../../hooks/use-storage.hook';
+import {useWithdrawHook} from '../../hooks/use-withdraw.hook';
 import {width, widthPercentage, widthResponsive} from '../../utils';
 import {ArrowLeftIcon, ErrorIcon, TickCircleIcon} from '../../assets/icon';
 
@@ -28,7 +30,7 @@ interface InputProps {
   accountNumber: string;
   swiftCode: string;
   bankAddress: string;
-  nameOfAccountHolder: string;
+  accountHolder: string;
   beneficiaryName: string;
   beneficiaryAddress: string;
 }
@@ -39,7 +41,7 @@ const validation = yup.object({
   accountNumber: yup.string(),
   swiftCode: yup.string(),
   bankAddress: yup.string(),
-  nameOfAccountHolder: yup.string(),
+  accountHolder: yup.string(),
   beneficiaryName: yup.string(),
   beneficiaryAddress: yup.string(),
 });
@@ -54,6 +56,7 @@ export const AddBankAccountScreen: React.FC = () => {
   const [disabledButton, setDisabledButton] = useState<boolean>(true);
   const [toastVisible, setToastVisible] = useState<boolean>(false);
 
+  const {isError, errorMsg, setAddBankAccount} = useWithdrawHook();
   const {
     control,
     formState: {errors, isValid, isValidating},
@@ -67,7 +70,7 @@ export const AddBankAccountScreen: React.FC = () => {
       accountNumber: '',
       swiftCode: '',
       bankAddress: '',
-      nameOfAccountHolder: '',
+      accountHolder: '',
       beneficiaryName: '',
       beneficiaryAddress: '',
     },
@@ -75,6 +78,34 @@ export const AddBankAccountScreen: React.FC = () => {
 
   const onPressGoBack = () => {
     navigation.goBack();
+  };
+
+  const onPressConfirm = async () => {
+    setShowModal(false);
+    const JSONProfile = storage.getString('profile');
+    let uuid: string = '';
+    if (JSONProfile) {
+      const profileObject = JSON.parse(JSONProfile);
+      uuid = profileObject.uuid;
+    }
+    try {
+      await setAddBankAccount({
+        userId: uuid,
+        country: getValues('country'),
+        bankName: getValues('bankName'),
+        accountNumber: getValues('accountNumber'),
+        swiftCode: getValues('swiftCode'),
+        bankAddress: getValues('bankAddress'),
+        accountHolder: getValues('accountHolder'),
+        beneficiaryName: getValues('beneficiaryName'),
+        beneficiaryAddress: getValues('beneficiaryAddress'),
+        attachment: 'bank_statement.pdf',
+      });
+
+      setChanges(false);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -124,26 +155,19 @@ export const AddBankAccountScreen: React.FC = () => {
           name="bankName"
           control={control}
           render={({field: {onChange, value}}) => (
-            <Dropdown.Input
-              type="location"
-              initialValue={value}
-              data={[]}
-              placeHolder={
+            <SsuInput.InputLabel
+              label={t('Withdrawal.AddBankAccount.Label.BankName') || ''}
+              value={value}
+              onChangeText={text => {
+                onChange(text);
+                setChanges(true);
+              }}
+              placeholder={
                 t('Withdrawal.AddBankAccount.Placeholder.BankName') || ''
               }
-              dropdownLabel={
-                t('Withdrawal.AddBankAccount.Label.BankName') || ''
-              }
-              textTyped={(newText: {label: string; value: string}) => {
-                onChange(newText.value);
-                setChanges(true);
-                // setSelectedCountry(newText.value);
-              }}
-              containerStyles={{
-                marginTop: mvs(16),
-              }}
               isError={errors?.bankName ? true : false}
               errorMsg={errors?.bankName?.message}
+              containerStyles={{marginTop: mvs(15)}}
             />
           )}
         />
@@ -153,16 +177,14 @@ export const AddBankAccountScreen: React.FC = () => {
           control={control}
           render={({field: {onChange, value}}) => (
             <SsuInput.InputLabel
-              label={
-                t('Withdrawal.AddBankAccount.Placeholder.AccountNumber') || ''
-              }
+              label={t('Withdrawal.AddBankAccount.Label.AccountNumber') || ''}
               value={value}
               onChangeText={text => {
                 onChange(text);
                 setChanges(true);
               }}
               placeholder={
-                t('Withdrawal.AddBankAccount.Label.AccountNumber') || ''
+                t('Withdrawal.AddBankAccount.Placeholder.AccountNumber') || ''
               }
               isError={errors?.accountNumber ? true : false}
               errorMsg={errors?.accountNumber?.message}
@@ -176,13 +198,15 @@ export const AddBankAccountScreen: React.FC = () => {
           control={control}
           render={({field: {onChange, value}}) => (
             <SsuInput.InputLabel
-              label={t('Withdrawal.AddBankAccount.Placeholder.SwiftCode') || ''}
+              label={t('Withdrawal.AddBankAccount.Label.SwiftCode') || ''}
               value={value}
               onChangeText={text => {
                 onChange(text);
                 setChanges(true);
               }}
-              placeholder={t('Withdrawal.AddBankAccount.Label.SwiftCode') || ''}
+              placeholder={
+                t('Withdrawal.AddBankAccount.Placeholder.SwiftCode') || ''
+              }
               isError={errors?.swiftCode ? true : false}
               errorMsg={errors?.swiftCode?.message}
               containerStyles={{marginTop: mvs(15)}}
@@ -195,16 +219,14 @@ export const AddBankAccountScreen: React.FC = () => {
           control={control}
           render={({field: {onChange, value}}) => (
             <SsuInput.InputLabel
-              label={
-                t('Withdrawal.AddBankAccount.Placeholder.BankAddress') || ''
-              }
+              label={t('Withdrawal.AddBankAccount.Label.BankAddress') || ''}
               value={value}
               onChangeText={text => {
                 onChange(text);
                 setChanges(true);
               }}
               placeholder={
-                t('Withdrawal.AddBankAccount.Label.BankAddress') || ''
+                t('Withdrawal.AddBankAccount.Placeholder.BankAddress') || ''
               }
               isError={errors?.bankAddress ? true : false}
               errorMsg={errors?.bankAddress?.message}
@@ -214,14 +236,12 @@ export const AddBankAccountScreen: React.FC = () => {
         />
 
         <Controller
-          name="nameOfAccountHolder"
+          name="accountHolder"
           control={control}
           render={({field: {onChange, value}}) => (
             <SsuInput.InputLabel
               label={
-                t(
-                  'Withdrawal.AddBankAccount.Placeholder.NameOfAccountHolder',
-                ) || ''
+                t('Withdrawal.AddBankAccount.Label.NameOfAccountHolder') || ''
               }
               value={value}
               onChangeText={text => {
@@ -229,10 +249,12 @@ export const AddBankAccountScreen: React.FC = () => {
                 setChanges(true);
               }}
               placeholder={
-                t('Withdrawal.AddBankAccount.Label.NameOfAccountHolder') || ''
+                t(
+                  'Withdrawal.AddBankAccount.Placeholder.NameOfAccountHolder',
+                ) || ''
               }
-              isError={errors?.nameOfAccountHolder ? true : false}
-              errorMsg={errors?.nameOfAccountHolder?.message}
+              isError={errors?.accountHolder ? true : false}
+              errorMsg={errors?.accountHolder?.message}
               containerStyles={{marginTop: mvs(15)}}
             />
           )}
@@ -243,16 +265,14 @@ export const AddBankAccountScreen: React.FC = () => {
           control={control}
           render={({field: {onChange, value}}) => (
             <SsuInput.InputLabel
-              label={
-                t('Withdrawal.AddBankAccount.Placeholder.BeneficiaryName') || ''
-              }
+              label={t('Withdrawal.AddBankAccount.Label.BeneficiaryName') || ''}
               value={value}
               onChangeText={text => {
                 onChange(text);
                 setChanges(true);
               }}
               placeholder={
-                t('Withdrawal.AddBankAccount.Label.BeneficiaryName') || ''
+                t('Withdrawal.AddBankAccount.Placeholder.BeneficiaryName') || ''
               }
               isError={errors?.beneficiaryName ? true : false}
               errorMsg={errors?.beneficiaryName?.message}
@@ -267,8 +287,7 @@ export const AddBankAccountScreen: React.FC = () => {
           render={({field: {onChange, value}}) => (
             <SsuInput.InputLabel
               label={
-                t('Withdrawal.AddBankAccount.Placeholder.BeneficiaryAddress') ||
-                ''
+                t('Withdrawal.AddBankAccount.Label.BeneficiaryAddress') || ''
               }
               value={value}
               onChangeText={text => {
@@ -276,7 +295,8 @@ export const AddBankAccountScreen: React.FC = () => {
                 setChanges(true);
               }}
               placeholder={
-                t('Withdrawal.AddBankAccount.Label.BeneficiaryAddress') || ''
+                t('Withdrawal.AddBankAccount.Placeholder.BeneficiaryAddress') ||
+                ''
               }
               isError={errors?.beneficiaryAddress ? true : false}
               errorMsg={errors?.beneficiaryAddress?.message}
@@ -285,13 +305,13 @@ export const AddBankAccountScreen: React.FC = () => {
           )}
         />
 
-        {/* {isError ? (
+        {isError ? (
           <View style={styles.containerErrorMsg}>
             <ErrorIcon fill={color.Error[400]} />
             <Gap width={ms(4)} />
             <Text style={styles.errorMsg}>{errorMsg}</Text>
           </View>
-        ) : null} */}
+        ) : null}
 
         <Button
           label={t('Btn.Save') || ''}
@@ -308,7 +328,7 @@ export const AddBankAccountScreen: React.FC = () => {
           title={t('Setting.Account.Title') || ''}
           subtitle={t('Setting.Account.Confirm') || ''}
           onPressClose={() => setShowModal(false)}
-          onPressOk={() => {}}
+          onPressOk={onPressConfirm}
         />
 
         <SsuToast
@@ -348,7 +368,7 @@ const styles = StyleSheet.create({
   },
   button: {
     width: width * 0.9,
-    aspectRatio: widthPercentage(327 / 38),
+    aspectRatio: widthPercentage(327 / 42),
     marginVertical: mvs(25),
     alignSelf: 'center',
   },
@@ -379,7 +399,7 @@ const styles = StyleSheet.create({
   },
   buttonDisabled: {
     width: '100%',
-    aspectRatio: mvs(327 / 36),
+    aspectRatio: mvs(327 / 40),
     marginVertical: mvs(25),
     alignSelf: 'center',
     backgroundColor: color.Dark[50],

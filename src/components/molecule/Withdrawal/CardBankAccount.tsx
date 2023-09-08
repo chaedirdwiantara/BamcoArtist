@@ -9,23 +9,26 @@ import {
 import {useTranslation} from 'react-i18next';
 import {mvs} from 'react-native-size-matters';
 
-import {color, font, typography} from '../../../theme';
-import {EditIcon} from '../../../assets/icon';
+import {Gap} from '../../atom';
 import {width, widthPercentage} from '../../../utils';
+import {color, font, typography} from '../../../theme';
+import {EditIcon, TrashIcon} from '../../../assets/icon';
 
 interface CardBankAccountProps {
+  haveBankAccount: boolean;
   number?: string;
   bankName?: string;
-  selectedBank: number;
-  goToEditBankAccount: () => void;
+  goToEditBankAccount?: () => void;
+  onPressRemove?: () => void;
   containerStyles?: ViewStyle;
 }
 
 export const CardBankAccount: React.FC<CardBankAccountProps> = ({
+  haveBankAccount,
   number,
   bankName,
-  selectedBank,
   goToEditBankAccount,
+  onPressRemove,
   containerStyles,
 }) => {
   const {t} = useTranslation();
@@ -34,15 +37,27 @@ export const CardBankAccount: React.FC<CardBankAccountProps> = ({
     <View style={containerStyles}>
       <View style={styles.containerFirstSection}>
         <Text style={[typography.Button2, {color: color.Neutral[10]}]}>
-          {t('Withdrawal.BankAccount.ChooseAccount')}
+          {t('Withdrawal.BankAccount.BankAccount')}
         </Text>
-        <TouchableOpacity onPress={goToEditBankAccount}>
-          <EditIcon
-            stroke={color.Pink[2]}
-            width={widthPercentage(20)}
-            height={widthPercentage(20)}
-          />
-        </TouchableOpacity>
+        {haveBankAccount && (
+          <View style={styles.iconSection}>
+            <TouchableOpacity onPress={goToEditBankAccount}>
+              <EditIcon
+                stroke={color.Pink[2]}
+                width={widthPercentage(21)}
+                height={widthPercentage(21)}
+              />
+            </TouchableOpacity>
+            <Gap width={widthPercentage(10)} />
+            <TouchableOpacity onPress={onPressRemove}>
+              <TrashIcon
+                width={widthPercentage(23)}
+                height={widthPercentage(23)}
+                stroke={color.Pink[2]}
+              />
+            </TouchableOpacity>
+          </View>
+        )}
       </View>
 
       <View style={styles.containerSecondSection}>
@@ -54,14 +69,7 @@ export const CardBankAccount: React.FC<CardBankAccountProps> = ({
         </Text>
       </View>
 
-      <View
-        style={[
-          styles.containerItemBank,
-          {
-            backgroundColor:
-              selectedBank === 0 ? color.Success[500] : color.Dark[600],
-          },
-        ]}>
+      <View style={styles.containerItemBank}>
         <Text style={[typography.Caption, styles.numberValueStyle]}>
           {number}
         </Text>
@@ -107,6 +115,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: mvs(18),
     paddingHorizontal: mvs(15),
+    backgroundColor: color.Dark[600],
   },
   numberValueStyle: {
     color: color.Neutral[10],
@@ -117,5 +126,9 @@ const styles = StyleSheet.create({
     color: color.Neutral[10],
     fontFamily: font.InterMedium,
     width: '55%',
+  },
+  iconSection: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
 });

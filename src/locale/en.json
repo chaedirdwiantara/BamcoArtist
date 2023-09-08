@@ -1212,7 +1212,7 @@
   "Withdrawal": {
     "Title": "Withdrawal",
     "BankAccount": {
-      "ChooseAccount": "Choose Account",
+      "BankAccount": "Bank Account",
       "AddAccount": "Add Account",
       "Number": "Number",
       "AccountNumber": "Account Number",
