@@ -1496,5 +1496,8 @@
     "ValidUntil": "Valid until",
     "Claim": "Claim",
     "Claimed": "Claimed"
+  },
+  "LiveTipping": {
+    "SwipeUp": "Swipe Up To Tip"
   }
 }

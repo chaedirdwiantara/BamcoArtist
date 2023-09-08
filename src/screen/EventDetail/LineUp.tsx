@@ -8,10 +8,9 @@ import {EmptyStateSongMusician} from '../../components/molecule/EmptyState/Empty
 import Color from '../../theme/Color';
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {MainTabParams, RootStackParams} from '../../navigations';
 import MusiciansListCard from '../../components/molecule/ListCard/MusiciansListCard';
 import {EventLineUp} from '../../interface/event.interface';
-import {profileStorage} from '../../hooks/use-storage.hook';
+import {RootStackParams} from '../../navigations';
 
 interface EventLineUpInterface {
   dataLineUp?: EventLineUp[];
@@ -22,7 +21,6 @@ const LineUp: FC<EventLineUpInterface> = ({dataLineUp, isLoading}) => {
   const {t} = useTranslation();
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
-  const navigation2 = useNavigation<NativeStackNavigationProp<MainTabParams>>();
   const [listLineUp, setListLineUp] = useState(dataLineUp);
 
   useEffect(() => {
@@ -44,7 +42,6 @@ const LineUp: FC<EventLineUpInterface> = ({dataLineUp, isLoading}) => {
       )}
 
       {listLineUp?.map((item, index) => {
-        const self = item?.musician?.UUID === profileStorage()?.uuid;
         return (
           <MusiciansListCard
             key={item?.musician?.UUID}
@@ -64,18 +61,13 @@ const LineUp: FC<EventLineUpInterface> = ({dataLineUp, isLoading}) => {
             activeMore={false}
             isLive={item?.statusLineUpEvent === 'live'}
             onClickTip={() =>
-              self
-                ? navigation2.navigate('Profile', {})
-                : navigation.push('LiveTipping', {id: '1'})
+              navigation.push('LiveTipping', {id: item?.musician?.UUID})
             }
             onPressImage={() =>
-              self
-                ? navigation2.navigate('Profile', {})
-                : navigation.push('MusicianProfile', {id: item?.musician?.UUID})
+              // navigation.push('MusicianProfile', {id: item?.musician?.UUID})
+              navigation.push('LiveTipping', {id: item?.musician?.UUID})
             }
             onPressMore={() => null}
-            self={self}
-            isLineUp={true}
           />
         );
       })}

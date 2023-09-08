@@ -1,26 +1,63 @@
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import React, {useState} from 'react';
+import {
+  Animated,
+  Easing,
+  Image,
+  ImageSourcePropType,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import Color from '../theme/Color';
 import {AvatarProfile, Gap, ModalCustom, TopNavigation} from '../components';
-import {ArrowLeftIcon, LiveIcon} from '../assets/icon';
+import {ArrowLeftIcon, ChevronUp, LiveIcon} from '../assets/icon';
 import {useTranslation} from 'react-i18next';
 import {heightResponsive, kFormatter, widthResponsive} from '../utils';
-import {useNavigation} from '@react-navigation/native';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {useFocusEffect} from '@react-navigation/native';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {RootStackParams} from '../navigations';
 import Typography from '../theme/Typography';
 import {mvs} from 'react-native-size-matters';
 import initialname from '../utils/initialname';
 import Font from '../theme/Font';
 import RankCard from '../components/molecule/ListCard/RankCard';
+import Draggable from 'react-native-draggable';
+import {useMusicianHook} from '../hooks/use-musician.hook';
+import {useProfileHook} from '../hooks/use-profile.hook';
+import {useCreditHook} from '../hooks/use-credit.hook';
+import {ModalLoading} from '../components/molecule/ModalLoading/ModalLoading';
 
-export const LiveTipping = () => {
+type LiveTippingProps = NativeStackScreenProps<RootStackParams, 'LiveTipping'>;
+
+export const LiveTipping: FC<LiveTippingProps> = ({
+  route,
+  navigation,
+}: LiveTippingProps) => {
+  const uuid = route.params.id;
   const {t} = useTranslation();
-  const navigation =
-    useNavigation<NativeStackNavigationProp<RootStackParams>>();
+  const {isLoadingMusician, dataDetailMusician, getDetailMusician} =
+    useMusicianHook();
+  const {dataCountProfile, getTotalCountProfile} = useProfileHook();
+  const {creditCount, getCreditCount} = useCreditHook();
 
   const [showModalEmpty, setShowModalEmpty] = useState<boolean>(false);
-  const [showModalSession, setShowModalSession] = useState<boolean>(false);
+  const [showModalSession, _setShowModalSession] = useState<boolean>(false);
+  const [showMoney, setShowMoney] = useState<boolean>(true);
+  const [opacityMoney, setOpacityMoney] = useState<number>(1);
+  const [onSwipe, setOnSwipe] = useState<boolean>(false);
+  const [isTop, setIsTop] = useState(true);
+  const [showSwipeText, setShowSwipeText] = useState(true);
+  const [credit, setCredit] = useState<number>(creditCount);
+  const [counter, setCounter] = useState<number>(0);
+  const [disabledSwipe, setDisabledSwipe] = useState<boolean>(creditCount <= 0);
+  const [moneyBatchURL, setMoneyBatchURL] = useState<ImageSourcePropType>(
+    require('../assets/image/money-batch.png'),
+  );
+  const [moneyURL, setMoneyURL] = useState<ImageSourcePropType>(
+    require('../assets/image/money.png'),
+  );
+  const animatedValue = useRef(new Animated.Value(0)).current;
 
   const handleBackAction = () => {
     navigation.goBack();
@@ -68,6 +105,69 @@ export const LiveTipping = () => {
     },
   ];
 
+  useEffect(() => {
+    if (!showMoney) {
+      setTimeout(() => {
+        setShowMoney(true);
+        setOpacityMoney(1);
+        setOnSwipe(false);
+      }, 50);
+    }
+  }, [showMoney]);
+
+  useEffect(() => {
+    if (counter >= 25 && counter < 50) {
+      setMoneyBatchURL(require('../assets/image/money-batch-red.png'));
+      setMoneyURL(require('../assets/image/money-red.png'));
+    }
+    if (counter >= 50) {
+      setDisabledSwipe(true);
+      setMoneyURL(require('../assets/image/money-onfire.png'));
+
+      getCreditCount();
+      // TODO: set after creditcount successfully changed or on background
+      setTimeout(() => {
+        setCounter(0);
+        setDisabledSwipe(false);
+        setMoneyBatchURL(require('../assets/image/money-batch.png'));
+        setMoneyURL(require('../assets/image/money.png'));
+      }, 3000);
+    }
+  }, [counter]);
+
+  useEffect(() => {
+    setCredit(creditCount);
+  }, [creditCount]);
+
+  const startAnimation = (toValue: number) => {
+    Animated.timing(animatedValue, {
+      toValue,
+      duration: 400,
+      easing: Easing.linear,
+      useNativeDriver: true,
+    }).start(() => {
+      setIsTop(!isTop);
+    });
+  };
+
+  useEffect(() => {
+    startAnimation(isTop ? 1 : 0);
+  }, [isTop]);
+
+  const translateY = animatedValue.interpolate({
+    inputRange: [0, 1],
+    outputRange: [heightResponsive(280), heightResponsive(300)],
+    extrapolate: 'clamp',
+  });
+
+  useFocusEffect(
+    useCallback(() => {
+      getDetailMusician({id: uuid});
+      getTotalCountProfile({uuid});
+      getCreditCount();
+    }, [uuid]),
+  );
+
   return (
     <View style={styles.root}>
       <TopNavigation.Type4
@@ -78,9 +178,10 @@ export const LiveTipping = () => {
         leftIconAction={handleBackAction}
         rightIcon={
           <TopNavigation.LiveTippingNav
-            credit={'12.000'}
+            credit={credit}
             onPressCredit={() => navigation.navigate('TopUpCredit')}
             onPressGift={() => navigation.navigate('ClaimReward', {id: '1'})}
+            onSwipe={onSwipe}
           />
         }
         rightIconAction={() => null}
@@ -89,12 +190,22 @@ export const LiveTipping = () => {
           borderBottomWidth: 0,
         }}
       />
-      <View style={{flex: 1, paddingHorizontal: widthResponsive(24)}}>
+
+      <View
+        style={{
+          flex: 1,
+          justifyContent: 'space-between',
+          paddingHorizontal: widthResponsive(24),
+        }}>
         <View style={{alignItems: 'center'}}>
           <TouchableOpacity style={{alignItems: 'center'}}>
             <AvatarProfile
-              initialName={initialname('Sam Padbiri')}
-              imgUri={'https://picsum.photos//201'}
+              initialName={initialname(dataDetailMusician?.fullname ?? '')}
+              imgUri={
+                dataDetailMusician?.imageProfileUrls.length !== 0
+                  ? dataDetailMusician?.imageProfileUrls[1].image
+                  : ''
+              }
               onPress={() => null}
             />
             <Gap height={heightResponsive(4)} />
@@ -120,12 +231,12 @@ export const LiveTipping = () => {
                     alignItems: 'center',
                   },
                 ]}>
-                Sam Padbiri
+                {dataDetailMusician?.fullname}
               </Text>
             </View>
 
             <Text style={[Typography.Overline, {color: '#A1A1A1'}]}>
-              @dreebsby
+              {dataDetailMusician?.username}
             </Text>
           </TouchableOpacity>
 
@@ -140,26 +251,40 @@ export const LiveTipping = () => {
                 color: Color.Neutral[10],
               },
             ]}>
-            British and Albanian singer and songwriter. Possessing a
-            mezzo-soprano vocal range.
+            {dataDetailMusician?.about}
           </Text>
 
           <Gap height={heightResponsive(14)} />
 
           <View style={styles.rowCenter}>
-            {infoProfileArtist.map((v, i) => {
-              return (
-                <TouchableOpacity
-                  key={i}
-                  style={styles.itemStyle}
-                  onPress={() => null}>
-                  <Text style={styles.pointStyle}>
-                    {isNaN(v?.point) ? '-' : kFormatter(v?.point, 1)}
-                  </Text>
-                  <Text style={styles.titleStyle}>{v.title}</Text>
-                </TouchableOpacity>
-              );
-            })}
+            <TouchableOpacity style={styles.itemStyle} onPress={() => null}>
+              <Text style={styles.pointStyle}>
+                {isNaN(dataDetailMusician?.fans || 0)
+                  ? '-'
+                  : kFormatter(dataDetailMusician?.fans, 1)}
+              </Text>
+              <Text style={styles.titleStyle}>{t('Musician.Label.Fans')}</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.itemStyle} onPress={() => null}>
+              <Text style={styles.pointStyle}>
+                {isNaN(dataDetailMusician?.followers || 0)
+                  ? '-'
+                  : kFormatter(dataDetailMusician?.followers, 1)}
+              </Text>
+              <Text style={styles.titleStyle}>
+                {t('Musician.Label.Followers')}
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.itemStyle} onPress={() => null}>
+              <Text style={styles.pointStyle}>
+                {isNaN(dataCountProfile?.countAlbumReleased || 0)
+                  ? '-'
+                  : kFormatter(dataCountProfile?.countAlbumReleased, 1)}
+              </Text>
+              <Text style={styles.titleStyle}>
+                {t('Musician.Label.Releases')}
+              </Text>
+            </TouchableOpacity>
           </View>
 
           <Gap height={heightResponsive(18)} />
@@ -179,6 +304,98 @@ export const LiveTipping = () => {
               );
             })}
           </View>
+        </View>
+
+        <View style={{alignItems: 'center', justifyContent: 'flex-end'}}>
+          <Image
+            source={moneyBatchURL}
+            style={
+              {
+                // width: width * 0.5,
+              }
+            }
+            resizeMode="contain"
+          />
+
+          {showMoney && (
+            <Draggable
+              disabled={disabledSwipe}
+              x={widthResponsive(50)}
+              y={heightResponsive(-5)}
+              minY={heightResponsive(-300)}
+              maxY={heightResponsive(-5)}
+              maxX={widthResponsive(50)}
+              minX={widthResponsive(50)}
+              onDragRelease={(event, ges, bound) => {
+                if (event.nativeEvent.pageY < 400) {
+                  setShowMoney(false);
+                  setCredit(credit - 1);
+                  setOnSwipe(true);
+                  setCounter(counter + 1);
+                }
+              }}
+              onDrag={(event, ges) => {
+                if (showSwipeText) {
+                  setShowSwipeText(false);
+                }
+
+                setOpacityMoney(0.7);
+                // if (event.nativeEvent.pageY < 300) {
+                //   setOpacityMoney(0.1);
+                // } else if (event.nativeEvent.pageY < 400) {
+                //   setOpacityMoney(0.3);
+                // } else if (event.nativeEvent.pageY < 500) {
+                //   setOpacityMoney(0.5);
+                // } else if (event.nativeEvent.pageY < 600) {
+                //   setOpacityMoney(0.7);
+                // } else if (event.nativeEvent.pageY < 700) {
+                //   setOpacityMoney(0.9);
+                // }
+              }}
+              shouldReverse>
+              {counter >= 50 && (
+                <Image
+                  source={require('../assets/image/fire.png')}
+                  style={{
+                    // width: width * 0.47,
+                    position: 'absolute',
+                    opacity: opacityMoney,
+                    top: heightResponsive(-60),
+                    left: widthResponsive(-25),
+                  }}
+                  resizeMode="contain"
+                />
+              )}
+
+              <Image
+                source={moneyURL}
+                style={{
+                  // width: width * 0.47,
+                  position: 'absolute',
+                  opacity: opacityMoney,
+                }}
+                resizeMode="contain"
+              />
+              {showSwipeText && (
+                <View style={styles.containerAnimation}>
+                  <Animated.View
+                    style={[styles.square, {transform: [{translateY}]}]}>
+                    <View style={{marginBottom: heightResponsive(-12)}}>
+                      <ChevronUp />
+                    </View>
+                    <ChevronUp fill="#FFF" />
+                    <Text
+                      style={[
+                        Typography.Subtitle2,
+                        {color: Color.Neutral[10]},
+                      ]}>
+                      {t('LiveTipping.SwipeUp')}
+                    </Text>
+                  </Animated.View>
+                </View>
+              )}
+            </Draggable>
+          )}
         </View>
       </View>
 
@@ -267,6 +484,7 @@ export const LiveTipping = () => {
           </View>
         }
       />
+      <ModalLoading visible={isLoadingMusician} />
     </View>
   );
 };
@@ -326,5 +544,14 @@ const styles = StyleSheet.create({
     width: widthResponsive(120),
     height: heightResponsive(120),
     alignItems: 'center',
+  },
+  containerAnimation: {
+    position: 'absolute',
+    bottom: 0,
+  },
+  square: {
+    width: widthResponsive(200),
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
