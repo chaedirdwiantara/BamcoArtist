@@ -16,7 +16,6 @@ export const WithdrawalScreen: React.FC = () => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
   const {t} = useTranslation();
-  const [selectedBank, setSelectedBank] = useState<number>(-1);
 
   const onPressGoBack = () => {
     navigation.goBack();
@@ -34,6 +33,10 @@ export const WithdrawalScreen: React.FC = () => {
     navigation.navigate('InputWithdrawal');
   };
 
+  // only enable on the 14th and 28th of each month
+  const getDate = new Date().getDate();
+  const enabledButton = getDate === 14 || getDate === 28;
+
   return (
     <View style={styles.root}>
       <TopNavigation.Type1
@@ -47,19 +50,19 @@ export const WithdrawalScreen: React.FC = () => {
       />
 
       <CardBankAccount
+        haveBankAccount={true}
         number={'50352657444'}
         bankName={'Bank Central Asia (BCA)'}
-        selectedBank={selectedBank}
-        goToEditBankAccount={goToEditBankAccount}
+        goToEditBankAccount={goToAddBankAccount}
         containerStyles={{marginTop: mvs(20)}}
       />
 
       <Button
         label={t('Btn.Continue')}
-        disabled={selectedBank === -1}
+        disabled={!enabledButton}
         textStyles={{fontSize: mvs(13), fontFamily: font.InterMedium}}
         containerStyles={
-          selectedBank === -1 ? styles.btnDisabled : styles.btnContainer
+          !enabledButton ? styles.btnDisabled : styles.btnContainer
         }
         onPress={goToInputWithdrawal}
       />
