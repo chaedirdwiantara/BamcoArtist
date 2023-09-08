@@ -193,6 +193,41 @@ export const useSortByFilter = (
   }, [selectedSort]);
 };
 
+export const useSortFilterPostType = (
+  selectedSort: string | undefined,
+  t: TFunction<'translation', undefined, 'translation'>,
+  getListDataPost: (props?: ParamsProps | undefined) => Promise<void>,
+  perPage: number,
+  page: number,
+  categoryValue: string | undefined,
+  setFilterActive: React.Dispatch<React.SetStateAction<boolean>>,
+  setFilterByValue: React.Dispatch<React.SetStateAction<string | undefined>>,
+  uuid?: string | undefined,
+  isPremium?: boolean,
+) => {
+  useEffect(() => {
+    if (selectedSort) {
+      const dataSortS =
+        selectedSort === 'Feed.FilterBy.Exclusive'
+          ? 'exclusive'
+          : selectedSort === 'Feed.FilterBy.Public'
+          ? 'public'
+          : '';
+
+      getListDataPost({
+        page: 1,
+        perPage: perPage * page,
+        sortBy: dataSortS,
+        category: categoryValue,
+        isPremium: isPremium,
+        musician_uuid: uuid,
+      });
+      setFilterActive(true);
+      setFilterByValue(dataSortS);
+    }
+  }, [selectedSort]);
+};
+
 export const useCategoryFilter = (
   selectedCategory: string | undefined,
   getListDataPost: (props?: ParamsProps | undefined) => Promise<void>,

@@ -433,6 +433,12 @@
       "Latest": "最新的",
       "Popular": "最新的"
     },
+    "FilterBy":{
+      "Title": "Filter by",
+      "All": "All",
+      "Exclusive": "Exclusive",
+      "Public": "Public"
+    },
     "NoMore": "No more feeds"
   },
   "Event": {

@@ -433,6 +433,12 @@
       "Latest": "Latest",
       "Popular": "Popular"
     },
+    "FilterBy":{
+      "Title": "Filter by",
+      "All": "All",
+      "Exclusive": "Exclusive",
+      "Public": "Public"
+    },
     "NoMore": "No more feeds"
   },
   "Event": {
