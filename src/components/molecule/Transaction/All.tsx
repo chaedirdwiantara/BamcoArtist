@@ -15,6 +15,9 @@ import LoadingSpinner from '../../atom/Loading/LoadingSpinner';
 import {FlashList} from '@shopify/flash-list';
 import {EmptyStateSongMusician} from '../EmptyState/EmptyStateSongMusician';
 import {useEventHook} from '../../../hooks/use-event.hook';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {RootStackParams} from '../../../navigations';
+import {useNavigation} from '@react-navigation/native';
 
 interface TransactionProps {
   token: string;
@@ -26,6 +29,8 @@ const AllTransaction: React.FC<TransactionProps> = (
   const {token} = props;
   const {t} = useTranslation();
   const {useOrderListBookYay} = useEventHook();
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParams>>();
 
   const [dataOrder, setDataOrder] = useState<any>([]);
   const [totalPage, setTotalPage] = useState<number>(1);
@@ -123,7 +128,9 @@ const AllTransaction: React.FC<TransactionProps> = (
             currencyCode={item?.currencyCode}
             deliveryFee={item?.deliveryAmount}
             discount={item?.promotionAmount}
-            onPressDetail={() => null}>
+            onPressDetail={() =>
+              navigation.navigate('TransactionDetail', {id: item?.id})
+            }>
             {item?.orderItems?.map((child: any) => (
               <TransactionItem
                 currencyCode={item?.currencyCode}
