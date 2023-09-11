@@ -55,7 +55,6 @@ interface ListProps extends TouchableOpacityProps {
   disableComment?: boolean;
   commentOnPress?: () => void;
   showDropdown?: boolean;
-  musicianUuid?: string;
   selectedUserUuid?: (uuid: string) => void;
   selectedUserName?: (name: string) => void;
   onProfile?: boolean;
@@ -79,7 +78,6 @@ const PostListCard: React.FC<ListProps> = (props: ListProps) => {
     disableComment = true,
     commentOnPress,
     showDropdown,
-    musicianUuid,
     selectedUserUuid,
     selectedUserName,
     onProfile,
@@ -99,6 +97,7 @@ const PostListCard: React.FC<ListProps> = (props: ListProps) => {
   const category = categoryNormalize(data?.category);
   const commentCount = data?.commentsCount;
   const myPost = data?.musician.uuid === myUuid;
+  const musicianUuid = data?.musician.uuid;
   const idPost = data?.id;
   const isPremium = data?.isPremiumPost;
   const viewCount = data?.viewsCount;

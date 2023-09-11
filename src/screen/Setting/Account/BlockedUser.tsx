@@ -33,6 +33,7 @@ import {color, font, typography} from '../../../theme';
 import {useSettingHook} from '../../../hooks/use-setting.hook';
 import {elipsisText, width, widthPercentage} from '../../../utils';
 import {ListBlockedType} from '../../../interface/setting.interface';
+import {blockUserRecorded} from '../../../store/blockUser.store';
 
 export const BlockedUserScreen: React.FC = () => {
   const {t} = useTranslation();
@@ -40,6 +41,7 @@ export const BlockedUserScreen: React.FC = () => {
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
 
   const {getListBlockedUser} = useSettingHook();
+  const {uuidBlocked, setuuidBlocked} = blockUserRecorded();
   const {data: listBlockedUser, refetch} = useQuery('list-blockedUser', () =>
     getListBlockedUser(),
   );
@@ -68,7 +70,8 @@ export const BlockedUserScreen: React.FC = () => {
       await unblockUser({uuid: selectedUser?.uuid});
       InteractionManager.runAfterInteractions(() => setToastVisible(true));
 
-      // refetch after unblock success
+      //save the unblock uuid to global state & refetch after unblock success
+      setuuidBlocked(uuidBlocked.filter(x => x !== selectedUser?.uuid));
       refetch();
     } catch (error) {}
   };
