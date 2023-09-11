@@ -68,9 +68,9 @@ const ListTips: React.FC<ListTipsProps> = props => {
             : ['contribution_repeat_status', 'duration'],
         filterValue:
           duration === ''
-            ? [`${status === 'current' ? 1 : 2}`]
+            ? [`${status === 'current' ? 1 : 4}`]
             : [
-                `${status === 'current' ? 1 : 2}, ${
+                `${status === 'current' ? 1 : 4}, ${
                   duration === 'weekly'
                     ? 7
                     : duration === 'monthly'
@@ -109,7 +109,7 @@ const ListTips: React.FC<ListTipsProps> = props => {
   //   let column: string[] = filterColumn;
   //   let value: number[] = filterValue;
 
-  //   value[0] = status === 'current' ? 1 : 2;
+  //   value[0] = status === 'current' ? 1 : 4;
   //   if (duration === '') {
   //     if (value.length > 1) {
   //       column = column.splice(0, 1);
