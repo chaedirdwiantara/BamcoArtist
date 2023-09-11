@@ -31,7 +31,7 @@ import {
   SearchBar,
   Carousel,
 } from '../components';
-import {font} from '../theme';
+import {color, font} from '../theme';
 import Color from '../theme/Color';
 import {defaultBanner, listOverviewCard} from '../data/home';
 import {useFcmHook} from '../hooks/use-fcm.hook';
@@ -73,6 +73,7 @@ import {useQuery} from 'react-query';
 import {useAnalyticsHook} from '../hooks/use-analytics.hook';
 import {UploadMusicSection} from '../components/molecule/UploadMusic';
 import {randomString} from '../utils/randomString';
+import ShowMoreAnalytics from '../components/molecule/ShowMoreAnalytics';
 
 type OnScrollEventHandler = (
   event: NativeSyntheticEvent<NativeScrollEvent>,
@@ -124,6 +125,7 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
   const [dataFansPost, setDataFansPost] =
     useState<TotalPostAndFansResponseType>();
   const [dataIncome, setDataIncome] = useState<TotalIncome>();
+  const [showAnalytic, setShowAnalytic] = useState<boolean>(false);
 
   const {data: songAndAlbumData, refetch: refetchTotalSongAlbum} = useQuery(
     'overview-totalSongAlbum',
@@ -378,6 +380,10 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
     navigation.navigate('ProfileProgress');
   };
 
+  const handleShowMoreAnalytics = () => {
+    setShowAnalytic(true);
+  };
+
   if (isLoadingBanner) {
     return <View style={styles.root} />;
   }
@@ -408,6 +414,7 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
       <ScrollView
         showsVerticalScrollIndicator={false}
         scrollEventThrottle={16}
+        scrollEnabled={showAnalytic}
         refreshControl={
           <RefreshControl
             refreshing={refreshing}
@@ -434,8 +441,45 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
           data={dataBanner?.length > 0 ? dataBanner : defaultBanner}
           onPressBanner={handleWebview}
         />
+        <Text
+          style={[
+            styles.titleOverview,
+            {paddingVertical: mvs(20), paddingHorizontal: widthResponsive(22)},
+          ]}>
+          {t('Home.CreateNewPost')}
+        </Text>
+        {/* Create Post Shortcuts */}
+        {dataProfile?.data && (
+          <CreatePostShortcut
+            avatarUri={dataProfile?.data?.imageProfileUrls[1]?.image}
+            placeholder={`${randomPlaceHolder}...`}
+            compOnPress={handleCreatePost}
+          />
+        )}
+        <Gap height={20} />
 
-        <Text style={styles.titleOverview}>{t('Home.OverviewCard.Title')}</Text>
+        {dataSongAlbum?.countAlbumReleased === 0 && (
+          <View style={styles.containerUpload}>
+            <UploadMusicSection />
+          </View>
+        )}
+
+        <View style={styles.overviewContainer}>
+          <Text style={styles.titleOverview}>
+            {t('Home.OverviewCard.Title')}
+          </Text>
+          <TouchableOpacity
+            onPress={() => setShowAnalytic(false)}
+            disabled={!showAnalytic}>
+            <Text
+              style={[
+                styles.hideAnalytics,
+                {color: showAnalytic ? color.Success[400] : 'transparent'},
+              ]}>
+              {t('Home.OverviewCard.HideAnalytics')}
+            </Text>
+          </TouchableOpacity>
+        </View>
         <View style={styles.containerOverview}>
           {listOverviewCard.map((item, index) => {
             const newData = [
@@ -457,23 +501,6 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
             );
           })}
         </View>
-        <Text style={[styles.titleOverview, {paddingVertical: mvs(20)}]}>
-          {t('Home.CreateNewPost')}
-        </Text>
-        {/* Create Post Shortcuts */}
-        {dataProfile?.data && (
-          <CreatePostShortcut
-            avatarUri={dataProfile?.data?.imageProfileUrls[1]?.image}
-            placeholder={`${randomPlaceHolder}...`}
-            compOnPress={handleCreatePost}
-          />
-        )}
-
-        {dataSongAlbum?.countAlbumReleased === 0 && (
-          <View style={styles.containerUpload}>
-            <UploadMusicSection />
-          </View>
-        )}
 
         <Gap height={mvs(25)} />
         {/* Tab Analytic */}
@@ -511,6 +538,9 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
         </View>
         {/* End of Tab Analytic */}
       </ScrollView>
+
+      {!showAnalytic && <ShowMoreAnalytics onPress={handleShowMoreAnalytics} />}
+
       <BottomSheetGuest
         modalVisible={modalGuestVisible}
         onPressClose={() => setModalGuestVisible(false)}
@@ -599,13 +629,15 @@ const styles = StyleSheet.create({
     marginTop: heightPercentage(10),
   },
   titleOverview: {
-    width: width * 0.9,
-    alignSelf: 'center',
     color: Color.Neutral[10],
     fontSize: mvs(18),
     fontFamily: font.InterMedium,
     fontWeight: '600',
-    paddingVertical: mvs(15),
+  },
+  hideAnalytics: {
+    fontFamily: font.InterRegular,
+    fontSize: mvs(13),
+    fontWeight: '500',
   },
   containerOverview: {
     flexWrap: 'wrap',
@@ -616,5 +648,12 @@ const styles = StyleSheet.create({
   containerUpload: {
     marginTop: mvs(25),
     alignSelf: 'center',
+  },
+  overviewContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: widthResponsive(22),
+    alignItems: 'center',
+    marginBottom: widthResponsive(20),
   },
 });

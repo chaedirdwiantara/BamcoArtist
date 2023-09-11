@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import {mvs} from 'react-native-size-matters';
 import {
+  DropDownFilter,
   Gap,
   ListCard,
   ModalConfirm,
@@ -44,16 +45,23 @@ import {
   likePressedOnFeed,
   likesCountInFeed,
   playSongOnFeed,
+  useCategoryFilter,
   useGetCreditCount,
   useGetDataOnMount,
   useRefreshingEffect,
   useSetDataToMainData,
+  useSortByFilter,
   useStopRefreshing,
+  useSortFilterPostType,
 } from './ListUtils/ListFunction';
 import Clipboard from '@react-native-community/clipboard';
 import {imageShare} from '../../utils/share';
 import {useShareHook} from '../../hooks/use-share.hook';
-import {DataDropDownType} from '../../data/dropdown';
+import {
+  DataDropDownType,
+  dropDownDataCategory,
+  dropDownDataFilterBy,
+} from '../../data/dropdown';
 import {useReportHook} from '../../hooks/use-report.hook';
 import {feedReportRecorded} from '../../store/idReported';
 import {ReportParamsProps} from '../../interface/report.interface';
@@ -95,6 +103,12 @@ const PostListProfile: FC<PostListProps> = (props: PostListProps) => {
   const [uuid, setUuid] = useState<string>();
   const [refreshing, setRefreshing] = useState<boolean>(false);
   const [modalConfirm, setModalConfirm] = useState(false);
+  const [selectedFilterMenu, setSelectedFilterMenu] =
+    useState<DataDropDownType>();
+  const [selectedCategoryMenu, setSelectedCategoryMenu] =
+    useState<DataDropDownType>();
+  const [filterByValue, setFilterByValue] = useState<string>();
+  const [categoryValue, setCategoryValue] = useState<string>();
 
   //* MUSIC HOOKS
   const [pauseModeOn, setPauseModeOn] = useState<boolean>(false);
@@ -149,13 +163,37 @@ const PostListProfile: FC<PostListProps> = (props: PostListProps) => {
   );
 
   //* call when refreshing
-
   useRefreshingEffect(refreshing, getListProfilePost, getCreditCount, perPage);
 
   useStopRefreshing(feedIsLoading, setRefreshing);
 
   //* set response data list post to main data
   useSetDataToMainData(dataPostList, filterActive, dataMain, setDataMain);
+
+  //* hit sort by endpoint
+  useSortFilterPostType(
+    selectedFilterMenu?.label,
+    getListProfilePost,
+    perPage,
+    page,
+    categoryValue,
+    setFilterActive,
+    setFilterByValue,
+    uuidMusician,
+  );
+
+  //* hit category endpoint
+  useCategoryFilter(
+    selectedCategoryMenu?.value,
+    getListProfilePost,
+    perPage,
+    page,
+    filterByValue,
+    selectedCategoryMenu?.value,
+    setFilterActive,
+    setCategoryValue,
+    uuidMusician,
+  );
 
   //* Handle when end of Scroll
   const handleEndScroll = () => {
@@ -336,12 +374,41 @@ const PostListProfile: FC<PostListProps> = (props: PostListProps) => {
 
   return (
     <>
+      <View style={styles.filterContainer}>
+        <DropDownFilter
+          labelCaption={
+            selectedFilterMenu
+              ? t(selectedFilterMenu.label)
+              : t('Feed.FilterBy.Title')
+          }
+          dataFilter={dropDownDataFilterBy}
+          selectedMenu={setSelectedFilterMenu}
+          leftPosition={widthResponsive(-59)}
+          containerStyle={{
+            marginTop: widthResponsive(20),
+            marginBottom: widthResponsive(20),
+          }}
+        />
+        <DropDownFilter
+          labelCaption={
+            selectedCategoryMenu
+              ? t(selectedCategoryMenu.label)
+              : t('Home.Tab.TopPost.Category.Title')
+          }
+          dataFilter={dropDownDataCategory}
+          selectedMenu={setSelectedCategoryMenu}
+          leftPosition={widthResponsive(-140)}
+          containerStyle={{
+            marginTop: widthResponsive(20),
+            marginBottom: widthResponsive(20),
+          }}
+        />
+      </View>
       {dataMain !== null && dataMain.length !== 0 ? (
         <View
           style={{
             flex: 1,
             marginHorizontal: widthResponsive(-24),
-            marginTop: widthResponsive(24),
           }}>
           {refreshing && (
             <View style={styles.loadingContainer}>
@@ -527,6 +594,12 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginTop: heightResponsive(10),
     marginBottom: heightResponsive(8),
+  },
+  filterContainer: {
+    width: '100%',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    backgroundColor: color.Dark[800],
   },
   childrenPostTitle: {
     flexShrink: 1,

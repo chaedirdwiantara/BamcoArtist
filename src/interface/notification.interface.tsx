@@ -15,6 +15,7 @@ export type WordReplacerType = {
   text: string;
   link: string;
   color: string;
+  fontWeight: string;
 };
 
 export type ListNotificationData = {
