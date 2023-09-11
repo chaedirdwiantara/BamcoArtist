@@ -1214,12 +1214,15 @@
     "BankAccount": {
       "BankAccount": "Bank Account",
       "AddAccount": "Add Account",
+      "AddBankAccount": "Add Bank Account",
       "Number": "Number",
       "AccountNumber": "Account Number",
       "BankName": "Bank Name",
-      "Action": "Action"
+      "Action": "Action",
+      "EmptyState": "You don’t have available bank account,\nadd your bank account to proceed the withdrawal"
     },
     "InputWithdrawal": {
+      "WithdrawCredits": "You can withdraw your credits on the 14th or 28th of every month, and the process will take a maximum of 7 working days.",
       "InputWithdrawalAmount": "Input Withdrawal Amount",
       "InputAmount": "Input Amount",
       "CreditToWithdraw": "Credit to Withdraw",
@@ -1258,9 +1261,23 @@
     "EditBankAccount": {
       "Title": "Edit Account"
     },
+    "DeleteBankAccount": {
+      "ModalConfirm": {
+        "Title": "Delete Bank Account",
+        "Subtitle": "Are you sure you want to delete your bank account? you need to add new bank account to withdraw"
+      }
+    },
     "VerifCode": {
       "VerificationCode": "Verification Code",
       "VerificationText": "We have sent you six digits verification code on address {{email}} check your inbox and enter verification code here"
+    },
+    "ModalSuccess": {
+      "Title": "Congratulations! \nYour withdrawal is being processed!",
+      "SubtitleFirstTime": "Once we have verified your bank details your funds will be on their way! This process can usually take up to 7 working days.",
+      "SubtitleNextWithdraw": "This can take up to 7 working days. You will receive your funds upon successful confirmation.",
+      "CreateWithdrawalAccount": "Your withdrawal account have been saved!",
+      "EditWithdrawalAccount": "Your account have been edited!",
+      "DeleteWithdrawalAccount": "Bank account has been deleted!"
     }
   },
   "RecoverAccount": {

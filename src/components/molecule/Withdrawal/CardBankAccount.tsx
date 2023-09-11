@@ -69,14 +69,16 @@ export const CardBankAccount: React.FC<CardBankAccountProps> = ({
         </Text>
       </View>
 
-      <View style={styles.containerItemBank}>
-        <Text style={[typography.Caption, styles.numberValueStyle]}>
-          {number}
-        </Text>
-        <Text style={[typography.Caption, styles.bankNameValueStyle]}>
-          {bankName}
-        </Text>
-      </View>
+      {haveBankAccount && (
+        <View style={styles.containerItemBank}>
+          <Text style={[typography.Caption, styles.numberValueStyle]}>
+            {number}
+          </Text>
+          <Text style={[typography.Caption, styles.bankNameValueStyle]}>
+            {bankName}
+          </Text>
+        </View>
+      )}
     </View>
   );
 };
