@@ -51,11 +51,11 @@ export default CreatePostShortcut;
 
 const styles = StyleSheet.create({
   container: {
-    borderTopWidth: 1,
-    borderBottomWidth: 1,
-    borderTopColor: color.Dark[500],
-    borderBottomColor: color.Dark[500],
-    paddingHorizontal: widthResponsive(24),
+    borderWidth: 1,
+    borderColor: color.Dark[500],
+    marginHorizontal: widthResponsive(22),
+    paddingHorizontal: widthResponsive(12),
+    borderRadius: 4,
   },
   inputStyle: {
     flexDirection: 'row',

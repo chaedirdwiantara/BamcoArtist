@@ -173,13 +173,13 @@ const PostListProfile: FC<PostListProps> = (props: PostListProps) => {
   //* hit sort by endpoint
   useSortFilterPostType(
     selectedFilterMenu?.label,
-    t,
     getListProfilePost,
     perPage,
     page,
     categoryValue,
     setFilterActive,
     setFilterByValue,
+    uuidMusician,
   );
 
   //* hit category endpoint
@@ -192,6 +192,7 @@ const PostListProfile: FC<PostListProps> = (props: PostListProps) => {
     selectedCategoryMenu?.value,
     setFilterActive,
     setCategoryValue,
+    uuidMusician,
   );
 
   //* Handle when end of Scroll

@@ -195,7 +195,6 @@ export const useSortByFilter = (
 
 export const useSortFilterPostType = (
   selectedSort: string | undefined,
-  t: TFunction<'translation', undefined, 'translation'>,
   getListDataPost: (props?: ParamsProps | undefined) => Promise<void>,
   perPage: number,
   page: number,

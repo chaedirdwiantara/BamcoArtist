@@ -174,7 +174,8 @@
       "ThirdCard": "My Exclusive Post",
       "FourthCard": "My Album",
       "FifthCard": "My Songs",
-      "SixthCard": "My Income"
+      "SixthCard": "My Income",
+      "HideAnalytics": "Hide"
     },
     "CreateNewPost": "Create New Post",
     "Topbar": {

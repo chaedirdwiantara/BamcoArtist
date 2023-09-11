@@ -35,20 +35,30 @@ export const ListAvatar: React.FC<ListAvatarProps> = (
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
   const moreThanThree = `+${data.length - 3}`;
+
+  //? #0 AREA
+  const userNameFontWeight: any =
+    wordReplacer && wordReplacer?.length > 0
+      ? wordReplacer[0].fontWeight
+      : '400';
+  const userNameFontColor =
+    wordReplacer &&
+    wordReplacer?.length > 0 &&
+    wordReplacer[0].color &&
+    wordReplacer[0].color !== ''
+      ? wordReplacer[0].color
+      : color.Neutral[10];
+
+  // ? #1 AREA
   const linkTNC =
     wordReplacer && wordReplacer?.length > 0
-      ? wordReplacer[0].link
+      ? wordReplacer[1].link
       : 'https://www.thebeam.co/termsandcondition';
+
   const colorLinkTNC =
     wordReplacer && wordReplacer?.length > 0
-      ? wordReplacer[0].color
-      : color.Pink[200];
-  const linkSettings =
-    wordReplacer && wordReplacer?.length > 0 ? wordReplacer[1].link : 'Setting';
-  const colorLinkSettings =
-    wordReplacer && wordReplacer?.length > 0
       ? wordReplacer[1].color
-      : color.Pink[200];
+      : color.Neutral[10];
 
   const onPressFirstSpecialText = () => {
     navigation.navigate('Webview', {
@@ -57,32 +67,56 @@ export const ListAvatar: React.FC<ListAvatarProps> = (
     });
   };
 
+  // ? #2 AREA
+  const linkSettings =
+    wordReplacer && wordReplacer?.length > 0
+      ? wordReplacer[2].link
+      : 'SendAppeal';
+
+  const colorLinkSettings =
+    wordReplacer && wordReplacer?.length > 0
+      ? wordReplacer[1].color
+      : color.Pink[200];
+
   const onPressSecondSpecialText = () => {
-    navigation.navigate('SendAppeal', {title: 'Send Appeal'});
+    //@ts-ignore this should be fine since the screen page comes from api response
+    navigation.navigate(linkSettings);
   };
 
   const renderDesc = (text: string | undefined) => {
     return text?.split(' ').map((word, index) => {
       if (word.includes('#0')) {
         return (
+          <Text
+            style={[
+              styles.fullname,
+              {color: userNameFontColor, fontWeight: userNameFontWeight},
+            ]}>
+            {wordReplacer && wordReplacer?.length > 0
+              ? wordReplacer[0].text
+              : word}{' '}
+          </Text>
+        );
+      } else if (word.includes('#1')) {
+        return (
           <TouchableWithoutFeedback
             key={index}
             onPress={() => onPressFirstSpecialText()}>
             <Text style={[styles.fullname, {color: colorLinkTNC}]}>
               {wordReplacer && wordReplacer?.length > 0
-                ? wordReplacer[0].text
+                ? wordReplacer[1].text
                 : word}{' '}
             </Text>
           </TouchableWithoutFeedback>
         );
-      } else if (word.includes('#1')) {
+      } else if (word.includes('#2')) {
         return (
           <TouchableWithoutFeedback
             key={index}
             onPress={() => onPressSecondSpecialText()}>
             <Text style={[styles.fullname, {color: colorLinkSettings}]}>
               {wordReplacer && wordReplacer?.length > 0
-                ? wordReplacer[1].text
+                ? wordReplacer[2].text
                 : word}{' '}
             </Text>
           </TouchableWithoutFeedback>

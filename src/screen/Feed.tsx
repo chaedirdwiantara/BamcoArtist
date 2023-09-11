@@ -54,6 +54,7 @@ import {
   useUploadVideo,
 } from './ListCard/ListUtils/PostVideoFunction';
 import {useFeedHook} from '../hooks/use-feed.hook';
+import PostListExclusive from './ListCard/PostListExclusive';
 
 const {StatusBarManager} = NativeModules;
 const barHeight = StatusBarManager.HEIGHT;
@@ -104,8 +105,8 @@ export const FeedScreen: React.FC = () => {
 
   const [selectedIndex, setSelectedIndex] = useState(-0);
   const [filter] = useState([
-    {filterName: 'Feed.MyPost'},
     {filterName: 'Feed.Public'},
+    {filterName: 'Feed.Exclusive'},
   ]);
   const [allowToPost, setAllowToPost] = useState<boolean>(false);
   const [selectedCategory, setSelectedCategory] = useState<string>();
@@ -353,7 +354,7 @@ export const FeedScreen: React.FC = () => {
                 uriVideo={uriVideo?.path}
               />
             ) : (
-              <PostListMyPost
+              <PostListExclusive
                 dataRightDropdown={dropDownDataCategory}
                 dataLeftDropdown={dropDownDataSort}
                 videoUploadProgress={
