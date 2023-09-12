@@ -574,7 +574,19 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
             icon={<FriedEggIcon />}
           />
         </>
-      ) : null}
+      ) : (
+        <>
+          <Gap height={195} />
+          <EmptyState
+            text={t('EmptyState.DontHavePost') || ''}
+            containerStyle={{
+              justifyContent: 'flex-start',
+              paddingTop: heightPercentage(24),
+            }}
+            icon={<FriedEggIcon />}
+          />
+        </>
+      )}
       <ModalShare
         url={shareLink}
         modalVisible={modalShare}
