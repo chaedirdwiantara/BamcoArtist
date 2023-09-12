@@ -121,6 +121,7 @@ import {MerchDetail} from '../screen/MerchDetail';
 import {ConcertDetail} from '../screen/ConcertDetail';
 import {TicketDetail} from '../screen/ConcertDetail/TicketDetail';
 import Shop from '../screen/Action/Shop';
+import {TransactionDetail} from '../screen/Action/TransactionDetail';
 
 // Icon
 import {
@@ -368,6 +369,9 @@ export type RootStackParams = {
   };
   LiveTipping: {id: string};
   ClaimReward: {id: string};
+  TransactionDetail: {
+    id: string;
+  };
 };
 
 export type MainTabParams = {
@@ -637,6 +641,7 @@ export const RootStackScreen = () => (
     <RootStack.Screen name="EventDetail" component={EventDetail} />
     <RootStack.Screen name="LiveTipping" component={LiveTipping} />
     <RootStack.Screen name="ClaimReward" component={ClaimReward} />
+    <RootStack.Screen name="TransactionDetail" component={TransactionDetail} />
   </RootStack.Navigator>
 );
 
