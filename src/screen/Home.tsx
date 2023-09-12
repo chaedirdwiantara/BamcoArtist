@@ -414,7 +414,6 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
       <ScrollView
         showsVerticalScrollIndicator={false}
         scrollEventThrottle={16}
-        scrollEnabled={showAnalytic}
         refreshControl={
           <RefreshControl
             refreshing={refreshing}
@@ -456,13 +455,14 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
             compOnPress={handleCreatePost}
           />
         )}
-        <Gap height={20} />
 
         {dataSongAlbum?.countAlbumReleased === 0 && (
           <View style={styles.containerUpload}>
             <UploadMusicSection />
           </View>
         )}
+
+        <Gap height={20} />
 
         <View style={styles.overviewContainer}>
           <Text style={styles.titleOverview}>
@@ -502,44 +502,47 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
           })}
         </View>
 
-        <Gap height={mvs(25)} />
+        {!showAnalytic && (
+          <ShowMoreAnalytics onPress={handleShowMoreAnalytics} />
+        )}
+
         {/* Tab Analytic */}
-        <View style={[styles.containerContent]}>
-          <TabFilter.Type3
-            filterData={filterAnalytic}
-            onPress={filterDataAnalytic}
-            selectedIndex={selectedIndexAnalytic}
-            translation={true}
-          />
-          {filterAnalytic[selectedIndexAnalytic].filterName ===
-          'Home.Tab.Analytic.Income.Title' ? (
-            <View style={{paddingHorizontal: widthResponsive(20)}}>
-              <Gap height={widthResponsive(15)} />
-              <Income />
-            </View>
-          ) : filterAnalytic[selectedIndexAnalytic].filterName ===
-            'Home.Tab.Analytic.Fans.Title' ? (
-            <View style={{paddingHorizontal: widthResponsive(20)}}>
-              <Gap height={widthResponsive(15)} />
-              <Fans />
-            </View>
-          ) : filterAnalytic[selectedIndexAnalytic].filterName ===
-            'Home.Tab.Analytic.Post.Title' ? (
-            <PostAnalytic uuid={uuid} />
-          ) : filterAnalytic[selectedIndexAnalytic].filterName ===
-            'Home.Tab.Analytic.Album.Title' ? (
-            <View style={{paddingHorizontal: widthResponsive(20)}}>
-              <Gap height={widthResponsive(15)} />
-              <AlbumAnalytic />
-            </View>
-          ) : (
-            <Explore refreshing={refreshing} />
-          )}
-        </View>
+        {showAnalytic && (
+          <View style={[styles.containerContent]}>
+            <TabFilter.Type3
+              filterData={filterAnalytic}
+              onPress={filterDataAnalytic}
+              selectedIndex={selectedIndexAnalytic}
+              translation={true}
+            />
+            {filterAnalytic[selectedIndexAnalytic].filterName ===
+            'Home.Tab.Analytic.Income.Title' ? (
+              <View style={{paddingHorizontal: widthResponsive(20)}}>
+                <Gap height={widthResponsive(15)} />
+                <Income />
+              </View>
+            ) : filterAnalytic[selectedIndexAnalytic].filterName ===
+              'Home.Tab.Analytic.Fans.Title' ? (
+              <View style={{paddingHorizontal: widthResponsive(20)}}>
+                <Gap height={widthResponsive(15)} />
+                <Fans />
+              </View>
+            ) : filterAnalytic[selectedIndexAnalytic].filterName ===
+              'Home.Tab.Analytic.Post.Title' ? (
+              <PostAnalytic uuid={uuid} />
+            ) : filterAnalytic[selectedIndexAnalytic].filterName ===
+              'Home.Tab.Analytic.Album.Title' ? (
+              <View style={{paddingHorizontal: widthResponsive(20)}}>
+                <Gap height={widthResponsive(15)} />
+                <AlbumAnalytic />
+              </View>
+            ) : (
+              <Explore refreshing={refreshing} />
+            )}
+          </View>
+        )}
         {/* End of Tab Analytic */}
       </ScrollView>
-
-      {!showAnalytic && <ShowMoreAnalytics onPress={handleShowMoreAnalytics} />}
 
       <BottomSheetGuest
         modalVisible={modalGuestVisible}
@@ -590,6 +593,7 @@ const styles = StyleSheet.create({
     backgroundColor: Color.Dark[800],
   },
   containerContent: {
+    marginTop: widthResponsive(25),
     marginBottom: heightPercentage(26),
     width: '100%',
   },
@@ -646,7 +650,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   containerUpload: {
-    marginTop: mvs(25),
+    marginTop: widthResponsive(22),
     alignSelf: 'center',
   },
   overviewContainer: {

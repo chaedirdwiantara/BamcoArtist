@@ -19,12 +19,10 @@ const ShowMoreAnalytics: React.FC<ShowMoreAnalyticsProps> = ({
   return (
     <LinearGradient
       colors={[
-        'transparent',
-        'rgba(15, 19, 25, 0.1)',
-        'rgba(15, 19, 25, 0.4)',
         'rgba(15, 19, 25, 0.6)',
-        'rgba(15, 19, 25, 0.8)',
         'rgba(15, 19, 25, 0.9)',
+        'rgba(15, 19, 25, 0.99)',
+        'rgba(15, 19, 25, 0.999)',
         color.Dark[800],
       ]}
       style={[styles.gradientContainer, style]}
@@ -42,7 +40,7 @@ export default ShowMoreAnalytics;
 const styles = StyleSheet.create({
   gradientContainer: {
     width: '100%',
-    height: 121,
+    height: widthResponsive(135),
     position: 'absolute',
     bottom: 0,
     justifyContent: 'center',
