@@ -67,6 +67,8 @@ import {feedReportRecorded} from '../../store/idReported';
 import {ReportParamsProps} from '../../interface/report.interface';
 import {ModalReport} from '../../components/molecule/Modal/ModalReport';
 import {reportingMenu} from '../../data/report';
+import {useVideoStore} from '../../store/video.store';
+import {useUploadImageHook} from '../../hooks/use-uploadImage.hook';
 
 const {height} = Dimensions.get('screen');
 
@@ -86,6 +88,8 @@ const PostListProfile: FC<PostListProps> = (props: PostListProps) => {
   const {coverImage, title, description, uuidMusician = ''} = props;
 
   const dataToExc = {coverImage, title, description};
+
+  const {setUriVideo} = useVideoStore();
 
   const [recorder, setRecorder] = useState<string[]>([]);
   const [selectedId, setSelectedId] = useState<string[]>();
@@ -128,6 +132,8 @@ const PostListProfile: FC<PostListProps> = (props: PostListProps) => {
     setLikePost,
     setUnlikePost,
     getListProfilePost,
+    setDataCreatePost,
+    setDeletePost,
   } = useFeedHook();
 
   const {
@@ -147,6 +153,8 @@ const PostListProfile: FC<PostListProps> = (props: PostListProps) => {
     setSelectedSharePost,
     selectedSharePost,
   } = useShareHook();
+
+  const {setDataVideo} = useUploadImageHook();
 
   const {creditCount, getCreditCount} = useCreditHook();
   const MyUuid = profileStorage()?.uuid;
@@ -302,6 +310,19 @@ const PostListProfile: FC<PostListProps> = (props: PostListProps) => {
       const selectedValue = t(selectedMenuPost.value);
 
       switch (selectedValue) {
+        case '1':
+          setUriVideo(null);
+          setDataCreatePost(null);
+          setDataVideo(undefined);
+          let dataSelected = dataMain.filter(
+            data => data.id === selectedIdPost,
+          );
+          navigation.navigate('CreatePost', {postData: dataSelected[0]});
+          break;
+        case '2':
+          setDeletePost({id: selectedIdPost});
+          setDataMain(dataMain.filter(data => data.id !== selectedIdPost));
+          break;
         case '11':
           navigation.navigate('MusicianProfile', {
             id: selectedUserUuid,
@@ -518,10 +539,9 @@ const PostListProfile: FC<PostListProps> = (props: PostListProps) => {
         </View>
       ) : dataMain?.length === 0 && feedMessage === 'you not follow anyone' ? (
         <ListToFollowMusician />
-      ) : dataMain?.length === 0 &&
-        feedMessage === `Musician don't have any post` ? (
+      ) : (
         <Text style={styles.emptyState}>{t('EmptyState.Musician')}</Text>
-      ) : null}
+      )}
       <ModalReport
         modalVisible={reportToast}
         onPressClose={() => setReportToast(false)}
