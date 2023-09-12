@@ -44,7 +44,7 @@ export default OverviewCard;
 const styles = StyleSheet.create({
   container: {
     width: width * 0.45,
-    aspectRatio: mvs(159 / 84),
+    aspectRatio: mvs(159 / 71),
     borderRadius: mvs(4),
     paddingHorizontal: ms(4),
     paddingVertical: mvs(4),
