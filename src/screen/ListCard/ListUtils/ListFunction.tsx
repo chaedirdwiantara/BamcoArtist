@@ -154,7 +154,7 @@ export const useSetDataToMainData = (
       );
       setDataMain(filterDuplicate);
     }
-    if (dataPostList && filterActive) {
+    if (dataPostList && dataPostList.length > 0 && filterActive) {
       setDataMain(dataPostList);
     }
   }, [dataPostList, filterActive]);
