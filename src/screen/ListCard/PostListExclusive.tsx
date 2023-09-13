@@ -101,6 +101,9 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
     allowRefresh,
   } = props;
 
+  const noPostYetMessage =
+    'Your subscribed musician has not yet posted any exclusive content.';
+
   const {handleScroll, compCTranslateY} = useHeaderAnimation();
   const {
     shareLink,
@@ -241,6 +244,13 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
       setDataTemporary(dataPostList);
     }
   }, [dataPostList]);
+
+  //? set no data into main cz of message
+  useEffect(() => {
+    if (dataTemporary?.length === 0 && feedMessage === noPostYetMessage) {
+      setDataMain(dataTemporary);
+    }
+  }, [dataTemporary, feedMessage]);
 
   useSetDataToMainData(dataTemporary, filterActive, dataMain, setDataMain);
 
@@ -561,8 +571,8 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
           />
         </>
       ) : dataTemporary?.length === 0 &&
-        postData?.message ===
-          'Your subscribed musician has not yet posted any exclusive content.' ? (
+        (postData?.message === noPostYetMessage ||
+          feedMessage === noPostYetMessage) ? (
         <>
           <Gap height={195} />
           <EmptyState
@@ -574,19 +584,7 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
             icon={<FriedEggIcon />}
           />
         </>
-      ) : (
-        <>
-          <Gap height={195} />
-          <EmptyState
-            text={t('EmptyState.DontHavePost') || ''}
-            containerStyle={{
-              justifyContent: 'flex-start',
-              paddingTop: heightPercentage(24),
-            }}
-            icon={<FriedEggIcon />}
-          />
-        </>
-      )}
+      ) : null}
       <ModalShare
         url={shareLink}
         modalVisible={modalShare}
