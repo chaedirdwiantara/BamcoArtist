@@ -8,16 +8,20 @@ import {heightResponsive, width, widthResponsive} from '../../../utils';
 import {mvs} from 'react-native-size-matters';
 import Font from '../../../theme/Font';
 import {useTranslation} from 'react-i18next';
-import {ListDataSearchMusician} from '../../../interface/search.interface';
-import {MusicianList} from '../../../interface/musician.interface';
+import {
+  EventMusicianTipped,
+  EventTopTipper,
+} from '../../../interface/event.interface';
+import LoadingSpinner from '../../atom/Loading/LoadingSpinner';
 
 interface ModalTippedProps {
   title: string;
   secondTitle: string;
   modalVisible: boolean;
   onPressClose: () => void;
-  tipper?: MusicianList | ListDataSearchMusician;
-  musicianTipped?: MusicianList[] | ListDataSearchMusician[];
+  tipper?: EventTopTipper;
+  musicianTipped?: EventMusicianTipped[];
+  isLoading: boolean;
 }
 
 export const ModalTipped: React.FC<ModalTippedProps> = (
@@ -30,6 +34,7 @@ export const ModalTipped: React.FC<ModalTippedProps> = (
     tipper,
     musicianTipped,
     onPressClose,
+    isLoading,
   } = props;
   const {t} = useTranslation();
   return (
@@ -46,53 +51,46 @@ export const ModalTipped: React.FC<ModalTippedProps> = (
         <View style={styles.card}>
           <Text style={styles.title}>{title}</Text>
           <View>
-            <MusiciansListCard
-              key={tipper?.uuid}
-              musicianName={tipper?.fullname ?? ''}
-              imgUri={tipper?.imageProfileUrls[1]?.image || ''}
-              containerStyles={{marginTop: mvs(18)}}
-              activeMore={false}
-              showCredit={true}
-              creditCount={1000}
-              onPressImage={() => null}
-              onPressMore={() => null}
-            />
+            {isLoading ? (
+              <LoadingSpinner />
+            ) : (
+              <MusiciansListCard
+                key={tipper?.tipperUUID}
+                musicianName={tipper?.tipperFullname ?? ''}
+                imgUri={tipper?.tipperImage || ''}
+                containerStyles={{marginTop: mvs(18)}}
+                activeMore={false}
+                showCredit={true}
+                creditCount={tipper?.totalDonation}
+                onPressImage={() => null}
+                onPressMore={() => null}
+              />
+            )}
           </View>
           <Gap height={heightResponsive(20)} />
           <Text style={styles.secondTitle}>{secondTitle}</Text>
-          <MusiciansListCard
-            key={tipper?.uuid}
-            musicianName={tipper?.fullname ?? ''}
-            imgUri={tipper?.imageProfileUrls[1]?.image || ''}
-            containerStyles={{marginTop: mvs(18)}}
-            activeMore={false}
-            showCredit={true}
-            creditCount={1000}
-            onPressImage={() => null}
-            onPressMore={() => null}
-          />
-          <MusiciansListCard
-            key={tipper?.uuid}
-            musicianName={tipper?.fullname ?? ''}
-            imgUri={tipper?.imageProfileUrls[1]?.image || ''}
-            containerStyles={{marginTop: mvs(18)}}
-            activeMore={false}
-            showCredit={true}
-            creditCount={1000}
-            onPressImage={() => null}
-            onPressMore={() => null}
-          />
-          <MusiciansListCard
-            key={tipper?.uuid}
-            musicianName={tipper?.fullname ?? ''}
-            imgUri={tipper?.imageProfileUrls[1]?.image || ''}
-            containerStyles={{marginTop: mvs(18)}}
-            activeMore={false}
-            showCredit={true}
-            creditCount={1000}
-            onPressImage={() => null}
-            onPressMore={() => null}
-          />
+          {isLoading ? (
+            <LoadingSpinner />
+          ) : (
+            <>
+              {musicianTipped?.map((v: EventMusicianTipped, _i: number) => {
+                return (
+                  <MusiciansListCard
+                    key={v?.musicianUUID}
+                    musicianName={v?.musicianFullname ?? ''}
+                    imgUri={v?.musicianImage || ''}
+                    containerStyles={{marginTop: mvs(18)}}
+                    activeMore={false}
+                    showCredit={true}
+                    creditCount={v?.totalDonation}
+                    onPressImage={() => null}
+                    onPressMore={() => null}
+                  />
+                );
+              })}
+            </>
+          )}
+
           <View style={styles.containerButton}>
             <TouchableOpacity onPress={onPressClose}>
               <Text style={styles.option}>{t('General.Dismiss')}</Text>

@@ -10,7 +10,7 @@ import {
   NativeScrollEvent,
   RefreshControl,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import Color from '../../theme/Color';
 import {heightResponsive, width, widthResponsive} from '../../utils';
 import {Gap, SsuDivider, TabFilter, TopNavigation} from '../../components';
@@ -26,6 +26,7 @@ import dayjs from 'dayjs';
 import LoadingSpinner from '../../components/atom/Loading/LoadingSpinner';
 import {ModalLoading} from '../../components/molecule/ModalLoading/ModalLoading';
 import {useEventHook} from '../../hooks/use-event.hook';
+import {useFocusEffect} from '@react-navigation/native';
 
 type OnScrollEventHandler = (
   event: NativeSyntheticEvent<NativeScrollEvent>,
@@ -38,7 +39,7 @@ export const EventDetail: React.FC<EventDetailProps> = ({
 }: EventDetailProps) => {
   const {id} = route.params;
   const {t} = useTranslation();
-  const {useEventDetail, useEventLineUp} = useEventHook();
+  const {useEventDetail, useEventLineUp, useEventTopTipper} = useEventHook();
 
   const [scrollEffect, setScrollEffect] = useState<boolean>(false);
   const [selectedIndex, setSelectedIndex] = useState(-0);
@@ -79,10 +80,25 @@ export const EventDetail: React.FC<EventDetailProps> = ({
     isRefetching: isRefetchingDetail,
   } = useEventDetail(id);
 
+  const {
+    data: dataTopTipper,
+    refetch: refetchTopTipper,
+    isLoading: isLoadingTopTipper,
+    isRefetching: isRefetchingTopTipper,
+  } = useEventTopTipper(id);
+
   useEffect(() => {
     refetchLineUp();
     refetchDetail();
   }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      refetchLineUp();
+      refetchDetail();
+      refetchTopTipper();
+    }, []),
+  );
 
   return (
     <View style={styles.root}>
@@ -224,8 +240,11 @@ export const EventDetail: React.FC<EventDetailProps> = ({
               isLoading={isLoadingLineUp || isRefetchingLineUp}
             />
           ) : (
-            // TODO: Change data tiper
-            <TopTiper dataTipper={[]} />
+            <TopTiper
+              dataTipper={dataTopTipper?.data}
+              isLoading={isLoadingTopTipper || isRefetchingTopTipper}
+              eventId={id}
+            />
           )}
         </View>
       </ScrollView>

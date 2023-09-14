@@ -3,12 +3,15 @@ import {
   EventDetailResponse,
   EventLineUpResponse,
   EventMusicianResponse,
+  EventMusicianTippedResponse,
+  EventTopTipperResponse,
   MerchListResponse,
   OrderListBookyay,
   SearchEventInput,
 } from '../interface/event.interface';
 import BookYayAPI from './baseBookYay';
 import RinjaniAPI from './baseRinjani';
+import KrakatauAPI from './baseKrakatau';
 
 export const listMerch = async (
   props?: ParamsProps,
@@ -102,4 +105,39 @@ export const fetchListOrder = async (
     .catch(err => {
       return err;
     });
+};
+
+export const getEventTopTipper = async (
+  events: string,
+  props?: ParamsProps,
+): Promise<EventTopTipperResponse> => {
+  const {data} = await KrakatauAPI().request<EventTopTipperResponse>({
+    url: `/events/top-tipper`,
+    method: 'GET',
+    params: {
+      events,
+      ...props,
+    },
+  });
+
+  return data;
+};
+
+export const getEventMusicianTipped = async (
+  tipperuuid: string,
+  event_id: string,
+  props?: ParamsProps,
+): Promise<EventMusicianTippedResponse> => {
+  const {data} = await KrakatauAPI().request<EventMusicianTippedResponse>({
+    url: `/events/tipped-musician/${tipperuuid}`,
+    method: 'GET',
+    params: {
+      per_page: 100,
+      filter_column: 'event_id',
+      filter_value: event_id,
+      ...props,
+    },
+  });
+
+  return data;
 };
