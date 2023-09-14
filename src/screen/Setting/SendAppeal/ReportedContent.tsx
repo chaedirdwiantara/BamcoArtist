@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import {useTranslation} from 'react-i18next';
 import {ms, mvs} from 'react-native-size-matters';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
@@ -8,8 +8,11 @@ import {width} from '../../../utils';
 import {color, font} from '../../../theme';
 import {ArrowLeftIcon} from '../../../assets/icon';
 import {RootStackParams} from '../../../navigations';
-import {CommentAppeal, TopNavigation} from '../../../components';
-import {CommentReportedType} from '../../../interface/setting.interface';
+import {CommentAppeal, PostAppeal, TopNavigation} from '../../../components';
+import {
+  CommentReportedType,
+  PostReportedType,
+} from '../../../interface/setting.interface';
 
 type ReportedContentProps = NativeStackScreenProps<
   RootStackParams,
@@ -26,7 +29,7 @@ export const ReportedContentScreen: React.FC<ReportedContentProps> = ({
     navigation.goBack();
   };
 
-  const goToSendAppeal = (val: CommentReportedType) => {
+  const goToSendAppeal = (val: CommentReportedType | PostReportedType) => {
     setSelectedContent(val.reportedViolationId);
     navigation.navigate('SendAppeal', {title, selectedViolation: val});
   };
@@ -51,21 +54,35 @@ export const ReportedContentScreen: React.FC<ReportedContentProps> = ({
         <Text style={styles.subtitle}>
           {t('Setting.SendAppeal.ReportedContent.Subtitle')}
         </Text>
-        {dataViolation.commentReported.map((val, i) => (
-          <CommentAppeal
-            key={i}
-            isSelected={val.reportedViolationId === selectedContent}
-            fullname={val.commentOwner.fullname}
-            username={val.commentOwner.username}
-            repliedTo={val.repliedTo}
-            postDate={val.timeAgo}
-            caption={val.caption}
-            likesCount={val.likesCount}
-            commentsCount={val.commentsCount}
-            onPressSelected={() => goToSendAppeal(val)}
-            containerStyles={{marginBottom: mvs(15)}}
-          />
-        ))}
+
+        <ScrollView showsVerticalScrollIndicator={false}>
+          {/* // post violation */}
+          {dataViolation.postReported.map((val, i) => (
+            <PostAppeal
+              key={i}
+              data={val}
+              onPressSelected={() => goToSendAppeal(val)}
+              containerStyles={{marginBottom: mvs(15)}}
+            />
+          ))}
+
+          {/* // comment violation */}
+          {dataViolation.commentReported.map((val, i) => (
+            <CommentAppeal
+              key={i}
+              isSelected={val.reportedViolationId === selectedContent}
+              fullname={val.commentOwner.fullname}
+              username={val.commentOwner.username}
+              repliedTo={val.repliedTo}
+              postDate={val.timeAgo}
+              caption={val.caption}
+              likesCount={val.likesCount}
+              commentsCount={val.commentsCount}
+              onPressSelected={() => goToSendAppeal(val)}
+              containerStyles={{marginBottom: mvs(15)}}
+            />
+          ))}
+        </ScrollView>
       </View>
     </View>
   );

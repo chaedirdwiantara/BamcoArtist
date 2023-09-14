@@ -1,10 +1,11 @@
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet, View, ViewStyle} from 'react-native';
 import React, {FC} from 'react';
 import PostCard from './PostCardAppeal';
 import ChildrenPostCard from './ChildrenPost';
 import {PostList} from '../../../../interface/feed.interface';
 import ChoiceIconAppeal from '../ChildrenCard/ChoiceIcon';
 import {Gap} from '../../../atom';
+import {PostReportedType} from '../../../../interface/setting.interface';
 
 // TODO: CHANGE THE DUMMY DATA LATER YA BAMBANG
 const dataDummy: PostList = {
@@ -95,7 +96,11 @@ const dataDummy: PostList = {
 };
 
 interface PostAppeal {
-  data: PostList;
+  data: PostReportedType;
+  onPressSelected?: () => void;
+  isSelected?: boolean;
+  hideChoiceIcon?: boolean;
+  containerStyles?: ViewStyle;
 }
 
 const PostAppeal: FC<PostAppeal> = (props: PostAppeal) => {
@@ -106,15 +111,15 @@ const PostAppeal: FC<PostAppeal> = (props: PostAppeal) => {
       <Gap width={12} />
       <View style={styles.componentStyle}>
         <PostCard
-          musicianName={dataDummy.musician.fullname}
-          musicianId="123"
-          postDate="27 Des 2022"
-          likeCount={20}
-          commentCount={21}
+          musicianName={data.musician.fullname}
+          musicianId={data.musician.uuid}
+          postDate={data.timeAgo}
+          likeCount={data.likesCount}
+          commentCount={data.commentsCount}
           category="Backstate"
           isPremium
-          viewCount={3}
-          shareCount={9}
+          viewCount={data.viewsCount}
+          shareCount={data.shareCount}
           children={<ChildrenPostCard data={dataDummy} />}
         />
       </View>

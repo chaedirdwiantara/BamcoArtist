@@ -16,11 +16,12 @@ import VideoComp from '../../VideoPlayer/videoComp';
 import ImageModal from '../../../../screen/Detail/ImageModal';
 import {color, font} from '../../../../theme';
 import MusicPreviewAppeal from '../ChildrenCard/MusicPreview';
+import {PostReportedType} from '../../../../interface/setting.interface';
 
 export const {width} = Dimensions.get('screen');
 
 interface ChildrenPostCardProps {
-  data: PostList;
+  data: PostReportedType;
   imgWidth?: number;
   imgWidth2?: number;
 }
