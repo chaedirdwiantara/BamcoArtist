@@ -75,7 +75,7 @@ export const listPostExclusive = async (
   props?: ParamsProps,
 ): Promise<ListPostResponseType> => {
   const {data} = await SsuAPI().request<ListPostResponseType>({
-    url: '/musician-app/posts/premium',
+    url: '/musician-app/post/premium',
     method: 'GET',
     params: props,
   });
