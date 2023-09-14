@@ -154,6 +154,12 @@ export const dropDownDataSort: DropDownSortType[] = [
   {label: 'Feed.Sort.Popular', value: '2'},
 ];
 
+export const dropDownDataFilterBy: DropDownSortType[] = [
+  {label: 'Feed.FilterBy.All', value: 'all'},
+  {label: 'Feed.FilterBy.Exclusive', value: 'exclusive'},
+  {label: 'Feed.FilterBy.Public', value: 'public'},
+];
+
 export const dropDownDataSubscription: DataDropDownType[] = [
   {label: 'Setting.Tips.Filter.All', value: ''},
   {label: 'Setting.Tips.Filter.Weekly', value: 'weekly'},

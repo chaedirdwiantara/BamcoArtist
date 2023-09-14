@@ -181,16 +181,17 @@ export const TopUpCreditContent: React.FC<TopUpCreditProps> = ({
           <>
             {isLoading ? null : dataHistory && dataHistory.data.length > 0 ? (
               <View style={styles.containerContent}>
-                {dataHistory.data.map((val, i) => (
-                  <TransactionCard
-                    key={i}
-                    title={t('TopUp.Transaction.SuccessPurchased', {
-                      credit: toCurrency(val.credit, {withFraction: false}),
-                    })}
-                    date={dateLongMonth(val.createdAt)}
-                    onPress={() => goToDetailTransaction(val)}
-                  />
-                ))}
+                {dataHistory &&
+                  dataHistory.data.map((val, i) => (
+                    <TransactionCard
+                      key={i}
+                      title={t('TopUp.Transaction.SuccessPurchased', {
+                        credit: toCurrency(val.credit, {withFraction: false}),
+                      })}
+                      date={dateLongMonth(val.createdAt)}
+                      onPress={() => goToDetailTransaction(val)}
+                    />
+                  ))}
               </View>
             ) : (
               <EmptyState

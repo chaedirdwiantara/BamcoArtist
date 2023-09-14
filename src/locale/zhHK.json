@@ -174,7 +174,8 @@
       "ThirdCard": "My Exclusive Post",
       "FourthCard": "My Album",
       "FifthCard": "My Songs",
-      "SixthCard": "My Income"
+      "SixthCard": "My Income",
+      "HideAnalytics": "Hide"
     },
     "CreateNewPost": "Create New Post",
     "Topbar": {
@@ -433,6 +434,12 @@
       "Latest": "最新的",
       "Popular": "最新的"
     },
+    "FilterBy":{
+      "Title": "Filter by",
+      "All": "All",
+      "Exclusive": "Exclusive",
+      "Public": "Public"
+    },
     "NoMore": "No more feeds"
   },
   "Event": {
@@ -575,7 +582,7 @@
     "Tab": {
       "Profile": "人資料",
       "Main": "MAIN",
-      "Musician": "MUSICIAN",
+      "Musician": "POST",
       "Music": "MUSIC",
       "Fans": "樂迷",
       "Merchandise": "MERCHANDISE",

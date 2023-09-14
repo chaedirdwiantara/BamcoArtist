@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import {mvs} from 'react-native-size-matters';
 import {
+  DropDownFilter,
   Gap,
   ListCard,
   ModalConfirm,
@@ -44,21 +45,30 @@ import {
   likePressedOnFeed,
   likesCountInFeed,
   playSongOnFeed,
+  useCategoryFilter,
   useGetCreditCount,
   useGetDataOnMount,
   useRefreshingEffect,
   useSetDataToMainData,
+  useSortByFilter,
   useStopRefreshing,
+  useSortFilterPostType,
 } from './ListUtils/ListFunction';
 import Clipboard from '@react-native-community/clipboard';
 import {imageShare} from '../../utils/share';
 import {useShareHook} from '../../hooks/use-share.hook';
-import {DataDropDownType} from '../../data/dropdown';
+import {
+  DataDropDownType,
+  dropDownDataCategory,
+  dropDownDataFilterBy,
+} from '../../data/dropdown';
 import {useReportHook} from '../../hooks/use-report.hook';
 import {feedReportRecorded} from '../../store/idReported';
 import {ReportParamsProps} from '../../interface/report.interface';
 import {ModalReport} from '../../components/molecule/Modal/ModalReport';
 import {reportingMenu} from '../../data/report';
+import {useVideoStore} from '../../store/video.store';
+import {useUploadImageHook} from '../../hooks/use-uploadImage.hook';
 
 const {height} = Dimensions.get('screen');
 
@@ -79,6 +89,8 @@ const PostListProfile: FC<PostListProps> = (props: PostListProps) => {
 
   const dataToExc = {coverImage, title, description};
 
+  const {setUriVideo} = useVideoStore();
+
   const [recorder, setRecorder] = useState<string[]>([]);
   const [selectedId, setSelectedId] = useState<string[]>();
   const [modalShare, setModalShare] = useState<boolean>(false);
@@ -95,6 +107,12 @@ const PostListProfile: FC<PostListProps> = (props: PostListProps) => {
   const [uuid, setUuid] = useState<string>();
   const [refreshing, setRefreshing] = useState<boolean>(false);
   const [modalConfirm, setModalConfirm] = useState(false);
+  const [selectedFilterMenu, setSelectedFilterMenu] =
+    useState<DataDropDownType>();
+  const [selectedCategoryMenu, setSelectedCategoryMenu] =
+    useState<DataDropDownType>();
+  const [filterByValue, setFilterByValue] = useState<string>();
+  const [categoryValue, setCategoryValue] = useState<string>();
 
   //* MUSIC HOOKS
   const [pauseModeOn, setPauseModeOn] = useState<boolean>(false);
@@ -114,6 +132,8 @@ const PostListProfile: FC<PostListProps> = (props: PostListProps) => {
     setLikePost,
     setUnlikePost,
     getListProfilePost,
+    setDataCreatePost,
+    setDeletePost,
   } = useFeedHook();
 
   const {
@@ -134,6 +154,8 @@ const PostListProfile: FC<PostListProps> = (props: PostListProps) => {
     selectedSharePost,
   } = useShareHook();
 
+  const {setDataVideo} = useUploadImageHook();
+
   const {creditCount, getCreditCount} = useCreditHook();
   const MyUuid = profileStorage()?.uuid;
 
@@ -148,14 +170,47 @@ const PostListProfile: FC<PostListProps> = (props: PostListProps) => {
     setPage,
   );
 
-  //* call when refreshing
+  const noPostYetMessage = "Musician don't have any post";
 
+  //* call when refreshing
   useRefreshingEffect(refreshing, getListProfilePost, getCreditCount, perPage);
 
   useStopRefreshing(feedIsLoading, setRefreshing);
 
+  //? set no data into main cz of message
+  useEffect(() => {
+    if (dataPostList?.length === 0 && feedMessage === noPostYetMessage) {
+      setDataMain(dataPostList);
+    }
+  }, [dataPostList, feedMessage]);
+
   //* set response data list post to main data
   useSetDataToMainData(dataPostList, filterActive, dataMain, setDataMain);
+
+  //* hit sort by endpoint
+  useSortFilterPostType(
+    selectedFilterMenu?.label,
+    getListProfilePost,
+    perPage,
+    page,
+    categoryValue,
+    setFilterActive,
+    setFilterByValue,
+    uuidMusician,
+  );
+
+  //* hit category endpoint
+  useCategoryFilter(
+    selectedCategoryMenu?.label,
+    getListProfilePost,
+    perPage,
+    page,
+    filterByValue,
+    selectedCategoryMenu?.value,
+    setFilterActive,
+    setCategoryValue,
+    uuidMusician,
+  );
 
   //* Handle when end of Scroll
   const handleEndScroll = () => {
@@ -264,6 +319,19 @@ const PostListProfile: FC<PostListProps> = (props: PostListProps) => {
       const selectedValue = t(selectedMenuPost.value);
 
       switch (selectedValue) {
+        case '1':
+          setUriVideo(null);
+          setDataCreatePost(null);
+          setDataVideo(undefined);
+          let dataSelected = dataMain.filter(
+            data => data.id === selectedIdPost,
+          );
+          navigation.navigate('CreatePost', {postData: dataSelected[0]});
+          break;
+        case '2':
+          setDeletePost({id: selectedIdPost});
+          setDataMain(dataMain.filter(data => data.id !== selectedIdPost));
+          break;
         case '11':
           navigation.navigate('MusicianProfile', {
             id: selectedUserUuid,
@@ -336,12 +404,41 @@ const PostListProfile: FC<PostListProps> = (props: PostListProps) => {
 
   return (
     <>
+      <View style={styles.filterContainer}>
+        <DropDownFilter
+          labelCaption={
+            selectedFilterMenu
+              ? t(selectedFilterMenu.label)
+              : t('Feed.FilterBy.Title')
+          }
+          dataFilter={dropDownDataFilterBy}
+          selectedMenu={setSelectedFilterMenu}
+          leftPosition={widthResponsive(-59)}
+          containerStyle={{
+            marginTop: widthResponsive(20),
+            marginBottom: widthResponsive(20),
+          }}
+        />
+        <DropDownFilter
+          labelCaption={
+            selectedCategoryMenu
+              ? t(selectedCategoryMenu.label)
+              : t('Home.Tab.TopPost.Category.Title')
+          }
+          dataFilter={dropDownDataCategory}
+          selectedMenu={setSelectedCategoryMenu}
+          leftPosition={widthResponsive(-140)}
+          containerStyle={{
+            marginTop: widthResponsive(20),
+            marginBottom: widthResponsive(20),
+          }}
+        />
+      </View>
       {dataMain !== null && dataMain.length !== 0 ? (
         <View
           style={{
             flex: 1,
             marginHorizontal: widthResponsive(-24),
-            marginTop: widthResponsive(24),
           }}>
           {refreshing && (
             <View style={styles.loadingContainer}>
@@ -451,10 +548,9 @@ const PostListProfile: FC<PostListProps> = (props: PostListProps) => {
         </View>
       ) : dataMain?.length === 0 && feedMessage === 'you not follow anyone' ? (
         <ListToFollowMusician />
-      ) : dataMain?.length === 0 &&
-        feedMessage === `Musician don't have any post` ? (
+      ) : (
         <Text style={styles.emptyState}>{t('EmptyState.Musician')}</Text>
-      ) : null}
+      )}
       <ModalReport
         modalVisible={reportToast}
         onPressClose={() => setReportToast(false)}
@@ -527,6 +623,12 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginTop: heightResponsive(10),
     marginBottom: heightResponsive(8),
+  },
+  filterContainer: {
+    width: '100%',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    backgroundColor: color.Dark[800],
   },
   childrenPostTitle: {
     flexShrink: 1,

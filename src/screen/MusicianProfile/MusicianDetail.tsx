@@ -53,7 +53,6 @@ import MerchList from '../ListCard/MerchList';
 import ConcertList from '../ListCard/ConcertList';
 import EventMusician from '../../components/molecule/EventMusician';
 import {useBlockHook} from '../../hooks/use-block.hook';
-import {blockUserRecorded} from '../../store/blockUser.store';
 import BlockProfileUI from '../../components/molecule/BlockOnProfile';
 import {
   DataDropDownType,
@@ -103,10 +102,11 @@ export const MusicianDetail: React.FC<MusicianDetailProps> = ({
     blockError,
     blockResponse,
     unblockResponse,
+    setBlockResponse,
+    setUnblockResponse,
     setBlockUser,
     setUnblockUser,
   } = useBlockHook();
-  const {uuidBlocked, setuuidBlocked} = blockUserRecorded();
 
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [scrolEffect, setScrollEffect] = useState(false);
@@ -126,7 +126,7 @@ export const MusicianDetail: React.FC<MusicianDetailProps> = ({
   const [modalUnblock, setModalUnblock] = useState<boolean>(false);
   const [modalBlock, setModalBlock] = useState<boolean>(false);
   const [toastUnblock, settoastUnblock] = useState<boolean>(false);
-  const [toastBlockSucceed, setToastBlockSucceed] = useState<boolean>(false);
+  const [toastBlock, setToastBlock] = useState<boolean>(false);
 
   const showPopUp: boolean | undefined = storage.getBoolean('showPopUp');
 
@@ -198,15 +198,17 @@ export const MusicianDetail: React.FC<MusicianDetailProps> = ({
   //! BLOCK/UNBLOCK AREA
   useEffect(() => {
     if (blockResponse === 'Success') {
-      setToastBlockSucceed(true);
       setRefreshing!();
+      setToastBlock(true);
+      setBlockResponse(undefined);
     }
   }, [blockResponse]);
 
   useEffect(() => {
     if (unblockResponse === 'Success') {
-      settoastUnblock(true);
       setRefreshing!();
+      settoastUnblock(true);
+      setUnblockResponse(undefined);
     }
   }, [unblockResponse]);
 
@@ -220,8 +222,11 @@ export const MusicianDetail: React.FC<MusicianDetailProps> = ({
   };
 
   const handleToastUnblock = () => {
-    setuuidBlocked(uuidBlocked.filter(x => x !== profile.uuid));
     settoastUnblock(false);
+  };
+
+  const handleToastBlock = () => {
+    setToastBlock(false);
   };
 
   const blockModalOnPress = () => {
@@ -517,8 +522,8 @@ export const MusicianDetail: React.FC<MusicianDetailProps> = ({
       )}
       {/* //? When block succeed */}
       <SuccessToast
-        toastVisible={toastBlockSucceed}
-        onBackPressed={() => setToastBlockSucceed(false)}
+        toastVisible={toastBlock}
+        onBackPressed={handleToastBlock}
         caption={`${t('General.BlockSucceed')} @${profile.fullname}`}
       />
 

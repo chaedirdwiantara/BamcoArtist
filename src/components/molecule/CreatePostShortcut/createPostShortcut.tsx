@@ -3,7 +3,11 @@ import React, {FC} from 'react';
 import {Avatar, Gap, SsuInput} from '../../atom';
 import {color, font} from '../../../theme';
 import {widthResponsive} from '../../../utils';
-import {ImportMusicIcon, ImportPhotoIcon} from '../../../assets/icon';
+import {
+  AddVoteIcon,
+  ImportMusicIcon,
+  ImportPhotoIcon,
+} from '../../../assets/icon';
 import {ms, mvs} from 'react-native-size-matters';
 
 interface CreatePostShortcutProps {
@@ -31,11 +35,15 @@ const CreatePostShortcut: FC<CreatePostShortcutProps> = (
       <View style={styles.buttonContainer}>
         <View style={{flexDirection: 'row'}}>
           <TouchableOpacity onPress={compOnPress}>
-            <ImportPhotoIcon />
+            <ImportPhotoIcon fill={color.Pink[200]} />
           </TouchableOpacity>
           <Gap width={16} />
           <TouchableOpacity onPress={compOnPress}>
-            <ImportMusicIcon />
+            <ImportMusicIcon fill={color.Pink[200]} />
+          </TouchableOpacity>
+          <Gap width={16} />
+          <TouchableOpacity onPress={compOnPress}>
+            <AddVoteIcon fill={color.Pink[200]} />
           </TouchableOpacity>
         </View>
         <TouchableOpacity onPress={compOnPress} style={styles.buttonPost}>
@@ -51,11 +59,11 @@ export default CreatePostShortcut;
 
 const styles = StyleSheet.create({
   container: {
-    borderTopWidth: 1,
-    borderBottomWidth: 1,
-    borderTopColor: color.Dark[500],
-    borderBottomColor: color.Dark[500],
-    paddingHorizontal: widthResponsive(24),
+    borderWidth: 1,
+    borderColor: color.Dark[500],
+    marginHorizontal: widthResponsive(22),
+    paddingHorizontal: widthResponsive(12),
+    borderRadius: 4,
   },
   inputStyle: {
     flexDirection: 'row',
