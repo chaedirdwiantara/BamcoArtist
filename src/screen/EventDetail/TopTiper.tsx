@@ -2,29 +2,45 @@ import React, {FC, useEffect, useState} from 'react';
 import {ScrollView, View} from 'react-native';
 import {useTranslation} from 'react-i18next';
 import {mvs} from 'react-native-size-matters';
-import {MusicianList} from '../../interface/musician.interface';
-import {ListDataSearchMusician} from '../../interface/search.interface';
 import LoadingSpinner from '../../components/atom/Loading/LoadingSpinner';
 import {EmptyStateSongMusician} from '../../components/molecule/EmptyState/EmptyStateSongMusician';
 import ModalTipped from '../../components/molecule/Modal/ModalTipped';
 import MusiciansListCard from '../../components/molecule/ListCard/MusiciansListCard';
+import {useEventHook} from '../../hooks/use-event.hook';
+import {EventTopTipper} from '../../interface/event.interface';
 
 interface TopTiperProps {
-  dataTipper?: MusicianList[] | ListDataSearchMusician[];
+  dataTipper?: EventTopTipper[];
+  eventId: string;
   isLoading?: boolean;
 }
 
-const TopTiper: FC<TopTiperProps> = ({dataTipper, isLoading}) => {
+const TopTiper: FC<TopTiperProps> = ({dataTipper, isLoading, eventId}) => {
   const {t} = useTranslation();
+
+  const {useEventMusicianTipped} = useEventHook();
   const [listTipper, setListTipper] = useState(dataTipper);
   const [showTipped, setShowTipped] = useState<boolean>(false);
+  const [tipper, setTipper] = useState<EventTopTipper>();
+
+  const {
+    data: dataTipped,
+    refetch: refetchTipped,
+    isLoading: isLoadingTipped,
+    isRefetching: isRefetchingTipped,
+  } = useEventMusicianTipped(tipper?.tipperUUID ?? '', eventId);
 
   useEffect(() => {
     if (dataTipper !== undefined) {
       setListTipper(dataTipper);
-      console.log(dataTipper);
     }
   }, [dataTipper]);
+
+  useEffect(() => {
+    if (tipper !== undefined) {
+      refetchTipped();
+    }
+  }, [tipper]);
 
   return (
     <>
@@ -43,18 +59,21 @@ const TopTiper: FC<TopTiperProps> = ({dataTipper, isLoading}) => {
           {listTipper?.map((item, index) => {
             return (
               <MusiciansListCard
-                key={item.uuid}
+                key={item.tipperUUID}
                 musicianNum={(index + 1).toLocaleString('en-US', {
                   minimumIntegerDigits: 2,
                   useGrouping: false,
                 })}
-                musicianName={item.fullname}
-                imgUri={item.imageProfileUrls[1]?.image || ''}
+                musicianName={item.tipperFullname}
+                imgUri={item.tipperImage || ''}
                 containerStyles={{marginTop: mvs(18)}}
                 activeMore={false}
                 showCredit={true}
-                creditCount={1000}
-                onPressImage={() => setShowTipped(true)}
+                creditCount={item.totalDonation}
+                onPressImage={() => {
+                  setTipper(item);
+                  setShowTipped(true);
+                }}
                 onPressMore={() => null}
               />
             );
@@ -71,7 +90,9 @@ const TopTiper: FC<TopTiperProps> = ({dataTipper, isLoading}) => {
         title={t('Event.Detail.TipDistribution')}
         secondTitle={t('Event.Detail.MusicianTipped')}
         onPressClose={() => setShowTipped(false)}
-        tipper={listTipper?.[0]}
+        tipper={tipper}
+        musicianTipped={dataTipped?.data}
+        isLoading={isLoadingTipped || isRefetchingTipped}
       />
     </>
   );

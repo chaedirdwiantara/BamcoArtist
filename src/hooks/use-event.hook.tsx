@@ -3,6 +3,8 @@ import {
   fetchListOrder,
   getEventDetail,
   getEventLineUp,
+  getEventMusicianTipped,
+  getEventTopTipper,
   listConcert,
   listEventMusician,
   listMerch,
@@ -86,6 +88,30 @@ export const useEventHook = () => {
     );
   };
 
+  const useEventTopTipper = (events: string, params?: ParamsProps) => {
+    return useQuery(
+      [`event/detail/toptipper/${events}`],
+      () => getEventTopTipper(events, params),
+      {
+        enabled: false,
+      },
+    );
+  };
+
+  const useEventMusicianTipped = (
+    tipperuuid: string,
+    event_id: string,
+    params?: ParamsProps,
+  ) => {
+    return useQuery(
+      [`event/detail/toptipper/${tipperuuid}/${event_id}`],
+      () => getEventMusicianTipped(tipperuuid, event_id, params),
+      {
+        enabled: false,
+      },
+    );
+  };
+
   const useOrderListBookYay = (
     token: string,
     totalPage: number,
@@ -123,5 +149,7 @@ export const useEventHook = () => {
     useEventDetail,
     useEventLineUp,
     useOrderListBookYay,
+    useEventTopTipper,
+    useEventMusicianTipped,
   };
 };
