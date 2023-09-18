@@ -465,7 +465,7 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
     setDataReport(false);
     setReportSuccessToast(false);
   };
-  // ! END OF REPORT POST AREA
+  // ! END OF REPORT POST AREAS
 
   // SHARE LINK
   useEffect(() => {
