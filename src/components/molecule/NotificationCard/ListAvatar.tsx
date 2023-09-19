@@ -150,7 +150,7 @@ export const ListAvatar: React.FC<ListAvatarProps> = (
       )}
 
       <View style={{width: '100%', maxWidth: '90%'}}>
-        <Text style={styles.fullname} numberOfLines={4}>
+        <Text style={styles.fullname} numberOfLines={8}>
           {renderDesc(desc)}
         </Text>
       </View>
