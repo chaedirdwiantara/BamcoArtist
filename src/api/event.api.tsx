@@ -6,6 +6,7 @@ import {
   EventMusicianTippedResponse,
   EventTopTipperResponse,
   MerchListResponse,
+  MusicianStatusResponse,
   OrderListBookyay,
   SearchEventInput,
 } from '../interface/event.interface';
@@ -137,6 +138,18 @@ export const getEventMusicianTipped = async (
       filter_value: event_id,
       ...props,
     },
+  });
+
+  return data;
+};
+
+export const getStatusLiveMusician = async (
+  eventId: string,
+  musicianId: string,
+): Promise<MusicianStatusResponse> => {
+  const {data} = await RinjaniAPI().request<MusicianStatusResponse>({
+    url: `/events/${eventId}/check-musician-live/${musicianId}`,
+    method: 'GET',
   });
 
   return data;

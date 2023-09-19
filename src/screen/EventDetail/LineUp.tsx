@@ -15,9 +15,10 @@ import {RootStackParams} from '../../navigations';
 interface EventLineUpInterface {
   dataLineUp?: EventLineUp[];
   isLoading?: boolean;
+  eventId: string;
 }
 
-const LineUp: FC<EventLineUpInterface> = ({dataLineUp, isLoading}) => {
+const LineUp: FC<EventLineUpInterface> = ({dataLineUp, isLoading, eventId}) => {
   const {t} = useTranslation();
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
@@ -52,20 +53,26 @@ const LineUp: FC<EventLineUpInterface> = ({dataLineUp, isLoading}) => {
             musicianName={item?.musician?.fullname}
             imgUri={item?.musician?.image?.[1]?.image || ''}
             containerStyles={
-              item?.statusLineUpEvent === 'live'
+              item?.statusLineupEvent === 'live'
                 ? styles.musicianLive
                 : {marginTop: mvs(18)}
             }
             followerMode
             followersCount={item?.musician?.followers}
             activeMore={false}
-            isLive={item?.statusLineUpEvent === 'live'}
+            isLive={item?.statusLineupEvent === 'live'}
             onClickTip={() =>
-              navigation.push('LiveTipping', {id: item?.musician?.UUID})
+              navigation.push('LiveTipping', {
+                id: item?.musician?.UUID,
+                eventId: eventId,
+              })
             }
             onPressImage={() =>
               // navigation.push('MusicianProfile', {id: item?.musician?.UUID})
-              navigation.push('LiveTipping', {id: item?.musician?.UUID})
+              navigation.push('LiveTipping', {
+                id: item?.musician?.UUID,
+                eventId: eventId,
+              })
             }
             onPressMore={() => null}
           />

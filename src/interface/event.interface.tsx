@@ -258,7 +258,7 @@ export interface EventLineUp {
     followers: number;
   };
   totalTipping: number;
-  statusLineUpEvent: string;
+  statusLineupEvent: string;
 }
 
 export interface EventListInterface {
@@ -317,4 +317,8 @@ export interface EventMusicianTippedResponse extends BaseResponseApi {
     TotalData: number;
     TotalPage: number;
   };
+}
+
+export interface MusicianStatusResponse extends BaseResponseApi {
+  data: boolean;
 }

@@ -366,7 +366,7 @@ export type RootStackParams = {
   EventDetail: {
     id: string;
   };
-  LiveTipping: {id: string};
+  LiveTipping: {id: string; eventId: string};
   ClaimReward: {id: string};
   TransactionDetail: {
     id: string;

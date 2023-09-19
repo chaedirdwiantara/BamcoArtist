@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useCallback, useEffect, useRef, useState} from 'react';
+import React, {FC, useCallback, useEffect, useRef, useState} from 'react';
 import Color from '../theme/Color';
 import {AvatarProfile, Gap, ModalCustom, TopNavigation} from '../components';
 import {ArrowLeftIcon, ChevronUp, LiveIcon} from '../assets/icon';
@@ -27,6 +27,10 @@ import {useMusicianHook} from '../hooks/use-musician.hook';
 import {useProfileHook} from '../hooks/use-profile.hook';
 import {useCreditHook} from '../hooks/use-credit.hook';
 import {ModalLoading} from '../components/molecule/ModalLoading/ModalLoading';
+import BackgroundService from 'react-native-background-actions';
+import {liveTipping} from '../api/credit.api';
+import {storage} from '../hooks/use-storage.hook';
+import {useEventHook} from '../hooks/use-event.hook';
 
 type LiveTippingProps = NativeStackScreenProps<RootStackParams, 'LiveTipping'>;
 
@@ -35,14 +39,16 @@ export const LiveTipping: FC<LiveTippingProps> = ({
   navigation,
 }: LiveTippingProps) => {
   const uuid = route.params.id;
+  const eventId = route.params.eventId;
   const {t} = useTranslation();
   const {isLoadingMusician, dataDetailMusician, getDetailMusician} =
     useMusicianHook();
   const {dataCountProfile, getTotalCountProfile} = useProfileHook();
   const {creditCount, getCreditCount} = useCreditHook();
+  const {useEventMusicianLiveStatus} = useEventHook();
 
   const [showModalEmpty, setShowModalEmpty] = useState<boolean>(false);
-  const [showModalSession, _setShowModalSession] = useState<boolean>(false);
+  const [showModalSession, setShowModalSession] = useState<boolean>(false);
   const [showMoney, setShowMoney] = useState<boolean>(true);
   const [opacityMoney, setOpacityMoney] = useState<number>(1);
   const [onSwipe, setOnSwipe] = useState<boolean>(false);
@@ -50,7 +56,8 @@ export const LiveTipping: FC<LiveTippingProps> = ({
   const [showSwipeText, setShowSwipeText] = useState(true);
   const [credit, setCredit] = useState<number>(creditCount);
   const [counter, setCounter] = useState<number>(0);
-  const [disabledSwipe, setDisabledSwipe] = useState<boolean>(creditCount <= 0);
+  const [counterTipping, setCounterTipping] = useState<number>(0);
+  const [disabledSwipe, setDisabledSwipe] = useState<boolean>(false);
   const [moneyBatchURL, setMoneyBatchURL] = useState<ImageSourcePropType>(
     require('../assets/image/money-batch.png'),
   );
@@ -63,21 +70,20 @@ export const LiveTipping: FC<LiveTippingProps> = ({
     navigation.goBack();
   };
 
-  const infoProfileArtist = [
-    {
-      point: 4100,
-      title: t('Musician.Label.Fans'),
-    },
-    {
-      point: 18300,
-      title: t('Musician.Label.Followers'),
-    },
-    {
-      point: 91200,
-      title: t('Musician.Label.Releases'),
-    },
-  ];
+  const {data: dataStatus, refetch: refetchStatus} = useEventMusicianLiveStatus(
+    eventId,
+    uuid,
+  );
 
+  useEffect(() => {
+    refetchStatus();
+  }, []);
+
+  useEffect(() => {
+    setShowModalSession(!dataStatus?.data as boolean);
+  }, [dataStatus]);
+
+  // TODO: change with response from API
   const rank = [
     {
       rank: 1,
@@ -123,16 +129,18 @@ export const LiveTipping: FC<LiveTippingProps> = ({
     if (counter >= 50) {
       setDisabledSwipe(true);
       setMoneyURL(require('../assets/image/money-onfire.png'));
+    }
 
-      getCreditCount();
-      // TODO: set after creditcount successfully changed or on background
-      setTimeout(() => {
+    const timeoutCounter = setTimeout(() => {
+      if (counter > 0) {
+        getCreditCount();
         setCounter(0);
         setDisabledSwipe(false);
         setMoneyBatchURL(require('../assets/image/money-batch.png'));
         setMoneyURL(require('../assets/image/money.png'));
-      }, 3000);
-    }
+      }
+    }, 3000);
+    return () => clearTimeout(timeoutCounter);
   }, [counter]);
 
   useEffect(() => {
@@ -168,6 +176,72 @@ export const LiveTipping: FC<LiveTippingProps> = ({
     }, [uuid]),
   );
 
+  const sleep = (time: any) => {
+    return new Promise<void>(resolve => setTimeout(() => resolve(), time));
+  };
+
+  const veryIntensiveTask = async (taskDataArguments?: any) => {
+    const {delay} = taskDataArguments;
+    await new Promise(async (_resolve: any) => {
+      for (let i = 0; BackgroundService.isRunning(); i++) {
+        if (i === 4) {
+          setCounterTipping(0);
+          await sendTipping();
+          getCreditCount();
+          stopBgService();
+        }
+        await sleep(delay);
+      }
+    });
+  };
+
+  const options: any = {
+    taskName: 'Live Tipping',
+    taskTitle: dataDetailMusician?.fullname,
+    taskDesc: dataDetailMusician?.about,
+    taskIcon: {
+      name: 'ic_launcher',
+      type: 'mipmap',
+    },
+    color: '#ff00ff',
+    linkingURI: '',
+    parameters: {
+      delay: 1000,
+    },
+  };
+
+  const startBgService = async () => {
+    if (!BackgroundService.isRunning()) {
+      await BackgroundService.start(veryIntensiveTask, options);
+      await BackgroundService.updateNotification({
+        taskDesc: 'Live Tipping',
+      });
+    }
+  };
+
+  const stopBgService = async () => {
+    await BackgroundService.stop();
+  };
+
+  const sendTipping = async () => {
+    await liveTipping({
+      ownerId: dataDetailMusician?.uuid ?? '',
+      ownerUserName: dataDetailMusician?.username ?? '',
+      ownerFullName: dataDetailMusician?.fullname ?? '',
+      ownerImage:
+        dataDetailMusician?.imageProfileUrls?.length === 0
+          ? ''
+          : (dataDetailMusician?.imageProfileUrls[0].image as string),
+      eventId: eventId,
+      counter: storage.getNumber('counterTipping') ?? 0,
+      credit: 1,
+    });
+  };
+
+  useEffect(() => {
+    if (counterTipping > 0) storage.set('counterTipping', counterTipping);
+  }, [counterTipping]);
+
   return (
     <View style={styles.root}>
       <TopNavigation.Type4
@@ -202,9 +276,9 @@ export const LiveTipping: FC<LiveTippingProps> = ({
             <AvatarProfile
               initialName={initialname(dataDetailMusician?.fullname ?? '')}
               imgUri={
-                dataDetailMusician?.imageProfileUrls.length !== 0
-                  ? dataDetailMusician?.imageProfileUrls[1].image
-                  : ''
+                dataDetailMusician?.imageProfileUrls?.length === 0
+                  ? ''
+                  : (dataDetailMusician?.imageProfileUrls[0].image as string)
               }
               onPress={() => null}
             />
@@ -216,12 +290,15 @@ export const LiveTipping: FC<LiveTippingProps> = ({
                   position: 'relative',
                 },
               ]}>
-              <View style={styles.containerIconLive}>
-                <LiveIcon
-                  width={widthResponsive(20)}
-                  height={heightResponsive(20)}
-                />
-              </View>
+              {dataStatus?.data && (
+                <View style={styles.containerIconLive}>
+                  <LiveIcon
+                    width={widthResponsive(20)}
+                    height={heightResponsive(20)}
+                  />
+                </View>
+              )}
+
               <Text
                 style={[
                   Typography.Heading6,
@@ -240,7 +317,7 @@ export const LiveTipping: FC<LiveTippingProps> = ({
             </Text>
           </TouchableOpacity>
 
-          <Gap height={heightResponsive(14)} />
+          <Gap height={heightResponsive(4)} />
 
           <Text
             style={[
@@ -287,7 +364,7 @@ export const LiveTipping: FC<LiveTippingProps> = ({
             </TouchableOpacity>
           </View>
 
-          <Gap height={heightResponsive(18)} />
+          <Gap height={heightResponsive(12)} />
 
           <View style={styles.rowCenter}>
             {rank.map((v, i) => {
@@ -327,30 +404,19 @@ export const LiveTipping: FC<LiveTippingProps> = ({
               maxX={widthResponsive(50)}
               minX={widthResponsive(50)}
               onDragRelease={(event, ges, bound) => {
-                if (event.nativeEvent.pageY < 400) {
+                if (showSwipeText) {
+                  setShowSwipeText(false);
+                }
+                if (credit > 0) {
                   setShowMoney(false);
                   setCredit(credit - 1);
                   setOnSwipe(true);
                   setCounter(counter + 1);
+                  setCounterTipping(counterTipping + 1);
+                  startBgService();
+                } else {
+                  setShowModalEmpty(true);
                 }
-              }}
-              onDrag={(event, ges) => {
-                if (showSwipeText) {
-                  setShowSwipeText(false);
-                }
-
-                setOpacityMoney(0.7);
-                // if (event.nativeEvent.pageY < 300) {
-                //   setOpacityMoney(0.1);
-                // } else if (event.nativeEvent.pageY < 400) {
-                //   setOpacityMoney(0.3);
-                // } else if (event.nativeEvent.pageY < 500) {
-                //   setOpacityMoney(0.5);
-                // } else if (event.nativeEvent.pageY < 600) {
-                //   setOpacityMoney(0.7);
-                // } else if (event.nativeEvent.pageY < 700) {
-                //   setOpacityMoney(0.9);
-                // }
               }}
               shouldReverse>
               {counter >= 50 && (
@@ -383,7 +449,7 @@ export const LiveTipping: FC<LiveTippingProps> = ({
                     <View style={{marginBottom: heightResponsive(-12)}}>
                       <ChevronUp />
                     </View>
-                    <ChevronUp fill="#FFF" />
+                    <ChevronUp />
                     <Text
                       style={[
                         Typography.Subtitle2,
@@ -481,6 +547,34 @@ export const LiveTipping: FC<LiveTippingProps> = ({
                 {t('Btn.Back')}
               </Text>
             </TouchableOpacity>
+          </View>
+        }
+      />
+
+      <ModalCustom
+        modalVisible={disabledSwipe}
+        children={
+          <View style={styles.modalContainer}>
+            <View style={styles.imageModalContainer}>
+              <Image source={require('../assets/image/glass-hour.png')} />
+            </View>
+            <Gap height={heightResponsive(16)} />
+            <Text
+              style={[
+                Typography.Body2,
+                {fontWeight: '700', color: '#FFF', textAlign: 'center'},
+              ]}>
+              {t('LiveTipping.TooFast')}
+            </Text>
+            <Gap height={heightResponsive(16)} />
+            <Text
+              style={[
+                Typography.Overline,
+                {color: '#BDBDBD', textAlign: 'center'},
+              ]}>
+              {t('LiveTipping.EnjoyShow')}
+            </Text>
+            <Gap height={heightResponsive(20)} />
           </View>
         }
       />

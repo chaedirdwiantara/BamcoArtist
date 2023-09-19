@@ -188,3 +188,13 @@ export type GetTransactionHistoryResponseType = {
   };
   status: number;
 };
+
+export type LiveTippingParams = {
+  ownerId: string;
+  ownerUserName: string;
+  ownerFullName: string;
+  eventId: string;
+  counter: number;
+  credit: number;
+  ownerImage: string;
+};
