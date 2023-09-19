@@ -272,7 +272,11 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
 
   //? set no data into main cz of message
   useEffect(() => {
-    if (dataTemporary?.length === 0 && feedMessage === noPostYetMessage) {
+    if (
+      dataTemporary?.length === 0 &&
+      feedMessage === noPostYetMessage &&
+      filterActive
+    ) {
       setDataMain(dataTemporary);
     }
   }, [dataTemporary, feedMessage]);
