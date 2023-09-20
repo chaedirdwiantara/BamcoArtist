@@ -2,31 +2,50 @@ import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {useTranslation} from 'react-i18next';
 import {mvs} from 'react-native-size-matters';
-import {useNavigation} from '@react-navigation/native';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
 
-import {
-  Gap,
-  Button,
-  SsuOTPInput,
-  SsuOTPTimer,
-  TopNavigation,
-} from '../../components';
 import {color, font} from '../../theme';
-import {width, widthPercentage} from '../../utils';
 import {ArrowLeftIcon} from '../../assets/icon';
 import {RootStackParams} from '../../navigations';
+import {width, widthPercentage} from '../../utils';
+import {profileStorage} from '../../hooks/use-storage.hook';
+import {useWithdrawHook} from '../../hooks/use-withdraw.hook';
 import {KeyboardShift} from '../../components/molecule/KeyboardShift';
 import RenderMessage from '../../components/molecule/OtpInput/RenderMessage';
+import {Gap, SsuOTPInput, SsuOTPTimer, TopNavigation} from '../../components';
 
-export const VerifCodeWithdrawalScreen: React.FC = () => {
+type WithdrawalProps = NativeStackScreenProps<
+  RootStackParams,
+  'VerifCodeWithdrawal'
+>;
+
+export const VerifCodeWithdrawalScreen: React.FC<WithdrawalProps> = ({
+  route,
+  navigation,
+}: WithdrawalProps) => {
+  const {type, data} = route.params;
   const timer = 30;
-  const navigation =
-    useNavigation<NativeStackNavigationProp<RootStackParams>>();
   const {t} = useTranslation();
+  const email = profileStorage()?.email;
+  const {isError, isOtpValid, confirmOtp} = useWithdrawHook();
 
   const onPressGoBack = () => {
     navigation.goBack();
+  };
+
+  const onCodeComplete = async (otp: string) => {
+    // type add & edit isActive = true, delete isActive = false
+    // type edit must send previous bank id
+    const payload = {
+      id: data?.bankId || 0,
+      isActive: type !== 'delete',
+      code: otp,
+      previousBank: type === 'edit' ? data?.previousBankId || 0 : 0,
+    };
+    try {
+      await confirmOtp(payload);
+      navigation.navigate('Withdrawal');
+    } catch (error) {}
   };
 
   return (
@@ -53,9 +72,7 @@ export const VerifCodeWithdrawalScreen: React.FC = () => {
             </Text>
             <Gap height={16} />
             <Text style={styles.descStyle}>
-              {t('Withdrawal.VerifCode.VerificationText', {
-                email: 'lorem@gmail.com',
-              })}
+              {t('Withdrawal.VerifCode.VerificationText', {email})}
             </Text>
           </View>
           <Gap height={18} />
@@ -63,25 +80,16 @@ export const VerifCodeWithdrawalScreen: React.FC = () => {
             hideIcon
             onCodeFilled={(result, code) => {
               if (result) {
-                // onCodeComplete(code);
+                onCodeComplete(code);
               }
             }}
           />
-          {/* {isError ? (
-        <RenderMessage otpSuccess={isOtpValid ? true : false} />
-      ) : null} */}
+          {isError ? (
+            <RenderMessage otpSuccess={isOtpValid ? true : false} />
+          ) : null}
 
-          {/* TODO: move out the props for success or error when resend otp */}
           <SsuOTPTimer action={() => {}} timer={timer} />
           <Gap height={4} />
-          <Button
-            type="border"
-            label="Back"
-            borderColor="transparent"
-            textStyles={{fontSize: mvs(14), color: color.Success[400]}}
-            containerStyles={{width: '100%'}}
-            onPress={onPressGoBack}
-          />
         </View>
       </View>
     </KeyboardShift>
@@ -96,8 +104,8 @@ const styles = StyleSheet.create({
   },
   otpTitleContainer: {
     width: '100%',
-    justifyContent: 'flex-start',
-    alignItems: 'flex-start',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   titleStyle: {
     fontFamily: font.InterRegular,
