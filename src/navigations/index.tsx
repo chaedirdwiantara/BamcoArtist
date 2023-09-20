@@ -102,9 +102,7 @@ import {AlbumScreen} from '../screen/Album/Album';
 // TopUp
 import {TopUpCreditScreen} from '../screen/TopUpCredit/TopUpCredit';
 import {WithdrawalScreen} from '../screen/Withdrawal';
-import {InputWithdrawalScreen} from '../screen/Withdrawal/InputWithdrawal';
-import {AddBankAccountScreen} from '../screen/Withdrawal/AddBankAccount';
-import {EditBankAccountScreen} from '../screen/Withdrawal/EditBankAccount';
+import {NewBankAccountScreen} from '../screen/Withdrawal/NewBankAccount';
 import {VerifCodeWithdrawalScreen} from '../screen/Withdrawal/VerifCodeWithdrawal';
 import {DetailHistoryTransactionScreen} from '../screen/TopUpCredit/DetailHistoryTransaction';
 
@@ -168,6 +166,7 @@ import {SongAlbum} from '../interface/song.interface';
 import ListPlaylist from '../screen/Playlist/ListPlaylist';
 import {MyQRCode} from '../screen/Setting/MyQRCode';
 import {TransactionHistoryPropsType} from '../interface/credit.interface';
+import {BankAccountPropsType} from '../interface/withdraw.interface';
 
 export type RootStackParams = {
   AboutDeletion: undefined;
@@ -346,10 +345,14 @@ export type RootStackParams = {
   };
   TicketDetail: undefined;
   Shop: undefined;
-  AddBankAccount: undefined;
-  EditBankAccount: undefined;
-  InputWithdrawal: undefined;
-  VerifCodeWithdrawal: undefined;
+  NewBankAccount: {
+    type: string;
+    data?: BankAccountPropsType;
+  };
+  VerifCodeWithdrawal: {
+    type: string;
+    data?: BankAccountPropsType;
+  };
   Withdrawal: undefined;
   YourTopFansScreen: undefined;
   AlbumAnalyticScreen: {albumId: number};
@@ -583,15 +586,7 @@ export const RootStackScreen = () => (
       component={DetailHistoryTransactionScreen}
     />
     <RootStack.Screen name="Withdrawal" component={WithdrawalScreen} />
-    <RootStack.Screen
-      name="InputWithdrawal"
-      component={InputWithdrawalScreen}
-    />
-    <RootStack.Screen name="AddBankAccount" component={AddBankAccountScreen} />
-    <RootStack.Screen
-      name="EditBankAccount"
-      component={EditBankAccountScreen}
-    />
+    <RootStack.Screen name="NewBankAccount" component={NewBankAccountScreen} />
     <RootStack.Screen
       name="VerifCodeWithdrawal"
       component={VerifCodeWithdrawalScreen}
