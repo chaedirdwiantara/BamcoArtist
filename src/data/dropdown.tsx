@@ -7,93 +7,21 @@ export interface DataCountryType {
 export const countryData: DataCountryType[] = [
   {
     value: '1',
-    label: 'US',
-    image: require('../assets/flags/US.png'),
-    code: '+1',
-  },
-  {
-    value: '2',
-    label: 'ID',
-    image: require('../assets/flags/ID.png'),
-    code: '+62',
-  },
-  {
-    value: '3',
-    label: 'JP',
-    image: require('../assets/flags/JP.png'),
-    code: '+81',
-  },
-  {
-    value: '4',
-    label: 'IN',
-    image: require('../assets/flags/IND.png'),
-    code: '+91',
-  },
-  {
-    value: '5',
-    label: 'UK',
-    image: require('../assets/flags/UK.png'),
-    code: '+44',
-  },
-  {
-    value: '6',
     label: 'HK',
     image: require('../assets/flags/HK.png'),
     code: '+852',
   },
   {
-    value: '7',
+    value: '2',
     label: 'MO',
     image: require('../assets/flags/MO.png'),
     code: '+853',
   },
   {
-    value: '8',
+    value: '3',
     label: 'TW',
     image: require('../assets/flags/TW.png'),
     code: '+886',
-  },
-  {
-    value: '9',
-    label: 'CN',
-    image: require('../assets/flags/CN.png'),
-    code: '+86',
-  },
-  {
-    value: '10',
-    label: 'MY',
-    image: require('../assets/flags/MY.png'),
-    code: '+60',
-  },
-  {
-    value: '11',
-    label: 'AU',
-    image: require('../assets/flags/AU.png'),
-    code: '+61',
-  },
-  {
-    value: '12',
-    label: 'PH',
-    image: require('../assets/flags/PH.png'),
-    code: '+63',
-  },
-  {
-    value: '13',
-    label: 'SG',
-    image: require('../assets/flags/SG.png'),
-    code: '+65',
-  },
-  {
-    value: '15',
-    label: 'KR',
-    image: require('../assets/flags/KR.png'),
-    code: '+82',
-  },
-  {
-    value: '16',
-    label: 'CA',
-    image: require('../assets/flags/CA.png'),
-    code: '+1',
   },
 ];
 

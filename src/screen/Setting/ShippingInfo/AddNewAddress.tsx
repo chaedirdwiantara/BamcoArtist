@@ -45,10 +45,18 @@ export const AddNewAddressScreen: React.FC<AddNewAddressProps> = ({
     }
   }, [data, selectedCountry, dataAllCountry]);
 
+  // only 3 countries allowed
+  const filterCountry =
+    dataAllCountry !== undefined
+      ? dataAllCountry.filter(
+          val => val.value === 'HK' || val.value === 'MO' || val.value === 'TW',
+        )
+      : [];
+
   return (
     <View style={styles.root}>
       <AddShippingAddress
-        dataAllCountry={dataAllCountry !== undefined ? dataAllCountry : []}
+        dataAllCountry={filterCountry}
         dataCities={
           dataCitiesOfCountry !== undefined ? dataCitiesOfCountry : []
         }
