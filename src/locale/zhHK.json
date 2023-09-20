@@ -747,6 +747,7 @@
       "ToastAddAddress": "Address has been added!",
       "ToastChangeAddress": "Address has been updated!",
       "ToastDeleteAddress": "Address has been deleted!",
+      "PhoneNumberInvalid": "Phone number is invalid, ensure phone number you've entered is correct",
       "Label": {
         "Email": "電子郵件",
         "Phone": "電話號碼",
