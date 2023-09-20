@@ -180,7 +180,11 @@ const PostListProfile: FC<PostListProps> = (props: PostListProps) => {
 
   //? set no data into main cz of message
   useEffect(() => {
-    if (dataPostList?.length === 0 && feedMessage === noPostYetMessage) {
+    if (
+      dataPostList?.length === 0 &&
+      feedMessage === noPostYetMessage &&
+      filterActive
+    ) {
       setDataMain(dataPostList);
     }
   }, [dataPostList, feedMessage]);

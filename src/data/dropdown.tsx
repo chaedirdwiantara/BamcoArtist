@@ -338,12 +338,10 @@ export const dataDurationVote: DataDropDownNumberType[] = [
 
 export const dataProfileDropdown: DataDropDownType[] = [
   {label: 'Dropdown.Profile.qr', value: '1', disabled: false},
-  {label: 'Dropdown.Profile.share', value: '2', disabled: false},
   {label: 'Dropdown.Profile.block', value: '3', disabled: false},
 ];
 
 export const dataProfileDropdownBlocked: DataDropDownType[] = [
   {label: 'Dropdown.Profile.qr', value: '1', disabled: false},
-  {label: 'Dropdown.Profile.share', value: '2', disabled: false},
   {label: 'Dropdown.Profile.unblock', value: '4', disabled: false},
 ];

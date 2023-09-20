@@ -121,8 +121,6 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
   ]);
   const [isModalVisible, setModalVisible] = useState<boolean>(false);
   const [zoomImage, setZoomImage] = useState<string[]>([]);
-  const [modalConfirm, setModalConfirm] = useState<boolean>(false);
-  const [toastUnblock, settoastUnblock] = useState<boolean>(false);
 
   const showImage = (uri: string) => {
     setModalVisible(!isModalVisible);
