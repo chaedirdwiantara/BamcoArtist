@@ -81,7 +81,7 @@ const Type1: React.FC<Props> = (props: Props) => {
                 selectedMenu={resultDataDropdown!}
                 iconChildren={<DropDownIcon />}
                 topPosition={widthResponsive(5)}
-                leftPosition={widthResponsive(-3)}
+                leftPosition={widthResponsive(20)}
               />
             </View>
           )}

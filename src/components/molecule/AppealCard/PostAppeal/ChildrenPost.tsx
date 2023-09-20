@@ -17,6 +17,7 @@ import ImageModal from '../../../../screen/Detail/ImageModal';
 import {color, font} from '../../../../theme';
 import MusicPreviewAppeal from '../ChildrenCard/MusicPreview';
 import {PostReportedType} from '../../../../interface/setting.interface';
+import VoteForAppeal from '../../Vote/voteForAppeal';
 
 export const {width} = Dimensions.get('screen');
 
@@ -29,10 +30,14 @@ interface ChildrenPostCardProps {
 const ChildrenPostCard: FC<ChildrenPostCardProps> = (
   props: ChildrenPostCardProps,
 ) => {
-  const {data, imgWidth, imgWidth2} = props;
+  const {data} = props;
 
   const [isModalVisible, setModalVisible] = useState<boolean>(false);
   const [imgUrl, setImgUrl] = useState<number>(-1);
+
+  const pollingOptions = data.pollingOptions;
+  const pollTimeLeft = data.pollTimeLeft;
+  const pollCount = data.pollCount;
 
   // ignore warning
   useEffect(() => {
@@ -108,6 +113,13 @@ const ChildrenPostCard: FC<ChildrenPostCardProps> = (
                     disabledPlayIcon
                   />
                 </TouchableOpacity>
+              )}
+              {data.isPolling && (
+                <VoteForAppeal
+                  pollingOptions={pollingOptions}
+                  pollTimeLeft={pollTimeLeft}
+                  pollCount={pollCount}
+                />
               )}
             </View>
           </View>

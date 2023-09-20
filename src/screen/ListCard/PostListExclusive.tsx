@@ -1,31 +1,33 @@
-import React, {FC, useCallback, useEffect, useState} from 'react';
+import React, {FC, useCallback, useEffect, useRef, useState} from 'react';
 import {
-  Animated,
   Dimensions,
-  NativeModules,
-  Platform,
+  FlatList,
   RefreshControl,
   StyleSheet,
-  Text,
   View,
+  Animated,
+  Platform,
+  NativeModules,
 } from 'react-native';
 import {mvs} from 'react-native-size-matters';
 import {
   DropDownFilter,
   Gap,
   ListCard,
+  ModalConfirm,
   ModalDonate,
   ModalShare,
   ModalSuccessDonate,
+  NewPostAvail,
   ProgressBar,
-  SsuToast,
+  SuccessToast,
 } from '../../components';
 import {
   DataDropDownType,
   DropDownFilterType,
   DropDownSortType,
 } from '../../data/dropdown';
-import {color, font, typography} from '../../theme';
+import {color} from '../../theme';
 import {
   elipsisText,
   heightPercentage,
@@ -34,14 +36,11 @@ import {
 } from '../../utils';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {MainTabParams, RootStackParams} from '../../navigations';
+import {RootStackParams} from '../../navigations';
 import {EmptyState} from '../../components/molecule/EmptyState/EmptyState';
-import {FriedEggIcon, TickCircleIcon} from '../../assets/icon';
 import ListToFollowMusician from './ListToFollowMusician';
 import {useFeedHook} from '../../hooks/use-feed.hook';
 import {PostList} from '../../interface/feed.interface';
-import {dateFormat} from '../../utils/date-format';
-import categoryNormalize from '../../utils/categoryNormalize';
 import {ModalLoading} from '../../components/molecule/ModalLoading/ModalLoading';
 import {usePlayerHook} from '../../hooks/use-player.hook';
 import {useTranslation} from 'react-i18next';
@@ -58,7 +57,6 @@ import {
   useCategoryFilter,
   useCheckNewUpdate,
   useGetCreditCount,
-  useGetDataOnMountNoId,
   useRefreshingEffect,
   useSetDataMainQuery,
   useSetDataToMainData,
@@ -67,44 +65,51 @@ import {
 } from './ListUtils/ListFunction';
 import Clipboard from '@react-native-community/clipboard';
 import {useQuery} from 'react-query';
-import {useVideoStore} from '../../store/video.store';
-import {useUploadImageHook} from '../../hooks/use-uploadImage.hook';
 import {useHeaderAnimation} from '../../hooks/use-header-animation.hook';
-import {useShareHook} from '../../hooks/use-share.hook';
+import {usePostLogger} from './ListUtils/use-PostLogger';
 import {imageShare} from '../../utils/share';
+import {useShareHook} from '../../hooks/use-share.hook';
+import {useReportHook} from '../../hooks/use-report.hook';
+import {ReportParamsProps} from '../../interface/report.interface';
+import {reportingMenu} from '../../data/report';
+import {feedReportRecorded} from '../../store/idReported';
+import {ModalReport} from '../../components/molecule/Modal/ModalReport';
+import {useBlockHook} from '../../hooks/use-block.hook';
+import {FriedEggIcon} from '../../assets/icon';
 
 const {height} = Dimensions.get('screen');
 const {StatusBarManager} = NativeModules;
 const barHeight = StatusBarManager.HEIGHT;
 
+type RenderItemProps = {
+  item: PostList;
+  index: number;
+};
 interface PostListProps {
   dataRightDropdown: DataDropDownType[];
   dataLeftDropdown: DropDownFilterType[] | DropDownSortType[];
   uuidMusician?: string;
   videoUploadProgress?: number;
   uriVideo?: string;
-  allowRefresh?: boolean;
 }
 
 const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
   const {t} = useTranslation();
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
-  const navigateProfile =
-    useNavigation<NativeStackNavigationProp<MainTabParams>>();
   const {
     dataRightDropdown,
     dataLeftDropdown,
-    uuidMusician,
+    uuidMusician = '',
     videoUploadProgress,
     uriVideo,
-    allowRefresh,
   } = props;
 
   const noPostYetMessage =
     'Your subscribed musician has not yet posted any exclusive content.';
 
   const {handleScroll, compCTranslateY} = useHeaderAnimation();
+  const {viewabilityConfig, onViewableItemsChanged} = usePostLogger();
   const {
     shareLink,
     getShareLink,
@@ -118,31 +123,39 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
   const [modalShare, setModalShare] = useState<boolean>(false);
   const [isCopied, setIsCopied] = useState<boolean>(false);
   const [toastVisible, setToastVisible] = useState(false);
+  const [reportToast, setReportToast] = useState(false);
+  const [reportSuccessToast, setReportSuccessToast] = useState(false);
   const [modalDonate, setModalDonate] = useState<boolean>(false);
   const [modalSuccessDonate, setModalSuccessDonate] = useState<boolean>(false);
   const [trigger2ndModal, setTrigger2ndModal] = useState<boolean>(false);
   const [page, setPage] = useState<number>(1);
   const [perPage, setPerPage] = useState<number>(15);
-  const [dataTemporary, setDataTemporary] = useState<PostList[]>();
+  const [dataTemporary, setDataTemporary] = useState<PostList[]>([]);
   const [dataMain, setDataMain] = useState<PostList[]>([]);
   const [filterActive, setFilterActive] = useState<boolean>(true);
   const [filterByValue, setFilterByValue] = useState<string>();
   const [categoryValue, setCategoryValue] = useState<string>();
+  const [uuid, setUuid] = useState<string>();
   const [selectedFilterMenu, setSelectedFilterMenu] =
     useState<DataDropDownType>();
   const [selectedCategoryMenu, setSelectedCategoryMenu] =
     useState<DataDropDownType>();
   const [refreshing, setRefreshing] = useState<boolean>(false);
-  // * UPDATE HOOKS
-  const [selectedIdPost, setSelectedIdPost] = useState<string>();
-  const [selectedMenu, setSelectedMenu] = useState<DataDropDownType>();
   const [selectedMusicianId, setSelectedMusicianId] = useState<string>('');
+  const [modalConfirm, setModalConfirm] = useState<boolean>(false);
+  const [selectedUserName, setSelectedUserName] = useState<string>('');
+  const [toastBlockSucceed, setToastBlockSucceed] = useState<boolean>(false);
 
   //* MUSIC HOOKS
   const [pauseModeOn, setPauseModeOn] = useState<boolean>(false);
   const [idNowPlaying, setIdNowPlaing] = useState<string>();
 
-  const {setDataVideo} = useUploadImageHook();
+  // * REPORT HOOKS
+  const [selectedIdPost, setSelectedIdPost] = useState<string>();
+  const [selectedMenuPost, setSelectedMenuPost] = useState<DataDropDownType>();
+  const [selectedUserUuid, setSelectedUserUuid] = useState<string>();
+  const [selectedCategory, setSelectedCategory] = useState<string>();
+  const [reason, setReason] = useState<string>('');
 
   const {
     feedIsLoading,
@@ -152,9 +165,8 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
     getListDataExclusivePost,
     setLikePost,
     setUnlikePost,
-    setDeletePost,
     getListDataExclusiveQuery,
-    setDataCreatePost,
+    sendLogShare,
   } = useFeedHook();
 
   const {
@@ -167,58 +179,73 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
     addPlaylistFeed,
   } = usePlayerHook();
 
-  const {setUriVideo} = useVideoStore();
+  const {blockLoading, blockError, blockResponse, setBlockUser} =
+    useBlockHook();
 
   const {creditCount, getCreditCount} = useCreditHook();
-  const uuid = profileStorage()?.uuid;
+  const MyUuid = profileStorage()?.uuid;
 
   //* QUERY AREA
   const [previousData, setPreviousData] = useState<PostList[]>();
+  const [showUpdateNotif, setShowUpdateNotif] = useState(false);
+  const [numberOfNewData, setNumberOfNewData] = useState<number>(0);
+
+  const flatListRef = useRef<FlatList<any> | null>(null);
+
+  const scrollToTop = () => {
+    flatListRef.current?.scrollToOffset({offset: 0});
+  };
 
   const {
     data: postData,
     isLoading: queryDataLoading,
     isError,
     refetch,
-  } = useQuery('posts-myPost', () =>
-    getListDataExclusiveQuery({
-      page: 1,
-      perPage: perPage,
-      sortBy: filterByValue,
-      category: categoryValue,
-    }),
+  } = useQuery(
+    'posts-exclusive',
+    () =>
+      getListDataExclusiveQuery({
+        page: 1,
+        perPage: perPage,
+        sortBy: filterByValue,
+        category: categoryValue,
+      }),
+    {
+      staleTime: 300000,
+      refetchInterval: 300000,
+    },
   );
 
-  //?setData if not same as current
-  useEffect(() => {
-    if (!queryDataLoading && postData) {
-      if (postData.data !== previousData) {
-        setPreviousData(postData.data);
-      }
-    }
-  }, [queryDataLoading, postData]);
+  //* check if there's new update
+  useCheckNewUpdate(
+    queryDataLoading,
+    postData,
+    previousData,
+    setShowUpdateNotif,
+    setNumberOfNewData,
+    setPreviousData,
+  );
 
-  //? set data into main (show data)
+  const handleUpdateClick = () => {
+    setShowUpdateNotif(false);
+    scrollToTop();
+    postData?.data && setPreviousData(postData.data);
+  };
+
+  //* set data into main (show data)
   useSetDataMainQuery(previousData, setDataMain);
-
   //* END OF QUERY AREA
 
   //* get data on mount this page
   useGetCreditCount(modalDonate, getCreditCount);
-  // useGetDataOnMountNoId(perPage, getListDataMyPost, setPage);
-  // //?get data on mount this page
+
+  // useGetDataOnMount(uuidMusician, perPage, getListDataExclusivePost, setUuid, setPage);
+  //?get data on mount this page
   useFocusEffect(
     useCallback(() => {
       refetch();
     }, []),
   );
-
-  //* get data when video post suceeded
-  useEffect(() => {
-    if (allowRefresh) {
-      setRefreshing(true);
-    }
-  }, [allowRefresh]);
 
   //* call when refreshing
   useRefreshingEffect(
@@ -247,7 +274,11 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
 
   //? set no data into main cz of message
   useEffect(() => {
-    if (dataTemporary?.length === 0 && feedMessage === noPostYetMessage) {
+    if (
+      dataTemporary?.length === 0 &&
+      feedMessage === noPostYetMessage &&
+      filterActive
+    ) {
       setDataMain(dataTemporary);
     }
   }, [dataTemporary, feedMessage]);
@@ -264,6 +295,7 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
     categoryValue,
     setFilterActive,
     setFilterByValue,
+    uuid,
   );
 
   //* hit category endpoint
@@ -276,6 +308,7 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
     selectedCategoryMenu?.value,
     setFilterActive,
     setCategoryValue,
+    uuid,
   );
 
   //* Handle when end of Scroll
@@ -312,6 +345,7 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
   const shareOnPress = (content: PostList) => {
     setModalShare(true);
     setSelectedSharePost(content);
+    setSelectedMusicianId(content.id);
   };
 
   //Credit onPress
@@ -335,11 +369,8 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
     setTrigger2ndModal(false);
   };
 
-  const handleToDetailMusician = () => {
-    navigateProfile.navigate('Profile', {
-      showToast: false,
-      deletePlaylist: false,
-    });
+  const handleToDetailMusician = (id: string) => {
+    navigation.navigate('MusicianProfile', {id});
   };
 
   const onModalShareHide = () => {
@@ -351,34 +382,9 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
     setIsCopied(true);
     if (Clipboard && Clipboard.setString) {
       Clipboard.setString(shareLink);
+      sendLogShare({id: selectedMusicianId});
     }
   };
-
-  // ! UPDATE POST AREA
-  useEffect(() => {
-    if (
-      selectedIdPost !== undefined &&
-      selectedMenu !== undefined &&
-      dataMain
-    ) {
-      //? Delete Post
-      if (selectedMenu.value === '2') {
-        setDeletePost({id: selectedIdPost});
-        setDataMain(dataMain.filter(data => data.id !== selectedIdPost));
-        setSelectedMenu(undefined);
-      }
-      //? Edit Post
-      if (selectedMenu.value === '1') {
-        setUriVideo(null);
-        setDataCreatePost(null);
-        setDataVideo(undefined);
-        let dataSelected = dataMain.filter(data => data.id === selectedIdPost);
-        navigation.navigate('CreatePost', {postData: dataSelected[0]});
-        setSelectedMenu(undefined);
-      }
-    }
-  }, [selectedIdPost, selectedMenu, dataMain]);
-  // ! END OF UPDATE POST AREA
 
   // ! MUSIC AREA
   const onPressPlaySong = (val: PostList) => {
@@ -401,6 +407,72 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
   };
   // ! END OF MUSIC AREA
 
+  // ! REPORT POST AREA
+  const {
+    dataReport,
+    reportIsLoading,
+    reportIsError,
+    setDataReport,
+    setPostReport,
+  } = useReportHook();
+
+  const {idReported, setIdReported} = feedReportRecorded();
+
+  useEffect(() => {
+    if (selectedIdPost && selectedMenuPost && selectedUserUuid && dataMain) {
+      const selectedValue = t(selectedMenuPost.value);
+
+      switch (selectedValue) {
+        case '11':
+          navigation.navigate('MusicianProfile', {
+            id: selectedUserUuid,
+          });
+          break;
+        case '22':
+          setReportToast(true);
+          break;
+        case '33':
+          setModalConfirm(true);
+          break;
+        default:
+          break;
+      }
+      setSelectedMenuPost(undefined);
+    }
+  }, [selectedIdPost, selectedMenuPost, selectedUserUuid]);
+
+  //? set status disable after report sent to make sure the status report is updated
+  useEffect(() => {
+    if (dataReport && selectedIdPost) {
+      setReportToast(false);
+      if (!idReported.includes(selectedIdPost)) {
+        setIdReported([...idReported, selectedIdPost]);
+      }
+    }
+  }, [dataReport]);
+
+  const sendOnPress = () => {
+    const reportBody: ReportParamsProps = {
+      reportType: 'post',
+      reportTypeId: selectedIdPost ?? '0',
+      reporterUuid: MyUuid ?? '',
+      reportedUuid: selectedUserUuid ?? '',
+      reportCategory: t(selectedCategory ?? ''),
+      reportReason: reason ?? '',
+    };
+    setPostReport(reportBody);
+  };
+
+  const onModalReportHide = () => {
+    setReportSuccessToast(true);
+  };
+
+  const closeModalSuccess = () => {
+    setDataReport(false);
+    setReportSuccessToast(false);
+  };
+  // ! END OF REPORT POST AREA
+
   // SHARE LINK
   useEffect(() => {
     if (selectedSharePost) {
@@ -416,6 +488,21 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
       });
     }
   }, [selectedSharePost]);
+
+  // ! BLOCK USER AREA
+  const blockModalOnPress = () => {
+    setBlockUser({uuid: selectedUserUuid});
+    setModalConfirm(false);
+  };
+
+  useEffect(() => {
+    if (blockResponse === 'Success') {
+      setDataMain(
+        dataMain.filter(data => data.musician.uuid !== selectedUserUuid),
+      );
+      setToastBlockSucceed(true);
+    }
+  }, [blockResponse]);
 
   return (
     <>
@@ -453,6 +540,7 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
           }}
         />
       </Animated.View>
+
       {videoUploadProgress ? (
         <ProgressBar
           progress={videoUploadProgress}
@@ -467,7 +555,7 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
           }}
         />
       ) : null}
-      {dataMain && dataMain.length !== 0 ? (
+      {dataMain !== null && dataMain?.length !== 0 ? (
         <View style={styles.bodyContainer}>
           {refreshing && (
             <View style={styles.loadingContainer}>
@@ -475,21 +563,18 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
             </View>
           )}
           <Animated.FlatList
-            data={
-              filterActive
-                ? dataMain
-                : dataMain.sort(
-                    (a, b) =>
-                      new Date(b.createdAt).getTime() -
-                      new Date(a.createdAt).getTime(),
-                  )
-            }
+            ref={flatListRef}
+            data={dataMain}
             showsVerticalScrollIndicator={false}
             keyExtractor={(_, index) => index.toString()}
             contentContainerStyle={{
               flexGrow: 1,
               paddingBottom:
-                height >= 800 ? heightResponsive(220) : heightResponsive(160),
+                uuidMusician !== ''
+                  ? undefined
+                  : height >= 800
+                  ? heightResponsive(220)
+                  : heightResponsive(160),
             }}
             refreshControl={
               <RefreshControl
@@ -497,11 +582,13 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
                 onRefresh={() => setRefreshing(true)}
               />
             }
-            onScroll={handleScroll}
             onEndReached={handleEndScroll}
             onEndReachedThreshold={1}
+            onScroll={handleScroll}
             bounces={false}
-            renderItem={({item, index}) => (
+            viewabilityConfig={viewabilityConfig}
+            onViewableItemsChanged={onViewableItemsChanged}
+            renderItem={({item, index}: RenderItemProps) => (
               <>
                 {index === 0 && !videoUploadProgress ? (
                   <Gap
@@ -522,15 +609,22 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
                 ) : null}
                 <ListCard.PostList
                   data={item}
-                  toDetailOnPress={handleToDetailMusician}
+                  toDetailOnPress={() =>
+                    handleToDetailMusician(item.musician.uuid)
+                  }
                   onPress={() => cardOnPress(item)}
                   likeOnPress={() => likeOnPress(item.id, item.isLiked)}
                   likePressed={likePressedInFeed(selectedId, item, recorder)}
                   likeCount={likesCountInFeed(selectedId, item, recorder)}
                   tokenOnPress={() => tokenOnPress(item.musician.uuid)}
                   shareOnPress={() => shareOnPress(item)}
-                  selectedMenu={setSelectedMenu}
+                  selectedMenu={setSelectedMenuPost}
                   selectedIdPost={setSelectedIdPost}
+                  selectedUserUuid={setSelectedUserUuid}
+                  selectedUserName={setSelectedUserName}
+                  reportSent={
+                    idReported.includes(item.id) ? true : item.reportSent
+                  }
                   showDropdown
                   children={
                     <ChildrenCard
@@ -554,21 +648,8 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
       ) : dataTemporary?.length === 0 &&
         postData?.message === 'you not follow anyone' ? (
         <>
-          <Gap height={195} />
+          <Gap height={Platform.OS === 'android' ? 195 : 145} />
           <ListToFollowMusician />
-        </>
-      ) : dataTemporary?.length === 0 &&
-        postData?.message === `You don't have any post` ? (
-        <>
-          <Gap height={195} />
-          <EmptyState
-            text={t('EmptyState.DontHavePost') || ''}
-            containerStyle={{
-              justifyContent: 'flex-start',
-              paddingTop: heightPercentage(24),
-            }}
-            icon={<FriedEggIcon />}
-          />
         </>
       ) : dataTemporary?.length === 0 &&
         (postData?.message === noPostYetMessage ||
@@ -585,6 +666,27 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
           />
         </>
       ) : null}
+      <ModalReport
+        modalVisible={reportToast}
+        onPressClose={() => setReportToast(false)}
+        title={`${t('ModalComponent.Report.Type.Post.FirstTitle')}`}
+        secondTitle={`${t('ModalComponent.Report.Type.Post.SecondTitle')}`}
+        dataReport={reportingMenu}
+        onPressOk={sendOnPress}
+        category={setSelectedCategory}
+        reportReason={setReason}
+        modalOnHide={
+          dataReport
+            ? onModalReportHide
+            : () => console.log(modalShare, 'modal is hide')
+        }
+      />
+      {/* //? When report succesfully */}
+      <SuccessToast
+        toastVisible={reportSuccessToast}
+        onBackPressed={closeModalSuccess}
+        caption={t('ModalComponent.Report.ReportSuccess')}
+      />
       <ModalShare
         url={shareLink}
         modalVisible={modalShare}
@@ -599,23 +701,11 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
         }
         disabled={!successGetLink}
       />
-      <SsuToast
-        modalVisible={toastVisible}
+      {/* //? When copy link done */}
+      <SuccessToast
+        toastVisible={toastVisible}
         onBackPressed={() => setToastVisible(false)}
-        children={
-          <View style={[styles.modalContainer]}>
-            <TickCircleIcon
-              width={widthResponsive(21)}
-              height={heightPercentage(20)}
-              stroke={color.Neutral[10]}
-            />
-            <Gap width={widthResponsive(7)} />
-            <Text style={[typography.Button2, styles.textStyle]}>
-              {t('General.LinkCopied')}
-            </Text>
-          </View>
-        }
-        modalStyle={{marginHorizontal: widthResponsive(24)}}
+        caption={t('General.LinkCopied')}
       />
       <ModalDonate
         userId={selectedMusicianId}
@@ -631,6 +721,33 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
       {!refreshing && (
         <ModalLoading visible={queryDataLoading && !previousData} />
       )}
+
+      {showUpdateNotif && (
+        <NewPostAvail
+          onPress={handleUpdateClick}
+          numberOfNewData={numberOfNewData}
+        />
+      )}
+
+      {/* //? Block user modal */}
+      {modalConfirm && (
+        <ModalConfirm
+          modalVisible={modalConfirm}
+          title={`${t('Block.Modal.Title')} @${selectedUserName} ?`}
+          subtitle={`${t('Block.Modal.Subtitle')} @${selectedUserName}`}
+          yesText={`${t('Block.Modal.RightButton')}`}
+          noText={`${t('Block.Modal.LeftButton')}`}
+          onPressClose={() => setModalConfirm(false)}
+          onPressOk={blockModalOnPress}
+          rightButtonStyle={styles.rightButtonStyle}
+        />
+      )}
+      {/* //? When block succeed */}
+      <SuccessToast
+        toastVisible={toastBlockSucceed}
+        onBackPressed={() => setToastBlockSucceed(false)}
+        caption={`${t('General.BlockSucceed')} @${selectedUserName}`}
+      />
     </>
   );
 };
@@ -655,21 +772,6 @@ const styles = StyleSheet.create({
     zIndex: 1,
     backgroundColor: color.Dark[800],
   },
-  modalContainer: {
-    width: '100%',
-    position: 'absolute',
-    bottom: heightPercentage(22),
-    height: heightPercentage(36),
-    backgroundColor: color.Success[400],
-    paddingHorizontal: widthResponsive(12),
-    borderRadius: 4,
-    flexDirection: 'row',
-    alignItems: 'center',
-    zIndex: 1,
-  },
-  textStyle: {
-    color: color.Neutral[10],
-  },
   categoryContainerStyle: {
     width: undefined,
     aspectRatio: undefined,
@@ -684,5 +786,11 @@ const styles = StyleSheet.create({
   loadingContainer: {
     alignItems: 'center',
     paddingVertical: heightPercentage(20),
+  },
+  rightButtonStyle: {
+    backgroundColor: color.Error.block,
+    borderRadius: 4,
+    paddingHorizontal: widthResponsive(16),
+    paddingVertical: widthResponsive(6),
   },
 });

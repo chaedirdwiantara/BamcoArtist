@@ -286,3 +286,35 @@ export interface OrderListBookyay {
   success: boolean;
   data: any;
 }
+
+export interface EventTopTipper {
+  tipperUUID: string;
+  tipperType: string;
+  tipperUsername: string;
+  tipperFullname: string;
+  tipperImage: string;
+  totalDonation: number;
+}
+
+export interface EventTopTipperResponse extends BaseResponseApi {
+  data: EventTopTipper[];
+}
+
+export interface EventMusicianTipped {
+  musicianUUID: string;
+  musicianUsername: string;
+  musicianFullname: string;
+  musicianImage: string;
+  totalDonation: number;
+}
+
+export interface EventMusicianTippedResponse extends BaseResponseApi {
+  data: EventMusicianTipped[];
+  meta: {
+    Page: number;
+    DataOffset: number;
+    PerPage: number;
+    TotalData: number;
+    TotalPage: number;
+  };
+}
