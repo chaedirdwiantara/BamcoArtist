@@ -30,6 +30,7 @@ interface ModalImagePickerProps {
   maxFiles?: number;
   showVideo?: boolean;
   onModalHide?: () => void;
+  includeBase64?: boolean;
 }
 
 export const ModalImagePicker: React.FC<ModalImagePickerProps> = ({
@@ -45,6 +46,7 @@ export const ModalImagePicker: React.FC<ModalImagePickerProps> = ({
   maxFiles,
   showVideo,
   onModalHide,
+  includeBase64 = false,
 }) => {
   const {t} = useTranslation();
 
@@ -54,6 +56,7 @@ export const ModalImagePicker: React.FC<ModalImagePickerProps> = ({
       compressImageMaxHeight: 1024,
       compressImageQuality: 0.9,
       cropping: true,
+      includeBase64,
     }).then(image => {
       sendUri(image);
       onPressClose();
@@ -99,6 +102,7 @@ export const ModalImagePicker: React.FC<ModalImagePickerProps> = ({
       compressImageMaxHeight: 1024,
       compressImageQuality: 0.9,
       cropping: true,
+      includeBase64,
     }).then(image => {
       sendUri(image);
       onPressClose();
