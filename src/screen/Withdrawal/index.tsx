@@ -1,46 +1,90 @@
-import React, {useState} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import React, {useCallback, useEffect, useState} from 'react';
+import {InteractionManager, StyleSheet, Text, TextInput, View} from 'react-native';
 import {useTranslation} from 'react-i18next';
 import {mvs} from 'react-native-size-matters';
-import {useNavigation} from '@react-navigation/native';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
-import {color, font, typography} from '../../theme';
-import {ArrowLeftIcon} from '../../assets/icon';
+import {
+  width,
+  kFormatter,
+  convertToHKD,
+  widthPercentage,
+  heightPercentage,
+} from '../../utils';
 import {RootStackParams} from '../../navigations';
-import {width, widthPercentage} from '../../utils';
-import {Button, TopNavigation} from '../../components';
+import {color, font, typography} from '../../theme';
+import {removeBankAccount} from '../../api/withdraw.api';
+import {useCreditHook} from '../../hooks/use-credit.hook';
+import {ArrowLeftIcon, CoinDIcon} from '../../assets/icon';
+import {profileStorage} from '../../hooks/use-storage.hook';
+import {useWithdrawHook} from '../../hooks/use-withdraw.hook';
+import {Button, Gap, ModalConfirm, TopNavigation} from '../../components';
+import {ModalLoading} from '../../components/molecule/ModalLoading/ModalLoading';
 import {CardBankAccount} from '../../components/molecule/Withdrawal/CardBankAccount';
 
 export const WithdrawalScreen: React.FC = () => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
   const {t} = useTranslation();
+  const {dataBankUser, getUserBankAccount} = useWithdrawHook();
+  const {creditCount, getCreditCount} = useCreditHook();
+  const [focusInput, setFocusInput] = useState<boolean>(false);
+  const [totalCredit, setTotalCredit] = useState<string>('');
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const [isLoadingDelete, setLoadingDelete] = useState<boolean>(false);
+
+  // get credit user
+  useEffect(() => {
+    getCreditCount();
+  }, []);
+
+  // get bank account user
+  useFocusEffect(
+    useCallback(() => {
+      const uuid = profileStorage()?.uuid;
+      getUserBankAccount({uuid});
+    }, []),
+  );
 
   const onPressGoBack = () => {
     navigation.goBack();
   };
 
-  const goToAddBankAccount = () => {
-    navigation.navigate('AddBankAccount');
-  };
-
-  const goToEditBankAccount = () => {
-    navigation.navigate('EditBankAccount');
-  };
-
-  const goToInputWithdrawal = () => {
-    navigation.navigate('InputWithdrawal');
+  const goToCreateBankAccount = (type: string) => {
+    navigation.navigate('NewBankAccount', {type, data: dataBankUser});
   };
 
   const goToVerifCode = () => {
-    navigation.navigate('VerifCodeWithdrawal');
+    navigation.navigate('VerifCodeWithdrawal', {
+      type: 'withdraw',
+      data: dataBankUser,
+    });
+  };
+
+  const deleteBankAccount = async () => {
+    setShowModal(false);
+    InteractionManager.runAfterInteractions(() => setLoadingDelete(true));
+    try {
+      await removeBankAccount({id: dataBankUser?.bankId});
+
+      InteractionManager.runAfterInteractions(() => setLoadingDelete(false));
+      // navigate to otp screen when success
+      navigation.navigate('VerifCodeWithdrawal', {
+        type: 'delete',
+        data: dataBankUser,
+      });
+    } catch (error) {
+      InteractionManager.runAfterInteractions(() => setLoadingDelete(false));
+    }
   };
 
   // only enable on the 14th and 28th of each month
   const getDate = new Date().getDate();
   const enabledButton = getDate === 14 || getDate === 28;
 
+  // active border color, when focus is true
+  const activeColor = focusInput ? color.Pink[200] : color.Dark[500];
   return (
     <View style={styles.root}>
       <TopNavigation.Type1
@@ -54,26 +98,86 @@ export const WithdrawalScreen: React.FC = () => {
       />
 
       <CardBankAccount
-        haveBankAccount={false}
-        number={'50352657444'}
-        bankName={'Bank Central Asia (BCA)'}
-        goToEditBankAccount={goToAddBankAccount}
+        number={dataBankUser?.accountNumber}
+        bankName={dataBankUser?.bankName}
+        goToEditBankAccount={() => goToCreateBankAccount('edit')}
+        onPressRemove={() => setShowModal(true)}
         containerStyles={{marginTop: mvs(20)}}
       />
 
+      {/* // show if user have bank account */}
+      {dataBankUser !== null && dataBankUser !== undefined && (
+        <View>
+          <View style={styles.containerCoin}>
+            <Text style={styles.textMyCredit}>{t('TopUp.MyCoin')}</Text>
+            <View style={{flexDirection: 'row'}}>
+              <CoinDIcon
+                style={{
+                  width: widthPercentage(18),
+                  height: heightPercentage(18),
+                }}
+              />
+              <Gap width={widthPercentage(5)} />
+              <Text style={styles.amountMyCredit}>
+                {kFormatter(creditCount, 1)}
+              </Text>
+            </View>
+          </View>
+          <Text style={styles.textLabelInput}>
+            {t('Withdrawal.InputWithdrawal.InputWithdrawalAmount')}
+          </Text>
+          <View style={[styles.containerInput, {borderColor: activeColor}]}>
+            <View style={{width: '10%'}}>
+              <CoinDIcon
+                style={{
+                  width: widthPercentage(18),
+                  height: heightPercentage(18),
+                }}
+              />
+            </View>
+            <TextInput
+              style={{
+                width: '90%',
+                color: color.Neutral[10],
+              }}
+              value={totalCredit}
+              keyboardType={'number-pad'}
+              textAlign="right"
+              placeholder={t('Withdrawal.InputWithdrawal.InputAmount') || ''}
+              placeholderTextColor={color.Dark[300]}
+              onFocus={() => {
+                setFocusInput(true);
+              }}
+              onBlur={() => {
+                setFocusInput(false);
+              }}
+              onChangeText={value => {
+                // only accept number without leading zeros
+                if (value !== '0') setTotalCredit(value.replace(/[^0-9]/g, ''));
+              }}
+            />
+          </View>
+        </View>
+      )}
+
+      {/* // show if user don't have bank account */}
       <View style={styles.containerEmptyState}>
-        <Text style={styles.titleEmptyState}>
-          {t('Withdrawal.BankAccount.BankAccount')}
-        </Text>
-        <Text style={styles.subtitleEmptyState}>
-          {t('Withdrawal.BankAccount.EmptyState')}
-        </Text>
-        <Button
-          label={t('Withdrawal.BankAccount.AddBankAccount')}
-          textStyles={{fontSize: mvs(11), fontFamily: font.InterMedium}}
-          containerStyles={styles.btnAddBankAcc}
-          onPress={goToAddBankAccount}
-        />
+        {(dataBankUser === null || dataBankUser === undefined) && (
+          <>
+            <Text style={styles.titleEmptyState}>
+              {t('Withdrawal.BankAccount.BankAccount')}
+            </Text>
+            <Text style={styles.subtitleEmptyState}>
+              {t('Withdrawal.BankAccount.EmptyState')}
+            </Text>
+            <Button
+              label={t('Withdrawal.BankAccount.AddBankAccount')}
+              textStyles={{fontSize: mvs(11), fontFamily: font.InterMedium}}
+              containerStyles={styles.btnAddBankAcc}
+              onPress={() => goToCreateBankAccount('add')}
+            />
+          </>
+        )}
       </View>
 
       <View style={styles.footerContent}>
@@ -85,7 +189,7 @@ export const WithdrawalScreen: React.FC = () => {
             {t('Withdrawal.InputWithdrawal.CreditToWithdraw')}
           </Text>
           <Text style={[typography.Subtitle2, styles.valueCreditWithdraw]}>
-            {'0'}
+            {totalCredit || 0}
           </Text>
         </View>
         <View
@@ -99,7 +203,7 @@ export const WithdrawalScreen: React.FC = () => {
             {t('Withdrawal.InputWithdrawal.TotalConversion')}
           </Text>
           <Text style={[typography.Subtitle2, styles.valueTotalConversion]}>
-            {'0'}
+            {convertToHKD(Number(totalCredit))}
           </Text>
         </View>
         <Button
@@ -111,6 +215,18 @@ export const WithdrawalScreen: React.FC = () => {
           }
           onPress={goToVerifCode}
         />
+
+        <ModalConfirm
+          modalVisible={showModal}
+          title={t('Withdrawal.DeleteBankAccount.ModalConfirm.Title') || ''}
+          subtitle={
+            t('Withdrawal.DeleteBankAccount.ModalConfirm.Subtitle') || ''
+          }
+          onPressClose={() => setShowModal(false)}
+          onPressOk={deleteBankAccount}
+        />
+
+        <ModalLoading visible={isLoadingDelete} />
       </View>
     </View>
   );
@@ -126,7 +242,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    // backgroundColor: 'red',
   },
   btnAddBankAcc: {
     width: width * 0.35,
@@ -204,5 +319,44 @@ const styles = StyleSheet.create({
     color: color.Neutral[10],
     fontFamily: font.InterMedium,
     fontSize: mvs(13),
+  },
+  containerCoin: {
+    width: width * 0.9,
+    borderRadius: 4,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    borderWidth: mvs(1),
+    borderColor: color.Dark[500],
+    paddingHorizontal: widthPercentage(20),
+    paddingVertical: mvs(13),
+    marginVertical: mvs(20),
+    backgroundColor: color.Dark[600],
+  },
+  textMyCredit: {
+    fontFamily: font.InterMedium,
+    fontSize: mvs(14),
+    color: color.Neutral[10],
+  },
+  amountMyCredit: {
+    fontFamily: font.InterSemiBold,
+    fontSize: mvs(14),
+    color: color.Neutral[10],
+  },
+  textLabelInput: {
+    color: color.Dark[50],
+    fontFamily: font.InterRegular,
+    marginBottom: mvs(10),
+    fontSize: mvs(12),
+  },
+  containerInput: {
+    width: width * 0.9,
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    borderWidth: mvs(1),
+    paddingHorizontal: widthPercentage(15),
+    paddingVertical: mvs(12),
+    borderRadius: mvs(4),
   },
 });
