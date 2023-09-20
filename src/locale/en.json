@@ -1240,7 +1240,7 @@
       "ModalConfirm": {
         "TitleUnsaved": "Unsaved Progress",
         "SubtitleAdd": "Are you sure your Withdrawal Account is correct and want to save your current Withdrawal Account?",
-        "SubtitleUnsaved": "Are you sure you want to go back? your withdrawal account will be unsaved and you need to input your data again"
+        "SubtitleUnsaved": "Are you sure you want to go back? Your withdrawal account will be unsaved and you need to input your data again"
       },
       "Label": {
         "Country": "Country",
@@ -1271,7 +1271,7 @@
     "DeleteBankAccount": {
       "ModalConfirm": {
         "Title": "Delete Bank Account",
-        "Subtitle": "Are you sure you want to delete your bank account? you need to add new bank account to withdraw"
+        "Subtitle": "Are you sure you want to delete your bank account? You need to add new bank account to withdraw"
       }
     },
     "VerifCode": {
