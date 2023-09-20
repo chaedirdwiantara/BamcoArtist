@@ -2,8 +2,7 @@ import React from 'react';
 import {Platform, StyleSheet} from 'react-native';
 import Modal from 'react-native-modal';
 import Lottie from 'lottie-react-native';
-import {ms, mvs} from 'react-native-size-matters';
-import {height} from '../../../utils';
+import {height, heightResponsive, widthResponsive} from '../../../utils';
 
 interface ModalLoadingProps {
   visible: boolean;
@@ -18,18 +17,26 @@ export const ModalLoading = (props: ModalLoadingProps) => {
       statusBarTranslucent
       isVisible={visible}
       style={styles.root}>
-      <Lottie
-        source={require('../../../assets/animation/loading-beamco-musician.json')}
-        autoPlay
-        loop
-        style={{
-          padding: 0,
-          margin: 0,
-          width: ms(300),
-          height: mvs(300),
-          aspectRatio: 1 / 1,
-        }}
-      />
+      {Platform.OS === 'ios' ? (
+        <Lottie
+          source={require('../../../assets/animation/loading-beamco-musician.json')}
+          autoPlay
+          loop
+          style={{
+            padding: 0,
+            margin: 0,
+            width: widthResponsive(250),
+            height: heightResponsive(250),
+            aspectRatio: 1 / 1,
+          }}
+        />
+      ) : (
+        <Lottie
+          source={require('../../../assets/animation/loading-beamco-musician.json')}
+          autoPlay
+          loop
+        />
+      )}
     </Modal>
   );
 };
