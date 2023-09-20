@@ -171,9 +171,8 @@ import {TransactionHistoryPropsType} from '../interface/credit.interface';
 
 export type RootStackParams = {
   AboutDeletion: undefined;
-  Account: {data: ProfileResponseData};
+  Account: undefined;
   AccountInformation: {
-    data: ProfileResponseData;
     fromScreen: string;
   };
   AddToPlaylist: {id: number[]; type?: string; fromMainTab?: boolean};
