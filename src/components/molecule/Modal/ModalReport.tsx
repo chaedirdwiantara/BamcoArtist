@@ -20,6 +20,7 @@ interface ModalReportProps {
   dataReport: DataDropDownType[];
   category: (data: string) => void;
   reportReason: (data: string) => void;
+  modalOnHide: () => void;
 }
 
 export const ModalReport: React.FC<ModalReportProps> = (
@@ -36,6 +37,7 @@ export const ModalReport: React.FC<ModalReportProps> = (
     dataReport,
     category,
     reportReason,
+    modalOnHide,
   } = props;
 
   const [activeIndex, setActiveIndex] = useState<number>(-1);
@@ -195,7 +197,8 @@ export const ModalReport: React.FC<ModalReportProps> = (
       animationInTiming={600}
       animationOutTiming={600}
       backdropTransitionInTiming={600}
-      backdropTransitionOutTiming={600}>
+      backdropTransitionOutTiming={600}
+      onModalHide={modalOnHide}>
       <View style={styles.root}>
         {!nextPage ? modalFirstPage() : modalSecondPage()}
       </View>

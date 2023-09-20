@@ -84,14 +84,6 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = (
   const iconRight = () => {
     return (
       <View style={[styles.iconRight, {flex: 1, flexDirection: 'row'}]}>
-        {type === 'profile' ? (
-          <>
-            <TouchableOpacity onPress={() => iconPress('backgroundUri')}>
-              <ShareIcon style={styles.shareIcon} />
-            </TouchableOpacity>
-            <Gap width={12} />
-          </>
-        ) : null}
         <TouchableOpacity onPress={() => iconPress('backgroundUri')}>
           {type === 'profile' ? (
             !scrollEffect && <SettingIcon style={styles.settingIcon} />
