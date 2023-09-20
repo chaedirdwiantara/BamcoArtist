@@ -15,7 +15,6 @@ import {color, font, typography} from '../../../theme';
 import {EditIcon, TrashIcon} from '../../../assets/icon';
 
 interface CardBankAccountProps {
-  haveBankAccount: boolean;
   number?: string;
   bankName?: string;
   goToEditBankAccount?: () => void;
@@ -24,7 +23,6 @@ interface CardBankAccountProps {
 }
 
 export const CardBankAccount: React.FC<CardBankAccountProps> = ({
-  haveBankAccount,
   number,
   bankName,
   goToEditBankAccount,
@@ -39,7 +37,7 @@ export const CardBankAccount: React.FC<CardBankAccountProps> = ({
         <Text style={[typography.Button2, {color: color.Neutral[10]}]}>
           {t('Withdrawal.BankAccount.BankAccount')}
         </Text>
-        {haveBankAccount && (
+        {bankName && (
           <View style={styles.iconSection}>
             <TouchableOpacity onPress={goToEditBankAccount}>
               <EditIcon
@@ -69,7 +67,7 @@ export const CardBankAccount: React.FC<CardBankAccountProps> = ({
         </Text>
       </View>
 
-      {haveBankAccount && (
+      {bankName && (
         <View style={styles.containerItemBank}>
           <Text style={[typography.Caption, styles.numberValueStyle]}>
             {number}
@@ -115,9 +113,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingVertical: mvs(18),
+    paddingVertical: mvs(15),
     paddingHorizontal: mvs(15),
-    backgroundColor: color.Dark[600],
+    backgroundColor: 'transparent',
+    borderWidth: mvs(1),
+    borderColor: '#282F3C',
   },
   numberValueStyle: {
     color: color.Neutral[10],
