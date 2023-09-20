@@ -288,6 +288,7 @@ export interface OrderListBookyay {
 }
 
 export interface EventTopTipper {
+  rank?: string;
   tipperUUID: string;
   tipperType: string;
   tipperUsername: string;

@@ -67,12 +67,13 @@ const LineUp: FC<EventLineUpInterface> = ({dataLineUp, isLoading, eventId}) => {
                 eventId: eventId,
               })
             }
-            onPressImage={() =>
-              // navigation.push('MusicianProfile', {id: item?.musician?.UUID})
-              navigation.push('LiveTipping', {
-                id: item?.musician?.UUID,
-                eventId: eventId,
-              })
+            onPressImage={
+              () =>
+                navigation.push('MusicianProfile', {id: item?.musician?.UUID})
+              // navigation.push('LiveTipping', {
+              //   id: item?.musician?.UUID,
+              //   eventId: eventId,
+              // })
             }
             onPressMore={() => null}
           />

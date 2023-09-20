@@ -3,6 +3,7 @@ import {
   fetchListOrder,
   getEventDetail,
   getEventLineUp,
+  getEventLiveRank,
   getEventMusicianTipped,
   getEventTopTipper,
   getStatusLiveMusician,
@@ -152,6 +153,21 @@ export const useEventHook = () => {
     );
   };
 
+  const useEventRankerLiveTipping = (
+    events: string,
+    musician?: string,
+    params?: ParamsProps,
+  ) => {
+    return useQuery(
+      [`event/detail/toptipper/${events}`],
+      () => getEventLiveRank(events, musician, params),
+      {
+        refetchInterval: 5000,
+        refetchIntervalInBackground: true,
+      },
+    );
+  };
+
   return {
     getListDataMerch,
     getListDataConcert,
@@ -164,5 +180,6 @@ export const useEventHook = () => {
     useEventTopTipper,
     useEventMusicianTipped,
     useEventMusicianLiveStatus,
+    useEventRankerLiveTipping,
   };
 };

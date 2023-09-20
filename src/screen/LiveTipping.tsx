@@ -29,8 +29,9 @@ import {useCreditHook} from '../hooks/use-credit.hook';
 import {ModalLoading} from '../components/molecule/ModalLoading/ModalLoading';
 import BackgroundService from 'react-native-background-actions';
 import {liveTipping} from '../api/credit.api';
-import {storage} from '../hooks/use-storage.hook';
+import {profileStorage, storage} from '../hooks/use-storage.hook';
 import {useEventHook} from '../hooks/use-event.hook';
+import {EventTopTipper} from '../interface/event.interface';
 
 type LiveTippingProps = NativeStackScreenProps<RootStackParams, 'LiveTipping'>;
 
@@ -45,7 +46,9 @@ export const LiveTipping: FC<LiveTippingProps> = ({
     useMusicianHook();
   const {dataCountProfile, getTotalCountProfile} = useProfileHook();
   const {creditCount, getCreditCount} = useCreditHook();
-  const {useEventMusicianLiveStatus} = useEventHook();
+  const {useEventMusicianLiveStatus, useEventRankerLiveTipping} =
+    useEventHook();
+  const profile = profileStorage();
 
   const [showModalEmpty, setShowModalEmpty] = useState<boolean>(false);
   const [showModalSession, setShowModalSession] = useState<boolean>(false);
@@ -75,41 +78,31 @@ export const LiveTipping: FC<LiveTippingProps> = ({
     uuid,
   );
 
+  const {data: dataRanker, refetch: refetchRanker} = useEventRankerLiveTipping(
+    eventId,
+    uuid,
+  );
+
   useEffect(() => {
     refetchStatus();
+    refetchRanker();
   }, []);
 
   useEffect(() => {
     setShowModalSession(!dataStatus?.data as boolean);
   }, [dataStatus]);
 
-  // TODO: change with response from API
-  const rank = [
-    {
-      rank: 1,
-      username: 'leroy',
-      credit: 56000,
-      isYou: false,
-    },
-    {
-      rank: 2,
-      username: 'Jenkins',
-      credit: 20000,
-      isYou: false,
-    },
-    {
-      rank: 3,
-      username: 'Ahoi',
-      credit: 10000,
-      isYou: false,
-    },
-    {
-      rank: 4,
-      username: 'You!',
-      credit: 10,
-      isYou: true,
-    },
-  ];
+  const formatRanker = (data: EventTopTipper[]) => {
+    return data?.map(v => {
+      return {
+        rank: v.rank,
+        avatar: v.tipperImage,
+        username: v.tipperFullname,
+        credit: v.totalDonation,
+        isYou: v.tipperUUID === profile?.uuid,
+      };
+    });
+  };
 
   useEffect(() => {
     if (!showMoney) {
@@ -367,11 +360,11 @@ export const LiveTipping: FC<LiveTippingProps> = ({
           <Gap height={heightResponsive(12)} />
 
           <View style={styles.rowCenter}>
-            {rank.map((v, i) => {
+            {formatRanker(dataRanker?.data ?? []).map((v, i) => {
               return (
                 <React.Fragment key={i}>
                   <RankCard
-                    rank={v.rank}
+                    rank={Number(v.rank)}
                     username={v.username}
                     credit={v.credit}
                     isYou={v.isYou}
