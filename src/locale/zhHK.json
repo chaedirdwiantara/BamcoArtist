@@ -885,7 +885,7 @@
       },
       "ShareQR": {
         "Subtitle": "Share this QR code to let others know the Beamco profile",
-        "BtnShare": "Share QR Code",
+        "BtnShare": "Share Profile",
         "BtnBack": "Back"
       }
     },
@@ -1408,7 +1408,8 @@
     },
     "Profile": {
       "Title": "Get in touch with {{name}}",
-      "Subtitle": "Discover Attention-Grabbing Musicians to Explore!"
+      "Subtitle": "Discover Attention-Grabbing Musicians to Explore!",
+      "LinkCopied": "The profile URL has been copied!"
     }
   },
   "ModalComponent": {

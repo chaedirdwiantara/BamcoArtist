@@ -574,9 +574,7 @@ const PostListProfile: FC<PostListProps> = (props: PostListProps) => {
         category={setSelectedCategory}
         reportReason={setReason}
         modalOnHide={
-          dataReport
-            ? onModalReportHide
-            : () => console.log(modalShare, 'modal is hide')
+          dataReport ? onModalReportHide : () => console.log('modal is hide')
         }
       />
       {/* //? When report succesfully */}
