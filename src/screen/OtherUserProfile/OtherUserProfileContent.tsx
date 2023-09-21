@@ -149,7 +149,7 @@ export const OtherUserProfileContent: React.FC<ProfileContentProps> = ({
   };
 
   const onPressShareQR = () => {
-    // navigation.navigate('MyQRCode', {uuid: profile.uuid});
+    navigation.navigate('MyQRCode', {uuid: profile.uuid, type: 'fans'});
   };
 
   //! BLOCK/UNBLOCK AREA
