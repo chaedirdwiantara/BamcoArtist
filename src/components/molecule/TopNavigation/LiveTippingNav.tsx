@@ -1,5 +1,12 @@
-import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
-import React from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Animated,
+  Easing,
+} from 'react-native';
+import React, {useEffect, useRef, useState} from 'react';
 import {CoinDIcon, AddIcon, GiftIcon} from '../../../assets/icon';
 import Color from '../../../theme/Color';
 import Typography from '../../../theme/Typography';
@@ -13,11 +20,41 @@ type Props = {
   onPressCredit: () => void;
   onPressGift: () => void;
   isNewGift?: boolean;
+  onSwipe?: boolean;
 };
 
 const LiveTippingNav = (props: Props) => {
-  const {credit, onPressCredit, onPressGift, isNewGift} = props;
+  const {credit, onPressCredit, onPressGift, isNewGift, onSwipe} = props;
   const {t} = useTranslation();
+  const animatedValue = useRef(new Animated.Value(0)).current;
+  const [isTop, setIsTop] = useState(true);
+
+  const startAnimation = (toValue: number) => {
+    Animated.timing(animatedValue, {
+      toValue,
+      duration: 300,
+      easing: Easing.linear,
+      useNativeDriver: true,
+    }).start(() => {
+      setIsTop(!isTop);
+    });
+  };
+
+  useEffect(() => {
+    startAnimation(onSwipe ? 1 : 0);
+  }, [onSwipe]);
+
+  const translateY = animatedValue.interpolate({
+    inputRange: [0, 1],
+    outputRange: [heightResponsive(0), heightResponsive(40)],
+    extrapolate: 'clamp',
+  });
+
+  const rotateY = animatedValue.interpolate({
+    inputRange: [0, 1],
+    outputRange: ['0deg', '180deg'],
+  });
+
   return (
     <View
       style={{
@@ -26,6 +63,28 @@ const LiveTippingNav = (props: Props) => {
       }}>
       <View style={styles.rowCenter}>
         <View style={styles.creditWrapper}>
+          {onSwipe && (
+            <View style={styles.containerAnimation}>
+              <Animated.View
+                style={[
+                  {
+                    transform: [{translateY}, {rotateY}],
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                  },
+                ]}>
+                <CoinDIcon width={widthResponsive(10)} />
+                {/* <Text
+                  style={[
+                    Typography.Overline,
+                    {color: Color.Neutral[10], fontWeight: '600'},
+                  ]}>
+                  -1
+                </Text> */}
+              </Animated.View>
+            </View>
+          )}
+
           <CoinDIcon width={widthResponsive(10)} />
           <Gap width={widthResponsive(3)} />
           <Text
@@ -127,5 +186,10 @@ const styles = StyleSheet.create({
     color: Color.Neutral[10],
     fontWeight: '700',
     fontSize: mvs(8),
+  },
+  containerAnimation: {
+    position: 'absolute',
+    bottom: 0,
+    left: widthResponsive(8),
   },
 });

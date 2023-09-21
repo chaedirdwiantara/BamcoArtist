@@ -3,8 +3,10 @@ import {
   fetchListOrder,
   getEventDetail,
   getEventLineUp,
+  getEventLiveRank,
   getEventMusicianTipped,
   getEventTopTipper,
+  getStatusLiveMusician,
   listConcert,
   listEventMusician,
   listMerch,
@@ -140,6 +142,32 @@ export const useEventHook = () => {
     });
   };
 
+  const useEventMusicianLiveStatus = (eventId: string, musicianId: string) => {
+    return useQuery(
+      [`event/${eventId}/${musicianId}`],
+      () => getStatusLiveMusician(eventId, musicianId),
+      {
+        refetchInterval: 5000,
+        refetchIntervalInBackground: true,
+      },
+    );
+  };
+
+  const useEventRankerLiveTipping = (
+    events: string,
+    musician?: string,
+    params?: ParamsProps,
+  ) => {
+    return useQuery(
+      [`event/detail/toptipper/${events}`],
+      () => getEventLiveRank(events, musician, params),
+      {
+        refetchInterval: 5000,
+        refetchIntervalInBackground: true,
+      },
+    );
+  };
+
   return {
     getListDataMerch,
     getListDataConcert,
@@ -151,5 +179,7 @@ export const useEventHook = () => {
     useOrderListBookYay,
     useEventTopTipper,
     useEventMusicianTipped,
+    useEventMusicianLiveStatus,
+    useEventRankerLiveTipping,
   };
 };

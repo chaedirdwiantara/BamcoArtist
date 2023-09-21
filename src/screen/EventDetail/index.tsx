@@ -10,7 +10,7 @@ import {
   NativeScrollEvent,
   RefreshControl,
 } from 'react-native';
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import Color from '../../theme/Color';
 import {heightResponsive, width, widthResponsive} from '../../utils';
 import {Gap, SsuDivider, TabFilter, TopNavigation} from '../../components';
@@ -74,23 +74,18 @@ export const EventDetail: React.FC<EventDetailProps> = ({
   } = useEventLineUp(id);
 
   const {
-    data: dataDetail,
-    refetch: refetchDetail,
-    isLoading: isLoadingDetail,
-    isRefetching: isRefetchingDetail,
-  } = useEventDetail(id);
-
-  const {
     data: dataTopTipper,
     refetch: refetchTopTipper,
     isLoading: isLoadingTopTipper,
     isRefetching: isRefetchingTopTipper,
   } = useEventTopTipper(id);
 
-  useEffect(() => {
-    refetchLineUp();
-    refetchDetail();
-  }, []);
+  const {
+    data: dataDetail,
+    refetch: refetchDetail,
+    isLoading: isLoadingDetail,
+    isRefetching: isRefetchingDetail,
+  } = useEventDetail(id);
 
   useFocusEffect(
     useCallback(() => {
@@ -146,7 +141,6 @@ export const EventDetail: React.FC<EventDetailProps> = ({
                 leftIcon={<ArrowLeftIcon />}
                 leftIconAction={handleBackAction}
                 containerStyles={{
-                  paddingHorizontal: widthResponsive(20),
                   borderBottomColor: 'transparent',
                 }}
               />
@@ -238,6 +232,7 @@ export const EventDetail: React.FC<EventDetailProps> = ({
             <LineUp
               dataLineUp={dataLineUp?.data}
               isLoading={isLoadingLineUp || isRefetchingLineUp}
+              eventId={id}
             />
           ) : (
             <TopTiper
