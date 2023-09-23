@@ -1,11 +1,18 @@
 import {EmitterSubscription, Platform} from 'react-native';
 import * as IAP from 'react-native-iap';
-import {createIapApple, generateSessionPurchase} from '../api/credit.api';
+import {
+  createIapApple,
+  createIapGoogle,
+  generateSessionPurchase,
+} from '../api/credit.api';
 import {getCoinFromProductId} from '../utils';
 import {useIapStore} from '../store/iap.store';
 import {storage} from './use-storage.hook';
 import {AuthType} from '../interface/auth.interface';
 import {useCreditHook} from './use-credit.hook';
+import {queryClient} from '../service/queryClient';
+
+let executeOnce = false;
 
 export const useIapHook = () => {
   const {getCreditCount} = useCreditHook();
@@ -73,48 +80,80 @@ export const useIapHook = () => {
     initIAP();
     purchaseUpdateListener = IAP.purchaseUpdatedListener(
       async (purchase: IAP.SubscriptionPurchase | IAP.ProductPurchase) => {
-        const receipt = purchase.transactionReceipt;
-        if (receipt) {
-          const deviceId = storage.getString('uniqueId');
-          const JSONProfile = storage.getString('profile') as string;
-          const profileObject = JSON.parse(JSONProfile) as AuthType;
-          const ownerId = profileObject.uuid;
-          let selectedProduct: IAP.Product[] = [];
-          const listProduct = (await getProductIap()) as IAP.Product[];
-          selectedProduct = listProduct.filter(
-            ar => ar.productId === purchase.productId,
-          );
-          if (deviceId) {
-            const generateSession = await generateSessionPurchase({
-              deviceId: deviceId,
-            });
-            if (selectedProduct.length > 0) {
-              if (Platform.OS === 'ios') {
-                await createIapApple({
-                  owner: ownerId,
-                  ownerType: 2, //1 fans, 2 musician
-                  trxReferenceId: purchase.transactionId ?? '',
-                  credit: parseInt(
-                    getCoinFromProductId({
-                      productId: purchase.productId,
-                      type: 'number',
-                    }),
-                  ),
-                  packageId: purchase.productId,
-                  currency: selectedProduct[0].currency,
-                  packagePrice: Number(selectedProduct[0].price),
-                  trxStatus: 1,
-                  deviceId: deviceId,
-                  trxSession: generateSession.data.Session,
-                });
-              } else if (Platform.OS === 'android') {
-                // TODO: witing create iap android
+        const runOnce = (() => {
+          return async () => {
+            if (!executeOnce) {
+              executeOnce = true;
+              const receipt = purchase.transactionReceipt;
+              if (receipt) {
+                const deviceId = storage.getString('uniqueId');
+                const JSONProfile = storage.getString('profile') as string;
+                const profileObject = JSON.parse(JSONProfile) as AuthType;
+                const ownerId = profileObject.uuid;
+                let selectedProduct: IAP.Product[] = [];
+                const listProduct = (await getProductIap()) as IAP.Product[];
+                selectedProduct = listProduct.filter(
+                  ar => ar.productId === purchase.productId,
+                );
+                if (deviceId) {
+                  const generateSession = await generateSessionPurchase({
+                    deviceId: deviceId,
+                  });
+                  if (selectedProduct.length > 0) {
+                    if (Platform.OS === 'ios') {
+                      await createIapApple({
+                        owner: ownerId,
+                        ownerType: 2, //1 fans, 2 musician
+                        trxReferenceId: purchase.transactionId ?? '',
+                        credit: parseInt(
+                          getCoinFromProductId({
+                            productId: purchase.productId,
+                            type: 'number',
+                          }),
+                        ),
+                        packageId: purchase.productId,
+                        currency: selectedProduct[0].currency,
+                        packagePrice: Number(selectedProduct[0].price),
+                        trxStatus: 1,
+                        deviceId: deviceId,
+                        trxSession: generateSession.data.Session,
+                      });
+                    } else if (Platform.OS === 'android') {
+                      await createIapGoogle({
+                        owner: ownerId,
+                        ownerType: 2, //1 fans, 2 musician
+                        trxReferenceId: purchase.transactionId ?? '',
+                        credit: parseInt(
+                          getCoinFromProductId({
+                            productId: purchase.productId,
+                            type: 'number',
+                          }),
+                        ),
+                        packageId: purchase.productId,
+                        currency: selectedProduct[0].currency,
+                        packagePrice: Number(
+                          selectedProduct[0].price.replace(/[^0-9.-]+/g, ''),
+                        ),
+                        trxStatus: 1,
+                        deviceId: deviceId,
+                        trxSession: generateSession.data.Session,
+                        packageName: purchase.packageNameAndroid,
+                        token: purchase.purchaseToken,
+                      });
+                    }
+                    await getCreditCount();
+                  }
+                }
+                await IAP.finishTransaction({purchase, isConsumable: true});
+                executeOnce = false;
               }
-              await getCreditCount();
+              queryClient.invalidateQueries({
+                queryKey: ['transaction-history'],
+              });
             }
-          }
-          await IAP.finishTransaction({purchase, isConsumable: true});
-        }
+          };
+        })();
+        runOnce();
       },
     );
     purchaseErrorListener = IAP.purchaseErrorListener(

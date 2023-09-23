@@ -131,6 +131,8 @@ export interface CreateIapPropsType {
   trxStatus: number;
   deviceId: string;
   trxSession: string;
+  packageName?: string;
+  token?: string;
 }
 
 export interface CreateIapResponseType extends BaseResponseApi {

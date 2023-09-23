@@ -153,6 +153,22 @@ export const createIapApple = async (
   return data;
 };
 
+export const createIapGoogle = async (
+  props: CreateIapPropsType,
+): Promise<CreateIapResponseType> => {
+  const {data} = await SsuAPI().request<CreateIapResponseType>({
+    url: '/transaction/iap/google',
+    method: 'POST',
+    data: props,
+    headers: {
+      'Device-Id': props.deviceId,
+      'Transaction-Session': props.trxSession,
+    },
+  });
+
+  return data;
+};
+
 export const getListRevenue = async ({
   page,
   perPage,

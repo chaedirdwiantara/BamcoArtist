@@ -11,15 +11,9 @@ import {
   widthPercentage,
   heightPercentage,
 } from '../../../utils';
-import {
-  listPrice,
-  withdrawalList,
-  transactionList,
-  ListWithdrawalProps,
-  ListTransactionProps,
-} from '../../../data/topUp';
+import {ListWithdrawalProps} from '../../../data/topUp';
 import {CoinCard} from './CoinCard';
-import {Button, Gap} from '../../atom';
+import {Gap} from '../../atom';
 import {TabFilter} from '../TabFilter';
 import {TopNavigation} from '../TopNavigation';
 import {WithdrawalCard} from './WithdrawalCard';
@@ -47,7 +41,6 @@ export const TopUpCreditContent: React.FC<TopUpCreditProps> = ({
   const {creditCount, getCreditCount, getTransactionHistory} = useCreditHook();
   const {
     iapProduct,
-    initIAP,
     endIap,
     getProductIap,
     purchaseProduct,
@@ -55,12 +48,11 @@ export const TopUpCreditContent: React.FC<TopUpCreditProps> = ({
     purchaseUpdateListener,
     purchaseErrorListener,
   } = useIapHook();
-  const {data: dataHistory, isLoading} = useQuery(
-    ['/transaction-history'],
-    () => getTransactionHistory(),
-  );
+  const {data: dataHistory, isLoading} = useQuery({
+    queryKey: ['transaction-history'],
+    queryFn: () => getTransactionHistory(),
+  });
   const [selectedIndex, setSelectedIndex] = useState<number>(0);
-  const [listTransaction] = useState<ListTransactionProps[]>([]);
   const [listWithdrawal, setListWithdrawal] = useState<ListWithdrawalProps[]>(
     [],
   );
