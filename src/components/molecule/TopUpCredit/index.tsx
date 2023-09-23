@@ -75,7 +75,6 @@ export const TopUpCreditContent: React.FC<TopUpCreditProps> = ({
   }, []);
 
   useEffect(() => {
-    initIAP();
     getProductIap();
     loadIapListener();
 

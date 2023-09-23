@@ -16,7 +16,12 @@ export const useIapHook = () => {
       'Credit_beamco_artist_1200',
       'Credit_beamco_artist_6500',
     ],
-    android: [],
+    android: [
+      'credit_beamco_artist_100',
+      'credit_beamco_artist_540',
+      'credit_beamco_artist_1200',
+      'credit_beamco_artist_6500',
+    ],
   });
   const iapStore = useIapStore();
 
@@ -33,6 +38,7 @@ export const useIapHook = () => {
 
   const getProductIap = async () => {
     try {
+      await initIAP();
       const response = await IAP.getProducts({skus: productId ?? []});
       iapStore.setProductList(response);
       return response;
@@ -47,10 +53,17 @@ export const useIapHook = () => {
 
   const purchaseProduct = async (sku: string) => {
     try {
-      await IAP.requestPurchase({
-        sku,
-        andDangerouslyFinishTransactionAutomaticallyIOS: false,
-      });
+      if (Platform.OS === 'ios') {
+        await IAP.requestPurchase({
+          sku,
+          andDangerouslyFinishTransactionAutomaticallyIOS: false,
+        });
+      } else if (Platform.OS === 'android') {
+        await IAP.requestPurchase({
+          skus: [sku],
+          andDangerouslyFinishTransactionAutomaticallyIOS: false,
+        });
+      }
     } catch (err) {
       console.log(err);
     }
@@ -60,10 +73,8 @@ export const useIapHook = () => {
     initIAP();
     purchaseUpdateListener = IAP.purchaseUpdatedListener(
       async (purchase: IAP.SubscriptionPurchase | IAP.ProductPurchase) => {
-        console.log('purchaseUpdatedListener', purchase);
         const receipt = purchase.transactionReceipt;
         if (receipt) {
-          // TODO: wiring to backend to add the credit into profile
           const deviceId = storage.getString('uniqueId');
           const JSONProfile = storage.getString('profile') as string;
           const profileObject = JSON.parse(JSONProfile) as AuthType;
@@ -78,23 +89,27 @@ export const useIapHook = () => {
               deviceId: deviceId,
             });
             if (selectedProduct.length > 0) {
-              await createIapApple({
-                owner: ownerId,
-                ownerType: 2, //1 fans, 2 musician
-                trxReferenceId: purchase.transactionId ?? '',
-                credit: parseInt(
-                  getCoinFromProductId({
-                    productId: purchase.productId,
-                    type: 'number',
-                  }),
-                ),
-                packageId: purchase.productId,
-                currency: selectedProduct[0].currency,
-                packagePrice: Number(selectedProduct[0].price),
-                trxStatus: 1,
-                deviceId: deviceId,
-                trxSession: generateSession.data.Session,
-              });
+              if (Platform.OS === 'ios') {
+                await createIapApple({
+                  owner: ownerId,
+                  ownerType: 2, //1 fans, 2 musician
+                  trxReferenceId: purchase.transactionId ?? '',
+                  credit: parseInt(
+                    getCoinFromProductId({
+                      productId: purchase.productId,
+                      type: 'number',
+                    }),
+                  ),
+                  packageId: purchase.productId,
+                  currency: selectedProduct[0].currency,
+                  packagePrice: Number(selectedProduct[0].price),
+                  trxStatus: 1,
+                  deviceId: deviceId,
+                  trxSession: generateSession.data.Session,
+                });
+              } else if (Platform.OS === 'android') {
+                // TODO: witing create iap android
+              }
               await getCreditCount();
             }
           }

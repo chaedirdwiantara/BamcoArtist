@@ -7230,10 +7230,10 @@ react-native-gradle-plugin@^0.70.3:
   resolved "https://registry.yarnpkg.com/react-native-gradle-plugin/-/react-native-gradle-plugin-0.70.3.tgz#cbcf0619cbfbddaa9128701aa2d7b4145f9c4fc8"
   integrity sha512-oOanj84fJEXUg9FoEAQomA8ISG+DVIrTZ3qF7m69VQUJyOGYyDZmPqKcjvRku4KXlEH6hWO9i4ACLzNBh8gC0A==
 
-react-native-iap@^12.10.5:
-  version "12.10.5"
-  resolved "https://registry.yarnpkg.com/react-native-iap/-/react-native-iap-12.10.5.tgz#d9def0191bcc8d414a017a9b11f48730fca87155"
-  integrity sha512-KVIgIiz3EE0esPVSZiavKSN2NeUarURA5JJUh6XUGXSsM9YTS3pZaJZpHo8Z62vbsXceg17N5soCnlyvaNmIIQ==
+react-native-iap@^12.10.8:
+  version "12.10.8"
+  resolved "https://registry.yarnpkg.com/react-native-iap/-/react-native-iap-12.10.8.tgz#4cf1670ca3401381b48a822ef444e0835f9af4f3"
+  integrity sha512-n5iw1Lzw0tXN54sx/bcS5nttfnJ6ecQb95FYzLHN3NIsrRK9nkudcf5LhmNXznHkfh6YdMk0w8V1vRWRWiDRcA==
   dependencies:
     "@expo/config-plugins" "^6.0.1"
 
@@ -7347,10 +7347,10 @@ react-native-video@^6.0.0-alpha.4:
     keymirror "^0.1.1"
     prop-types "^15.7.2"
 
-react-native-vision-camera@^2.15.4:
-  version "2.15.4"
-  resolved "https://registry.yarnpkg.com/react-native-vision-camera/-/react-native-vision-camera-2.15.4.tgz#821f0505fc8c63b87c1ae4697d2bb4f670333576"
-  integrity sha512-SJXSWH1pu4V3Kj4UuX/vSgOxc9d5wb5+nHqBHd+5iUtVyVLEp0F6Jbbaha7tDoU+kUBwonhlwr2o8oV6NZ7Ibg==
+react-native-vision-camera@^2.16.1:
+  version "2.16.1"
+  resolved "https://registry.yarnpkg.com/react-native-vision-camera/-/react-native-vision-camera-2.16.1.tgz#b1af6d2161a7b19dc39da8f645344a63b0d4ded8"
+  integrity sha512-2utw/1EkgeaL6CLQX9Bm6HEpkmkbyx/dBJmwjA2nVz3IuXn5ys57NwMa0o/qg8proSGvcs8XKpqtQtnMPA1P+w==
 
 react-native-webview@^11.25.0:
   version "11.26.0"
