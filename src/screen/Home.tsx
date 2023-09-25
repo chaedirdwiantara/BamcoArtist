@@ -84,6 +84,7 @@ type HomeProps = NativeStackScreenProps<MainTabParams, 'Home'>;
 interface ModalPostState {
   isExclusivePostModal: boolean;
   isSetExclusiveSetting: boolean;
+  isBanned: boolean;
 }
 
 export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
@@ -116,6 +117,7 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
   const [showModalPost, setShowModalPost] = useState<ModalPostState>({
     isExclusivePostModal: false,
     isSetExclusiveSetting: false,
+    isBanned: false,
   });
   const [postChoice, setPostChoice] = useState<
     'choiceA' | 'choiceB' | undefined
@@ -307,17 +309,27 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
   };
 
   const handleCreatePost = () => {
-    setShowModalPost({
-      isExclusivePostModal: true,
-      isSetExclusiveSetting: false,
-    });
-    getExclusiveContent({uuid});
+    if (dataProfile?.data.isBanned) {
+      setShowModalPost({
+        isExclusivePostModal: false,
+        isSetExclusiveSetting: false,
+        isBanned: true,
+      });
+    } else {
+      setShowModalPost({
+        isExclusivePostModal: true,
+        isSetExclusiveSetting: false,
+        isBanned: false,
+      });
+      getExclusiveContent({uuid});
+    }
   };
 
   const handleCreatePostBackdrop = () => {
     setShowModalPost({
       isExclusivePostModal: false,
       isSetExclusiveSetting: false,
+      isBanned: false,
     });
   };
 
@@ -326,6 +338,7 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
     setShowModalPost({
       isExclusivePostModal: false,
       isSetExclusiveSetting: false,
+      isBanned: false,
     });
   };
 
@@ -340,6 +353,7 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
         setShowModalPost({
           isExclusivePostModal: false,
           isSetExclusiveSetting: true,
+          isBanned: false,
         });
       } else {
         uriVideo && setUriVideo(null);
@@ -353,6 +367,7 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
     setShowModalPost({
       isExclusivePostModal: false,
       isSetExclusiveSetting: false,
+      isBanned: false,
     });
   };
 
@@ -360,6 +375,7 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
     setShowModalPost({
       isExclusivePostModal: false,
       isSetExclusiveSetting: false,
+      isBanned: false,
     });
     navigation.navigate('ExclusiveContentSetting', {type: 'navToCreatePost'});
   };
@@ -387,6 +403,23 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
   if (isLoadingBanner) {
     return <View style={styles.root} />;
   }
+
+  const handleCloseBanModal = () => {
+    setShowModalPost({
+      isExclusivePostModal: false,
+      isSetExclusiveSetting: false,
+      isBanned: false,
+    });
+  };
+
+  const handleOkBanModal = () => {
+    setShowModalPost({
+      isExclusivePostModal: false,
+      isSetExclusiveSetting: false,
+      isBanned: false,
+    });
+    navigation.navigate('Setting');
+  };
 
   return (
     <View style={styles.root}>
@@ -582,6 +615,19 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
         noText={t('Modal.ExclusiveContentConfirm.ButtonCancel') || ''}
         onPressClose={handleMaybeLater}
         onPressOk={handleConfirmModal}
+      />
+
+      {/* //? Banned user modal */}
+      <ModalConfirm
+        modalVisible={showModalPost.isBanned}
+        title={`${t('Setting.PreventInteraction.Title')}`}
+        subtitle={`${t('Setting.PreventInteraction.Subtitle')}`}
+        yesText={`${t('Btn.Send')}`}
+        noText={`${t('Btn.Cancel')}`}
+        onPressClose={handleCloseBanModal}
+        onPressOk={handleOkBanModal}
+        textNavigate={`${t('Setting.PreventInteraction.TextNavigate')}`}
+        textOnPress={handleOkBanModal}
       />
     </View>
   );
