@@ -192,7 +192,7 @@ export const MusicianDetail: React.FC<MusicianDetailProps> = ({
   };
 
   const onPressShareQR = () => {
-    navigation.navigate('MyQRCode', {uuid});
+    navigation.navigate('MyQRCode', {uuid, type: 'otherMusician'});
   };
 
   //! BLOCK/UNBLOCK AREA

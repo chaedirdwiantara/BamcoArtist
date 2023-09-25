@@ -8,6 +8,7 @@ import ModalTipped from '../../components/molecule/Modal/ModalTipped';
 import MusiciansListCard from '../../components/molecule/ListCard/MusiciansListCard';
 import {useEventHook} from '../../hooks/use-event.hook';
 import {EventTopTipper} from '../../interface/event.interface';
+import {profileStorage} from '../../hooks/use-storage.hook';
 
 interface TopTiperProps {
   dataTipper?: EventTopTipper[];
@@ -17,6 +18,7 @@ interface TopTiperProps {
 
 const TopTiper: FC<TopTiperProps> = ({dataTipper, isLoading, eventId}) => {
   const {t} = useTranslation();
+  const profile = profileStorage();
 
   const {useEventMusicianTipped} = useEventHook();
   const [listTipper, setListTipper] = useState(dataTipper);
@@ -64,7 +66,11 @@ const TopTiper: FC<TopTiperProps> = ({dataTipper, isLoading, eventId}) => {
                   minimumIntegerDigits: 2,
                   useGrouping: false,
                 })}
-                musicianName={item.tipperFullname}
+                musicianName={
+                  profile?.uuid === item.tipperUUID
+                    ? 'You'
+                    : item.tipperFullname
+                }
                 imgUri={item.tipperImage || ''}
                 containerStyles={{marginTop: mvs(18)}}
                 activeMore={false}

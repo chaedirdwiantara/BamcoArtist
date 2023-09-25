@@ -6,6 +6,7 @@ import {
   EventMusicianTippedResponse,
   EventTopTipperResponse,
   MerchListResponse,
+  MusicianStatusResponse,
   OrderListBookyay,
   SearchEventInput,
 } from '../interface/event.interface';
@@ -135,6 +136,36 @@ export const getEventMusicianTipped = async (
       per_page: 100,
       filter_column: 'event_id',
       filter_value: event_id,
+      ...props,
+    },
+  });
+
+  return data;
+};
+
+export const getStatusLiveMusician = async (
+  eventId: string,
+  musicianId: string,
+): Promise<MusicianStatusResponse> => {
+  const {data} = await RinjaniAPI().request<MusicianStatusResponse>({
+    url: `/events/${eventId}/check-musician-live/${musicianId}`,
+    method: 'GET',
+  });
+
+  return data;
+};
+
+export const getEventLiveRank = async (
+  events: string,
+  musician?: string,
+  props?: ParamsProps,
+): Promise<EventTopTipperResponse> => {
+  const {data} = await KrakatauAPI().request<EventTopTipperResponse>({
+    url: `/events/live/top-tipper`,
+    method: 'GET',
+    params: {
+      events,
+      musician,
       ...props,
     },
   });

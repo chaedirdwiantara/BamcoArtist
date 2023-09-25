@@ -434,7 +434,7 @@
       "Latest": "最新的",
       "Popular": "最新的"
     },
-    "FilterBy":{
+    "FilterBy": {
       "Title": "Filter by",
       "All": "All",
       "Exclusive": "Exclusive",
@@ -747,6 +747,7 @@
       "ToastAddAddress": "Address has been added!",
       "ToastChangeAddress": "Address has been updated!",
       "ToastDeleteAddress": "Address has been deleted!",
+      "PhoneNumberInvalid": "Phone number is invalid, ensure phone number you've entered is correct",
       "Label": {
         "Email": "電子郵件",
         "Phone": "電話號碼",
@@ -885,7 +886,7 @@
       },
       "ShareQR": {
         "Subtitle": "Share this QR code to let others know the Beamco profile",
-        "BtnShare": "Share QR Code",
+        "BtnShare": "Share Profile",
         "BtnBack": "Back"
       }
     },
@@ -1425,7 +1426,8 @@
     },
     "Profile": {
       "Title": "Get in touch with {{name}}",
-      "Subtitle": "Discover Attention-Grabbing Musicians to Explore!"
+      "Subtitle": "Discover Attention-Grabbing Musicians to Explore!",
+      "LinkCopied": "The profile URL has been copied!"
     }
   },
   "ModalComponent": {
@@ -1512,5 +1514,10 @@
     "ValidUntil": "Valid until",
     "Claim": "Claim",
     "Claimed": "Claimed"
+  },
+  "LiveTipping": {
+    "SwipeUp": "Swipe Up To Tip",
+    "TooFast": "You swipe to fast!",
+    "EnjoyShow": "Let’s enjoy the show\nand take a rest for few second"
   }
 }

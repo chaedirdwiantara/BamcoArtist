@@ -99,7 +99,6 @@ export const ProfileProgressScreen: React.FC = () => {
       if (dataProfile) {
         if (screenName === 'AccountInformation') {
           navigation.navigate(screenName, {
-            data: dataProfile?.data,
             fromScreen: 'progress',
           });
         } else {

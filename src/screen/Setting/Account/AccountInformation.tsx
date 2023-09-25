@@ -6,6 +6,7 @@ import Color from '../../../theme/Color';
 import {AccountContent} from '../../../components';
 import {RootStackParams} from '../../../navigations';
 import {useSettingHook} from '../../../hooks/use-setting.hook';
+import {useProfileHook} from '../../../hooks/use-profile.hook';
 import {useLocationHook} from '../../../hooks/use-location.hook';
 
 type AccountInformationProps = NativeStackScreenProps<
@@ -16,7 +17,7 @@ export const AccountInformationScreen: React.FC<AccountInformationProps> = ({
   navigation,
   route,
 }: AccountInformationProps) => {
-  const {data, fromScreen} = route.params;
+  const {fromScreen} = route.params;
   const {
     dataAllCountry,
     dataCitiesOfCountry,
@@ -30,25 +31,27 @@ export const AccountInformationScreen: React.FC<AccountInformationProps> = ({
     listGenre,
     listMood,
   } = useSettingHook();
+  const {dataProfile, getProfileUser} = useProfileHook();
   const [selectedCountry, setSelectedCountry] = useState<number>(0);
 
   useEffect(() => {
     getDataAllCountry();
     getListMoodGenre({page: 0, perPage: 30});
     getListRolesInIndustry();
+    getProfileUser();
   }, []);
 
   useEffect(() => {
-    if (data) {
-      setSelectedCountry(data.locationCountry?.id || 0);
+    if (dataProfile?.data) {
+      setSelectedCountry(dataProfile.data.locationCountry?.id || 0);
     }
-  }, [data]);
+  }, [dataProfile]);
 
   useEffect(() => {
     if (selectedCountry > 0) {
       getCitiesOfCountry({id: selectedCountry});
     }
-  }, [data, selectedCountry]);
+  }, [dataProfile, selectedCountry]);
 
   const onPressGoBack = () => {
     navigation.goBack();
@@ -56,13 +59,13 @@ export const AccountInformationScreen: React.FC<AccountInformationProps> = ({
 
   return (
     <View style={styles.root}>
-      {data && (
+      {dataProfile?.data && (
         <AccountContent
           dataAllCountry={dataAllCountry !== undefined ? dataAllCountry : []}
           dataCitiesOfCountry={
             dataCitiesOfCountry !== undefined ? dataCitiesOfCountry : []
           }
-          profile={data}
+          profile={dataProfile.data}
           moods={listMood}
           genres={listGenre}
           roles={listRoles}

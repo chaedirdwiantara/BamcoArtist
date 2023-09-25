@@ -11,34 +11,36 @@ import {RootStackParams} from '../../navigations';
 import {useProfileHook} from '../../hooks/use-profile.hook';
 import {usePlayerStore} from '../../store/player.store';
 import {mvs} from 'react-native-size-matters';
-import {useTranslation} from 'react-i18next';
 import {color, font} from '../../theme';
 import {MyQRCodeContent} from '../../components/molecule/ProfileContent/MyQRCodeContent';
 import {useMusicianHook} from '../../hooks/use-musician.hook';
+import {QrCode} from '../../interface/qrcode.interface';
 
 type MyQRCodeProps = NativeStackScreenProps<RootStackParams, 'MyQRCode'>;
+type PossibleKeys = 'uuid' | 'fullname' | 'username';
 
 export const MyQRCode: FC<MyQRCodeProps> = ({route}: MyQRCodeProps) => {
-  const {t} = useTranslation();
-
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
-  const {uuid} = route.params;
+  const {uuid, type} = route.params;
 
-  const {dataProfile, getProfileUser} = useProfileHook();
+  const {dataProfile, dataFansProfile, getProfileUser, getOtherProfileUser} =
+    useProfileHook();
   const {dataDetailMusician, getDetailMusician} = useMusicianHook();
   const {setWithoutBottomTab, show} = usePlayerStore();
 
   useEffect(() => {
     if (uuid !== '' && uuid !== undefined) {
-      getDetailMusician({id: uuid});
+      if (type === 'fans') {
+        getOtherProfileUser({id: uuid});
+      } else {
+        getDetailMusician({id: uuid});
+      }
     } else {
       getProfileUser();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [uuid]);
-
-  useEffect(() => {}, [dataProfile]);
 
   useFocusEffect(
     useCallback(() => {
@@ -53,30 +55,50 @@ export const MyQRCode: FC<MyQRCodeProps> = ({route}: MyQRCodeProps) => {
     navigation.goBack();
   };
 
-  const avatar =
+  const avatarMyProfile =
     dataProfile?.data !== undefined &&
     dataProfile?.data.imageProfileUrls?.length > 0
       ? dataProfile?.data.imageProfileUrls[2].image
-      : null;
+      : '';
 
-  const profile = {
-    fullname: dataProfile?.data.fullname,
-    username: dataProfile?.data.username,
-    avatarUri: avatar,
+  const avatarDetailMusician =
+    dataDetailMusician && dataDetailMusician.imageProfileUrls?.length > 0
+      ? dataDetailMusician.imageProfileUrls[2].image
+      : '';
+
+  const avatarOtherFans =
+    dataFansProfile?.data !== undefined &&
+    dataFansProfile?.data.images?.length > 0
+      ? dataFansProfile?.data.images[2].image
+      : '';
+
+  const getDataFromProfileOrMusician = (key: PossibleKeys): string => {
+    if (dataProfile?.data && key in dataProfile.data) {
+      return dataProfile.data[key];
+    } else if (dataDetailMusician && key in dataDetailMusician) {
+      return dataDetailMusician[key];
+    } else if (dataFansProfile?.data && key in dataFansProfile.data) {
+      return dataFansProfile.data[key];
+    }
+    return '';
+  };
+
+  const profile: QrCode = {
+    uuid: getDataFromProfileOrMusician('uuid'),
+    fullname: getDataFromProfileOrMusician('fullname'),
+    username: getDataFromProfileOrMusician('username'),
+    avatarUri:
+      type === 'myProfile'
+        ? avatarMyProfile
+        : type === 'otherMusician'
+        ? avatarDetailMusician
+        : avatarOtherFans,
   };
 
   return (
     <View style={[styles.root, styles.container]}>
-      {dataProfile?.data || dataDetailMusician ? (
-        <MyQRCodeContent
-          type={
-            uuid !== '' && uuid !== undefined ? 'musician detail' : 'profile'
-          }
-          profile={
-            uuid !== '' && uuid !== undefined ? dataDetailMusician : profile
-          }
-          onPressGoBack={onPressGoBack}
-        />
+      {dataProfile?.data || dataDetailMusician || dataFansProfile?.data ? (
+        <MyQRCodeContent profile={profile} onPressGoBack={onPressGoBack} />
       ) : null}
     </View>
   );
