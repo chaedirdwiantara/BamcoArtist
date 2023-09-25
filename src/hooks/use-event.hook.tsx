@@ -8,6 +8,7 @@ import {
   getEventTopTipper,
   getStatusLiveMusician,
   listConcert,
+  listEventHome,
   listEventMusician,
   listMerch,
   searchEvent,
@@ -168,6 +169,12 @@ export const useEventHook = () => {
     );
   };
 
+  const useEventHome = (params?: ParamsProps) => {
+    return useQuery([`event/home}`], () => listEventHome(params), {
+      enabled: false,
+    });
+  };
+
   return {
     getListDataMerch,
     getListDataConcert,
@@ -181,5 +188,6 @@ export const useEventHook = () => {
     useEventMusicianTipped,
     useEventMusicianLiveStatus,
     useEventRankerLiveTipping,
+    useEventHome,
   };
 };
