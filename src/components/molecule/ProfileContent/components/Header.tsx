@@ -78,7 +78,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = (
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
 
   const toMyQrCode = () => {
-    navigation.navigate('MyQRCode', {uuid: ''});
+    navigation.navigate('MyQRCode', {uuid: '', type: 'myProfile'});
   };
 
   const iconRight = () => {

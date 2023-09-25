@@ -5,10 +5,11 @@ import {
   ScrollView,
   StyleSheet,
   KeyboardAvoidingView,
+  Text,
 } from 'react-native';
 import * as yup from 'yup';
 import {useTranslation} from 'react-i18next';
-import {mvs} from 'react-native-size-matters';
+import {ms, mvs} from 'react-native-size-matters';
 import {yupResolver} from '@hookform/resolvers/yup';
 import {Controller, useForm} from 'react-hook-form';
 import {useNavigation} from '@react-navigation/native';
@@ -22,9 +23,9 @@ import {
 } from '../../../utils';
 import {Dropdown} from '../DropDown';
 import Color from '../../../theme/Color';
-import {Button, SsuInput} from '../../atom';
+import {Button, Gap, SsuInput} from '../../atom';
 import {TopNavigation} from '../TopNavigation';
-import {ArrowLeftIcon} from '../../../assets/icon';
+import {ArrowLeftIcon, ErrorIcon} from '../../../assets/icon';
 import {ModalConfirm} from '../Modal/ModalConfirm';
 import {RootStackParams} from '../../../navigations';
 import {storage} from '../../../hooks/use-storage.hook';
@@ -32,6 +33,7 @@ import {DataDropDownType, countryData} from '../../../data/dropdown';
 import {ListCountryType} from '../../../interface/location.interface';
 import {DataShippingProps} from '../../../interface/setting.interface';
 import {createShipping, updateShipping} from '../../../api/setting.api';
+import {font} from '../../../theme';
 
 interface AddShippingAddressProps {
   dataShipping: DataShippingProps | undefined;
@@ -43,7 +45,14 @@ interface AddShippingAddressProps {
 }
 
 const validation = yup.object({
-  phoneNumber: yup.string().required('This field is required'),
+  phoneNumber: yup
+    .string()
+    .strict(true)
+    .trim('Full name cannot include leading and trailing spaces')
+    .matches(
+      /^.{8,15}$/,
+      'Phone number should be min 8 and shorter than 15 digits',
+    ),
   receiverFirstname: yup.string().required('This field is required'),
   receiverLastname: yup.string().required('This field is required'),
   address: yup.string().required('This field is required'),
@@ -78,6 +87,8 @@ export const AddShippingAddress: React.FC<AddShippingAddressProps> = ({
     city: dataShipping?.city || '',
     postalCode: dataShipping?.postalCode?.toString() || '',
   });
+  const [isError, setIsError] = useState<boolean>(false);
+  const [errorMsg, setErrorMsg] = useState<string>('');
 
   const {
     control,
@@ -147,6 +158,8 @@ export const AddShippingAddress: React.FC<AddShippingAddressProps> = ({
   };
 
   const onPressConfirm = async () => {
+    setIsError(false);
+    setErrorMsg('');
     try {
       const payload = {
         ...state,
@@ -162,18 +175,33 @@ export const AddShippingAddress: React.FC<AddShippingAddressProps> = ({
       if (dataShipping === undefined) {
         const response = await createShipping(payload);
 
-        // send id to list address screen, for "new" flag
-        if (response.data.bookyayShipmentID !== undefined) {
-          storage.set('newIdShipping', response.data.bookyayShipmentID);
+        // handle error
+        if (response.code === 500) {
+          setIsError(true);
+          setErrorMsg('Setting.Shipping.PhoneNumberInvalid');
+        } else {
+          // send id to list address screen, for "new" flag
+          if (response.data.bookyayShipmentID !== undefined) {
+            storage.set('newIdShipping', response.data.bookyayShipmentID);
+          }
+          // to show toast add success in list address screen
+          storage.set('toastType', 'add');
+          navigation.goBack();
         }
-        // to show toast add success in list address screen
-        storage.set('toastType', 'add');
       } else {
-        await updateShipping(payload);
-        // to show toast update success in list address screen
-        storage.set('toastType', 'update');
+        // update shipping
+        const response = await updateShipping(payload);
+
+        // handle error
+        if (response.code === 500) {
+          setIsError(true);
+          setErrorMsg('Setting.Shipping.PhoneNumberInvalid');
+        } else {
+          // to show toast update success in list address screen
+          storage.set('toastType', 'update');
+          navigation.goBack();
+        }
       }
-      navigation.goBack();
       setShowModal(false);
     } catch (error) {
       setShowModal(false);
@@ -222,6 +250,8 @@ export const AddShippingAddress: React.FC<AddShippingAddressProps> = ({
                   isFocus={focusInput === 'newPhoneNumber'}
                   onBlur={() => handleFocusInput('')}
                   onSelectCountry={val => onChangeText('phoneNumberCode', val)}
+                  isError={errors?.phoneNumber ? true : false}
+                  errorMsg={errors?.phoneNumber?.message}
                 />
               )}
             />
@@ -356,6 +386,14 @@ export const AddShippingAddress: React.FC<AddShippingAddressProps> = ({
             )}
           />
 
+          {isError ? (
+            <View style={styles.containerErrorMsg}>
+              <ErrorIcon fill={Color.Error[400]} />
+              <Gap width={ms(4)} />
+              <Text style={styles.errorMsg}>{t(errorMsg)}</Text>
+            </View>
+          ) : null}
+
           <Button
             label={t('Btn.Save')}
             onPress={() => setShowModal(true)}
@@ -406,5 +444,18 @@ const styles = StyleSheet.create({
   },
   textStyle: {
     color: Color.Neutral[10],
+  },
+  containerErrorMsg: {
+    width: '100%',
+    flexDirection: 'row',
+    paddingTop: mvs(10),
+    alignItems: 'center',
+  },
+  errorMsg: {
+    color: Color.Error[400],
+    fontFamily: font.InterRegular,
+    fontSize: mvs(11),
+    lineHeight: mvs(12),
+    maxWidth: '90%',
   },
 });

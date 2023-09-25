@@ -1,24 +1,22 @@
 import React from 'react';
 import {View, StyleSheet} from 'react-native';
 import {useTranslation} from 'react-i18next';
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
 import {color} from '../../../theme';
 import {TopNavigation} from '../../../components';
 import {ArrowLeftIcon} from '../../../assets/icon';
 import {RootStackParams} from '../../../navigations';
+import {useNavigation} from '@react-navigation/native';
 import {menuAccount} from '../../../data/Settings/setting';
 import {heightPercentage, widthPercentage} from '../../../utils';
 import {MenuText} from '../../../components/atom/MenuText/MenuText';
 
-type AccountProps = NativeStackScreenProps<RootStackParams, 'Account'>;
-export const AccountScreen: React.FC<AccountProps> = ({
-  navigation,
-  route,
-}: AccountProps) => {
-  const {data} = route.params;
+export const AccountScreen: React.FC = () => {
   const listMenu = menuAccount;
   const {t} = useTranslation();
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParams>>();
 
   const onPressGoBack = () => {
     navigation.goBack();
@@ -28,7 +26,7 @@ export const AccountScreen: React.FC<AccountProps> = ({
     if (val === 'BlockedUser') {
       navigation.navigate(val);
     } else {
-      navigation.navigate('AccountInformation', {fromScreen: 'Account', data});
+      navigation.navigate('AccountInformation', {fromScreen: 'Account'});
     }
   };
 

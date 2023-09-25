@@ -1,4 +1,4 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {useFocusEffect} from '@react-navigation/native';
 import {Button, Gap} from '../../atom';
@@ -13,10 +13,14 @@ import {usePlayerStore} from '../../../store/player.store';
 import {useTranslation} from 'react-i18next';
 import QRCode from 'react-native-qrcode-svg';
 import {widthPercentage} from '../../../utils';
+import Clipboard from '@react-native-community/clipboard';
+import {useShareHook} from '../../../hooks/use-share.hook';
+import {useFeedHook} from '../../../hooks/use-feed.hook';
+import SuccessToast from '../Toast/SuccessToast';
+import {QrCode} from '../../../interface/qrcode.interface';
 
 export interface MyQRCodeContentProps {
-  type: string;
-  profile: any;
+  profile: QrCode;
   onPressGoBack: () => void;
 }
 
@@ -27,11 +31,15 @@ const btnBack = 'Setting.ReferralQR.ShareQR.BtnBack';
 export const MyQRCodeContent: React.FC<MyQRCodeContentProps> = (
   props: MyQRCodeContentProps,
 ) => {
-  const {type, profile, onPressGoBack} = props;
+  const {profile, onPressGoBack} = props;
 
   const {t} = useTranslation();
 
   const {setWithoutBottomTab, show} = usePlayerStore();
+  const {shareLink, getShareLink, successGetLink} = useShareHook();
+  const {sendLogShare} = useFeedHook();
+
+  const [toastVisible, setToastVisible] = useState(false);
 
   useFocusEffect(
     useCallback(() => {
@@ -41,6 +49,26 @@ export const MyQRCodeContent: React.FC<MyQRCodeContentProps> = (
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [show]),
   );
+
+  // SHARE LINK
+  useEffect(() => {
+    if (successGetLink && Clipboard && Clipboard.setString) {
+      Clipboard.setString(shareLink);
+      sendLogShare({id: profile.uuid});
+      setToastVisible(true);
+    }
+  }, [successGetLink]);
+
+  const onPressCopy = () => {
+    getShareLink({
+      scheme: `/musician/${profile.uuid}`,
+      image: profile.avatarUri,
+      title: t('ShareLink.Profile.Title', {
+        name: profile.fullname,
+      }),
+      description: t('ShareLink.Profile.Subtitle'),
+    });
+  };
 
   return (
     <View style={[styles.root, styles.container]}>
@@ -63,13 +91,7 @@ export const MyQRCodeContent: React.FC<MyQRCodeContentProps> = (
           }}>
           <AvatarProfile
             initialName={initialname(profile.fullname)}
-            imgUri={
-              type === 'profile'
-                ? profile.avatarUri
-                : profile.imageProfileUrls.length !== 0
-                ? profile.imageProfileUrls[1]?.image
-                : ''
-            }
+            imgUri={profile.avatarUri}
             type=""
             qrType="shareQR"
             showIcon={false}
@@ -88,7 +110,9 @@ export const MyQRCodeContent: React.FC<MyQRCodeContentProps> = (
               borderColor: '#2c3444',
             },
           ]}>
-          <QRCode value={profile.username} size={widthPercentage(180)} />
+          {shareLink && (
+            <QRCode value={shareLink} size={widthPercentage(180)} />
+          )}
         </View>
         <Gap height={32} />
       </View>
@@ -97,7 +121,7 @@ export const MyQRCodeContent: React.FC<MyQRCodeContentProps> = (
           label={t(btnShare)}
           textStyles={{fontSize: mvs(14)}}
           containerStyles={{width: '80%'}}
-          // onPress={handleScanning}
+          onPress={onPressCopy}
         />
         <Gap height={16} />
 
@@ -107,6 +131,12 @@ export const MyQRCodeContent: React.FC<MyQRCodeContentProps> = (
           textStyles={{fontSize: mvs(14), color: color.Success[400]}}
           containerStyles={{width: '80%'}}
           onPress={onPressGoBack}
+        />
+        {/* //? When copy link done */}
+        <SuccessToast
+          toastVisible={toastVisible}
+          onBackPressed={() => setToastVisible(false)}
+          caption={t('ShareLink.Profile.LinkCopied')}
         />
       </View>
     </View>

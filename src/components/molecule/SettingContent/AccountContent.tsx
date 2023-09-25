@@ -215,9 +215,7 @@ export const AccountContent: React.FC<AccountProps> = ({
   const onPressConfirm = async () => {
     setShowModal(false);
     try {
-      await updateProfilePreference({
-        username: getValues('username'),
-        fullname: getValues('fullname'),
+      const payload = {
         labels: getValues('labels'),
         yearsActiveFrom: getValues('yearsActiveFrom'),
         yearsActiveTo: getValues('yearsActiveTo'),
@@ -230,7 +228,20 @@ export const AccountContent: React.FC<AccountProps> = ({
         moods: valueMoodsPreference as number[],
         favoriteGeneres: valueGenresPreference as number[],
         rolesInIndustry: valueTypeOfMusician as number[],
-      });
+      };
+
+      // if previous screen is progress profile
+      // user doesn't need to send username & full name (req from BE)
+      const newPayload =
+        fromScreen === 'progress'
+          ? payload
+          : {
+              ...payload,
+              username: getValues('username'),
+              fullname: getValues('fullname'),
+            };
+
+      await updateProfilePreference(newPayload);
 
       storage.set(
         'profile',

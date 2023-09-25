@@ -509,6 +509,8 @@ PODS:
   - React-jsinspector (0.70.6)
   - React-logger (0.70.6):
     - glog
+  - react-native-background-actions (3.0.0):
+    - React-Core
   - react-native-date-picker (4.2.13):
     - React-Core
   - react-native-fbsdk-next (11.1.0):
@@ -637,7 +639,7 @@ PODS:
   - RNGoogleSignin (8.2.2):
     - GoogleSignIn (~> 6.2)
     - React-Core
-  - RNIap (12.10.5):
+  - RNIap (12.10.8):
     - React-Core
   - RNImageCropPicker (0.38.1):
     - React-Core
@@ -697,14 +699,14 @@ PODS:
   - Sentry/HybridSDK (8.10.0):
     - SentryPrivate (= 8.10.0)
   - SentryPrivate (8.10.0)
-  - SocketRocket (0.6.1)
+  - SocketRocket (0.6.0)
   - SSZipArchive (2.2.3)
   - SwiftAudioEx (0.15.3)
   - TOCropViewController (2.6.1)
   - vision-camera-code-scanner (0.2.0):
     - GoogleMLKit/BarcodeScanning
     - React-Core
-  - VisionCamera (2.15.4):
+  - VisionCamera (2.16.1):
     - React
     - React-callinvoker
     - React-Core
@@ -767,6 +769,7 @@ DEPENDENCIES:
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
+  - react-native-background-actions (from `../node_modules/react-native-background-actions`)
   - react-native-date-picker (from `../node_modules/react-native-date-picker`)
   - react-native-fbsdk-next (from `../node_modules/react-native-fbsdk-next`)
   - react-native-get-random-values (from `../node_modules/react-native-get-random-values`)
@@ -917,6 +920,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/jsinspector"
   React-logger:
     :path: "../node_modules/react-native/ReactCommon/logger"
+  react-native-background-actions:
+    :path: "../node_modules/react-native-background-actions"
   react-native-date-picker:
     :path: "../node_modules/react-native-date-picker"
   react-native-fbsdk-next:
@@ -1069,6 +1074,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: b4a65947391c658450151275aa406f2b8263178f
   React-jsinspector: 60769e5a0a6d4b32294a2456077f59d0266f9a8b
   React-logger: 1623c216abaa88974afce404dc8f479406bbc3a0
+  react-native-background-actions: 30c71460dd98a2aaae31f6f5c87546dd243b8921
   react-native-date-picker: 04e866ba4e7857f83abd504ad42e787f0f02ae00
   react-native-fbsdk-next: c78dede90e3c50ab6936a7d56c43e1a9eb37e25a
   react-native-get-random-values: a6ea6a8a65dc93e96e24a11105b1a9c8cfe1d72a
@@ -1097,7 +1103,7 @@ SPEC CHECKSUMS:
   RNFBMessaging: 1a84a46789e1ee9820d70839683faff890a22411
   RNFlashList: 399bf6a0db68f594ad2c86aaff3ea39564f39f8a
   RNGoogleSignin: 81521697b2c8f97f9a586ac7257b1a1d9b51b115
-  RNIap: c397f49db45af3b10dca64b2325f21bb8078ad21
+  RNIap: 99a559a3642155b47aa0622f9693632010a0b4f7
   RNImageCropPicker: 648356d68fbf9911a1016b3e3723885d28373eda
   RNNotifee: d585266dd69e1f355d26d074cbfdbdfa6c94b7d5
   RNReanimated: 6668b0587bebd4b15dd849b99e5a9c70fc12ed95
@@ -1108,15 +1114,15 @@ SPEC CHECKSUMS:
   SDWebImageWebPCoder: 908b83b6adda48effe7667cd2b7f78c897e5111d
   Sentry: 71cd4427146ac56eab6e70401ac7a24384c3d3b5
   SentryPrivate: 9334613897c85a9e30f2c9d7a331af8aaa4fe71f
-  SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
+  SocketRocket: fccef3f9c5cedea1353a9ef6ada904fde10d6608
   SSZipArchive: 62d4947b08730e4cda640473b0066d209ff033c9
   SwiftAudioEx: 83eabba2940924fc1c0d5cb0896049921365229c
   TOCropViewController: edfd4f25713d56905ad1e0b9f5be3fbe0f59c863
   vision-camera-code-scanner: dda884a7f3ec8243a2a6d6489b91860648371bca
-  VisionCamera: e9a95af10e00aaebe99d648ff4519fd336e16ffe
+  VisionCamera: 038cba190635523eedb2ae8a67bb226d7ef2f054
   Yoga: 99caf8d5ab45e9d637ee6e0174ec16fbbb01bcfc
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: 58f630e8650f4683f6b515f45fb6e91ace20a8f1
+PODFILE CHECKSUM: 81c86365a618f235527ecb7061548f68db0aafca
 
 COCOAPODS: 1.12.1

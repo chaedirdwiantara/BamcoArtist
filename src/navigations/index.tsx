@@ -171,9 +171,8 @@ import {TransactionHistoryPropsType} from '../interface/credit.interface';
 
 export type RootStackParams = {
   AboutDeletion: undefined;
-  Account: {data: ProfileResponseData};
+  Account: undefined;
   AccountInformation: {
-    data: ProfileResponseData;
     fromScreen: string;
   };
   AddToPlaylist: {id: number[]; type?: string; fromMainTab?: boolean};
@@ -281,7 +280,7 @@ export type RootStackParams = {
     title: string;
   };
   Setting: undefined;
-  MyQRCode: {uuid?: string};
+  MyQRCode: {uuid?: string; type?: 'fans' | 'otherMusician' | 'myProfile'};
   Security: {
     info?: boolean;
     message?: string;
@@ -366,7 +365,7 @@ export type RootStackParams = {
   EventDetail: {
     id: string;
   };
-  LiveTipping: {id: string};
+  LiveTipping: {id: string; eventId: string};
   ClaimReward: {id: string};
   TransactionDetail: {
     id: string;

@@ -4,8 +4,9 @@ import {NavigationContainer} from '@react-navigation/native';
 import {AppProvider} from './context/app.context';
 import {PortalProvider} from '@gorhom/portal';
 import {RootStackScreen} from './navigations';
-import {QueryClient, QueryClientProvider} from 'react-query';
+import {QueryClientProvider} from 'react-query';
 import codePush from 'react-native-code-push';
+import {queryClient} from './service/queryClient';
 
 let codePushOptions = {checkFrequency: codePush.CheckFrequency.ON_APP_START};
 
@@ -16,7 +17,6 @@ Sentry.init({
 });
 
 const App = () => {
-  const queryClient = new QueryClient();
   return (
     <NavigationContainer>
       <PortalProvider>

@@ -131,6 +131,8 @@ export interface CreateIapPropsType {
   trxStatus: number;
   deviceId: string;
   trxSession: string;
+  packageName?: string;
+  token?: string;
 }
 
 export interface CreateIapResponseType extends BaseResponseApi {
@@ -187,4 +189,14 @@ export type GetTransactionHistoryResponseType = {
     TotalPage: number;
   };
   status: number;
+};
+
+export type LiveTippingParams = {
+  ownerId: string;
+  ownerUserName: string;
+  ownerFullName: string;
+  eventId: string;
+  counter: number;
+  credit: number;
+  ownerImage: string;
 };

@@ -5,6 +5,7 @@ import {
   CreateIapResponseType,
   CreditResponseType,
   GetTransactionHistoryResponseType,
+  LiveTippingParams,
   SessionPurchaseProps,
   SessionPurchaseResponseType,
   SubsECParams,
@@ -152,6 +153,22 @@ export const createIapApple = async (
   return data;
 };
 
+export const createIapGoogle = async (
+  props: CreateIapPropsType,
+): Promise<CreateIapResponseType> => {
+  const {data} = await SsuAPI().request<CreateIapResponseType>({
+    url: '/transaction/iap/google',
+    method: 'POST',
+    data: props,
+    headers: {
+      'Device-Id': props.deviceId,
+      'Transaction-Session': props.trxSession,
+    },
+  });
+
+  return data;
+};
+
 export const getListRevenue = async ({
   page,
   perPage,
@@ -187,3 +204,14 @@ export const getHistoryTransaction =
 
     return data;
   };
+
+export const liveTipping = async (props?: LiveTippingParams): Promise<any> => {
+  const {data} = await SsuAPI().request<any>({
+    url: '/donation/tipping',
+    method: 'POST',
+    data: props,
+  });
+  console.log({data});
+
+  return data;
+};
