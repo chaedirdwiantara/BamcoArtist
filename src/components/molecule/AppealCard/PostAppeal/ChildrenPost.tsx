@@ -22,7 +22,7 @@ import VoteForAppeal from '../../Vote/voteForAppeal';
 export const {width} = Dimensions.get('screen');
 
 interface ChildrenPostCardProps {
-  data: PostReportedType;
+  data: PostList;
   imgWidth?: number;
   imgWidth2?: number;
 }
@@ -78,24 +78,24 @@ const ChildrenPostCard: FC<ChildrenPostCardProps> = (
                 onPress={() => {}}
                 disabled={true}
               />
-              {data.images.length === 0 && data.quoteToPost.encodeHlsUrl ? (
+              {data.images.length === 0 && data.quoteToPost?.encodeHlsUrl ? (
                 <MusicPreviewAppeal
-                  title={data.quoteToPost.title}
-                  musician={data.quoteToPost.musician}
+                  title={data.quoteToPost?.title}
+                  musician={data.quoteToPost?.musician}
                   coverImage={
-                    data.quoteToPost.coverImage[1]?.image !== undefined
+                    data.quoteToPost?.coverImage[1]?.image !== undefined
                       ? data.quoteToPost.coverImage[1].image
                       : ''
                   }
-                  duration={data.quoteToPost.endAt}
+                  duration={data.quoteToPost?.endAt}
                 />
               ) : null}
-              {data.video.encodeHlsUrl !== '' && (
+              {data.images.length === 0 && data.video?.encodeHlsUrl && (
                 <TouchableOpacity disabled>
                   <VideoComp
                     id={data.id}
                     dataVideo={data.video}
-                    sourceUri={data.video.encodeHlsUrl}
+                    sourceUri={data.video?.encodeHlsUrl}
                     onPress={() => {}}
                     buttonIconsStyle={{
                       position: 'absolute',

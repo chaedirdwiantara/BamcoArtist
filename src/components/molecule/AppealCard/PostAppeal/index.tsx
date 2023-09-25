@@ -1,118 +1,40 @@
-import {StyleSheet, View, ViewStyle} from 'react-native';
 import React, {FC} from 'react';
+import {StyleSheet, View, ViewStyle} from 'react-native';
+
+import {Gap} from '../../../atom';
 import PostCard from './PostCardAppeal';
 import ChildrenPostCard from './ChildrenPost';
-import {PostList} from '../../../../interface/feed.interface';
+import {widthResponsive} from '../../../../utils';
 import ChoiceIconAppeal from '../ChildrenCard/ChoiceIcon';
-import {Gap} from '../../../atom';
+import {PostList} from '../../../../interface/feed.interface';
 import {PostReportedType} from '../../../../interface/setting.interface';
 
-// TODO: CHANGE THE DUMMY DATA LATER YA BAMBANG
-const dataDummy: PostList = {
-  id: '6wvXjK34g',
-  caption: 'beatiful nature🍃',
-  likesCount: 1,
-  commentsCount: 0,
-  category: 'day_in_life',
-  images: [],
-  musician: {
-    uuid: 'dc24c143-b6df-48a8-a5bb-ae296e66ccc8',
-    username: 'dzik',
-    fullname: 'Seko Band',
-    email: 'dzik@upi.edu',
-    imageProfileUrls: [
-      {
-        image:
-          'https://storage.googleapis.com/media-storage-81b162d8/000124-thumbnail.jpeg',
-        presetName: 'thumbnail',
-      },
-      {
-        image:
-          'https://storage.googleapis.com/media-storage-81b162d8/000124-small.jpeg',
-        presetName: 'small',
-      },
-      {
-        image:
-          'https://storage.googleapis.com/media-storage-81b162d8/000124-medium.jpeg',
-        presetName: 'medium',
-      },
-      {
-        image:
-          'https://storage.googleapis.com/media-storage-81b162d8/000124-large.jpeg',
-        presetName: 'large',
-      },
-    ],
-    followers: 0,
-    isFollowed: true,
-  },
-  createdAt: '2023-07-26T13:18:07Z',
-  updatedAt: '2023-08-04T12:58:44Z',
-  isLiked: true,
-  isPremiumPost: false,
-  isSubscribe: false,
-  quoteToPost: {
-    targetId: 'fdfdfr3r3',
-    targetType: 'video',
-    title: 'ada apa denganku',
-    musician: 'seko bang',
-    coverImage: [
-      {
-        image:
-          'https://customer-j4g673mr0gncpv44.cloudflarestream.com/ed1a4e286008206514eb9f04eafae29a/thumbnails/thumbnail.jpg',
-        presetName: 'thumbnail',
-      },
-      {
-        image:
-          'https://customer-j4g673mr0gncpv44.cloudflarestream.com/ed1a4e286008206514eb9f04eafae29a/thumbnails/thumbnail.jpg',
-        presetName: 'thumbnail',
-      },
-    ],
-    encodeDashUrl: 'null',
-    encodeHlsUrl: '',
-    startAt: '00:00',
-    endAt: '00:00',
-    lyrics: 'fdfd',
-    originalSongUrl: 'http://',
-  },
-  video: {
-    coverImage: [
-      {
-        image:
-          'https://customer-j4g673mr0gncpv44.cloudflarestream.com/ed1a4e286008206514eb9f04eafae29a/thumbnails/thumbnail.jpg',
-        presetName: 'thumbnail',
-      },
-    ],
-    encodeDashUrl:
-      'https://customer-j4g673mr0gncpv44.cloudflarestream.com/ed1a4e286008206514eb9f04eafae29a/manifest/video.mpd',
-    // encodeHlsUrl: '',
-    encodeHlsUrl:
-      'https://customer-j4g673mr0gncpv44.cloudflarestream.com/ed1a4e286008206514eb9f04eafae29a/manifest/video.m3u8',
-    duration: '00:10',
-    views: 0,
-  },
-  timeAgo: '1 weeks',
-  viewsCount: 35,
-  shareCount: 0,
-};
-
 interface PostAppeal {
-  data: PostReportedType;
-  onPressSelected?: () => void;
+  data: PostList;
   isSelected?: boolean;
   hideChoiceIcon?: boolean;
+  onPressSelected?: () => void;
   containerStyles?: ViewStyle;
 }
 
 const PostAppeal: FC<PostAppeal> = (props: PostAppeal) => {
-  const {data} = props;
+  const {data, isSelected, hideChoiceIcon, onPressSelected, containerStyles} =
+    props;
   return (
-    <View style={styles.container}>
-      <ChoiceIconAppeal choiceOnPress={() => {}} selected={false} />
-      <Gap width={12} />
+    <View style={[styles.container, containerStyles]}>
+      {!hideChoiceIcon && (
+        <>
+          <ChoiceIconAppeal
+            choiceOnPress={() => onPressSelected && onPressSelected()}
+            selected={isSelected || false}
+          />
+          <Gap width={widthResponsive(20)} />
+        </>
+      )}
       <View style={styles.componentStyle}>
         <PostCard
           musicianName={data.musician.fullname}
-          musicianId={data.musician.uuid}
+          musicianId={data.musician.username}
           postDate={data.timeAgo}
           likeCount={data.likesCount}
           commentCount={data.commentsCount}
@@ -120,7 +42,7 @@ const PostAppeal: FC<PostAppeal> = (props: PostAppeal) => {
           isPremium
           viewCount={data.viewsCount}
           shareCount={data.shareCount}
-          children={<ChildrenPostCard data={dataDummy} />}
+          children={<ChildrenPostCard data={data} />}
         />
       </View>
     </View>
