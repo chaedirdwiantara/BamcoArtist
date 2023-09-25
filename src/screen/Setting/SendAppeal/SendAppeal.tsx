@@ -11,23 +11,26 @@ export const SendAppealScreen: React.FC<SendAppealProps> = ({
   navigation,
   route,
 }: SendAppealProps) => {
-  const {title, selectedViolation} = route.params;
+  const {selectedViolation, type} = route.params;
 
   const onPressGoBack = () => {
     navigation.goBack();
   };
 
-  const goToSetting = () => {
-    navigation.navigate('Setting');
+  const goToHome = () => {
+    navigation.reset({
+      index: 0,
+      routes: [{name: 'MainTab'}],
+    });
   };
 
   return (
     <View style={styles.root}>
       <SendAppealContent
+        type={type}
         selectedViolation={selectedViolation}
-        title={title}
         onPressGoBack={onPressGoBack}
-        goToSetting={goToSetting}
+        goToHome={goToHome}
       />
     </View>
   );

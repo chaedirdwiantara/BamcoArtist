@@ -42,7 +42,7 @@ const CommentAppeal: React.FC<CommentAppealPropsType> = ({
             choiceOnPress={() => onPressSelected && onPressSelected()}
             selected={isSelected || false}
           />
-          <Gap width={12} />
+          <Gap width={widthResponsive(20)} />
         </>
       )}
       <TouchableOpacity

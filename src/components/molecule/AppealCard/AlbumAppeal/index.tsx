@@ -1,4 +1,4 @@
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet, View, ViewStyle} from 'react-native';
 import React, {FC} from 'react';
 import {widthResponsive} from '../../../../utils';
 import {color} from '../../../../theme';
@@ -8,35 +8,42 @@ import {Gap} from '../../../atom';
 
 interface AlbumAppealProps {
   title: string;
-  musician: string;
   coverImage: string;
-  duration: string;
-  year: number;
+  year: string;
   numberOfSongs: number;
+  isSelected?: boolean;
+  hideChoiceIcon?: boolean;
+  onPressSelected?: () => void;
+  containerStyles?: ViewStyle;
 }
 
 const AlbumAppeal: FC<AlbumAppealProps> = (props: AlbumAppealProps) => {
-  const {title, musician, coverImage, duration} = props;
-
-  // TODO: REMOVE IT LATER YA BAMBANG
-  const dummyData: AlbumAppealProps = {
-    title: 'ada apaa denganku',
-    musician: 'kanjen band',
-    coverImage:
-      'https://customer-j4g673mr0gncpv44.cloudflarestream.com/ed1a4e286008206514eb9f04eafae29a/thumbnails/thumbnail.jpg',
-    duration: '03:00',
-    year: 2022,
-    numberOfSongs: 10,
-  };
+  const {
+    title,
+    coverImage,
+    year,
+    numberOfSongs,
+    isSelected,
+    hideChoiceIcon,
+    onPressSelected,
+    containerStyles,
+  } = props;
 
   return (
-    <View style={styles.container}>
-      <ChoiceIconAppeal choiceOnPress={() => {}} selected={false} />
-      <Gap width={12} />
+    <View style={[styles.container, containerStyles]}>
+      {!hideChoiceIcon && (
+        <>
+          <ChoiceIconAppeal
+            choiceOnPress={() => onPressSelected && onPressSelected()}
+            selected={isSelected || false}
+          />
+          <Gap width={widthResponsive(20)} />
+        </>
+      )}
       <ListCard.MusicList
-        imgUri={dummyData.coverImage ?? null}
-        musicTitle={dummyData.title}
-        singerName={`${dummyData.year} * Album * ${dummyData.numberOfSongs} song`}
+        imgUri={coverImage ?? null}
+        musicTitle={title}
+        singerName={`${year} * Album * ${numberOfSongs} song`}
         containerStyles={styles.componentStyle}
         hideDropdownMore
         appeal

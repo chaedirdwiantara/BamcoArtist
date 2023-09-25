@@ -267,11 +267,10 @@ export type RootStackParams = {
   Referral: undefined;
   ReferralCode: undefined;
   ReportedContent: {
-    title: string;
     dataViolation: ListViolationsType;
   };
   SendAppeal: {
-    title: string;
+    type?: string;
     selectedViolation?: PostReportedType &
       CommentReportedType &
       SongReportedType &
