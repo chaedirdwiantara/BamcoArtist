@@ -351,6 +351,7 @@ export type RootStackParams = {
   VerifCodeWithdrawal: {
     type: string;
     data?: BankAccountPropsType;
+    idWithdraw?: number;
   };
   Withdrawal: undefined;
   YourTopFansScreen: undefined;
