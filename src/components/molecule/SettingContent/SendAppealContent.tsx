@@ -21,22 +21,25 @@ import CommentAppeal from '../AppealCard/CommentAppeal';
 import {ModalLoading} from '../ModalLoading/ModalLoading';
 import {ModalSuccessDonate} from '../Modal/ModalSuccessDonate';
 import {useUploadImageHook} from '../../../hooks/use-uploadImage.hook';
+import PostAppeal from '../AppealCard/PostAppeal';
+import MusicAppeal from '../AppealCard/MusicAppeal';
+import AlbumAppeal from '../AppealCard/AlbumAppeal';
 
 interface SendAppealProps {
-  title: string;
+  type?: string;
   selectedViolation?: PostReportedType &
     CommentReportedType &
     SongReportedType &
     AlbumReportedType;
   onPressGoBack: () => void;
-  goToSetting: () => void;
+  goToHome: () => void;
 }
 
 export const SendAppealContent: React.FC<SendAppealProps> = ({
-  title,
+  type,
   selectedViolation,
   onPressGoBack,
-  goToSetting,
+  goToHome,
 }) => {
   const {t} = useTranslation();
   const [description, setDescription] = useState<string>('');
@@ -163,7 +166,7 @@ export const SendAppealContent: React.FC<SendAppealProps> = ({
   return (
     <View style={styles.root}>
       <TopNavigation.Type1
-        title={title}
+        title={t('Setting.Report.Modal.SendAppeal')}
         leftIcon={<ArrowLeftIcon />}
         itemStrokeColor={color.Neutral[10]}
         leftIconAction={onPressGoBack}
@@ -176,17 +179,43 @@ export const SendAppealContent: React.FC<SendAppealProps> = ({
             <Text style={styles.title}>
               {t('Setting.SendAppeal.ContentToRecover')}
             </Text>
-            <CommentAppeal
-              fullname={selectedViolation.commentOwner.fullname}
-              username={selectedViolation.commentOwner.username}
-              repliedTo={selectedViolation.repliedTo}
-              postDate={selectedViolation.timeAgo}
-              caption={selectedViolation.caption}
-              likesCount={selectedViolation.likesCount}
-              commentsCount={selectedViolation.commentsCount}
-              containerStyles={{marginBottom: mvs(15)}}
-              hideChoiceIcon={true}
-            />
+            {type === 'post' ? (
+              <PostAppeal
+                data={selectedViolation}
+                containerStyles={{marginBottom: mvs(15)}}
+                hideChoiceIcon={true}
+              />
+            ) : type === 'comment' ? (
+              <CommentAppeal
+                fullname={selectedViolation.commentOwner.fullname}
+                username={selectedViolation.commentOwner.username}
+                repliedTo={selectedViolation.repliedTo}
+                postDate={selectedViolation.timeAgo}
+                caption={selectedViolation.caption}
+                likesCount={selectedViolation.likesCount}
+                commentsCount={selectedViolation.commentsCount}
+                containerStyles={{marginBottom: mvs(15)}}
+                hideChoiceIcon={true}
+              />
+            ) : type === 'song' ? (
+              <MusicAppeal
+                title={selectedViolation.title}
+                musician={selectedViolation.musicianName}
+                coverImage={selectedViolation.image}
+                duration={selectedViolation.songDuration}
+                containerStyles={{marginBottom: mvs(15)}}
+                hideChoiceIcon={true}
+              />
+            ) : (
+              <AlbumAppeal
+                title={selectedViolation.title}
+                coverImage={selectedViolation.image}
+                year={selectedViolation.productionYear}
+                numberOfSongs={selectedViolation.songTotal}
+                containerStyles={{marginBottom: mvs(15)}}
+                hideChoiceIcon={true}
+              />
+            )}
           </View>
           <View style={styles.separator} />
         </>
@@ -213,9 +242,9 @@ export const SendAppealContent: React.FC<SendAppealProps> = ({
       <ModalSuccessDonate
         title={t('Setting.SendAppeal.ModalSuccess.Title') || ''}
         subtitle={t('Setting.SendAppeal.ModalSuccess.Subtitle') || ''}
-        buttonText={t('Setting.SendAppeal.ModalSuccess.Button') || ''}
+        buttonText={t('Btn.Dismiss') || ''}
         modalVisible={showModalSuccess}
-        toggleModal={goToSetting}
+        toggleModal={goToHome}
       />
 
       <ModalLimit
