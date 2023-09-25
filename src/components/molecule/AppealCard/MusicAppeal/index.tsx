@@ -1,4 +1,4 @@
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet, View, ViewStyle} from 'react-native';
 import React, {FC} from 'react';
 import MusicListPreview from '../ChildrenCard/MusicPreview';
 import {widthResponsive} from '../../../../utils';
@@ -11,29 +11,40 @@ interface MusicAppealProps {
   musician: string;
   coverImage: string;
   duration: string;
+  isSelected?: boolean;
+  hideChoiceIcon?: boolean;
+  onPressSelected?: () => void;
+  containerStyles?: ViewStyle;
 }
 
 const MusicAppeal: FC<MusicAppealProps> = (props: MusicAppealProps) => {
-  const {title, musician, coverImage, duration} = props;
-
-  // TODO: REMOVE IT LATER YA BAMBANG
-  const dummyData: MusicAppealProps = {
-    title: 'ada apaa denganku',
-    musician: 'kanjen band',
-    coverImage:
-      'https://customer-j4g673mr0gncpv44.cloudflarestream.com/ed1a4e286008206514eb9f04eafae29a/thumbnails/thumbnail.jpg',
-    duration: '03:00',
-  };
+  const {
+    title,
+    musician,
+    coverImage,
+    duration,
+    isSelected,
+    hideChoiceIcon,
+    onPressSelected,
+    containerStyles,
+  } = props;
 
   return (
-    <View style={styles.container}>
-      <ChoiceIconAppeal choiceOnPress={() => {}} selected={false} />
-      <Gap width={12} />
+    <View style={[styles.container, containerStyles]}>
+      {!hideChoiceIcon && (
+        <>
+          <ChoiceIconAppeal
+            choiceOnPress={() => onPressSelected && onPressSelected()}
+            selected={isSelected || false}
+          />
+          <Gap width={widthResponsive(20)} />
+        </>
+      )}
       <MusicListPreview
-        title={dummyData.title}
-        musician={dummyData.musician}
-        coverImage={dummyData.coverImage}
-        duration={dummyData.duration}
+        title={title}
+        musician={musician}
+        coverImage={coverImage}
+        duration={duration}
         containerStyle={styles.componentStyle}
       />
     </View>

@@ -142,6 +142,7 @@ export const EventDetail: React.FC<EventDetailProps> = ({
                 leftIconAction={handleBackAction}
                 containerStyles={{
                   borderBottomColor: 'transparent',
+                  paddingHorizontal: widthResponsive(24),
                 }}
               />
             </LinearGradient>

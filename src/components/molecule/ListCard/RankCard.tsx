@@ -6,16 +6,18 @@ import {heightResponsive, widthResponsive, normalize} from '../../../utils';
 import initialname from '../../../utils/initialname';
 import {Gap} from '../../atom';
 import {AvatarProfile} from '../AvatarProfile/AvatarProfile';
+import {DefaultAvatar} from '../../../assets/icon';
 
 interface RankInterface {
   rank: number;
   username: string;
   credit: string | number;
   isYou: boolean;
+  avatar?: string;
 }
 
 const RankCard = (props: RankInterface) => {
-  const {rank, username, credit, isYou} = props;
+  const {rank, username, credit, isYou, avatar} = props;
 
   const bgColor =
     rank === 1
@@ -65,12 +67,19 @@ const RankCard = (props: RankInterface) => {
           {rank}
         </Text>
         <Gap height={heightResponsive(4)} />
-        <AvatarProfile
-          initialName={initialname(username)}
-          imgUri={'https://picsum.photos//201'}
-          onPress={() => null}
-          size={widthResponsive(30)}
-        />
+        {avatar !== '' ? (
+          <AvatarProfile
+            initialName={initialname(username)}
+            imgUri={avatar ?? ''}
+            onPress={() => null}
+            size={widthResponsive(30)}
+          />
+        ) : (
+          <DefaultAvatar.MusicianIcon
+            width={widthResponsive(30)}
+            height={heightResponsive(30)}
+          />
+        )}
         <Gap height={heightResponsive(4)} />
         <Text numberOfLines={1} style={[styles.textInter, styles.subtitle]}>
           {username}
