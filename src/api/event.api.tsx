@@ -1,6 +1,7 @@
 import {ParamsProps} from '../interface/base.interface';
 import {
   EventDetailResponse,
+  EventHomeResponse,
   EventLineUpResponse,
   EventMusicianResponse,
   EventMusicianTippedResponse,
@@ -166,6 +167,20 @@ export const getEventLiveRank = async (
     params: {
       events,
       musician,
+      ...props,
+    },
+  });
+
+  return data;
+};
+
+export const listEventHome = async (
+  props?: ParamsProps,
+): Promise<EventHomeResponse> => {
+  const {data} = await RinjaniAPI().request<EventHomeResponse>({
+    url: '/events',
+    method: 'GET',
+    params: {
       ...props,
     },
   });

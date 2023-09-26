@@ -503,6 +503,7 @@
       "TipDistribution": "Tip Distribution",
       "MusicianTipped": "Musician Tipped"
     },
+    "Live": "Live",
     "EmptyState": {
       "Home": "No live events are currently available at this time.\nStay tuned for exciting upcoming experiences!",
       "Title": "Discover Live Event",

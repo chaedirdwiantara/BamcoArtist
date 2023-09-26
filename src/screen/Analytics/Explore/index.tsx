@@ -25,6 +25,8 @@ import {useSongHook} from '../../../hooks/use-song.hook';
 import {storage} from '../../../hooks/use-storage.hook';
 import {SongList} from '../../../interface/song.interface';
 import {RootStackParams} from '../../../navigations';
+import {useEventHook} from '../../../hooks/use-event.hook';
+import EventList from '../../ListCard/EventList';
 
 interface ExploreProps {
   refreshing: boolean;
@@ -48,6 +50,13 @@ const Explore = (props: ExploreProps) => {
   const {listMood, getListMoodPublic, listGenre, getListGenrePublic} =
     useSettingHook();
   const {getSearchPlaylists} = useSearchHook();
+  const {useEventHome} = useEventHook();
+
+  const {
+    data: dataEvent,
+    isLoading: isLoadingEvent,
+    refetch: refetchEvent,
+  } = useEventHome();
 
   const isLogin = storage.getBoolean('isLogin');
   const [selectedIndexSong, setSelectedIndexSong] = useState(-0);
@@ -62,6 +71,7 @@ const Explore = (props: ExploreProps) => {
     listGenre.length === 0 && getListGenrePublic();
     refetchPlaylist();
     getListComingSoon();
+    refetchEvent();
   }, [refreshing]);
 
   // Triggering when click love on the same song in top & new song tab
@@ -170,6 +180,18 @@ const Explore = (props: ExploreProps) => {
         )}
       </View>
       {/* End of Tab Song */}
+      <Gap height={heightPercentage(20)} />
+      {/* Event List */}
+      <View style={[styles.containerContent]}>
+        <TabFilter.Type3
+          filterData={[{filterName: 'Event.Live'}]}
+          onPress={() => null}
+          selectedIndex={0}
+          translation={true}
+        />
+        <EventList dataEvent={dataEvent?.data} isLoading={isLoadingEvent} />
+      </View>
+      {/* End of Tab Event List */}
       {/* Playlist */}
       <ListPlaylistHome
         title={t('Home.Playlist.Title')}
