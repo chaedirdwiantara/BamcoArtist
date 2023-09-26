@@ -943,6 +943,11 @@
         "Button": "Back to Settings"
       }
     },
+    "PreventInteraction": {
+      "Title": "You've been banned",
+      "Subtitle": "You are not able to have an interaction with other people. Visit help in settings to send appeal and remove your banned by sending a valid reason",
+      "TextNavigate": "help in settings"
+    },
     "Helps": {
       "Title": "Helps"
     },
@@ -1478,7 +1483,7 @@
       "isBlockedProfCaption": "They can't follow or view your post and you can't see replies or notification from",
       "blockIsProfTitle": "You have been Blocked",
       "blockIsProfCaption": "You can't see replies or notification from",
-      "unBlockTitle": "Are you sure to ublock",
+      "unBlockTitle": "Are you sure to unblock",
       "unBlockCaptionA": "by unblocking",
       "unBlockCaptionB": "They will be able view your content, and you will see content or notification from",
       "unblockButtonYes": "Unblock",

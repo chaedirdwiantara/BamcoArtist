@@ -46,6 +46,8 @@ interface CommentSectionType {
   profileUUID: string;
   deletedCommentParentId: string[];
   addCommentParentId: string[];
+  isBanned: boolean;
+  modalBanned: (value: boolean) => void;
 }
 
 const CommentSection: FC<CommentSectionType> = (props: CommentSectionType) => {
@@ -70,6 +72,8 @@ const CommentSection: FC<CommentSectionType> = (props: CommentSectionType) => {
     profileUUID,
     deletedCommentParentId,
     addCommentParentId,
+    isBanned,
+    modalBanned,
   } = props;
 
   const {uuidBlocked} = blockUserRecorded();
@@ -78,79 +82,87 @@ const CommentSection: FC<CommentSectionType> = (props: CommentSectionType) => {
   const [selectedId, setSelectedId] = useState<string[]>();
 
   const likeOnPress = (id: string, isLiked: boolean) => {
-    if (isLiked === true && selectedId === undefined) {
-      onUnlike?.(id);
-      setSelectedId([]);
-      if (!recorder.includes(id)) {
-        setRecorder([...recorder, id]);
+    if (isBanned) {
+      modalBanned?.(true);
+    } else {
+      if (isLiked === true && selectedId === undefined) {
+        onUnlike?.(id);
+        setSelectedId([]);
+        if (!recorder.includes(id)) {
+          setRecorder([...recorder, id]);
+        }
       }
-    }
-    if (!isLiked && selectedId === undefined) {
-      onLike?.(id);
-      setSelectedId([id]);
-      if (!recorder.includes(id)) {
-        setRecorder([...recorder, id]);
+      if (!isLiked && selectedId === undefined) {
+        onLike?.(id);
+        setSelectedId([id]);
+        if (!recorder.includes(id)) {
+          setRecorder([...recorder, id]);
+        }
       }
-    }
-    if (
-      isLiked === true &&
-      !selectedId?.includes(id) &&
-      !recorder.includes(id)
-    ) {
-      onUnlike?.(id);
-      if (!recorder.includes(id)) {
-        setRecorder([...recorder, id]);
+      if (
+        isLiked === true &&
+        !selectedId?.includes(id) &&
+        !recorder.includes(id)
+      ) {
+        onUnlike?.(id);
+        if (!recorder.includes(id)) {
+          setRecorder([...recorder, id]);
+        }
       }
-    }
-    if (
-      isLiked === false &&
-      !selectedId?.includes(id) &&
-      !recorder.includes(id)
-    ) {
-      onLike?.(id);
-      setSelectedId(selectedId ? [...selectedId, id] : [id]);
-      if (!recorder.includes(id)) {
-        setRecorder([...recorder, id]);
+      if (
+        isLiked === false &&
+        !selectedId?.includes(id) &&
+        !recorder.includes(id)
+      ) {
+        onLike?.(id);
+        setSelectedId(selectedId ? [...selectedId, id] : [id]);
+        if (!recorder.includes(id)) {
+          setRecorder([...recorder, id]);
+        }
       }
-    }
-    if (
-      isLiked === true &&
-      !selectedId?.includes(id) &&
-      recorder.includes(id)
-    ) {
-      onLike?.(id);
-      setSelectedId(selectedId ? [...selectedId, id] : [id]);
-      if (!recorder.includes(id)) {
-        setRecorder([...recorder, id]);
+      if (
+        isLiked === true &&
+        !selectedId?.includes(id) &&
+        recorder.includes(id)
+      ) {
+        onLike?.(id);
+        setSelectedId(selectedId ? [...selectedId, id] : [id]);
+        if (!recorder.includes(id)) {
+          setRecorder([...recorder, id]);
+        }
       }
-    }
-    if (
-      isLiked === false &&
-      !selectedId?.includes(id) &&
-      recorder.includes(id)
-    ) {
-      onLike?.(id);
-      setSelectedId(selectedId ? [...selectedId, id] : [id]);
-      if (!recorder.includes(id)) {
-        setRecorder([...recorder, id]);
+      if (
+        isLiked === false &&
+        !selectedId?.includes(id) &&
+        recorder.includes(id)
+      ) {
+        onLike?.(id);
+        setSelectedId(selectedId ? [...selectedId, id] : [id]);
+        if (!recorder.includes(id)) {
+          setRecorder([...recorder, id]);
+        }
       }
-    }
-    if (isLiked === true && selectedId?.includes(id) && recorder.includes(id)) {
-      onUnlike?.(id);
-      setSelectedId(selectedId.filter((x: string) => x !== id));
-      if (!recorder.includes(id)) {
-        setRecorder([...recorder, id]);
+      if (
+        isLiked === true &&
+        selectedId?.includes(id) &&
+        recorder.includes(id)
+      ) {
+        onUnlike?.(id);
+        setSelectedId(selectedId.filter((x: string) => x !== id));
+        if (!recorder.includes(id)) {
+          setRecorder([...recorder, id]);
+        }
       }
-    }
-    if (
-      isLiked === false &&
-      selectedId?.includes(id) &&
-      recorder.includes(id)
-    ) {
-      onUnlike?.(id);
-      setSelectedId(selectedId.filter((x: string) => x !== id));
-      if (!recorder.includes(id)) {
-        setRecorder([...recorder, id]);
+      if (
+        isLiked === false &&
+        selectedId?.includes(id) &&
+        recorder.includes(id)
+      ) {
+        onUnlike?.(id);
+        setSelectedId(selectedId.filter((x: string) => x !== id));
+        if (!recorder.includes(id)) {
+          setRecorder([...recorder, id]);
+        }
       }
     }
   };
@@ -161,9 +173,13 @@ const CommentSection: FC<CommentSectionType> = (props: CommentSectionType) => {
     commentLvl: number,
     parentID: string,
   ) => {
-    userName === 'accountdeactivated'
-      ? console.log('deleted account detected')
-      : onComment?.({id, userName, commentLvl, parentID});
+    if (isBanned) {
+      modalBanned?.(true);
+    } else {
+      userName === 'accountdeactivated'
+        ? console.log('deleted account detected')
+        : onComment?.({id, userName, commentLvl, parentID});
+    }
   };
 
   const handleToDetail = (id: string, userName: string) => {

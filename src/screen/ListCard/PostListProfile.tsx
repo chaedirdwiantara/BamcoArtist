@@ -69,6 +69,7 @@ import {ModalReport} from '../../components/molecule/Modal/ModalReport';
 import {reportingMenu} from '../../data/report';
 import {useVideoStore} from '../../store/video.store';
 import {useUploadImageHook} from '../../hooks/use-uploadImage.hook';
+import {userProfile} from '../../store/userProfile.store';
 
 const {height} = Dimensions.get('screen');
 
@@ -90,6 +91,7 @@ const PostListProfile: FC<PostListProps> = (props: PostListProps) => {
   const dataToExc = {coverImage, title, description};
 
   const {setUriVideo} = useVideoStore();
+  const {profileStore} = userProfile();
 
   const [recorder, setRecorder] = useState<string[]>([]);
   const [selectedId, setSelectedId] = useState<string[]>();
@@ -114,6 +116,7 @@ const PostListProfile: FC<PostListProps> = (props: PostListProps) => {
     useState<DataDropDownType>();
   const [filterByValue, setFilterByValue] = useState<string>();
   const [categoryValue, setCategoryValue] = useState<string>();
+  const [modalBanned, setModalBanned] = useState<boolean>(false);
 
   //* MUSIC HOOKS
   const [pauseModeOn, setPauseModeOn] = useState<boolean>(false);
@@ -324,24 +327,32 @@ const PostListProfile: FC<PostListProps> = (props: PostListProps) => {
       const selectedValue = t(selectedMenuPost.value);
 
       switch (selectedValue) {
+        // ? Edit Post
         case '1':
-          setUriVideo(null);
-          setDataCreatePost(null);
-          setDataVideo(undefined);
-          let dataSelected = dataMain.filter(
-            data => data.id === selectedIdPost,
-          );
-          navigation.navigate('CreatePost', {postData: dataSelected[0]});
+          if (profileStore.data.isBanned) {
+            setModalBanned(true);
+          } else {
+            setUriVideo(null);
+            setDataCreatePost(null);
+            setDataVideo(undefined);
+            let dataSelected = dataMain.filter(
+              data => data.id === selectedIdPost,
+            );
+            navigation.navigate('CreatePost', {postData: dataSelected[0]});
+          }
           break;
+        // ? Delete Post
         case '2':
           setDeletePost({id: selectedIdPost});
           setDataMain(dataMain.filter(data => data.id !== selectedIdPost));
           break;
+        // ? To Profile
         case '11':
           navigation.navigate('MusicianProfile', {
             id: selectedUserUuid,
           });
           break;
+        // ? Report Post
         case '22':
           setReportToast(true);
           break;
@@ -412,6 +423,15 @@ const PostListProfile: FC<PostListProps> = (props: PostListProps) => {
       });
     }
   }, [selectedSharePost]);
+
+  const handleCloseBanModal = () => {
+    setModalBanned(false);
+  };
+
+  const handleOkBanModal = () => {
+    setModalBanned(false);
+    navigation.navigate('Setting');
+  };
 
   return (
     <>
@@ -625,6 +645,18 @@ const PostListProfile: FC<PostListProps> = (props: PostListProps) => {
         noText={'No'}
         onPressClose={handleMaybeLater}
         onPressOk={handleConfirmModal}
+      />
+      {/* //? Banned user modal */}
+      <ModalConfirm
+        modalVisible={modalBanned}
+        title={`${t('Setting.PreventInteraction.Title')}`}
+        subtitle={`${t('Setting.PreventInteraction.Subtitle')}`}
+        yesText={`${t('Btn.Send')}`}
+        noText={`${t('Btn.Cancel')}`}
+        onPressClose={handleCloseBanModal}
+        onPressOk={handleOkBanModal}
+        textNavigate={`${t('Setting.PreventInteraction.TextNavigate')}`}
+        textOnPress={handleOkBanModal}
       />
     </>
   );
