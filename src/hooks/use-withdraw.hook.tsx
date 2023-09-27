@@ -3,13 +3,16 @@ import {useState} from 'react';
 import {ParamsProps} from '../interface/base.interface';
 import {
   userBank,
-  verifyOtp,
   addBankAccount,
   editBankAccount,
+  verifyOtpBank,
+  verifyOtpWithdraw,
+  listWithdraw,
 } from '../api/withdraw.api';
 import {
   VerifyBankPropsType,
   BankAccountPropsType,
+  VerifyWithdrawPropsType,
 } from '../interface/withdraw.interface';
 
 export const useWithdrawHook = () => {
@@ -21,15 +24,14 @@ export const useWithdrawHook = () => {
   const [dataBankUser, setDataBankUser] = useState<BankAccountPropsType>();
 
   const getUserBankAccount = async (props: ParamsProps) => {
-    setIsLoading(true);
-    setIsError(false);
     try {
       const response = await userBank(props);
-      setDataBankUser(response.data);
+      return {
+        data: response?.data,
+        message: response?.message,
+      };
     } catch (error) {
-      setIsError(true);
-    } finally {
-      setIsLoading(false);
+      console.log(error);
     }
   };
 
@@ -79,12 +81,12 @@ export const useWithdrawHook = () => {
     }
   };
 
-  const confirmOtp = async (props: VerifyBankPropsType) => {
+  const confirmOtpBank = async (props: VerifyBankPropsType) => {
     setIsError(false);
     setErrorMsg('');
     setIsLoading(true);
     try {
-      await verifyOtp(props);
+      await verifyOtpBank(props);
       setIsOtpValid(true);
       setIsError(false);
     } catch (error) {
@@ -106,6 +108,45 @@ export const useWithdrawHook = () => {
     }
   };
 
+  const confirmOtpWithdraw = async (props: VerifyWithdrawPropsType) => {
+    setIsError(false);
+    setErrorMsg('');
+    setIsLoading(true);
+    try {
+      await verifyOtpWithdraw(props);
+      setIsOtpValid(true);
+      setIsError(false);
+    } catch (error) {
+      console.log(error);
+      setIsError(true);
+      setIsOtpValid(false);
+      if (
+        axios.isAxiosError(error) &&
+        error.response?.status &&
+        error.response?.status >= 400
+      ) {
+        setErrorMsg(error.response?.data?.message);
+        setErrorCode(error.response?.data?.code);
+      } else if (error instanceof Error) {
+        setErrorMsg(error.message);
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const getListWithdraw = async (props: ParamsProps) => {
+    try {
+      const response = await listWithdraw(props);
+      return {
+        data: response?.data,
+        message: response?.message,
+      };
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return {
     isLoading,
     isError,
@@ -113,9 +154,12 @@ export const useWithdrawHook = () => {
     errorCode,
     isOtpValid,
     dataBankUser,
+    setDataBankUser,
     setAddBankAccount,
     setEditBankAccount,
     getUserBankAccount,
-    confirmOtp,
+    confirmOtpBank,
+    confirmOtpWithdraw,
+    getListWithdraw,
   };
 };

@@ -1,5 +1,5 @@
 export type BankAccountPropsType = {
-  id?: string | number;
+  id?: number;
   countWithdraw?: number;
   bankId?: number;
   previousBankId?: number;
@@ -22,6 +22,11 @@ export type VerifyBankPropsType = {
   previousBank: number;
 };
 
+export type VerifyWithdrawPropsType = {
+  id: number;
+  code: string;
+};
+
 export type WithdrawRequestPropsType = {
   userId: string;
   bankId: number;
@@ -38,6 +43,23 @@ export type RemoveBankAccountResponseType = {
 export type GetUserBankResponseType = {
   code: number;
   data: BankAccountPropsType;
+  message: string;
+  status: number;
+};
+
+export type ListWithdrawPropsType = {
+  amount: number;
+  amountConversion: string;
+  toBankNumber: string;
+  requestDate: string;
+  status: string;
+  notes: string;
+  isOpen?: boolean;
+};
+
+export type GetListWithdrawResponseType = {
+  code: number;
+  data: ListWithdrawPropsType[];
   message: string;
   status: number;
 };
