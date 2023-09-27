@@ -30,9 +30,11 @@ import {
   ProfileResponseType,
 } from '../interface/profile.interface';
 import {myIdGenreStore} from '../store/myIdGenre.store';
+import {userProfile} from '../store/userProfile.store';
 
 export const useProfileHook = () => {
   const {setIdGenre} = myIdGenreStore();
+  const {setProfileStore} = userProfile();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isLoadingStep, setIsLoadingStep] = useState<boolean>(false);
   const [isError, setIsError] = useState<boolean>(false);
@@ -59,6 +61,7 @@ export const useProfileHook = () => {
       const response = await getProfile();
       setDataProfile(response);
       setIdGenre(response.data.favoriteGenres.map(item => item.id));
+      setProfileStore(response);
     } catch (error) {
       console.log(error);
     } finally {

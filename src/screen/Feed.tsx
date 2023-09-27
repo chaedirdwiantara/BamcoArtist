@@ -55,6 +55,7 @@ import {
 } from './ListCard/ListUtils/PostVideoFunction';
 import {useFeedHook} from '../hooks/use-feed.hook';
 import PostListExclusive from './ListCard/PostListExclusive';
+import {userProfile} from '../store/userProfile.store';
 
 const {StatusBarManager} = NativeModules;
 const barHeight = StatusBarManager.HEIGHT;
@@ -65,6 +66,8 @@ export const FeedScreen: React.FC = () => {
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
   const isLogin = storage.getString('profile');
   const uuid = profileStorage()?.uuid;
+  const {profileStore} = userProfile();
+
   const {visible} = usePlayerHook();
   const {dataExclusiveContent, getExclusiveContent} = useSettingHook();
   const {
@@ -117,6 +120,7 @@ export const FeedScreen: React.FC = () => {
   const [isModalVisible, setModalVisible] = useState({
     filterModal: false,
     confirmModal: false,
+    isBanned: false,
   });
   const [progress, setProgress] = useState<number>();
   const [uploadProgress, setUploadProgress] = useState<number>();
@@ -134,9 +138,17 @@ export const FeedScreen: React.FC = () => {
         dataExclusiveContent === null &&
         selectedCategory === 'Feed.Exclusive'
       ) {
-        setModalVisible({filterModal: false, confirmModal: true});
+        setModalVisible({
+          filterModal: false,
+          confirmModal: true,
+          isBanned: false,
+        });
       } else {
-        setModalVisible({filterModal: false, confirmModal: false});
+        setModalVisible({
+          filterModal: false,
+          confirmModal: false,
+          isBanned: false,
+        });
         setSelectedCategory(undefined);
         setUriVideo(null);
         setAllowToUpload(false);
@@ -155,19 +167,31 @@ export const FeedScreen: React.FC = () => {
   };
 
   const handleFloatingIcon = () => {
-    setModalVisible({filterModal: true, confirmModal: false});
-    getExclusiveContent({uuid});
+    if (profileStore.data.isBanned) {
+      setModalVisible({
+        filterModal: false,
+        confirmModal: false,
+        isBanned: true,
+      });
+    } else {
+      setModalVisible({
+        filterModal: true,
+        confirmModal: false,
+        isBanned: false,
+      });
+      getExclusiveContent({uuid});
+    }
   };
 
   const handleConfirmModal = () => {
-    setModalVisible({filterModal: false, confirmModal: false});
+    setModalVisible({filterModal: false, confirmModal: false, isBanned: false});
     setSelectedCategory(undefined);
     setDataCreatePost(null);
     navigation.navigate('ExclusiveContentSetting', {type: 'navToCreatePost'});
   };
 
   const handleMaybeLater = () => {
-    setModalVisible({filterModal: false, confirmModal: false});
+    setModalVisible({filterModal: false, confirmModal: false, isBanned: false});
     setSelectedCategory(undefined);
   };
 
@@ -301,6 +325,15 @@ export const FeedScreen: React.FC = () => {
     }
   }, [createPostError]);
 
+  const handleCloseBanModal = () => {
+    setModalVisible({filterModal: false, confirmModal: false, isBanned: false});
+  };
+
+  const handleOkBanModal = () => {
+    setModalVisible({filterModal: false, confirmModal: false, isBanned: false});
+    navigation.navigate('Setting');
+  };
+
   return (
     <SafeAreaView style={styles.root}>
       {isLogin ? (
@@ -365,7 +398,6 @@ export const FeedScreen: React.FC = () => {
                     : 0
                 }
                 uriVideo={uriVideo?.path}
-                allowRefresh={allowToRefresh}
               />
             )}
           </View>
@@ -392,7 +424,11 @@ export const FeedScreen: React.FC = () => {
           {offsetCategoryFilter !== undefined && (
             <FilterModal
               toggleModal={() =>
-                setModalVisible({filterModal: false, confirmModal: false})
+                setModalVisible({
+                  filterModal: false,
+                  confirmModal: false,
+                  isBanned: false,
+                })
               }
               modalVisible={isModalVisible.filterModal}
               dataFilter={dropDownSetAudience}
@@ -441,6 +477,19 @@ export const FeedScreen: React.FC = () => {
                 </Text>
               </View>
             }
+          />
+
+          {/* //? Banned user modal */}
+          <ModalConfirm
+            modalVisible={isModalVisible.isBanned}
+            title={`${t('Setting.PreventInteraction.Title')}`}
+            subtitle={`${t('Setting.PreventInteraction.Subtitle')}`}
+            yesText={`${t('Btn.Send')}`}
+            noText={`${t('Btn.Cancel')}`}
+            onPressClose={handleCloseBanModal}
+            onPressOk={handleOkBanModal}
+            textNavigate={`${t('Setting.PreventInteraction.TextNavigate')}`}
+            textOnPress={handleOkBanModal}
           />
         </View>
       ) : (

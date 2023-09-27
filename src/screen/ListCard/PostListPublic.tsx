@@ -426,9 +426,11 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
             id: selectedUserUuid,
           });
           break;
+        // ? Report
         case '22':
           setReportToast(true);
           break;
+        // ? Block
         case '33':
           setModalConfirm(true);
           break;
