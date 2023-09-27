@@ -104,6 +104,37 @@ export const usePlayerHook = () => {
     }
   };
 
+  // ? TODO: DISCUSS ABOUT IT LATER
+  const addPlaylistNewVer = async ({
+    dataSong,
+    isPlay = false,
+  }: {
+    dataSong: SongList;
+    isPlay?: boolean;
+  }) => {
+    const track: Track = {
+      url: dataSong.transcodedSongUrl[1].encodedHlsUrl,
+      title: dataSong.title,
+      artist: dataSong.musicianName,
+      type: TrackType.HLS,
+      artwork:
+        dataSong.imageUrl && dataSong.imageUrl.length !== 0
+          ? dataSong.imageUrl[1].image
+          : dummySongImg,
+      id: dataSong.id,
+      musicianId: dataSong.musicianId || dataSong.musicianUUID,
+    };
+    try {
+      await TrackPlayer.reset();
+      await TrackPlayer.add(track);
+      if (isPlay) {
+        setPlaySong();
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   const addPlaylistFeed = async ({
     dataSong,
     playSongId,
@@ -314,5 +345,6 @@ export const usePlayerHook = () => {
     setRepeatPlayer,
     addPlaylistMostPlayed,
     showMiniPlayerOnly,
+    addPlaylistNewVer,
   };
 };
