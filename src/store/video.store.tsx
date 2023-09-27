@@ -71,3 +71,17 @@ export const useDataVideoForPost = create<DataVideoForPost>(set => ({
   setStoredDataAudience: (value: string) => set({storedDataAudience: value}),
   setStoredIdForUpdate: (value: string) => set({storedIdForUpdate: value}),
 }));
+
+interface VideoStatusProps {
+  videoIdIsPlaying: string;
+  videoPaused: boolean;
+  setVideoIdIsPlaying: (value: string) => void;
+  setVideoPaused: (value: boolean) => void;
+}
+
+export const useVideoStatus = create<VideoStatusProps>(set => ({
+  videoIdIsPlaying: '',
+  videoPaused: false,
+  setVideoIdIsPlaying: (value: string) => set({videoIdIsPlaying: value}),
+  setVideoPaused: (value: boolean) => set({videoPaused: value}),
+}));
