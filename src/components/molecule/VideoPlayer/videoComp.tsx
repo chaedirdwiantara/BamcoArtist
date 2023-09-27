@@ -24,6 +24,8 @@ import {Gap} from '../../atom';
 import {VideoResponseType} from '../../../interface/feed.interface';
 import {useFeedHook} from '../../../hooks/use-feed.hook';
 import FullScreenVideo from './FullScreenVideo';
+import {usePlayerHook} from '../../../hooks/use-player.hook';
+import {useVideoStatus} from '../../../store/video.store';
 
 export const {width} = Dimensions.get('screen');
 
@@ -54,6 +56,10 @@ const VideoComp: FC<VideoProps> = (props: VideoProps) => {
     disabledPlayIcon,
   } = props;
 
+  const {isPlaying: musicPlaying, setPauseSong} = usePlayerHook();
+  const {videoIdIsPlaying, videoPaused, setVideoIdIsPlaying, setVideoPaused} =
+    useVideoStatus();
+
   const [duration, setDuration] = useState(0);
   const [currentTime, setCurrentTime] = useState<number>(0);
   const [paused, setPaused] = useState<boolean>(true);
@@ -66,11 +72,35 @@ const VideoComp: FC<VideoProps> = (props: VideoProps) => {
 
   const {dataViewsCount, setViewCount} = useFeedHook();
 
+  const pausePlusDeleteId = () => {
+    setPaused(true);
+    setVideoIdIsPlaying('');
+  };
+
   useEffect(() => {
     if (fromModalCurrent) {
       onSeek(fromModalCurrent);
     }
   }, [fromModalCurrent]);
+
+  // ? make sure there's only one video to be playing at a time
+  useEffect(() => {
+    if (videoIdIsPlaying === id) {
+      setPaused(false);
+      setIsPlaying(true);
+    } else {
+      setPaused(true);
+      setIsPlaying(false);
+    }
+  }, [videoIdIsPlaying]);
+
+  // ? pause video from playing state when music is playing
+  useEffect(() => {
+    if (musicPlaying) {
+      pausePlusDeleteId();
+      setIsPlaying(false);
+    }
+  }, [musicPlaying]);
 
   const onSeek = (data: number) => {
     videoRef.current.seek(data);
@@ -88,14 +118,21 @@ const VideoComp: FC<VideoProps> = (props: VideoProps) => {
 
   const handlePlaying = () => {
     if (!blurModeOn) {
-      setPaused(false), setIsPlaying(true);
+      if (musicPlaying) {
+        // ? pause music playing when play video on press
+        setPauseSong();
+      }
+      if (id) {
+        setVideoIdIsPlaying(id);
+      }
     }
   };
 
   const onEnd = () => {
     setCurrentTime(0);
-    setPaused(true);
     setIsPlaying(false);
+    pausePlusDeleteId();
+    setVideoIdIsPlaying('');
     if (id) {
       setViewCount({id: id});
     }
@@ -103,7 +140,7 @@ const VideoComp: FC<VideoProps> = (props: VideoProps) => {
 
   const handleFullScreen = () => {
     setFullScreen(true);
-    setPaused(true);
+    pausePlusDeleteId();
   };
 
   return (
@@ -192,7 +229,7 @@ const VideoComp: FC<VideoProps> = (props: VideoProps) => {
             }}>
             <View style={[styles.durationTimeTextPlaying, buttonIconsStyle]}>
               <TouchableOpacity
-                onPress={() => setPaused(true)}
+                onPress={pausePlusDeleteId}
                 style={{marginHorizontal: widthResponsive(10)}}>
                 {!paused && <PauseIcon2 width={10} height={13} />}
               </TouchableOpacity>

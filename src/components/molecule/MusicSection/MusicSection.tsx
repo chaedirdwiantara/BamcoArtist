@@ -102,6 +102,7 @@ export const MusicSection: React.FC<ListProps> = (props: ListProps) => {
   const [reportToast, setReportToast] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string>();
   const [reason, setReason] = useState<string>('');
+  const [reportSuccessToast, setReportSuccessToast] = useState(false);
 
   useEffect(() => {
     if (modalDonate) getCreditCount();
@@ -181,8 +182,13 @@ export const MusicSection: React.FC<ListProps> = (props: ListProps) => {
     setPostReport(reportBody);
   };
 
+  const onModalReportHide = () => {
+    setReportSuccessToast(true);
+  };
+
   const closeModalSuccess = () => {
     setDataReport(false);
+    setReportSuccessToast(false);
   };
 
   useEffect(() => {
@@ -256,10 +262,15 @@ export const MusicSection: React.FC<ListProps> = (props: ListProps) => {
         onPressOk={sendOnPress}
         category={setSelectedCategory}
         reportReason={setReason}
+        modalOnHide={
+          dataReport
+            ? onModalReportHide
+            : () => console.log(modalShare, 'modal is hide')
+        }
       />
       {/* //? When report succesfully */}
       <SuccessToast
-        toastVisible={dataReport}
+        toastVisible={reportSuccessToast}
         onBackPressed={closeModalSuccess}
         caption={t('ModalComponent.Report.ReportSuccess')}
       />
