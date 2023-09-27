@@ -37,9 +37,8 @@ import {storage} from '../../hooks/use-storage.hook';
 import {useLocationHook} from '../../hooks/use-location.hook';
 import {useWithdrawHook} from '../../hooks/use-withdraw.hook';
 import {width, widthPercentage, widthResponsive} from '../../utils';
-import {addBankAccount, editBankAccount} from '../../api/withdraw.api';
-import {ModalLoading} from '../../components/molecule/ModalLoading/ModalLoading';
 import {KeyboardShift} from '../../components/molecule/KeyboardShift';
+import {ModalLoading} from '../../components/molecule/ModalLoading/ModalLoading';
 
 interface InputProps {
   country: string;
@@ -74,7 +73,13 @@ export const NewBankAccountScreen: React.FC<BankAccountProps> = ({
 }: BankAccountProps) => {
   const {type, data} = route.params;
   const {t} = useTranslation();
-  const {isError, errorMsg} = useWithdrawHook();
+  const {
+    isError,
+    errorMsg,
+    dataBankUser,
+    setAddBankAccount,
+    setEditBankAccount,
+  } = useWithdrawHook();
   const {dataAllCountry, getDataAllCountryWithdraw} = useLocationHook();
 
   const [attachment, setAttachment] = useState<string | null>();
@@ -122,6 +127,22 @@ export const NewBankAccountScreen: React.FC<BankAccountProps> = ({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isValidating, isValid, changes, attachment]);
+
+  // go to verification otp when success add/edit bank
+  useEffect(() => {
+    if (dataBankUser) {
+      // for type edit, must send previous bank id
+      const responseData =
+        type === 'add'
+          ? dataBankUser
+          : {...dataBankUser, previousBankId: data?.bankId};
+
+      navigation.navigate('VerifCodeWithdrawal', {
+        type,
+        data: responseData,
+      });
+    }
+  }, [dataBankUser, isLoading]);
 
   const onPressGoBack = () => {
     if (changes) {
@@ -177,23 +198,12 @@ export const NewBankAccountScreen: React.FC<BankAccountProps> = ({
           beneficiaryAddress: getValues('beneficiaryAddress'),
           attachment: imageBase64,
         };
-        let response =
-          type === 'add'
-            ? await addBankAccount(payload)
-            : await editBankAccount({...payload, id: data?.bankId});
+
+        type === 'add'
+          ? await setAddBankAccount(payload)
+          : await setEditBankAccount({...payload, id: data?.bankId});
 
         InteractionManager.runAfterInteractions(() => setIsLoading(false));
-        // if add success, navigate to otp screen
-        // for type edit, must send bank id before edit
-        const responseData =
-          type === 'add'
-            ? response.data
-            : {...response.data, previousBankId: data?.bankId};
-
-        navigation.navigate('VerifCodeWithdrawal', {
-          type,
-          data: responseData,
-        });
       } catch (error) {
         InteractionManager.runAfterInteractions(() => setIsLoading(false));
       }
