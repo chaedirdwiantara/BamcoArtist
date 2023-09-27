@@ -5,6 +5,8 @@ import {
   GetUserBankResponseType,
   VerifyBankPropsType,
   WithdrawRequestPropsType,
+  VerifyWithdrawPropsType,
+  GetListWithdrawResponseType,
 } from '../interface/withdraw.interface';
 import SsuAPI from './baseKrakatau';
 
@@ -54,11 +56,23 @@ export const removeBankAccount = async (
   return data;
 };
 
-export const verifyOtp = async (
+export const verifyOtpBank = async (
   props: VerifyBankPropsType,
 ): Promise<RemoveBankAccountResponseType> => {
   const {data} = await SsuAPI().request<RemoveBankAccountResponseType>({
     url: `/withdraw/bank-Verify/${props.id}`,
+    method: 'PUT',
+    data: props,
+  });
+
+  return data;
+};
+
+export const verifyOtpWithdraw = async (
+  props: VerifyWithdrawPropsType,
+): Promise<RemoveBankAccountResponseType> => {
+  const {data} = await SsuAPI().request<RemoveBankAccountResponseType>({
+    url: `/withdraw/verify-otp/${props.id}`,
     method: 'PUT',
     data: props,
   });
@@ -73,6 +87,17 @@ export const withdrawRequest = async (
     url: '/withdraw/request',
     method: 'POST',
     data: props,
+  });
+
+  return data;
+};
+
+export const listWithdraw = async (
+  props: ParamsProps,
+): Promise<GetListWithdrawResponseType> => {
+  const {data} = await SsuAPI().request<GetListWithdrawResponseType>({
+    url: `/admin-panel/withdraw/list/${props.uuid}`,
+    method: 'GET',
   });
 
   return data;
