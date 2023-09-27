@@ -369,7 +369,7 @@ export type RootStackParams = {
   EventDetail: {
     id: string;
   };
-  LiveTipping: {id: string; eventId: string};
+  LiveTipping: {id: string; eventId: string; endDate: string};
   ClaimReward: {id: string};
   TransactionDetail: {
     id: string;

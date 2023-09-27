@@ -16,9 +16,15 @@ interface EventLineUpInterface {
   dataLineUp?: EventLineUp[];
   isLoading?: boolean;
   eventId: string;
+  endDate: string;
 }
 
-const LineUp: FC<EventLineUpInterface> = ({dataLineUp, isLoading, eventId}) => {
+const LineUp: FC<EventLineUpInterface> = ({
+  dataLineUp,
+  isLoading,
+  eventId,
+  endDate,
+}) => {
   const {t} = useTranslation();
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
@@ -65,6 +71,7 @@ const LineUp: FC<EventLineUpInterface> = ({dataLineUp, isLoading, eventId}) => {
               navigation.push('LiveTipping', {
                 id: item?.musician?.UUID,
                 eventId: eventId,
+                endDate: endDate,
               })
             }
             onPressImage={
