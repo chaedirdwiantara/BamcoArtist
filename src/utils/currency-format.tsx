@@ -42,4 +42,8 @@ const kFormatter3 = (num: number = 0) => {
   return Math.abs(num) > 999 ? value + 'K' : Math.sign(num) * Math.abs(num);
 };
 
-export {toCurrency, kFormatter, kFormatter2, kFormatter3};
+const convertToHKD = (num: number = 0) => {
+  return num * 0.0739;
+};
+
+export {toCurrency, kFormatter, kFormatter2, kFormatter3, convertToHKD};

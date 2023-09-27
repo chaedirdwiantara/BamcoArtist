@@ -9,27 +9,24 @@ import {
 import {useTranslation} from 'react-i18next';
 import {mvs} from 'react-native-size-matters';
 
-import {color, font, typography} from '../../../theme';
-import {EditIcon} from '../../../assets/icon';
+import {Gap} from '../../atom';
 import {width, widthPercentage} from '../../../utils';
+import {color, font, typography} from '../../../theme';
+import {EditIcon, TrashIcon} from '../../../assets/icon';
 
 interface CardBankAccountProps {
-  number: string;
-  bankName: string;
-  selectedBank: number;
-  onPressSelectedBank: (param: number) => void;
-  goToAddBankAccount: () => void;
-  goToEditBankAccount: () => void;
+  number?: string;
+  bankName?: string;
+  goToEditBankAccount?: () => void;
+  onPressRemove?: () => void;
   containerStyles?: ViewStyle;
 }
 
 export const CardBankAccount: React.FC<CardBankAccountProps> = ({
   number,
   bankName,
-  selectedBank,
-  onPressSelectedBank,
-  goToAddBankAccount,
   goToEditBankAccount,
+  onPressRemove,
   containerStyles,
 }) => {
   const {t} = useTranslation();
@@ -38,13 +35,27 @@ export const CardBankAccount: React.FC<CardBankAccountProps> = ({
     <View style={containerStyles}>
       <View style={styles.containerFirstSection}>
         <Text style={[typography.Button2, {color: color.Neutral[10]}]}>
-          {t('Withdrawal.BankAccount.ChooseAccount')}
+          {t('Withdrawal.BankAccount.BankAccount')}
         </Text>
-        <TouchableOpacity onPress={goToAddBankAccount}>
-          <Text style={[typography.Button2, {color: color.Pink[2]}]}>
-            {`+ ${t('Withdrawal.BankAccount.AddAccount')}`}
-          </Text>
-        </TouchableOpacity>
+        {bankName && (
+          <View style={styles.iconSection}>
+            <TouchableOpacity onPress={goToEditBankAccount}>
+              <EditIcon
+                stroke={color.Pink[2]}
+                width={widthPercentage(21)}
+                height={widthPercentage(21)}
+              />
+            </TouchableOpacity>
+            <Gap width={widthPercentage(10)} />
+            <TouchableOpacity onPress={onPressRemove}>
+              <TrashIcon
+                width={widthPercentage(23)}
+                height={widthPercentage(23)}
+                stroke={color.Pink[2]}
+              />
+            </TouchableOpacity>
+          </View>
+        )}
       </View>
 
       <View style={styles.containerSecondSection}>
@@ -54,32 +65,18 @@ export const CardBankAccount: React.FC<CardBankAccountProps> = ({
         <Text style={[typography.Caption, styles.bankNameTitleStyle]}>
           {t('Withdrawal.BankAccount.BankName')}
         </Text>
-        <Text style={[typography.Caption, styles.actionTitleStyle]}>
-          {t('Withdrawal.BankAccount.Action')}
-        </Text>
       </View>
 
-      <TouchableOpacity
-        style={[
-          styles.containerItemBank,
-          {
-            backgroundColor:
-              selectedBank === 0 ? color.Success[500] : color.Dark[600],
-          },
-        ]}
-        onPress={() => onPressSelectedBank(0)}>
-        <Text style={[typography.Caption, styles.numberValueStyle]}>
-          {number}
-        </Text>
-        <Text style={[typography.Caption, styles.bankNameValueStyle]}>
-          {bankName}
-        </Text>
-        <TouchableOpacity
-          style={styles.editIconStyle}
-          onPress={goToEditBankAccount}>
-          <EditIcon width={widthPercentage(20)} height={widthPercentage(20)} />
-        </TouchableOpacity>
-      </TouchableOpacity>
+      {bankName && (
+        <View style={styles.containerItemBank}>
+          <Text style={[typography.Caption, styles.numberValueStyle]}>
+            {number}
+          </Text>
+          <Text style={[typography.Caption, styles.bankNameValueStyle]}>
+            {bankName}
+          </Text>
+        </View>
+      )}
     </View>
   );
 };
@@ -104,39 +101,36 @@ const styles = StyleSheet.create({
   numberTitleStyle: {
     color: color.Neutral[10],
     fontFamily: font.InterMedium,
-    width: '38%',
+    width: '40%',
   },
   bankNameTitleStyle: {
     color: color.Neutral[10],
     fontFamily: font.InterMedium,
-    width: '47%',
-  },
-  actionTitleStyle: {
-    color: color.Neutral[10],
-    fontFamily: font.InterMedium,
-    width: '15%',
+    width: '55%',
   },
   containerItemBank: {
     width: width * 0.9,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingVertical: mvs(18),
+    paddingVertical: mvs(15),
     paddingHorizontal: mvs(15),
+    backgroundColor: 'transparent',
+    borderWidth: mvs(1),
+    borderColor: '#282F3C',
   },
   numberValueStyle: {
     color: color.Neutral[10],
     fontFamily: font.InterMedium,
-    width: '38%',
+    width: '40%',
   },
   bankNameValueStyle: {
     color: color.Neutral[10],
     fontFamily: font.InterMedium,
-    width: '47%',
+    width: '55%',
   },
-  editIconStyle: {
-    width: '15%',
-    justifyContent: 'center',
+  iconSection: {
+    flexDirection: 'row',
     alignItems: 'center',
   },
 });

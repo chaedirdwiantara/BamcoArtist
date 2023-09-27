@@ -61,6 +61,23 @@ export const useLocationHook = () => {
     }
   };
 
+  const getDataAllCountryWithdraw = async () => {
+    setIsLoading(true);
+    try {
+      const response = await getAllCountry({
+        perPage: 300,
+        order: 'asc',
+      });
+      const newResp = formatValueNameState(response.data);
+      setDataAllCountry(newResp);
+    } catch (error) {
+      setIsError(true);
+      setDataAllCountry([]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const getStateInCountry = async (props: DataStateProps) => {
     setIsLoading(true);
     try {
@@ -119,5 +136,6 @@ export const useLocationHook = () => {
     getCitiesInState,
     getCitiesOfCountry,
     getDataAllCountryShipping,
+    getDataAllCountryWithdraw,
   };
 };

@@ -39,7 +39,7 @@ const PostAppeal: FC<PostAppeal> = (props: PostAppeal) => {
           likeCount={data.likesCount}
           commentCount={data.commentsCount}
           category="Backstate"
-          isPremium
+          isPremium={data.isPremiumPost}
           viewCount={data.viewsCount}
           shareCount={data.shareCount}
           children={<ChildrenPostCard data={data} />}

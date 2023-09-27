@@ -9,9 +9,11 @@ import {Button, SsuToast} from '../../atom';
 interface Props {
   action: () => void;
   timer?: number;
+  timerText?: string;
 }
 
 const SsuOTPTimer: FC<Props> = props => {
+  const {timerText} = props;
   const {t} = useTranslation();
   const [resend, setResend] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
@@ -85,7 +87,7 @@ const SsuOTPTimer: FC<Props> = props => {
       <>
         <View style={styles.renderTimer}>
           <Text style={styles.renderTimeText}>
-            {t('OTP.ResendAfter')}
+            {timerText ? timerText : t('OTP.ResendAfter')}
             <Text>00:{timer}</Text>
           </Text>
           <Button

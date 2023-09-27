@@ -22,7 +22,7 @@ export const ButtonStatus: React.FC<ButtonProps> = (props: ButtonProps) => {
     <Button
       label={label}
       disabled={true}
-      textStyles={{fontSize: mvs(11)}}
+      textStyles={{fontSize: mvs(11), fontWeight: '600'}}
       containerStyles={{
         width: width * 0.2,
         aspectRatio: mvs(64 / 20),

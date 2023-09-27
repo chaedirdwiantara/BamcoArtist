@@ -1,19 +1,19 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {StyleSheet, View, Text, ScrollView} from 'react-native';
 import {useQuery} from 'react-query';
 import {useTranslation} from 'react-i18next';
 import {mvs} from 'react-native-size-matters';
+import {useFocusEffect} from '@react-navigation/native';
 
 import {
   width,
-  kFormatter,
   toCurrency,
+  kFormatter3,
   widthPercentage,
   heightPercentage,
 } from '../../../utils';
-import {ListWithdrawalProps} from '../../../data/topUp';
 import {CoinCard} from './CoinCard';
-import {Gap} from '../../atom';
+import {Button, Gap} from '../../atom';
 import {TabFilter} from '../TabFilter';
 import {TopNavigation} from '../TopNavigation';
 import {WithdrawalCard} from './WithdrawalCard';
@@ -21,9 +21,12 @@ import {TransactionCard} from './TransactionCard';
 import {EmptyState} from '../EmptyState/EmptyState';
 import {color, font, typography} from '../../../theme';
 import {useIapHook} from '../../../hooks/use-iap.hook';
-import {dateLongMonth} from '../../../utils/date-format';
 import {useCreditHook} from '../../../hooks/use-credit.hook';
 import {ArrowLeftIcon, CoinDIcon} from '../../../assets/icon';
+import {useWithdrawHook} from '../../../hooks/use-withdraw.hook';
+import {profileStorage, storage} from '../../../hooks/use-storage.hook';
+import {ListWithdrawPropsType} from '../../../interface/withdraw.interface';
+import {dateFormatSubscribe, dateLongMonth} from '../../../utils/date-format';
 import {TransactionHistoryPropsType} from '../../../interface/credit.interface';
 
 interface TopUpCreditProps {
@@ -48,12 +51,22 @@ export const TopUpCreditContent: React.FC<TopUpCreditProps> = ({
     purchaseUpdateListener,
     purchaseErrorListener,
   } = useIapHook();
+  const {getListWithdraw} = useWithdrawHook();
   const {data: dataHistory, isLoading} = useQuery({
     queryKey: ['transaction-history'],
     queryFn: () => getTransactionHistory(),
   });
+  const {
+    data: dataWithdraw,
+    status: statusWithdraw,
+    refetch: refetchWithdraw,
+  } = useQuery({
+    queryKey: ['list-withdraw'],
+    queryFn: () => getListWithdraw({uuid: profileStorage()?.uuid}),
+  });
+
   const [selectedIndex, setSelectedIndex] = useState<number>(0);
-  const [listWithdrawal, setListWithdrawal] = useState<ListWithdrawalProps[]>(
+  const [listWithdrawal, setListWithdrawal] = useState<ListWithdrawPropsType[]>(
     [],
   );
   const [filter] = useState([
@@ -61,6 +74,29 @@ export const TopUpCreditContent: React.FC<TopUpCreditProps> = ({
     {filterName: 'TopUp.Filter.Transaction'},
     {filterName: 'TopUp.Filter.Withdrawal'},
   ]);
+
+  useFocusEffect(
+    useCallback(() => {
+      refetchWithdraw();
+    }, []),
+  );
+
+  // save withdraw to local state
+  useFocusEffect(
+    useCallback(() => {
+      if (statusWithdraw === 'success' && dataWithdraw?.data) {
+        setListWithdrawal(dataWithdraw?.data);
+        // if back from request withdraw, tab active must be on Withdrawal tab
+        const index = storage.getNumber('withdrawIndex') || 0;
+        setSelectedIndex(index);
+
+        // remove index after shown
+        setTimeout(() => {
+          storage.delete('withdrawIndex');
+        }, 1000);
+      }
+    }, [statusWithdraw, dataWithdraw]),
+  );
 
   useEffect(() => {
     getCreditCount();
@@ -82,6 +118,7 @@ export const TopUpCreditContent: React.FC<TopUpCreditProps> = ({
   };
 
   const onPressOpenWithdrawal = (index: number) => {
+    // add new prop to open withdraw card
     let newList = [...listWithdrawal];
     newList[index].isOpen = !newList[index].isOpen;
     setListWithdrawal(newList);
@@ -123,18 +160,17 @@ export const TopUpCreditContent: React.FC<TopUpCreditProps> = ({
             <CoinDIcon />
             <Gap width={widthPercentage(5)} />
             <Text style={[typography.Heading6, {color: color.Neutral[10]}]}>
-              {kFormatter(creditCount, 1)}
+              {kFormatter3(creditCount)}
             </Text>
           </View>
         </View>
 
-        {/* // hide until API's ready
         <Button
           label={t('TopUp.ButtonWithdraw')}
           textStyles={{fontSize: mvs(13), fontFamily: font.InterMedium}}
           containerStyles={styles.btnContainer}
           onPress={onPressWithdrawal}
-        /> */}
+        />
 
         <TabFilter.Type1
           filterData={filter}
@@ -194,24 +230,18 @@ export const TopUpCreditContent: React.FC<TopUpCreditProps> = ({
             )}
           </>
         ) : (
-          // TODO: Need to be wired with API history withdrawal
           <>
             {listWithdrawal.length > 0 ? (
               <View style={styles.containerContent}>
                 {listWithdrawal.map((val, i) => (
                   <WithdrawalCard
                     key={i}
-                    transactionAmount={toCurrency(val.transactionAmount, {
+                    transactionAmount={toCurrency(val.amount, {
                       withFraction: false,
                     })}
-                    conversionAmount={
-                      'HKD ' +
-                      toCurrency(val.conversionAmount, {
-                        withFraction: false,
-                      })
-                    }
-                    idMusician={val.idMusician}
-                    date={val.date}
+                    conversionAmount={val.amountConversion}
+                    idMusician={val.toBankNumber}
+                    date={dateFormatSubscribe(val.requestDate)}
                     status={val.status}
                     notes={val.notes}
                     isOpen={val.isOpen}

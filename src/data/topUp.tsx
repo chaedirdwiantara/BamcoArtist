@@ -11,16 +11,6 @@ export interface ListTransactionProps {
   from: string;
 }
 
-export interface ListWithdrawalProps {
-  transactionAmount: number;
-  conversionAmount: number;
-  idMusician: string;
-  date: string;
-  status: string;
-  notes: string;
-  isOpen?: boolean;
-}
-
 const listPrice: ListPriceProps[] = [
   {
     totalCoin: '1,000',
@@ -77,31 +67,4 @@ const transactionList: ListTransactionProps[] = [
   },
 ];
 
-const withdrawalList: ListWithdrawalProps[] = [
-  {
-    transactionAmount: 10000,
-    conversionAmount: 10000,
-    idMusician: '50352657444',
-    date: 'Des 10, 2022',
-    status: 'Pending',
-    notes: '',
-  },
-  {
-    transactionAmount: 40000,
-    conversionAmount: 50000,
-    idMusician: '50352657231',
-    date: 'Des 05, 2022',
-    status: 'Success',
-    notes: '',
-  },
-  {
-    transactionAmount: 100000,
-    conversionAmount: 125000,
-    idMusician: '50352657897',
-    date: 'Des 01, 2022',
-    status: 'Rejected',
-    notes: 'Your withdrawal have been rejected due bank iBeamcoes',
-  },
-];
-
-export {listPrice, transactionList, withdrawalList};
+export {listPrice, transactionList};

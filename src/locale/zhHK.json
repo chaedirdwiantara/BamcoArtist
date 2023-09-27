@@ -1216,7 +1216,12 @@
       "To": "To",
       "Date": "Date",
       "TransactionStatus": "Transaction Status",
-      "Notes": "Notes"
+      "Notes": "Notes",
+      "Status": {
+        "Pending": "Pending",
+        "Success": "Success",
+        "Rejected": "Rejected"
+      }
     },
     "EmptyState": {
       "Transaction": "The transaction list will be displayed here, but as of now, no transactions have been made.",
@@ -1226,25 +1231,29 @@
   "Withdrawal": {
     "Title": "Withdrawal",
     "BankAccount": {
-      "ChooseAccount": "Choose Account",
+      "BankAccount": "Bank Account",
       "AddAccount": "Add Account",
+      "AddBankAccount": "Add Bank Account",
       "Number": "Number",
       "AccountNumber": "Account Number",
       "BankName": "Bank Name",
-      "Action": "Action"
+      "Action": "Action",
+      "EmptyState": "You don’t have available bank account,\nadd your bank account to proceed the withdrawal"
     },
     "InputWithdrawal": {
+      "WithdrawCredits": "You can withdraw your credits on the 14th or 28th of every month, and the process will take a maximum of 7 working days.",
       "InputWithdrawalAmount": "Input Withdrawal Amount",
       "InputAmount": "Input Amount",
       "CreditToWithdraw": "Credit to Withdraw",
-      "TotalConversion": "Total Conversion"
+      "TotalConversion": "Total Conversion",
+      "ErrorMsg": "The minimum amount for withdraw is 5000 credits"
     },
     "AddBankAccount": {
       "Title": "Add Account",
       "ModalConfirm": {
         "TitleUnsaved": "Unsaved Progress",
         "SubtitleAdd": "Are you sure your Withdrawal Account is correct and want to save your current Withdrawal Account?",
-        "SubtitleUnsaved": "Are you sure you want to go back? your withdrawal account will be unsaved and you need to input your data again"
+        "SubtitleUnsaved": "Are you sure you want to go back? Your withdrawal account will be unsaved and you need to input your data again"
       },
       "Label": {
         "Country": "Country",
@@ -1270,11 +1279,31 @@
       }
     },
     "EditBankAccount": {
-      "Title": "Edit Account"
+      "Title": "Edit Bank Account",
+      "ModalConfirm": {
+        "SubtitleEdit": "Are you sure your want to update your current Withdrawal Account?"
+      }
+    },
+    "DeleteBankAccount": {
+      "ModalConfirm": {
+        "Title": "Delete Bank Account",
+        "Subtitle": "Are you sure you want to delete your bank account? You need to add new bank account to withdraw"
+      }
     },
     "VerifCode": {
       "VerificationCode": "Verification Code",
-      "VerificationText": "We have sent you six digits verification code on address {{email}} check your inbox and enter verification code here"
+      "VerificationText": "We have sent you six digits verification code on address {{email}} check your inbox and enter verification code here",
+      "ResendAfter": "You can resend verification code after ",
+      "Rejected": "Please enter a valid verification code"
+    },
+    "ModalSuccess": {
+      "Title": "Congratulations! \nYour withdrawal is being processed!",
+      "SubtitleFirstTime": "Once we have verified your bank details your funds will be on their way! This process can usually take up to 7 working days.",
+      "SubtitleNextWithdraw": "This can take up to 7 working days. You will receive your funds upon successful confirmation.",
+      "CreateWithdrawalAccount": "Your withdrawal account\nhave been saved!",
+      "EditWithdrawalAccount": "Your account\nhave been edited!",
+      "DeleteWithdrawalAccount": "Bank account\nhas been deleted!",
+      "ButtonText": "Back to credit"
     }
   },
   "RecoverAccount": {
