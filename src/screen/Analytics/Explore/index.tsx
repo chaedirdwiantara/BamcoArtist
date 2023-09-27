@@ -39,7 +39,8 @@ const Explore = (props: ExploreProps) => {
   const {refreshing} = props;
 
   const {dataAlbumComingSoon, getListComingSoon} = useHomeHook();
-  const {showPlayer, addPlaylist} = usePlayerHook();
+  const {showPlayer, showMiniPlayerOnly, addPlaylistNewVer, addPlaylist} =
+    usePlayerHook();
   const {
     isLoadingSong,
     dataTopSong,
@@ -106,11 +107,17 @@ const Explore = (props: ExploreProps) => {
   const onPressTopSong = (val: SongList) => {
     addPlaylist({dataSong: dataTopSong, playSongId: val.id, isPlay: true});
     showPlayer();
+    // TODO: DISCUSS ABOUT IT LATER
+    // addPlaylistNewVer({dataSong: val, isPlay: true});
+    // showMiniPlayerOnly();
   };
 
   const onPressNewSong = (val: SongList) => {
     addPlaylist({dataSong: dataNewSong, playSongId: val.id, isPlay: true});
     showPlayer();
+    // TODO: DISCUSS ABOUT IT LATER
+    // addPlaylistNewVer({dataSong: val, isPlay: true});
+    // showMiniPlayerOnly();
   };
 
   const goToListMusic = (
