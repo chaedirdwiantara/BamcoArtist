@@ -25,15 +25,21 @@ import {
   TopNavigation,
   ModalImagePicker,
 } from '../../components';
+import {
+  ErrorIcon,
+  TrashIcon,
+  CameraIcon,
+  ArrowLeftIcon,
+} from '../../assets/icon';
 import {RootStackParams} from '../../navigations';
 import {color, font, typography} from '../../theme';
 import {storage} from '../../hooks/use-storage.hook';
-import {addBankAccount, editBankAccount} from '../../api/withdraw.api';
 import {useLocationHook} from '../../hooks/use-location.hook';
 import {useWithdrawHook} from '../../hooks/use-withdraw.hook';
 import {width, widthPercentage, widthResponsive} from '../../utils';
-import {ArrowLeftIcon, CameraIcon, ErrorIcon} from '../../assets/icon';
+import {addBankAccount, editBankAccount} from '../../api/withdraw.api';
 import {ModalLoading} from '../../components/molecule/ModalLoading/ModalLoading';
+import {KeyboardShift} from '../../components/molecule/KeyboardShift';
 
 interface InputProps {
   country: string;
@@ -109,24 +115,13 @@ export const NewBankAccountScreen: React.FC<BankAccountProps> = ({
   }, []);
 
   useEffect(() => {
-    if (
-      isValid &&
-      getValues('country') &&
-      getValues('bankName') &&
-      getValues('accountNumber') &&
-      getValues('swiftCode') &&
-      getValues('bankAddress') &&
-      getValues('accountHolder') &&
-      getValues('beneficiaryName') &&
-      getValues('beneficiaryAddress') &&
-      attachment
-    ) {
+    if (isValid && attachment) {
       setDisabledButton(false);
     } else {
       setDisabledButton(true);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isValidating, isValid, changes]);
+  }, [isValidating, isValid, changes, attachment]);
 
   const onPressGoBack = () => {
     if (changes) {
@@ -144,8 +139,13 @@ export const NewBankAccountScreen: React.FC<BankAccountProps> = ({
   const onPressSave = () => {
     setShowModalConfirm(true);
     setModalType('save');
-    setTitleModal('Withdrawal.AddBankAccount.Title');
-    setSubtitleModal('Withdrawal.AddBankAccount.ModalConfirm.SubtitleAdd');
+    if (type === 'add') {
+      setTitleModal('Withdrawal.AddBankAccount.Title');
+      setSubtitleModal('Withdrawal.AddBankAccount.ModalConfirm.SubtitleAdd');
+    } else {
+      setTitleModal('Withdrawal.EditBankAccount.Title');
+      setSubtitleModal('Withdrawal.EditBankAccount.ModalConfirm.SubtitleEdit');
+    }
   };
 
   const onPressConfirm = async () => {
@@ -201,289 +201,293 @@ export const NewBankAccountScreen: React.FC<BankAccountProps> = ({
   };
 
   return (
-    <View style={styles.root}>
-      <TopNavigation.Type1
-        title={
-          type === 'add'
-            ? t('Withdrawal.AddBankAccount.Title')
-            : t('Withdrawal.EditBankAccount.Title')
-        }
-        leftIcon={<ArrowLeftIcon />}
-        itemStrokeColor={color.Neutral[10]}
-        leftIconAction={onPressGoBack}
-        containerStyles={{
-          paddingHorizontal: widthPercentage(12),
-        }}
-      />
-
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        style={{
-          paddingHorizontal: widthResponsive(20),
-        }}>
-        <Controller
-          name="country"
-          control={control}
-          render={({field: {onChange, value}}) => (
-            <Dropdown.Input
-              type="location"
-              initialValue={value}
-              data={dataAllCountry}
-              placeHolder={
-                t('Withdrawal.AddBankAccount.Placeholder.Country') || ''
-              }
-              dropdownLabel={t('Withdrawal.AddBankAccount.Label.Country') || ''}
-              textTyped={(newText: {label: string; value: string}) => {
-                onChange(newText.value);
-                setChanges(true);
-                // setSelectedCountry(newText.value);
-              }}
-              containerStyles={{
-                marginTop: mvs(16),
-              }}
-              isError={errors?.country ? true : false}
-              errorMsg={errors?.country?.message}
-            />
-          )}
-        />
-
-        <Controller
-          name="bankName"
-          control={control}
-          render={({field: {onChange, value}}) => (
-            <SsuInput.InputLabel
-              label={t('Withdrawal.AddBankAccount.Label.BankName') || ''}
-              value={value}
-              onChangeText={text => {
-                onChange(text);
-                setChanges(true);
-              }}
-              placeholder={
-                t('Withdrawal.AddBankAccount.Placeholder.BankName') || ''
-              }
-              isError={errors?.bankName ? true : false}
-              errorMsg={errors?.bankName?.message}
-              containerStyles={{marginTop: mvs(15)}}
-            />
-          )}
-        />
-
-        <Controller
-          name="accountNumber"
-          control={control}
-          render={({field: {onChange, value}}) => (
-            <SsuInput.InputLabel
-              label={t('Withdrawal.AddBankAccount.Label.AccountNumber') || ''}
-              value={value}
-              onChangeText={text => {
-                onChange(text);
-                setChanges(true);
-              }}
-              placeholder={
-                t('Withdrawal.AddBankAccount.Placeholder.AccountNumber') || ''
-              }
-              isError={errors?.accountNumber ? true : false}
-              errorMsg={errors?.accountNumber?.message}
-              containerStyles={{marginTop: mvs(15)}}
-            />
-          )}
-        />
-
-        <Controller
-          name="swiftCode"
-          control={control}
-          render={({field: {onChange, value}}) => (
-            <SsuInput.InputLabel
-              label={t('Withdrawal.AddBankAccount.Label.SwiftCode') || ''}
-              value={value}
-              onChangeText={text => {
-                onChange(text);
-                setChanges(true);
-              }}
-              placeholder={
-                t('Withdrawal.AddBankAccount.Placeholder.SwiftCode') || ''
-              }
-              isError={errors?.swiftCode ? true : false}
-              errorMsg={errors?.swiftCode?.message}
-              containerStyles={{marginTop: mvs(15)}}
-            />
-          )}
-        />
-
-        <Controller
-          name="bankAddress"
-          control={control}
-          render={({field: {onChange, value}}) => (
-            <SsuInput.InputLabel
-              label={t('Withdrawal.AddBankAccount.Label.BankAddress') || ''}
-              value={value}
-              onChangeText={text => {
-                onChange(text);
-                setChanges(true);
-              }}
-              placeholder={
-                t('Withdrawal.AddBankAccount.Placeholder.BankAddress') || ''
-              }
-              isError={errors?.bankAddress ? true : false}
-              errorMsg={errors?.bankAddress?.message}
-              containerStyles={{marginTop: mvs(15)}}
-            />
-          )}
-        />
-
-        <Controller
-          name="accountHolder"
-          control={control}
-          render={({field: {onChange, value}}) => (
-            <SsuInput.InputLabel
-              label={
-                t('Withdrawal.AddBankAccount.Label.NameOfAccountHolder') || ''
-              }
-              value={value}
-              onChangeText={text => {
-                onChange(text);
-                setChanges(true);
-              }}
-              placeholder={
-                t(
-                  'Withdrawal.AddBankAccount.Placeholder.NameOfAccountHolder',
-                ) || ''
-              }
-              isError={errors?.accountHolder ? true : false}
-              errorMsg={errors?.accountHolder?.message}
-              containerStyles={{marginTop: mvs(15)}}
-            />
-          )}
-        />
-
-        <Controller
-          name="beneficiaryName"
-          control={control}
-          render={({field: {onChange, value}}) => (
-            <SsuInput.InputLabel
-              label={t('Withdrawal.AddBankAccount.Label.BeneficiaryName') || ''}
-              value={value}
-              onChangeText={text => {
-                onChange(text);
-                setChanges(true);
-              }}
-              placeholder={
-                t('Withdrawal.AddBankAccount.Placeholder.BeneficiaryName') || ''
-              }
-              isError={errors?.beneficiaryName ? true : false}
-              errorMsg={errors?.beneficiaryName?.message}
-              containerStyles={{marginTop: mvs(15)}}
-            />
-          )}
-        />
-
-        <Controller
-          name="beneficiaryAddress"
-          control={control}
-          render={({field: {onChange, value}}) => (
-            <SsuInput.InputLabel
-              label={
-                t('Withdrawal.AddBankAccount.Label.BeneficiaryAddress') || ''
-              }
-              value={value}
-              onChangeText={text => {
-                onChange(text);
-                setChanges(true);
-              }}
-              placeholder={
-                t('Withdrawal.AddBankAccount.Placeholder.BeneficiaryAddress') ||
-                ''
-              }
-              isError={errors?.beneficiaryAddress ? true : false}
-              errorMsg={errors?.beneficiaryAddress?.message}
-              containerStyles={{marginTop: mvs(15)}}
-            />
-          )}
-        />
-
-        <View style={{marginTop: mvs(15)}}>
-          <Text style={[typography.Overline, styles.label]}>
-            {t('Withdrawal.AddBankAccount.Label.UploadPhotos')}
-          </Text>
-          <TouchableOpacity
-            style={[
-              styles.attachment,
-              {aspectRatio: attachment ? mvs(327 / 200) : mvs(327 / 96)},
-            ]}
-            onPress={() => setShowModalImage(true)}>
-            {attachment ? (
-              <>
-                <Image
-                  source={{
-                    uri: `data:image/jpeg;base64,${attachment}`,
-                  }}
-                  resizeMode="stretch"
-                  borderRadius={mvs(4)}
-                  style={{height: '100%', width: '100%'}}
-                />
-                <CameraIcon
-                  stroke={color.Neutral[10]}
-                  style={{
-                    position: 'absolute',
-                    right: 0,
-                    top: 0,
-                  }}
-                />
-              </>
-            ) : (
-              <>
-                <CameraIcon
-                  stroke={color.Dark[300]}
-                  style={styles.iconCamera}
-                />
-                <Text style={styles.uploadText}>
-                  {t('Withdrawal.AddBankAccount.Placeholder.UploadPhotos')}
-                </Text>
-              </>
-            )}
-          </TouchableOpacity>
-        </View>
-
-        {isError ? (
-          <View style={styles.containerErrorMsg}>
-            <ErrorIcon fill={color.Error[400]} />
-            <Gap width={ms(4)} />
-            <Text style={styles.errorMsg}>{errorMsg}</Text>
-          </View>
-        ) : null}
-
-        <Button
-          label={t('Btn.Save') || ''}
-          onPress={onPressSave}
-          textStyles={{fontSize: mvs(13)}}
-          containerStyles={
-            disabledButton ? styles.buttonDisabled : styles.button
+    <KeyboardShift>
+      <View style={styles.root}>
+        <TopNavigation.Type1
+          title={
+            type === 'add'
+              ? t('Withdrawal.AddBankAccount.Title')
+              : t('Withdrawal.EditBankAccount.Title')
           }
-          disabled={disabledButton}
+          leftIcon={<ArrowLeftIcon />}
+          itemStrokeColor={color.Neutral[10]}
+          leftIconAction={onPressGoBack}
+          containerStyles={{
+            paddingHorizontal: widthPercentage(12),
+          }}
         />
 
-        <ModalImagePicker
-          title={t('Profile.Edit.Photos') || ''}
-          modalVisible={showModalImage}
-          sendUri={image => setAttachment(image.data)}
-          sendUriMultiple={() => null}
-          onDeleteImage={() => setAttachment(null)}
-          onPressClose={() => setShowModalImage(false)}
-          hideMenuDelete={attachment !== undefined}
-          includeBase64={true}
-        />
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          style={{
+            paddingHorizontal: widthResponsive(20),
+          }}>
+          <Controller
+            name="country"
+            control={control}
+            render={({field: {onChange, value}}) => (
+              <Dropdown.Input
+                type="location"
+                initialValue={value}
+                data={dataAllCountry}
+                placeHolder={
+                  t('Withdrawal.AddBankAccount.Placeholder.Country') || ''
+                }
+                dropdownLabel={
+                  t('Withdrawal.AddBankAccount.Label.Country') || ''
+                }
+                textTyped={(newText: {label: string; value: string}) => {
+                  onChange(newText.value);
+                  setChanges(true);
+                }}
+                containerStyles={{
+                  marginTop: mvs(16),
+                }}
+                isError={errors?.country ? true : false}
+                errorMsg={errors?.country?.message}
+              />
+            )}
+          />
 
-        <ModalConfirm
-          modalVisible={showModalConfirm}
-          title={t(titleModal) || ''}
-          subtitle={t(subtitleModal) || ''}
-          onPressClose={() => setShowModalConfirm(false)}
-          onPressOk={onPressConfirm}
-        />
-      </ScrollView>
+          <Controller
+            name="bankName"
+            control={control}
+            render={({field: {onChange, value}}) => (
+              <SsuInput.InputLabel
+                label={t('Withdrawal.AddBankAccount.Label.BankName') || ''}
+                value={value}
+                onChangeText={text => {
+                  onChange(text);
+                  setChanges(true);
+                }}
+                placeholder={
+                  t('Withdrawal.AddBankAccount.Placeholder.BankName') || ''
+                }
+                isError={errors?.bankName ? true : false}
+                errorMsg={errors?.bankName?.message}
+                containerStyles={{marginTop: mvs(15)}}
+              />
+            )}
+          />
 
-      <ModalLoading visible={isLoading} />
-    </View>
+          <Controller
+            name="accountNumber"
+            control={control}
+            render={({field: {onChange, value}}) => (
+              <SsuInput.InputLabel
+                label={t('Withdrawal.AddBankAccount.Label.AccountNumber') || ''}
+                value={value}
+                onChangeText={text => {
+                  onChange(text);
+                  setChanges(true);
+                }}
+                placeholder={
+                  t('Withdrawal.AddBankAccount.Placeholder.AccountNumber') || ''
+                }
+                isError={errors?.accountNumber ? true : false}
+                errorMsg={errors?.accountNumber?.message}
+                containerStyles={{marginTop: mvs(15)}}
+                keyboardType="number-pad"
+              />
+            )}
+          />
+
+          <Controller
+            name="swiftCode"
+            control={control}
+            render={({field: {onChange, value}}) => (
+              <SsuInput.InputLabel
+                label={t('Withdrawal.AddBankAccount.Label.SwiftCode') || ''}
+                value={value}
+                onChangeText={text => {
+                  onChange(text);
+                  setChanges(true);
+                }}
+                placeholder={
+                  t('Withdrawal.AddBankAccount.Placeholder.SwiftCode') || ''
+                }
+                isError={errors?.swiftCode ? true : false}
+                errorMsg={errors?.swiftCode?.message}
+                containerStyles={{marginTop: mvs(15)}}
+              />
+            )}
+          />
+
+          <Controller
+            name="bankAddress"
+            control={control}
+            render={({field: {onChange, value}}) => (
+              <SsuInput.InputLabel
+                label={t('Withdrawal.AddBankAccount.Label.BankAddress') || ''}
+                value={value}
+                onChangeText={text => {
+                  onChange(text);
+                  setChanges(true);
+                }}
+                placeholder={
+                  t('Withdrawal.AddBankAccount.Placeholder.BankAddress') || ''
+                }
+                isError={errors?.bankAddress ? true : false}
+                errorMsg={errors?.bankAddress?.message}
+                containerStyles={{marginTop: mvs(15)}}
+              />
+            )}
+          />
+
+          <Controller
+            name="accountHolder"
+            control={control}
+            render={({field: {onChange, value}}) => (
+              <SsuInput.InputLabel
+                label={
+                  t('Withdrawal.AddBankAccount.Label.NameOfAccountHolder') || ''
+                }
+                value={value}
+                onChangeText={text => {
+                  onChange(text);
+                  setChanges(true);
+                }}
+                placeholder={
+                  t(
+                    'Withdrawal.AddBankAccount.Placeholder.NameOfAccountHolder',
+                  ) || ''
+                }
+                isError={errors?.accountHolder ? true : false}
+                errorMsg={errors?.accountHolder?.message}
+                containerStyles={{marginTop: mvs(15)}}
+              />
+            )}
+          />
+
+          <Controller
+            name="beneficiaryName"
+            control={control}
+            render={({field: {onChange, value}}) => (
+              <SsuInput.InputLabel
+                label={
+                  t('Withdrawal.AddBankAccount.Label.BeneficiaryName') || ''
+                }
+                value={value}
+                onChangeText={text => {
+                  onChange(text);
+                  setChanges(true);
+                }}
+                placeholder={
+                  t('Withdrawal.AddBankAccount.Placeholder.BeneficiaryName') ||
+                  ''
+                }
+                isError={errors?.beneficiaryName ? true : false}
+                errorMsg={errors?.beneficiaryName?.message}
+                containerStyles={{marginTop: mvs(15)}}
+              />
+            )}
+          />
+
+          <Controller
+            name="beneficiaryAddress"
+            control={control}
+            render={({field: {onChange, value}}) => (
+              <SsuInput.InputLabel
+                label={
+                  t('Withdrawal.AddBankAccount.Label.BeneficiaryAddress') || ''
+                }
+                value={value}
+                onChangeText={text => {
+                  onChange(text);
+                  setChanges(true);
+                }}
+                placeholder={
+                  t(
+                    'Withdrawal.AddBankAccount.Placeholder.BeneficiaryAddress',
+                  ) || ''
+                }
+                isError={errors?.beneficiaryAddress ? true : false}
+                errorMsg={errors?.beneficiaryAddress?.message}
+                containerStyles={{marginTop: mvs(15)}}
+              />
+            )}
+          />
+
+          <View style={{marginTop: mvs(15)}}>
+            <Text style={[typography.Overline, styles.label]}>
+              {t('Withdrawal.AddBankAccount.Label.UploadPhotos')}
+            </Text>
+            <TouchableOpacity
+              style={[
+                styles.attachment,
+                {aspectRatio: attachment ? mvs(327 / 250) : mvs(327 / 96)},
+              ]}
+              onPress={() => setShowModalImage(true)}>
+              {attachment ? (
+                <>
+                  <Image
+                    source={{
+                      uri: `data:image/jpeg;base64,${attachment}`,
+                    }}
+                    borderRadius={mvs(4)}
+                    style={styles.image}
+                  />
+                  <TouchableOpacity
+                    style={styles.containerIcon}
+                    onPress={() => setAttachment(null)}>
+                    <TrashIcon stroke={color.Neutral[10]} />
+                  </TouchableOpacity>
+                </>
+              ) : (
+                <>
+                  <CameraIcon
+                    stroke={color.Dark[300]}
+                    style={styles.iconCamera}
+                  />
+                  <Text style={styles.uploadText}>
+                    {t('Withdrawal.AddBankAccount.Placeholder.UploadPhotos')}
+                  </Text>
+                </>
+              )}
+            </TouchableOpacity>
+          </View>
+
+          {isError ? (
+            <View style={styles.containerErrorMsg}>
+              <ErrorIcon fill={color.Error[400]} />
+              <Gap width={ms(4)} />
+              <Text style={styles.errorMsg}>{errorMsg}</Text>
+            </View>
+          ) : null}
+
+          <Button
+            label={t('Btn.Save') || ''}
+            onPress={onPressSave}
+            textStyles={{fontSize: mvs(13)}}
+            containerStyles={
+              disabledButton ? styles.buttonDisabled : styles.button
+            }
+            disabled={disabledButton}
+          />
+
+          <ModalImagePicker
+            title={t('Profile.Edit.Photos') || ''}
+            modalVisible={showModalImage}
+            sendUri={image => setAttachment(image.data)}
+            sendUriMultiple={() => null}
+            onDeleteImage={() => setAttachment(null)}
+            onPressClose={() => setShowModalImage(false)}
+            hideMenuDelete={attachment !== null && attachment !== undefined}
+            includeBase64={true}
+          />
+
+          <ModalConfirm
+            modalVisible={showModalConfirm}
+            title={t(titleModal) || ''}
+            subtitle={t(subtitleModal) || ''}
+            onPressClose={() => setShowModalConfirm(false)}
+            onPressOk={onPressConfirm}
+          />
+        </ScrollView>
+
+        <ModalLoading visible={isLoading} />
+      </View>
+    </KeyboardShift>
   );
 };
 
@@ -543,5 +547,20 @@ const styles = StyleSheet.create({
   iconCamera: {
     width: widthPercentage(22),
     height: widthPercentage(22),
+  },
+  containerIcon: {
+    position: 'absolute',
+    right: mvs(10),
+    top: mvs(10),
+    backgroundColor: color.Dark[800],
+    paddingVertical: mvs(6),
+    paddingHorizontal: mvs(6),
+    borderRadius: mvs(4),
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  image: {
+    height: '100%',
+    width: '100%',
   },
 });
