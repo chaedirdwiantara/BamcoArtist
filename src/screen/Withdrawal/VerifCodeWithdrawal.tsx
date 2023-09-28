@@ -34,8 +34,14 @@ export const VerifCodeWithdrawalScreen: React.FC<WithdrawalProps> = ({
   const timer = 59;
   const {t} = useTranslation();
   const email = profileStorage()?.email;
-  const {isError, isLoading, isOtpValid, confirmOtpBank, confirmOtpWithdraw} =
-    useWithdrawHook();
+  const {
+    isError,
+    isLoading,
+    isOtpValid,
+    confirmOtpBank,
+    confirmOtpWithdraw,
+    resendOtpWithdraw,
+  } = useWithdrawHook();
   const [showModalSuccess, setShowModalSuccess] = useState<boolean>(false);
   const [titleModal, setTitleModal] = useState<string>('');
   const [subtitleModal, setSubtitleModal] = useState<string>('');
@@ -106,6 +112,18 @@ export const VerifCodeWithdrawalScreen: React.FC<WithdrawalProps> = ({
     type === 'withdraw' ? verifWithdrawReq(otp) : verifBankAccount(otp);
   };
 
+  const resendOtp = async () => {
+    // id of withdraw/bank
+    let id = 0;
+    type === 'withdraw' ? (id = idWithdraw || 0) : (id = data?.bankId || 0);
+    // context => 1 = withdraw | 2 = bank
+    let context = 0;
+    type === 'withdraw' ? (context = 1) : (context = 2);
+
+    // resend otp
+    resendOtpWithdraw(id, context);
+  };
+
   const onPressModalSuccess = () => {
     if (type === 'withdraw') {
       storage.set('withdrawIndex', 2);
@@ -159,7 +177,7 @@ export const VerifCodeWithdrawalScreen: React.FC<WithdrawalProps> = ({
           ) : null}
 
           <SsuOTPTimer
-            action={() => {}}
+            action={resendOtp}
             timer={timer}
             timerText={t('Withdrawal.VerifCode.ResendAfter') || ''}
           />

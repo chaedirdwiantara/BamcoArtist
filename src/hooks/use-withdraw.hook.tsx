@@ -8,6 +8,7 @@ import {
   verifyOtpBank,
   verifyOtpWithdraw,
   listWithdraw,
+  resendOtp,
 } from '../api/withdraw.api';
 import {
   VerifyBankPropsType,
@@ -40,7 +41,8 @@ export const useWithdrawHook = () => {
     setIsError(false);
     setErrorMsg('');
     try {
-      await addBankAccount(props);
+      const response = await addBankAccount(props);
+      setDataBankUser(response.data);
     } catch (error) {
       console.log(error);
       setIsError(true);
@@ -63,7 +65,8 @@ export const useWithdrawHook = () => {
     setIsError(false);
     setErrorMsg('');
     try {
-      await editBankAccount(props);
+      const response = await editBankAccount(props);
+      setDataBankUser(response.data);
     } catch (error) {
       console.log(error);
       setIsError(true);
@@ -135,6 +138,29 @@ export const useWithdrawHook = () => {
     }
   };
 
+  const resendOtpWithdraw = async (id: number, context?: number) => {
+    setIsError(false);
+    setErrorMsg('');
+    setIsLoading(true);
+    try {
+      await resendOtp(id, context);
+    } catch (error) {
+      setIsError(true);
+      if (
+        axios.isAxiosError(error) &&
+        error.response?.status &&
+        error.response?.status >= 400
+      ) {
+        setErrorMsg(error.response?.data?.message);
+        setErrorCode(error.response?.data?.code);
+      } else if (error instanceof Error) {
+        setErrorMsg(error.message);
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const getListWithdraw = async (props: ParamsProps) => {
     try {
       const response = await listWithdraw(props);
@@ -161,5 +187,6 @@ export const useWithdrawHook = () => {
     confirmOtpBank,
     confirmOtpWithdraw,
     getListWithdraw,
+    resendOtpWithdraw,
   };
 };

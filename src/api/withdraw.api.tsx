@@ -102,3 +102,15 @@ export const listWithdraw = async (
 
   return data;
 };
+
+export const resendOtp = async (
+  id: number,
+  context?: number,
+): Promise<RemoveBankAccountResponseType> => {
+  const {data} = await SsuAPI().request<RemoveBankAccountResponseType>({
+    url: `/withdraw/resend-otp/${id}/${context}/`,
+    method: 'POST',
+  });
+
+  return data;
+};
