@@ -21,10 +21,12 @@ type Props = {
   onPressGift: () => void;
   isNewGift?: boolean;
   onSwipe?: boolean;
+  showGift?: boolean;
 };
 
 const LiveTippingNav = (props: Props) => {
-  const {credit, onPressCredit, onPressGift, isNewGift, onSwipe} = props;
+  const {credit, onPressCredit, onPressGift, isNewGift, onSwipe, showGift} =
+    props;
   const {t} = useTranslation();
   const animatedValue = useRef(new Animated.Value(0)).current;
   const [isTop, setIsTop] = useState(true);
@@ -100,23 +102,25 @@ const LiveTippingNav = (props: Props) => {
         </TouchableOpacity>
       </View>
       <Gap width={widthResponsive(20)} />
-      <TouchableOpacity onPress={onPressGift} style={styles.rowCenter}>
-        <GiftIcon
-          stroke="#FFF"
-          width={widthResponsive(18)}
-          height={heightResponsive(18)}
-        />
-        {isNewGift && (
-          <View style={styles.talkBubble}>
-            <View style={styles.talkBubbleSquare}>
-              <Text style={[Typography.Overline, styles.claim]}>
-                {t('ClaimReward.Claim')}
-              </Text>
+      {showGift && (
+        <TouchableOpacity onPress={onPressGift} style={styles.rowCenter}>
+          <GiftIcon
+            stroke="#FFF"
+            width={widthResponsive(18)}
+            height={heightResponsive(18)}
+          />
+          {isNewGift && (
+            <View style={styles.talkBubble}>
+              <View style={styles.talkBubbleSquare}>
+                <Text style={[Typography.Overline, styles.claim]}>
+                  {t('ClaimReward.Claim')}
+                </Text>
+              </View>
+              <View style={styles.talkBubbleTriangle} />
             </View>
-            <View style={styles.talkBubbleTriangle} />
-          </View>
-        )}
-      </TouchableOpacity>
+          )}
+        </TouchableOpacity>
+      )}
     </View>
   );
 };

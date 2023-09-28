@@ -214,11 +214,11 @@ const Income = () => {
               type="tip"
               descAvg={selectedRange.value}
               numberAvg={dataChart?.tipAvg || ''}
-              numberDiffsAvg={dataChart?.tipAvgProgress || ''}
-              progressAvg={dataChart?.tipAvgCompare || 'same'}
+              numberDiffsAvg={dataChart?.tipAvgCompare || ''}
+              progressAvg={dataChart?.tipAvgProgress || 'same'}
               numberEarned={dataChart?.tipEarned || ''}
-              numberDiffsEarned={dataChart?.tipEarnedProgress || ''}
-              progressEarned={dataChart?.tipEarnedCompare || 'same'}
+              numberDiffsEarned={dataChart?.tipEarnedCompare || ''}
+              progressEarned={dataChart?.tipEarnedProgress || 'same'}
               descEarned={selectedRange.value}
             />
           )}
@@ -228,11 +228,11 @@ const Income = () => {
               type="subscription"
               descAvg={selectedRange.value}
               numberAvg={dataChart?.subsAvg || ''}
-              numberDiffsAvg={dataChart?.subsAvgProgress || ''}
-              progressAvg={dataChart?.subsAvgCompare || 'same'}
+              numberDiffsAvg={dataChart?.subsAvgCompare || ''}
+              progressAvg={dataChart?.subsAvgProgress || 'same'}
               numberEarned={dataChart?.subsEarned || ''}
-              numberDiffsEarned={dataChart?.subsEarnedProgress || ''}
-              progressEarned={dataChart?.subsEarnedCompare || 'same'}
+              numberDiffsEarned={dataChart?.subsEarnedCompare || ''}
+              progressEarned={dataChart?.subsEarnedProgress || 'same'}
               descEarned={selectedRange.value}
             />
           )}

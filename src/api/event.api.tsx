@@ -1,11 +1,15 @@
 import {ParamsProps} from '../interface/base.interface';
 import {
+  ClaimVoucherResponse,
   EventDetailResponse,
   EventHomeResponse,
   EventLineUpResponse,
   EventMusicianResponse,
   EventMusicianTippedResponse,
   EventTopTipperResponse,
+  GenerateVoucherReq,
+  GenerateVoucherResponse,
+  GetVoucherByEventResponse,
   MerchListResponse,
   MusicianStatusResponse,
   OrderListBookyay,
@@ -183,6 +187,44 @@ export const listEventHome = async (
     params: {
       ...props,
     },
+  });
+
+  return data;
+};
+
+export const getEventVoucher = async (
+  params: GenerateVoucherReq,
+): Promise<GenerateVoucherResponse> => {
+  const {data} = await KrakatauAPI().request<GenerateVoucherResponse>({
+    url: `/vouchers/check-generate-first-tip`,
+    method: 'POST',
+    data: params,
+  });
+
+  return data;
+};
+
+export const getEventDetailVoucher = async (
+  eventId: string,
+): Promise<GetVoucherByEventResponse> => {
+  const {data} = await KrakatauAPI().request<GetVoucherByEventResponse>({
+    url: `/vouchers/event/${eventId}`,
+    method: 'GET',
+  });
+
+  return data;
+};
+
+export const redeemEventVoucher = async ({
+  voucherId,
+  eventId,
+}: {
+  voucherId: number;
+  eventId: string;
+}): Promise<ClaimVoucherResponse> => {
+  const {data} = await KrakatauAPI().request<ClaimVoucherResponse>({
+    url: `/vouchers/redeem/${voucherId}/event/${eventId}`,
+    method: 'PATCH',
   });
 
   return data;

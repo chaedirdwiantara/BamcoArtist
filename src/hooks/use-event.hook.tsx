@@ -2,10 +2,12 @@ import {UseInfiniteQueryOptions, useInfiniteQuery, useQuery} from 'react-query';
 import {
   fetchListOrder,
   getEventDetail,
+  getEventDetailVoucher,
   getEventLineUp,
   getEventLiveRank,
   getEventMusicianTipped,
   getEventTopTipper,
+  getEventVoucher,
   getStatusLiveMusician,
   listConcert,
   listEventHome,
@@ -14,6 +16,7 @@ import {
   searchEvent,
 } from '../api/event.api';
 import {
+  GenerateVoucherReq,
   OrderListBookyay,
   RequestPropsListMerch,
 } from '../interface/event.interface';
@@ -175,6 +178,18 @@ export const useEventHook = () => {
     });
   };
 
+  const useEventGenerateVoucher = (params: GenerateVoucherReq) => {
+    return useQuery([`event/voucher/${params?.eventId}`], () =>
+      getEventVoucher(params),
+    );
+  };
+
+  const useEventDetailVoucher = (eventId: string) => {
+    return useQuery([`event/voucher/detail/${eventId}`], () =>
+      getEventDetailVoucher(eventId),
+    );
+  };
+
   return {
     getListDataMerch,
     getListDataConcert,
@@ -189,5 +204,7 @@ export const useEventHook = () => {
     useEventMusicianLiveStatus,
     useEventRankerLiveTipping,
     useEventHome,
+    useEventGenerateVoucher,
+    useEventDetailVoucher,
   };
 };

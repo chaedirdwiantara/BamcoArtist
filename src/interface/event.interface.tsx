@@ -323,3 +323,50 @@ export interface EventMusicianTippedResponse extends BaseResponseApi {
 export interface MusicianStatusResponse extends BaseResponseApi {
   data: boolean;
 }
+
+export interface GenerateVoucherReq {
+  tipperUUID: string;
+  tipperType: string;
+  eventId: string;
+  endDateEvent: string;
+}
+
+export interface GenerateVoucherResponse extends BaseResponseApi {
+  data: {
+    isGenerated: boolean;
+    id: number;
+    voucherId: number;
+    ownerUUID: string;
+    ownerType: string;
+    eventId: string;
+    expiredDate: string;
+    isRedeemed: boolean;
+    createdAt: string;
+  };
+}
+
+export interface GetVoucherByEventResponse extends BaseResponseApi {
+  data: {
+    voucher: {
+      id: number;
+      code: string;
+      title: string;
+      termsCondition: {
+        title: string;
+        value: string[];
+      };
+      startDate: string;
+      endDate: string;
+      createdAt: string;
+      updatedAt: string;
+    };
+    ownerUUID: string;
+    ownerType: string;
+    expiredDate: string;
+    isRedeemed: boolean;
+  };
+}
+
+export interface ClaimVoucherResponse extends BaseResponseApi {
+  data: null;
+}

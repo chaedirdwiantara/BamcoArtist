@@ -41,13 +41,18 @@ export const LiveTipping: FC<LiveTippingProps> = ({
 }: LiveTippingProps) => {
   const uuid = route.params.id;
   const eventId = route.params.eventId;
+  const endDate = route.params.endDate;
   const {t} = useTranslation();
   const {isLoadingMusician, dataDetailMusician, getDetailMusician} =
     useMusicianHook();
   const {dataCountProfile, getTotalCountProfile} = useProfileHook();
   const {creditCount, getCreditCount} = useCreditHook();
-  const {useEventMusicianLiveStatus, useEventRankerLiveTipping} =
-    useEventHook();
+  const {
+    useEventMusicianLiveStatus,
+    useEventRankerLiveTipping,
+    useEventGenerateVoucher,
+    useEventDetailVoucher,
+  } = useEventHook();
   const profile = profileStorage();
 
   const [showModalEmpty, setShowModalEmpty] = useState<boolean>(false);
@@ -83,16 +88,36 @@ export const LiveTipping: FC<LiveTippingProps> = ({
     uuid,
   );
 
-  useEffect(() => {
-    refetchStatus();
-    refetchRanker();
-  }, []);
+  const {data: dataVoucher, refetch: refetchVoucher} = useEventGenerateVoucher({
+    tipperUUID: profile?.uuid ?? '',
+    tipperType: 'musician',
+    eventId: eventId,
+    endDateEvent: endDate,
+  });
+
+  const {data: dataDetailVoucher, refetch: refetchDetailVoucher} =
+    useEventDetailVoucher(eventId);
+
+  useFocusEffect(
+    useCallback(() => {
+      refetchStatus();
+      refetchRanker();
+      refetchVoucher();
+      refetchDetailVoucher();
+    }, []),
+  );
 
   useEffect(() => {
     if (dataStatus) {
       setShowModalSession(!dataStatus?.data as boolean);
     }
   }, [dataStatus]);
+
+  useEffect(() => {
+    if (dataVoucher?.data?.isGenerated) {
+      refetchDetailVoucher();
+    }
+  }, [dataVoucher]);
 
   const formatRanker = (data: EventTopTipper[]) => {
     return data?.map(v => {
@@ -183,6 +208,9 @@ export const LiveTipping: FC<LiveTippingProps> = ({
           setCounterTipping(0);
           await sendTipping();
           getCreditCount();
+          if (!dataVoucher?.data?.isGenerated) {
+            refetchVoucher();
+          }
           stopBgService();
         }
         await sleep(delay);
@@ -249,8 +277,14 @@ export const LiveTipping: FC<LiveTippingProps> = ({
           <TopNavigation.LiveTippingNav
             credit={credit}
             onPressCredit={() => navigation.navigate('TopUpCredit')}
-            onPressGift={() => navigation.navigate('ClaimReward', {id: '1'})}
+            onPressGift={() => {
+              dataDetailVoucher?.data !== undefined
+                ? navigation.navigate('ClaimReward', {id: eventId})
+                : null;
+            }}
             onSwipe={onSwipe}
+            isNewGift={!dataDetailVoucher?.data?.isRedeemed}
+            showGift={dataDetailVoucher?.data !== undefined}
           />
         }
         rightIconAction={() => null}
@@ -361,22 +395,24 @@ export const LiveTipping: FC<LiveTippingProps> = ({
 
           <Gap height={heightResponsive(12)} />
 
-          <View style={styles.rowCenter}>
-            {formatRanker(dataRanker?.data ?? []).map((v, i) => {
-              return (
-                <React.Fragment key={i}>
-                  <RankCard
-                    rank={Number(v.rank)}
-                    username={v.username}
-                    credit={v.credit}
-                    isYou={v.isYou}
-                    avatar={v.avatar}
-                  />
-                  {i < 3 && <Gap width={widthResponsive(8)} />}
-                </React.Fragment>
-              );
-            })}
-          </View>
+          {!isLoadingMusician && (
+            <View style={styles.rowCenter}>
+              {formatRanker(dataRanker?.data ?? []).map((v, i) => {
+                return (
+                  <React.Fragment key={i}>
+                    <RankCard
+                      rank={Number(v.rank)}
+                      username={v.username}
+                      credit={v.credit}
+                      isYou={v.isYou}
+                      avatar={v.avatar}
+                    />
+                    {i < 3 && <Gap width={widthResponsive(8)} />}
+                  </React.Fragment>
+                );
+              })}
+            </View>
+          )}
         </View>
 
         <View style={{alignItems: 'center', justifyContent: 'flex-end'}}>
@@ -557,7 +593,7 @@ export const LiveTipping: FC<LiveTippingProps> = ({
         children={
           <View style={styles.modalContainer}>
             <View style={styles.imageModalContainer}>
-              <Image source={require('../assets/image/glass-hour.png')} />
+              <Image source={require('../assets/image/swipe-fast.png')} />
             </View>
             <Gap height={heightResponsive(16)} />
             <Text
