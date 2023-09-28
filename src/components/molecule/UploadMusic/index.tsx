@@ -22,7 +22,7 @@ export const UploadMusicSection = () => {
       <Text style={styles.modalSubtitle}>
         <Text>{t('Home.UploadMusic.ModalInfo.Subtitle1')}</Text>
         <Text style={{fontFamily: font.InterBold}}>
-          {'https://musician.ssudev.space'}
+          {'https://musician.thebeam.co'}
         </Text>
         <Text>{t('Home.UploadMusic.ModalInfo.Subtitle2')}</Text>
       </Text>
