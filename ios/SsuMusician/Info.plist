@@ -60,6 +60,10 @@
 	<string></string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Allow $(PRODUCT_NAME) to access your photos to post image or video and to take a photo to set as my profile image</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>itms-apps</string>
+	</array>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Inter-Black.ttf</string>
