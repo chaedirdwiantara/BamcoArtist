@@ -59,10 +59,9 @@ const ListenerCountry: FC<ListenerCountryProps> = (
                 labelCaption={labelCaption}
                 dataFilter={dataFilter}
                 selectedMenu={selectedMenu}
-                leftPosition={
-                  lang === 'en' ? widthResponsive(-85) : widthResponsive(-85)
-                }
-                topPosition={widthResponsive(20)}
+                leftPosition={widthResponsive(31.5)}
+                topPosition={widthResponsive(18)}
+                bottomPosition={widthResponsive(-22)}
                 containerStyle={styles.dropdownContainer}
                 textCustomStyle={{color: color.Neutral[10], fontSize: mvs(11)}}
                 iconColor={color.Neutral[10]}

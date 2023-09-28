@@ -118,8 +118,9 @@ const VoteComponent: FC<VoteProps> = (props: VoteProps) => {
           labelCaption={t(pollDuration.label)}
           dataFilter={dataDurationVote}
           selectedMenu={setPollDuration}
-          leftPosition={widthResponsive(-90)}
-          topPosition={widthResponsive(3)}
+          leftPosition={widthResponsive(25.5)}
+          topPosition={widthResponsive(10)}
+          bottomPosition={widthResponsive(-25)}
           containerStyle={{
             marginTop: widthResponsive(0),
             marginBottom: widthResponsive(0),

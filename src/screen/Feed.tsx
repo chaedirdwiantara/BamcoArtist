@@ -440,7 +440,7 @@ export const FeedScreen: React.FC = () => {
               containerStyle={{
                 top: !visible
                   ? offsetCategoryFilter?.py -
-                    widthResponsive(Platform.OS === 'android' ? 106 : 93)
+                    widthResponsive(Platform.OS === 'android' ? 106 : 100)
                   : offsetCategoryFilter?.py - widthResponsive(47),
                 left: offsetCategoryFilter?.px - widthResponsive(125),
                 width: widthResponsive(125),

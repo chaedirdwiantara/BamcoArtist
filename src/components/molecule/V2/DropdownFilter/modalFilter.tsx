@@ -11,8 +11,8 @@ import React, {FC} from 'react';
 import Modal from 'react-native-modal';
 import {color, font} from '../../../../theme';
 import {DataDropDownType} from '../../../../data/dropdown';
-import {ms, mvs} from 'react-native-size-matters';
 import {useTranslation} from 'react-i18next';
+import {widthResponsive} from '../../../../utils';
 
 export const {width} = Dimensions.get('screen');
 
@@ -116,12 +116,12 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     justifyContent: 'flex-start',
     alignItems: 'center',
-    paddingHorizontal: ms(12),
-    paddingVertical: mvs(5),
+    paddingHorizontal: widthResponsive(12),
+    paddingVertical: widthResponsive(5),
     borderColor: color.Dark[600],
   },
   textFilter: {
-    fontSize: mvs(10),
+    fontSize: widthResponsive(10),
     fontFamily: font.InterRegular,
     fontWeight: '500',
     color: color.Neutral[10],
