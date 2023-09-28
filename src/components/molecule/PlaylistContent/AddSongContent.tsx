@@ -41,7 +41,8 @@ export const AddSongContent: React.FC<AddSongProps> = ({
   nextPage,
 }) => {
   const {t} = useTranslation();
-  const [toastVisible, setToastVisible] = useState(false);
+  const [toastVisible, setToastVisible] = useState<boolean>(false);
+  const [songName, setSongName] = useState<string>('');
 
   useEffect(() => {
     toastVisible &&
@@ -50,7 +51,8 @@ export const AddSongContent: React.FC<AddSongProps> = ({
       }, 3000);
   }, [toastVisible]);
 
-  const onPressIcon = (songId: number) => {
+  const onPressIcon = (songId: number, title: string) => {
+    setSongName(title);
     setAddSongToPlaylist({playlistId: playlist.id, songId: songId});
     setToastVisible(true);
   };
@@ -108,7 +110,10 @@ export const AddSongContent: React.FC<AddSongProps> = ({
             />
             <Gap width={widthPercentage(7)} />
             <Text style={[typography.Button2, styles.textStyle]}>
-              {t('Music.Playlist.Success')}
+              {t('Music.Playlist.Success', {
+                song: songName,
+                playlist: playlist.name,
+              })}
             </Text>
           </View>
         }
@@ -142,7 +147,7 @@ const styles = StyleSheet.create({
     width: '100%',
     position: 'absolute',
     bottom: heightPercentage(22),
-    height: heightPercentage(36),
+    paddingVertical: heightPercentage(5),
     backgroundColor: color.Success[400],
     paddingHorizontal: widthPercentage(12),
     borderRadius: 4,
@@ -151,5 +156,6 @@ const styles = StyleSheet.create({
   },
   textStyle: {
     color: color.Neutral[10],
+    maxWidth: '90%',
   },
 });

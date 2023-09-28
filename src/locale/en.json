@@ -1015,7 +1015,7 @@
       "Edit": "Edit Playlist",
       "Delete": "Delete Playlist",
       "Share": "Share Playlist",
-      "Success": "Song have been added to playlist!",
+      "Success": "{{song}} successfully added to playlist {{playlist}}",
       "Remove": "Remove from Playlist",
       "ViewAlbum": "View Album"
     },
