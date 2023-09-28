@@ -103,10 +103,9 @@ const Album: FC<AlbumProps> = (props: AlbumProps) => {
           labelCaption={selectedAlbum.label}
           dataFilter={albumList}
           selectedMenu={setSelectedAlbum}
-          leftPosition={
-            lang === 'en' ? widthResponsive(-120) : widthResponsive(-120)
-          }
-          topPosition={widthResponsive(20)}
+          leftPosition={widthResponsive(-3)}
+          topPosition={widthResponsive(18)}
+          bottomPosition={widthResponsive(-22)}
           containerStyle={styles.dropdownContainer}
           textCustomStyle={{color: color.Neutral[10], fontSize: mvs(11)}}
           iconColor={color.Neutral[10]}

@@ -140,10 +140,9 @@ const Income = () => {
             labelCaption={t(selectedType.label)}
             dataFilter={dropDownIncomeType}
             selectedMenu={setSelectedType}
-            leftPosition={
-              lang === 'en' ? widthResponsive(-103) : widthResponsive(-103)
-            }
-            topPosition={heightResponsive(20)}
+            leftPosition={widthResponsive(13.5)}
+            topPosition={widthResponsive(18)}
+            bottomPosition={widthResponsive(-22)}
             containerStyle={styles.dropdownContainer}
             textCustomStyle={{color: Color.Neutral[10], fontSize: mvs(11)}}
             iconColor={Color.Neutral[10]}
@@ -154,10 +153,9 @@ const Income = () => {
             labelCaption={t(selectedRange.label)}
             dataFilter={dropDownIncomeRange}
             selectedMenu={setSelectedRange}
-            leftPosition={
-              lang === 'en' ? widthResponsive(-91) : widthResponsive(-91)
-            }
-            topPosition={heightResponsive(20)}
+            leftPosition={widthResponsive(26)}
+            topPosition={widthResponsive(18)}
+            bottomPosition={widthResponsive(-22)}
             containerStyle={styles.dropdownContainer}
             textCustomStyle={{color: Color.Neutral[10], fontSize: mvs(11)}}
             iconColor={Color.Neutral[10]}
