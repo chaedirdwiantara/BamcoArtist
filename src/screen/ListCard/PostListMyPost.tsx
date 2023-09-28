@@ -422,7 +422,8 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
           }
           dataFilter={dataLeftDropdown}
           selectedMenu={setSelectedFilterMenu}
-          leftPosition={widthResponsive(-60)}
+          leftPosition={widthResponsive(60)}
+          topPosition={widthResponsive(3)}
           containerStyle={{
             marginTop: widthResponsive(20),
             marginBottom: widthResponsive(20),
@@ -436,7 +437,8 @@ const PostListMyPost: FC<PostListProps> = (props: PostListProps) => {
           }
           dataFilter={dataRightDropdown}
           selectedMenu={setSelectedCategoryMenu}
-          leftPosition={widthResponsive(-144)}
+          leftPosition={widthResponsive(-26)}
+          topPosition={widthResponsive(3)}
           containerStyle={{
             marginTop: widthResponsive(20),
             marginBottom: widthResponsive(20),

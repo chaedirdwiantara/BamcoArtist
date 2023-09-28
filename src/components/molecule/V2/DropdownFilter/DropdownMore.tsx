@@ -128,7 +128,7 @@ const DropdownMore: React.FC<DropdownV2Props> = (props: DropdownV2Props) => {
           yPosition={offsetSortFilter?.py}
           containerStyle={{
             top:
-              heightPercent > 30
+              heightPercent > 40
                 ? offsetSortFilter?.py + ms(2) + topPosition
                 : offsetSortFilter?.py +
                   ms(2) -

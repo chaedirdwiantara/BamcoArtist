@@ -13,18 +13,18 @@ interface BottomCardProps {
   numberAvg: string;
   numberDiffsAvg: string;
   descAvg: string;
-  progressAvg: 'improve' | 'regression' | 'same';
+  progressAvg: string;
   numberEarned: string;
   numberDiffsEarned: string;
   descEarned: string;
-  progressEarned: 'improve' | 'regression' | 'same';
+  progressEarned: string;
 }
 
 interface PercentageProps {
   number: string;
   numberDiffs: string;
   desc: string;
-  progress: 'improve' | 'regression' | 'same';
+  progress: string;
 }
 
 const Percentage = (props: PercentageProps) => {
