@@ -6,6 +6,7 @@ export type paramsTypeUuid = {
 
 export type MusicianList = {
   point?: string;
+  credit: number;
   email: string;
   followers: number;
   fullname: string;
