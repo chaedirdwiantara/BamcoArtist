@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react';
-import {View, StyleSheet, Platform} from 'react-native';
+import {View, StyleSheet, Platform, Linking} from 'react-native';
 import {ms, mvs} from 'react-native-size-matters';
-import DeviceInfo from 'react-native-device-info';
 import AnimatedLottieView from 'lottie-react-native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 
@@ -19,12 +18,25 @@ type SplashScrennProps = NativeStackScreenProps<
 export const SplashScreen: React.FC<SplashScrennProps> = ({
   navigation,
 }: SplashScrennProps) => {
-  const currentVersion = DeviceInfo.getVersion();
-  const {dataVersion, getVersionInfo} = useVersionHook();
+  const {checkVersion} = useVersionHook();
   const [modalVisible, setModalVisible] = useState<boolean>(false);
+  const [forceUpdate, setForceUpdate] = useState<boolean>(true);
 
   const onUpdate = () => {
-    null;
+    if (Platform.OS === 'android') {
+      Linking.openURL(
+        'https://play.google.com/store/apps/details?id=co.beam.artist.android',
+      );
+    } else if (Platform.OS === 'ios') {
+      const link =
+        'itms-apps://apps.apple.com/us/app/beamco-for-artists/id6449465762';
+      Linking.canOpenURL(link).then(
+        supported => {
+          supported && Linking.openURL(link);
+        },
+        err => console.log(err),
+      );
+    }
   };
 
   const onCancel = () => {
@@ -44,25 +56,31 @@ export const SplashScreen: React.FC<SplashScrennProps> = ({
     }, 500);
   };
 
-  // TODO: Need update in versioning iOS (mas khamzah)
-  // useEffect(() => {
-  //   storage.getBoolean('skipOnboard')
-  //     ? getVersionInfo({
-  //         platform: Platform.OS,
-  //       })
-  //     : navigation.replace('Boarding');
-  // }, []);
-
   useEffect(() => {
-    onCancel();
-    // if (dataVersion?.version === currentVersion) {
-    //   onCancel();
-    // } else {
-    //   setTimeout(() => {
-    //     setModalVisible(true);
-    //   }, 2000);
-    // }
-  }, [dataVersion]);
+    const checkVersioning = async () => {
+      try {
+        const checkDataVersion = await checkVersion();
+        return checkDataVersion;
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    checkVersioning()
+      .then(res => {
+        if (res) {
+          if (res.showUpdate === false) {
+            onCancel();
+          } else {
+            setModalVisible(res.showUpdate);
+            setForceUpdate(res.forceUpdate);
+          }
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }, []);
 
   return (
     <View style={styles.root}>
@@ -76,7 +94,7 @@ export const SplashScreen: React.FC<SplashScrennProps> = ({
         modalVisible={modalVisible}
         onPressOk={onUpdate}
         onPressClose={onCancel}
-        showMaybeLater={!dataVersion?.forceUpdate}
+        showMaybeLater={forceUpdate}
       />
     </View>
   );
