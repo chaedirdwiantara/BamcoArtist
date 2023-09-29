@@ -14,11 +14,11 @@ interface ICheckVersion {
 
 export const useVersionHook = () => {
   const checkVersion = async (): Promise<ICheckVersion | undefined> => {
+    let resultCheck: ICheckVersion = {
+      forceUpdate: false,
+      showUpdate: false,
+    };
     try {
-      let resultCheck: ICheckVersion = {
-        forceUpdate: false,
-        showUpdate: false,
-      };
       let propsVersion = {
         platform: Platform.OS,
       };
@@ -40,8 +40,7 @@ export const useVersionHook = () => {
       }
       return resultCheck;
     } catch (error) {
-      console.log('error nih', error);
-      return undefined;
+      return resultCheck;
     }
   };
 
