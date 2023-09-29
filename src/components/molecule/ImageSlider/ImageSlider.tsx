@@ -426,6 +426,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: color.Neutral[10],
     marginVertical: mvs(10),
+    maxWidth: width * 0.8,
   },
   titleStart: {
     color: color.Neutral[10],
