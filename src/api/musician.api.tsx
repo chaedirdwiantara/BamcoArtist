@@ -117,3 +117,15 @@ export const getAppersOnAlbum = async (
 
   return data;
 };
+
+export const listContribution = async (
+  props?: ParamsProps,
+): Promise<ListMusicianResponseType> => {
+  const {data} = await SsuAPI().request<ListMusicianResponseType>({
+    url: '/public/top-fans-musician',
+    method: 'GET',
+    params: props,
+  });
+
+  return data;
+};

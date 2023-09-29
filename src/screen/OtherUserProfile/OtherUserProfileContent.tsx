@@ -49,6 +49,7 @@ import {
   dataProfileDropdown,
   dataProfileDropdownBlocked,
 } from '../../data/dropdown';
+import ListContributionToMusician from './components/ListContribution';
 
 type OnScrollEventHandler = (
   event: NativeSyntheticEvent<NativeScrollEvent>,
@@ -315,10 +316,7 @@ export const OtherUserProfileContent: React.FC<ProfileContentProps> = ({
                 )
               ) : filter[selectedIndex].filterName ===
                 'Profile.Tab.TopMusician' ? (
-                <EmptyState
-                  text={t('Profile.Label.NoMusicianOther') || ''}
-                  containerStyle={{marginVertical: heightPercentage(30)}}
-                />
+                <ListContributionToMusician uuid={profile.uuid || ''} />
               ) : (
                 <EmptyState
                   text={t('Profile.Label.NoBadgeOther') || ''}

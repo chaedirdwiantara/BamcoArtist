@@ -17,7 +17,7 @@ interface ListSongsPropsScreen {
   hideDropdownMore?: boolean;
   rightIcon?: boolean;
   rightIconComponent?: React.ReactNode;
-  onPressIcon?: (data: number) => void;
+  onPressIcon?: (data: number, title: string) => void;
   activeOpacity?: number;
   loveIcon?: boolean;
   newDataMore?: DataDropDownType[];
@@ -107,7 +107,7 @@ const ListSongs: FC<ListSongsPropsScreen> = (props: ListSongsPropsScreen) => {
           hideDropdownMore={hideDropdownMore}
           rightIcon={rightIcon}
           rightIconComponent={rightIconComponent}
-          onPressIcon={() => onPressIcon && onPressIcon(item.id)}
+          onPressIcon={() => onPressIcon && onPressIcon(item.id, item.title)}
           activeOpacity={activeOpacity}
           loveIcon={loveIcon}
           likeOnPress={() => likeOnPress(item.id, item.isLiked)}
