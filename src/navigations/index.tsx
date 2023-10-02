@@ -77,6 +77,8 @@ import {ReportedContentScreen} from '../screen/Setting/SendAppeal/ReportedConten
 import {ListAddressScreen} from '../screen/Setting/ShippingInfo/ListAddress';
 import {AddNewAddressScreen} from '../screen/Setting/ShippingInfo/AddNewAddress';
 import {RevenueScreen} from '../screen/Setting/Revenue';
+import QrCode from '../screen/Setting/QrCode';
+import Device from '../screen/Setting/QrCode/Device';
 
 // Profile
 import {ProfileScreen} from '../screen/Profile/Profile';
@@ -374,6 +376,8 @@ export type RootStackParams = {
   TransactionDetail: {
     id: string;
   };
+  QrCode: undefined;
+  Device: undefined;
 };
 
 export type MainTabParams = {
@@ -636,6 +640,8 @@ export const RootStackScreen = () => (
     <RootStack.Screen name="LiveTipping" component={LiveTipping} />
     <RootStack.Screen name="ClaimReward" component={ClaimReward} />
     <RootStack.Screen name="TransactionDetail" component={TransactionDetail} />
+    <RootStack.Screen name="QrCode" component={QrCode} />
+    <RootStack.Screen name="Device" component={Device} />
   </RootStack.Navigator>
 );
 

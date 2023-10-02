@@ -4,6 +4,10 @@ export const menuSetting: {text: string; value: string}[] = [
     value: 'Account',
   },
   {
+    text: 'Setting.QrCode.Title',
+    value: 'QrCode',
+  },
+  {
     text: 'Setting.Transaction.Title',
     value: 'Transaction',
   },
@@ -64,6 +68,13 @@ export const menuAccount: {text: string; value: string}[] = [
   {
     text: 'Setting.BlockedUser.Title',
     value: 'BlockedUser',
+  },
+];
+
+export const menuQrCode: {text: string; value: string}[] = [
+  {
+    text: 'Setting.QrCode.Device.Title',
+    value: 'Device',
   },
 ];
 
