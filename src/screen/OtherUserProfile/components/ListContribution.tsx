@@ -37,7 +37,7 @@ const ListContributionToMusician: FC<ListContributonProps> = (
       setDataContribution(
         data?.pages?.flatMap((page: any) => page?.data ?? []) ?? [],
       );
-      const total = Math.ceil(data?.pages?.[0]?.meta.total ?? 1);
+      const total = Math.ceil(data?.pages?.[0]?.meta?.total ?? 1);
       setTotalPage(total);
     } else {
       setDataContribution([]);
@@ -65,7 +65,7 @@ const ListContributionToMusician: FC<ListContributonProps> = (
         ListEmptyComponent={
           !isLoading ? (
             <EmptyState
-              text={t('Profile.Label.NoMusician') || ''}
+              text={t('Profile.Label.NoMusicianOther') || ''}
               containerStyle={{marginVertical: heightPercentage(30)}}
             />
           ) : (

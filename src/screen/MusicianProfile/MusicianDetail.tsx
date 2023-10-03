@@ -370,10 +370,8 @@ export const MusicianDetail: React.FC<MusicianDetailProps> = ({
                   }}>
                   <Gap height={12} />
                   <PopUp
-                    title={'Show your appreciation'}
-                    subTitle={
-                      'Send tips to support your favorite musician to see them growth'
-                    }
+                    title={t('Musician.ShowAppreciate')}
+                    subTitle={t('Musician.SendTip')}
                     closeOnPress={closeOnPress}
                   />
                 </View>

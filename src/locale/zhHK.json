@@ -592,7 +592,10 @@
       "Merchandise": "商品",
       "Ticket": "票務",
       "Event": "現場"
-    }
+    },
+    "ShowAppreciate": "Show your appreciation",
+    "SendTip": "Send tip to support your favorite artist to see them growth",
+    "EmptyStateFans": "Artist do not have any fans."
   },
   "ExclusiveContent": {
     "Title": "獨家內容",
