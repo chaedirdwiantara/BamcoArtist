@@ -508,6 +508,7 @@
       "TipDistribution": "Beam Distribution",
       "MusicianTipped": "Artist Beamed"
     },
+    "Live": "Live",
     "EmptyState": {
       "Home": "No live events are currently available at this time.\nStay tuned for exciting upcoming experiences!",
       "Title": "Discover Live Event",
@@ -593,7 +594,10 @@
       "Merchandise": "MERCHANDISE",
       "Ticket": "TICKET",
       "Event": "LIVE"
-    }
+    },
+    "ShowAppreciate": "Show your appreciation",
+    "SendTip": "Send tip to support your favorite artist to see them growth",
+    "EmptyStateFans": "Artist do not have any fans."
   },
   "ExclusiveContent": {
     "Title": "Exclusive Content",
