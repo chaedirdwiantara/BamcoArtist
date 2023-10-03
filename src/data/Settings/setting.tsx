@@ -3,10 +3,11 @@ export const menuSetting: {text: string; value: string}[] = [
     text: 'Setting.Account.Title',
     value: 'Account',
   },
-  {
-    text: 'Setting.QrCode.Title',
-    value: 'QrCode',
-  },
+  // TODO: ENABLE ON NEXT MR
+  // {
+  //   text: 'Setting.QrCode.Title',
+  //   value: 'QrCode',
+  // },
   {
     text: 'Setting.Transaction.Title',
     value: 'Transaction',
