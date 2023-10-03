@@ -21,7 +21,7 @@ export const MerchScreen: React.FC = () => {
 
   const bookyayToken = profileStorage()?.bookyayToken;
 
-  const merchantUrl = `https://uat.yeah-yeah.com/items/product?clause=product_5000001&token=${bookyayToken}`;
+  const merchantUrl = `https://m.bookyay.com/items/product?clause=product_5000001&token=${bookyayToken}`;
 
   return (
     <SafeAreaView style={styles.root}>

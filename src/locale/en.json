@@ -990,6 +990,16 @@
     },
     "Transaction": {
       "Title": "Transaction"
+    },
+    "QrCode":{
+      "Title":"QR Code",
+      "Device": {
+        "Title":"Devices",
+        "Caption":"Use Beamco Artist on Web by Scanning the QR Code to Sign in",
+        "Button":"Scan Now",
+        "LinkedTitle": "Linked Devices",
+        "EmptyStateLinked":"You have no linked devices"
+      }
     }
   },
   "Music": {

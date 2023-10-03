@@ -77,6 +77,9 @@ import {ReportedContentScreen} from '../screen/Setting/SendAppeal/ReportedConten
 import {ListAddressScreen} from '../screen/Setting/ShippingInfo/ListAddress';
 import {AddNewAddressScreen} from '../screen/Setting/ShippingInfo/AddNewAddress';
 import {RevenueScreen} from '../screen/Setting/Revenue';
+import QrCode from '../screen/Setting/QrCode';
+import Device from '../screen/Setting/QrCode/Device';
+import Scanner from '../screen/Setting/QrCode/Scanner';
 
 // Profile
 import {ProfileScreen} from '../screen/Profile/Profile';
@@ -374,6 +377,9 @@ export type RootStackParams = {
   TransactionDetail: {
     id: string;
   };
+  QrCode: undefined;
+  Device: undefined;
+  Scanner: undefined;
 };
 
 export type MainTabParams = {
@@ -445,7 +451,7 @@ const TabScreen = () => {
           ),
         }}
       />
-      {/* <MainTab.Screen
+      <MainTab.Screen
         name="Merch"
         component={MerchScreen}
         options={{
@@ -468,7 +474,7 @@ const TabScreen = () => {
             </View>
           ),
         }}
-      /> */}
+      />
       <MainTab.Screen
         name="Profile"
         component={ProfileScreen}
@@ -636,6 +642,9 @@ export const RootStackScreen = () => (
     <RootStack.Screen name="LiveTipping" component={LiveTipping} />
     <RootStack.Screen name="ClaimReward" component={ClaimReward} />
     <RootStack.Screen name="TransactionDetail" component={TransactionDetail} />
+    <RootStack.Screen name="QrCode" component={QrCode} />
+    <RootStack.Screen name="Device" component={Device} />
+    <RootStack.Screen name="Scanner" component={Scanner} />
   </RootStack.Navigator>
 );
 
