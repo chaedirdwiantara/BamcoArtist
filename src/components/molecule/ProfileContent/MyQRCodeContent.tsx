@@ -40,6 +40,8 @@ export const MyQRCodeContent: React.FC<MyQRCodeContentProps> = (
   const {sendLogShare} = useFeedHook();
 
   const [toastVisible, setToastVisible] = useState(false);
+  const [shareLinkPlus, setShareLinkPlus] = useState<string>();
+  const [onCopy, setOnCopy] = useState<boolean>(false);
 
   useFocusEffect(
     useCallback(() => {
@@ -52,12 +54,28 @@ export const MyQRCodeContent: React.FC<MyQRCodeContentProps> = (
 
   // SHARE LINK
   useEffect(() => {
-    if (successGetLink && Clipboard && Clipboard.setString) {
+    if (successGetLink && Clipboard && Clipboard.setString && onCopy) {
       Clipboard.setString(shareLink);
       sendLogShare({id: profile.uuid});
       setToastVisible(true);
+      setOnCopy(false);
     }
   }, [successGetLink]);
+
+  useEffect(() => {
+    if (shareLink === 'generating...') {
+      getShareLink({
+        scheme: `/musician/${profile.uuid}`,
+        image: profile.avatarUri,
+        title: t('ShareLink.Profile.Title', {
+          name: profile.fullname,
+        }),
+        description: t('ShareLink.Profile.Subtitle'),
+      });
+    } else {
+      setShareLinkPlus(`${shareLink}?username=${profile.username}`);
+    }
+  }, [shareLink]);
 
   const onPressCopy = () => {
     getShareLink({
@@ -68,6 +86,7 @@ export const MyQRCodeContent: React.FC<MyQRCodeContentProps> = (
       }),
       description: t('ShareLink.Profile.Subtitle'),
     });
+    setOnCopy(true);
   };
 
   return (
@@ -110,8 +129,8 @@ export const MyQRCodeContent: React.FC<MyQRCodeContentProps> = (
               borderColor: '#2c3444',
             },
           ]}>
-          {shareLink && (
-            <QRCode value={shareLink} size={widthPercentage(180)} />
+          {shareLink !== 'generating...' && shareLinkPlus && (
+            <QRCode value={shareLinkPlus} size={widthPercentage(180)} />
           )}
         </View>
         <Gap height={32} />
