@@ -1,7 +1,13 @@
 import {Image, StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import React, {useState} from 'react';
 import {ArrowLeftIcon} from '../../../assets/icon';
-import {Button, Gap, SsuDivider, TopNavigation} from '../../../components';
+import {
+  Button,
+  Gap,
+  ModalConfirm,
+  SsuDivider,
+  TopNavigation,
+} from '../../../components';
 import {color, font} from '../../../theme';
 import {useTranslation} from 'react-i18next';
 import {useNavigation} from '@react-navigation/native';
@@ -12,12 +18,24 @@ import {mvs} from 'react-native-size-matters';
 
 const Device = () => {
   const {t} = useTranslation();
+
+  const [showModalPost, setShowModalPost] = useState<boolean>(false);
+
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
 
   const onPressGoBack = () => {
     navigation.goBack();
   };
+
+  const handleScanButton = () => {
+    navigation.navigate('Scanner');
+  };
+
+  const handleCloseModal = () => {};
+
+  const handleOkeModal = () => {};
+
   return (
     <View style={styles.root}>
       <TopNavigation.Type1
@@ -39,6 +57,7 @@ const Device = () => {
         <Button
           label={t('Setting.QrCode.Device.Button')}
           containerStyles={styles.buttonStyle}
+          onPress={handleScanButton}
         />
         <Gap height={24} />
         <Text style={styles.linkedTitle}>
@@ -51,6 +70,15 @@ const Device = () => {
           {t('Setting.QrCode.Device.EmptyStateLinked')}
         </Text>
       </View>
+      {/* <ModalConfirm
+        modalVisible={showModalPost}
+        title={t('Modal.ExclusiveContentConfirm.Title') || ''}
+        subtitle={t('Modal.ExclusiveContentConfirm.Body') || ''}
+        yesText={t('Modal.ExclusiveContentConfirm.ButtonOk') || ''}
+        noText={t('Modal.ExclusiveContentConfirm.ButtonCancel') || ''}
+        onPressClose={handleCloseModal}
+        onPressOk={handleOkeModal}
+      /> */}
     </View>
   );
 };

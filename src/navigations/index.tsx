@@ -79,6 +79,7 @@ import {AddNewAddressScreen} from '../screen/Setting/ShippingInfo/AddNewAddress'
 import {RevenueScreen} from '../screen/Setting/Revenue';
 import QrCode from '../screen/Setting/QrCode';
 import Device from '../screen/Setting/QrCode/Device';
+import Scanner from '../screen/Setting/QrCode/Scanner';
 
 // Profile
 import {ProfileScreen} from '../screen/Profile/Profile';
@@ -378,6 +379,7 @@ export type RootStackParams = {
   };
   QrCode: undefined;
   Device: undefined;
+  Scanner: undefined;
 };
 
 export type MainTabParams = {
@@ -642,6 +644,7 @@ export const RootStackScreen = () => (
     <RootStack.Screen name="TransactionDetail" component={TransactionDetail} />
     <RootStack.Screen name="QrCode" component={QrCode} />
     <RootStack.Screen name="Device" component={Device} />
+    <RootStack.Screen name="Scanner" component={Scanner} />
   </RootStack.Navigator>
 );
 
