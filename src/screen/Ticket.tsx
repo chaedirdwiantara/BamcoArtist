@@ -20,7 +20,7 @@ export const TicketScreen: React.FC = () => {
   );
 
   const bookyayToken = profileStorage()?.bookyayToken;
-  const ticketUrl = `https://uat.yeah-yeah.com/items/product?clause=product_5629499535000004&token=${bookyayToken}`;
+  const ticketUrl = `https://m.bookyay.com/items/product?clause=product_5629499535000004&token=${bookyayToken}`;
 
   return (
     <SafeAreaView style={styles.root}>
