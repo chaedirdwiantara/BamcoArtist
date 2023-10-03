@@ -20,33 +20,35 @@ const PlaylistHome: FC<PlaylistProps> = (props: PlaylistProps) => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
   return (
-    <ScrollView
-      horizontal
-      showsHorizontalScrollIndicator={false}
-      contentContainerStyle={{
-        paddingLeft: widthResponsive(24),
-      }}>
+    <>
       {dataPlaylist?.length > 0 ? (
-        dataPlaylist?.map((item, index) => {
-          return (
-            <PlaylistHomeCard
-              key={index}
-              imgUri={item.thumbnailUrl}
-              musicTitle={item.name}
-              singerName={item.playlistOwner.fullname}
-              onPressCard={() =>
-                navigation.navigate('Playlist', {id: item.id, from: 'other'})
-              }
-            />
-          );
-        })
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={{
+            paddingLeft: widthResponsive(24),
+          }}>
+          {dataPlaylist?.map((item, index) => {
+            return (
+              <PlaylistHomeCard
+                key={index}
+                imgUri={item.thumbnailUrl}
+                musicTitle={item.name}
+                singerName={item.playlistOwner.fullname}
+                onPressCard={() =>
+                  navigation.navigate('Playlist', {id: item.id, from: 'other'})
+                }
+              />
+            );
+          })}
+        </ScrollView>
       ) : (
         <EmptyStateSongMusician
           text={t('Home.Playlist.EmptyState')}
           height={200}
         />
       )}
-    </ScrollView>
+    </>
   );
 };
 

@@ -19,7 +19,7 @@ import {
   paramsTypeUuid,
 } from '../interface/musician.interface';
 import {ParamsProps} from '../interface/base.interface';
-import {PostPropsTypeA} from '../interface/feed.interface';
+import {useInfiniteQuery} from 'react-query';
 
 export const useMusicianHook = () => {
   const [isLoadingMusician, setIsLoadingMusician] = useState(false);
@@ -194,6 +194,24 @@ export const useMusicianHook = () => {
     }
   };
 
+  const useListContribution = (totalPage: number, params?: ParamsProps) => {
+    return useInfiniteQuery({
+      queryKey: ['list-contribution'],
+      enabled: false,
+      queryFn: ({pageParam = 1}) =>
+        listContribution({...params, page: pageParam, perPage: 10}),
+      keepPreviousData: true,
+      getNextPageParam: lastPage => {
+        if ((lastPage?.data?.length as number) < totalPage) {
+          const nextPage = (lastPage?.data?.length as number) + 1;
+          return nextPage;
+        }
+        return null;
+      },
+      getPreviousPageParam: () => null,
+    });
+  };
+
   return {
     isLoadingMusician,
     isErrorMusician,
@@ -216,5 +234,6 @@ export const useMusicianHook = () => {
     getListDataRecommendedMusician,
     getDataAppearsOn,
     getListContribution,
+    useListContribution,
   };
 };
