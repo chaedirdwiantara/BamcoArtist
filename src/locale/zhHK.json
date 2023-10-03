@@ -589,7 +589,10 @@
       "Merchandise": "MERCHANDISE",
       "Ticket": "TICKET",
       "Event": "LIVE"
-    }
+    },
+    "ShowAppreciate": "Show your appreciation",
+    "SendTip": "Send tip to support your favorite artist to see them growth",
+    "EmptyStateFans": "Artist do not have any fans."
   },
   "ExclusiveContent": {
     "Title": "專屬內容",
