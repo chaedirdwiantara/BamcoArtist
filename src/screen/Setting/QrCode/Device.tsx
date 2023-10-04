@@ -1,62 +1,81 @@
 import {Image, StyleSheet, Text, View} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {ArrowLeftIcon} from '../../../assets/icon';
-import {
-  Button,
-  Gap,
-  ModalConfirm,
-  ReferralContent,
-  SsuDivider,
-  TopNavigation,
-} from '../../../components';
+import {Button, Gap, SsuDivider, TopNavigation} from '../../../components';
 import {color, font} from '../../../theme';
 import {useTranslation} from 'react-i18next';
-import {useNavigation} from '@react-navigation/native';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParams} from '../../../navigations';
 import {widthResponsive} from '../../../utils';
 import {mvs} from 'react-native-size-matters';
 import {Camera, useCameraDevices} from 'react-native-vision-camera';
 import {BarcodeFormat, useScanBarcodes} from 'vision-camera-code-scanner';
+import {useQrCodeHook} from '../../../hooks/use-qrCode.hook';
+import {userProfile} from '../../../store/userProfile.store';
+import LoadingSpinner from '../../../components/atom/Loading/LoadingSpinner';
 
 const Device = () => {
   const {t} = useTranslation();
-
-  const [showScanner, setShowScanner] = useState<boolean>(false);
-
+  const {profileStore} = userProfile();
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
-
-  const onPressGoBack = () => {
-    navigation.goBack();
-  };
-
-  const handleScanButton = () => {
-    // navigation.navigate('Scanner');
-    setShowScanner(true);
-  };
+  const {
+    linking,
+    linkedDone,
+    linkedFailed,
+    linkedDevicesData,
+    setLinkedDone,
+    setLinkData,
+    getLinkedDevices,
+  } = useQrCodeHook();
+  const [frameProcessor, barcodes] = useScanBarcodes([BarcodeFormat.QR_CODE]);
 
   // Camera
   const devices = useCameraDevices();
   const device = devices.back;
 
-  // QRCode
-  const [frameProcessor, barcodes] = useScanBarcodes([BarcodeFormat.QR_CODE]);
   const [refCode, setRefCode] = useState<string>();
+  const [showScanner, setShowScanner] = useState<boolean>(false);
 
+  // ? getting linked devices when accessing this screen
+  useFocusEffect(
+    useCallback(() => {
+      getLinkedDevices({uuid: profileStore.data.uuid});
+    }, []),
+  );
+
+  // ? linking data when get qr value
   useEffect(() => {
     console.log('refCode', refCode);
+
+    if (refCode) {
+      setLinkData({
+        uuid: profileStore.data.uuid,
+        QRCode: refCode,
+      });
+    }
   }, [refCode]);
+
+  // ? hide camera when successfully linking data
+  useEffect(() => {
+    if (linkedDone) {
+      setShowScanner(false);
+      const timer = setTimeout(() => {
+        getLinkedDevices({
+          uuid: profileStore.data.uuid,
+        });
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [linkedDone]);
 
   useEffect(() => {
     togleActiveState();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [barcodes]);
 
   const togleActiveState = async () => {
     if (barcodes && barcodes.length > 0) {
-      //   setIsScanned(true);
-
       barcodes.forEach(async scannedBarcode => {
         if (
           scannedBarcode.rawValue !== '' &&
@@ -68,9 +87,23 @@ const Device = () => {
     }
   };
 
+  const onPressGoBack = () => {
+    navigation.goBack();
+  };
+
+  const handleScanButton = () => {
+    setLinkedDone(false);
+    setShowScanner(true);
+  };
+
   const OffScanner = () => {
     return (
       <View style={styles.imageContainer}>
+        {linking && (
+          <View style={styles.loadingContainer}>
+            <LoadingSpinner />
+          </View>
+        )}
         <Image
           style={styles.image}
           source={require('../../../assets/image/LinkDevices.png')}
@@ -90,9 +123,11 @@ const Device = () => {
         <SsuDivider />
         <Gap height={24} />
         {/* EMPTY STATE TEXT */}
-        <Text style={styles.emptyStateTxt}>
-          {t('Setting.QrCode.Device.EmptyStateLinked')}
-        </Text>
+        {linkedDevicesData ? null : (
+          <Text style={styles.emptyStateTxt}>
+            {t('Setting.QrCode.Device.EmptyStateLinked')}
+          </Text>
+        )}
       </View>
     );
   };
@@ -108,7 +143,7 @@ const Device = () => {
           <Camera
             style={{flex: 1}}
             device={device}
-            isActive={true}
+            isActive={showScanner}
             frameProcessor={frameProcessor}
             frameProcessorFps={5}
           />
@@ -193,5 +228,9 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: color.Neutral[10],
     textAlign: 'center',
+  },
+  loadingContainer: {
+    alignItems: 'center',
+    paddingVertical: widthResponsive(20),
   },
 });

@@ -32,6 +32,7 @@ export type ParamsProps = {
   genreID?: number[];
   myUUID?: string;
   pageSize?: number;
+  QRCode?: string;
 };
 
 export type imageTypes = {
