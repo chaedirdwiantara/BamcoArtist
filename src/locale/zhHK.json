@@ -167,8 +167,8 @@
       "View": "查看",
       "ModalInfo": {
         "Title": "發布您的專輯！",
-        "Subtitle1": "要發布您的專輯，您需要登入 ",
-        "Subtitle2": " 並填寫您的發布信息"
+        "Subtitle1": "為了發行您的專輯，請在這裡簽名 ",
+        "Subtitle2": " 使用桌面模式並完成發行詳情。"
       }
     },
     "OverviewCard": {
@@ -989,14 +989,14 @@
     "Transaction": {
       "Title": "交易"
     },
-    "QrCode":{
-      "Title":"QR Code",
+    "QrCode": {
+      "Title": "QR Code",
       "Device": {
-        "Title":"Devices",
-        "Caption":"Use Beamco Artist on Web by Scanning the QR Code to Sign in",
-        "Button":"Scan Now",
+        "Title": "Devices",
+        "Caption": "Use Beamco Artist on Web by Scanning the QR Code to Sign in",
+        "Button": "Scan Now",
         "LinkedTitle": "Linked Devices",
-        "EmptyStateLinked":"You have no linked devices"
+        "EmptyStateLinked": "You have no linked devices"
       }
     }
   },
