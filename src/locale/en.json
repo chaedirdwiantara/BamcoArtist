@@ -167,9 +167,9 @@
       "Title": "How to upload music",
       "View": "View",
       "ModalInfo": {
-        "Title": "Release Your Album!",
-        "Subtitle1": "To launch your album, please sign here ",
-        "Subtitle2": " using desktop mode and complete the release details."
+        "Title": "Release your music with Beamco!",
+        "Subtitle1": "To drop your music, please sign in here on desktop: ",
+        "Subtitle2": " and complete your release details!"
       }
     },
     "OverviewCard": {
