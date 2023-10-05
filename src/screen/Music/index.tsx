@@ -55,7 +55,7 @@ export const MusicPlayer: FC<MusicProps> = ({navigation}: MusicProps) => {
       <Animated.View style={styles.mainImageWrapper}>
         <View style={styles.imageWrapper}>
           {/* @ts-ignore */}
-          <Image source={item.artwork} style={styles.musicImage} />
+          <Image source={{uri: item.artwork}} style={styles.musicImage} />
         </View>
       </Animated.View>
     );
@@ -101,7 +101,7 @@ export const MusicPlayer: FC<MusicProps> = ({navigation}: MusicProps) => {
       <View style={styles.mainContainer}>
         {/* image */}
         <Animated.FlatList
-          data={songs}
+          data={[currentTrack]}
           keyExtractor={(_, index) => index.toString()}
           horizontal
           pagingEnabled
