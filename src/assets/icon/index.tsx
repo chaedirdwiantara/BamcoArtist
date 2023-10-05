@@ -11,6 +11,7 @@ import ArrowDownIcon from './ArrowDown.icon';
 import AudioMusic from './AudioMusic.icon';
 import BellNotif from './BellNotif.icon';
 import BlitzIcon from './Blitz.icon';
+import BraveBrowserIcon from './BraveBrowser.icon';
 import CameraIcon from './Camera';
 import CancelCreatePostIcon from './CancelCreatePost.icon';
 import ChatIcon from './Chat.icon';
@@ -24,6 +25,7 @@ import ChevronDownIcon from './ChevronDown.icon';
 import ChevronDown2 from './ChevronDown2.icon';
 import ChevronUp from './ChevronUp';
 import ChevronUp2 from './ChevronUp2.icon';
+import ChromeBrowserIcon from './ChromeBroser.icon';
 import CloseIcon from './Close.icon';
 import CloseCircleIcon from './CloseCircle.icon';
 import CoinInput from './CoinInput';
@@ -40,9 +42,11 @@ import CrackEggIcon from './CrackEgg.icon';
 import CrownIcon from './Crown.icon';
 import {DefaultAvatar} from './DefaultAvatar.icon';
 import {DefaultImage} from './DefaultImage.icon';
+import DefaultBrowserIcon from './DefaultBrowser.icon';
 import DiagramIcon from './Diagram.icon';
 import DropDownIcon from './Dropdown.icon';
 import DonateCoinIcon from './DonateCoin.icon';
+import EdgeBrowserIcon from './EdgeBrowser.icon';
 import EditIcon from './Edit.icon';
 import EmailIcon from './Email.icon';
 import EqualizerIcon from './Equalizer.icon';
@@ -54,6 +58,7 @@ import EyeOpenIcon from './EyeOpen.icon';
 import FbIcon from './Fb.icon';
 import Fb2Icon from './Fb2.icon';
 import FeedIcon from './Feed.icon';
+import FirefoxBrowserIcon from './FirefoxBrowser.icon';
 import FriedEggIcon from './FriedEgg.icon';
 import FullNameIcon from './FullName.icon';
 import FullScreenIcon from './Fullscreen.icon';
@@ -88,6 +93,7 @@ import NextIcon from './Next.icon';
 import NotificationIcon from './Notification.icon';
 import NormalScreenIcon from './NormalScreen.icon';
 import OpenCameraIcon from './OpenCamera.icon';
+import OperaBrowserIcon from './OperaBrowser.icon';
 import RepeatIcon from './Repeaticon';
 import RepeatOneIcon from './RepeatOne.icon';
 import PauseIcon from './Pause.icon';
@@ -103,6 +109,7 @@ import PressedRadioIcon from './PressedRadio.icon';
 import ProcessingIcon from './Processing.icon';
 import PublicIcon from './Public.icon';
 import RadioButtonIcon from './RadioButton.icon';
+import SafariBrowserIcon from './SafariBrowser.icon';
 import SaveIcon from './Save.icon';
 import SearchIcon from './Search.icon';
 import SettingIcon from './Setting.icon';
@@ -155,6 +162,7 @@ export {
   ArrowDownIcon,
   AudioMusic,
   BellNotif,
+  BraveBrowserIcon,
   BlitzIcon,
   CameraIcon,
   CancelCreatePostIcon,
@@ -169,6 +177,7 @@ export {
   ChevronDown2,
   ChevronUp,
   ChevronUp2,
+  ChromeBrowserIcon,
   CloseIcon,
   CloseCircleIcon,
   CoinCIcon,
@@ -185,9 +194,11 @@ export {
   CrownIcon,
   DefaultAvatar,
   DefaultImage,
+  DefaultBrowserIcon,
   DiagramIcon,
   DropDownIcon,
   DonateCoinIcon,
+  EdgeBrowserIcon,
   EditIcon,
   EmailIcon,
   EqualizerIcon,
@@ -199,6 +210,7 @@ export {
   FbIcon,
   Fb2Icon,
   FeedIcon,
+  FirefoxBrowserIcon,
   FriedEggIcon,
   FullNameIcon,
   FullScreenIcon,
@@ -232,6 +244,7 @@ export {
   NotificationIcon,
   NormalScreenIcon,
   OpenCameraIcon,
+  OperaBrowserIcon,
   PauseIcon,
   PauseIcon2,
   PauseVideoIcon,
@@ -248,6 +261,7 @@ export {
   RadioButtonIcon,
   RepeatIcon,
   RepeatOneIcon,
+  SafariBrowserIcon,
   SaveIcon,
   SearchIcon,
   SettingIcon,

@@ -13,10 +13,10 @@ export interface CreateLinkDataResponseType {
 }
 
 export interface LinkedDevicesData {
-  imageUri: string;
-  qrCode: string;
+  deviceName: string | null;
   isUsed: boolean;
-  device: string;
+  lastActiveAt: string;
+  qrCode: string;
 }
 export interface GetLinkedDevicesResponseType {
   code: number;

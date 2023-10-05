@@ -34,6 +34,7 @@ import IconNotif from './IconNotif';
 import {ImageSlider} from './ImageSlider/ImageSlider';
 import {InputWithdrawal} from './Withdrawal/InputWithdrawal';
 import LineAreaChart from './LineAreaChart';
+import LinkedDevicesCard from './LinkedDevicesCard';
 import {ListCard} from './ListCard';
 import {ListenersAndDonate} from './ListenersAndDonate/ListenersAndDonate';
 import ListenersCountry from './ListenerCountry';
@@ -121,6 +122,7 @@ export {
   ImageSlider,
   InputWithdrawal,
   LineAreaChart,
+  LinkedDevicesCard,
   ListCard,
   ListenersAndDonate,
   ListenersCountry,

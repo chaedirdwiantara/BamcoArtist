@@ -1,7 +1,20 @@
-import {Image, StyleSheet, Text, View} from 'react-native';
+import {
+  Image,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import React, {useCallback, useEffect, useState} from 'react';
 import {ArrowLeftIcon} from '../../../assets/icon';
-import {Button, Gap, SsuDivider, TopNavigation} from '../../../components';
+import {
+  Button,
+  Gap,
+  LinkedDevicesCard,
+  SsuDivider,
+  TopNavigation,
+} from '../../../components';
 import {color, font} from '../../../theme';
 import {useTranslation} from 'react-i18next';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
@@ -47,8 +60,6 @@ const Device = () => {
 
   // ? linking data when get qr value
   useEffect(() => {
-    console.log('refCode', refCode);
-
     if (refCode) {
       setLinkData({
         uuid: profileStore.data.uuid,
@@ -123,11 +134,24 @@ const Device = () => {
         <SsuDivider />
         <Gap height={24} />
         {/* EMPTY STATE TEXT */}
-        {linkedDevicesData ? null : (
-          <Text style={styles.emptyStateTxt}>
-            {t('Setting.QrCode.Device.EmptyStateLinked')}
-          </Text>
-        )}
+        <ScrollView
+          scrollEnabled={true}
+          style={{width: '100%', height: widthResponsive(240)}}
+          showsVerticalScrollIndicator={false}>
+          {linkedDevicesData ? (
+            linkedDevicesData?.map((val, i) => (
+              <LinkedDevicesCard data={val} index={i} onPress={() => {}} />
+            ))
+          ) : (
+            <Text style={styles.emptyStateTxt}>
+              {t('Setting.QrCode.Device.EmptyStateLinked')}
+            </Text>
+          )}
+        </ScrollView>
+        <Gap height={35} />
+        <View style={styles.deviceInfoContainer}>
+          <Text style={styles.deviceInfo}>Tap Devices to Log Out</Text>
+        </View>
       </View>
     );
   };
@@ -232,5 +256,15 @@ const styles = StyleSheet.create({
   loadingContainer: {
     alignItems: 'center',
     paddingVertical: widthResponsive(20),
+  },
+  deviceInfoContainer: {
+    position: 'absolute',
+    bottom: 0,
+  },
+  deviceInfo: {
+    fontFamily: font.InterRegular,
+    color: color.Pink[200],
+    fontWeight: '500',
+    fontSize: mvs(12),
   },
 });

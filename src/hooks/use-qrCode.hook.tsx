@@ -1,5 +1,4 @@
 import {useState} from 'react';
-import {likeComment} from '../api/feed.api';
 import {ParamsProps} from '../interface/base.interface';
 import {createLinkedDataApi, linkedDevicesApi} from '../api/qrCode.api';
 import {LinkedDevicesData} from '../interface/qrcode.interface';
