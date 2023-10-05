@@ -101,7 +101,7 @@ const Device = () => {
     return (
       <View style={styles.scannerContainer}>
         <Text style={styles.scannerCaption}>
-          {'Open http://musician.thebeam.co to scan and linked the devices'}
+          {'Open https://artists.thebeam.co to scan and linked the devices'}
         </Text>
         <Gap height={24} />
         {device !== undefined ? (
