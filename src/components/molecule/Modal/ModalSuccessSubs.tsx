@@ -15,13 +15,15 @@ interface ModalSuccessProps {
   title?: string;
   subtitle?: string;
   buttonText?: string;
+  artist?: string;
 }
 
 export const ModalSuccessSubs: FC<ModalSuccessProps> = (
   props: ModalSuccessProps,
 ) => {
   const {t} = useTranslation();
-  const {toggleModal, modalVisible, title, subtitle, buttonText} = props;
+  const {toggleModal, modalVisible, title, subtitle, buttonText, artist} =
+    props;
   return (
     <Modal
       isVisible={modalVisible}
@@ -31,7 +33,7 @@ export const ModalSuccessSubs: FC<ModalSuccessProps> = (
       <View style={styles.container}>
         <CheckGradientIcon style={styles.iconStyle} />
         <Text style={[typography.Subtitle1, styles.textStyles]}>
-          {title ? title : t('ExclusiveContent.Success')}
+          {title ? title : t('ExclusiveContent.Success', {artist: artist})}
         </Text>
         {subtitle && (
           <Text style={[typography.Button2, styles.textStyles]}>
