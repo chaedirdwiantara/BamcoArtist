@@ -616,7 +616,7 @@
     "ErrorCoinSubs": "Insufficient coin, add more coin to subscribe",
     "Edit": "Edit My Exclusive Content",
     "Active": "Subscription Active",
-    "Success": "Congratulations! You have successfully subscribed to [ARTIST NAME]'s exclusive content!", // tambahin artist name
+    "Success": "Congratulations! You have successfully subscribed to {{artist}}'s exclusive content!",
     "View": "View Exclusive Content",
     "Subscribe": "Subscribe Exclusive Content"
   },

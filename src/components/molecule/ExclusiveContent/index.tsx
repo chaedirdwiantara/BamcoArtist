@@ -192,6 +192,7 @@ export const ExclusiveContent: React.FC<ExclusiveProps> = ({
       <ModalSuccessSubs
         modalVisible={successSubs}
         toggleModal={onPressSuccess}
+        artist={data?.musician?.fullname}
       />
     </>
   );
