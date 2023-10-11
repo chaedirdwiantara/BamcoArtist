@@ -37,7 +37,9 @@ const LineUp: FC<EventLineUpInterface> = ({
   }, [dataLineUp]);
 
   return listLineUp && listLineUp?.length > 0 ? (
-    <ScrollView showsHorizontalScrollIndicator={false}>
+    <ScrollView
+      showsHorizontalScrollIndicator={false}
+      style={{paddingBottom: heightResponsive(40)}}>
       {isLoading && (
         <View
           style={{
