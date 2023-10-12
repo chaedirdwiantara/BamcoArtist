@@ -147,7 +147,7 @@ export const UseReferralContent: React.FC<UseReferralContentProps> = ({
           scannedBarcode.rawValue !== '' &&
           scannedBarcode.rawValue !== undefined
         ) {
-          setRefCode(scannedBarcode.rawValue);
+          setRefCode(scannedBarcode.rawValue.split('=')[1]);
         }
       });
     }

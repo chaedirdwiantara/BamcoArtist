@@ -6,7 +6,7 @@ let API: AxiosInstance;
 
 const setupAPIClient = () => {
   API = axios.create({
-    baseURL: 'https://rinjani.ssudev.space/api/v1',
+    baseURL: 'https://rinjani.thebeam.co/api/v1',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
