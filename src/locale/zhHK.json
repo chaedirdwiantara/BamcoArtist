@@ -1081,6 +1081,15 @@
     "Title": "通知"
   },
   "Modal": {
+    "ModalInfo": {
+      "TitleMerch": "Sell Your Merchandise Now!",
+      "Subtitle1Merch": "To list your merchandise for sale, kindly log in to ",
+      "Subtitle2Merch": " and submit the necessary merchandise details.",
+      "TitleTicket": "Sell Your Ticket Now!",
+      "Subtitle1Ticket": "To sell your ticket, please log in to ",
+      "Subtitle2Ticket": " and provide the necessary information about your ticket.",
+      "CheckboxText": "Don’t show me this information again"
+    },
     "MusicianNotAvail": {
       "Title": "特色藝術家",
       "Subtitle": "您正在尋找的藝術家在beam平台上不可用，一旦有新的消息，我們會通知您。"

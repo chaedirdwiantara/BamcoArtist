@@ -1083,6 +1083,15 @@
     "Title": "Notification"
   },
   "Modal": {
+    "ModalInfo": {
+      "TitleMerch": "Sell Your Merchandise Now!",
+      "Subtitle1Merch": "To list your merchandise for sale, kindly log in to ",
+      "Subtitle2Merch": " and submit the necessary merchandise details.",
+      "TitleTicket": "Sell Your Ticket Now!",
+      "Subtitle1Ticket": "To sell your ticket, please log in to ",
+      "Subtitle2Ticket": " and provide the necessary information about your ticket.",
+      "CheckboxText": "Don’t show me this information again"
+    },
     "MusicianNotAvail": {
       "Title": "Featuring Artist",
       "Subtitle": "Artist that you’ve looking for is not available in beam platform, we'll let you know as soon as something new is on the horizon."
