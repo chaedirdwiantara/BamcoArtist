@@ -299,7 +299,8 @@ export const SignupScreen: React.FC = () => {
                 onPress={() => handleChangeLoginType('email')}>
                 {t('SignUp.Email')}
               </Text>
-              <View style={styles.verticalSeparatorLoginType} />
+              {/* TODO: show when sign up by phone number ready */}
+              {/* <View style={styles.verticalSeparatorLoginType} />
               <Text
                 style={
                   watch('registrationType') === 'phoneNumber'
@@ -308,7 +309,7 @@ export const SignupScreen: React.FC = () => {
                 }
                 onPress={() => handleChangeLoginType('phoneNumber')}>
                 {t('SignUp.Phone')}
-              </Text>
+              </Text> */}
             </View>
             <Gap height={16} />
             {watch('registrationType') === 'email' ? (

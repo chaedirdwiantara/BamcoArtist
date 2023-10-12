@@ -315,7 +315,8 @@ export const LoginScreen: React.FC = () => {
             onPress={() => handleChangeLoginType('email')}>
             {t('Login.Form.Email')}
           </Text>
-          <View style={styles.verticalSeparatorLoginType} />
+          {/* TODO: show when login by phone number ready */}
+          {/* <View style={styles.verticalSeparatorLoginType} />
           <Text
             style={
               watch('loginType') === 'phoneNumber'
@@ -324,7 +325,7 @@ export const LoginScreen: React.FC = () => {
             }
             onPress={() => handleChangeLoginType('phoneNumber')}>
             {t('Login.Form.PhoneNumber')}
-          </Text>
+          </Text> */}
         </View>
         {watch('loginType') === 'email' && (
           <View>

@@ -7,12 +7,14 @@ import {FansListMusician} from './ListFansMusician';
 import {EmptyState} from '../..';
 import {heightPercentage} from '../../../utils';
 import {ListDataFans} from '../../../interface/search.interface';
+import {useTranslation} from 'react-i18next';
 
 interface FollowersProps {
   uuid: string;
 }
 
 export const FansScreen: React.FC<FollowersProps> = (props: FollowersProps) => {
+  const {t} = useTranslation();
   const {uuid} = props;
   const {getListMusiciansFans} = useSearchHook();
 
@@ -33,7 +35,7 @@ export const FansScreen: React.FC<FollowersProps> = (props: FollowersProps) => {
         />
       ) : (
         <EmptyState
-          text={'Musician do not have any fans.'}
+          text={t('Musician.EmptyStateFans')}
           containerStyle={{
             alignSelf: 'center',
             marginTop: heightPercentage(30),

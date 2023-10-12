@@ -57,6 +57,17 @@ export const ModalImagePicker: React.FC<ModalImagePickerProps> = ({
       compressImageQuality: 0.9,
       cropping: true,
       includeBase64,
+      smartAlbums: [
+        'RecentlyAdded',
+        'Favorites',
+        'UserLibrary',
+        'Screenshots',
+        'Generic',
+        'PhotoStream',
+        'SelfPortraits',
+        'Panoramas',
+        'Bursts',
+      ],
     }).then(image => {
       sendUri(image);
       onPressClose();
@@ -72,6 +83,17 @@ export const ModalImagePicker: React.FC<ModalImagePickerProps> = ({
       multiple: true,
       mediaType: 'photo',
       maxFiles,
+      smartAlbums: [
+        'RecentlyAdded',
+        'Favorites',
+        'UserLibrary',
+        'Screenshots',
+        'Generic',
+        'PhotoStream',
+        'SelfPortraits',
+        'Panoramas',
+        'Bursts',
+      ],
     }).then(image => {
       sendUriMultiple(image);
       onPressClose();

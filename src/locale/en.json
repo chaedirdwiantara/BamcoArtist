@@ -167,9 +167,9 @@
       "Title": "How to upload music",
       "View": "View",
       "ModalInfo": {
-        "Title": "Release Your Album!",
-        "Subtitle1": "To Release your album, you need to login to ",
-        "Subtitle2": " and fill your release information"
+        "Title": "Release your music with Beamco!",
+        "Subtitle1": "To drop your music, please sign in here on desktop: ",
+        "Subtitle2": " and complete your release details!"
       }
     },
     "OverviewCard": {
@@ -508,6 +508,7 @@
       "TipDistribution": "Beam Distribution",
       "MusicianTipped": "Artist Beamed"
     },
+    "Live": "Live",
     "EmptyState": {
       "Home": "No live events are currently available at this time.\nStay tuned for exciting upcoming experiences!",
       "Title": "Discover Live Event",
@@ -593,7 +594,10 @@
       "Merchandise": "MERCHANDISE",
       "Ticket": "TICKET",
       "Event": "LIVE"
-    }
+    },
+    "ShowAppreciate": "Show your appreciation",
+    "SendTip": "Send tip to support your favorite artist to see them growth",
+    "EmptyStateFans": "Artist do not have any fans."
   },
   "ExclusiveContent": {
     "Title": "Exclusive Content",
@@ -612,7 +616,7 @@
     "ErrorCoinSubs": "Insufficient coin, add more coin to subscribe",
     "Edit": "Edit My Exclusive Content",
     "Active": "Subscription Active",
-    "Success": "Congratulations! You have successfully subscribed to [ARTIST NAME]'s exclusive content!", // tambahin artist name
+    "Success": "Congratulations! You have successfully subscribed to {{artist}}'s exclusive content!",
     "View": "View Exclusive Content",
     "Subscribe": "Subscribe Exclusive Content"
   },
@@ -987,12 +991,12 @@
     "Transaction": {
       "Title": "Transaction"
     },
-    "QrCode":{
-      "Title":"QR Code",
+    "QrCode": {
+      "Title": "QR Code",
       "Device": {
-        "Title":"Devices",
-        "Caption":"Use Beamco Artist on Web by Scanning the QR Code to Sign in",
-        "Button":"Scan Now",
+        "Title": "Devices",
+        "Caption": "Use Beamco Artist on Web by Scanning the QR Code to Sign in",
+        "Button": "Scan Now",
         "LinkedTitle": "Linked Devices",
         "EmptyStateLinked":"You have no linked devices",
         "Tips":"Tap Devices to Log Out",
