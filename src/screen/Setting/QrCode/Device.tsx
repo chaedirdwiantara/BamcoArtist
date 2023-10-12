@@ -1,5 +1,6 @@
 import {
   Image,
+  Linking,
   ScrollView,
   StyleSheet,
   Text,
@@ -47,10 +48,6 @@ const Device = () => {
   } = useQrCodeHook();
   const [frameProcessor, barcodes] = useScanBarcodes([BarcodeFormat.QR_CODE]);
 
-  // Camera
-  const devices = useCameraDevices();
-  const device = devices.back;
-
   const [refCode, setRefCode] = useState<string>();
   const [showScanner, setShowScanner] = useState<boolean>(false);
   const [linkedDevicesState, setLinkedDevicesState] =
@@ -59,6 +56,25 @@ const Device = () => {
     qrCode: string;
     index: number;
   }>();
+
+  // Camera
+  const devices = useCameraDevices();
+  const device = devices.back;
+
+  // Camera Handler
+  async function getPermission() {
+    const permission = await Camera.requestCameraPermission();
+
+    if (permission === 'denied') {
+      await Linking.openSettings();
+    }
+  }
+
+  useEffect(() => {
+    if (showScanner) {
+      getPermission();
+    }
+  }, [showScanner]);
 
   // ? getting linked devices when accessing this screen
   useFocusEffect(
