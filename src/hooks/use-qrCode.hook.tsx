@@ -1,6 +1,10 @@
 import {useState} from 'react';
 import {ParamsProps} from '../interface/base.interface';
-import {createLinkedDataApi, linkedDevicesApi} from '../api/qrCode.api';
+import {
+  createLinkedDataApi,
+  linkedDevicesApi,
+  logoutDeviceApi,
+} from '../api/qrCode.api';
 import {LinkedDevicesData} from '../interface/qrcode.interface';
 
 export const useQrCodeHook = () => {
@@ -11,6 +15,9 @@ export const useQrCodeHook = () => {
   const [linkedDevicesData, setLinkedDevicesData] =
     useState<LinkedDevicesData[]>();
   const [errorGetDevices, setErrorGetDevices] = useState(false);
+  const [loggingOut, setLoggingOut] = useState(false);
+  const [loggedOutSuccess, setLoggedOutSuccess] = useState(false);
+  const [errorLoggingOut, setErrorLoggingOut] = useState(false);
 
   const setLinkData = async (props?: ParamsProps) => {
     setLinking(true);
@@ -38,6 +45,19 @@ export const useQrCodeHook = () => {
     }
   };
 
+  const setLogoutDevice = async (props?: ParamsProps) => {
+    setLoggingOut(true);
+    try {
+      const response = await logoutDeviceApi(props);
+      setLoggedOutSuccess(true);
+    } catch (error) {
+      console.log(error);
+      setErrorLoggingOut(true);
+    } finally {
+      setLoggingOut(false);
+    }
+  };
+
   return {
     linking,
     linkedDone,
@@ -45,9 +65,13 @@ export const useQrCodeHook = () => {
     gettingListDevices,
     linkedDevicesData,
     errorGetDevices,
+    loggedOutSuccess,
+    loggingOut,
+    errorLoggingOut,
     setLinkedDevicesData,
     setLinkedDone,
     setLinkData,
     getLinkedDevices,
+    setLogoutDevice,
   };
 };

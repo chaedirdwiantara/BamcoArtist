@@ -20,13 +20,14 @@ import {useTranslation} from 'react-i18next';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParams} from '../../../navigations';
-import {widthResponsive} from '../../../utils';
+import {heightResponsive, widthResponsive} from '../../../utils';
 import {mvs} from 'react-native-size-matters';
 import {Camera, useCameraDevices} from 'react-native-vision-camera';
 import {BarcodeFormat, useScanBarcodes} from 'vision-camera-code-scanner';
 import {useQrCodeHook} from '../../../hooks/use-qrCode.hook';
 import {userProfile} from '../../../store/userProfile.store';
 import LoadingSpinner from '../../../components/atom/Loading/LoadingSpinner';
+import {LinkedDevicesData} from '../../../interface/qrcode.interface';
 
 const Device = () => {
   const {t} = useTranslation();
@@ -37,10 +38,12 @@ const Device = () => {
     linking,
     linkedDone,
     linkedFailed,
+    loggedOutSuccess,
     linkedDevicesData,
     setLinkedDone,
     setLinkData,
     getLinkedDevices,
+    setLogoutDevice,
   } = useQrCodeHook();
   const [frameProcessor, barcodes] = useScanBarcodes([BarcodeFormat.QR_CODE]);
 
@@ -50,6 +53,12 @@ const Device = () => {
 
   const [refCode, setRefCode] = useState<string>();
   const [showScanner, setShowScanner] = useState<boolean>(false);
+  const [linkedDevicesState, setLinkedDevicesState] =
+    useState<LinkedDevicesData[]>();
+  const [linkedDeviceChoosen, setLinkedDeviceChoosen] = useState<{
+    qrCode: string;
+    index: number;
+  }>();
 
   // ? getting linked devices when accessing this screen
   useFocusEffect(
@@ -64,6 +73,7 @@ const Device = () => {
       setLinkData({
         uuid: profileStore.data.uuid,
         QRCode: refCode,
+        deviceName: refCode.split('=')[1] ?? 'Unknown Device',
       });
     }
   }, [refCode]);
@@ -98,6 +108,23 @@ const Device = () => {
     }
   };
 
+  // ? set linked devices to linked devices useState
+  useEffect(() => {
+    if (linkedDevicesData) {
+      setLinkedDevicesState(linkedDevicesData);
+    }
+  }, [linkedDevicesData]);
+
+  // ? filter choosen logout when logout succeeded
+  useEffect(() => {
+    if (loggedOutSuccess) {
+      const device = linkedDevicesState?.filter(
+        x => !linkedDeviceChoosen?.qrCode.includes(x.qrCode),
+      );
+      setLinkedDevicesState(device);
+    }
+  }, [loggedOutSuccess]);
+
   const onPressGoBack = () => {
     navigation.goBack();
   };
@@ -105,6 +132,11 @@ const Device = () => {
   const handleScanButton = () => {
     setLinkedDone(false);
     setShowScanner(true);
+  };
+
+  const handleLogout = (qrCode: string, index: number) => {
+    setLogoutDevice({QRCode: qrCode});
+    setLinkedDeviceChoosen({qrCode, index});
   };
 
   const OffScanner = () => {
@@ -136,11 +168,15 @@ const Device = () => {
         {/* EMPTY STATE TEXT */}
         <ScrollView
           scrollEnabled={true}
-          style={{width: '100%', height: widthResponsive(240)}}
+          style={{width: '100%', height: heightResponsive(245)}}
           showsVerticalScrollIndicator={false}>
-          {linkedDevicesData ? (
-            linkedDevicesData?.map((val, i) => (
-              <LinkedDevicesCard data={val} index={i} onPress={() => {}} />
+          {linkedDevicesState ? (
+            linkedDevicesState?.map((val, i) => (
+              <LinkedDevicesCard
+                data={val}
+                index={i}
+                onPress={() => handleLogout(val.qrCode, i)}
+              />
             ))
           ) : (
             <Text style={styles.emptyStateTxt}>
@@ -150,7 +186,9 @@ const Device = () => {
         </ScrollView>
         <Gap height={35} />
         <View style={styles.deviceInfoContainer}>
-          <Text style={styles.deviceInfo}>Tap Devices to Log Out</Text>
+          <Text style={styles.deviceInfo}>
+            {t('Setting.QrCode.Device.Tips')}
+          </Text>
         </View>
       </View>
     );
@@ -160,7 +198,9 @@ const Device = () => {
     return (
       <View style={styles.scannerContainer}>
         <Text style={styles.scannerCaption}>
-          {'Open http://musician.thebeam.co to scan and linked the devices'}
+          {t('Setting.QrCode.Device.onScannerCaption', {
+            link: 'http://musician.thebeam.co',
+          })}
         </Text>
         <Gap height={24} />
         {device !== undefined ? (

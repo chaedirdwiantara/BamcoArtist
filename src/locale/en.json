@@ -994,7 +994,9 @@
         "Caption":"Use Beamco Artist on Web by Scanning the QR Code to Sign in",
         "Button":"Scan Now",
         "LinkedTitle": "Linked Devices",
-        "EmptyStateLinked":"You have no linked devices"
+        "EmptyStateLinked":"You have no linked devices",
+        "Tips":"Tap Devices to Log Out",
+        "onScannerCaption":"Open {{link}} to scan and linked the devices"
       }
     }
   },

@@ -24,3 +24,10 @@ export interface GetLinkedDevicesResponseType {
   message: string;
   status: number;
 }
+
+export interface SetLogOutResponseType {
+  code: number;
+  data: string;
+  message: string;
+  status: number;
+}

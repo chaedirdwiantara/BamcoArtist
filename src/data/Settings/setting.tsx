@@ -76,6 +76,10 @@ export const menuQrCode: {text: string; value: string}[] = [
     text: 'Setting.QrCode.Device.Title',
     value: 'Device',
   },
+  {
+    text: 'Setting.Referral.Title',
+    value: 'Referral Code',
+  },
 ];
 
 export const dummyViolations = {

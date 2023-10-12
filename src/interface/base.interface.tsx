@@ -33,6 +33,7 @@ export type ParamsProps = {
   myUUID?: string;
   pageSize?: number;
   QRCode?: string;
+  deviceName?: string;
 };
 
 export type imageTypes = {

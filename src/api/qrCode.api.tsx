@@ -3,6 +3,7 @@ import {ParamsProps} from '../interface/base.interface';
 import {
   CreateLinkDataResponseType,
   GetLinkedDevicesResponseType,
+  SetLogOutResponseType,
 } from '../interface/qrcode.interface';
 
 export const createLinkedDataApi = async (
@@ -22,6 +23,17 @@ export const linkedDevicesApi = async (
 ): Promise<GetLinkedDevicesResponseType> => {
   const {data} = await SsuAPI().request<GetLinkedDevicesResponseType>({
     url: `/musician-app/qr-code/${props?.uuid}/linked-device`,
+    method: 'GET',
+  });
+
+  return data;
+};
+
+export const logoutDeviceApi = async (
+  props?: ParamsProps,
+): Promise<SetLogOutResponseType> => {
+  const {data} = await SsuAPI().request<SetLogOutResponseType>({
+    url: `/musician-app/qr-code/${props?.uuid}/logout-device`,
     method: 'GET',
   });
 
