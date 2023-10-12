@@ -1,38 +1,17 @@
 import React, {useState} from 'react';
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {useTranslation} from 'react-i18next';
 import {ms, mvs} from 'react-native-size-matters';
 
+import {Gap} from '../../atom';
 import {width} from '../../../utils';
-import {Button, Gap} from '../../atom';
 import {color, font} from '../../../theme';
+import {ModalInfo} from '../Modal/ModalInfo';
 import {UploadIcon} from '../../../assets/icon';
-import {ModalCustom} from '../Modal/ModalCustom';
 
 export const UploadMusicSection = () => {
   const {t} = useTranslation();
   const [showModal, setShowModal] = useState<boolean>(false);
-
-  const children = () => (
-    <View style={styles.card}>
-      <Image source={require('../../../assets/image/cloud.png')} />
-      <Text style={styles.modalTitle}>
-        {t('Home.UploadMusic.ModalInfo.Title')}
-      </Text>
-      <Text style={styles.modalSubtitle}>
-        <Text>{t('Home.UploadMusic.ModalInfo.Subtitle1')}</Text>
-        <Text style={{fontFamily: font.InterBold}}>
-          {'https://artists.thebeam.co'}
-        </Text>
-        <Text>{t('Home.UploadMusic.ModalInfo.Subtitle2')}</Text>
-      </Text>
-      <Button
-        label={t('Btn.Dismiss')}
-        containerStyles={styles.containerBtn}
-        onPress={() => setShowModal(false)}
-      />
-    </View>
-  );
 
   return (
     <View>
@@ -49,9 +28,12 @@ export const UploadMusicSection = () => {
         </TouchableOpacity>
       </View>
 
-      <ModalCustom
-        modalVisible={showModal}
-        children={children()}
+      <ModalInfo
+        title={t('Home.UploadMusic.ModalInfo.Title')}
+        subtitle1={t('Home.UploadMusic.ModalInfo.Subtitle1')}
+        url={'https://artists.thebeam.co'}
+        subtitle2={t('Home.UploadMusic.ModalInfo.Subtitle2')}
+        visible={showModal}
         onPressClose={() => setShowModal(false)}
       />
     </View>
