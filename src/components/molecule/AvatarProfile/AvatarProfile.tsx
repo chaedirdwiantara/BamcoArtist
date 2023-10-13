@@ -1,4 +1,5 @@
 import React from 'react';
+import {mvs} from 'react-native-size-matters';
 import FastImage from 'react-native-fast-image';
 import {StyleSheet, View, TouchableOpacity, Text} from 'react-native';
 import {widthPercentage} from '../../../utils';
@@ -16,6 +17,8 @@ interface AvatarProps {
   onPress?: () => void;
   icon?: React.ReactNode;
   backgroundColor?: string;
+  showBorder?: boolean;
+  borderColor?: string;
 }
 
 export const AvatarProfile: React.FC<AvatarProps> = (props: AvatarProps) => {
@@ -29,6 +32,8 @@ export const AvatarProfile: React.FC<AvatarProps> = (props: AvatarProps) => {
     icon,
     activeOpacity,
     backgroundColor,
+    showBorder,
+    borderColor,
     onPress,
   } = props;
 
@@ -55,6 +60,8 @@ export const AvatarProfile: React.FC<AvatarProps> = (props: AvatarProps) => {
             backgroundColor: backgroundColor
               ? backgroundColor
               : color.Success[400],
+            borderWidth: showBorder ? mvs(2) : 0,
+            borderColor,
           },
         ]}>
         {type !== 'edit' ? (
@@ -84,8 +91,8 @@ export const AvatarProfile: React.FC<AvatarProps> = (props: AvatarProps) => {
               styles.root,
               {
                 width: size,
-                borderColor: '#F37070',
-                borderWidth: qrType === 'shareQR' ? 3 : 0,
+                borderColor: borderColor ? borderColor : '#F37070',
+                borderWidth: showBorder ? mvs(2) : qrType === 'shareQR' ? 3 : 0,
                 borderRadius: 10000,
               },
             ]}
