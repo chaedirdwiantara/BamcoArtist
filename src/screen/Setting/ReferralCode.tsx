@@ -130,7 +130,8 @@ export const ReferralCodeSetting: React.FC = () => {
 
       {profileStore && (
         <KeyboardAvoidingView
-          behavior={Platform.OS === 'ios' ? 'padding' : 'padding'}>
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          keyboardVerticalOffset={Platform.OS === 'ios' ? 100 : 0}>
           <View>
             <TabFilter.Type1
               filterData={filter}
