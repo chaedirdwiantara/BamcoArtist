@@ -593,9 +593,9 @@
       "Ticket": "票",
       "Event": "活動"
     },
-    "ShowAppreciate": "表達您的欣賞",
-    "SendTip": "發送小費以支持您最喜愛的藝術家，看到他們的成長",
-    "EmptyStateFans": "藝術家沒有任何粉絲。"
+      "ShowAppreciate": "表達您的欣賞",
+      "SendTip": "給您喜愛的藝術家發送小費，支持他們的成長",
+      "EmptyStateFans": "藝術家沒有任何粉絲。"
   },
   "ExclusiveContent": {
     "Title": "獨家內容",
@@ -989,14 +989,16 @@
     "Transaction": {
       "Title": "交易"
     },
-    "QrCode": {
-      "Title": "QR 碼",
-      "Device": {
-        "Title": "設備",
-        "Caption": "掃描 QR 碼以在網頁上使用 Beamco Artist 進行登錄",
-        "Button": "立即掃描",
-        "LinkedTitle": "已連接的設備",
-        "EmptyStateLinked": "您沒有已連接的設備"
+	"QrCode": {
+  	"Title": "QR Code",
+ 	   "Device": {
+ 	     "Title": "裝置",
+ 	     "Caption": "掃描 QR 碼以在 Beamco Artist 網頁上登錄",
+ 	     "Button": "立即掃描",
+  	   "LinkedTitle": "已連接的裝置",
+ 	     "EmptyStateLinked": "您尚未連接任何裝置",
+ 	     "Tips": "點擊「裝置」以登出",
+ 	     "onScannerCaption": "打開 {{link}} 以掃描並連接裝置"
       }
     }
   },

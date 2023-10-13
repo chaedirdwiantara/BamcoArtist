@@ -22,21 +22,23 @@ import Color from '../../theme/Color';
 import {ArrowLeftIcon} from '../../assets/icon';
 import {RootStackParams} from '../../navigations';
 import {useProfileHook} from '../../hooks/use-profile.hook';
-import {heightPercentage, width, widthPercentage} from '../../utils';
+import {
+  heightPercentage,
+  width,
+  widthPercentage,
+  widthResponsive,
+} from '../../utils';
 import {color, typography} from '../../theme';
 import {mvs} from 'react-native-size-matters';
+import {userProfile} from '../../store/userProfile.store';
 
 export const ReferralCodeSetting: React.FC = () => {
   const {t} = useTranslation();
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
-  const {
-    isValidReferral,
-    errorMsg,
-    applyReferralUser,
-    dataProfile,
-    getProfileUser,
-  } = useProfileHook();
+  const {isValidReferral, errorMsg, applyReferralUser} = useProfileHook();
+
+  const {profileStore} = userProfile();
 
   // Refferal Content
   const [isScanFailed, setIsScanFailed] = useState<boolean>(false);
@@ -51,19 +53,14 @@ export const ReferralCodeSetting: React.FC = () => {
   };
 
   useEffect(() => {
-    getProfileUser();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
     if (
-      dataProfile?.data.referralFrom !== null &&
-      dataProfile?.data.referralFrom !== undefined
+      profileStore?.data.referralFrom !== null &&
+      profileStore?.data.referralFrom !== undefined
     ) {
       setIsScanSuccess(true);
-      setRefCode(dataProfile?.data.referralFrom);
+      setRefCode(profileStore?.data.referralFrom);
     } else setIsScanSuccess(false);
-  }, [dataProfile]);
+  }, [profileStore]);
 
   const handleSkipFailed = () => {
     setIsScanFailed(false);
@@ -131,26 +128,26 @@ export const ReferralCodeSetting: React.FC = () => {
         }}
       />
 
-      {dataProfile && (
-        <View>
-          <TabFilter.Type1
-            filterData={filter}
-            onPress={filterData}
-            selectedIndex={selectedIndex}
-            TouchableStyle={{width: width * 0.45}}
-            translation={true}
-          />
-
-          {filter[selectedIndex].filterName ===
-          t('Setting.Referral.ReferFriend.Title') ? (
-            <ReferAFriend
-              username={dataProfile.data.username}
-              handleWebview={handleWebview}
+      {profileStore && (
+        <KeyboardAvoidingView
+          behavior={'padding'}
+          keyboardVerticalOffset={Platform.OS === 'ios' ? 100 : 0}>
+          <View>
+            <TabFilter.Type1
+              filterData={filter}
+              onPress={filterData}
+              selectedIndex={selectedIndex}
+              TouchableStyle={{width: width * 0.45}}
+              translation={true}
             />
-          ) : (
-            <KeyboardAvoidingView
-              behavior={Platform.OS === 'ios' ? 'padding' : 'padding'}
-              keyboardVerticalOffset={Platform.OS === 'ios' ? 100 : 0}>
+
+            {filter[selectedIndex].filterName ===
+            t('Setting.Referral.ReferFriend.Title') ? (
+              <ReferAFriend
+                username={profileStore.data.username}
+                handleWebview={handleWebview}
+              />
+            ) : (
               <ScrollView
                 decelerationRate="fast"
                 showsVerticalScrollIndicator={false}
@@ -177,13 +174,13 @@ export const ReferralCodeSetting: React.FC = () => {
                     setIsScanned={setIsScanned}
                     isManualEnter={isManualEnter}
                     setIsManualEnter={setIsManualEnter}
-                    referralFrom={dataProfile.data.referralFrom}
+                    referralFrom={profileStore.data.referralFrom}
                   />
                 </View>
               </ScrollView>
-            </KeyboardAvoidingView>
-          )}
-        </View>
+            )}
+          </View>
+        </KeyboardAvoidingView>
       )}
     </View>
   );

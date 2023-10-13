@@ -21,8 +21,12 @@ const QrCode = () => {
     navigation.goBack();
   };
 
-  const onPress = () => {
-    navigation.navigate('Device');
+  const onPress = (value: string) => {
+    if (value === 'Referral Code') {
+      navigation.navigate('ReferralCode');
+    } else {
+      navigation.navigate('Device');
+    }
   };
 
   return (
@@ -39,7 +43,7 @@ const QrCode = () => {
           key={i}
           text={t(val.text) || ''}
           containerStyles={{marginTop: widthResponsive(12)}}
-          onPress={onPress}
+          onPress={() => onPress(val.value)}
         />
       ))}
     </View>
