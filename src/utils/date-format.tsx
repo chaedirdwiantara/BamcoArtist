@@ -1,4 +1,4 @@
-const dateFormat = (ISOStringDate: string) => {
+const dateFormat = (ISOStringDate: string | Date) => {
   const today = new Date(ISOStringDate).toLocaleDateString('en-GB', {
     day: 'numeric',
     month: 'short',
