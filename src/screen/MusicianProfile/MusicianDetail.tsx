@@ -77,6 +77,7 @@ interface MusicianDetailProps {
   exclusiveContent?: DataExclusiveResponse;
   subsEC?: boolean;
   setRefreshing?: () => void;
+  isLoading?: boolean;
 }
 
 export const MusicianDetail: React.FC<MusicianDetailProps> = ({
@@ -93,6 +94,7 @@ export const MusicianDetail: React.FC<MusicianDetailProps> = ({
   subsEC,
   dataAppearsOn,
   setRefreshing,
+  isLoading,
 }) => {
   const {t} = useTranslation();
   const navigation =
@@ -413,7 +415,7 @@ export const MusicianDetail: React.FC<MusicianDetailProps> = ({
                   </View>
                 ) : filter[selectedIndex].filterName ===
                   'Musician.Tab.Music' ? (
-                  showContentMusic ? (
+                  isLoading ? null : showContentMusic ? (
                     <View style={{paddingHorizontal: widthResponsive(20)}}>
                       <ListPlaylist
                         data={dataPlaylist}
