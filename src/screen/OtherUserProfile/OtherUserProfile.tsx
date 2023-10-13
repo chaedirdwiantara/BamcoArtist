@@ -79,6 +79,7 @@ export const OtherUserProfile: FC<OtherProfileProps> = ({
   );
 
   const profile: profile = {
+    ...dataFansProfile?.data,
     fullname:
       dataFansProfile?.data.fullname !== undefined
         ? dataFansProfile.data.fullname

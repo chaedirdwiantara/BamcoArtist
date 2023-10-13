@@ -59,6 +59,7 @@ import {
   dataProfileDropdown,
   dataProfileDropdownBlocked,
 } from '../../data/dropdown';
+import {useBadgeHook} from '../../hooks/use-badge.hook';
 
 type OnScrollEventHandler = (
   event: NativeSyntheticEvent<NativeScrollEvent>,
@@ -109,6 +110,14 @@ export const MusicianDetail: React.FC<MusicianDetailProps> = ({
     setBlockUser,
     setUnblockUser,
   } = useBlockHook();
+
+  // BADGE
+  const {useCheckBadge} = useBadgeHook();
+  // artist type = 2
+  const {data: dataBadge} = useCheckBadge({
+    userType: 2,
+    point: profile.point?.pointLifetime,
+  });
 
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [scrolEffect, setScrollEffect] = useState(false);
@@ -335,6 +344,7 @@ export const MusicianDetail: React.FC<MusicianDetailProps> = ({
           donateOnPress={donateOnPress}
           onPressImage={showImage}
           blocked={profile.isBlock || profile.blockIs}
+          dataBadge={dataBadge?.data}
         />
         <View style={styles.infoCard}>
           <UserInfoCard
