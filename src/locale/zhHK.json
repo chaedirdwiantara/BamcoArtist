@@ -1316,15 +1316,18 @@
     },
     "VerifCode": {
       "VerificationCode": "驗證碼",
-      "VerificationText": "請輸入發送到{{email}}的代碼"
+      "VerificationText": "請輸入發送到{{email}}的代碼",
+      "Rejected": "請輸入有效的恢復碼",
+      "ResendAfter": "您可以在之後重新發送恢復碼 "
     },
     "ModalSuccess": {
-      "Title": "恭喜！你的提款正在處理中！這過程可能需要多達7個工作天。成功確認後，你將收到資金。",
+      "Title": "恭喜！你的提款正在處理中！",
       "SubtitleFirstTime": "一旦我們驗證了你的銀行資料，你的資金將離你不遠！這過程可能需要多達7個工作天。",
       "SubtitleNextWithdraw": "這可能需要多達7個工作日。成功確認後，你將收到資金。",
       "CreateWithdrawalAccount": "已創建你的提款帳戶！",
       "EditWithdrawalAccount": "已編輯你的提款帳戶！",
-      "DeleteWithdrawalAccount": "已刪除你的提款帳戶！"
+      "DeleteWithdrawalAccount": "已刪除你的提款帳戶！",
+      "ButtonText": "返回到信用"
     }
   },
   "RecoverAccount": {
