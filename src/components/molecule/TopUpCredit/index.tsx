@@ -160,7 +160,7 @@ export const TopUpCreditContent: React.FC<TopUpCreditProps> = ({
             <CoinDIcon />
             <Gap width={widthPercentage(5)} />
             <Text style={[typography.Heading6, {color: color.Neutral[10]}]}>
-              {kFormatter3(creditCount)}
+              {toCurrency(creditCount, {withFraction: false})}
             </Text>
           </View>
         </View>

@@ -17,7 +17,7 @@ import {
   widthResponsive,
 } from '../../../../utils';
 import {mvs} from 'react-native-size-matters';
-import {AvatarProfile} from '../..';
+import {AvatarProfile, BadgeLevel} from '../..';
 import {ButtonGradient, Gap} from '../../../atom';
 import Typography from '../../../../theme/Typography';
 import {
@@ -35,6 +35,7 @@ import {RootStackParams} from '../../../../navigations';
 import {useTranslation} from 'react-i18next';
 import LoadingSpinner from '../../../atom/Loading/LoadingSpinner';
 import QRCodeIcon from '../../../../assets/icon/QRCode.icon';
+import {DataBadgeType} from '../../../../interface/badge.interface';
 
 export interface ProfileHeaderProps {
   avatarUri?: string;
@@ -51,6 +52,7 @@ export interface ProfileHeaderProps {
   backIcon?: boolean;
   onPressImage?: (uri: string) => void;
   refreshing?: boolean;
+  dataBadge?: DataBadgeType;
 }
 
 export const ProfileHeader: React.FC<ProfileHeaderProps> = (
@@ -71,6 +73,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = (
     backIcon,
     onPressImage,
     refreshing,
+    dataBadge,
   } = props;
   const {t} = useTranslation();
   const navigation =
@@ -107,7 +110,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = (
     type === 'edit' || backgroundUri === '' || backgroundUri === null;
 
   const showLoading = Platform.OS === 'ios' && refreshing;
-  const newHeight = showLoading ? heightPercentage(390) : heightPercentage(350);
+  const newHeight = showLoading ? heightPercentage(420) : heightPercentage(380);
 
   return (
     <View
@@ -135,12 +138,21 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = (
                 showIcon={type === 'edit'}
                 icon={<CameraIcon />}
                 onPress={() => iconPress('avatarUri')}
+                showBorder={type !== 'edit'}
+                borderColor={dataBadge?.colour}
               />
             </TouchableOpacity>
             <Text style={[Typography.Heading5, styles.fullname]}>
               {fullname}
             </Text>
             <Text style={styles.username}>{username}</Text>
+
+            {/* // BADGE */}
+            <BadgeLevel
+              imageUri={dataBadge?.image[0]?.image || ''}
+              backgroundColor={dataBadge?.colour || ''}
+              text={dataBadge?.title || ''}
+            />
 
             {type === 'profile' && (
               <View style={styles.containerFooter}>

@@ -36,6 +36,7 @@ const MusicianProfile: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   const {dataPlaylist, getPlaylist} = usePlaylistHook();
 
   const {
+    isLoadingAlbum,
     isLoadingMusician,
     dataDetailMusician,
     dataAlbum,
@@ -173,9 +174,10 @@ const MusicianProfile: FC<PostDetailProps> = ({route}: PostDetailProps) => {
           }
           subsEC={alreadySubsEC}
           setRefreshing={handleRefreshing}
+          isLoading={isLoadingMusician || isLoadingAlbum}
         />
       )}
-      <ModalLoading visible={isLoadingMusician} />
+      <ModalLoading visible={isLoadingMusician || isLoadingAlbum} />
       <ModalDonate
         userId={uuid}
         onPressDonate={onPressDonate}

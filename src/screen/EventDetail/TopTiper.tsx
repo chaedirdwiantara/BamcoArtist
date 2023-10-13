@@ -9,6 +9,7 @@ import MusiciansListCard from '../../components/molecule/ListCard/MusiciansListC
 import {useEventHook} from '../../hooks/use-event.hook';
 import {EventTopTipper} from '../../interface/event.interface';
 import {profileStorage} from '../../hooks/use-storage.hook';
+import {heightResponsive} from '../../utils';
 
 interface TopTiperProps {
   dataTipper?: EventTopTipper[];
@@ -47,7 +48,9 @@ const TopTiper: FC<TopTiperProps> = ({dataTipper, isLoading, eventId}) => {
   return (
     <>
       {listTipper && listTipper?.length > 0 ? (
-        <ScrollView showsHorizontalScrollIndicator={false}>
+        <ScrollView
+          showsHorizontalScrollIndicator={false}
+          style={{paddingBottom: heightResponsive(40)}}>
           {isLoading && (
             <View
               style={{

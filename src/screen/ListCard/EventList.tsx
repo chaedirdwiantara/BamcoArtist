@@ -1,5 +1,5 @@
 import React, {FC, useEffect, useState} from 'react';
-import {ScrollView, StyleSheet, View} from 'react-native';
+import {ScrollView, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {useTranslation} from 'react-i18next';
 import {ms, mvs} from 'react-native-size-matters';
 import {heightResponsive, widthResponsive} from '../../utils';
@@ -50,38 +50,10 @@ const EventList: FC<EventListProps> = ({type, dataEvent, isLoading}) => {
         {listEvent?.map((item, index) => {
           if (index <= 4) {
             return (
-              <MusiciansListCard
-                key={item.id}
-                musicianNum={(index + 1).toLocaleString('en-US', {
-                  minimumIntegerDigits: 2,
-                  useGrouping: false,
-                })}
-                musicianName={item.name}
-                imgUri={item.imageCover?.[0]?.image || ''}
-                containerStyles={
-                  item.status === 'live'
-                    ? styles.eventLive
-                    : {marginTop: mvs(18)}
-                }
-                point={type === 'profile' ? '' : ''}
-                isEvent={true}
-                activeMore={false}
-                onPressImage={() =>
-                  navigation.navigate('EventDetail', {id: item.id})
-                }
-                onPressMore={() => null}
-                eventDate={`${item.locationCity}, ${item.locationCountry}`}
-                isLive={item.status === 'live'}
-              />
-            );
-          }
-        })}
-      </View>
-      {listEvent?.length > 5 && (
-        <View style={{width: widthResponsive(255)}}>
-          {listEvent?.map((item, index) => {
-            if (index > 4 && index < 10) {
-              return (
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate('EventDetail', {id: item.id});
+                }}>
                 <MusiciansListCard
                   key={item.id}
                   musicianNum={(index + 1).toLocaleString('en-US', {
@@ -91,7 +63,6 @@ const EventList: FC<EventListProps> = ({type, dataEvent, isLoading}) => {
                   musicianName={item.name}
                   imgUri={item.imageCover?.[0]?.image || ''}
                   containerStyles={
-                    // TODO: get response from api isLive
                     item.status === 'live'
                       ? styles.eventLive
                       : {marginTop: mvs(18)}
@@ -106,6 +77,44 @@ const EventList: FC<EventListProps> = ({type, dataEvent, isLoading}) => {
                   eventDate={`${item.locationCity}, ${item.locationCountry}`}
                   isLive={item.status === 'live'}
                 />
+              </TouchableOpacity>
+            );
+          }
+        })}
+      </View>
+      {listEvent?.length > 5 && (
+        <View style={{width: widthResponsive(255)}}>
+          {listEvent?.map((item, index) => {
+            if (index > 4 && index < 10) {
+              return (
+                <TouchableOpacity
+                  onPress={() => {
+                    navigation.navigate('EventDetail', {id: item.id});
+                  }}>
+                  <MusiciansListCard
+                    key={item.id}
+                    musicianNum={(index + 1).toLocaleString('en-US', {
+                      minimumIntegerDigits: 2,
+                      useGrouping: false,
+                    })}
+                    musicianName={item.name}
+                    imgUri={item.imageCover?.[0]?.image || ''}
+                    containerStyles={
+                      item.status === 'live'
+                        ? styles.eventLive
+                        : {marginTop: mvs(18)}
+                    }
+                    point={type === 'profile' ? '' : ''}
+                    isEvent={true}
+                    activeMore={false}
+                    onPressImage={() =>
+                      navigation.navigate('EventDetail', {id: item.id})
+                    }
+                    onPressMore={() => null}
+                    eventDate={`${item.locationCity}, ${item.locationCountry}`}
+                    isLive={item.status === 'live'}
+                  />
+                </TouchableOpacity>
               );
             }
           })}

@@ -18,7 +18,7 @@ export type ProfileProps = {
   lastLoginAt: string | null;
   phoneNumber: string | null;
   bookyayToken: string;
-  bookyayTokenOrganizer: string;
+  bookyayOrganizerToken: string;
 };
 
 export const profileStorage = (): ProfileProps | null => {

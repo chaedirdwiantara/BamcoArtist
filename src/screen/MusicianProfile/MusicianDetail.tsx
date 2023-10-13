@@ -59,6 +59,7 @@ import {
   dataProfileDropdown,
   dataProfileDropdownBlocked,
 } from '../../data/dropdown';
+import {useBadgeHook} from '../../hooks/use-badge.hook';
 
 type OnScrollEventHandler = (
   event: NativeSyntheticEvent<NativeScrollEvent>,
@@ -77,6 +78,7 @@ interface MusicianDetailProps {
   exclusiveContent?: DataExclusiveResponse;
   subsEC?: boolean;
   setRefreshing?: () => void;
+  isLoading?: boolean;
 }
 
 export const MusicianDetail: React.FC<MusicianDetailProps> = ({
@@ -93,6 +95,7 @@ export const MusicianDetail: React.FC<MusicianDetailProps> = ({
   subsEC,
   dataAppearsOn,
   setRefreshing,
+  isLoading,
 }) => {
   const {t} = useTranslation();
   const navigation =
@@ -107,6 +110,14 @@ export const MusicianDetail: React.FC<MusicianDetailProps> = ({
     setBlockUser,
     setUnblockUser,
   } = useBlockHook();
+
+  // BADGE
+  const {useCheckBadge} = useBadgeHook();
+  // artist type = 2
+  const {data: dataBadge} = useCheckBadge({
+    userType: 2,
+    point: profile.point?.pointLifetime,
+  });
 
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [scrolEffect, setScrollEffect] = useState(false);
@@ -333,6 +344,7 @@ export const MusicianDetail: React.FC<MusicianDetailProps> = ({
           donateOnPress={donateOnPress}
           onPressImage={showImage}
           blocked={profile.isBlock || profile.blockIs}
+          dataBadge={dataBadge?.data}
         />
         <View style={styles.infoCard}>
           <UserInfoCard
@@ -413,7 +425,7 @@ export const MusicianDetail: React.FC<MusicianDetailProps> = ({
                   </View>
                 ) : filter[selectedIndex].filterName ===
                   'Musician.Tab.Music' ? (
-                  showContentMusic ? (
+                  isLoading ? null : showContentMusic ? (
                     <View style={{paddingHorizontal: widthResponsive(20)}}>
                       <ListPlaylist
                         data={dataPlaylist}
