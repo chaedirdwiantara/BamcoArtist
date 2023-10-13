@@ -50,6 +50,7 @@ import {
   dataProfileDropdownBlocked,
 } from '../../data/dropdown';
 import ListContributionToMusician from './components/ListContribution';
+import {useBadgeHook} from '../../hooks/use-badge.hook';
 
 type OnScrollEventHandler = (
   event: NativeSyntheticEvent<NativeScrollEvent>,
@@ -66,6 +67,11 @@ type profile = {
   isBlock: boolean | undefined;
   blockIs: boolean | undefined;
   uuid: string | undefined;
+  point: {
+    daily: number;
+    lastUpdated: string;
+    pointLifetime: number;
+  };
 };
 
 interface ProfileContentProps {
@@ -114,6 +120,14 @@ export const OtherUserProfileContent: React.FC<ProfileContentProps> = ({
     setUnblockResponse,
   } = useBlockHook();
   const {setWithoutBottomTab, show} = usePlayerStore();
+
+  // BADGE
+  const {useCheckBadge} = useBadgeHook();
+  // fans type = 1
+  const {data: dataBadge} = useCheckBadge({
+    userType: 1,
+    point: profile.point?.pointLifetime,
+  });
 
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [scrollEffect, setScrollEffect] = useState(false);
@@ -262,6 +276,7 @@ export const OtherUserProfileContent: React.FC<ProfileContentProps> = ({
           noEdit={!ownProfile}
           backIcon={!ownProfile}
           onPressImage={showImage}
+          dataBadge={dataBadge?.data}
         />
         <UserInfoCard
           profile={profile}

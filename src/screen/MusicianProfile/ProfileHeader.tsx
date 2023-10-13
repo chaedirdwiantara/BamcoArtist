@@ -12,11 +12,12 @@ import {
 
 import {mvs} from 'react-native-size-matters';
 import {CameraIcon} from '../../assets/icon';
-import {AvatarProfile, Button, Gap} from '../../components';
+import {AvatarProfile, BadgeLevel, Button, Gap} from '../../components';
 import {color, font} from '../../theme';
 import {heightPercentage, width, widthResponsive} from '../../utils';
 import initialname from '../../utils/initialname';
 import Color from '../../theme/Color';
+import {DataBadgeType} from '../../interface/badge.interface';
 
 export interface ProfileHeaderProps {
   avatarUri?: string;
@@ -34,6 +35,7 @@ export interface ProfileHeaderProps {
   donateOnPress?: () => void;
   onPressImage?: (uri: string) => void;
   blocked?: boolean;
+  dataBadge?: DataBadgeType;
 }
 
 export const ProfileHeader: React.FC<ProfileHeaderProps> = (
@@ -54,6 +56,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = (
     donateOnPress,
     onPressImage,
     blocked,
+    dataBadge,
   } = props;
 
   const followOnPressed = () => {
@@ -94,11 +97,19 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = (
                 type={type}
                 showIcon={false}
                 icon={<CameraIcon />}
+                showBorder={true}
+                borderColor={dataBadge?.colour}
               />
             </TouchableOpacity>
             <Gap height={12} />
             <Text style={styles.fullname}>{fullname}</Text>
             <Text style={styles.username}>{username}</Text>
+            {/* // BADGE */}
+            <BadgeLevel
+              imageUri={dataBadge?.image[0]?.image || ''}
+              backgroundColor={dataBadge?.colour || ''}
+              text={dataBadge?.title || ''}
+            />
             <Gap height={19} />
             {type === '' && (
               <View style={styles.containerFooter}>
@@ -151,7 +162,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = (
 const styles = StyleSheet.create({
   root: {
     width,
-    height: heightPercentage(340),
+    height: heightPercentage(350),
     justifyContent: 'flex-start',
     alignItems: 'center',
   },

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {
   View,
   StyleSheet,
@@ -49,6 +49,7 @@ import ExclusiveDailyContent from '../../../screen/MusicianProfile/ExclusiveDail
 import MerchList from '../../../screen/ListCard/MerchList';
 import ConcertList from '../../../screen/ListCard/ConcertList';
 import EventMusician from '../EventMusician';
+import {useBadgeHook} from '../../../hooks/use-badge.hook';
 
 type OnScrollEventHandler = (
   event: NativeSyntheticEvent<NativeScrollEvent>,
@@ -101,6 +102,14 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
 }) => {
   const {t} = useTranslation();
 
+  // BADGE
+  const {useCheckBadge} = useBadgeHook();
+  // artist type = 2
+  const {data: dataBadge} = useCheckBadge({
+    userType: 2,
+    point: profile.point?.pointLifetime,
+  });
+
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [scrollEffect, setScrollEffect] = useState(false);
   const [filter] = useState([
@@ -139,8 +148,8 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
 
   const topPosition =
     Platform.OS === 'ios' && refreshing
-      ? heightPercentage(360)
-      : heightPercentage(310);
+      ? heightPercentage(400)
+      : heightPercentage(350);
 
   return (
     <View style={{flex: 1}}>
@@ -178,6 +187,7 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
           backIcon={ownProfile}
           onPressImage={showImage}
           refreshing={refreshing}
+          dataBadge={dataBadge?.data}
         />
         <UserInfoCard
           profile={profile}

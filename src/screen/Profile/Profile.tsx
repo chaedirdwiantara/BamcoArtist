@@ -113,6 +113,7 @@ export const ProfileScreen: React.FC<ProfileProps> = ({
       : null;
 
   const profile = {
+    ...dataProfile?.data,
     fullname: dataProfile?.data.fullname,
     username: dataProfile?.data.username,
     bio: dataProfile?.data.bio || t('Profile.Label.Description'),
