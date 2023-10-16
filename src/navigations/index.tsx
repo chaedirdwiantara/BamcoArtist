@@ -303,7 +303,7 @@ export type RootStackParams = {
     musicianId: string;
   };
   Notification: undefined;
-  PostDetail: PostList;
+  PostDetail: {id: string};
   SearchScreen: undefined;
   TnCAndPP: undefined;
   TopUpCredit: undefined;

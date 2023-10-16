@@ -133,8 +133,6 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   const {profileStore} = userProfile();
 
   const data = route.params;
-
-  const musicianName = data.musician.fullname;
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
   const navigation2 = useNavigation<NativeStackNavigationProp<MainTabParams>>();
@@ -1169,7 +1167,7 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
     <View style={styles.root}>
       {/* Header Section */}
       <TopNavigation.Type1
-        title={`${musicianName} ${t('Post.Title')}`}
+        title={`${dataPostDetail?.musician.fullname ?? ''} ${t('Post.Title')}`}
         leftIconAction={handleBackAction}
         maxLengthTitle={40}
         itemStrokeColor={color.Neutral[10]}
@@ -1188,10 +1186,10 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
           {dataPostDetail ? (
             <>
               <ListCard.PostList
-                data={data}
+                data={dataPostDetail}
                 disabled
                 toDetailOnPress={() =>
-                  handleToDetailMusician(data.musician.uuid)
+                  handleToDetailMusician(dataPostDetail.musician.uuid)
                 }
                 onPress={() => {}}
                 likeOnPress={() =>
@@ -1202,12 +1200,17 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
                 tokenOnPress={tokenOnPress}
                 shareOnPress={() =>
                   shareOnPress(
-                    data.id,
+                    dataPostDetail.id,
                     dataPostDetail.musician.uuid === profileStore?.data.uuid,
                     dataPostDetail,
                   )
                 }
-                commentOnPress={() => commentOnPress(data.id, musicianName)}
+                commentOnPress={() =>
+                  commentOnPress(
+                    dataPostDetail.id,
+                    dataPostDetail.musician.fullname,
+                  )
+                }
                 selectedMenu={setSelectedMenuPost}
                 selectedIdPost={setSelectedIdPost}
                 selectedUserName={setSelectedUserName}
@@ -1343,13 +1346,15 @@ export const PostDetail: FC<PostDetailProps> = ({route}: PostDetailProps) => {
           caption={t('ModalComponent.Report.ReportSuccess')}
         />
 
-        <ModalDonate
-          userId={data.musician.uuid}
-          onPressDonate={onPressDonate}
-          modalVisible={modalDonate}
-          onPressClose={() => setModalDonate(false)}
-          onModalHide={() => setModalSuccessDonate(true)}
-        />
+        {dataPostDetail && (
+          <ModalDonate
+            userId={dataPostDetail.musician.uuid}
+            onPressDonate={onPressDonate}
+            modalVisible={modalDonate}
+            onPressClose={() => setModalDonate(false)}
+            onModalHide={() => setModalSuccessDonate(true)}
+          />
+        )}
         <ModalSuccessDonate
           modalVisible={modalSuccessDonate && trigger2ndModal}
           toggleModal={onPressSuccess}
