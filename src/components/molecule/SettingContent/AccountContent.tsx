@@ -192,15 +192,7 @@ export const AccountContent: React.FC<AccountProps> = ({
   }, [toastVisible]);
 
   useEffect(() => {
-    if (
-      isValid &&
-      valueGenres.length > 0 &&
-      valueTypeOfMusician.length > 0 &&
-      getValues('yearsActiveFrom') &&
-      getValues('yearsActiveTo') &&
-      getValues('locationCountry') &&
-      getValues('locationCity')
-    ) {
+    if (isValid) {
       setDisabledButton(false);
     } else {
       setDisabledButton(true);
@@ -216,6 +208,8 @@ export const AccountContent: React.FC<AccountProps> = ({
     setShowModal(false);
     try {
       const payload = {
+        username: getValues('username'),
+        fullname: getValues('fullname'),
         labels: getValues('labels'),
         yearsActiveFrom: getValues('yearsActiveFrom'),
         yearsActiveTo: getValues('yearsActiveTo'),
@@ -229,19 +223,7 @@ export const AccountContent: React.FC<AccountProps> = ({
         favoriteGeneres: valueGenresPreference as number[],
         rolesInIndustry: valueTypeOfMusician as number[],
       };
-
-      // if previous screen is progress profile
-      // user doesn't need to send username & full name (req from BE)
-      const newPayload =
-        fromScreen === 'progress'
-          ? payload
-          : {
-              ...payload,
-              username: getValues('username'),
-              fullname: getValues('fullname'),
-            };
-
-      await updateProfilePreference(newPayload);
+      await updateProfilePreference(payload);
 
       storage.set(
         'profile',
@@ -338,10 +320,6 @@ export const AccountContent: React.FC<AccountProps> = ({
                 isError={errors?.username ? true : false}
                 errorMsg={errors?.username?.message}
                 containerStyles={{marginTop: heightPercentage(15)}}
-                editable={fromScreen !== 'progress'}
-                inputStyles={{
-                  color: fromScreen !== 'progress' ? '#fff' : 'gray',
-                }}
               />
             )}
           />
@@ -362,17 +340,12 @@ export const AccountContent: React.FC<AccountProps> = ({
                 isError={errors?.fullname ? true : false}
                 errorMsg={errors?.fullname?.message}
                 containerStyles={{marginTop: heightPercentage(15)}}
-                editable={fromScreen !== 'progress'}
-                inputStyles={{
-                  color: fromScreen !== 'progress' ? '#fff' : 'gray',
-                }}
               />
             )}
           />
 
           <Dropdown.Multi
             data={formatValueName2(genres) ?? []}
-            isRequired={true}
             placeHolder={t('Setting.Account.Placeholder.Genre') || ''}
             dropdownLabel={t('Setting.Account.Label.Genre') || ''}
             textTyped={(_newText: string) => null}
@@ -388,11 +361,6 @@ export const AccountContent: React.FC<AccountProps> = ({
             <Text style={[typography.Overline, {color: Color.Neutral[50]}]}>
               {t('Setting.Account.Label.DateOfBirth')}
             </Text>
-            {fromScreen === 'progress' && (
-              <Text style={[typography.Overline, {color: Color.Pink[200]}]}>
-                {' *' + t('General.Required')}
-              </Text>
-            )}
           </View>
           <MenuText.RightIcon
             text={birthdate === '' ? 'YYYY-MM-DD' : birthdate}
@@ -453,7 +421,6 @@ export const AccountContent: React.FC<AccountProps> = ({
               render={({field: {onChange, value}}) => (
                 <Dropdown.Input
                   initialValue={value}
-                  isRequired={true}
                   data={dataYearsFrom}
                   placeHolder={t('Setting.Account.Placeholder.Active') || ''}
                   dropdownLabel={t('Musician.Label.Active') || ''}
@@ -507,7 +474,6 @@ export const AccountContent: React.FC<AccountProps> = ({
               render={({field: {onChange, value}}) => (
                 <Dropdown.Input
                   type="location"
-                  isRequired={true}
                   initialValue={value}
                   data={dataAllCountry}
                   placeHolder={t('Setting.Account.Placeholder.Country') || ''}
@@ -558,7 +524,6 @@ export const AccountContent: React.FC<AccountProps> = ({
             render={({field: {onChange, value}}) => (
               <Dropdown.Input
                 initialValue={value}
-                isRequired={true}
                 data={formatValueName2(roles) ?? []}
                 placeHolder={t('Setting.Account.Label.TypeOfMusician') || ''}
                 dropdownLabel={t('Setting.Account.Label.TypeOfMusician') || ''}
@@ -584,7 +549,6 @@ export const AccountContent: React.FC<AccountProps> = ({
                 <Dropdown.Input
                   initialValue={value}
                   data={dataGender}
-                  isRequired={true}
                   placeHolder={t('Setting.Account.Placeholder.Gender')}
                   dropdownLabel={t('Setting.Account.Label.Gender')}
                   textTyped={(newText: {label: string; value: string}) => {
@@ -767,8 +731,6 @@ const styles = StyleSheet.create({
     backgroundColor: Color.Dark[50],
   },
   containerBirth: {
-    flexDirection: 'row',
-    alignItems: 'center',
     marginTop: heightPercentage(15),
   },
   titleBirthDate: {
