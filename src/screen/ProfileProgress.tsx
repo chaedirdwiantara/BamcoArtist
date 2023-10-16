@@ -116,9 +116,7 @@ export const ProfileProgressScreen: React.FC = () => {
         ? t('ProfileProgress.Tab.AccountInformation')
         : t('ProfileProgress.Tab.ProfileInformation');
     const uncompleteListTemp =
-      type === 'account'
-        ? uncompleteList.account.filter(val => val !== 'Expectation')
-        : uncompleteList.profile;
+      type === 'account' ? uncompleteList.account : uncompleteList.profile;
     const uncompleteSubtitle =
       uncompleteListTemp.length > 0
         ? t('ProfileProgress.SubtitleTooltip')
