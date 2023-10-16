@@ -505,7 +505,8 @@
       "LineUp": "陣容",
       "TopTiper": "最佳Beamer",
       "TipDistribution": "Beam分佈",
-      "MusicianTipped": "Beamed音樂人"
+      "MusicianTipped": "Beamed音樂人",
+      "Perform": "我要表演！"
     },
     "EmptyState": {
       "Home": "目前沒有任何直播活動。敬請期待更多精彩體驗！",
@@ -593,9 +594,9 @@
       "Ticket": "票",
       "Event": "活動"
     },
-      "ShowAppreciate": "表達您的欣賞",
-      "SendTip": "給您喜愛的藝術家發送小費，支持他們的成長",
-      "EmptyStateFans": "藝術家沒有任何粉絲。"
+    "ShowAppreciate": "表達您的欣賞",
+    "SendTip": "給您喜愛的藝術家發送小費，支持他們的成長",
+    "EmptyStateFans": "藝術家沒有任何粉絲。"
   },
   "ExclusiveContent": {
     "Title": "獨家內容",
@@ -989,16 +990,16 @@
     "Transaction": {
       "Title": "交易"
     },
-	"QrCode": {
-  	"Title": "QR Code",
- 	   "Device": {
- 	     "Title": "裝置",
- 	     "Caption": "掃描 QR 碼以在 Beamco Artist 網頁上登錄",
- 	     "Button": "立即掃描",
-  	   "LinkedTitle": "已連接的裝置",
- 	     "EmptyStateLinked": "您尚未連接任何裝置",
- 	     "Tips": "點擊「裝置」以登出",
- 	     "onScannerCaption": "打開 {{link}} 以掃描並連接裝置"
+    "QrCode": {
+      "Title": "QR Code",
+      "Device": {
+        "Title": "裝置",
+        "Caption": "掃描 QR 碼以在 Beamco Artist 網頁上登錄",
+        "Button": "立即掃描",
+        "LinkedTitle": "已連接的裝置",
+        "EmptyStateLinked": "您尚未連接任何裝置",
+        "Tips": "點擊「裝置」以登出",
+        "onScannerCaption": "打開 {{link}} 以掃描並連接裝置"
       }
     }
   },

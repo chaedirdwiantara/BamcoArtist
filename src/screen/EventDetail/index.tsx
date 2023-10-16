@@ -12,8 +12,19 @@ import {
 } from 'react-native';
 import React, {useCallback, useState} from 'react';
 import Color from '../../theme/Color';
-import {heightResponsive, width, widthResponsive} from '../../utils';
-import {Gap, SsuDivider, TabFilter, TopNavigation} from '../../components';
+import {
+  heightPercentage,
+  heightResponsive,
+  width,
+  widthResponsive,
+} from '../../utils';
+import {
+  Button,
+  Gap,
+  SsuDivider,
+  TabFilter,
+  TopNavigation,
+} from '../../components';
 import LinearGradient from 'react-native-linear-gradient';
 import Typography from '../../theme/Typography';
 import {ArrowLeftIcon, LiveIcon, LocationIcon} from '../../assets/icon';
@@ -27,6 +38,7 @@ import LoadingSpinner from '../../components/atom/Loading/LoadingSpinner';
 import {ModalLoading} from '../../components/molecule/ModalLoading/ModalLoading';
 import {useEventHook} from '../../hooks/use-event.hook';
 import {useFocusEffect} from '@react-navigation/native';
+import {mvs} from 'react-native-size-matters';
 
 type OnScrollEventHandler = (
   event: NativeSyntheticEvent<NativeScrollEvent>,
@@ -197,20 +209,33 @@ export const EventDetail: React.FC<EventDetailProps> = ({
             {dataDetail?.data?.fullAddress}
           </Text>
           <Gap height={heightResponsive(10)} />
-          <TouchableOpacity onPress={onClickMap} style={styles.map}>
-            <LocationIcon
-              width={widthResponsive(18)}
-              stroke={Color.Pink.linear}
+          <View style={[styles.map, {justifyContent: 'space-between'}]}>
+            <TouchableOpacity onPress={onClickMap} style={styles.map}>
+              <LocationIcon
+                width={widthResponsive(18)}
+                stroke={Color.Pink.linear}
+              />
+              <Gap width={widthResponsive(4)} />
+              <Text
+                style={[
+                  Typography.Body4,
+                  {color: Color.Pink.linear, textTransform: 'uppercase'},
+                ]}>
+                View Location on map
+              </Text>
+            </TouchableOpacity>
+
+            <Button
+              onPress={() =>
+                Linking.openURL(
+                  `mailto:team@thebeam.co?subject=I%20want%20to%20Perform%20on%20the%20next%20Beamco%20Event&body=-Artists%20Name%0A-Email`,
+                )
+              }
+              label={t('Event.Detail.Perform')}
+              containerStyles={styles.button}
+              textStyles={styles.buttonText}
             />
-            <Gap width={widthResponsive(4)} />
-            <Text
-              style={[
-                Typography.Body4,
-                {color: Color.Pink.linear, textTransform: 'uppercase'},
-              ]}>
-              View Location on map
-            </Text>
-          </TouchableOpacity>
+          </View>
 
           <SsuDivider
             containerStyle={{
@@ -291,5 +316,13 @@ const styles = StyleSheet.create({
   loadingContainer: {
     flex: 1,
     alignItems: 'center',
+  },
+  button: {
+    width: width * 0.25,
+    aspectRatio: heightPercentage(120 / 30),
+    backgroundColor: Color.Pink.linear,
+  },
+  buttonText: {
+    fontSize: mvs(10),
   },
 });
