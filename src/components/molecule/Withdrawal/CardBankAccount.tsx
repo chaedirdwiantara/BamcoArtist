@@ -101,12 +101,12 @@ const styles = StyleSheet.create({
   numberTitleStyle: {
     color: color.Neutral[10],
     fontFamily: font.InterMedium,
-    width: '40%',
+    width: '45%',
   },
   bankNameTitleStyle: {
     color: color.Neutral[10],
     fontFamily: font.InterMedium,
-    width: '55%',
+    width: '50%',
   },
   containerItemBank: {
     width: width * 0.9,
@@ -122,12 +122,12 @@ const styles = StyleSheet.create({
   numberValueStyle: {
     color: color.Neutral[10],
     fontFamily: font.InterMedium,
-    width: '40%',
+    width: '45%',
   },
   bankNameValueStyle: {
     color: color.Neutral[10],
     fontFamily: font.InterMedium,
-    width: '55%',
+    width: '50%',
   },
   iconSection: {
     flexDirection: 'row',

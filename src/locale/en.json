@@ -1321,15 +1321,18 @@
     },
     "VerifCode": {
       "VerificationCode": "Verification Code",
-      "VerificationText": "Please Enter the Code Sent to {{email}}"
+      "VerificationText": "Please Enter the Code Sent to {{email}}",
+      "Rejected": "Please enter a valid recovery code",
+      "ResendAfter": "You can resend recovery code after "
     },
     "ModalSuccess": {
-      "Title": "Congratulations! \nYour withdrawal is being processed! This can take up to 7 working days. You will receive your funds upon successful confirmation.",
+      "Title": "Congratulations! \nYour withdrawal is being processed!",
       "SubtitleFirstTime": "Once we have verified your bank details your funds will be on their way! This process can usually take up to 7 working days.",
       "SubtitleNextWithdraw": "This can take up to 7 working days. You will receive your funds upon successful confirmation.",
       "CreateWithdrawalAccount": "Your withdrawal account have been saved!",
       "EditWithdrawalAccount": "Your account have been edited!",
-      "DeleteWithdrawalAccount": "Bank account has been deleted!"
+      "DeleteWithdrawalAccount": "Bank account has been deleted!",
+      "ButtonText": "Back to credit"
     }
   },
   "RecoverAccount": {
