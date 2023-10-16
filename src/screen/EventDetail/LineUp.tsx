@@ -10,7 +10,8 @@ import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import MusiciansListCard from '../../components/molecule/ListCard/MusiciansListCard';
 import {EventLineUp} from '../../interface/event.interface';
-import {RootStackParams} from '../../navigations';
+import {MainTabParams, RootStackParams} from '../../navigations';
+import {profileStorage} from '../../hooks/use-storage.hook';
 
 interface EventLineUpInterface {
   dataLineUp?: EventLineUp[];
@@ -29,6 +30,7 @@ const LineUp: FC<EventLineUpInterface> = ({
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
   const [listLineUp, setListLineUp] = useState(dataLineUp);
+  const navigation2 = useNavigation<NativeStackNavigationProp<MainTabParams>>();
 
   useEffect(() => {
     if (dataLineUp !== undefined) {
@@ -51,6 +53,7 @@ const LineUp: FC<EventLineUpInterface> = ({
       )}
 
       {listLineUp?.map((item, index) => {
+        const self = item?.musician?.UUID === profileStorage()?.uuid;
         return (
           <MusiciansListCard
             key={item?.musician?.UUID}
@@ -70,21 +73,24 @@ const LineUp: FC<EventLineUpInterface> = ({
             activeMore={false}
             isLive={item?.statusLineupEvent === 'live'}
             onClickTip={() =>
-              navigation.push('LiveTipping', {
-                id: item?.musician?.UUID,
-                eventId: eventId,
-                endDate: endDate,
-              })
+              self
+                ? navigation2.navigate('Profile', {})
+                : navigation.push('LiveTipping', {
+                    id: item?.musician?.UUID,
+                    eventId: eventId,
+                    endDate: endDate,
+                  })
             }
-            onPressImage={
-              () =>
-                navigation.push('MusicianProfile', {id: item?.musician?.UUID})
-              // navigation.push('LiveTipping', {
-              //   id: item?.musician?.UUID,
-              //   eventId: eventId,
-              // })
+            onPressImage={() =>
+              self
+                ? navigation2.navigate('Profile', {})
+                : navigation.push('MusicianProfile', {
+                    id: item?.musician?.UUID,
+                  })
             }
             onPressMore={() => null}
+            self={self}
+            isLineUp={true}
           />
         );
       })}
