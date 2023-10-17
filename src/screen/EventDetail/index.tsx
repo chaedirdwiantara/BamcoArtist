@@ -228,7 +228,9 @@ export const EventDetail: React.FC<EventDetailProps> = ({
             <Button
               onPress={() =>
                 Linking.openURL(
-                  `mailto:team@thebeam.co?subject=I%20want%20to%20Perform%20on%20the%20next%20Beamco%20Event&body=-Artists%20Name%0A-Email`,
+                  `mailto:team@thebeam.co?subject=${encodeURI(
+                    t('Event.Detail.MailTitle'),
+                  )}&body=${encodeURI(t('Event.Detail.MailBody'))}`,
                 )
               }
               label={t('Event.Detail.Perform')}
