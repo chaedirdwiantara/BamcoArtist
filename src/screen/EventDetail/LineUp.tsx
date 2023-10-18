@@ -42,16 +42,6 @@ const LineUp: FC<EventLineUpInterface> = ({
     <ScrollView
       showsHorizontalScrollIndicator={false}
       style={{paddingBottom: heightResponsive(40)}}>
-      {isLoading && (
-        <View
-          style={{
-            alignItems: 'center',
-            paddingVertical: mvs(20),
-          }}>
-          <LoadingSpinner />
-        </View>
-      )}
-
       {listLineUp?.map((item, index) => {
         const self = item?.musician?.UUID === profileStorage()?.uuid;
         return (
@@ -94,6 +84,16 @@ const LineUp: FC<EventLineUpInterface> = ({
           />
         );
       })}
+
+      {isLoading && (
+        <View
+          style={{
+            alignItems: 'center',
+            paddingVertical: mvs(20),
+          }}>
+          <LoadingSpinner />
+        </View>
+      )}
     </ScrollView>
   ) : (
     <EmptyStateSongMusician
