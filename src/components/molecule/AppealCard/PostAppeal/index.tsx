@@ -38,7 +38,7 @@ const PostAppeal: FC<PostAppeal> = (props: PostAppeal) => {
           postDate={data.timeAgo}
           likeCount={data.likesCount}
           commentCount={data.commentsCount}
-          category="Backstate"
+          category={data.category}
           isPremium={data.isPremiumPost}
           viewCount={data.viewsCount}
           shareCount={data.shareCount}

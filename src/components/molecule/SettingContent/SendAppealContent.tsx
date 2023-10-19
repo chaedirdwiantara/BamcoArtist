@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {View, StyleSheet, Platform, Text} from 'react-native';
+import {View, StyleSheet, Platform, Text, ScrollView} from 'react-native';
 import {useTranslation} from 'react-i18next';
 import {mvs} from 'react-native-size-matters';
 import ImagePicker, {Image} from 'react-native-image-crop-picker';
@@ -24,6 +24,7 @@ import {useUploadImageHook} from '../../../hooks/use-uploadImage.hook';
 import PostAppeal from '../AppealCard/PostAppeal';
 import MusicAppeal from '../AppealCard/MusicAppeal';
 import AlbumAppeal from '../AppealCard/AlbumAppeal';
+import {KeyboardShift} from '../KeyboardShift';
 
 interface SendAppealProps {
   type?: string;
@@ -164,106 +165,109 @@ export const SendAppealContent: React.FC<SendAppealProps> = ({
   };
 
   return (
-    <View style={styles.root}>
-      <TopNavigation.Type1
-        title={t('Setting.Report.Modal.SendAppeal')}
-        leftIcon={<ArrowLeftIcon />}
-        itemStrokeColor={color.Neutral[10]}
-        leftIconAction={onPressGoBack}
-        containerStyles={{paddingHorizontal: widthPercentage(12)}}
-      />
+    <KeyboardShift>
+      <View style={styles.root}>
+        <TopNavigation.Type1
+          title={t('Setting.Report.Modal.SendAppeal')}
+          leftIcon={<ArrowLeftIcon />}
+          itemStrokeColor={color.Neutral[10]}
+          leftIconAction={onPressGoBack}
+          containerStyles={{paddingHorizontal: widthPercentage(12)}}
+        />
 
-      {selectedViolation ? (
-        <>
-          <View style={styles.containerViolation}>
-            <Text style={styles.title}>
-              {t('Setting.SendAppeal.ContentToRecover')}
-            </Text>
-            {type === 'post' ? (
-              <PostAppeal
-                data={selectedViolation}
-                containerStyles={{marginBottom: mvs(15)}}
-                hideChoiceIcon={true}
-              />
-            ) : type === 'comment' ? (
-              <CommentAppeal
-                fullname={selectedViolation.commentOwner.fullname}
-                username={selectedViolation.commentOwner.username}
-                repliedTo={selectedViolation.repliedTo}
-                postDate={selectedViolation.timeAgo}
-                caption={selectedViolation.caption}
-                likesCount={selectedViolation.likesCount}
-                commentsCount={selectedViolation.commentsCount}
-                containerStyles={{marginBottom: mvs(15)}}
-                hideChoiceIcon={true}
-              />
-            ) : type === 'song' ? (
-              <MusicAppeal
-                title={selectedViolation.title}
-                musician={selectedViolation.musicianName}
-                coverImage={selectedViolation.image}
-                duration={selectedViolation.songDuration}
-                containerStyles={{marginBottom: mvs(15)}}
-                hideChoiceIcon={true}
-              />
-            ) : (
-              <AlbumAppeal
-                title={selectedViolation.title}
-                coverImage={selectedViolation.image}
-                year={selectedViolation.productionYear}
-                numberOfSongs={selectedViolation.songTotal}
-                containerStyles={{marginBottom: mvs(15)}}
-                hideChoiceIcon={true}
-              />
-            )}
-          </View>
-          <View style={styles.separator} />
-        </>
-      ) : null}
+        <ScrollView showsVerticalScrollIndicator={false}>
+          {selectedViolation ? (
+            <>
+              <View style={styles.containerViolation}>
+                <Text style={styles.title}>
+                  {t('Setting.SendAppeal.ContentToRecover')}
+                </Text>
+                {type === 'post' ? (
+                  <PostAppeal
+                    data={selectedViolation}
+                    containerStyles={{marginBottom: mvs(15)}}
+                    hideChoiceIcon={true}
+                  />
+                ) : type === 'comment' ? (
+                  <CommentAppeal
+                    fullname={selectedViolation.commentOwner.fullname}
+                    username={selectedViolation.commentOwner.username}
+                    repliedTo={selectedViolation.repliedTo}
+                    postDate={selectedViolation.timeAgo}
+                    caption={selectedViolation.caption}
+                    likesCount={selectedViolation.likesCount}
+                    commentsCount={selectedViolation.commentsCount}
+                    containerStyles={{marginBottom: mvs(15)}}
+                    hideChoiceIcon={true}
+                  />
+                ) : type === 'song' ? (
+                  <MusicAppeal
+                    title={selectedViolation.title}
+                    musician={selectedViolation.musicianName}
+                    coverImage={selectedViolation.image}
+                    duration={selectedViolation.songDuration}
+                    containerStyles={{marginBottom: mvs(15)}}
+                    hideChoiceIcon={true}
+                  />
+                ) : (
+                  <AlbumAppeal
+                    title={selectedViolation.title}
+                    coverImage={selectedViolation.image}
+                    year={selectedViolation.productionYear}
+                    numberOfSongs={selectedViolation.songTotal}
+                    containerStyles={{marginBottom: mvs(15)}}
+                    hideChoiceIcon={true}
+                  />
+                )}
+              </View>
+              <View style={styles.separator} />
+            </>
+          ) : null}
 
-      <SsuInput.InputLabel
-        value={description}
-        onChangeText={(newText: string) => setDescription(newText)}
-        placeholder={t('Setting.Report.Placeholder.Text') || ''}
-        containerStyles={styles.textArea}
-        multiline
-        numberOfLines={10}
-        inputStyles={styles.inputDesc}
-        showImage={true}
-        onPressCamera={onCameraPress}
-        onPressLibrary={onImageLibraryPress}
-        containerInputStyles={{borderBottomWidth: 0}}
-        listImage={listImage}
-        onPressDeleteImage={removeImage}
-        blurOnSubmit={true}
-      />
+          <SsuInput.InputLabel
+            value={description}
+            onChangeText={(newText: string) => setDescription(newText)}
+            placeholder={t('Setting.Report.Placeholder.Text') || ''}
+            containerStyles={styles.textArea}
+            multiline
+            numberOfLines={10}
+            inputStyles={styles.inputDesc}
+            showImage={true}
+            onPressCamera={onCameraPress}
+            onPressLibrary={onImageLibraryPress}
+            containerInputStyles={{borderBottomWidth: 0}}
+            listImage={listImage}
+            onPressDeleteImage={removeImage}
+            blurOnSubmit={true}
+          />
 
-      <ModalLoading visible={isLoadingImage} />
+          <Button
+            label={t('Btn.Send')}
+            onPress={onPressSend}
+            containerStyles={styles.button}
+          />
+          <ModalLoading visible={isLoadingImage} />
 
-      <ModalSuccessDonate
-        title={t('Setting.SendAppeal.ModalSuccess.Title') || ''}
-        subtitle={t('Setting.SendAppeal.ModalSuccess.Subtitle') || ''}
-        buttonText={t('Btn.Dismiss') || ''}
-        modalVisible={showModalSuccess}
-        toggleModal={goToHome}
-      />
+          <ModalSuccessDonate
+            title={t('Setting.SendAppeal.ModalSuccess.Title') || ''}
+            subtitle={t('Setting.SendAppeal.ModalSuccess.Subtitle') || ''}
+            buttonText={t('Btn.Dismiss') || ''}
+            modalVisible={showModalSuccess}
+            toggleModal={goToHome}
+          />
 
-      <ModalLimit
-        text={
-          modalLimitType === 'onUpload'
-            ? t('Modal.Limit.SubtitleSR2')
-            : t('Modal.Limit.SubtitleSR1')
-        }
-        modalVisible={showModalLimit}
-        onPressClose={() => setShowModalLimit(false)}
-      />
-
-      <Button
-        label={t('Btn.Send')}
-        onPress={onPressSend}
-        containerStyles={styles.button}
-      />
-    </View>
+          <ModalLimit
+            text={
+              modalLimitType === 'onUpload'
+                ? t('Modal.Limit.SubtitleSR2')
+                : t('Modal.Limit.SubtitleSR1')
+            }
+            modalVisible={showModalLimit}
+            onPressClose={() => setShowModalLimit(false)}
+          />
+        </ScrollView>
+      </View>
+    </KeyboardShift>
   );
 };
 
@@ -288,10 +292,8 @@ const styles = StyleSheet.create({
   button: {
     width: width * 0.9,
     aspectRatio: widthPercentage(327 / 36),
-    position: 'absolute',
-    bottom: 0,
     alignSelf: 'center',
-    marginBottom: mvs(30),
+    marginVertical: mvs(40),
   },
   title: {
     color: color.Neutral[10],
