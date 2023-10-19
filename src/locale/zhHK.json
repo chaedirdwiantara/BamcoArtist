@@ -506,7 +506,9 @@
       "TopTiper": "最佳Beamer",
       "TipDistribution": "Beam分佈",
       "MusicianTipped": "Beamed音樂人",
-      "Perform": "我要表演！"
+      "Perform": "我要上台！",
+      "MailTitle": "立即申請成為Beamco Live! 演出歌手",
+      "MailBody": "請點擊此按鍵，我們將會有專人聯絡你，成為下一個Beamco Live! 的新星！"
     },
     "EmptyState": {
       "Home": "目前沒有任何直播活動。敬請期待更多精彩體驗！",

@@ -507,7 +507,9 @@
       "TopTiper": "TOP BEAMERS",
       "TipDistribution": "Beam Distribution",
       "MusicianTipped": "Artist Beamed",
-      "Perform": "I want to Perform!"
+      "Perform": "Pick Me!",
+      "MailTitle": "I'd like to perform at the next Beamco Live!",
+      "MailBody": "Simply hit send to this email to register your interest in performing at the next Beamco Live! The Beamco Concierge will get in touch with you soon!"
     },
     "Live": "Live",
     "EmptyState": {
