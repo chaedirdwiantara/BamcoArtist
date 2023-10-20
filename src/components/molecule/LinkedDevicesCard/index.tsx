@@ -29,17 +29,17 @@ const LinkedDevicesCard: FC<LinkedDevicesCardProps> = (
   const BrowserLibrary = (data: string) => {
     return (
       <View>
-        {data.includes('brave') ? (
+        {data.includes('Brave') ? (
           <BraveBrowserIcon />
-        ) : data.includes('chrome') ? (
+        ) : data.includes('Chrome') ? (
           <ChromeBrowserIcon />
-        ) : data.includes('firefox') ? (
+        ) : data.includes('Firefox') ? (
           <FirefoxBrowserIcon />
-        ) : data.includes('edge') ? (
+        ) : data.includes('Edge') ? (
           <EdgeBrowserIcon />
-        ) : data.includes('opera') ? (
+        ) : data.includes('Opera') ? (
           <OperaBrowserIcon />
-        ) : data.includes('safari') ? (
+        ) : data.includes('Safari') ? (
           <SafariBrowserIcon />
         ) : (
           <DefaultBrowserIcon />
