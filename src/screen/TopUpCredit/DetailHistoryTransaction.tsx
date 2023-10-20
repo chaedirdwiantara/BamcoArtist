@@ -2,6 +2,7 @@ import React, {FC} from 'react';
 import {Linking, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {useTranslation} from 'react-i18next';
 import {ms, mvs} from 'react-native-size-matters';
+import Clipboard from '@react-native-community/clipboard';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 
 import {
@@ -31,8 +32,12 @@ export const DetailHistoryTransactionScreen: FC<TransactionProps> = ({
   const {dataDetail} = route.params;
   const newData = [
     {
-      title: 'TopUp.Transaction.Detail.ReferenceNumber',
+      title: 'TopUp.Transaction.Detail.TransactionID',
       value: dataDetail.id,
+    },
+    {
+      title: 'TopUp.Transaction.Detail.ReferenceID',
+      value: dataDetail.trxReferenceId,
     },
     {
       title: 'TopUp.Transaction.Detail.Status',
@@ -77,6 +82,10 @@ export const DetailHistoryTransactionScreen: FC<TransactionProps> = ({
     );
   };
 
+  const copyToClipboard = (value: string) => {
+    Clipboard.setString(value);
+  };
+
   const ListDetail = ({
     title,
     value,
@@ -85,27 +94,38 @@ export const DetailHistoryTransactionScreen: FC<TransactionProps> = ({
     value: string | number;
   }) => {
     // check some special case
+    const isTransaction =
+      title === 'TopUp.Transaction.Detail.TransactionID' &&
+      typeof value === 'string';
     const isReference =
-      title === 'TopUp.Transaction.Detail.ReferenceNumber' &&
+      title === 'TopUp.Transaction.Detail.ReferenceID' &&
       typeof value === 'string';
     const isStatus =
       title === 'TopUp.Transaction.Detail.Status' && typeof value === 'string';
+    const showCopyIcon = isTransaction || isReference;
 
     return (
       <View style={styles.containerHelp}>
         <Text style={styles.valueText}>{t(title)}</Text>
-        <View style={{flexDirection: 'row'}}>
+        <TouchableOpacity
+          activeOpacity={showCopyIcon ? 0 : 1}
+          style={{flexDirection: 'row'}}
+          onPress={() => showCopyIcon && copyToClipboard(value)}>
           <Text style={[styles.valueText, {color: color.Neutral[10]}]}>
-            {isReference ? elipsisText(value, 20) : isStatus ? t(value) : value}
+            {showCopyIcon
+              ? elipsisText(value, 20)
+              : isStatus
+              ? t(value)
+              : value}
           </Text>
-          {/* // show copy icon if title = reference number */}
-          {isReference && (
+          {/* // show copy icon if title = transaction id or reference id */}
+          {showCopyIcon && (
             <>
               <Gap width={ms(5)} />
               <CopyIcon />
             </>
           )}
-        </View>
+        </TouchableOpacity>
       </View>
     );
   };
