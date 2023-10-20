@@ -1564,5 +1564,8 @@
     "SwipeUp": "向上滑動以發送",
     "TooFast": "滑動太快，請重新再試！",
     "EnjoyShow": "讓我們盡情享受表演！"
+  },
+  "DiscoverArtist":{
+    "Title":"Discover Artist"
   }
 }
