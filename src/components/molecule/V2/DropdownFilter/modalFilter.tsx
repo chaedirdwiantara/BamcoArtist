@@ -10,7 +10,10 @@ import {
 import React, {FC} from 'react';
 import Modal from 'react-native-modal';
 import {color, font} from '../../../../theme';
-import {DataDropDownType} from '../../../../data/dropdown';
+import {
+  DataDropDownNumberType,
+  DataDropDownType,
+} from '../../../../data/dropdown';
 import {useTranslation} from 'react-i18next';
 import {widthResponsive} from '../../../../utils';
 
@@ -19,7 +22,7 @@ export const {width} = Dimensions.get('screen');
 interface ModalFilterProps {
   toggleModal: () => void;
   modalVisible: boolean;
-  dataFilter: DataDropDownType[];
+  dataFilter: DataDropDownType[] | DataDropDownNumberType[];
   filterOnPress?: (label: string) => void;
   sendCategory: (value: string) => void;
   translation?: boolean;

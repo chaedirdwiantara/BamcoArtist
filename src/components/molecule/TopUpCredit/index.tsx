@@ -150,6 +150,7 @@ export const TopUpCreditContent: React.FC<TopUpCreditProps> = ({
         dropdownData={dataCreditDropdown}
         resultDataDropdown={resultDataDropdown}
         dropdownStyle={{marginRight: 0}}
+        leftPositionDropdown={widthPercentage(-20)}
       />
 
       <ScrollView

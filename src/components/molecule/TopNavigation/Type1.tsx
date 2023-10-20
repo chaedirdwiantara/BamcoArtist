@@ -34,11 +34,18 @@ type Props = {
   dropdownData?: DataDropDownType[] | DataDropDownNumberType[];
   beingBlocked?: boolean;
   dropdownStyle?: ViewStyle;
+  leftPositionDropdown?: number;
 };
 
 /** == COMPONENT === */
 const Type1: React.FC<Props> = (props: Props) => {
-  const {dropdownData, resultDataDropdown, beingBlocked, dropdownStyle} = props;
+  const {
+    dropdownData,
+    resultDataDropdown,
+    beingBlocked,
+    dropdownStyle,
+    leftPositionDropdown = widthResponsive(20),
+  } = props;
 
   /** => icon left */
   const iconLeft = () => {
@@ -88,7 +95,7 @@ const Type1: React.FC<Props> = (props: Props) => {
                 selectedMenu={resultDataDropdown!}
                 iconChildren={<DropDownIcon />}
                 topPosition={widthResponsive(5)}
-                leftPosition={widthResponsive(20)}
+                leftPosition={leftPositionDropdown}
               />
             </View>
           )}
