@@ -51,16 +51,6 @@ const TopTiper: FC<TopTiperProps> = ({dataTipper, isLoading, eventId}) => {
         <ScrollView
           showsHorizontalScrollIndicator={false}
           style={{paddingBottom: heightResponsive(40)}}>
-          {isLoading && (
-            <View
-              style={{
-                alignItems: 'center',
-                paddingVertical: mvs(20),
-              }}>
-              <LoadingSpinner />
-            </View>
-          )}
-
           {listTipper?.map((item, index) => {
             return (
               <MusiciansListCard
@@ -87,6 +77,15 @@ const TopTiper: FC<TopTiperProps> = ({dataTipper, isLoading, eventId}) => {
               />
             );
           })}
+          {isLoading && (
+            <View
+              style={{
+                alignItems: 'center',
+                paddingVertical: mvs(20),
+              }}>
+              <LoadingSpinner />
+            </View>
+          )}
         </ScrollView>
       ) : (
         <EmptyStateSongMusician
