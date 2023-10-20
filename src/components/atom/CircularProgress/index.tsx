@@ -8,7 +8,7 @@ const AnimatedTextInput = Animated.createAnimatedComponent(TextInput);
 
 export const CircularProgress = ({
   percentage = 75,
-  radius = mvs(32),
+  radius = mvs(24),
   strokeWidth = mvs(10),
   duration = 500,
   strokeColor = '#FF7ED8',
@@ -103,6 +103,6 @@ const styles = StyleSheet.create({
     color: color.Neutral[10],
     fontWeight: '600',
     textAlign: 'center',
-    fontSize: mvs(13),
+    fontSize: mvs(9),
   },
 });
