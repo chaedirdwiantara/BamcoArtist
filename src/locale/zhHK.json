@@ -1256,7 +1256,13 @@
     "EmptyState": {
       "Transaction": "交易紀錄將在此顯示。暫時還沒有進行任何交易。",
       "Withdrawal": "目前沒有有關提款的交易可顯示。"
-    }
+    },
+    "Dropdown": {
+      "TopUpCredit": "Top Up Credit",
+      "CreditTransaction": "Credit Transaction"
+    },
+    "Credit": "Credit",
+    "Estimation": "Estimation"
   },
   "Withdrawal": {
     "Title": "提款",

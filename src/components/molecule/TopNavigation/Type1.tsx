@@ -11,7 +11,11 @@ import {elipsisText, widthPercentage, widthResponsive} from '../../../utils';
 import topNavstyles from './topNavstyles';
 import {color, font} from '../../../theme';
 import DropdownMore from '../V2/DropdownFilter/DropdownMore';
-import {DataDropDownType, albumReportSent} from '../../../data/dropdown';
+import {
+  DataDropDownNumberType,
+  DataDropDownType,
+  albumReportSent,
+} from '../../../data/dropdown';
 
 /** === INTERFACE === */
 type Props = {
@@ -24,14 +28,17 @@ type Props = {
   leftIconAction: () => void;
   containerStyles?: ViewStyle;
   onPressShareQR?: () => void;
-  resultDataDropdown?: (dataResult: DataDropDownType) => void;
-  dropdownData?: DataDropDownType[];
+  resultDataDropdown?: (
+    dataResult: DataDropDownType | DataDropDownNumberType,
+  ) => void;
+  dropdownData?: DataDropDownType[] | DataDropDownNumberType[];
   beingBlocked?: boolean;
+  dropdownStyle?: ViewStyle;
 };
 
 /** == COMPONENT === */
 const Type1: React.FC<Props> = (props: Props) => {
-  const {dropdownData, resultDataDropdown, beingBlocked} = props;
+  const {dropdownData, resultDataDropdown, beingBlocked, dropdownStyle} = props;
 
   /** => icon left */
   const iconLeft = () => {
@@ -75,7 +82,7 @@ const Type1: React.FC<Props> = (props: Props) => {
         </View>
         <View style={topNavstyles.rightContainer}>
           {props.type === 'user detail' && !beingBlocked && (
-            <View style={styles.dropdownContainer}>
+            <View style={[styles.dropdownContainer, dropdownStyle]}>
               <DropdownMore
                 dataFilter={dropdownData ?? albumReportSent}
                 selectedMenu={resultDataDropdown!}
