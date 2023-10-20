@@ -1258,7 +1258,13 @@
     "EmptyState": {
       "Transaction": "The transaction list will be displayed here, but as of now, no transactions have been made.",
       "Withdrawal": "There are no transactions to display at the moment regarding withdrawals."
-    }
+    },
+    "Dropdown": {
+      "TopUpCredit": "Top Up Credit",
+      "CreditTransaction": "Credit Transaction"
+    },
+    "Credit": "Credit",
+    "Estimation": "Estimation"
   },
   "Withdrawal": {
     "Title": "Withdraw",

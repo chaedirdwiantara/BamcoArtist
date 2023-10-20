@@ -8,21 +8,25 @@ import {useFocusEffect} from '@react-navigation/native';
 import {
   width,
   toCurrency,
-  kFormatter3,
   widthPercentage,
   heightPercentage,
 } from '../../../utils';
+import {
+  dataCreditDropdown,
+  DataDropDownNumberType,
+} from '../../../data/dropdown';
+import {Button} from '../../atom';
 import {CoinCard} from './CoinCard';
-import {Button, Gap} from '../../atom';
 import {TabFilter} from '../TabFilter';
 import {TopNavigation} from '../TopNavigation';
 import {WithdrawalCard} from './WithdrawalCard';
 import {TransactionCard} from './TransactionCard';
+import {ArrowLeftIcon} from '../../../assets/icon';
+import {MyCreditInfoCard} from './MyCreditInfoCard';
 import {EmptyState} from '../EmptyState/EmptyState';
 import {color, font, typography} from '../../../theme';
 import {useIapHook} from '../../../hooks/use-iap.hook';
 import {useCreditHook} from '../../../hooks/use-credit.hook';
-import {ArrowLeftIcon, CoinDIcon} from '../../../assets/icon';
 import {useWithdrawHook} from '../../../hooks/use-withdraw.hook';
 import {profileStorage, storage} from '../../../hooks/use-storage.hook';
 import {ListWithdrawPropsType} from '../../../interface/withdraw.interface';
@@ -33,12 +37,14 @@ interface TopUpCreditProps {
   onPressGoBack: () => void;
   onPressWithdrawal: () => void;
   goToDetailTransaction: (data: TransactionHistoryPropsType) => void;
+  goToCredit: (type: number) => void;
 }
 
 export const TopUpCreditContent: React.FC<TopUpCreditProps> = ({
   onPressGoBack,
   goToDetailTransaction,
   onPressWithdrawal,
+  goToCredit,
 }) => {
   const {t} = useTranslation();
   const {creditCount, getCreditCount, getTransactionHistory} = useCreditHook();
@@ -128,13 +134,22 @@ export const TopUpCreditContent: React.FC<TopUpCreditProps> = ({
     purchaseProduct(productId);
   };
 
+  const resultDataDropdown = (selectedMenu: DataDropDownNumberType) => {
+    const value = selectedMenu.value;
+    goToCredit(value);
+  };
+
   return (
     <View style={styles.root}>
       <TopNavigation.Type1
+        type="user detail"
         title={t('TopUp.Title')}
         leftIcon={<ArrowLeftIcon />}
         itemStrokeColor={color.Neutral[10]}
         leftIconAction={onPressGoBack}
+        dropdownData={dataCreditDropdown}
+        resultDataDropdown={resultDataDropdown}
+        dropdownStyle={{marginRight: 0}}
       />
 
       <ScrollView
@@ -152,18 +167,11 @@ export const TopUpCreditContent: React.FC<TopUpCreditProps> = ({
           </Text>
         </View>
 
-        <View style={styles.containerCoin}>
-          <Text style={[typography.Subtitle1, {color: color.Neutral[10]}]}>
-            {t('TopUp.MyCoin')}
-          </Text>
-          <View style={{flexDirection: 'row'}}>
-            <CoinDIcon />
-            <Gap width={widthPercentage(5)} />
-            <Text style={[typography.Heading6, {color: color.Neutral[10]}]}>
-              {toCurrency(creditCount, {withFraction: false})}
-            </Text>
-          </View>
-        </View>
+        <MyCreditInfoCard
+          creditCount={Number(creditCount)}
+          title1={t('TopUp.MyCoin')}
+          title2={t('TopUp.Estimation')}
+        />
 
         <Button
           label={t('TopUp.ButtonWithdraw')}
@@ -275,18 +283,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: heightPercentage(20),
     width: width * 0.9,
-  },
-  containerCoin: {
-    width: width * 0.9,
-    borderRadius: 4,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    borderWidth: heightPercentage(1),
-    borderColor: color.Dark[500],
-    paddingHorizontal: widthPercentage(20),
-    paddingVertical: heightPercentage(15),
-    marginVertical: heightPercentage(20),
   },
   containerListPrice: {
     width,

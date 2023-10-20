@@ -35,12 +35,17 @@ export const TopUpCreditScreen: React.FC = () => {
     navigation.navigate('DetailHistoryTransaction', {dataDetail});
   };
 
+  const goToCredit = (type: number) => {
+    navigation.navigate('Credit', {type});
+  };
+
   return (
     <View style={styles.root}>
       <TopUpCreditContent
         onPressGoBack={onPressGoBack}
         onPressWithdrawal={onPressWithdrawal}
         goToDetailTransaction={goToDetailTransaction}
+        goToCredit={goToCredit}
       />
     </View>
   );

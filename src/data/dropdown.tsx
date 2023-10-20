@@ -273,3 +273,8 @@ export const dataProfileDropdownBlocked: DataDropDownType[] = [
   {label: 'Dropdown.Profile.qr', value: '1', disabled: false},
   {label: 'Dropdown.Profile.unblock', value: '4', disabled: false},
 ];
+
+export const dataCreditDropdown: DataDropDownNumberType[] = [
+  {label: 'TopUp.Dropdown.TopUpCredit', value: 0},
+  {label: 'TopUp.Dropdown.CreditTransaction', value: 1},
+];

@@ -103,6 +103,7 @@ import {AlbumScreen} from '../screen/Album/Album';
 
 // TopUp
 import {TopUpCreditScreen} from '../screen/TopUpCredit/TopUpCredit';
+import {CreditScreen} from '../screen/TopUpCredit/CreditScreen';
 import {WithdrawalScreen} from '../screen/Withdrawal';
 import {NewBankAccountScreen} from '../screen/Withdrawal/NewBankAccount';
 import {VerifCodeWithdrawalScreen} from '../screen/Withdrawal/VerifCodeWithdrawal';
@@ -307,6 +308,9 @@ export type RootStackParams = {
   SearchScreen: undefined;
   TnCAndPP: undefined;
   TopUpCredit: undefined;
+  Credit: {
+    type: number;
+  };
   MusicianProfile: {
     id: string;
   };
@@ -584,6 +588,7 @@ export const RootStackScreen = () => (
     <RootStack.Screen name="Webview" component={WebviewPage} />
     <RootStack.Screen name="MusicPlayer" component={MusicPlayer} />
     <RootStack.Screen name="TopUpCredit" component={TopUpCreditScreen} />
+    <RootStack.Screen name="Credit" component={CreditScreen} />
     <RootStack.Screen
       name="DetailHistoryTransaction"
       component={DetailHistoryTransactionScreen}
