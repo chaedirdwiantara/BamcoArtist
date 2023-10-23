@@ -11,6 +11,7 @@ import {
 import {mvs} from 'react-native-size-matters';
 import {
   DropDownFilter,
+  EmptyStateFeed,
   Gap,
   ListCard,
   ModalConfirm,
@@ -71,6 +72,8 @@ import {reportingMenu} from '../../data/report';
 import {useVideoStore} from '../../store/video.store';
 import {useUploadImageHook} from '../../hooks/use-uploadImage.hook';
 import {userProfile} from '../../store/userProfile.store';
+import {ModalConfirmChoice} from '../../components/molecule/Modal/ModalConfirmChoice';
+import {useSettingHook} from '../../hooks/use-setting.hook';
 
 const {height} = Dimensions.get('screen');
 
@@ -78,7 +81,11 @@ type RenderItemProps = {
   item: PostList;
   index: number;
 };
-
+interface ModalPostState {
+  isExclusivePostModal: boolean;
+  isSetExclusiveSetting: boolean;
+  isBanned: boolean;
+}
 interface PostListProps extends DataExclusiveResponse {
   uuidMusician?: string;
 }
@@ -91,7 +98,7 @@ const PostListProfile: FC<PostListProps> = (props: PostListProps) => {
 
   const dataToExc = {coverImage, title, description};
 
-  const {setUriVideo} = useVideoStore();
+  const {uriVideo, setUriVideo} = useVideoStore();
   const {profileStore} = userProfile();
 
   const [recorder, setRecorder] = useState<string[]>([]);
@@ -118,6 +125,14 @@ const PostListProfile: FC<PostListProps> = (props: PostListProps) => {
   const [filterByValue, setFilterByValue] = useState<string>();
   const [categoryValue, setCategoryValue] = useState<string>();
   const [modalBanned, setModalBanned] = useState<boolean>(false);
+  const [showModalPost, setShowModalPost] = useState<ModalPostState>({
+    isExclusivePostModal: false,
+    isSetExclusiveSetting: false,
+    isBanned: false,
+  });
+  const [postChoice, setPostChoice] = useState<
+    'choiceA' | 'choiceB' | undefined
+  >();
 
   //* MUSIC HOOKS
   const [pauseModeOn, setPauseModeOn] = useState<boolean>(false);
@@ -160,8 +175,8 @@ const PostListProfile: FC<PostListProps> = (props: PostListProps) => {
   } = useShareHook();
 
   const {setDataVideo} = useUploadImageHook();
-
   const {creditCount, getCreditCount} = useCreditHook();
+  const {dataExclusiveContent, getExclusiveContent} = useSettingHook();
   const MyUuid = profileStorage()?.uuid;
 
   //* get data on mount this page
@@ -409,6 +424,70 @@ const PostListProfile: FC<PostListProps> = (props: PostListProps) => {
     setModalConfirm(false);
   };
 
+  const handleEmptyStateOnPress = () => {
+    if (profileStore?.data.isBanned) {
+      setShowModalPost({
+        isExclusivePostModal: false,
+        isSetExclusiveSetting: false,
+        isBanned: true,
+      });
+    } else {
+      setShowModalPost({
+        isExclusivePostModal: true,
+        isSetExclusiveSetting: false,
+        isBanned: false,
+      });
+      getExclusiveContent({uuid});
+    }
+  };
+
+  const handleCreatePostBackdrop = () => {
+    setShowModalPost({
+      isExclusivePostModal: false,
+      isSetExclusiveSetting: false,
+      isBanned: false,
+    });
+  };
+
+  const handleChoiceOnPress = (value: 'choiceA' | 'choiceB') => {
+    setPostChoice(value);
+    setShowModalPost({
+      isExclusivePostModal: false,
+      isSetExclusiveSetting: false,
+      isBanned: false,
+    });
+  };
+
+  const handleOnModalHide = () => {
+    if (postChoice === 'choiceA') {
+      uriVideo && setUriVideo(null);
+      setPostChoice(undefined);
+      navigation.navigate('CreatePost', {audience: 'Feed.Public'});
+    } else if (postChoice === 'choiceB') {
+      if (dataExclusiveContent === null) {
+        setPostChoice(undefined);
+        setShowModalPost({
+          isExclusivePostModal: false,
+          isSetExclusiveSetting: true,
+          isBanned: false,
+        });
+      } else {
+        uriVideo && setUriVideo(null);
+        setPostChoice(undefined);
+        navigation.navigate('CreatePost', {audience: 'Feed.Exclusive'});
+      }
+    }
+  };
+
+  const handleConfirmModalExclusive = () => {
+    setShowModalPost({
+      isExclusivePostModal: false,
+      isSetExclusiveSetting: false,
+      isBanned: false,
+    });
+    navigation.navigate('ExclusiveContentSetting', {type: 'navToCreatePost'});
+  };
+
   // SHARE LINK
   useEffect(() => {
     if (selectedSharePost) {
@@ -589,7 +668,11 @@ const PostListProfile: FC<PostListProps> = (props: PostListProps) => {
       ) : dataMain?.length === 0 && feedMessage === 'you not follow anyone' ? (
         <ListToFollowMusician />
       ) : (
-        <Text style={styles.emptyState}>{t('EmptyState.Musician')}</Text>
+        <EmptyStateFeed
+          text={t('EmptyState.Musician') || ''}
+          onPress={handleEmptyStateOnPress}
+          buttonCaption={t('Feed.EmptyStateButtonCaption') || ''}
+        />
       )}
       <ModalReport
         modalVisible={reportToast}
@@ -656,6 +739,37 @@ const PostListProfile: FC<PostListProps> = (props: PostListProps) => {
       {/* //? Banned user modal */}
       <ModalConfirm
         modalVisible={modalBanned}
+        title={`${t('Setting.PreventInteraction.Title')}`}
+        subtitle={`${t('Setting.PreventInteraction.Subtitle')}`}
+        yesText={`${t('Btn.Send')}`}
+        noText={`${t('Btn.Cancel')}`}
+        onPressClose={handleCloseBanModal}
+        onPressOk={handleOkBanModal}
+        textNavigate={`${t('Setting.PreventInteraction.TextNavigate')}`}
+        textOnPress={handleOkBanModal}
+      />
+      {/* //? Confirm what post want to make */}
+      <ModalConfirmChoice
+        modalVisible={showModalPost.isExclusivePostModal}
+        backdropOnPress={handleCreatePostBackdrop}
+        choiceA={'Post as Public Content'}
+        choiceB={'Post as Exclusive Content'}
+        choiceOnPress={handleChoiceOnPress}
+        onModalHide={handleOnModalHide}
+      />
+      <ModalConfirm
+        modalVisible={showModalPost.isSetExclusiveSetting}
+        title={t('Modal.ExclusiveContentConfirm.Title') || ''}
+        subtitle={t('Modal.ExclusiveContentConfirm.Body') || ''}
+        yesText={t('Modal.ExclusiveContentConfirm.ButtonOk') || ''}
+        noText={t('Modal.ExclusiveContentConfirm.ButtonCancel') || ''}
+        onPressClose={handleMaybeLater}
+        onPressOk={handleConfirmModalExclusive}
+      />
+
+      {/* //? Banned user modal */}
+      <ModalConfirm
+        modalVisible={showModalPost.isBanned}
         title={`${t('Setting.PreventInteraction.Title')}`}
         subtitle={`${t('Setting.PreventInteraction.Subtitle')}`}
         yesText={`${t('Btn.Send')}`}

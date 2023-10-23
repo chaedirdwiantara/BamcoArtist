@@ -445,7 +445,8 @@
       "Exclusive": "Exclusive",
       "Public": "Public"
     },
-    "NoMore": "No more feeds"
+    "NoMore": "No more feeds",
+    "EmptyStateButtonCaption":"Create New Post!"
   },
   "Event": {
     "Title": "Action",
@@ -1576,5 +1577,8 @@
     "SwipeUp": "Swipe Up To Beam",
     "TooFast": "You swipe to fast!",
     "EnjoyShow": "Let’s enjoy the show\nand take a rest for few second"
+  },
+  "DiscoverArtist":{
+    "Title":"Discover Artist"
   }
 }

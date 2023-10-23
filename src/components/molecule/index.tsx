@@ -24,6 +24,7 @@ import {EditPlaylistContent} from './PlaylistContent/EditPlaylist';
 import {EditProfile} from './ProfileContent/EditProfile';
 import {EmailContent} from './SettingContent/EmailContent';
 import {EmptyState} from './EmptyState/EmptyState';
+import EmptyStateFeed from './EmptyState/EmptyStateFeed';
 import EmptyStateHome from './EmptyState/EmptyStateHome';
 import EmptyStateAnalytic from './EmptyState/EmptyStateAnalytic';
 import {EmptyStateWithdraw} from './Withdrawal/EmptyStateWithdraw';
@@ -113,6 +114,7 @@ export {
   EditProfile,
   EmailContent,
   EmptyState,
+  EmptyStateFeed,
   EmptyStateHome,
   EmptyStateAnalytic,
   EmptyStateWithdraw,

@@ -88,7 +88,7 @@ const Device = () => {
     if (refCode) {
       setLinkData({
         uuid: profileStore.data.uuid,
-        QRCode: refCode,
+        QRCode: refCode.split('=')[0],
         deviceName: refCode.split('=')[1] ?? 'Unknown Device',
       });
     }

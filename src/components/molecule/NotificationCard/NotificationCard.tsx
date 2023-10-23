@@ -33,7 +33,8 @@ export const NotificationCard: React.FC<NotificationCardProps> = (
       keyExtractor={(_, index) => index.toString()}
       renderItem={({item}) => (
         <View style={styles.root}>
-          {/* {item.type === 'like' ? (
+          {/* '1 = bell / 2 = love' */}
+          {/* {item.type === '2' ? (
             <HeartIcon style={styles.icon} />
           ) : (
             <BellNotif style={styles.icon} />

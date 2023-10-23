@@ -12,6 +12,7 @@ import {
 import {mvs} from 'react-native-size-matters';
 import {
   DropDownFilter,
+  EmptyStateFeed,
   Gap,
   ListCard,
   ModalConfirm,
@@ -658,12 +659,8 @@ const PostListExclusive: FC<PostListProps> = (props: PostListProps) => {
           feedMessage === noPostYetMessage) ? (
         <>
           <Gap height={195} />
-          <EmptyState
+          <EmptyStateFeed
             text={t('EmptyState.Exclusive') || ''}
-            containerStyle={{
-              justifyContent: 'flex-start',
-              paddingTop: heightPercentage(24),
-            }}
             icon={<FriedEggIcon />}
           />
         </>

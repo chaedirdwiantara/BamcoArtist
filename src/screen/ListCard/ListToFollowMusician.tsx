@@ -13,7 +13,12 @@ import {heightResponsive} from '../../utils';
 
 const {height} = Dimensions.get('screen');
 
-const ListToFollowMusician = () => {
+interface ListToFollowMusicianProps {
+  hideCaption?: boolean;
+}
+
+const ListToFollowMusician = (props: ListToFollowMusicianProps) => {
+  const {hideCaption} = props;
   const {t} = useTranslation();
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
@@ -37,7 +42,9 @@ const ListToFollowMusician = () => {
 
   return (
     <>
-      <Text style={styles.textStyle}>{t('Musician.Label.Musicians')}</Text>
+      {!hideCaption && (
+        <Text style={styles.textStyle}>{t('Musician.Label.Musicians')}</Text>
+      )}
       <FlatList
         data={dataMusician}
         showsVerticalScrollIndicator={false}

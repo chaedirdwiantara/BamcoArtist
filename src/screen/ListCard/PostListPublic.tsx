@@ -12,6 +12,7 @@ import {
 import {mvs} from 'react-native-size-matters';
 import {
   DropDownFilter,
+  EmptyStateFeed,
   Gap,
   ListCard,
   ModalConfirm,
@@ -660,13 +661,7 @@ const PostListPublic: FC<PostListProps> = (props: PostListProps) => {
           feedMessage === noPostYetMessage) ? (
         <>
           <Gap height={Platform.OS === 'android' ? 195 : 145} />
-          <EmptyState
-            text={t('EmptyState.FollowMusician') || ''}
-            containerStyle={{
-              justifyContent: 'flex-start',
-              paddingTop: heightPercentage(24),
-            }}
-          />
+          <EmptyStateFeed text={t('EmptyState.FollowMusician') || ''} />
         </>
       ) : null}
       <ModalReport
