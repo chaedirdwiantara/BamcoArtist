@@ -445,7 +445,8 @@
       "Exclusive": "Exclusive",
       "Public": "Public"
     },
-    "NoMore": "No more feeds"
+    "NoMore": "No more feeds",
+    "EmptyStateButtonCaption":"Create New Post!"
   },
   "Event": {
     "Title": "Action",

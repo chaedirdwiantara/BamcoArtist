@@ -7,18 +7,22 @@ import {color} from '../../../theme';
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParams} from '../../../navigations';
+import {useTranslation} from 'react-i18next';
 
 interface EmptyStateFeedProps {
   text: string;
+  buttonCaption?: string;
   icon?: React.ReactNode;
+  onPress?: () => void;
 }
 
 const EmptyStateFeed: FC<EmptyStateFeedProps> = (
   props: EmptyStateFeedProps,
 ) => {
-  const {text, icon} = props;
+  const {text, buttonCaption, icon, onPress} = props;
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
+  const {t} = useTranslation();
 
   const buttonOnPress = () => {
     navigation.navigate('DiscoverArtist');
@@ -37,9 +41,9 @@ const EmptyStateFeed: FC<EmptyStateFeedProps> = (
       />
       <Gap height={24} />
       <Button
-        label="Discover Artist"
+        label={buttonCaption ?? t('DiscoverArtist.Title')}
         containerStyles={styles.buttonStyle}
-        onPress={buttonOnPress}
+        onPress={onPress ?? buttonOnPress}
       />
     </View>
   );

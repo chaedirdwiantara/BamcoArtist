@@ -444,7 +444,8 @@
       "Exclusive": "獨家",
       "Public": "公開"
     },
-    "NoMore": "沒有更多動態"
+    "NoMore": "沒有更多動態",
+    "EmptyStateButtonCaption":"Create New Post!"
   },
   "Event": {
     "Title": "活動",
