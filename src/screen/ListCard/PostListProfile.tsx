@@ -479,6 +479,15 @@ const PostListProfile: FC<PostListProps> = (props: PostListProps) => {
     }
   };
 
+  const handleConfirmModalExclusive = () => {
+    setShowModalPost({
+      isExclusivePostModal: false,
+      isSetExclusiveSetting: false,
+      isBanned: false,
+    });
+    navigation.navigate('ExclusiveContentSetting', {type: 'navToCreatePost'});
+  };
+
   // SHARE LINK
   useEffect(() => {
     if (selectedSharePost) {
@@ -755,7 +764,7 @@ const PostListProfile: FC<PostListProps> = (props: PostListProps) => {
         yesText={t('Modal.ExclusiveContentConfirm.ButtonOk') || ''}
         noText={t('Modal.ExclusiveContentConfirm.ButtonCancel') || ''}
         onPressClose={handleMaybeLater}
-        onPressOk={handleConfirmModal}
+        onPressOk={handleConfirmModalExclusive}
       />
 
       {/* //? Banned user modal */}
