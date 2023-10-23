@@ -1,5 +1,5 @@
-import React, {FC, useEffect, useState} from 'react';
-import {RefreshControl, StyleSheet, View} from 'react-native';
+import React, {FC, useCallback, useEffect, useState} from 'react';
+import {Linking, RefreshControl, StyleSheet, View} from 'react-native';
 import {heightPercentage, heightResponsive, widthResponsive} from '../../utils';
 import {FlashList} from '@shopify/flash-list';
 import MerchListCard from '../../components/molecule/ListCard/MerchListCard';
@@ -11,6 +11,10 @@ import {useInfiniteQuery} from 'react-query';
 import {MerchData} from '../../interface/event.interface';
 import {useTranslation} from 'react-i18next';
 import LoadingSpinner from '../../components/atom/Loading/LoadingSpinner';
+import {profileStorage} from '../../hooks/use-storage.hook';
+import {useFocusEffect} from '@react-navigation/native';
+import {getBookyayToken} from '../../service/refreshBookyayToken';
+import EmptyStateBookyay from '../../components/molecule/EmptyState/EmptyStateBookyay';
 type MerchListType = {
   type?: string;
   musicianId?: string;
@@ -71,6 +75,20 @@ const MerchList: FC<MerchListType> = props => {
     }
   };
 
+  useFocusEffect(
+    useCallback(() => {
+      getBookyayToken();
+    }, []),
+  );
+
+  const bookyayOrganizerToken = profileStorage()?.bookyayOrganizerToken;
+
+  const openAdminBookyay = () => {
+    return Linking.openURL(
+      `https://admin.bookyay.com/?token=${bookyayOrganizerToken}`,
+    );
+  };
+
   return (
     <>
       <FlashList
@@ -81,19 +99,29 @@ const MerchList: FC<MerchListType> = props => {
         onTouchEnd={loadMore}
         ListEmptyComponent={
           !isLoading && !isRefetching ? (
-            <EmptyState
-              icon={
-                <CrackEggIcon
-                  fill={Color.Dark[500]}
-                  width={widthResponsive(150)}
-                  height={heightResponsive(150)}
-                  style={styles.iconEmpty}
+            <>
+              {musicianId === profileStorage()?.uuid ? (
+                <EmptyStateBookyay
+                  text={t('Event.Merch.EmptyState') || ''}
+                  onPress={openAdminBookyay}
+                  buttonCaption={t('Event.Merch.BtnSell') || ''}
                 />
-              }
-              text={t('Event.Merch.ComingSoon.Title') || ''}
-              subtitle={t('Event.Merch.ComingSoon.Subtitle') || ''}
-              containerStyle={styles.containerEmpty}
-            />
+              ) : (
+                <EmptyState
+                  icon={
+                    <CrackEggIcon
+                      fill={Color.Dark[500]}
+                      width={widthResponsive(150)}
+                      height={heightResponsive(150)}
+                      style={styles.iconEmpty}
+                    />
+                  }
+                  text={t('Event.Merch.ComingSoon.Title') || ''}
+                  subtitle={t('Event.Merch.ComingSoon.Subtitle') || ''}
+                  containerStyle={styles.containerEmpty}
+                />
+              )}
+            </>
           ) : null
         }
         renderItem={({item, index}: any) => (
