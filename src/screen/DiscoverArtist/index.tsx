@@ -1,8 +1,8 @@
-import {Platform, SafeAreaView, StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import React from 'react';
 import {color} from '../../theme';
 import ListToFollowMusician from '../ListCard/ListToFollowMusician';
-import {Gap, TopNavigation} from '../../components';
+import {TopNavigation} from '../../components';
 import {useTranslation} from 'react-i18next';
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
