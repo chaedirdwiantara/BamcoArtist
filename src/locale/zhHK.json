@@ -445,7 +445,7 @@
       "Public": "公開"
     },
     "NoMore": "沒有更多動態",
-    "EmptyStateButtonCaption":"Create New Post!"
+    "EmptyStateButtonCaption": "Create New Post!"
   },
   "Event": {
     "Title": "活動",
@@ -471,7 +471,9 @@
       "ComingSoon": {
         "Title": "探索活動",
         "Subtitle": "當演唱會或活動開售門票時，你會在此看到"
-      }
+      },
+      "EmptyState": "唉呀！我哋唔搵到任何活動。\n您嘅活動數據會喺呢度顯示。",
+      "BtnSell": "開始賣門票！"
     },
     "Merch": {
       "Title": "商品",
@@ -486,7 +488,9 @@
       "ComingSoon": {
         "Title": "探索商品",
         "Subtitle": "當音樂人列出商品時，你會在此看到"
-      }
+      },
+      "EmptyState": "唉呀！我哋唔搵到任何商品。\n您嘅商品會喺呢度顯示。",
+      "BtnSell": "開始賣商品！"
     },
     "Dropdown": {
       "Category": {
@@ -1573,7 +1577,7 @@
     "TooFast": "滑動太快，請重新再試！",
     "EnjoyShow": "讓我們盡情享受表演！"
   },
-  "DiscoverArtist":{
-    "Title":"Discover Artist"
+  "DiscoverArtist": {
+    "Title": "Discover Artist"
   }
 }

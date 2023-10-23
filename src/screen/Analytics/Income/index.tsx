@@ -17,7 +17,6 @@ import {
   dropDownIncomeRange,
   dropDownIncomeType,
 } from '../../../data/dropdown';
-import {storage} from '../../../hooks/use-storage.hook';
 import BottomCard from './BottomCard';
 import {BarChart} from 'react-native-gifted-charts';
 import {useAnalyticsHook} from '../../../hooks/use-analytics.hook';
@@ -29,7 +28,6 @@ import {
 
 const Income = () => {
   const {t} = useTranslation();
-  const lang = storage.getString('lang');
 
   const {getIncome} = useAnalyticsHook();
 
@@ -209,12 +207,12 @@ const Income = () => {
         <View>
           {(selectedType.value === '1' || selectedType.value === '2') && (
             <BottomCard
-              type="tip"
+              type="beam"
               descAvg={selectedRange.value}
-              numberAvg={dataChart?.tipAvg || ''}
+              numberAvg={dataChart?.tipAvg || '0'}
               numberDiffsAvg={dataChart?.tipAvgCompare || ''}
               progressAvg={dataChart?.tipAvgProgress || 'same'}
-              numberEarned={dataChart?.tipEarned || ''}
+              numberEarned={dataChart?.tipEarned || '0'}
               numberDiffsEarned={dataChart?.tipEarnedCompare || ''}
               progressEarned={dataChart?.tipEarnedProgress || 'same'}
               descEarned={selectedRange.value}
@@ -225,10 +223,10 @@ const Income = () => {
             <BottomCard
               type="subscription"
               descAvg={selectedRange.value}
-              numberAvg={dataChart?.subsAvg || ''}
+              numberAvg={dataChart?.subsAvg || '0'}
               numberDiffsAvg={dataChart?.subsAvgCompare || ''}
               progressAvg={dataChart?.subsAvgProgress || 'same'}
-              numberEarned={dataChart?.subsEarned || ''}
+              numberEarned={dataChart?.subsEarned || '0'}
               numberDiffsEarned={dataChart?.subsEarnedCompare || ''}
               progressEarned={dataChart?.subsEarnedProgress || 'same'}
               descEarned={selectedRange.value}

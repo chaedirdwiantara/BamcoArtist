@@ -9,7 +9,7 @@ import {ArrowDownIcon, ArrowUpGreenIcon} from '../../../assets/icon';
 import {useTranslation} from 'react-i18next';
 
 interface BottomCardProps {
-  type: 'tip' | 'subscription';
+  type: 'beam' | 'subscription';
   numberAvg: string;
   numberDiffsAvg: string;
   descAvg: string;
@@ -77,7 +77,7 @@ const BottomCard = (props: BottomCardProps) => {
         <View
           style={[
             styles.iconContainer,
-            {backgroundColor: type === 'tip' ? '#7EF6AB' : '#F67DEB'},
+            {backgroundColor: type === 'beam' ? '#7EF6AB' : '#F67DEB'},
           ]}></View>
         <Gap width={widthResponsive(8)} />
         <Text style={styles.title}>{type}</Text>

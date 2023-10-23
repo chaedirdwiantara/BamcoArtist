@@ -1,5 +1,5 @@
-import React, {FC, useEffect, useState} from 'react';
-import {RefreshControl, StyleSheet, View} from 'react-native';
+import React, {FC, useCallback, useEffect, useState} from 'react';
+import {Linking, RefreshControl, StyleSheet, View} from 'react-native';
 import {heightPercentage, heightResponsive, widthResponsive} from '../../utils';
 import {FlashList} from '@shopify/flash-list';
 import MerchListCard from '../../components/molecule/ListCard/MerchListCard';
@@ -11,6 +11,10 @@ import {useInfiniteQuery} from 'react-query';
 import {MerchData} from '../../interface/event.interface';
 import {useTranslation} from 'react-i18next';
 import LoadingSpinner from '../../components/atom/Loading/LoadingSpinner';
+import EmptyStateBookyay from '../../components/molecule/EmptyState/EmptyStateBookyay';
+import {profileStorage} from '../../hooks/use-storage.hook';
+import {useFocusEffect} from '@react-navigation/native';
+import {getBookyayToken} from '../../service/refreshBookyayToken';
 type ConcertListType = {
   type?: string;
   musicianId?: string;
@@ -70,6 +74,20 @@ const ConcertList: FC<ConcertListType> = props => {
     }
   };
 
+  useFocusEffect(
+    useCallback(() => {
+      getBookyayToken();
+    }, []),
+  );
+
+  const bookyayOrganizerToken = profileStorage()?.bookyayOrganizerToken;
+
+  const openAdminBookyay = () => {
+    return Linking.openURL(
+      `https://admin.bookyay.com/?token=${bookyayOrganizerToken}`,
+    );
+  };
+
   return (
     <>
       <FlashList
@@ -80,19 +98,29 @@ const ConcertList: FC<ConcertListType> = props => {
         onTouchEnd={loadMore}
         ListEmptyComponent={
           !isLoading && !isRefetching ? (
-            <EmptyState
-              icon={
-                <CrackEggIcon
-                  fill={Color.Dark[500]}
-                  width={widthResponsive(150)}
-                  height={heightResponsive(150)}
-                  style={styles.iconEmpty}
+            <>
+              {musicianId === profileStorage()?.uuid ? (
+                <EmptyStateBookyay
+                  text={t('Event.Concert.EmptyState') || ''}
+                  onPress={openAdminBookyay}
+                  buttonCaption={t('Event.Concert.BtnSell') || ''}
                 />
-              }
-              text={t('Event.Concert.ComingSoon.Title') || ''}
-              subtitle={t('Event.Concert.ComingSoon.Subtitle') || ''}
-              containerStyle={styles.containerEmpty}
-            />
+              ) : (
+                <EmptyState
+                  icon={
+                    <CrackEggIcon
+                      fill={Color.Dark[500]}
+                      width={widthResponsive(150)}
+                      height={heightResponsive(150)}
+                      style={styles.iconEmpty}
+                    />
+                  }
+                  text={t('Event.Concert.ComingSoon.Title') || ''}
+                  subtitle={t('Event.Concert.ComingSoon.Subtitle') || ''}
+                  containerStyle={styles.containerEmpty}
+                />
+              )}
+            </>
           ) : null
         }
         renderItem={({item, index}: any) => (

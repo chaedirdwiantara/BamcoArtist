@@ -446,7 +446,7 @@
       "Public": "Public"
     },
     "NoMore": "No more feeds",
-    "EmptyStateButtonCaption":"Create New Post!"
+    "EmptyStateButtonCaption": "Create New Post!"
   },
   "Event": {
     "Title": "Action",
@@ -472,7 +472,9 @@
       "ComingSoon": {
         "Title": "Discover Ticket",
         "Subtitle": "When artists list ticket, you’ll see them here"
-      }
+      },
+      "EmptyState": "Oops! We couldn't find any of your Event.\nYour event data will be displayed here.",
+      "BtnSell": "Start Selling Ticket!"
     },
     "Merch": {
       "Title": "Merch",
@@ -487,7 +489,9 @@
       "ComingSoon": {
         "Title": "Discover Merchandise",
         "Subtitle": "When artist list merchandise, you’ll see them here"
-      }
+      },
+      "EmptyState": "Oops! We couldn't find any of your merchandise.\nYour merchandise will be displayed here.",
+      "BtnSell": "Start Selling Merch!"
     },
     "Dropdown": {
       "Category": {
@@ -1578,7 +1582,7 @@
     "TooFast": "You swipe to fast!",
     "EnjoyShow": "Let’s enjoy the show\nand take a rest for few second"
   },
-  "DiscoverArtist":{
-    "Title":"Discover Artist"
+  "DiscoverArtist": {
+    "Title": "Discover Artist"
   }
 }
