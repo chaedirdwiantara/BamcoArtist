@@ -20,12 +20,13 @@ export type WordReplacerType = {
 
 export type ListNotificationData = {
   id: string;
-  notifImage: null | string;
+  notifImage: string[];
   content: string;
   action: string;
   isRead: number;
   createdAt: string;
   wordReplacer: WordReplacerType[];
+  type: string;
 };
 
 export type ListNotificationResponseType = {

@@ -51,13 +51,6 @@ const Explore = (props: ExploreProps) => {
   const {listMood, getListMoodPublic, listGenre, getListGenrePublic} =
     useSettingHook();
   const {getSearchPlaylists} = useSearchHook();
-  const {useEventHome} = useEventHook();
-
-  const {
-    data: dataEvent,
-    isLoading: isLoadingEvent,
-    refetch: refetchEvent,
-  } = useEventHome();
 
   const isLogin = storage.getBoolean('isLogin');
   const [selectedIndexSong, setSelectedIndexSong] = useState(-0);
@@ -72,7 +65,6 @@ const Explore = (props: ExploreProps) => {
     listGenre.length === 0 && getListGenrePublic();
     refetchPlaylist();
     getListComingSoon();
-    refetchEvent();
   }, [refreshing]);
 
   // Triggering when click love on the same song in top & new song tab
@@ -150,12 +142,7 @@ const Explore = (props: ExploreProps) => {
           onPress={() => goToListMusic('Coming Soon', 'album')}
           onPressImage={(name, id) => goToDetailAlbum(name, id)}
         />
-      ) : (
-        <EmptyStateHome
-          title={t('Home.ComingSoon.Title')}
-          onPress={() => goToListMusic('Coming Soon', 'album')}
-        />
-      )}
+      ) : null}
       <Gap height={heightPercentage(20)} />
       {/* End of Coming Soon */}
       {/* Tab Song */}
@@ -188,23 +175,15 @@ const Explore = (props: ExploreProps) => {
       </View>
       {/* End of Tab Song */}
       <Gap height={heightPercentage(20)} />
-      {/* Event List */}
-      <View style={[styles.containerContent]}>
-        <TabFilter.Type3
-          filterData={[{filterName: 'Event.Live'}]}
-          onPress={() => null}
-          selectedIndex={0}
-          translation={true}
-        />
-        <EventList dataEvent={dataEvent?.data} isLoading={isLoadingEvent} />
-      </View>
-      {/* End of Tab Event List */}
+
       {/* Playlist */}
-      <ListPlaylistHome
-        title={t('Home.Playlist.Title')}
-        data={dataPlaylist?.data}
-        onPress={() => navigation.navigate('ListPlaylist')}
-      />
+      {dataPlaylist?.data && dataPlaylist?.data.length > 0 ? (
+        <ListPlaylistHome
+          title={t('Home.Playlist.Title')}
+          data={dataPlaylist?.data}
+          onPress={() => navigation.navigate('ListPlaylist')}
+        />
+      ) : null}
       {/* End of Playlist */}
 
       <Gap height={heightPercentage(40)} />
