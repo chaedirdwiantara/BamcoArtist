@@ -1228,7 +1228,8 @@
       "Detail": {
         "Title": "Transaction Details",
         "StatusInfo": "Credits added successfully!",
-        "ReferenceNumber": "Reference Number",
+        "TransactionID": "Transaction ID",
+        "ReferenceID": "Reference ID",
         "Status": "Status",
         "Success": "Success",
         "Failed": "Failed",

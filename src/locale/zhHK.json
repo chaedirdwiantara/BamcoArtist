@@ -1226,7 +1226,8 @@
       "Detail": {
         "Title": "交易詳情",
         "StatusInfo": "已成功充值！",
-        "ReferenceNumber": "參考編號",
+        "TransactionID": "Transaction ID",
+        "ReferenceID": "Reference ID",
         "Status": "狀態",
         "Success": "成功",
         "Failed": "失敗",

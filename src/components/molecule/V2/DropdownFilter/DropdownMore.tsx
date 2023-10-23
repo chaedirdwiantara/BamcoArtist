@@ -11,7 +11,10 @@ import React, {useEffect, useState} from 'react';
 import {IconMore} from '../../../atom';
 import {widthResponsive} from '../../../../utils';
 import FilterModal from './modalFilter';
-import {DataDropDownType} from '../../../../data/dropdown';
+import {
+  DataDropDownNumberType,
+  DataDropDownType,
+} from '../../../../data/dropdown';
 import {ms, mvs} from 'react-native-size-matters';
 
 const {StatusBarManager} = NativeModules;
@@ -25,7 +28,7 @@ interface DropdownV2Props {
   selectedUserUuid?: (uuid: string) => void;
   selectedMenu: (data: DataDropDownType) => void;
   selectedUserName?: (name: string) => void;
-  dataFilter: DataDropDownType[];
+  dataFilter: DataDropDownType[] | DataDropDownNumberType[];
   containerStyle?: ViewStyle;
   iconContainerStyle?: ViewStyle;
   compWitdth?: number;
