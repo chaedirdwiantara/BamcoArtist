@@ -516,12 +516,12 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
         <View style={styles.containerOverview}>
           {listOverviewCard.map((item, index) => {
             const newData = [
+              dataIncome?.totalIncome,
               dataFansPost?.totalFans,
               dataFansPost?.totalPublicPost,
               dataFansPost?.totalExclusivePost,
               dataSongAlbum?.countAlbumReleased,
               dataSongAlbum?.countSong,
-              dataIncome?.totalIncome,
             ];
             return (
               <OverviewCard
@@ -529,7 +529,7 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
                 amount={newData[index] || 0}
                 path={item.path}
                 title={t(item.title)}
-                type={item.id === 1 || item.id === 2 ? 'black' : 'white'}
+                type={item.id === 2 || item.id === 3 ? 'black' : 'white'}
               />
             );
           })}
