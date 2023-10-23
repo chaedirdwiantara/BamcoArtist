@@ -74,6 +74,8 @@ import {useAnalyticsHook} from '../hooks/use-analytics.hook';
 import {UploadMusicSection} from '../components/molecule/UploadMusic';
 import {randomString} from '../utils/randomString';
 import ShowMoreAnalytics from '../components/molecule/ShowMoreAnalytics';
+import EventList from './ListCard/EventList';
+import {useEventHook} from '../hooks/use-event.hook';
 
 type OnScrollEventHandler = (
   event: NativeSyntheticEvent<NativeScrollEvent>,
@@ -108,6 +110,12 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
   const {creditCount, getCreditCount} = useCreditHook();
   const {dataExclusiveContent, getExclusiveContent} = useSettingHook();
   const {getIncome} = useAnalyticsHook();
+  const {useEventHome} = useEventHook();
+  const {
+    data: dataEvent,
+    isLoading: isLoadingEvent,
+    refetch: refetchEvent,
+  } = useEventHome();
 
   const {uriVideo, setUriVideo} = useVideoStore();
 
@@ -171,6 +179,7 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
     refetchTotalSongAlbum();
     refetchTotalFansPost();
     refetchIncome();
+    refetchEvent();
     setTimeout(() => {
       setRefreshing(false);
     }, 1000);
@@ -495,7 +504,17 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
           </View>
         )}
 
-        <Gap height={20} />
+        {/* Event List */}
+        <View style={[styles.containerContent]}>
+          <TabFilter.Type3
+            filterData={[{filterName: 'Event.Live'}]}
+            onPress={() => null}
+            selectedIndex={0}
+            translation={true}
+          />
+          <EventList dataEvent={dataEvent?.data} isLoading={isLoadingEvent} />
+        </View>
+        {/* End of Tab Event List */}
 
         <View style={styles.overviewContainer}>
           <Text style={styles.titleOverview}>
