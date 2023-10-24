@@ -23,7 +23,11 @@
     "Required": "Required",
     "Dismiss": "Dismiss",
     "BlockSucceed": "You've been blocked",
-    "Topup": "Top Up"
+    "Topup": "Top Up",
+    "BeamedYou": "Beamed you ",
+    "StartSub": "Subscribed for ",
+    "Appreciate": "Appreciate!",
+    "Appreciated": "Appreciated!"
   },
   "Onboarding": {
     "Step1": {
@@ -1204,8 +1208,8 @@
     "Released": "Your Feed is currently empty. Upload Songs Now!",
     "Musician": "Oops! It’s seems you don’t have any post, your post will displayed here. \nLet’s create a new post!",
     "Revenue": {
-      "Tips": "You currently haven't received any Credits. Create content now!",
-      "Subs": "You currently do not have any Fan Subscriptions. Create exclusive content now!"
+      "Tips": "You haven't received any Beams from your fans. Create content to encourage receiving some Beams.",
+      "Subs": "You haven't received any subscriptions from your fans. Create exclusive content to earn fans subscriptions."
     }
   },
   "Guest": {
@@ -1270,7 +1274,7 @@
       "CreditTransaction": "Credit Transaction"
     },
     "Credit": "Credit",
-    "Estimation": "Estimation"
+    "Estimation": "Fiat Money"
   },
   "Withdrawal": {
     "Title": "Withdraw",

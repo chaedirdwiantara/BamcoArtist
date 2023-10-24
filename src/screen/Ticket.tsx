@@ -36,7 +36,9 @@ export const TicketScreen: React.FC = () => {
 
   const bookyayToken = profileStorage()?.bookyayToken;
   const bookyayOrganizerToken = profileStorage()?.bookyayOrganizerToken;
-  const ticketUrl = `https://m.bookyay.com/items/product?clause=product_5629499535000004&token=${bookyayToken}`;
+  const ticketUrl = `https://m.bookyay.com/items/event?clause=event_2000012&token=${bookyayToken}`;
+  // const ticketUrl = `https://m.bookyay.com/items/event?clause=event_1000031&token=${bookyayToken}`;
+  // const ticketUrl = `https://uat.yeah-yeah.com/items/product?clause=product_5629499535000004&token=${bookyayToken}`;
 
   // go to web admin bookyay and auto login to the current account
   const openAdminBookyay = () => {

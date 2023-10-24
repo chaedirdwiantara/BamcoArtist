@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {StyleSheet, View, Text, ScrollView} from 'react-native';
+import {StyleSheet, View, Text, ScrollView, RefreshControl} from 'react-native';
 import {useQuery} from 'react-query';
 import {useTranslation} from 'react-i18next';
 import {mvs} from 'react-native-size-matters';
@@ -32,6 +32,8 @@ import {profileStorage, storage} from '../../../hooks/use-storage.hook';
 import {ListWithdrawPropsType} from '../../../interface/withdraw.interface';
 import {dateFormatSubscribe, dateLongMonth} from '../../../utils/date-format';
 import {TransactionHistoryPropsType} from '../../../interface/credit.interface';
+import ListTips from '../Revenue/ListTips';
+import ListSubs from '../Revenue/ListSubs';
 
 interface TopUpCreditProps {
   onPressGoBack: () => void;
@@ -76,10 +78,12 @@ export const TopUpCreditContent: React.FC<TopUpCreditProps> = ({
     [],
   );
   const [filter] = useState([
-    {filterName: 'TopUp.Filter.Buy'},
-    {filterName: 'TopUp.Filter.Transaction'},
+    {filterName: 'Setting.Tips.Tab.Donation'},
+    {filterName: 'Setting.Tips.Tab.Subs'},
     {filterName: 'TopUp.Filter.Withdrawal'},
   ]);
+  const [touchEnd, setTouchEnd] = useState<boolean>(false);
+  const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
 
   useFocusEffect(
     useCallback(() => {
@@ -139,6 +143,22 @@ export const TopUpCreditContent: React.FC<TopUpCreditProps> = ({
     goToCredit(value);
   };
 
+  useEffect(() => {
+    if (touchEnd) setTouchEnd(false);
+  }, [touchEnd]);
+
+  useEffect(() => {
+    if (isRefreshing) setIsRefreshing(false);
+  }, [isRefreshing]);
+
+  const isCloseToBottom = ({layoutMeasurement, contentOffset, contentSize}) => {
+    const paddingToBottom = 20;
+    return (
+      layoutMeasurement.height + contentOffset.y >=
+      contentSize.height - paddingToBottom
+    );
+  };
+
   return (
     <View style={styles.root}>
       <TopNavigation.Type1
@@ -155,7 +175,23 @@ export const TopUpCreditContent: React.FC<TopUpCreditProps> = ({
 
       <ScrollView
         contentContainerStyle={styles.containerScrollView}
-        showsVerticalScrollIndicator={false}>
+        showsVerticalScrollIndicator={false}
+        onScroll={({nativeEvent}) => {
+          if (isCloseToBottom(nativeEvent)) {
+            setTouchEnd(true);
+          }
+        }}
+        scrollEventThrottle={100}
+        refreshControl={
+          <RefreshControl
+            refreshing={isRefreshing}
+            onRefresh={() => setIsRefreshing(true)}
+            onLayout={e => console.log(e.nativeEvent)}
+            tintColor="transparent"
+            colors={['transparent']}
+            style={{backgroundColor: 'transparent'}}
+          />
+        }>
         <View style={{justifyContent: 'center', alignItems: 'center'}}>
           <Text style={[typography.Subtitle1, styles.text]}>
             {t('TopUp.Subtitle1')}
@@ -189,55 +225,10 @@ export const TopUpCreditContent: React.FC<TopUpCreditProps> = ({
           translation={true}
         />
 
-        {filter[selectedIndex].filterName === 'TopUp.Filter.Buy' ? (
-          <View style={styles.containerListPrice}>
-            {iapProduct
-              .sort((a, b) => parseInt(a.price) - parseInt(b.price))
-              .map((val, i) => (
-                <View key={i} style={styles.padding}>
-                  <CoinCard
-                    productId={val.productId}
-                    price={val.localizedPrice}
-                    onPress={() => onPressCardCoin(val.productId)}
-                  />
-                </View>
-              ))}
-            <View style={styles.padding}>
-              <CoinCard
-                productId={''}
-                price={''}
-                initialCoin={''}
-                bonusCoin={''}
-                showIconCoin={false}
-                containerStyle={{backgroundColor: color.Dark[800]}}
-              />
-            </View>
-          </View>
-        ) : filter[selectedIndex].filterName === 'TopUp.Filter.Transaction' ? (
-          <>
-            {isLoading ? null : dataHistory && dataHistory.data.length > 0 ? (
-              <View style={styles.containerContent}>
-                {dataHistory &&
-                  dataHistory.data.map((val, i) => (
-                    <TransactionCard
-                      key={i}
-                      title={t('TopUp.Transaction.SuccessPurchased', {
-                        credit: toCurrency(val.credit, {withFraction: false}),
-                      })}
-                      date={dateLongMonth(val.createdAt)}
-                      onPress={() => goToDetailTransaction(val)}
-                    />
-                  ))}
-              </View>
-            ) : (
-              <EmptyState
-                text={t('TopUp.EmptyState.Transaction') || ''}
-                hideIcon={true}
-                containerStyle={styles.containerEmpty}
-                textStyle={styles.emptyText}
-              />
-            )}
-          </>
+        {filter[selectedIndex].filterName === 'Setting.Tips.Tab.Donation' ? (
+          <ListTips touchEnd={touchEnd} isRefreshing={isRefreshing} />
+        ) : filter[selectedIndex].filterName === 'Setting.Tips.Tab.Subs' ? (
+          <ListSubs touchEnd={touchEnd} isRefreshing={isRefreshing} />
         ) : (
           <>
             {listWithdrawal.length > 0 ? (
@@ -315,7 +306,7 @@ const styles = StyleSheet.create({
   },
   containerEmpty: {
     alignSelf: 'center',
-    marginTop: mvs(120),
+    marginTop: mvs(80),
   },
   emptyText: {
     fontFamily: font.InterRegular,

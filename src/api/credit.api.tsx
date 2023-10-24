@@ -211,7 +211,15 @@ export const liveTipping = async (props?: LiveTippingParams): Promise<any> => {
     method: 'POST',
     data: props,
   });
-  console.log({data});
+
+  return data;
+};
+
+export const appreciateFans = async (id?: string): Promise<any> => {
+  const {data} = await SsuAPI().request<any>({
+    url: `contribution/${id}/send-appreciate`,
+    method: 'POST',
+  });
 
   return data;
 };

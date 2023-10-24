@@ -23,10 +23,10 @@ export const menuSetting: {text: string; value: string}[] = [
     text: 'Setting.Shipping.Title',
     value: 'Shipping Information',
   },
-  {
-    text: 'Setting.Revenue.Title',
-    value: 'Revenue',
-  },
+  // {
+  //   text: 'Setting.Revenue.Title',
+  //   value: 'Revenue',
+  // },
   {
     text: 'Setting.Tips.Title',
     value: 'DonationAndSubscription',
