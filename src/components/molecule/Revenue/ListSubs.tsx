@@ -1,7 +1,7 @@
-import {View, Text, ScrollView, RefreshControl, StyleSheet} from 'react-native';
+import {View, StyleSheet} from 'react-native';
 import React, {useEffect, useState} from 'react';
-import {useInfiniteQuery} from 'react-query';
-import {getListRevenue} from '../../../api/credit.api';
+import {useInfiniteQuery, useMutation} from 'react-query';
+import {appreciateFans, getListRevenue} from '../../../api/credit.api';
 import {
   heightPercentage,
   heightResponsive,
@@ -15,10 +15,27 @@ import Color from '../../../theme/Color';
 import {mvs} from 'react-native-size-matters';
 import {font} from '../../../theme';
 import {RevenueCard} from '../SettingContent/RevenueCard';
+import {EmptyState} from '../EmptyState/EmptyState';
+import {
+  ListTipsDataType,
+  TipsDataType,
+} from '../../../interface/credit.interface';
+import {Gap, SsuToast} from '../../atom';
+import {TickCircleIcon} from '../../../assets/icon';
+import Typography from '../../../theme/Typography';
+import {Text} from 'react-native';
 
-const ListSubs: React.FC = () => {
+interface ListSubsProps {
+  touchEnd: boolean;
+  isRefreshing: boolean;
+}
+
+const ListSubs: React.FC<ListSubsProps> = ({touchEnd, isRefreshing}) => {
   const {t} = useTranslation();
   const [listSubs, setListSubs] = useState<any>([]);
+  const [toastVisible, setToastVisible] = useState<boolean>(false);
+  const [textError, setTextError] = useState<string>('');
+
   const {
     data: dataSubs,
     refetch,
@@ -46,6 +63,14 @@ const ListSubs: React.FC = () => {
     },
   );
 
+  useEffect(() => {
+    if (touchEnd) loadMore();
+  }, [touchEnd]);
+
+  useEffect(() => {
+    if (isRefreshing) refetch();
+  }, [isRefreshing]);
+
   const loadMore = () => {
     if (hasNextPage) {
       fetchNextPage();
@@ -54,29 +79,62 @@ const ListSubs: React.FC = () => {
 
   useEffect(() => {
     if (dataSubs !== undefined) {
-      setListSubs(dataSubs?.pages?.map((page: any) => page.data).flat() ?? []);
+      setListSubs(
+        dataSubs?.pages?.map((page: ListTipsDataType) => page.data).flat() ??
+          [],
+      );
     }
   }, [dataSubs]);
 
+  const setAppreaciate = useMutation({
+    mutationKey: ['appreaciate-subs'],
+    mutationFn: appreciateFans,
+    onSuccess(res, id: string) {
+      if (res?.code === 200) {
+        handleUpdateList(id, 1);
+      } else {
+        handleUpdateList(id, 0);
+        setTextError(res?.message);
+        setToastVisible(true);
+      }
+    },
+    onError(e: any, id) {
+      handleUpdateList(id, 0);
+      setTextError(e?.response?.data?.message);
+      setTimeout(() => {
+        setToastVisible(true);
+      }, 500);
+    },
+  });
+
+  const handleAppreaciate = (id: string) => {
+    handleUpdateList(id, 1);
+
+    setAppreaciate.mutate(id);
+  };
+
+  const handleUpdateList = (id: string, appreciate: number) => {
+    const newArray: TipsDataType[] = listSubs.map((v: TipsDataType) => {
+      if (v.id === id) {
+        return {
+          ...v,
+          appreciate: appreciate,
+        };
+      }
+
+      return v;
+    });
+
+    setListSubs(newArray);
+  };
+
   return (
     <>
-      <ScrollView
-        showsVerticalScrollIndicator={false}
+      <View
         style={{
           marginBottom: heightResponsive(25),
           paddingHorizontal: widthPercentage(6),
-        }}
-        onTouchEnd={loadMore}
-        refreshControl={
-          <RefreshControl
-            refreshing={isRefetching && !isFetchingNextPage}
-            onRefresh={refetch}
-            onLayout={e => console.log(e.nativeEvent)}
-            tintColor="transparent"
-            colors={['transparent']}
-            style={{backgroundColor: 'transparent'}}
-          />
-        }>
+        }}>
         {(isRefetching || isLoading) && !isFetchingNextPage && (
           <View style={styles.loadingContainer}>
             <LoadingSpinner />
@@ -87,15 +145,23 @@ const ListSubs: React.FC = () => {
           listSubs?.map((val: any, index: number) => (
             <RevenueCard
               key={index}
+              id={val.id}
               username={val.fromUserName}
               name={val.fromFullName}
               avatarUri={val.fromUserImage}
               credit={val.credit}
               time={val.timeAgo}
+              isAppreciate={val.appreciate}
+              onClickAppreciate={handleAppreaciate}
             />
           ))
         ) : (
-          <Text style={styles.emptyText}>{t('EmptyState.Revenue.Subs')}</Text>
+          <EmptyState
+            text={t('EmptyState.Revenue.Subs') || ''}
+            hideIcon={true}
+            containerStyle={styles.containerEmpty}
+            textStyle={styles.emptyText}
+          />
         )}
 
         {isFetchingNextPage && (
@@ -103,7 +169,26 @@ const ListSubs: React.FC = () => {
             <LoadingSpinner />
           </View>
         )}
-      </ScrollView>
+      </View>
+
+      <SsuToast
+        modalVisible={toastVisible}
+        onBackPressed={() => setToastVisible(false)}
+        children={
+          <View style={[styles.toastContainer]}>
+            <TickCircleIcon
+              width={widthPercentage(21)}
+              height={heightPercentage(20)}
+              stroke={Color.Neutral[10]}
+            />
+            <Gap width={widthPercentage(7)} />
+            <Text style={[Typography.Button2, {color: Color.Neutral[10]}]}>
+              {textError}
+            </Text>
+          </View>
+        }
+        modalStyle={{marginHorizontal: widthPercentage(24)}}
+      />
     </>
   );
 };
@@ -179,12 +264,26 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  containerEmpty: {
+    alignSelf: 'center',
+    marginTop: mvs(80),
+  },
   emptyText: {
     fontFamily: font.InterRegular,
-    fontSize: mvs(12),
+    fontSize: mvs(13),
     textAlign: 'center',
     color: Color.Neutral[10],
-    lineHeight: mvs(14),
-    marginTop: heightResponsive(200),
+    lineHeight: mvs(16),
+  },
+  toastContainer: {
+    width: '100%',
+    position: 'absolute',
+    bottom: heightPercentage(22),
+    height: heightPercentage(36),
+    backgroundColor: Color.Error[500],
+    paddingHorizontal: widthPercentage(12),
+    borderRadius: 4,
+    flexDirection: 'row',
+    alignItems: 'center',
   },
 });

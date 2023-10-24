@@ -36,7 +36,9 @@ export const MerchScreen: React.FC = () => {
 
   const bookyayToken = profileStorage()?.bookyayToken;
   const bookyayOrganizerToken = profileStorage()?.bookyayOrganizerToken;
-  const merchantUrl = `https://m.bookyay.com/items/product?clause=product_5000001&token=${bookyayToken}`;
+  const merchantUrl = `https://m.bookyay.com/items/product?clause=product_2000009&token=${bookyayToken}`;
+  // const merchantUrl = `https://m.bookyay.com/items/product?clause=product_1000017&token=${bookyayToken}`;
+  // const merchantUrl = `https://uat.yeah-yeah.com/items/product?clause=product_1000017&token=${bookyayToken}`;
 
   // go to web admin bookyay and auto login to the current account
   const openAdminBookyay = () => {

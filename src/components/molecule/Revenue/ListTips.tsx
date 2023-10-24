@@ -1,7 +1,7 @@
-import {View, ScrollView, RefreshControl, StyleSheet, Text} from 'react-native';
+import {View, StyleSheet, Text} from 'react-native';
 import React, {useEffect, useState} from 'react';
-import {useInfiniteQuery} from 'react-query';
-import {getListRevenue} from '../../../api/credit.api';
+import {useInfiniteQuery, useMutation} from 'react-query';
+import {appreciateFans, getListRevenue} from '../../../api/credit.api';
 import {
   heightPercentage,
   heightResponsive,
@@ -19,10 +19,22 @@ import {
   TipsDataType,
 } from '../../../interface/credit.interface';
 import {RevenueCard} from '../SettingContent/RevenueCard';
+import {EmptyState} from '../EmptyState/EmptyState';
+import {Gap, SsuToast} from '../../atom';
+import {TickCircleIcon} from '../../../assets/icon';
+import Typography from '../../../theme/Typography';
 
-const ListTips: React.FC = () => {
+interface ListTipsProps {
+  touchEnd: boolean;
+  isRefreshing: boolean;
+}
+
+const ListTips: React.FC<ListTipsProps> = ({touchEnd, isRefreshing}) => {
   const {t} = useTranslation();
   const [listTips, setListTips] = useState<TipsDataType[]>([]);
+  const [toastVisible, setToastVisible] = useState<boolean>(false);
+  const [textError, setTextError] = useState<string>('');
+
   const {
     data: dataTips,
     refetch,
@@ -31,27 +43,33 @@ const ListTips: React.FC = () => {
     fetchNextPage,
     isFetchingNextPage,
     hasNextPage,
-  } = useInfiniteQuery(
-    [`/list-tips=`],
-    ({pageParam = 1}) =>
+  } = useInfiniteQuery({
+    queryKey: [`/list-tips`],
+    queryFn: ({pageParam = 1}) =>
       getListRevenue({
         page: pageParam,
         perPage: 10,
         filterValue: 2,
       }),
-    {
-      getNextPageParam: lastPage => {
-        if (lastPage?.meta?.TotalPage >= lastPage?.meta?.Page) {
-          const nextPage = lastPage?.meta?.Page + 1;
-          return nextPage;
-        }
-        return null;
-      },
+    getNextPageParam: lastPage => {
+      if (lastPage?.meta?.TotalPage >= lastPage?.meta?.Page) {
+        const nextPage = lastPage?.meta?.Page + 1;
+        return nextPage;
+      }
+      return null;
     },
-  );
+  });
+
+  useEffect(() => {
+    if (touchEnd) loadMore();
+  }, [touchEnd]);
+
+  useEffect(() => {
+    if (isRefreshing) refetch();
+  }, [isRefreshing]);
 
   const loadMore = () => {
-    if (hasNextPage) {
+    if (hasNextPage && !isFetchingNextPage) {
       fetchNextPage();
     }
   };
@@ -65,25 +83,55 @@ const ListTips: React.FC = () => {
     }
   }, [dataTips]);
 
+  const setAppreaciate = useMutation({
+    mutationKey: ['appreaciate-beam'],
+    mutationFn: appreciateFans,
+    onSuccess(res, id: string) {
+      if (res?.code === 200) {
+        handleUpdateList(id, 1);
+      } else {
+        handleUpdateList(id, 0);
+        setTextError(res?.message);
+        setToastVisible(true);
+      }
+    },
+    onError(e: any, id: string) {
+      handleUpdateList(id, 0);
+      setTextError(e?.response?.data?.message);
+      setTimeout(() => {
+        setToastVisible(true);
+      }, 500);
+    },
+  });
+
+  const handleAppreaciate = (id: string) => {
+    handleUpdateList(id, 1);
+
+    setAppreaciate.mutate(id);
+  };
+
+  const handleUpdateList = (id: string, appreciate: number) => {
+    const newArray: TipsDataType[] = listTips.map(v => {
+      if (v.id === id) {
+        return {
+          ...v,
+          appreciate: appreciate,
+        };
+      }
+
+      return v;
+    });
+
+    setListTips(newArray);
+  };
+
   return (
     <>
-      <ScrollView
-        showsVerticalScrollIndicator={false}
+      <View
         style={{
           marginBottom: heightResponsive(25),
           paddingHorizontal: widthPercentage(6),
-        }}
-        onTouchEnd={loadMore}
-        refreshControl={
-          <RefreshControl
-            refreshing={isRefetching && !isFetchingNextPage}
-            onRefresh={refetch}
-            onLayout={e => console.log(e.nativeEvent)}
-            tintColor="transparent"
-            colors={['transparent']}
-            style={{backgroundColor: 'transparent'}}
-          />
-        }>
+        }}>
         {(isRefetching || isLoading) && !isFetchingNextPage && (
           <View style={styles.loadingContainer}>
             <LoadingSpinner />
@@ -94,15 +142,24 @@ const ListTips: React.FC = () => {
           listTips?.map((val: TipsDataType, index: number) => (
             <RevenueCard
               key={index}
+              id={val.id}
               username={val.fromUserName}
               name={val.fromFullName}
               avatarUri={val.fromUserImage}
               credit={val.credit}
               time={val.timeAgo}
+              type="beam"
+              isAppreciate={val.appreciate}
+              onClickAppreciate={handleAppreaciate}
             />
           ))
         ) : (
-          <Text style={styles.emptyText}>{t('EmptyState.Revenue.Tips')}</Text>
+          <EmptyState
+            text={t('EmptyState.Revenue.Tips') || ''}
+            hideIcon={true}
+            containerStyle={styles.containerEmpty}
+            textStyle={styles.emptyText}
+          />
         )}
 
         {isFetchingNextPage && (
@@ -110,7 +167,26 @@ const ListTips: React.FC = () => {
             <LoadingSpinner />
           </View>
         )}
-      </ScrollView>
+      </View>
+
+      <SsuToast
+        modalVisible={toastVisible}
+        onBackPressed={() => setToastVisible(false)}
+        children={
+          <View style={[styles.toastContainer]}>
+            <TickCircleIcon
+              width={widthPercentage(21)}
+              height={heightPercentage(20)}
+              stroke={Color.Neutral[10]}
+            />
+            <Gap width={widthPercentage(7)} />
+            <Text style={[Typography.Button2, {color: Color.Neutral[10]}]}>
+              {textError}
+            </Text>
+          </View>
+        }
+        modalStyle={{marginHorizontal: widthPercentage(24)}}
+      />
     </>
   );
 };
@@ -187,12 +263,26 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  containerEmpty: {
+    alignSelf: 'center',
+    marginTop: mvs(80),
+  },
   emptyText: {
     fontFamily: font.InterRegular,
-    fontSize: mvs(12),
+    fontSize: mvs(13),
     textAlign: 'center',
     color: Color.Neutral[10],
-    lineHeight: mvs(14),
-    marginTop: heightResponsive(200),
+    lineHeight: mvs(16),
+  },
+  toastContainer: {
+    width: '100%',
+    position: 'absolute',
+    bottom: heightPercentage(22),
+    height: heightPercentage(36),
+    backgroundColor: Color.Error[500],
+    paddingHorizontal: widthPercentage(12),
+    borderRadius: 4,
+    flexDirection: 'row',
+    alignItems: 'center',
   },
 });

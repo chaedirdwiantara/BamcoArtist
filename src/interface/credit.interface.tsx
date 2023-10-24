@@ -92,6 +92,7 @@ export type TipsDataType = {
   package: string;
   updatedAt: Date | string;
   timeAgo: string;
+  appreciate: number;
 };
 
 export interface ListTipsDataType extends BaseResponseApi {

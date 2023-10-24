@@ -23,7 +23,11 @@
     "Required": "必填",
     "Dismiss": "摒棄",
     "BlockSucceed": "封鎖成功",
-    "Topup": "充值"
+    "Topup": "充值",
+    "BeamedYou": "Beamed 你 ",
+    "StartSub": "訂閱咗 ",
+    "Appreciate": "多謝！",
+    "Appreciated": "好受寵！"
   },
   "Onboarding": {
     "Step1": {
@@ -1202,8 +1206,8 @@
     "Released": "你還沒有發佈音樂作品。立即上傳歌曲！",
     "Musician": "噢！你目前還沒有任何帖子。你的帖子將在此顯示，快來創建新帖子！",
     "Revenue": {
-      "Tips": "你目前尚未收到任何Beam。立即創建內容！",
-      "Subs": "你目前尚未收到任何訂閱。立即創建獨家內容！"
+      "Tips": "你未收到任何粉絲嘅「Beams」。製作內容，鼓勵收到一啲「Beams」。",
+      "Subs": "你仲未收到粉絲嘅訂閱。製作獨家內容，吸引粉絲訂閱。"
     }
   },
   "Guest": {
@@ -1264,11 +1268,11 @@
       "Withdrawal": "目前沒有有關提款的交易可顯示。"
     },
     "Dropdown": {
-      "TopUpCredit": "Top Up Credit",
-      "CreditTransaction": "Credit Transaction"
+      "TopUpCredit": "儲值信用",
+      "CreditTransaction": "信用交易"
     },
-    "Credit": "Credit",
-    "Estimation": "Estimation"
+    "Credit": "信用",
+    "Estimation": "法定貨幣"
   },
   "Withdrawal": {
     "Title": "提款",

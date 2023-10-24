@@ -11,6 +11,7 @@ import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParams} from '../../navigations';
 import {EventListData} from '../../interface/event.interface';
+import dayjs from 'dayjs';
 
 interface EventListProps {
   type?: string;
@@ -74,7 +75,9 @@ const EventList: FC<EventListProps> = ({type, dataEvent, isLoading}) => {
                     navigation.navigate('EventDetail', {id: item.id})
                   }
                   onPressMore={() => null}
-                  eventDate={`${item.locationCity}, ${item.locationCountry}`}
+                  eventDate={`${item.locationCountry}, ${dayjs(
+                    item.startDate,
+                  ).format('D MMM YYYY')}`}
                   isLive={item.status === 'live'}
                 />
               </TouchableOpacity>
@@ -111,7 +114,9 @@ const EventList: FC<EventListProps> = ({type, dataEvent, isLoading}) => {
                       navigation.navigate('EventDetail', {id: item.id})
                     }
                     onPressMore={() => null}
-                    eventDate={`${item.locationCity}, ${item.locationCountry}`}
+                    eventDate={`${item.locationCountry}, ${dayjs(
+                      item.startDate,
+                    ).format('D MMM YYYY')}`}
                     isLive={item.status === 'live'}
                   />
                 </TouchableOpacity>
