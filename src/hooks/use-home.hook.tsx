@@ -1,5 +1,5 @@
 import {useState} from 'react';
-import {comingSoonAlbum, diveInList} from '../api/home.api';
+import {comingSoonAlbum, diveInList, setLastActiveEP} from '../api/home.api';
 import {ComingSoon, DiveIn} from '../interface/home.interface';
 
 export const useHomeHook = () => {
@@ -9,6 +9,7 @@ export const useHomeHook = () => {
     [],
   );
   const [isError, setIsError] = useState(false);
+  const [lastActiveStatus, setLastActiveStatus] = useState<string>();
 
   const getListDiveIn = async () => {
     setIsLoading(true);
@@ -34,12 +35,26 @@ export const useHomeHook = () => {
     }
   };
 
+  const setLastActive = async () => {
+    setIsLoading(true);
+    try {
+      const response = await setLastActiveEP();
+      setLastActiveStatus(response.message);
+    } catch (error) {
+      setIsError(true);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return {
     isLoading,
     isError,
     dataDiveIn,
     dataAlbumComingSoon,
+    lastActiveStatus,
     getListDiveIn,
     getListComingSoon,
+    setLastActive,
   };
 };
