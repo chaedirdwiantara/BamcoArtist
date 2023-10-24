@@ -1,3 +1,4 @@
+import {Platform} from 'react-native';
 import {
   ConfirmEmailOTPRegisterResponseType,
   ConfirmSmsOTPLoginResponseType,
@@ -23,6 +24,9 @@ export const registerUser = async (
     url: '/musician-app/register',
     method: 'POST',
     data: registerProps,
+    headers: {
+      'X-OS-Platform': Platform.OS,
+    },
   });
 
   return data;
@@ -35,6 +39,9 @@ export const loginUser = async (
     url: '/musician-app/login',
     method: 'POST',
     data: loginProps,
+    headers: {
+      'X-OS-Platform': Platform.OS,
+    },
   });
 
   return data;
@@ -51,6 +58,9 @@ export const loginSso = async (
       user: user,
       registrationType: registrationType,
     },
+    headers: {
+      'X-OS-Platform': Platform.OS,
+    },
   });
   return data;
 };
@@ -62,6 +72,9 @@ export const loginPhoneNumber = async (
     url: '/musician-app/login-phone-number',
     method: 'POST',
     data: loginProps,
+    headers: {
+      'X-OS-Platform': Platform.OS,
+    },
   });
 
   return data;
