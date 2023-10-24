@@ -57,3 +57,10 @@ export type ComingSoonResponseType = {
   message: string;
   status: number;
 };
+
+export type SetLastActiveResponseType = {
+  code: number;
+  data: null;
+  message: string;
+  status: number;
+};

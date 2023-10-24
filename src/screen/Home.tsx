@@ -76,6 +76,7 @@ import {randomString} from '../utils/randomString';
 import ShowMoreAnalytics from '../components/molecule/ShowMoreAnalytics';
 import EventList from './ListCard/EventList';
 import {useEventHook} from '../hooks/use-event.hook';
+import {useHomeHook} from '../hooks/use-home.hook';
 
 type OnScrollEventHandler = (
   event: NativeSyntheticEvent<NativeScrollEvent>,
@@ -111,6 +112,7 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
   const {dataExclusiveContent, getExclusiveContent} = useSettingHook();
   const {getIncome} = useAnalyticsHook();
   const {useEventHome} = useEventHook();
+  const {setLastActive} = useHomeHook();
   const {
     data: dataEvent,
     isLoading: isLoadingEvent,
@@ -170,6 +172,7 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
       // Triggering when go back from other screen
       getProfileProgress();
       getProfileUser();
+      setLastActive();
     }, []),
   );
 
