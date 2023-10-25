@@ -264,6 +264,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   containerEmpty: {
+    flex: 0,
     alignSelf: 'center',
     marginTop: mvs(80),
   },
