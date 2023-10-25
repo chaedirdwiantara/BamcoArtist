@@ -42,8 +42,10 @@ const kFormatter3 = (num: number = 0) => {
   return Math.abs(num) > 999 ? value + 'K' : Math.sign(num) * Math.abs(num);
 };
 
-const convertToHKD = (num: number = 0) => {
-  return num * 0.0739;
+const convertToHKD = (num: number = 0, withdraw?: boolean) => {
+  const currency = num * 0.0739;
+  const afterNum = withdraw ? -4 : -5;
+  return Number(currency.toFixed(6).slice(0, afterNum));
 };
 
 export {toCurrency, kFormatter, kFormatter2, kFormatter3, convertToHKD};
