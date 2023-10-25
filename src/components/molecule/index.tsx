@@ -73,6 +73,7 @@ import {SignInGuestContent} from './SignInGuestContent/SignInGuestContent';
 import {AddShippingAddress} from './SettingContent/AddShippingAddress';
 import {SongDetailsContent} from './SongDetailsContent/SongDetailContent';
 import {SongTitlePlay} from './SongTitlePlay/SongTitlePlay';
+import {StepCopilot} from './StepCopilot';
 import SsuOTPInput from './OtpInput';
 import SsuOTPTimer from './OtpTimer';
 import {ShowCreditContent} from './SongDetailsContent/ShowCreditContent';
@@ -163,6 +164,7 @@ export {
   AddShippingAddress,
   SongDetailsContent,
   SongTitlePlay,
+  StepCopilot,
   SsuOTPInput,
   SsuOTPTimer,
   ShowCreditContent,
