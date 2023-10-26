@@ -1,12 +1,12 @@
 import * as React from 'react';
 import {View} from 'react-native';
 import Svg, {Path} from 'react-native-svg';
-import {widthPercentage} from '../../utils';
+import {widthResponsive} from '../../utils';
 import {SvgProps} from '../../interface/svg.interface';
 
 function ImportPhotoIcon({
-  width = widthPercentage(20),
-  height = widthPercentage(20),
+  width = widthResponsive(20),
+  height = widthResponsive(20),
   fill = '#8794AD',
   stroke = '#657694',
   style,
