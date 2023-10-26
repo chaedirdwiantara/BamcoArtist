@@ -959,7 +959,8 @@
         "Title": "已收到你的申訴！",
         "Subtitle": "我們將及時通知你",
         "Button": "返回設置"
-      }
+      },
+      "Placeholder": "Add appeal reason"
     },
     "PreventInteraction": {
       "Title": "你已被禁止",
