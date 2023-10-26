@@ -129,7 +129,7 @@ export const ClaimReward: React.FC<ClaimRewardProps> = ({
           <Text style={styles.tncTitle}>
             {detail?.voucher?.termsCondition?.title}
           </Text>
-          <View>
+          <View style={{paddingRight: widthResponsive(16)}}>
             {detail?.voucher?.termsCondition?.value?.map((item, index) => {
               return (
                 <View key={index} style={styles.tncDesc}>
