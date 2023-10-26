@@ -70,8 +70,7 @@ export const RevenueCard: React.FC<RevenueProps> = ({
             </View>
           </View>
           <Gap width={widthResponsive(10)} />
-          {/* // temporarily hidden */}
-          {/* <Button
+          <Button
             onPress={() => (isAppreciate === 1 ? null : onClickAppreciate(id))}
             label={
               isAppreciate === 1
@@ -82,7 +81,7 @@ export const RevenueCard: React.FC<RevenueProps> = ({
               isAppreciate === 1 ? styles.buttonDisabled : styles.button
             }
             textStyles={styles.buttonText}
-          /> */}
+          />
         </View>
         <Text
           style={[
