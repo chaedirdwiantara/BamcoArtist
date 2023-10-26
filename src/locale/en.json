@@ -961,7 +961,8 @@
         "Title": "Your Appeal has been received!",
         "Subtitle": "We shall notify you in due course",
         "Button": "Back to Settings"
-      }
+      },
+      "Placeholder": "Add appeal reason"
     },
     "PreventInteraction": {
       "Title": "You've been banned",

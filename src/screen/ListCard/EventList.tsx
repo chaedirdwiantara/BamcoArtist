@@ -52,6 +52,7 @@ const EventList: FC<EventListProps> = ({type, dataEvent, isLoading}) => {
           if (index <= 4) {
             return (
               <TouchableOpacity
+                key={index}
                 onPress={() => {
                   navigation.navigate('EventDetail', {id: item.id});
                 }}>
