@@ -45,7 +45,7 @@ export const FooterWithdraw: React.FC<FooterWithdrawProps> = ({
           {t('Withdrawal.InputWithdrawal.TotalConversion')}
         </Text>
         <Text style={[typography.Subtitle2, styles.valueTotalConversion]}>
-          {convertToHKD(Number(totalCredit))}
+          {convertToHKD(Number(totalCredit), true)}
         </Text>
       </View>
       <Button
