@@ -474,13 +474,7 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
             onTouchStart={handleSearchButton}
           />
         </TouchableOpacity>
-        {profileProgress?.stepProgress !== '100%' ? (
-          <ProgressCard
-            percentage={profileProgress?.stepProgress}
-            onPress={goToProfileProgress}
-            containerStyle={{marginTop: mvs(20)}}
-          />
-        ) : null}
+
         <Carousel
           data={dataBanner?.length > 0 ? dataBanner : defaultBanner}
           onPressBanner={handleWebview}
@@ -562,6 +556,14 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
             <UploadMusicSection />
           </View>
         )}
+
+        {profileProgress?.stepProgress !== '100%' ? (
+          <ProgressCard
+            percentage={profileProgress?.stepProgress}
+            onPress={goToProfileProgress}
+            containerStyle={{marginTop: mvs(20)}}
+          />
+        ) : null}
 
         {/* Tab Analytic */}
         <View style={[styles.containerContent]}>

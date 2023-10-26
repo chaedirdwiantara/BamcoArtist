@@ -48,7 +48,7 @@ export const ProgressCard: React.FC<ProgressCardProps> = (
 const styles = StyleSheet.create({
   containerContent: {
     width: width * 0.89,
-    paddingVertical: mvs(10),
+    paddingVertical: mvs(7),
     flexDirection: 'row',
     backgroundColor: '#223149',
     alignSelf: 'center',
