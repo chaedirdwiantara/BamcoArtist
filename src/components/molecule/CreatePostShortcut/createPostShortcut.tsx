@@ -50,7 +50,6 @@ const CreatePostShortcut: FC<CreatePostShortcutProps> = (
           <Text style={styles.postText}>Post</Text>
         </TouchableOpacity>
       </View>
-      <Gap height={13} />
     </View>
   );
 };
@@ -60,19 +59,23 @@ export default CreatePostShortcut;
 const styles = StyleSheet.create({
   container: {
     borderWidth: 1,
-    borderColor: color.Dark[500],
-    marginHorizontal: widthResponsive(22),
-    paddingHorizontal: widthResponsive(12),
+    borderColor: color.DarkBlue[200],
+    marginHorizontal: widthResponsive(20),
     borderRadius: 4,
   },
   inputStyle: {
+    paddingHorizontal: widthResponsive(12),
     flexDirection: 'row',
     alignItems: 'center',
   },
   buttonContainer: {
+    paddingHorizontal: widthResponsive(12),
+    paddingVertical: widthResponsive(10),
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+    borderTopWidth: 1,
+    borderTopColor: color.DarkBlue[200],
   },
   buttonPost: {
     flexDirection: 'row',
