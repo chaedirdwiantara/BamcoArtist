@@ -231,7 +231,7 @@ const styles = StyleSheet.create({
     color: Color.Dark[50],
   },
   loadingContainer: {
-    flex: 1,
+    flex: 0,
     alignItems: 'center',
   },
   listContainer: {

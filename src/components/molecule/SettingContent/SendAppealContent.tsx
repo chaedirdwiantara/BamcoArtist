@@ -227,7 +227,7 @@ export const SendAppealContent: React.FC<SendAppealProps> = ({
           <SsuInput.InputLabel
             value={description}
             onChangeText={(newText: string) => setDescription(newText)}
-            placeholder={t('Setting.Report.Placeholder.Text') || ''}
+            placeholder={t('Setting.SendAppeal.Placeholder') || ''}
             containerStyles={styles.textArea}
             multiline
             numberOfLines={10}

@@ -474,38 +474,11 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
             onTouchStart={handleSearchButton}
           />
         </TouchableOpacity>
-        {profileProgress?.stepProgress !== '100%' ? (
-          <ProgressCard
-            percentage={profileProgress?.stepProgress}
-            onPress={goToProfileProgress}
-            containerStyle={{marginTop: mvs(20)}}
-          />
-        ) : null}
+
         <Carousel
           data={dataBanner?.length > 0 ? dataBanner : defaultBanner}
           onPressBanner={handleWebview}
         />
-        <Text
-          style={[
-            styles.titleOverview,
-            {paddingVertical: mvs(20), paddingHorizontal: widthResponsive(22)},
-          ]}>
-          {t('Home.CreateNewPost')}
-        </Text>
-        {/* Create Post Shortcuts */}
-        {dataProfile?.data && (
-          <CreatePostShortcut
-            avatarUri={dataProfile?.data?.imageProfileUrls[1]?.image}
-            placeholder={`${randomPlaceHolder}...`}
-            compOnPress={handleCreatePost}
-          />
-        )}
-
-        {dataSongAlbum?.countAlbumReleased === 0 && (
-          <View style={styles.containerUpload}>
-            <UploadMusicSection />
-          </View>
-        )}
 
         {/* Event List */}
         <View style={[styles.containerContent]}>
@@ -557,45 +530,74 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
           })}
         </View>
 
-        {!showAnalytic && (
+        {/*  TODO: will be activate once the requirement is clear */}
+        {/* {!showAnalytic && (
           <ShowMoreAnalytics onPress={handleShowMoreAnalytics} />
+        )} */}
+
+        <Text
+          style={[
+            styles.titleOverview,
+            {paddingVertical: mvs(20), paddingHorizontal: widthResponsive(22)},
+          ]}>
+          {t('Home.CreateNewPost')}
+        </Text>
+        {/* Create Post Shortcuts */}
+        {dataProfile?.data && (
+          <CreatePostShortcut
+            avatarUri={dataProfile?.data?.imageProfileUrls[1]?.image}
+            placeholder={`${randomPlaceHolder}...`}
+            compOnPress={handleCreatePost}
+          />
         )}
 
-        {/* Tab Analytic */}
-        {showAnalytic && (
-          <View style={[styles.containerContent]}>
-            <TabFilter.Type3
-              filterData={filterAnalytic}
-              onPress={filterDataAnalytic}
-              selectedIndex={selectedIndexAnalytic}
-              translation={true}
-            />
-            {filterAnalytic[selectedIndexAnalytic].filterName ===
-            'Home.Tab.Analytic.Income.Title' ? (
-              <View style={{paddingHorizontal: widthResponsive(20)}}>
-                <Gap height={widthResponsive(15)} />
-                <Income />
-              </View>
-            ) : filterAnalytic[selectedIndexAnalytic].filterName ===
-              'Home.Tab.Analytic.Fans.Title' ? (
-              <View style={{paddingHorizontal: widthResponsive(20)}}>
-                <Gap height={widthResponsive(15)} />
-                <Fans />
-              </View>
-            ) : filterAnalytic[selectedIndexAnalytic].filterName ===
-              'Home.Tab.Analytic.Post.Title' ? (
-              <PostAnalytic uuid={uuid} />
-            ) : filterAnalytic[selectedIndexAnalytic].filterName ===
-              'Home.Tab.Analytic.Album.Title' ? (
-              <View style={{paddingHorizontal: widthResponsive(20)}}>
-                <Gap height={widthResponsive(15)} />
-                <AlbumAnalytic />
-              </View>
-            ) : (
-              <Explore refreshing={refreshing} />
-            )}
+        {dataSongAlbum?.countAlbumReleased === 0 && (
+          <View style={styles.containerUpload}>
+            <UploadMusicSection />
           </View>
         )}
+
+        {profileProgress?.stepProgress !== '100%' ? (
+          <ProgressCard
+            percentage={profileProgress?.stepProgress}
+            onPress={goToProfileProgress}
+            containerStyle={{marginTop: mvs(20)}}
+          />
+        ) : null}
+
+        {/* Tab Analytic */}
+        <View style={[styles.containerContent]}>
+          <TabFilter.Type3
+            filterData={filterAnalytic}
+            onPress={filterDataAnalytic}
+            selectedIndex={selectedIndexAnalytic}
+            translation={true}
+          />
+          {filterAnalytic[selectedIndexAnalytic].filterName ===
+          'Home.Tab.Analytic.Income.Title' ? (
+            <View style={{paddingHorizontal: widthResponsive(20)}}>
+              <Gap height={widthResponsive(15)} />
+              <Income />
+            </View>
+          ) : filterAnalytic[selectedIndexAnalytic].filterName ===
+            'Home.Tab.Analytic.Fans.Title' ? (
+            <View style={{paddingHorizontal: widthResponsive(20)}}>
+              <Gap height={widthResponsive(15)} />
+              <Fans />
+            </View>
+          ) : filterAnalytic[selectedIndexAnalytic].filterName ===
+            'Home.Tab.Analytic.Post.Title' ? (
+            <PostAnalytic uuid={uuid} />
+          ) : filterAnalytic[selectedIndexAnalytic].filterName ===
+            'Home.Tab.Analytic.Album.Title' ? (
+            <View style={{paddingHorizontal: widthResponsive(20)}}>
+              <Gap height={widthResponsive(15)} />
+              <AlbumAnalytic />
+            </View>
+          ) : (
+            <Explore refreshing={refreshing} />
+          )}
+        </View>
         {/* End of Tab Analytic */}
       </ScrollView>
 
