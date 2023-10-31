@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import {View, StyleSheet, InteractionManager} from 'react-native';
 import {useQuery} from 'react-query';
 import {useTranslation} from 'react-i18next';
@@ -42,9 +42,11 @@ export const WithdrawalScreen: React.FC = () => {
   const [dataBankUser, setDataBankUser] = useState<BankAccountPropsType>();
 
   // get credit user
-  useEffect(() => {
-    getCreditCount();
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      getCreditCount();
+    }, []),
+  );
 
   // get bank account user
   const {
@@ -125,7 +127,8 @@ export const WithdrawalScreen: React.FC = () => {
   // const getDate = new Date().getDate();
   // const date = getDate === 14 || getDate === 28;
   const minimumCredit = Number(totalCredit) >= 5000;
-  const enabledButton = minimumCredit;
+  const rangeCredit = Number(totalCredit) <= creditCount;
+  const enabledButton = minimumCredit && rangeCredit;
   return (
     <KeyboardShift>
       <View style={styles.root}>
@@ -155,6 +158,7 @@ export const WithdrawalScreen: React.FC = () => {
               <CardTotalCredit creditCount={creditCount} />
               <InputWithdrawal
                 totalCredit={totalCredit}
+                creditUser={creditCount}
                 setTotalCredit={setTotalCredit}
               />
             </View>
