@@ -6,7 +6,7 @@ import {mvs} from 'react-native-size-matters';
 import {Gap} from '../../atom';
 import {color, font} from '../../../theme';
 import {CoinDIcon} from '../../../assets/icon';
-import {kFormatter3, width, widthPercentage} from '../../../utils';
+import {toCurrency, width, widthPercentage} from '../../../utils';
 
 interface CardTotalCreditProps {
   creditCount: number;
@@ -30,7 +30,9 @@ export const CardTotalCredit: React.FC<CardTotalCreditProps> = ({
           }}
         />
         <Gap width={widthPercentage(5)} />
-        <Text style={styles.amountMyCredit}>{kFormatter3(creditCount)}</Text>
+        <Text style={styles.amountMyCredit}>
+          {toCurrency(creditCount, {withFraction: false})}
+        </Text>
       </View>
     </View>
   );

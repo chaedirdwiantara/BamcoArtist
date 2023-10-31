@@ -1293,7 +1293,8 @@
       "InputAmount": "輸入金額",
       "CreditToWithdraw": "待提取的Beam",
       "TotalConversion": "轉換為以港幣為單位的金額",
-      "ErrorMsg": "提款的最低額度為5000 Beam"
+      "ErrorMsgMin": "提款的最低額度為5000 Beam",
+      "ErrorMsgMax": "喺香港，你唔可以提取多過你嘅可用信貸額度。"
     },
     "AddBankAccount": {
       "Title": "添加帳戶",

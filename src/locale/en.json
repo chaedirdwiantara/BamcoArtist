@@ -1295,7 +1295,8 @@
       "InputAmount": "Enter Amount",
       "CreditToWithdraw": "Credits to Withdraw",
       "TotalConversion": "Credits in HK$",
-      "ErrorMsg": "The minimum amount for withdraw is 5000 Credits"
+      "ErrorMsgMin": "The minimum amount for withdraw is 5000 Credits",
+      "ErrorMsgMax": "You can’t withdraw more than your available credit"
     },
     "AddBankAccount": {
       "Title": "Add Account",
