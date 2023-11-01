@@ -113,11 +113,7 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
   const {getIncome} = useAnalyticsHook();
   const {useEventHome} = useEventHook();
   const {setLastActive} = useHomeHook();
-  const {
-    data: dataEvent,
-    isLoading: isLoadingEvent,
-    refetch: refetchEvent,
-  } = useEventHome();
+  const {isLoading: isLoadingEvent, refetch: refetchEvent} = useEventHome();
 
   const {uriVideo, setUriVideo} = useVideoStore();
 
@@ -488,7 +484,7 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
             selectedIndex={0}
             translation={true}
           />
-          <EventList dataEvent={dataEvent?.data} isLoading={isLoadingEvent} />
+          <EventList isLoading={isLoadingEvent} />
         </View>
         {/* End of Tab Event List */}
 

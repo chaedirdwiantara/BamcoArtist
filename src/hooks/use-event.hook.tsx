@@ -177,8 +177,22 @@ export const useEventHook = () => {
   };
 
   const useEventHome = (params?: ParamsProps) => {
-    return useQuery([`event/home}`], () => listEventHome(params), {
-      enabled: false,
+    return useInfiniteQuery({
+      queryKey: [`event/home`],
+      enabled: true,
+      queryFn: ({pageParam = 1}) =>
+        listEventHome({...params, page: pageParam, perPage: 3}),
+      keepPreviousData: false,
+      getNextPageParam: lastPage => {
+        if (
+          (lastPage?.data?.length as number) < Math.ceil(lastPage?.meta?.total)
+        ) {
+          const nextPage = (lastPage?.meta?.page as number) + 1;
+          return nextPage;
+        }
+        return null;
+      },
+      getPreviousPageParam: () => null,
     });
   };
 
