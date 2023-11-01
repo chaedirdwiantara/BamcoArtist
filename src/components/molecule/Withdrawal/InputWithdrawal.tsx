@@ -17,12 +17,14 @@ import {width, widthPercentage} from '../../../utils';
 
 interface InputWithdrawalProps {
   totalCredit: string;
+  creditUser: number;
   setTotalCredit: (val: string) => void;
   containerStyles?: ViewStyle;
 }
 
 export const InputWithdrawal: React.FC<InputWithdrawalProps> = ({
   totalCredit,
+  creditUser,
   setTotalCredit,
   containerStyles,
 }) => {
@@ -32,8 +34,19 @@ export const InputWithdrawal: React.FC<InputWithdrawalProps> = ({
   // active border color, when focus is true
   const activeColor = focusInput ? color.Pink[200] : color.Dark[500];
 
+  // max credit
+  const maxCredit = Number(totalCredit) > creditUser;
+
   // minimum credit amount = 5000
-  const isError = Number(totalCredit) < 5000 && Number(totalCredit) > 0;
+  const isError =
+    (Number(totalCredit) < 5000 && Number(totalCredit) > 0) || maxCredit;
+
+  // error text if credits are less than 500 or
+  // more than the user's credit amount
+  const errorText = maxCredit
+    ? 'Withdrawal.InputWithdrawal.ErrorMsgMax'
+    : 'Withdrawal.InputWithdrawal.ErrorMsgMin';
+
   return (
     <View style={containerStyles}>
       <Text style={styles.textLabelInput}>
@@ -66,9 +79,7 @@ export const InputWithdrawal: React.FC<InputWithdrawalProps> = ({
         <View style={styles.containerErrorMsg}>
           <ErrorIcon fill={color.Error[400]} />
           <Gap width={widthPercentage(4)} />
-          <Text style={styles.errorMsg}>
-            {t('Withdrawal.InputWithdrawal.ErrorMsg')}
-          </Text>
+          <Text style={styles.errorMsg}>{t(errorText)}</Text>
         </View>
       ) : null}
     </View>

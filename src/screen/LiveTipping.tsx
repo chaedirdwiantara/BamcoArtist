@@ -204,7 +204,7 @@ export const LiveTipping: FC<LiveTippingProps> = ({
     const {delay} = taskDataArguments;
     await new Promise(async (_resolve: any) => {
       for (let i = 0; BackgroundService.isRunning(); i++) {
-        if (i === 4) {
+        if (i === 2) {
           setCounterTipping(0);
           await sendTipping();
           getCreditCount();

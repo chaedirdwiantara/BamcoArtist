@@ -88,6 +88,7 @@ export const TopUpCreditContent: React.FC<TopUpCreditProps> = ({
   useFocusEffect(
     useCallback(() => {
       refetchWithdraw();
+      getCreditCount();
     }, []),
   );
 
@@ -107,10 +108,6 @@ export const TopUpCreditContent: React.FC<TopUpCreditProps> = ({
       }
     }, [statusWithdraw, dataWithdraw]),
   );
-
-  useEffect(() => {
-    getCreditCount();
-  }, []);
 
   useEffect(() => {
     getProductIap();
