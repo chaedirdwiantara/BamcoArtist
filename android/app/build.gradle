@@ -84,6 +84,7 @@ project.ext.react = [
 ]
 
 apply from: "../../node_modules/react-native/react.gradle"
+apply from: "../../node_modules/react-native-ultimate-config/android/rnuc.gradle"
 
 /**
  * Set this to true to create two separate APKs instead of one:
@@ -132,7 +133,7 @@ def reactNativeArchitectures() {
 
 ext.versionMajor = 1
 ext.versionMinor = 3
-ext.versionPatch = 5
+ext.versionPatch = 6
 ext.versionClassifier = null
 ext.isSnapshot = false
 
