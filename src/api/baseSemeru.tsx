@@ -1,4 +1,5 @@
 import axios, {AxiosError, AxiosInstance, AxiosRequestConfig} from 'axios';
+import config from 'react-native-ultimate-config';
 import {storage} from '../hooks/use-storage.hook';
 import {getAccessToken} from '../service/refreshToken';
 
@@ -6,7 +7,7 @@ let API: AxiosInstance;
 
 const setupAPIClient = () => {
   API = axios.create({
-    baseURL: 'https://semeru.thebeam.co/api/v1',
+    baseURL: `${config.BASE_SEMERU}/v1`,
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
