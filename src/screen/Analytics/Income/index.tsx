@@ -8,7 +8,7 @@ import {
   PosCreditCard,
 } from '../../../assets/icon';
 import {heightResponsive, kFormatter, widthResponsive} from '../../../utils';
-import {DropDownFilter, Gap} from '../../../components';
+import {DropDownFilter, Gap, StepCopilot} from '../../../components';
 import Color from '../../../theme/Color';
 import TopCard from './TopCard';
 import {useTranslation} from 'react-i18next';
@@ -93,147 +93,162 @@ const Income = () => {
 
   return (
     <>
-      <View style={{flexDirection: 'row'}}>
-        <TopCard
-          icon={<DollarSign />}
-          bgIcon={Color.Success[400]}
-          value={
-            incomeData?.totalTips
-              ? incomeData?.totalTips?.toString().length > 4
-                ? kFormatter(incomeData?.totalTips, 1)
-                : incomeData?.totalTips
-              : 0
-          }
-          text={t('Home.Tab.Analytic.Income.TopCard.Tip')}
-        />
-        <Gap width={widthResponsive(10)} />
-        <TopCard
-          icon={<PosCreditCard />}
-          bgIcon={Color.Pink.new}
-          value={
-            incomeData?.totalSubs
-              ? incomeData?.totalSubs?.toString().length > 4
-                ? kFormatter(incomeData?.totalSubs, 1)
-                : incomeData?.totalSubs
-              : 0
-          }
-          text={t('Home.Tab.Analytic.Income.TopCard.Subs')}
-        />
-      </View>
+      <StepCopilot
+        children={
+          <View style={{flexDirection: 'row'}}>
+            <TopCard
+              icon={<DollarSign />}
+              bgIcon={Color.Success[400]}
+              value={
+                incomeData?.totalTips
+                  ? incomeData?.totalTips?.toString().length > 4
+                    ? kFormatter(incomeData?.totalTips, 1)
+                    : incomeData?.totalTips
+                  : 0
+              }
+              text={t('Home.Tab.Analytic.Income.TopCard.Tip')}
+            />
+            <Gap width={widthResponsive(10)} />
+            <TopCard
+              icon={<PosCreditCard />}
+              bgIcon={Color.Pink.new}
+              value={
+                incomeData?.totalSubs
+                  ? incomeData?.totalSubs?.toString().length > 4
+                    ? kFormatter(incomeData?.totalSubs, 1)
+                    : incomeData?.totalSubs
+                  : 0
+              }
+              text={t('Home.Tab.Analytic.Income.TopCard.Subs')}
+            />
+          </View>
+        }
+        order={14}
+        name={t('Coachmark.Beam&Sub')}
+        text={t('Coachmark.SubtitleBeam&Sub')}
+      />
 
       <Gap height={heightResponsive(20)} />
 
-      <View style={styles.container}>
-        <View style={styles.titleContainer}>
-          <View style={styles.iconContainer}>
-            <NormalCreditCard />
+      <StepCopilot
+        children={
+          <View style={styles.container}>
+            <View style={styles.titleContainer}>
+              <View style={styles.iconContainer}>
+                <NormalCreditCard />
+              </View>
+              <Gap width={widthResponsive(10)} />
+              <Text style={styles.title}>
+                {t('Home.Tab.Analytic.Income.Main.Title')}
+              </Text>
+            </View>
+            <View style={{flexDirection: 'row', zIndex: 100}}>
+              <DropDownFilter
+                labelCaption={t(selectedType.label)}
+                dataFilter={dropDownIncomeType}
+                selectedMenu={setSelectedType}
+                leftPosition={widthResponsive(13.5)}
+                topPosition={widthResponsive(18)}
+                bottomPosition={widthResponsive(-22)}
+                containerStyle={styles.dropdownContainer}
+                textCustomStyle={{color: Color.Neutral[10], fontSize: mvs(11)}}
+                iconColor={Color.Neutral[10]}
+                dropdownStyle={styles.dropdown}
+              />
+              <Gap width={widthResponsive(12)} />
+              <DropDownFilter
+                labelCaption={t(selectedRange.label)}
+                dataFilter={dropDownIncomeRange}
+                selectedMenu={setSelectedRange}
+                leftPosition={widthResponsive(26)}
+                topPosition={widthResponsive(18)}
+                bottomPosition={widthResponsive(-22)}
+                containerStyle={styles.dropdownContainer}
+                textCustomStyle={{color: Color.Neutral[10], fontSize: mvs(11)}}
+                iconColor={Color.Neutral[10]}
+                dropdownStyle={styles.dropdown}
+              />
+            </View>
+
+            <Gap height={8} />
+            <Text style={styles.desc}>{dataChart?.description}</Text>
+            <Gap height={4} />
+
+            <View
+              style={{
+                marginBottom: heightResponsive(36),
+                marginLeft: widthResponsive(-8),
+              }}>
+              <BarChart
+                data={filterBarData(dataChart?.data)}
+                barWidth={8}
+                spacing={widthResponsive(35)}
+                roundedTop
+                roundedBottom
+                yAxisThickness={0}
+                yAxisTextStyle={{color: Color.Dark[100]}}
+                xAxisLabelTextStyle={{
+                  color: Color.Neutral[20],
+                  marginLeft:
+                    selectedType.value === '1' && selectedRange.value !== '2'
+                      ? 3
+                      : selectedType.value !== '1' &&
+                        selectedRange.value === '2'
+                      ? -3
+                      : 0,
+                  top: heightResponsive(10),
+                  fontSize: mvs(9),
+                  fontWeight: '600',
+                }}
+                xAxisColor={Color.Dark[300]}
+                xAxisType={'dash'}
+                xAxisLength={widthResponsive(265)}
+                noOfSections={3}
+                maxValue={dataChart?.maxValue}
+                rulesColor={Color.Dark[300]}
+                rulesType="dash"
+                rulesLength={widthResponsive(265)}
+                labelWidth={50}
+              />
+            </View>
+
+            <Gap height={heightResponsive(20)} />
+
+            <View>
+              {(selectedType.value === '1' || selectedType.value === '2') && (
+                <BottomCard
+                  type="beam"
+                  descAvg={selectedRange.value}
+                  numberAvg={dataChart?.tipAvg || '0'}
+                  numberDiffsAvg={dataChart?.tipAvgCompare || ''}
+                  progressAvg={dataChart?.tipAvgProgress || 'same'}
+                  numberEarned={dataChart?.tipEarned || '0'}
+                  numberDiffsEarned={dataChart?.tipEarnedCompare || ''}
+                  progressEarned={dataChart?.tipEarnedProgress || 'same'}
+                  descEarned={selectedRange.value}
+                />
+              )}
+
+              {(selectedType.value === '1' || selectedType.value === '3') && (
+                <BottomCard
+                  type="subscription"
+                  descAvg={selectedRange.value}
+                  numberAvg={dataChart?.subsAvg || '0'}
+                  numberDiffsAvg={dataChart?.subsAvgCompare || ''}
+                  progressAvg={dataChart?.subsAvgProgress || 'same'}
+                  numberEarned={dataChart?.subsEarned || '0'}
+                  numberDiffsEarned={dataChart?.subsEarnedCompare || ''}
+                  progressEarned={dataChart?.subsEarnedProgress || 'same'}
+                  descEarned={selectedRange.value}
+                />
+              )}
+            </View>
           </View>
-          <Gap width={widthResponsive(10)} />
-          <Text style={styles.title}>
-            {t('Home.Tab.Analytic.Income.Main.Title')}
-          </Text>
-        </View>
-        <View style={{flexDirection: 'row', zIndex: 100}}>
-          <DropDownFilter
-            labelCaption={t(selectedType.label)}
-            dataFilter={dropDownIncomeType}
-            selectedMenu={setSelectedType}
-            leftPosition={widthResponsive(13.5)}
-            topPosition={widthResponsive(18)}
-            bottomPosition={widthResponsive(-22)}
-            containerStyle={styles.dropdownContainer}
-            textCustomStyle={{color: Color.Neutral[10], fontSize: mvs(11)}}
-            iconColor={Color.Neutral[10]}
-            dropdownStyle={styles.dropdown}
-          />
-          <Gap width={widthResponsive(12)} />
-          <DropDownFilter
-            labelCaption={t(selectedRange.label)}
-            dataFilter={dropDownIncomeRange}
-            selectedMenu={setSelectedRange}
-            leftPosition={widthResponsive(26)}
-            topPosition={widthResponsive(18)}
-            bottomPosition={widthResponsive(-22)}
-            containerStyle={styles.dropdownContainer}
-            textCustomStyle={{color: Color.Neutral[10], fontSize: mvs(11)}}
-            iconColor={Color.Neutral[10]}
-            dropdownStyle={styles.dropdown}
-          />
-        </View>
-
-        <Gap height={8} />
-        <Text style={styles.desc}>{dataChart?.description}</Text>
-        <Gap height={4} />
-
-        <View
-          style={{
-            marginBottom: heightResponsive(36),
-            marginLeft: widthResponsive(-8),
-          }}>
-          <BarChart
-            data={filterBarData(dataChart?.data)}
-            barWidth={8}
-            spacing={widthResponsive(35)}
-            roundedTop
-            roundedBottom
-            yAxisThickness={0}
-            yAxisTextStyle={{color: Color.Dark[100]}}
-            xAxisLabelTextStyle={{
-              color: Color.Neutral[20],
-              marginLeft:
-                selectedType.value === '1' && selectedRange.value !== '2'
-                  ? 3
-                  : selectedType.value !== '1' && selectedRange.value === '2'
-                  ? -3
-                  : 0,
-              top: heightResponsive(10),
-              fontSize: mvs(9),
-              fontWeight: '600',
-            }}
-            xAxisColor={Color.Dark[300]}
-            xAxisType={'dash'}
-            xAxisLength={widthResponsive(265)}
-            noOfSections={3}
-            maxValue={dataChart?.maxValue}
-            rulesColor={Color.Dark[300]}
-            rulesType="dash"
-            rulesLength={widthResponsive(265)}
-            labelWidth={50}
-          />
-        </View>
-
-        <Gap height={heightResponsive(20)} />
-
-        <View>
-          {(selectedType.value === '1' || selectedType.value === '2') && (
-            <BottomCard
-              type="beam"
-              descAvg={selectedRange.value}
-              numberAvg={dataChart?.tipAvg || '0'}
-              numberDiffsAvg={dataChart?.tipAvgCompare || ''}
-              progressAvg={dataChart?.tipAvgProgress || 'same'}
-              numberEarned={dataChart?.tipEarned || '0'}
-              numberDiffsEarned={dataChart?.tipEarnedCompare || ''}
-              progressEarned={dataChart?.tipEarnedProgress || 'same'}
-              descEarned={selectedRange.value}
-            />
-          )}
-
-          {(selectedType.value === '1' || selectedType.value === '3') && (
-            <BottomCard
-              type="subscription"
-              descAvg={selectedRange.value}
-              numberAvg={dataChart?.subsAvg || '0'}
-              numberDiffsAvg={dataChart?.subsAvgCompare || ''}
-              progressAvg={dataChart?.subsAvgProgress || 'same'}
-              numberEarned={dataChart?.subsEarned || '0'}
-              numberDiffsEarned={dataChart?.subsEarnedCompare || ''}
-              progressEarned={dataChart?.subsEarnedProgress || 'same'}
-              descEarned={selectedRange.value}
-            />
-          )}
-        </View>
-      </View>
+        }
+        order={15}
+        name={t('Coachmark.MyIncome')}
+        text={t('Coachmark.SubtitleMyIncome')}
+      />
     </>
   );
 };
