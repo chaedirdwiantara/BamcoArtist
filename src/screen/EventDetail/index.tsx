@@ -182,7 +182,11 @@ export const EventDetail: React.FC<EventDetailProps> = ({
                 }}
                 rightIcon={
                   <TopNavigation.EventDetailNav
-                    onPressGift={() => navigation.navigate('ListVoucher')}
+                    onPressGift={() =>
+                      navigation.navigate('ListVoucher', {
+                        id: dataDetail?.data.id,
+                      })
+                    }
                     isGenerated={true}
                     onPressVoucher={() => setShowModaltopup(true)}
                   />
