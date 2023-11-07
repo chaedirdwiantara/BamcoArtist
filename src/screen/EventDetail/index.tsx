@@ -12,15 +12,10 @@ import {
 } from 'react-native';
 import React, {useCallback, useState} from 'react';
 import Color from '../../theme/Color';
+import {heightResponsive, width, widthResponsive} from '../../utils';
 import {
-  heightPercentage,
-  heightResponsive,
-  width,
-  widthResponsive,
-} from '../../utils';
-import {
-  Button,
   Gap,
+  ModalCustom,
   SsuDivider,
   TabFilter,
   TopNavigation,
@@ -38,7 +33,8 @@ import LoadingSpinner from '../../components/atom/Loading/LoadingSpinner';
 import {ModalLoading} from '../../components/molecule/ModalLoading/ModalLoading';
 import {useEventHook} from '../../hooks/use-event.hook';
 import {useFocusEffect} from '@react-navigation/native';
-import {mvs} from 'react-native-size-matters';
+import {profileStorage} from '../../hooks/use-storage.hook';
+import {Image} from 'react-native';
 
 type OnScrollEventHandler = (
   event: NativeSyntheticEvent<NativeScrollEvent>,
@@ -51,7 +47,13 @@ export const EventDetail: React.FC<EventDetailProps> = ({
 }: EventDetailProps) => {
   const {id} = route.params;
   const {t} = useTranslation();
-  const {useEventDetail, useEventLineUp, useEventTopTipper} = useEventHook();
+  const user = profileStorage();
+  const {
+    useEventDetail,
+    useEventLineUp,
+    useEventTopTipper,
+    useEventCheckGeneratedTopupVoucher,
+  } = useEventHook();
 
   const [scrollEffect, setScrollEffect] = useState<boolean>(false);
   const [selectedIndex, setSelectedIndex] = useState(-0);
@@ -59,6 +61,7 @@ export const EventDetail: React.FC<EventDetailProps> = ({
     {filterName: 'Event.Detail.LineUp'},
     {filterName: 'Event.Detail.TopTiper'},
   ]);
+  const [showModalTopup, setShowModaltopup] = useState<boolean>(false);
 
   const filterDataTab = (item: any, index: any) => {
     setSelectedIndex(index);
@@ -99,11 +102,19 @@ export const EventDetail: React.FC<EventDetailProps> = ({
     isRefetching: isRefetchingDetail,
   } = useEventDetail(id);
 
+  const {data: dataVoucher, refetch: refetchVoucher} =
+    useEventCheckGeneratedTopupVoucher({
+      userUUID: user?.uuid ?? '',
+      userType: 'musician',
+      eventId: id,
+    });
+
   useFocusEffect(
     useCallback(() => {
       refetchLineUp();
       refetchDetail();
       refetchTopTipper();
+      refetchVoucher();
     }, []),
   );
 
@@ -111,12 +122,21 @@ export const EventDetail: React.FC<EventDetailProps> = ({
     <View style={styles.root}>
       {scrollEffect && (
         <TopNavigation.Type1
-          title={t('Event.Detail.Title')}
+          type="event detail"
+          title={t('Event.Detail.Title') ?? ''}
           maxLengthTitle={20}
           itemStrokeColor={'white'}
           leftIcon={<ArrowLeftIcon />}
           leftIconAction={handleBackAction}
           containerStyles={styles.containerStickyHeader}
+          rightIcon={
+            <TopNavigation.EventDetailNav
+              onPressGift={() => navigation.navigate('ListVoucher')}
+              isGenerated={true}
+              onPressVoucher={() => setShowModaltopup(true)}
+            />
+          }
+          rightIconAction={() => null}
         />
       )}
       <ScrollView
@@ -146,8 +166,8 @@ export const EventDetail: React.FC<EventDetailProps> = ({
             <LinearGradient
               colors={['#00000000', Color.Dark[800]]}
               style={{height: '100%', width: '100%'}}>
-              <TopNavigation.Type1
-                title={t('Event.Detail.Title')}
+              <TopNavigation.Type4
+                title={t('Event.Detail.Title') ?? ''}
                 maxLengthTitle={20}
                 itemStrokeColor={'white'}
                 leftIcon={<ArrowLeftIcon />}
@@ -156,6 +176,13 @@ export const EventDetail: React.FC<EventDetailProps> = ({
                   borderBottomColor: 'transparent',
                   paddingHorizontal: widthResponsive(24),
                 }}
+                rightIcon={
+                  <TopNavigation.EventDetailNav
+                    onPressGift={() => navigation.navigate('ListVoucher')}
+                    isGenerated={true}
+                    onPressVoucher={() => setShowModaltopup(true)}
+                  />
+                }
               />
             </LinearGradient>
           </ImageBackground>
@@ -209,35 +236,20 @@ export const EventDetail: React.FC<EventDetailProps> = ({
             {dataDetail?.data?.fullAddress}
           </Text>
           <Gap height={heightResponsive(10)} />
-          <View style={[styles.map, {justifyContent: 'space-between'}]}>
-            <TouchableOpacity onPress={onClickMap} style={styles.map}>
-              <LocationIcon
-                width={widthResponsive(18)}
-                stroke={Color.Pink.linear}
-              />
-              <Gap width={widthResponsive(4)} />
-              <Text
-                style={[
-                  Typography.Body4,
-                  {color: Color.Pink.linear, textTransform: 'uppercase'},
-                ]}>
-                View Location on map
-              </Text>
-            </TouchableOpacity>
-
-            <Button
-              onPress={() =>
-                Linking.openURL(
-                  `mailto:team@thebeam.co?subject=${encodeURI(
-                    t('Event.Detail.MailTitle'),
-                  )}&body=${encodeURI(t('Event.Detail.MailBody'))}`,
-                )
-              }
-              label={t('Event.Detail.Perform')}
-              containerStyles={styles.button}
-              textStyles={styles.buttonText}
+          <TouchableOpacity onPress={onClickMap} style={styles.map}>
+            <LocationIcon
+              width={widthResponsive(18)}
+              stroke={Color.Pink.linear}
             />
-          </View>
+            <Gap width={widthResponsive(4)} />
+            <Text
+              style={[
+                Typography.Body4,
+                {color: Color.Pink.linear, textTransform: 'uppercase'},
+              ]}>
+              View Location on map
+            </Text>
+          </TouchableOpacity>
 
           <SsuDivider
             containerStyle={{
@@ -272,6 +284,129 @@ export const EventDetail: React.FC<EventDetailProps> = ({
           )}
         </View>
       </ScrollView>
+
+      <ModalCustom
+        modalVisible={showModalTopup}
+        children={
+          <View style={styles.modalContainer}>
+            <View style={styles.imageModalContainer}>
+              <Image source={require('../../assets/image/topup.png')} />
+              <Gap height={heightResponsive(6)} />
+              <Text
+                style={[
+                  Typography.Body4,
+                  {fontWeight: '500', color: '#FED843', textAlign: 'center'},
+                ]}>
+                540 {t('TopUp.Transaction.Detail.Credit')}
+              </Text>
+            </View>
+            <Gap height={heightResponsive(16)} />
+            <Text
+              style={[
+                Typography.Body2,
+                {
+                  fontWeight: '700',
+                  color: '#FFF',
+                  textAlign: 'center',
+                  paddingHorizontal: widthResponsive(10),
+                },
+              ]}>
+              {t('Event.Detail.Popup.Package1.Title')}
+            </Text>
+            <Gap height={heightResponsive(4)} />
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'flex-start',
+                width: '100%',
+              }}>
+              <Text
+                style={[
+                  Typography.Overline,
+                  {color: '#BDBDBD'},
+                ]}>{`\u2022`}</Text>
+              <Gap width={widthResponsive(4)} />
+              <Text
+                style={[
+                  Typography.Overline,
+                  {color: '#BDBDBD', fontWeight: '600'},
+                ]}>
+                {t('Event.Detail.Popup.Package1.Subtitle1')}
+              </Text>
+            </View>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'flex-start',
+                width: '100%',
+              }}>
+              <Text
+                style={[
+                  Typography.Overline,
+                  {color: '#BDBDBD'},
+                ]}>{`\u2022`}</Text>
+              <Gap width={widthResponsive(4)} />
+              <Text
+                style={[
+                  Typography.Overline,
+                  {color: '#BDBDBD', fontWeight: '600'},
+                ]}>
+                {t('Event.Detail.Popup.Package1.Subtitle2')}
+              </Text>
+            </View>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'flex-start',
+                width: '100%',
+              }}>
+              <Text
+                style={[
+                  Typography.Overline,
+                  {color: '#BDBDBD'},
+                ]}>{`\u2022`}</Text>
+              <Gap width={widthResponsive(4)} />
+              <Text
+                style={[
+                  Typography.Overline,
+                  {color: '#BDBDBD', fontWeight: '600'},
+                ]}>
+                {t('Event.Detail.Popup.Package1.Subtitle3')}
+              </Text>
+            </View>
+
+            <Gap height={heightResponsive(20)} />
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-around',
+                width: '100%',
+              }}>
+              <TouchableOpacity onPress={() => setShowModaltopup(false)}>
+                <Text
+                  style={[
+                    Typography.Body2,
+                    {fontWeight: '600', color: '#FFF'},
+                  ]}>
+                  {t('General.Dismiss')}
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate('TopUpCredit');
+                }}>
+                <Text
+                  style={[
+                    Typography.Body2,
+                    {fontWeight: '600', color: Color.Pink.linear},
+                  ]}>
+                  {t('General.BuyNow')}
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        }
+      />
 
       <ModalLoading visible={isLoadingDetail} />
     </View>
@@ -319,12 +454,22 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
   },
-  button: {
-    width: width * 0.25,
-    aspectRatio: heightPercentage(120 / 30),
-    backgroundColor: Color.Pink.linear,
+  modalContainer: {
+    backgroundColor: Color.Dark[800],
+    width: '100%',
+    maxWidth: widthResponsive(244),
+    alignItems: 'center',
+    borderRadius: widthResponsive(10),
+    paddingHorizontal: widthResponsive(16),
+    paddingBottom: heightResponsive(16),
+    paddingTop: heightResponsive(32),
   },
-  buttonText: {
-    fontSize: mvs(10),
+  imageModalContainer: {
+    backgroundColor: '#20242C',
+    padding: widthResponsive(20),
+    borderRadius: 100,
+    width: widthResponsive(120),
+    height: heightResponsive(120),
+    alignItems: 'center',
   },
 });

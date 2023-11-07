@@ -17,7 +17,7 @@ import {Image} from 'react-native-image-crop-picker';
 // Screen
 import {MerchScreen} from '../screen/Merch';
 import {TicketScreen} from '../screen/Ticket';
-import {FeedScreen} from '../screen/Feed';
+import FeedScreen from '../screen/Feed';
 import {ForgotPassword} from '../screen/ForgotPassword';
 import {LoginScreen} from '../screen/Login';
 import {OnboardScreen} from '../screen/Onboard';

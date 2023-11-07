@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {
   View,
   StyleSheet,
@@ -30,6 +30,7 @@ import {
   ModalConfirm,
   SearchBar,
   Carousel,
+  StepCopilot,
 } from '../components';
 import {color, font} from '../theme';
 import Color from '../theme/Color';
@@ -77,6 +78,9 @@ import ShowMoreAnalytics from '../components/molecule/ShowMoreAnalytics';
 import EventList from './ListCard/EventList';
 import {useEventHook} from '../hooks/use-event.hook';
 import {useHomeHook} from '../hooks/use-home.hook';
+import {useCopilot} from 'react-native-copilot';
+import {useCopilotStore} from '../store/copilot.store';
+import {useCoachmarkHook} from '../hooks/use-coachmark.hook';
 
 type OnScrollEventHandler = (
   event: NativeSyntheticEvent<NativeScrollEvent>,
@@ -116,9 +120,12 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
   const {isLoading: isLoadingEvent, refetch: refetchEvent} = useEventHome();
 
   const {uriVideo, setUriVideo} = useVideoStore();
+  const {copilotName, setTutorialId, setCopilotName, setInitialName} =
+    useCopilotStore();
+  const {useCoachmark} = useCoachmarkHook();
 
   const isLogin = storage.getBoolean('isLogin');
-  const [selectedIndexAnalytic, setSelectedIndexAnalytic] = useState(-0);
+  const [selectedIndexAnalytic, setSelectedIndexAnalytic] = useState(0);
   const [refreshing, setRefreshing] = useState<boolean>(false);
   const [showModalPost, setShowModalPost] = useState<ModalPostState>({
     isExclusivePostModal: false,
@@ -134,6 +141,7 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
     useState<TotalPostAndFansResponseType>();
   const [dataIncome, setDataIncome] = useState<TotalIncome>();
   const [showAnalytic, setShowAnalytic] = useState<boolean>(false);
+  const scrollViewRef = useRef<ScrollView>(null);
 
   const {data: songAndAlbumData, refetch: refetchTotalSongAlbum} = useQuery(
     'overview-totalSongAlbum',
@@ -158,6 +166,40 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
   const [randomPlaceHolder, setRandomPlaceHolder] = useState(
     dataPlaceHolder[Math.floor(Math.random() * dataPlaceHolder.length)],
   );
+
+  const {start, currentStepNumber} = useCopilot();
+  const {data: dataCoachmark, refetch: refetchCoachmark} = useCoachmark();
+
+  // refetch coachmark when switch tab
+  useEffect(() => {
+    refetchCoachmark();
+  }, [selectedIndexAnalytic]);
+
+  // COACHMARK START
+  useEffect(() => {
+    // Check status coachmark in each section
+    const hideCoachmark =
+      dataCoachmark?.data &&
+      dataCoachmark?.data.filter(
+        val => val.TutorialID === selectedIndexAnalytic + 1,
+      )[0]?.IsFinished;
+
+    const timeout = setTimeout(() => {
+      if ((currentStepNumber === 0 || copilotName !== '') && !hideCoachmark) {
+        // copilotName => where it starts
+        // scrollViewRef.current => to auto scroll when next step is off screen
+        start(t(copilotName) || '', scrollViewRef.current);
+      }
+    }, 1000);
+    return () => clearTimeout(timeout);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    start,
+    currentStepNumber,
+    copilotName,
+    dataCoachmark,
+    selectedIndexAnalytic,
+  ]);
 
   useFocusEffect(
     useCallback(() => {
@@ -272,7 +314,10 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
     {filterName: 'Home.Tab.Analytic.Explore.Title'},
   ]);
 
-  const filterDataAnalytic = (item: any, index: any) => {
+  const filterDataAnalytic = (item: any, index: any, nameCopilot: string) => {
+    index === 0 ? setCopilotName('') : setCopilotName(nameCopilot);
+    setInitialName(nameCopilot);
+    setTutorialId(index + 1);
     setSelectedIndexAnalytic(index);
   };
 
@@ -453,6 +498,7 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
       )}
 
       <ScrollView
+        ref={scrollViewRef}
         showsVerticalScrollIndicator={false}
         scrollEventThrottle={16}
         refreshControl={
@@ -484,74 +530,113 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
             selectedIndex={0}
             translation={true}
           />
-          <EventList isLoading={isLoadingEvent} />
+          <StepCopilot
+            children={<EventList isLoading={isLoadingEvent} />}
+            order={2}
+            name={t('Coachmark.Live')}
+            text={t('Coachmark.SubtitleLive')}
+          />
         </View>
         {/* End of Tab Event List */}
 
-        <View style={styles.overviewContainer}>
-          <Text style={styles.titleOverview}>
-            {t('Home.OverviewCard.Title')}
-          </Text>
-          <TouchableOpacity
-            onPress={() => setShowAnalytic(false)}
-            disabled={!showAnalytic}>
-            <Text
-              style={[
-                styles.hideAnalytics,
-                {color: showAnalytic ? color.Success[400] : 'transparent'},
-              ]}>
-              {t('Home.OverviewCard.HideAnalytics')}
-            </Text>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.containerOverview}>
-          {listOverviewCard.map((item, index) => {
-            const newData = [
-              dataIncome?.totalIncome,
-              dataFansPost?.totalFans,
-              dataFansPost?.totalPublicPost,
-              dataFansPost?.totalExclusivePost,
-              dataSongAlbum?.countAlbumReleased,
-              dataSongAlbum?.countSong,
-            ];
-            return (
-              <OverviewCard
-                key={item.id}
-                amount={newData[index] || 0}
-                path={item.path}
-                title={t(item.title)}
-                type={item.id === 2 || item.id === 3 ? 'black' : 'white'}
-              />
-            );
-          })}
-        </View>
+        <StepCopilot
+          children={
+            <>
+              <View style={styles.overviewContainer}>
+                <Text style={styles.titleOverview}>
+                  {t('Home.OverviewCard.Title')}
+                </Text>
+                <TouchableOpacity
+                  onPress={() => setShowAnalytic(false)}
+                  disabled={!showAnalytic}>
+                  <Text
+                    style={[
+                      styles.hideAnalytics,
+                      {
+                        color: showAnalytic
+                          ? color.Success[400]
+                          : 'transparent',
+                      },
+                    ]}>
+                    {t('Home.OverviewCard.HideAnalytics')}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+              <View style={styles.containerOverview}>
+                {listOverviewCard.map((item, index) => {
+                  const newData = [
+                    dataIncome?.totalIncome,
+                    dataFansPost?.totalFans,
+                    dataFansPost?.totalPublicPost,
+                    dataFansPost?.totalExclusivePost,
+                    dataSongAlbum?.countAlbumReleased,
+                    dataSongAlbum?.countSong,
+                  ];
+                  return (
+                    <OverviewCard
+                      key={item.id}
+                      amount={newData[index] || 0}
+                      path={item.path}
+                      title={t(item.title)}
+                      type={item.id === 2 || item.id === 3 ? 'black' : 'white'}
+                    />
+                  );
+                })}
+              </View>
+            </>
+          }
+          order={3}
+          name={t('Coachmark.Overview')}
+          text={t('Coachmark.SubtitleOverview')}
+        />
 
         {/*  TODO: will be activate once the requirement is clear */}
         {/* {!showAnalytic && (
           <ShowMoreAnalytics onPress={handleShowMoreAnalytics} />
         )} */}
 
-        <Text
-          style={[
-            styles.titleOverview,
-            {paddingVertical: mvs(20), paddingHorizontal: widthResponsive(22)},
-          ]}>
-          {t('Home.CreateNewPost')}
-        </Text>
-        {/* Create Post Shortcuts */}
-        {dataProfile?.data && (
-          <CreatePostShortcut
-            avatarUri={dataProfile?.data?.imageProfileUrls[1]?.image}
-            placeholder={`${randomPlaceHolder}...`}
-            compOnPress={handleCreatePost}
-          />
-        )}
+        <StepCopilot
+          children={
+            <>
+              <Text
+                style={[
+                  styles.titleOverview,
+                  {
+                    paddingVertical: mvs(20),
+                    paddingHorizontal: widthResponsive(22),
+                  },
+                ]}>
+                {t('Home.CreateNewPost')}
+              </Text>
+              {/* Create Post Shortcuts */}
+              {dataProfile?.data && (
+                <CreatePostShortcut
+                  avatarUri={dataProfile?.data?.imageProfileUrls[1]?.image}
+                  placeholder={`${randomPlaceHolder}...`}
+                  compOnPress={handleCreatePost}
+                />
+              )}
+            </>
+          }
+          order={4}
+          name={t('Coachmark.CreateNewPost')}
+          text={t('Coachmark.SubtitleCreateNewPost')}
+        />
 
-        {dataSongAlbum?.countAlbumReleased === 0 && (
-          <View style={styles.containerUpload}>
-            <UploadMusicSection />
-          </View>
-        )}
+        <StepCopilot
+          children={
+            <>
+              {dataSongAlbum?.countAlbumReleased === 0 && (
+                <View style={styles.containerUpload}>
+                  <UploadMusicSection />
+                </View>
+              )}
+            </>
+          }
+          order={5}
+          name={t('Coachmark.UploadMusic')}
+          text={t('Coachmark.SubtitleUploadMusic')}
+        />
 
         {profileProgress?.stepProgress !== '100%' ? (
           <ProgressCard
@@ -568,6 +653,7 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
             onPress={filterDataAnalytic}
             selectedIndex={selectedIndexAnalytic}
             translation={true}
+            showCopilot={true}
           />
           {filterAnalytic[selectedIndexAnalytic].filterName ===
           'Home.Tab.Analytic.Income.Title' ? (

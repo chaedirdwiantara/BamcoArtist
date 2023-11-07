@@ -5,6 +5,7 @@ import {default as Type4} from './Type4';
 import {default as Type5} from './Type5';
 import {default as Type2Animated} from './Type2-animated';
 import {default as LiveTippingNav} from './LiveTippingNav';
+import {default as EventDetailNav} from './EventDetailNav';
 
 export const TopNavigation = {
   Type1,
@@ -14,4 +15,5 @@ export const TopNavigation = {
   Type5,
   Type2Animated,
   LiveTippingNav,
+  EventDetailNav,
 };

@@ -422,3 +422,13 @@ export interface DataVoucherListDetail {
 export interface GetVoucherListDetailResponse extends BaseResponseApi {
   data: DataVoucherListDetail;
 }
+export interface CheckIsGeneratedTopupVoucherReq {
+  userUUID: string;
+  userType: string;
+  eventId: string;
+  endDateEvent?: string;
+}
+
+export interface CheckIsGeneratedTopupVoucherResponse extends BaseResponseApi {
+  data: boolean;
+}

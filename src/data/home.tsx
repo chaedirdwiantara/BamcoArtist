@@ -70,3 +70,32 @@ export const listRequiredProfile: string[] = [
   'Profile.Edit.AddBio',
   'Profile.Edit.AddWebsite',
 ];
+
+export const orderTabAnalytic: number[] = [6, 13, 16, 19, 25];
+export const orderTabSong: number[] = [27, 28];
+
+export const listNameTabAnalytic: string[] = [
+  'Coachmark.FansAnalytic',
+  'Coachmark.Income',
+  'Coachmark.PostTab',
+  'Coachmark.MyMusic',
+  'Coachmark.Discover',
+];
+
+export const listNameTabSong: string[] = [
+  'Coachmark.TopSongs',
+  'Coachmark.NewSong',
+];
+
+export const listTextTabAnalytic: string[] = [
+  'Coachmark.SubtitleFansAnalytic',
+  'Coachmark.SubtitleIncome',
+  'Coachmark.SubtitlePostTab',
+  'Coachmark.SubtitleMyMusic',
+  'Coachmark.SubtitleDiscover',
+];
+
+export const listTextTabSong: string[] = [
+  'Coachmark.SubtitleTopSongs',
+  'Coachmark.SubtitleNewSong',
+];

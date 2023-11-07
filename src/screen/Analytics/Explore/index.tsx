@@ -5,6 +5,7 @@ import {
   Gap,
   ListImageDesc,
   EmptyStateHome,
+  StepCopilot,
 } from '../../../components';
 import ListPlaylistHome from '../../../components/molecule/ListCard/ListPlaylistHome';
 import {heightPercentage, width, widthPercentage} from '../../../utils';
@@ -135,12 +136,19 @@ const Explore = (props: ExploreProps) => {
     <>
       {/* Coming Soon */}
       {dataAlbumComingSoon.length > 0 ? (
-        <ListImageDesc
-          title={t('Home.ComingSoon.Title')}
-          data={dataAlbumComingSoon}
-          containerStyle={styles.containerList}
-          onPress={() => goToListMusic('Coming Soon', 'album')}
-          onPressImage={(name, id) => goToDetailAlbum(name, id)}
+        <StepCopilot
+          children={
+            <ListImageDesc
+              title={t('Home.ComingSoon.Title')}
+              data={dataAlbumComingSoon}
+              containerStyle={styles.containerList}
+              onPress={() => goToListMusic('Coming Soon', 'album')}
+              onPressImage={(name, id) => goToDetailAlbum(name, id)}
+            />
+          }
+          order={26}
+          name={t('Coachmark.ComingSoon')}
+          text={t('Coachmark.SubtitleComingSoon')}
         />
       ) : null}
       <Gap height={heightPercentage(20)} />
@@ -178,10 +186,17 @@ const Explore = (props: ExploreProps) => {
 
       {/* Playlist */}
       {dataPlaylist?.data && dataPlaylist?.data.length > 0 ? (
-        <ListPlaylistHome
-          title={t('Home.Playlist.Title')}
-          data={dataPlaylist?.data}
-          onPress={() => navigation.navigate('ListPlaylist')}
+        <StepCopilot
+          children={
+            <ListPlaylistHome
+              title={t('Home.Playlist.Title')}
+              data={dataPlaylist?.data}
+              onPress={() => navigation.navigate('ListPlaylist')}
+            />
+          }
+          order={29}
+          name={t('Coachmark.Playlist')}
+          text={t('Coachmark.SubtitlePlaylist')}
         />
       ) : null}
       {/* End of Playlist */}

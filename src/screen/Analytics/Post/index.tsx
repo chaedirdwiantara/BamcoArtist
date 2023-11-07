@@ -3,7 +3,8 @@ import React, {FC} from 'react';
 import PopularPost from './Popular';
 import {widthResponsive} from '../../../utils';
 import PostEngagement from './PostEngagement';
-import {Gap} from '../../../components';
+import {Gap, StepCopilot} from '../../../components';
+import {useTranslation} from 'react-i18next';
 
 interface PostAnalyticProps {
   uuid: string;
@@ -11,11 +12,24 @@ interface PostAnalyticProps {
 
 const PostAnalytic: FC<PostAnalyticProps> = (props: PostAnalyticProps) => {
   const {uuid} = props;
+  const {t} = useTranslation();
   return (
     <View style={styles.container}>
-      {uuid && <PopularPost uuidMusician={uuid} />}
+      {uuid && (
+        <StepCopilot
+          children={<PopularPost uuidMusician={uuid} />}
+          order={17}
+          name={t('Coachmark.PopularPost')}
+          text={t('Coachmark.SubtitlePopularPost')}
+        />
+      )}
       <Gap height={20} />
-      <PostEngagement />
+      <StepCopilot
+        children={<PostEngagement />}
+        order={18}
+        name={t('Coachmark.PostEngagementRate')}
+        text={t('Coachmark.SubtitlePostEngagementRate')}
+      />
     </View>
   );
 };
