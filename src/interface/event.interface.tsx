@@ -377,3 +377,48 @@ export interface GetVoucherByEventResponse extends BaseResponseApi {
 export interface ClaimVoucherResponse extends BaseResponseApi {
   data: null;
 }
+
+export interface DataVoucherList {
+  expiredDate: string;
+  id: number;
+  isRedeemed: boolean;
+  ownerType: string;
+  ownerUUID: string;
+  voucher: {
+    code: string;
+    description: string;
+    imageUrl: imageTypes[];
+    title: string;
+  };
+}
+
+export interface GetVoucherListResponse extends BaseResponseApi {
+  data: DataVoucherList[];
+}
+
+export interface DataVoucherListDetail {
+  id: number;
+  ownerUUID: string;
+  ownerType: string;
+  expiredDate: string;
+  isRedeemed: boolean;
+  isAvailable: boolean;
+  voucher: {
+    id: number;
+    code: string;
+    title: string;
+    startDate: string;
+    endDate: string;
+    subTitle: string;
+    description: string;
+    termsCondition: {
+      title: string;
+      value: string[];
+    };
+    imageUrl: imageTypes[];
+  };
+}
+
+export interface GetVoucherListDetailResponse extends BaseResponseApi {
+  data: DataVoucherListDetail;
+}
