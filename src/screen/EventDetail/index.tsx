@@ -132,7 +132,7 @@ export const EventDetail: React.FC<EventDetailProps> = ({
           rightIcon={
             <TopNavigation.EventDetailNav
               onPressGift={() => navigation.navigate('ListVoucher')}
-              isGenerated={dataVoucher?.data ?? true}
+              isGenerated={true}
               onPressVoucher={() => setShowModaltopup(true)}
             />
           }
@@ -179,7 +179,7 @@ export const EventDetail: React.FC<EventDetailProps> = ({
                 rightIcon={
                   <TopNavigation.EventDetailNav
                     onPressGift={() => navigation.navigate('ListVoucher')}
-                    isGenerated={dataVoucher?.data ?? true}
+                    isGenerated={true}
                     onPressVoucher={() => setShowModaltopup(true)}
                   />
                 }
