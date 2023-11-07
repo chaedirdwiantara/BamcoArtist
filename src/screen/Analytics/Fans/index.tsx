@@ -7,50 +7,52 @@ import YourTopFans from './YourTopFans';
 import FansAge from './FansAge';
 import FansGender from './FansGender';
 import FansCountry from './FansCountry';
+import {useTranslation} from 'react-i18next';
 
 const Fans = () => {
+  const {t} = useTranslation();
   return (
     <View>
       <StepCopilot
         children={<FansGrowth />}
-        order={9}
-        name="1. Fans Growth"
-        text="How your followers turned into a fan by giving you a tip or subscribe your exclusive content"
+        order={7}
+        name={t('Coachmark.FansGrowth')}
+        text={t('Coachmark.SubtitleFansGrowth')}
       />
       <Gap height={20} />
       <StepCopilot
         children={<YourTopFans />}
-        order={10}
-        name="2. Fans Interaction"
-        text="Summary of your active fans interaction"
+        order={8}
+        name={t('Coachmark.TopFans')}
+        text={t('Coachmark.SubtitleTopFans')}
       />
       <Gap height={20} />
       <StepCopilot
         children={<FansActiveInteract />}
-        order={11}
-        name="3. Your Top Fans"
-        text="List of your die hard fans that have been support your content & album"
+        order={9}
+        name={t('Coachmark.FansInteraction')}
+        text={t('Coachmark.SubtitleFansInteraction')}
       />
       <Gap height={20} />
       <StepCopilot
         children={<FansAge />}
-        order={12}
-        name="4. Fans age"
-        text="See your fans age and make better content to suit with them"
+        order={10}
+        name={t('Coachmark.FansAge')}
+        text={t('Coachmark.SubtitleFansAge')}
       />
       <Gap height={20} />
       <StepCopilot
         children={<FansGender />}
-        order={13}
-        name="5. Fans Gender"
-        text="The percentage of your fans gender"
+        order={11}
+        name={t('Coachmark.FansGender')}
+        text={t('Coachmark.SubtitleFansGender')}
       />
       <Gap height={20} />
       <StepCopilot
         children={<FansCountry />}
-        order={14}
-        name="6. Fans Country"
-        text="List of where do your fans comes from"
+        order={12}
+        name={t('Coachmark.FansCountry')}
+        text={t('Coachmark.SubtitleFansCountry')}
       />
     </View>
   );
