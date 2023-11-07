@@ -1,12 +1,14 @@
-import {Text, TouchableOpacity, View, ViewStyle} from 'react-native';
 import React from 'react';
-import {elipsisText} from '../../../utils';
+import {useTranslation} from 'react-i18next';
+import {Text, TouchableOpacity, View, ViewStyle} from 'react-native';
+
+import {font} from '../../../theme';
 import {Avatar, Gap} from '../../atom';
 import topNavstyles from './topNavstyles';
-import {font} from '../../../theme';
-import {ChipMoney} from '../../atom/ChipMoney/ChipMoney';
+import {elipsisText} from '../../../utils';
+import {StepCopilot} from '../StepCopilot';
 import {DefaultAvatar} from '../../../assets/icon';
-import {useTranslation} from 'react-i18next';
+import {ChipMoney} from '../../atom/ChipMoney/ChipMoney';
 
 /** === INTERFACE === */
 type Props = {
@@ -84,9 +86,16 @@ const Type5: React.FC<Props> = (props: Props) => {
           </Text>
         </View>
         <View style={topNavstyles.rightContainer}>
-          <TouchableOpacity onPress={props.onPressCoin}>
-            <ChipMoney balance={props.points} />
-          </TouchableOpacity>
+          <StepCopilot
+            children={
+              <TouchableOpacity onPress={props.onPressCoin}>
+                <ChipMoney balance={props.points} />
+              </TouchableOpacity>
+            }
+            order={1}
+            name={t('Coachmark.Credit')}
+            text={t('Coachmark.SubtitleCredit')}
+          />
           <Gap width={12} />
           {iconRight()}
         </View>

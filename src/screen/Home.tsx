@@ -79,6 +79,8 @@ import EventList from './ListCard/EventList';
 import {useEventHook} from '../hooks/use-event.hook';
 import {useHomeHook} from '../hooks/use-home.hook';
 import {useCopilot} from 'react-native-copilot';
+import {useCopilotStore} from '../store/copilot.store';
+import {useCoachmarkHook} from '../hooks/use-coachmark.hook';
 
 type OnScrollEventHandler = (
   event: NativeSyntheticEvent<NativeScrollEvent>,
@@ -122,9 +124,12 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
   } = useEventHome();
 
   const {uriVideo, setUriVideo} = useVideoStore();
+  const {copilotName, setTutorialId, setCopilotName, setInitialName} =
+    useCopilotStore();
+  const {useCoachmark} = useCoachmarkHook();
 
   const isLogin = storage.getBoolean('isLogin');
-  const [selectedIndexAnalytic, setSelectedIndexAnalytic] = useState(-0);
+  const [selectedIndexAnalytic, setSelectedIndexAnalytic] = useState(0);
   const [refreshing, setRefreshing] = useState<boolean>(false);
   const [showModalPost, setShowModalPost] = useState<ModalPostState>({
     isExclusivePostModal: false,
@@ -167,14 +172,38 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
   );
 
   const {start, currentStepNumber} = useCopilot();
+  const {data: dataCoachmark, refetch: refetchCoachmark} = useCoachmark();
+
+  // refetch coachmark when switch tab
   useEffect(() => {
+    refetchCoachmark();
+  }, [selectedIndexAnalytic]);
+
+  // COACHMARK START
+  useEffect(() => {
+    // Check status coachmark in each section
+    const hideCoachmark =
+      dataCoachmark?.data &&
+      dataCoachmark?.data.filter(
+        val => val.TutorialID === selectedIndexAnalytic + 1,
+      )[0]?.IsFinished;
+
     const timeout = setTimeout(() => {
-      if (currentStepNumber === 0) {
-        start('Live Event', scrollViewRef.current);
+      if ((currentStepNumber === 0 || copilotName !== '') && !hideCoachmark) {
+        // copilotName => where it starts
+        // scrollViewRef.current => to auto scroll when next step is off screen
+        start(t(copilotName) || '', scrollViewRef.current);
       }
     }, 1000);
     return () => clearTimeout(timeout);
-  }, [start, currentStepNumber]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    start,
+    currentStepNumber,
+    copilotName,
+    dataCoachmark,
+    selectedIndexAnalytic,
+  ]);
 
   useFocusEffect(
     useCallback(() => {
@@ -289,7 +318,10 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
     {filterName: 'Home.Tab.Analytic.Explore.Title'},
   ]);
 
-  const filterDataAnalytic = (item: any, index: any) => {
+  const filterDataAnalytic = (item: any, index: any, nameCopilot: string) => {
+    index === 0 ? setCopilotName('') : setCopilotName(nameCopilot);
+    setInitialName(nameCopilot);
+    setTutorialId(index + 1);
     setSelectedIndexAnalytic(index);
   };
 
@@ -509,9 +541,9 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
                 isLoading={isLoadingEvent}
               />
             }
-            order={1}
-            name="Live Event"
-            text="This is the list of artists live"
+            order={2}
+            name={t('Coachmark.Live')}
+            text={t('Coachmark.SubtitleLive')}
           />
         </View>
         {/* End of Tab Event List */}
@@ -562,9 +594,9 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
               </View>
             </>
           }
-          order={2}
-          name="My Overview"
-          text="This is the summary of your account statistics"
+          order={3}
+          name={t('Coachmark.Overview')}
+          text={t('Coachmark.SubtitleOverview')}
         />
 
         {/*  TODO: will be activate once the requirement is clear */}
@@ -595,9 +627,9 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
               )}
             </>
           }
-          order={3}
-          name="Post"
-          text="You can create your post here"
+          order={4}
+          name={t('Coachmark.CreateNewPost')}
+          text={t('Coachmark.SubtitleCreateNewPost')}
         />
 
         <StepCopilot
@@ -610,9 +642,9 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
               )}
             </>
           }
-          order={4}
-          name="Upload Music"
-          text="Publish your music in Beamco by following the steps here"
+          order={5}
+          name={t('Coachmark.UploadMusic')}
+          text={t('Coachmark.SubtitleUploadMusic')}
         />
 
         {profileProgress?.stepProgress !== '100%' ? (
@@ -630,6 +662,7 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
             onPress={filterDataAnalytic}
             selectedIndex={selectedIndexAnalytic}
             translation={true}
+            showCopilot={true}
           />
           {filterAnalytic[selectedIndexAnalytic].filterName ===
           'Home.Tab.Analytic.Income.Title' ? (
