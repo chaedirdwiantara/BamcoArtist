@@ -201,7 +201,7 @@ export type RootStackParams = {
   DetailHistoryTransaction: {
     dataDetail: TransactionHistoryPropsType;
   };
-  DetailVoucher: {id: number};
+  DetailVoucher: {id: number; eventId: string};
   DiscoverArtist: undefined;
   DonationAndSubscription: undefined;
   EditProfile: {data: ProfileResponseData};

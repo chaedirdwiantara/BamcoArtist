@@ -26,13 +26,18 @@ import {Buffer} from 'buffer';
 type OnScrollEventHandler = (
   event: NativeSyntheticEvent<NativeScrollEvent>,
 ) => void;
-type ListVoucherProps = NativeStackScreenProps<RootStackParams, 'ListVoucher'>;
+type ListVoucherProps = NativeStackScreenProps<
+  RootStackParams,
+  'DetailVoucher'
+>;
 
 const DetailVoucher: FC<ListVoucherProps> = ({
   route,
   navigation,
 }: ListVoucherProps) => {
   const id = route.params.id;
+  const eventId = route.params.eventId;
+
   const {t} = useTranslation();
   const {useEventVoucherListDetail} = useEventHook();
 
@@ -55,7 +60,7 @@ const DetailVoucher: FC<ListVoucherProps> = ({
     refetch: refetchDetail,
     isLoading: isLoadingDetail,
     isRefetching: isRefetchingDetail,
-  } = useEventVoucherListDetail(id);
+  } = useEventVoucherListDetail(id.toString());
 
   useFocusEffect(
     useCallback(() => {
@@ -65,9 +70,8 @@ const DetailVoucher: FC<ListVoucherProps> = ({
 
   useEffect(() => {
     if (dataDetail?.data) {
-      setValueEncode(
-        Buffer.from(dataDetail?.data.id.toString()).toString('base64'),
-      );
+      let dataToEncode = `${dataDetail?.data.id}|${eventId}`;
+      setValueEncode(Buffer.from(dataToEncode).toString('base64'));
     }
   }, [dataDetail?.data]);
 
@@ -89,6 +93,7 @@ const DetailVoucher: FC<ListVoucherProps> = ({
           leftIcon={<ArrowLeftIcon />}
           leftIconAction={handleBackAction}
           containerStyles={styles.topNavStyle}
+          rightIconAction={() => {}}
         />
       )}
       <ScrollView
@@ -106,10 +111,10 @@ const DetailVoucher: FC<ListVoucherProps> = ({
         // }
       >
         {/* {isRefetchingDetail && (
-          <View style={styles.loadingContainer}>
-            <LoadingSpinner />
-          </View>
-        )} */}
+            <View style={styles.loadingContainer}>
+              <LoadingSpinner />
+            </View>
+          )} */}
 
         {dataDetail?.data && (
           <View style={styles.slide}>
@@ -129,6 +134,7 @@ const DetailVoucher: FC<ListVoucherProps> = ({
                       itemStrokeColor={'white'}
                       leftIcon={<ArrowLeftIcon />}
                       leftIconAction={handleBackAction}
+                      rightIconAction={() => {}}
                       containerStyles={{
                         borderBottomColor: 'transparent',
                         paddingHorizontal: widthResponsive(24),
