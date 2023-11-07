@@ -13,6 +13,7 @@ import com.microsoft.codepush.react.CodePush;
 import co.beam.artist.android.newarchitecture.MainApplicationReactNativeHost;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
+import com.reactnativeultimateconfig.UltimateConfigModule;
 
 public class MainApplication extends Application implements ReactApplication {
 
@@ -62,6 +63,7 @@ public class MainApplication extends Application implements ReactApplication {
     ReactFeatureFlags.useTurboModules = BuildConfig.IS_NEW_ARCHITECTURE_ENABLED;
     SoLoader.init(this, /* native exopackage */ false);
     initializeFlipper(this, getReactNativeHost().getReactInstanceManager());
+    UltimateConfigModule.setBuildConfig(BuildConfig.class);
   }
 
   /**

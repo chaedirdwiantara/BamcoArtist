@@ -7,7 +7,8 @@
     "ios": "react-native run-ios",
     "start": "react-native start",
     "test": "jest",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "rnuc": "$(npm bin)/rnuc"
   },
   "dependencies": {
     "@gorhom/portal": "^1.0.14",
@@ -60,6 +61,7 @@
     "react-native-svg": "^13.9.0",
     "react-native-swiper": "^1.6.0",
     "react-native-track-player": "^3.2.0",
+    "react-native-ultimate-config": "^6.0.1",
     "react-native-version-check": "^3.4.7",
     "react-native-video": "^6.0.0-alpha.4",
     "react-native-vision-camera": "2.15.4",

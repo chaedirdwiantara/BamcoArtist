@@ -117,11 +117,7 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
   const {getIncome} = useAnalyticsHook();
   const {useEventHome} = useEventHook();
   const {setLastActive} = useHomeHook();
-  const {
-    data: dataEvent,
-    isLoading: isLoadingEvent,
-    refetch: refetchEvent,
-  } = useEventHome();
+  const {isLoading: isLoadingEvent, refetch: refetchEvent} = useEventHome();
 
   const {uriVideo, setUriVideo} = useVideoStore();
   const {copilotName, setTutorialId, setCopilotName, setInitialName} =
@@ -535,12 +531,7 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
             translation={true}
           />
           <StepCopilot
-            children={
-              <EventList
-                dataEvent={dataEvent?.data}
-                isLoading={isLoadingEvent}
-              />
-            }
+            children={<EventList isLoading={isLoadingEvent} />}
             order={2}
             name={t('Coachmark.Live')}
             text={t('Coachmark.SubtitleLive')}
