@@ -24,6 +24,7 @@ import {
   ModalConfirm,
   ModalImagePicker,
   SsuInput,
+  StepCopilot,
   TopNavigation,
 } from '../../components';
 import {
@@ -56,6 +57,10 @@ import MusicPreview from '../../components/molecule/MusicPreview/MusicPreview';
 import {AddVoteIcon, ImportMusicIcon, ImportPhotoIcon} from '../../assets/icon';
 import {ModalLoading} from '../../components/molecule/ModalLoading/ModalLoading';
 import FilterModal from '../../components/molecule/V2/DropdownFilter/modalFilter';
+import {CopilotProvider, useCopilot} from 'react-native-copilot';
+import {useCoachmarkHook} from '../../hooks/use-coachmark.hook';
+import {useCopilotStore} from '../../store/copilot.store';
+import {StepNumber, Tooltip} from '../../components/molecule/TooltipGuideline';
 
 type PostDetailProps = NativeStackScreenProps<RootStackParams, 'CreatePost'>;
 
@@ -67,7 +72,7 @@ const vooteInitialChoices: dataVoteProps[] = [
   {id: '2', text: ''},
 ];
 
-const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
+const CreatePostCopilot: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   const {t} = useTranslation();
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
@@ -131,6 +136,7 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   const [keyBrdIsActive, setKeybrdIsActive] = useState<boolean>(false);
   const [videoTemporary, setVideoTemporary] = useState<Video>();
   const [updateToUpload, setUpdateToUpload] = useState<boolean>(false);
+  const [showCoachmark, setShowCoachmark] = useState<boolean>(true);
 
   const {
     uriVideo,
@@ -421,6 +427,31 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
     setVoteCompleted(true);
   };
 
+  // COACHMARK START
+  const {start} = useCopilot();
+  const {useCoachmark} = useCoachmarkHook();
+  const {data: dataCoachmark} = useCoachmark();
+  const {setTutorialId} = useCopilotStore();
+
+  useEffect(() => {
+    // Check status coachmark first post
+    // tutorial id feed = 7, check postman
+    const hideCoachmark =
+      dataCoachmark?.data &&
+      dataCoachmark?.data.filter(
+        (val: {TutorialID: number}) => val.TutorialID === 7,
+      )[0]?.IsFinished;
+
+    const timeout = setTimeout(() => {
+      if (!hideCoachmark && showCoachmark) {
+        start(t('Coachmark.TypeContent') || '', null);
+        setTutorialId(7);
+        setShowCoachmark(false);
+      }
+    }, 1000);
+    return () => clearTimeout(timeout);
+  }, [start, dataCoachmark]);
+
   return (
     <KeyboardAvoidingView
       style={{flex: 1}}
@@ -438,74 +469,85 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
         />
         <View style={styles.mainContainer}>
           {/* //! TOP AREA */}
-          <ScrollView style={styles.topBody}>
-            <View style={{}}>
-              <SsuInput.InputText
-                onFocus={() => setKeybrdIsActive(true)}
-                value={inputText}
-                onChangeText={(newText: string) => setInputText(newText)}
-                placeholder={`${t('Post.Create.Write')}...`}
-                containerStyles={{
-                  backgroundColor: 'transparent',
-                  paddingHorizontal: 0,
-                }}
-                multiline={true}
-                maxLength={400}
-                autoFocus
-              />
-              {uri[0]?.mime !== 'video/mp4' && (
-                <ImageList
-                  imgData={uri}
-                  disabled={true}
-                  height={79}
-                  onPress={closeImage}
-                />
-              )}
-              {musicData !== undefined &&
-              musicData.transcodedSongUrl !== undefined ? (
-                <MusicPreview
-                  targetId={musicData.id.toString()}
-                  title={musicData.title}
-                  musician={musicData.musicianName}
-                  coverImage={
-                    musicData.imageUrl.length !== 0
-                      ? musicData.imageUrl[0].image
-                      : dummySongImg
-                  }
-                  encodeDashUrl={musicData.transcodedSongUrl[0].encodedDashUrl}
-                  encodeHlsUrl={musicData.transcodedSongUrl[0].encodedHlsUrl}
-                  startAt={'0:00'}
-                  onPress={onPressPlaySong}
-                  closeOnPress={handleClosedPlayer}
-                  isPlay={isPlaying}
-                  playOrPause={handlePausePlay}
-                  pauseModeOn={pauseModeOn}
-                  currentProgress={playerProgress.position}
-                  duration={playerProgress.duration}
-                  seekPlayer={seekPlayer}
-                />
-              ) : null}
-              {showIcon === 'Vote' && (
-                <VoteComponent
-                  dataVote={dataVote}
-                  setDataVote={setDataVote}
-                  setVoteCompleted={setVoteCompleted}
-                  pollDuration={pollDuration}
-                  setPollDuration={setPollDuration}
-                />
-              )}
-            </View>
+          <StepCopilot
+            children={
+              <ScrollView style={styles.topBody}>
+                <View style={{}}>
+                  <SsuInput.InputText
+                    onFocus={() => setKeybrdIsActive(true)}
+                    value={inputText}
+                    onChangeText={(newText: string) => setInputText(newText)}
+                    placeholder={`${t('Post.Create.Write')}...`}
+                    containerStyles={{
+                      backgroundColor: 'transparent',
+                      paddingHorizontal: 0,
+                    }}
+                    multiline={true}
+                    maxLength={400}
+                    autoFocus
+                  />
+                  {uri[0]?.mime !== 'video/mp4' && (
+                    <ImageList
+                      imgData={uri}
+                      disabled={true}
+                      height={79}
+                      onPress={closeImage}
+                    />
+                  )}
+                  {musicData !== undefined &&
+                  musicData.transcodedSongUrl !== undefined ? (
+                    <MusicPreview
+                      targetId={musicData.id.toString()}
+                      title={musicData.title}
+                      musician={musicData.musicianName}
+                      coverImage={
+                        musicData.imageUrl.length !== 0
+                          ? musicData.imageUrl[0].image
+                          : dummySongImg
+                      }
+                      encodeDashUrl={
+                        musicData.transcodedSongUrl[0].encodedDashUrl
+                      }
+                      encodeHlsUrl={
+                        musicData.transcodedSongUrl[0].encodedHlsUrl
+                      }
+                      startAt={'0:00'}
+                      onPress={onPressPlaySong}
+                      closeOnPress={handleClosedPlayer}
+                      isPlay={isPlaying}
+                      playOrPause={handlePausePlay}
+                      pauseModeOn={pauseModeOn}
+                      currentProgress={playerProgress.position}
+                      duration={playerProgress.duration}
+                      seekPlayer={seekPlayer}
+                    />
+                  ) : null}
+                  {showIcon === 'Vote' && (
+                    <VoteComponent
+                      dataVote={dataVote}
+                      setDataVote={setDataVote}
+                      setVoteCompleted={setVoteCompleted}
+                      pollDuration={pollDuration}
+                      setPollDuration={setPollDuration}
+                    />
+                  )}
+                </View>
 
-            {/* // ! VIDEO AREA */}
-            {uriVideo?.duration && uriVideo?.duration < 15000 && (
-              <VideoComp
-                sourceUri={uriVideo.path}
-                withCloseIcon
-                onPress={closeVideo}
-                dontShowText={false}
-              />
-            )}
-          </ScrollView>
+                {/* // ! VIDEO AREA */}
+                {uriVideo?.duration && uriVideo?.duration < 15000 && (
+                  <VideoComp
+                    sourceUri={uriVideo.path}
+                    withCloseIcon
+                    onPress={closeVideo}
+                    dontShowText={false}
+                  />
+                )}
+              </ScrollView>
+            }
+            order={31}
+            name={t('Coachmark.TypeContent')}
+            text={t('Coachmark.SubtitleTypeContent')}
+          />
           {/* //! END OF TOP AREA */}
 
           {/* //! BOTTOM AREA */}
@@ -562,49 +604,61 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
                 )}
               </View>
 
-              <View
-                onLayout={event => {
-                  event.target.measure((x, y, width, height, pageX, pageY) => {
-                    setOffset({
-                      px: pageX,
-                      py: Platform.OS === 'android' ? pageY - barHeight : pageY,
-                      width: width,
-                    });
-                  });
-                }}
-                style={{opacity: 1}}>
-                <ButtonGradientwithIcon
-                  label={
-                    label
-                      ? t(convertCategoryValue(label))
-                      : t('Post.Create.Category')
-                  }
-                  onPress={() =>
-                    setModalVisible({
-                      modalFilter: true,
-                      modalImagePicker: false,
-                      modalSetAudience: false,
-                    })
-                  }
-                  containerStyles={{
-                    width: widthResponsive(140),
-                    alignItems: 'flex-start',
-                  }}
-                  gradientStyles={{
-                    width: '100%',
-                  }}
-                  textIconContainer={{
-                    paddingVertical: ms(6),
-                    width: '100%',
-                    justifyContent: 'space-between',
-                  }}
-                  textStyles={{
-                    fontFamily: font.InterRegular,
-                    fontWeight: '500',
-                    fontSize: ms(12),
-                  }}
-                />
-              </View>
+              <StepCopilot
+                children={
+                  <View
+                    onLayout={event => {
+                      event.target.measure(
+                        (x, y, width, height, pageX, pageY) => {
+                          setOffset({
+                            px: pageX,
+                            py:
+                              Platform.OS === 'android'
+                                ? pageY - barHeight
+                                : pageY,
+                            width: width,
+                          });
+                        },
+                      );
+                    }}
+                    style={{opacity: 1}}>
+                    <ButtonGradientwithIcon
+                      label={
+                        label
+                          ? t(convertCategoryValue(label))
+                          : t('Post.Create.Category')
+                      }
+                      onPress={() =>
+                        setModalVisible({
+                          modalFilter: true,
+                          modalImagePicker: false,
+                          modalSetAudience: false,
+                        })
+                      }
+                      containerStyles={{
+                        width: widthResponsive(140),
+                        alignItems: 'flex-start',
+                      }}
+                      gradientStyles={{
+                        width: '100%',
+                      }}
+                      textIconContainer={{
+                        paddingVertical: ms(6),
+                        width: '100%',
+                        justifyContent: 'space-between',
+                      }}
+                      textStyles={{
+                        fontFamily: font.InterRegular,
+                        fontWeight: '500',
+                        fontSize: ms(12),
+                      }}
+                    />
+                  </View>
+                }
+                order={32}
+                name={t('Coachmark.Category')}
+                text={t('Coachmark.SubtitleCategory')}
+              />
             </View>
             <View style={styles.textCounter}>
               {inputText.length > 0 && voteCompleted ? (
@@ -712,6 +766,23 @@ const CreatePost: FC<PostDetailProps> = ({route}: PostDetailProps) => {
         oneButton
       />
     </KeyboardAvoidingView>
+  );
+};
+
+const CreatePost: FC<PostDetailProps> = ({
+  route,
+  navigation,
+}: PostDetailProps) => {
+  return (
+    <CopilotProvider
+      stepNumberComponent={StepNumber}
+      tooltipComponent={Tooltip}
+      tooltipStyle={{
+        backgroundColor: color.DarkBlue[100],
+      }}
+      arrowColor={color.DarkBlue[100]}>
+      <CreatePostCopilot route={route} navigation={navigation} />
+    </CopilotProvider>
   );
 };
 
