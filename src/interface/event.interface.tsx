@@ -377,3 +377,14 @@ export interface GetVoucherByEventResponse extends BaseResponseApi {
 export interface ClaimVoucherResponse extends BaseResponseApi {
   data: null;
 }
+
+export interface CheckIsGeneratedTopupVoucherReq {
+  userUUID: string;
+  userType: string;
+  eventId: string;
+  endDateEvent?: string;
+}
+
+export interface CheckIsGeneratedTopupVoucherResponse extends BaseResponseApi {
+  data: boolean;
+}
