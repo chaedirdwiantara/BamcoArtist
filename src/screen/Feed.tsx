@@ -26,6 +26,7 @@ import {
   GuestContent,
   ModalConfirm,
   SsuToast,
+  StepCopilot,
   TabFilter,
   TopNavigation,
 } from '../components';
@@ -56,11 +57,15 @@ import {
 import {useFeedHook} from '../hooks/use-feed.hook';
 import PostListExclusive from './ListCard/PostListExclusive';
 import {userProfile} from '../store/userProfile.store';
+import {CopilotProvider, useCopilot} from 'react-native-copilot';
+import {useCoachmarkHook} from '../hooks/use-coachmark.hook';
+import {useCopilotStore} from '../store/copilot.store';
+import {StepNumber, Tooltip} from '../components/molecule/TooltipGuideline';
 
 const {StatusBarManager} = NativeModules;
 const barHeight = StatusBarManager.HEIGHT;
 
-export const FeedScreen: React.FC = () => {
+const FeedScreenCopilot: React.FC = () => {
   const {t} = useTranslation();
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
@@ -131,6 +136,7 @@ export const FeedScreen: React.FC = () => {
     `Your post couldn't be uploaded. Try Again`,
   );
   const [toastVisible, setToastVisible] = useState<boolean>(false);
+  const [showCoachmark, setShowCoachmark] = useState<boolean>(true);
 
   const handleOnCloseModal = () => {
     if (selectedCategory) {
@@ -334,6 +340,31 @@ export const FeedScreen: React.FC = () => {
     navigation.navigate('Setting');
   };
 
+  // COACHMARK START
+  const {start} = useCopilot();
+  const {useCoachmark} = useCoachmarkHook();
+  const {data: dataCoachmark} = useCoachmark();
+  const {setTutorialId} = useCopilotStore();
+
+  useEffect(() => {
+    // Check status coachmark feed
+    // tutorial id feed = 6, check postman
+    const hideCoachmark =
+      dataCoachmark?.data &&
+      dataCoachmark?.data.filter(
+        (val: {TutorialID: number}) => val.TutorialID === 6,
+      )[0]?.IsFinished;
+
+    const timeout = setTimeout(() => {
+      if (!hideCoachmark && showCoachmark) {
+        start('Feed', null);
+        setTutorialId(6);
+        setShowCoachmark(false);
+      }
+    }, 1000);
+    return () => clearTimeout(timeout);
+  }, [start, dataCoachmark]);
+
   return (
     <SafeAreaView style={styles.root}>
       {isLogin ? (
@@ -401,26 +432,37 @@ export const FeedScreen: React.FC = () => {
               />
             )}
           </View>
-          <TouchableOpacity
-            style={[
-              styles.buttonStyle,
-              {height: visible ? widthResponsive(100) : widthResponsive(50)},
-            ]}
-            onPress={handleFloatingIcon}
-            onLayout={event => {
-              event.target.measure((x, y, width, height, pageX, pageY) => {
-                setOffsetCategoryFilter({
-                  px: pageX + width,
-                  py: Platform.OS === 'android' ? pageY - barHeight : pageY,
-                });
-              });
-            }}>
-            {isModalVisible.filterModal ? (
-              <CancelCreatePostIcon style={styles.floatingIcon} />
-            ) : (
-              <AddPostIcon style={styles.floatingIcon} />
-            )}
-          </TouchableOpacity>
+          <StepCopilot
+            children={
+              <TouchableOpacity
+                style={[
+                  styles.buttonStyle,
+                  {
+                    height: visible
+                      ? widthResponsive(100)
+                      : widthResponsive(50),
+                  },
+                ]}
+                onPress={handleFloatingIcon}
+                onLayout={event => {
+                  event.target.measure((x, y, width, height, pageX, pageY) => {
+                    setOffsetCategoryFilter({
+                      px: pageX + width,
+                      py: Platform.OS === 'android' ? pageY - barHeight : pageY,
+                    });
+                  });
+                }}>
+                {isModalVisible.filterModal ? (
+                  <CancelCreatePostIcon style={styles.floatingIcon} />
+                ) : (
+                  <AddPostIcon style={styles.floatingIcon} />
+                )}
+              </TouchableOpacity>
+            }
+            order={30}
+            name="Feed"
+            text=""
+          />
           {offsetCategoryFilter !== undefined && (
             <FilterModal
               toggleModal={() =>
@@ -498,6 +540,22 @@ export const FeedScreen: React.FC = () => {
     </SafeAreaView>
   );
 };
+
+const FeedScreen: React.FC = () => {
+  return (
+    <CopilotProvider
+      stepNumberComponent={StepNumber}
+      tooltipComponent={Tooltip}
+      tooltipStyle={{
+        backgroundColor: color.DarkBlue[100],
+      }}
+      arrowColor={color.DarkBlue[100]}>
+      <FeedScreenCopilot />
+    </CopilotProvider>
+  );
+};
+
+export default FeedScreen;
 
 const styles = StyleSheet.create({
   root: {
