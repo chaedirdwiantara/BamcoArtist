@@ -1,19 +1,14 @@
-import React, {useEffect} from 'react';
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import React from 'react';
+import {useTranslation} from 'react-i18next';
 import {useCopilot} from 'react-native-copilot';
 import {ms, mvs} from 'react-native-size-matters';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+
 import {Gap} from '../../atom';
+import {width} from '../../../utils';
 import {color, font} from '../../../theme';
 import {useCopilotStore} from '../../../store/copilot.store';
-import {width} from '../../../utils';
-
-export type Labels = Partial<
-  Record<'skip' | 'previous' | 'next' | 'finish', string>
->;
-
-export interface TooltipProps {
-  labels: Labels;
-}
+import {useCoachmarkHook} from '../../../hooks/use-coachmark.hook';
 
 export interface ButtonTextProps {
   label?: string;
@@ -24,33 +19,33 @@ export const StepNumber = () => {
   return <View />;
 };
 
-export const Tooltip = ({labels}: TooltipProps) => {
+export const Tooltip = () => {
+  const {t} = useTranslation();
+  const {tutorialId, initialName, setCopilotName} = useCopilotStore();
+  const {pushCoachmarkProgress} = useCoachmarkHook();
   const {goToNext, goToPrev, stop, currentStep, isFirstStep, isLastStep} =
     useCopilot();
-  const {setCurrentStep, scrollRef, offsetSortFilter} = useCopilotStore();
 
-  useEffect(() => {
-    if (currentStep?.order !== undefined && currentStep.order > 2) {
-      scrollRef.current?.scrollTo({
-        x: 0,
-        y: offsetSortFilter.py,
-        animated: true,
-      });
-    }
-  }, [currentStep]);
-
-  const handleStop = () => {
-    setCurrentStep(currentStep);
+  const handleStop = (type: string) => {
     stop();
+    setCopilotName('');
+    if (type === 'finish') {
+      const payload = {
+        tutorialId,
+        orderingName: t(initialName),
+        isFinished: true,
+      };
+      pushCoachmarkProgress(payload);
+    }
   };
   const handleNext = () => {
-    setCurrentStep(currentStep);
     goToNext();
+    setCopilotName('');
   };
 
   const handlePrev = () => {
-    setCurrentStep(currentStep);
     goToPrev();
+    setCopilotName('');
   };
 
   const ButtonText = ({onPress, label}: ButtonTextProps) => (
@@ -59,10 +54,21 @@ export const Tooltip = ({labels}: TooltipProps) => {
     </TouchableOpacity>
   );
 
-  const justifyContent =
-    isFirstStep || isLastStep ? 'flex-end' : 'space-between';
+  // last step in each section
+  // see last order name in step copilot based on figma
+  const lastOrderNum = [12, 15, 18, 24, 29, 32];
+  // 100 is random number that is not included in the copilot
+  const lastStep = lastOrderNum.includes(currentStep?.order || 100);
+
+  // the opposite of the last order
+  const firstOrderNum = [13, 16, 19, 25, 31];
+  const firstStep = firstOrderNum.includes(currentStep?.order || 100);
+
   const isFeed = currentStep?.name === 'Feed';
-  const isPost = currentStep?.name === 'Post';
+  const justifyContent =
+    isFirstStep || firstStep || isLastStep || lastStep
+      ? 'flex-end'
+      : 'space-between';
 
   return (
     <View
@@ -70,27 +76,27 @@ export const Tooltip = ({labels}: TooltipProps) => {
         styles.tooltipContainer,
         {width: isFeed ? width * 0.6 : undefined},
       ]}>
-      {isPost || isFeed ? (
+      {isFeed ? (
         <View>
           <Text
             style={[
               styles.tooltipTitle,
-              {fontSize: 16, marginBottom: mvs(15)},
+              {fontSize: mvs(16), marginBottom: mvs(15)},
             ]}>
-            {'There are two post'}
+            {t('Coachmark.TwoPost')}
           </Text>
-          <Text style={styles.tooltipTitle}>{'Public Content'}</Text>
+          <Text style={styles.tooltipTitle}>
+            {t('Coachmark.PublicContent')}
+          </Text>
           <Text style={styles.tooltipText}>
-            {
-              'When you post public content, it will visible for all of your followers'
-            }
+            {t('Coachmark.SubtitlePublicContent')}
           </Text>
           <Gap height={mvs(15)} />
-          <Text style={styles.tooltipTitle}>{'Exclusive Content'}</Text>
+          <Text style={styles.tooltipTitle}>
+            {t('Coachmark.ExclusiveContent')}
+          </Text>
           <Text style={styles.tooltipText}>
-            {
-              'When you post for exclusive content it will only visible to the one who subscribed your content'
-            }
+            {t('Coachmark.SubtitleExclusiveContent')}
           </Text>
         </View>
       ) : (
@@ -101,22 +107,37 @@ export const Tooltip = ({labels}: TooltipProps) => {
       )}
       {isFeed ? (
         <View style={[styles.bottomBar, {justifyContent: 'flex-end'}]}>
-          <ButtonText onPress={handleStop} label={labels.finish} />
+          <ButtonText
+            onPress={() => handleStop('finish')}
+            label={t('Coachmark.Finish') || ''}
+          />
         </View>
       ) : (
         <View style={[styles.bottomBar, {justifyContent}]}>
-          {!isLastStep ? (
-            <ButtonText onPress={handleStop} label={labels.skip} />
+          {!isLastStep && !lastStep ? (
+            <ButtonText
+              onPress={() => handleStop('skip')}
+              label={t('Coachmark.Skip') || ''}
+            />
           ) : null}
           <View style={{flexDirection: 'row'}}>
-            {!isFirstStep ? (
-              <ButtonText onPress={handlePrev} label={labels.previous} />
+            {!isFirstStep && !firstStep ? (
+              <ButtonText
+                onPress={handlePrev}
+                label={t('Coachmark.Previous') || ''}
+              />
             ) : null}
             <Gap width={ms(10)} />
-            {!isLastStep ? (
-              <ButtonText onPress={handleNext} label={labels.next} />
+            {!isLastStep && !lastStep ? (
+              <ButtonText
+                onPress={handleNext}
+                label={t('Coachmark.Next') || ''}
+              />
             ) : (
-              <ButtonText onPress={handleStop} label={labels.finish} />
+              <ButtonText
+                onPress={() => handleStop('finish')}
+                label={t('Coachmark.Finish') || ''}
+              />
             )}
           </View>
         </View>
@@ -134,7 +155,7 @@ const styles = StyleSheet.create({
     fontSize: mvs(14),
     fontWeight: '600',
     fontFamily: font.InterSemiBold,
-    marginBottom: mvs(5),
+    marginBottom: mvs(10),
   },
   tooltipText: {
     color: color.Neutral[10],

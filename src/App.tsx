@@ -29,7 +29,6 @@ const App = () => {
         <AppProvider>
           <QueryClientProvider client={queryClient}>
             <CopilotProvider
-              stopOnOutsideClick
               stepNumberComponent={StepNumber}
               tooltipComponent={Tooltip}
               tooltipStyle={style}

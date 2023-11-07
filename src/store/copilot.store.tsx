@@ -1,37 +1,29 @@
-import React from 'react';
-import {LayoutRectangle, NativeMethods, ScrollView, View} from 'react-native';
 import create from 'zustand';
 
-interface OffsetPropsType {
-  px: number;
-  py: number;
-}
-
-interface Step {
-  name: string;
-  order: number;
-  visible: boolean;
-  wrapperRef: React.RefObject<NativeMethods>;
-  measure: () => Promise<LayoutRectangle>;
-  text: string;
-}
+// tutorial id = section coachmark
+// from credit & tab fans = 1
+// tab income = 2
+// tab post = 3
+// tab my music = 4
+// tab discover = 5
+// first post = 6
+// initialName = step name where it started, ex id 1 => initialName = credit, id 2 = tab income
+// copilotName = for triggering "start" coachmark when click on one of the tabs
 
 type ScrollState = {
-  scrollRef: React.MutableRefObject<ScrollView | null>;
-  setScrollRef: (by: React.MutableRefObject<ScrollView | null>) => void;
-  offsetSortFilter: OffsetPropsType;
-  setOffsetSortFilter: (by: OffsetPropsType) => void;
-  uploadRef: React.MutableRefObject<View | null>;
-  currentStep: Step | undefined;
-  setCurrentStep: (by: Step | undefined) => void;
+  tutorialId: number;
+  initialName: string;
+  copilotName: string;
+  setTutorialId: (id: number) => void;
+  setInitialName: (name: string) => void;
+  setCopilotName: (name: string) => void;
 };
-
 export const useCopilotStore = create<ScrollState>(set => ({
-  scrollRef: React.createRef(),
-  setScrollRef: by => set(state => ({scrollRef: by})),
-  offsetSortFilter: {px: 0, py: 0},
-  setOffsetSortFilter: by => set(state => ({offsetSortFilter: by})),
-  uploadRef: React.createRef(),
-  currentStep: undefined,
-  setCurrentStep: by => set(state => ({currentStep: by})),
+  // initial name copilot when start the app = Live
+  tutorialId: 1,
+  initialName: 'Coachmark.Credit',
+  copilotName: 'Coachmark.Credit',
+  setTutorialId: by => set(state => ({tutorialId: by})),
+  setInitialName: by => set(state => ({initialName: by})),
+  setCopilotName: by => set(state => ({copilotName: by})),
 }));
