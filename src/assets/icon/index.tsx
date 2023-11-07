@@ -148,6 +148,7 @@ import DollarSign from './DollarSign';
 import UploadIcon from './Upload.icon';
 import CalendarIcon from './Calendar.icon';
 import LiveIcon from './Live.icon';
+import TicketEventIcon from './TicketEvent.icon';
 
 export {
   AddIcon,
@@ -301,4 +302,5 @@ export {
   UploadIcon,
   CalendarIcon,
   LiveIcon,
+  TicketEventIcon,
 };

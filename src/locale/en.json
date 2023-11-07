@@ -27,7 +27,8 @@
     "BeamedYou": "Beamed you ",
     "StartSub": "Subscribed for ",
     "Appreciate": "Appreciate!",
-    "Appreciated": "Appreciated!"
+    "Appreciated": "Appreciated!",
+    "BuyNow": "Buy Now"
   },
   "Onboarding": {
     "Step1": {
@@ -518,7 +519,19 @@
       "MusicianTipped": "Artist Beamed",
       "Perform": "Pick Me!",
       "MailTitle": "I'd like to perform at the next Beamco Live!",
-      "MailBody": "Simply hit send to this email to register your interest in performing at the next Beamco Live! The Beamco Concierge will get in touch with you soon!"
+      "MailBody": "Simply hit send to this email to register your interest in performing at the next Beamco Live! The Beamco Concierge will get in touch with you soon!",
+      "LimitedOffer": "Limited Offer",
+      "Freebies": "FREEBIES!",
+      "Popup": {
+        "TitleReward": "Get a limited time reward!",
+        "SubtitleReward": "Top-up 540 credits to get a limited time voucher as a reward!",
+        "Package1": {
+          "Title": "Buy our $88 package now to get",
+          "Subtitle1": "2 drinks",
+          "Subtitle2": "540 BEAMCO credits",
+          "Subtitle3": "2 VIP concert tickets when you become the top Beamer"
+        }
+      }
     },
     "Live": "Live",
     "EmptyState": {
@@ -1223,9 +1236,9 @@
   },
   "TopUp": {
     "Title": "Credits",
-    "Subtitle1": "BEAMCO Credits is your way to show your appreciation",
-    "Subtitle2": "BEAMCO Credits allows you to parcitipate in Artists upside and grow their community",
-    "Subtitle3": "Find Artist who is providing a lot of value? Rewards them with BEAMCO Credits as a support",
+    "Subtitle1": "Use Credits to Support and Engage with Your Favourite Artists",
+    "Subtitle2": "Beamco Credits allow you to participate in our Artist’s journey and join our rankings",
+    "Subtitle3": "Find an Artist you love? Reward them with Beamco Credits as support",
     "MyCoin": "My Credits",
     "ButtonWithdraw": "Withdraw",
     "Filter": {

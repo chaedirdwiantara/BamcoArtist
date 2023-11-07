@@ -27,7 +27,8 @@
     "BeamedYou": "Beamed 你 ",
     "StartSub": "訂閱咗 ",
     "Appreciate": "多謝！",
-    "Appreciated": "好受寵！"
+    "Appreciated": "好受寵！",
+    "BuyNow": "Buy Now"
   },
   "Onboarding": {
     "Step1": {
@@ -517,7 +518,19 @@
       "MusicianTipped": "Beamed音樂人",
       "Perform": "我要上台！",
       "MailTitle": "立即申請成為Beamco Live! 演出歌手",
-      "MailBody": "請點擊此按鍵，我們將會有專人聯絡你，成為下一個Beamco Live! 的新星！"
+      "MailBody": "請點擊此按鍵，我們將會有專人聯絡你，成為下一個Beamco Live! 的新星！",
+      "LimitedOffer": "限時優惠",
+      "Freebies": "FREEBIES!",
+      "Popup": {
+        "TitleReward": "獲得有限時間的獎勵！",
+        "SubtitleReward": "充值540學分以獲得有限時間的優惠券作為獎勵！",
+        "Package1": {
+          "Title": "限時優惠！現只需$88便可獲得 to get",
+          "Subtitle1": "2 杯飲品",
+          "Subtitle2": "540 BEAMCO 幣",
+          "Subtitle3": "2張VIP演唱會門票（當你成為最佳Beamer)"
+        }
+      }
     },
     "EmptyState": {
       "Home": "目前沒有任何直播活動。敬請期待更多精彩體驗！",

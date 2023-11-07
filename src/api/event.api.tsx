@@ -1,5 +1,7 @@
 import {ParamsProps} from '../interface/base.interface';
 import {
+  CheckIsGeneratedTopupVoucherReq,
+  CheckIsGeneratedTopupVoucherResponse,
   ClaimVoucherResponse,
   EventDetailResponse,
   EventHomeResponse,
@@ -225,6 +227,45 @@ export const redeemEventVoucher = async ({
   const {data} = await KrakatauAPI().request<ClaimVoucherResponse>({
     url: `/vouchers/redeem/${voucherId}/event/${eventId}`,
     method: 'PATCH',
+  });
+
+  return data;
+};
+
+export const checkIsGeneratedTopupVoucher = async ({
+  userUUID,
+  userType,
+  eventId,
+}: CheckIsGeneratedTopupVoucherReq): Promise<CheckIsGeneratedTopupVoucherResponse> => {
+  const {data} =
+    await KrakatauAPI().request<CheckIsGeneratedTopupVoucherResponse>({
+      url: `/vouchers/check-isgenerated-topup-credit`,
+      method: 'POST',
+      data: {
+        userUUID,
+        userType,
+        eventId,
+      },
+    });
+
+  return data;
+};
+
+export const generateTopupVoucher = async ({
+  userUUID,
+  userType,
+  eventId,
+  endDateEvent,
+}: CheckIsGeneratedTopupVoucherReq): Promise<ClaimVoucherResponse> => {
+  const {data} = await KrakatauAPI().request<ClaimVoucherResponse>({
+    url: `/vouchers/generate-based-topup`,
+    method: 'POST',
+    data: {
+      userUUID,
+      userType,
+      eventId,
+      endDateEvent,
+    },
   });
 
   return data;

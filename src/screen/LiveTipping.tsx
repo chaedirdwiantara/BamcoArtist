@@ -278,13 +278,11 @@ export const LiveTipping: FC<LiveTippingProps> = ({
             credit={credit}
             onPressCredit={() => navigation.navigate('TopUpCredit')}
             onPressGift={() => {
-              dataDetailVoucher?.data !== undefined
-                ? navigation.navigate('ClaimReward', {id: eventId})
-                : null;
+              navigation.navigate('ListVoucher');
             }}
             onSwipe={onSwipe}
-            isNewGift={!dataDetailVoucher?.data?.isRedeemed}
-            showGift={dataDetailVoucher?.data !== undefined}
+            isNewGift={false}
+            showGift={true}
           />
         }
         rightIconAction={() => null}
