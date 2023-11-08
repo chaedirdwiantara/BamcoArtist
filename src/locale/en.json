@@ -543,6 +543,20 @@
         "Title": "Top Beamers Are Displayed Here",
         "Subtitle": "Wait until event goes live to view the top Beamers"
       }
+    },
+    "ListVoucher": {
+      "Title": "Vouchers Available",
+      "EmptyState": "You don’t have any vouchers yet. You can get them by purchasing some credits!"
+    },
+    "DetailVoucher":{
+      "Title": "Reward Details",
+      "PopUp":{
+        "Title": "Congratulations!",
+        "Desc":"Here’s the QR code to redeem your free drink(s) at the bar.",
+        "ButtonTitle":"Dismiss"
+      },
+      "Expired": "Valid Until",
+      "Tnc":"Terms & Conditions"
     }
   },
   "Profile": {

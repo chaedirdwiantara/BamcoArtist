@@ -45,6 +45,8 @@ import {EventDetail} from '../screen/EventDetail';
 import {LiveTipping} from '../screen/LiveTipping';
 import ClaimReward from '../screen/EventDetail/ClaimReward';
 import DiscoverArtist from '../screen/DiscoverArtist';
+import ListVoucher from '../screen/ListVoucher';
+import DetailVoucher from '../screen/DetailVoucher';
 
 // Home
 import {HomeScreen} from '../screen/Home';
@@ -199,6 +201,7 @@ export type RootStackParams = {
   DetailHistoryTransaction: {
     dataDetail: TransactionHistoryPropsType;
   };
+  DetailVoucher: {id: number; eventId: string};
   DiscoverArtist: undefined;
   DonationAndSubscription: undefined;
   EditProfile: {data: ProfileResponseData};
@@ -238,6 +241,7 @@ export type RootStackParams = {
   ListPost: {
     title: string;
   };
+  ListVoucher: {id: string};
   Login: undefined;
   MainTab: undefined;
   QuoteMusic: undefined;
@@ -650,6 +654,8 @@ export const RootStackScreen = () => (
     <RootStack.Screen name="QrCode" component={QrCode} />
     <RootStack.Screen name="Device" component={Device} />
     <RootStack.Screen name="DiscoverArtist" component={DiscoverArtist} />
+    <RootStack.Screen name="ListVoucher" component={ListVoucher} />
+    <RootStack.Screen name="DetailVoucher" component={DetailVoucher} />
   </RootStack.Navigator>
 );
 

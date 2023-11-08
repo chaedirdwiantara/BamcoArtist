@@ -12,6 +12,8 @@ import {
   GenerateVoucherReq,
   GenerateVoucherResponse,
   GetVoucherByEventResponse,
+  GetVoucherListDetailResponse,
+  GetVoucherListResponse,
   MerchListResponse,
   MusicianStatusResponse,
   OrderListBookyay,
@@ -232,6 +234,16 @@ export const redeemEventVoucher = async ({
   return data;
 };
 
+export const getEventVoucherList = async (
+  eventId: string,
+): Promise<GetVoucherListResponse> => {
+  const {data} = await KrakatauAPI().request<GetVoucherListResponse>({
+    url: `/vouchers/event/${eventId}`,
+    method: 'GET',
+  });
+  return data;
+};
+
 export const checkIsGeneratedTopupVoucher = async ({
   userUUID,
   userType,
@@ -248,6 +260,16 @@ export const checkIsGeneratedTopupVoucher = async ({
       },
     });
 
+  return data;
+};
+
+export const getEventVoucherListDetail = async (
+  voucherId: string,
+): Promise<GetVoucherListDetailResponse> => {
+  const {data} = await KrakatauAPI().request<GetVoucherListDetailResponse>({
+    url: `/vouchers/detail/${voucherId}`,
+    method: 'GET',
+  });
   return data;
 };
 
