@@ -23,7 +23,7 @@ export const FansScreen: React.FC<FollowersProps> = (props: FollowersProps) => {
     refetch,
     isRefetching,
     isLoading,
-  } = useQuery('/list-fans', () => getListMusiciansFans({uuid}));
+  } = useQuery(`list-fans-${uuid}`, () => getListMusiciansFans({uuid}));
 
   return (
     <View style={styles.root}>
