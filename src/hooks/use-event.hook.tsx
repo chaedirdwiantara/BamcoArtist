@@ -94,7 +94,7 @@ export const useEventHook = () => {
       () => getEventLineUp(id, params),
       {
         enabled: true,
-        refetchInterval: 5000,
+        refetchInterval: 3000,
         refetchIntervalInBackground: true,
       },
     );
@@ -106,7 +106,7 @@ export const useEventHook = () => {
       () => getEventTopTipper(events, params),
       {
         enabled: true,
-        refetchInterval: 5000,
+        refetchInterval: 3000,
         refetchIntervalInBackground: true,
       },
     );
@@ -159,7 +159,7 @@ export const useEventHook = () => {
       [`event/${eventId}/${musicianId}`],
       () => getStatusLiveMusician(eventId, musicianId),
       {
-        refetchInterval: 5000,
+        refetchInterval: 3000,
         refetchIntervalInBackground: true,
       },
     );
@@ -174,7 +174,7 @@ export const useEventHook = () => {
       [`event/detail/live-ranker/${events}`],
       () => getEventLiveRank(events, musician, params),
       {
-        refetchInterval: 5000,
+        refetchInterval: 3000,
         refetchIntervalInBackground: true,
       },
     );
