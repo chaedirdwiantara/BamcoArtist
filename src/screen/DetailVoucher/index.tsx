@@ -197,9 +197,26 @@ const DetailVoucher: FC<ListVoucherProps> = ({
       </ScrollView>
       <View style={styles.bottomContainer}>
         <Button
-          label="Show QR"
-          containerStyles={styles.buttonStyle}
+          label={
+            !dataDetail?.data.isAvailable
+              ? 'Sold Out'
+              : dataDetail?.data.isRedeemed
+              ? 'Redeemed'
+              : 'Show QR'
+          }
+          containerStyles={{
+            width: '100%',
+            height: widthResponsive(40),
+            aspectRatio: undefined,
+            backgroundColor:
+              dataDetail?.data.isAvailable && !dataDetail?.data.isRedeemed
+                ? color.Pink[10]
+                : color.Dark[50],
+          }}
           onPress={showQrOnPress}
+          disabled={
+            !dataDetail?.data.isAvailable || dataDetail?.data.isRedeemed
+          }
         />
       </View>
       <ModalCustom
