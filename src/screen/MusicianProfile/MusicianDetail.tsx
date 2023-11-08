@@ -7,6 +7,8 @@ import {
   NativeSyntheticEvent,
   TouchableOpacity,
   Text,
+  RefreshControl,
+  Platform,
 } from 'react-native';
 import {
   EmptyState,
@@ -77,6 +79,8 @@ interface MusicianDetailProps {
   goToPlaylist: (id: number) => void;
   exclusiveContent?: DataExclusiveResponse;
   subsEC?: boolean;
+  refresh: boolean;
+  setRefresh: () => void;
   setRefreshing?: () => void;
   isLoading?: boolean;
 }
@@ -94,6 +98,8 @@ export const MusicianDetail: React.FC<MusicianDetailProps> = ({
   exclusiveContent,
   subsEC,
   dataAppearsOn,
+  refresh,
+  setRefresh,
   setRefreshing,
   isLoading,
 }) => {
@@ -304,6 +310,11 @@ export const MusicianDetail: React.FC<MusicianDetailProps> = ({
     dataAlbum.length > 0 ||
     dataAppearsOn.length > 0;
 
+  const cardInfoPosition =
+    Platform.OS === 'ios' && refresh
+      ? heightResponsive(10)
+      : heightResponsive(-20);
+
   return (
     <View style={styles.container}>
       <SsuStatusBar type={'black'} />
@@ -325,6 +336,13 @@ export const MusicianDetail: React.FC<MusicianDetailProps> = ({
       <ScrollView
         showsVerticalScrollIndicator={false}
         scrollEventThrottle={16}
+        refreshControl={
+          <RefreshControl
+            refreshing={refresh}
+            onRefresh={setRefresh}
+            tintColor={'transparent'}
+          />
+        }
         onScroll={handleScroll}>
         <ProfileHeader
           avatarUri={
@@ -345,8 +363,9 @@ export const MusicianDetail: React.FC<MusicianDetailProps> = ({
           onPressImage={showImage}
           blocked={profile.isBlock || profile.blockIs}
           dataBadge={dataBadge?.data}
+          refresh={refresh}
         />
-        <View style={styles.infoCard}>
+        <View style={[styles.infoCard, {marginTop: cardInfoPosition}]}>
           <UserInfoCard
             onPress={goToFollowers}
             profile={musicianProfile}

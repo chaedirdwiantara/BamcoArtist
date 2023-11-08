@@ -7,6 +7,8 @@ import {
   NativeScrollEvent,
   NativeSyntheticEvent,
   Text,
+  RefreshControl,
+  Platform,
 } from 'react-native';
 import {useTranslation} from 'react-i18next';
 import {mvs} from 'react-native-size-matters';
@@ -91,6 +93,8 @@ interface ProfileContentProps {
   playerVisible?: boolean;
   otherUserProfile?: boolean;
   onPressGoBack: () => void;
+  refresh: boolean;
+  setRefresh: () => void;
   setRefreshing: () => void;
 }
 
@@ -104,6 +108,8 @@ export const OtherUserProfileContent: React.FC<ProfileContentProps> = ({
   totalCountlikedSong,
   ownProfile = false,
   onPressGoBack,
+  refresh,
+  setRefresh,
   setRefreshing,
 }) => {
   const {t} = useTranslation();
@@ -243,6 +249,11 @@ export const OtherUserProfileContent: React.FC<ProfileContentProps> = ({
     );
   };
 
+  const cardInfoPosition =
+    Platform.OS === 'ios' && refresh
+      ? heightPercentage(370)
+      : heightPercentage(310);
+
   return (
     <View style={{flex: 1}}>
       <TopNavigation.Type1
@@ -263,6 +274,13 @@ export const OtherUserProfileContent: React.FC<ProfileContentProps> = ({
       <ScrollView
         showsVerticalScrollIndicator={false}
         scrollEventThrottle={16}
+        refreshControl={
+          <RefreshControl
+            refreshing={refresh}
+            onRefresh={setRefresh}
+            tintColor={'transparent'}
+          />
+        }
         onScroll={handleScroll}>
         <ProfileHeader
           avatarUri={profile.avatarUri}
@@ -277,11 +295,12 @@ export const OtherUserProfileContent: React.FC<ProfileContentProps> = ({
           backIcon={!ownProfile}
           onPressImage={showImage}
           dataBadge={dataBadge?.data}
+          refreshing={refresh}
         />
         <UserInfoCard
           profile={profile}
           type={ownProfile ? '' : 'self'}
-          containerStyles={styles.infoCard}
+          containerStyles={{...styles.infoCard, top: cardInfoPosition}}
           totalFollowing={profile.totalFollowing}
           onPress={() => onPressGoTo('Following')}
           selfProfile={selfProfile?.data}
