@@ -31,8 +31,8 @@ const CheckGradientIcon = ({
           y1="3.52"
           y2="12.591"
           gradientUnits="userSpaceOnUse">
-          <Stop stopColor="#38A772"></Stop>
-          <Stop offset="1" stopColor="#67CD84"></Stop>
+          <Stop stopColor="#00D778"></Stop>
+          <Stop offset="1" stopColor="#00D778"></Stop>
         </LinearGradient>
       </Defs>
     </Svg>

@@ -315,7 +315,7 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
   ]);
 
   const filterDataAnalytic = (item: any, index: any, nameCopilot: string) => {
-    index === 0 ? setCopilotName('') : setCopilotName(nameCopilot);
+    setCopilotName(nameCopilot);
     setInitialName(nameCopilot);
     setTutorialId(index + 1);
     setSelectedIndexAnalytic(index);
