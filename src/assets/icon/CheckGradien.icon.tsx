@@ -3,6 +3,7 @@ import {View} from 'react-native';
 import Svg, {Circle, Defs, LinearGradient, Path, Stop} from 'react-native-svg';
 import {widthPercentage} from '../../utils';
 import {SvgProps} from '../../interface/svg.interface';
+import Color from '../../theme/Color';
 
 const CheckGradientIcon = ({
   width = widthPercentage(65),
@@ -31,8 +32,8 @@ const CheckGradientIcon = ({
           y1="3.52"
           y2="12.591"
           gradientUnits="userSpaceOnUse">
-          <Stop stopColor="#38A772"></Stop>
-          <Stop offset="1" stopColor="#67CD84"></Stop>
+          <Stop stopColor={Color.Success[400]}></Stop>
+          <Stop offset="1" stopColor={Color.Success[400]}></Stop>
         </LinearGradient>
       </Defs>
     </Svg>

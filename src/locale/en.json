@@ -530,6 +530,11 @@
           "Subtitle1": "2 drinks",
           "Subtitle2": "540 BEAMCO credits",
           "Subtitle3": "2 VIP concert tickets when you become the top Beamer"
+        },
+        "SuccessTopup": {
+          "Title": "Topup Success!",
+          "Subtitle": "You are now eligible to claim a reward!",
+          "ButtonClaim": "Claim Reward"
         }
       }
     },

@@ -36,7 +36,7 @@ type Props = {
   dropdownStyle?: ViewStyle;
   leftPositionDropdown?: number;
   rightIcon?: React.ReactNode;
-  rightIconAction: () => void;
+  rightIconAction?: () => void;
 };
 
 /** == COMPONENT === */

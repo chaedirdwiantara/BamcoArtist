@@ -79,10 +79,27 @@ const ListSubs: React.FC<ListSubsProps> = ({touchEnd, isRefreshing}) => {
 
   useEffect(() => {
     if (dataSubs !== undefined) {
-      setListSubs(
-        dataSubs?.pages?.map((page: ListTipsDataType) => page.data).flat() ??
-          [],
-      );
+      if (dataSubs !== undefined) {
+        if (listSubs.length > 0) {
+          const oldData = listSubs.filter(v => v.appreciate);
+          const newData =
+            dataSubs?.pages
+              ?.map((page: ListTipsDataType) => page.data)
+              .flat() ?? [];
+          oldData.map(v => {
+            const index = newData.findIndex(x => x.id === v.id);
+            newData[index].appreciate = v.appreciate;
+          });
+
+          setListSubs(newData);
+        } else {
+          setListSubs(
+            dataSubs?.pages
+              ?.map((page: ListTipsDataType) => page.data)
+              .flat() ?? [],
+          );
+        }
+      }
     }
   }, [dataSubs]);
 

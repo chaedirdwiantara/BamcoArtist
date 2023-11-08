@@ -529,6 +529,11 @@
           "Subtitle1": "2 杯飲品",
           "Subtitle2": "540 BEAMCO 幣",
           "Subtitle3": "2張VIP演唱會門票（當你成為最佳Beamer)"
+        },
+        "SuccessTopup": {
+          "Title": "儲值成功！",
+          "Subtitle": "您現在有資格領取獎勵了！",
+          "ButtonClaim": "Claim Reward"
         }
       }
     },
