@@ -63,7 +63,7 @@ export const EventDetail: React.FC<EventDetailProps> = ({
     {filterName: 'Event.Detail.TopTiper'},
   ]);
   const [showModalTopup, setShowModalTopup] = useState<boolean>(false);
-  const [showModalSuccess, setShowModalSuccess] = useState<boolean>(true);
+  const [showModalSuccess, setShowModalSuccess] = useState<boolean>(false);
 
   const filterDataTab = (item: any, index: any) => {
     setSelectedIndex(index);
