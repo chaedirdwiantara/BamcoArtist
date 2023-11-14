@@ -29,6 +29,7 @@ import {
   TopNavigation,
 } from '../../components';
 import {
+  DataDropDownNumberType,
   DataDropDownType,
   dataDurationVote,
   dropdownCategoryMusician,
@@ -126,7 +127,7 @@ const CreatePostCopilot: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   >('All');
   const [dataVote, setDataVote] =
     useState<dataVoteProps[]>(vooteInitialChoices);
-  const [pollDuration, setPollDuration] = useState<DataDropDownType>(
+  const [pollDuration, setPollDuration] = useState<DataDropDownNumberType>(
     dataDurationVote[0],
   );
   const [voteCompleted, setVoteCompleted] = useState<boolean>(true);

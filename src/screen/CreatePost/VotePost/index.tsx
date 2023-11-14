@@ -5,14 +5,20 @@ import {mvs} from 'react-native-size-matters';
 import {widthResponsive} from '../../../utils';
 import {DropDownFilter, Gap, SsuInput} from '../../../components';
 import {AddCircleIcon, MinusCircleWhiteIcon} from '../../../assets/icon';
-import {DataDropDownType, dataDurationVote} from '../../../data/dropdown';
+import {
+  DataDropDownNumberType,
+  DataDropDownType,
+  dataDurationVote,
+} from '../../../data/dropdown';
 import {useTranslation} from 'react-i18next';
 import {dataVoteProps} from '../../../interface/vote.interface';
 
 interface VoteProps {
   dataVote: dataVoteProps[];
-  pollDuration: DataDropDownType;
-  setPollDuration: React.Dispatch<React.SetStateAction<DataDropDownType>>;
+  pollDuration: DataDropDownNumberType;
+  setPollDuration: React.Dispatch<
+    React.SetStateAction<DataDropDownNumberType | DataDropDownType>
+  >;
   setDataVote: React.Dispatch<React.SetStateAction<dataVoteProps[]>>;
   setVoteCompleted: React.Dispatch<React.SetStateAction<boolean>>;
 }

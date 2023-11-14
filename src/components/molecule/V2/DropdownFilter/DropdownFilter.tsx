@@ -11,7 +11,10 @@ import React, {useEffect, useState} from 'react';
 import {Button} from '../../../atom';
 import {widthResponsive} from '../../../../utils';
 import FilterModal from './modalFilter';
-import {DataDropDownType} from '../../../../data/dropdown';
+import {
+  DataDropDownNumberType,
+  DataDropDownType,
+} from '../../../../data/dropdown';
 import {ms, mvs} from 'react-native-size-matters';
 import {color} from '../../../../theme';
 
@@ -21,7 +24,7 @@ const {height} = Dimensions.get('screen');
 
 interface DropdownV2Props {
   selectedMenu: (data: DataDropDownType) => void;
-  dataFilter: DataDropDownType[];
+  dataFilter: DataDropDownType[] | DataDropDownNumberType[];
   iconContainerStyle?: ViewStyle;
   labelCaption: string;
   topPosition?: number;
