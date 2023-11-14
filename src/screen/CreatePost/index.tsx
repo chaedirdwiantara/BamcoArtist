@@ -25,6 +25,7 @@ import {
   ModalImagePicker,
   SsuInput,
   StepCopilot,
+  SuccessToast,
   TopNavigation,
 } from '../../components';
 import {
@@ -61,6 +62,7 @@ import {CopilotProvider, useCopilot} from 'react-native-copilot';
 import {useCoachmarkHook} from '../../hooks/use-coachmark.hook';
 import {useCopilotStore} from '../../store/copilot.store';
 import {StepNumber, Tooltip} from '../../components/molecule/TooltipGuideline';
+import {useCreatePostStatus} from '../../store/postState.store';
 
 type PostDetailProps = NativeStackScreenProps<RootStackParams, 'CreatePost'>;
 
@@ -107,6 +109,7 @@ const CreatePostCopilot: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   } = usePlayerHook();
 
   const {setWithoutBottomTab, show} = usePlayerStore();
+  const {postSuccess, setPostSuccess} = useCreatePostStatus();
 
   const [label, setLabel] = useState<string>();
   const [userId, setUserId] = useState<string>('');
@@ -302,6 +305,7 @@ const CreatePostCopilot: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   useEffect(() => {
     if (dataCreatePost !== null) {
       show && setWithoutBottomTab(false);
+      setPostSuccess(true);
       navigation.goBack();
     }
   }, [dataCreatePost]);
@@ -466,6 +470,7 @@ const CreatePostCopilot: FC<PostDetailProps> = ({route}: PostDetailProps) => {
           maxLengthTitle={20}
           itemStrokeColor={'white'}
           leftIconAction={handleBackAction}
+          rightIconAction={() => {}}
         />
         <View style={styles.mainContainer}>
           {/* //! TOP AREA */}
