@@ -450,8 +450,7 @@
       "Public": "公開"
     },
     "NoMore": "沒有更多動態",
-    "EmptyStateButtonCaption": "Create New Post!",
-    "CreatePost":"Your post have been sent!"
+    "EmptyStateButtonCaption": "Create New Post!"
   },
   "Event": {
     "Title": "活動",
