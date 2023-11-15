@@ -542,7 +542,7 @@ const FeedScreenCopilot: React.FC = () => {
           <SuccessToast
             toastVisible={postSuccess}
             onBackPressed={() => setPostSuccess(false)}
-            caption={'Your post have been sent!'}
+            caption={`${t('Post.Create.Success')}`}
           />
         </View>
       ) : (

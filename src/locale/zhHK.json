@@ -450,7 +450,8 @@
       "Public": "公開"
     },
     "NoMore": "沒有更多動態",
-    "EmptyStateButtonCaption": "Create New Post!"
+    "EmptyStateButtonCaption": "Create New Post!",
+    "CreatePost":"Your post have been sent!"
   },
   "Event": {
     "Title": "活動",
@@ -1110,7 +1111,13 @@
       "Audience": "觀眾設置",
       "Quote": "引用",
       "Media": "上傳媒體",
-      "Preview": "添加預覽"
+      "Preview": "添加預覽",
+      "Success":"Your post have been sent!",
+      "Warning":{
+        "Title":"Upload Video",
+        "Caption":"Oops! Your video is more than 15 sec. To make sure your upload goes through, try cutting it down and then uploading again.",
+        "Button":"Ok, Got It"
+      }
     },
     "Dropdown": {
       "Visit": "訪問資料",

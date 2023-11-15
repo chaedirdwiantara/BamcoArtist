@@ -127,9 +127,9 @@ const CreatePostCopilot: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   >('All');
   const [dataVote, setDataVote] =
     useState<dataVoteProps[]>(vooteInitialChoices);
-  const [pollDuration, setPollDuration] = useState<DataDropDownNumberType>(
-    dataDurationVote[0],
-  );
+  const [pollDuration, setPollDuration] = useState<
+    DataDropDownNumberType | DataDropDownType
+  >(dataDurationVote[0]);
   const [voteCompleted, setVoteCompleted] = useState<boolean>(true);
 
   // * Hooks for uploading
@@ -763,11 +763,9 @@ const CreatePostCopilot: FC<PostDetailProps> = ({route}: PostDetailProps) => {
       </View>
       <ModalConfirm
         modalVisible={modalConfirm}
-        title={'Upload Video'}
-        subtitle={
-          'Oops! Your video is more than 15 sec. To make sure your upload goes through, try cutting it down and then uploading again.'
-        }
-        yesText={'Ok, Got It'}
+        title={`${t('Post.Create.Warning.Title')}`}
+        subtitle={`${t('Post.Create.Warning.Caption')}`}
+        yesText={`${t('Post.Create.Warning.Button')}`}
         onPressOk={handleOkConfirm}
         oneButton
       />

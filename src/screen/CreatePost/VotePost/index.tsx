@@ -15,7 +15,7 @@ import {dataVoteProps} from '../../../interface/vote.interface';
 
 interface VoteProps {
   dataVote: dataVoteProps[];
-  pollDuration: DataDropDownNumberType;
+  pollDuration: DataDropDownNumberType | DataDropDownType;
   setPollDuration: React.Dispatch<
     React.SetStateAction<DataDropDownNumberType | DataDropDownType>
   >;
