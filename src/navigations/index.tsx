@@ -90,6 +90,9 @@ import {ExclusiveContentScreen} from '../screen/ExclusiveContent';
 import {FollowersScreen} from '../screen/Profile/ListFollowers';
 import {RecoverAccountScreen} from '../screen/Profile/RecoverAccount';
 
+// Rewards
+import Rewards from '../screen/Rewards';
+
 // Playlist
 import {PlaylistScreen} from '../screen/Playlist/Playlist';
 import {CreateNewPlaylist} from '../screen/Playlist/CreateNewPlaylist';
@@ -134,6 +137,7 @@ import {
   HomeIcon,
   UserProfileIcon,
   TicketDefaultIcon,
+  UserRewardsIcon,
 } from '../assets/icon';
 
 import Font from '../theme/Font';
@@ -399,11 +403,12 @@ export type MainTabParams = {
   Home: {
     showToast?: boolean;
   };
-  Profile: {
-    showToast?: boolean;
-    deletePlaylist?: boolean;
-  };
+  // Profile: {
+  //   showToast?: boolean;
+  //   deletePlaylist?: boolean;
+  // };
   Search: undefined;
+  Rewards: undefined;
 };
 
 const screenOption: NativeStackNavigationOptions = {
@@ -460,18 +465,6 @@ const TabScreen = () => {
         }}
       />
       <MainTab.Screen
-        name="Merch"
-        component={MerchScreen}
-        options={{
-          tabBarIcon: ({color}) => (
-            <View style={styles.root}>
-              <CrownIcon stroke={color} />
-              <Text style={[styles.label, {color}]}>{'Merch'}</Text>
-            </View>
-          ),
-        }}
-      />
-      <MainTab.Screen
         name="Events"
         component={TicketScreen}
         options={{
@@ -484,6 +477,18 @@ const TabScreen = () => {
         }}
       />
       <MainTab.Screen
+        name="Merch"
+        component={MerchScreen}
+        options={{
+          tabBarIcon: ({color}) => (
+            <View style={styles.root}>
+              <CrownIcon stroke={color} />
+              <Text style={[styles.label, {color}]}>{'Merch'}</Text>
+            </View>
+          ),
+        }}
+      />
+      {/* <MainTab.Screen
         name="Profile"
         component={ProfileScreen}
         initialParams={{showToast: false, deletePlaylist: false}}
@@ -499,6 +504,20 @@ const TabScreen = () => {
               }>
               <UserProfileIcon stroke={color} />
               <Text style={[styles.label, {color}]}>{'Profile'}</Text>
+            </TouchableOpacity>
+          ),
+        }}
+      /> */}
+      <MainTab.Screen
+        name="Rewards"
+        component={Rewards}
+        options={{
+          tabBarIcon: ({color}) => (
+            <TouchableOpacity
+              style={styles.root}
+              onPress={() => navigation.navigate('Rewards')}>
+              <UserRewardsIcon stroke={color} />
+              <Text style={[styles.label, {color}]}>{'Rewards'}</Text>
             </TouchableOpacity>
           ),
         }}
