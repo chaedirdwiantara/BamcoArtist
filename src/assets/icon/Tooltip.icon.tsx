@@ -8,6 +8,7 @@ const TooltipIcon = ({
   width = widthPercentage(14),
   height = widthPercentage(14),
   fill = 'none',
+  stroke = '#98A2B3',
   style,
 }: SvgProps) => (
   <View style={[{width, height}, style]}>
@@ -15,7 +16,7 @@ const TooltipIcon = ({
       <G clipPath="url(#clip0_3019_222057)">
         <Path
           d="M4.545 4.5A1.5 1.5 0 017.46 5c0 1-1.5 1.5-1.5 1.5m.04 2h.005M11 6A5 5 0 111 6a5 5 0 0110 0z"
-          stroke="#98A2B3"
+          stroke={stroke}
           strokeWidth={1.33333}
           strokeLinecap="round"
           strokeLinejoin="round"
