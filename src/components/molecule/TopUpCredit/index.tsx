@@ -171,19 +171,12 @@ export const TopUpCreditContent: React.FC<TopUpCreditProps> = ({
           />
         }>
         <View style={{justifyContent: 'center', alignItems: 'center'}}>
-          <Text>
+          <Text style={{textAlign: 'center'}}>
             <Text style={[typography.Subtitle1, styles.text]}>
               {t('TopUp.Subtitle1')}
             </Text>
             <TouchableOpacity onPress={() => setShowModalTopupInfo(true)}>
-              <TooltipIcon
-                stroke={color.Pink[2]}
-                style={{
-                  marginLeft: widthPercentage(10),
-                  width: widthPercentage(17),
-                  height: widthPercentage(17),
-                }}
-              />
+              <TooltipIcon stroke={color.Pink[2]} style={styles.tooltipStyle} />
             </TouchableOpacity>
           </Text>
           <Text style={[typography.Caption, styles.text]}>
@@ -314,5 +307,12 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: color.Neutral[10],
     lineHeight: mvs(16),
+  },
+  tooltipStyle: {
+    position: 'absolute',
+    top: mvs(-15),
+    marginLeft: widthPercentage(10),
+    width: widthPercentage(17),
+    height: widthPercentage(17),
   },
 });
