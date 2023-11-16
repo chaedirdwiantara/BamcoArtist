@@ -104,12 +104,11 @@ export const EventDetail: React.FC<EventDetailProps> = ({
     isRefetching: isRefetchingDetail,
   } = useEventDetail(id);
 
-  const {data: dataVoucher, refetch: refetchVoucher} =
-    useEventCheckGeneratedTopupVoucher({
-      userUUID: user?.uuid ?? '',
-      userType: 'musician',
-      eventId: id,
-    });
+  const {refetch: refetchVoucher} = useEventCheckGeneratedTopupVoucher({
+    userUUID: user?.uuid ?? '',
+    userType: 'musician',
+    eventId: id,
+  });
 
   useFocusEffect(
     useCallback(() => {

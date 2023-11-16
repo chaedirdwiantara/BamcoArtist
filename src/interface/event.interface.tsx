@@ -259,6 +259,7 @@ export interface EventLineUp {
   };
   totalTipping: number;
   statusLineupEvent: string;
+  startTime: string;
 }
 
 export interface EventListInterface {

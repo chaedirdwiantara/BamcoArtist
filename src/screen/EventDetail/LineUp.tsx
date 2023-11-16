@@ -81,6 +81,7 @@ const LineUp: FC<EventLineUpInterface> = ({
             onPressMore={() => null}
             self={self}
             isLineUp={true}
+            liveTime={item?.startTime}
           />
         );
       })}
