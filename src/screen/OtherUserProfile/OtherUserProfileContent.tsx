@@ -38,6 +38,7 @@ import {
   widthPercentage,
   heightPercentage,
   widthResponsive,
+  elipsisText,
 } from '../../utils';
 import {ProfileFansResponseType} from '../../interface/profile.interface';
 import {useBlockHook} from '../../hooks/use-block.hook';
@@ -244,7 +245,7 @@ export const OtherUserProfileContent: React.FC<ProfileContentProps> = ({
           />
         </TouchableOpacity>
         <Gap width={widthPercentage(20)} />
-        <Text style={styles.name}>{profile.fullname}</Text>
+        <Text style={styles.name}>{elipsisText(profile.fullname, 25)}</Text>
       </View>
     );
   };

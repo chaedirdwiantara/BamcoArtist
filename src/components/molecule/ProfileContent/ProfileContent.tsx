@@ -19,6 +19,7 @@ import {
   widthPercentage,
   heightPercentage,
   widthResponsive,
+  elipsisText,
 } from '../../../utils';
 import {color, font} from '../../../theme';
 import {TabFilter} from '../TabFilter';
@@ -155,7 +156,9 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
     <View style={{flex: 1}}>
       {scrollEffect && (
         <View style={styles.containerStickyHeader}>
-          <Text style={[styles.name, styles.topIos]}>{profile.fullname}</Text>
+          <Text style={[styles.name, styles.topIos]}>
+            {elipsisText(profile.fullname, 25)}
+          </Text>
           <TouchableOpacity onPress={goToSetting}>
             <SettingIcon style={styles.topIos} />
           </TouchableOpacity>
@@ -385,7 +388,7 @@ const styles = StyleSheet.create({
     color: Color.Neutral[10],
   },
   topIos: {
-    top: heightPercentage(15),
+    top: heightPercentage(20),
   },
   modalContainer: {
     width: '100%',
