@@ -342,6 +342,10 @@ export type RootStackParams = {
   Cart: {
     promoId?: string;
   };
+  Profile: {
+    showToast?: boolean;
+    deletePlaylist?: boolean;
+  };
   PromoCode: undefined;
   PromoDetail: {
     id: string;
@@ -675,6 +679,7 @@ export const RootStackScreen = () => (
     <RootStack.Screen name="DiscoverArtist" component={DiscoverArtist} />
     <RootStack.Screen name="ListVoucher" component={ListVoucher} />
     <RootStack.Screen name="DetailVoucher" component={DetailVoucher} />
+    <RootStack.Screen name="Profile" component={ProfileScreen} />
   </RootStack.Navigator>
 );
 
