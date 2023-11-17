@@ -1117,7 +1117,13 @@
       "Audience": "Set Audience",
       "Quote": "Quote Music",
       "Media": "Upload Media",
-      "Preview": "Add Preview"
+      "Preview": "Add Preview",
+      "Success":"Your post have been sent!",
+      "Warning":{
+        "Title":"Upload Video",
+        "Caption":"Oops! Your video is more than 15 sec. To make sure your upload goes through, try cutting it down and then uploading again.",
+        "Button":"Ok, Got It"
+      }
     },
     "Dropdown": {
       "Visit": "Visit Profile",

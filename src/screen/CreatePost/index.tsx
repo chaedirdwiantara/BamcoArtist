@@ -25,9 +25,11 @@ import {
   ModalImagePicker,
   SsuInput,
   StepCopilot,
+  SuccessToast,
   TopNavigation,
 } from '../../components';
 import {
+  DataDropDownNumberType,
   DataDropDownType,
   dataDurationVote,
   dropdownCategoryMusician,
@@ -61,6 +63,7 @@ import {CopilotProvider, useCopilot} from 'react-native-copilot';
 import {useCoachmarkHook} from '../../hooks/use-coachmark.hook';
 import {useCopilotStore} from '../../store/copilot.store';
 import {StepNumber, Tooltip} from '../../components/molecule/TooltipGuideline';
+import {useCreatePostStatus} from '../../store/postState.store';
 
 type PostDetailProps = NativeStackScreenProps<RootStackParams, 'CreatePost'>;
 
@@ -107,6 +110,7 @@ const CreatePostCopilot: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   } = usePlayerHook();
 
   const {setWithoutBottomTab, show} = usePlayerStore();
+  const {postSuccess, setPostSuccess} = useCreatePostStatus();
 
   const [label, setLabel] = useState<string>();
   const [userId, setUserId] = useState<string>('');
@@ -123,9 +127,9 @@ const CreatePostCopilot: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   >('All');
   const [dataVote, setDataVote] =
     useState<dataVoteProps[]>(vooteInitialChoices);
-  const [pollDuration, setPollDuration] = useState<DataDropDownType>(
-    dataDurationVote[0],
-  );
+  const [pollDuration, setPollDuration] = useState<
+    DataDropDownNumberType | DataDropDownType
+  >(dataDurationVote[0]);
   const [voteCompleted, setVoteCompleted] = useState<boolean>(true);
 
   // * Hooks for uploading
@@ -302,6 +306,7 @@ const CreatePostCopilot: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   useEffect(() => {
     if (dataCreatePost !== null) {
       show && setWithoutBottomTab(false);
+      setPostSuccess(true);
       navigation.goBack();
     }
   }, [dataCreatePost]);
@@ -466,6 +471,7 @@ const CreatePostCopilot: FC<PostDetailProps> = ({route}: PostDetailProps) => {
           maxLengthTitle={20}
           itemStrokeColor={'white'}
           leftIconAction={handleBackAction}
+          rightIconAction={() => {}}
         />
         <View style={styles.mainContainer}>
           {/* //! TOP AREA */}
@@ -757,11 +763,9 @@ const CreatePostCopilot: FC<PostDetailProps> = ({route}: PostDetailProps) => {
       </View>
       <ModalConfirm
         modalVisible={modalConfirm}
-        title={'Upload Video'}
-        subtitle={
-          'Oops! Your video is more than 15 sec. To make sure your upload goes through, try cutting it down and then uploading again.'
-        }
-        yesText={'Ok, Got It'}
+        title={`${t('Post.Create.Warning.Title')}`}
+        subtitle={`${t('Post.Create.Warning.Caption')}`}
+        yesText={`${t('Post.Create.Warning.Button')}`}
         onPressOk={handleOkConfirm}
         oneButton
       />

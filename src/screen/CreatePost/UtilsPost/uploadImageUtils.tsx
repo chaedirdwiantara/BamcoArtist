@@ -6,7 +6,7 @@ import {dummySongImg} from '../../../data/image';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParams} from '../../../navigations';
 import {dataVoteProps} from '../../../interface/vote.interface';
-import {DataDropDownType} from '../../../data/dropdown';
+import {DataDropDownNumberType, DataDropDownType} from '../../../data/dropdown';
 
 export const useTriggerUploadImage = (
   active: boolean,
@@ -23,7 +23,7 @@ export const useTriggerUploadImage = (
   userId: string,
   show: boolean,
   dataVote: dataVoteProps[],
-  pollDuration: DataDropDownType,
+  pollDuration: DataDropDownNumberType | DataDropDownType,
   setCreatePost: (props?: CreatePostProps | undefined) => Promise<void>,
   setUpdatePost: (props?: CreatePostProps | undefined) => Promise<void>,
   setUploadImage: (

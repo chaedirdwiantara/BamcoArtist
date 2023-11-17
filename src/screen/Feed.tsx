@@ -27,6 +27,7 @@ import {
   ModalConfirm,
   SsuToast,
   StepCopilot,
+  SuccessToast,
   TabFilter,
   TopNavigation,
 } from '../components';
@@ -61,6 +62,7 @@ import {CopilotProvider, useCopilot} from 'react-native-copilot';
 import {useCoachmarkHook} from '../hooks/use-coachmark.hook';
 import {useCopilotStore} from '../store/copilot.store';
 import {StepNumber, Tooltip} from '../components/molecule/TooltipGuideline';
+import {useCreatePostStatus} from '../store/postState.store';
 
 const {StatusBarManager} = NativeModules;
 const barHeight = StatusBarManager.HEIGHT;
@@ -72,6 +74,7 @@ const FeedScreenCopilot: React.FC = () => {
   const isLogin = storage.getString('profile');
   const uuid = profileStorage()?.uuid;
   const {profileStore} = userProfile();
+  const {postSuccess, setPostSuccess} = useCreatePostStatus();
 
   const {visible} = usePlayerHook();
   const {dataExclusiveContent, getExclusiveContent} = useSettingHook();
@@ -251,13 +254,14 @@ const FeedScreenCopilot: React.FC = () => {
   //? 3. Check if video is ready to stream till 1 min
   useEffect(() => {
     if (getProgressUpload) {
+      let startTime = Date.now();
       let intervalRef = setInterval(() => {
         if (uploadStatus?.readyToStream === true) {
           setAllowToPost(true);
           setUploadStatus(undefined);
           setGetProgressUpload(false);
           clearInterval(intervalRef!);
-        } else if (intervalRef! >= 60000) {
+        } else if (Date.now() - startTime! >= 60000) {
           setAllowToPost(false);
           setUploadStatus(undefined);
           setGetProgressUpload(false);
@@ -300,6 +304,7 @@ const FeedScreenCopilot: React.FC = () => {
       setProgress(undefined);
       setTotalProgress(undefined);
       setAllowToRefresh(true);
+      setPostSuccess(true);
     }
   }, [dataCreatePost]);
 
@@ -532,6 +537,12 @@ const FeedScreenCopilot: React.FC = () => {
             onPressOk={handleOkBanModal}
             textNavigate={`${t('Setting.PreventInteraction.TextNavigate')}`}
             textOnPress={handleOkBanModal}
+          />
+          {/* //? Success create post */}
+          <SuccessToast
+            toastVisible={postSuccess}
+            onBackPressed={() => setPostSuccess(false)}
+            caption={`${t('Post.Create.Success')}`}
           />
         </View>
       ) : (
