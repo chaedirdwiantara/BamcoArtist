@@ -545,6 +545,10 @@
       "TopTipper": {
         "Title": "最佳Beamer將在此顯示",
         "Subtitle": "等待活動直播以查看最佳Beamer"
+      },
+      "LineUp": {
+        "Title": "即將揭曉藝術家！",
+        "Subtitle": "敬請期待令人興奮的藝術家公告！"
       }
     },
     "ListVoucher": {

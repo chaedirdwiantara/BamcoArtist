@@ -97,7 +97,8 @@ const LineUp: FC<EventLineUpInterface> = ({
     </ScrollView>
   ) : (
     <EmptyStateSongMusician
-      text={t('Home.Musician.EmptyState', {title: 'Top Musician'})}
+      title={t('Event.EmptyState.LineUp.Title') || ''}
+      text={t('Event.EmptyState.LineUp.Subtitle')}
     />
   );
 };
