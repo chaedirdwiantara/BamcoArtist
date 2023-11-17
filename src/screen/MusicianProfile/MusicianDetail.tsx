@@ -22,8 +22,10 @@ import {
   UserInfoCard,
 } from '../../components';
 import {
+  elipsisText,
   heightPercentage,
   heightResponsive,
+  width,
   widthPercentage,
   widthResponsive,
 } from '../../utils';
@@ -283,7 +285,7 @@ export const MusicianDetail: React.FC<MusicianDetailProps> = ({
           />
         </TouchableOpacity>
         <Gap width={widthPercentage(20)} />
-        <Text style={styles.name}>{profile.fullname}</Text>
+        <Text style={styles.name}>{elipsisText(profile.fullname, 25)}</Text>
       </View>
     );
   };
@@ -605,6 +607,7 @@ const styles = StyleSheet.create({
   containerLeftIcon: {
     flexDirection: 'row',
     alignItems: 'center',
+    width: width * 0.8,
   },
   name: {
     fontFamily: font.InterSemiBold,

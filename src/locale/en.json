@@ -1136,6 +1136,11 @@
     "Title": "Notification"
   },
   "Modal": {
+    "TopupInfo": {
+      "Title": "Credit Purchase",
+      "SubtitleIos": "If a course purchased through the iOS app isn’t in your account, check for a 'Pending' transaction in Apple; this may take 24-48 hours to process. If the status changes but the course isn't added, send us your Apple receipt to help resolve the issue.",
+      "SubtitleAndroid": "If a course purchased through the Android app isn’t in your account, check for a 'Pending' transaction in Google Play; this may take 24-48 hours to process. If the status changes but the course isn't added, send us your Google Play receipt to help resolve the issue."
+    },
     "ModalInfo": {
       "TitleMerch": "Sell Your Merchandise Now!",
       "Subtitle1Merch": "To list your merchandise for sale, kindly log in to ",

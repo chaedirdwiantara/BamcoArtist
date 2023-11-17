@@ -1134,6 +1134,11 @@
     "Title": "通知"
   },
   "Modal": {
+    "TopupInfo": {
+      "Title": "購買點數",
+      "SubtitleIos": "如果您透過 iOS 應用程式購買的課程未出現在您的帳戶中，請檢查 Apple 是否有「等待中」的交易；此過程可能需要 24-48 小時。如果交易狀態有變但課程未添加，請將您的 Apple 收據發送給我們，以協助解決問題。",
+      "SubtitleAndroid": "如果您透過 Android 應用程式購買的課程未出現在您的帳戶中，請檢查 Google Play 是否有「等待中」的交易；此過程可能需要 24-48 小時。如果交易狀態有變但課程未添加，請將您的 Google Play 收據發送給我們，以協助解決問題。"
+    },
     "ModalInfo": {
       "TitleMerch": "Sell Your Merchandise Now!",
       "Subtitle1Merch": "To list your merchandise for sale, kindly log in to ",
