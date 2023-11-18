@@ -17,6 +17,7 @@ import CommentInputModal from './CommentInputModal/CommentInputModal';
 import {CreateNewCard} from './CreateNewCard/CreateNewCard';
 import {CreateNewPlaylistContent} from './PlaylistContent/CreateNewPlaylistContent';
 import CreatePostShortcut from './CreatePostShortcut/createPostShortcut';
+import {CustomTipping} from './CustomTipping';
 import {Dropdown} from './DropDown';
 import DetailPost from './DetailPost/DetailPost';
 import {DASContent} from './SettingContent/DonationAndSubcription';
@@ -108,6 +109,7 @@ export {
   CreateNewCard,
   CreateNewPlaylistContent,
   CreatePostShortcut,
+  CustomTipping,
   DetailPost,
   DASContent,
   Dropdown,
