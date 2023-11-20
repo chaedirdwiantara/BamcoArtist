@@ -43,9 +43,10 @@ export const SplashScreen: React.FC<SplashScrennProps> = ({
     setModalVisible(false);
     setTimeout(() => {
       navigation.replace(
-        storage.getBoolean('isPreference')
-          ? 'Preference'
-          : storage.getBoolean('isLogin') || storage.getBoolean('isGuest')
+        // BEAM-1436: Remove step wizard after sign up
+        // storage.getBoolean('isPreference')
+        //   ? 'Preference' :
+        storage.getBoolean('isLogin') || storage.getBoolean('isGuest')
           ? 'MainTab'
           : storage.getBoolean('isDeleted')
           ? 'RecoverAccount'
