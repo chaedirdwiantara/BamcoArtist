@@ -600,6 +600,11 @@
       "Photos": "Add Photos"
     }
   },
+  "Rewards": {
+    "Title": "Rewards",
+    "Reward": "Rewards",
+    "Mission": "Mission"
+  },
   "Musician": {
     "Label": {
       "Fans": "FANS",
