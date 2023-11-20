@@ -147,11 +147,16 @@ export const SignupScreen: React.FC = () => {
       if (isRegisterSSO) {
         storage.set('isLogin', true);
         storage.set('profile', JSON.stringify(authResult.data));
+        // BEAM-1436: Remove step wizard after sign up
+        // navigation.reset({
+        //   index: 0,
+        //   routes: [{name: 'Preference'}],
+        // });
+        // storage.set('isPreference', true);
         navigation.reset({
           index: 0,
-          routes: [{name: 'Preference'}],
+          routes: [{name: 'MainTab'}],
         });
-        storage.set('isPreference', true);
       } else {
         if (watch('registrationType') === 'email') {
           navigation.replace('Otp', {
@@ -241,18 +246,19 @@ export const SignupScreen: React.FC = () => {
       loginResult !== null
     ) {
       storage.set('isLogin', true);
-      if (loginResult === 'preference') {
-        navigation.reset({
-          index: 0,
-          routes: [{name: 'Preference'}],
-        });
-        storage.set('isPreference', true);
-      } else {
-        navigation.reset({
-          index: 0,
-          routes: [{name: 'MainTab'}],
-        });
-      }
+      // BEAM-1436: Remove step wizard after sign up
+      // if (loginResult === 'preference') {
+      //   navigation.reset({
+      //     index: 0,
+      //     routes: [{name: 'Preference'}],
+      //   });
+      //   storage.set('isPreference', true);
+      // } else {
+      navigation.reset({
+        index: 0,
+        routes: [{name: 'MainTab'}],
+      });
+      // }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ssoRegistered, loginResult]);

@@ -105,11 +105,16 @@ export const SignupSSOScreen: React.FC<RegisterProps> = ({
     if (!isLoading && !isError && authResult !== null) {
       storage.set('profile', JSON.stringify(authResult.data));
       storage.set('isLogin', true);
+      // BEAM-1436: Remove step wizard after sign up
+      // navigation.reset({
+      //   index: 0,
+      //   routes: [{name: 'Preference'}],
+      // });
+      // storage.set('isPreference', true);
       navigation.reset({
         index: 0,
-        routes: [{name: 'Preference'}],
+        routes: [{name: 'MainTab'}],
       });
-      storage.set('isPreference', true);
     } else if (!isLoading && isError !== null) {
       setError('termsCondition', {
         type: 'value',

@@ -37,18 +37,19 @@ export const Otp: FC<OtpProps> = ({navigation, route}: OtpProps) => {
   useEffect(() => {
     if (!isLoading && !isError && isOtpValid === true) {
       storage.set('isLogin', true);
-      if (loginResult === 'preference') {
-        navigation.reset({
-          index: 0,
-          routes: [{name: 'Preference'}],
-        });
-        storage.set('isPreference', true);
-      } else if (loginResult === 'home') {
-        navigation.reset({
-          index: 0,
-          routes: [{name: 'MainTab'}],
-        });
-      }
+      // BEAM-1436: Remove step wizard after sign up
+      // if (loginResult === 'preference') {
+      //   navigation.reset({
+      //     index: 0,
+      //     routes: [{name: 'Preference'}],
+      //   });
+      //   storage.set('isPreference', true);
+      // } else if (loginResult === 'home') {
+      navigation.reset({
+        index: 0,
+        routes: [{name: 'MainTab'}],
+      });
+      // }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isError, errorMsg, isOtpValid, isLoading, loginResult]);
