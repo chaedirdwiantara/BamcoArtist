@@ -149,20 +149,18 @@ export const ForgotPassword: FC = () => {
       } else if (watch('page') === 'newPass') {
         if (!isError && loginResult !== null) {
           storage.set('isLogin', true);
-          // https://thebeamco.atlassian.net/jira/software/projects/BEAM/boards/2?assignee=712020%3A4f7dbd5d-5f8a-489c-8131-a29357bc0c80&selectedIssue=BEAM-1436
-          // BEAM-1436: Remove step wizard after sign up
-          // if (loginResult === 'preference') {
-          //   navigation.reset({
-          //     index: 0,
-          //     routes: [{name: 'Preference'}],
-          //   });
-          //   storage.set('isPreference', true);
-          // } else {
-          navigation.reset({
-            index: 0,
-            routes: [{name: 'MainTab'}],
-          });
-          // }
+          if (loginResult === 'preference') {
+            navigation.reset({
+              index: 0,
+              routes: [{name: 'Preference'}],
+            });
+            storage.set('isPreference', true);
+          } else {
+            navigation.reset({
+              index: 0,
+              routes: [{name: 'MainTab'}],
+            });
+          }
         } else if (isError) {
           console.log({errorMsg});
           setError('confirmPassword', {
