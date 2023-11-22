@@ -10,7 +10,7 @@ import {
   NativeScrollEvent,
   RefreshControl,
 } from 'react-native';
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import Color from '../../theme/Color';
 import {heightResponsive, width, widthResponsive} from '../../utils';
 import {
@@ -28,6 +28,7 @@ import {RootStackParams} from '../../navigations';
 import {useTranslation} from 'react-i18next';
 import LineUp from './LineUp';
 import TopTiper from './TopTiper';
+import Income from './Income';
 import dayjs from 'dayjs';
 import LoadingSpinner from '../../components/atom/Loading/LoadingSpinner';
 import {ModalLoading} from '../../components/molecule/ModalLoading/ModalLoading';
@@ -58,7 +59,7 @@ export const EventDetail: React.FC<EventDetailProps> = ({
 
   const [scrollEffect, setScrollEffect] = useState<boolean>(false);
   const [selectedIndex, setSelectedIndex] = useState(-0);
-  const [filterTab] = useState([
+  const [filterTab, setFilterTab] = useState([
     {filterName: 'Event.Detail.LineUp'},
     {filterName: 'Event.Detail.TopTiper'},
   ]);
@@ -109,6 +110,22 @@ export const EventDetail: React.FC<EventDetailProps> = ({
     userType: 'musician',
     eventId: id,
   });
+
+  useEffect(() => {
+    // show third tab (income), if user show in line up
+    const self =
+      dataLineUp?.data &&
+      dataLineUp?.data?.filter(
+        item => item?.musician?.UUID === profileStorage()?.uuid,
+      ).length > 0;
+
+    let tab = [
+      {filterName: 'Event.Detail.LineUp'},
+      {filterName: 'Event.Detail.TopTiper'},
+    ];
+    const newTab = self ? [...tab, {filterName: 'Event.Detail.Income'}] : tab;
+    setFilterTab(newTab);
+  }, [dataLineUp]);
 
   useFocusEffect(
     useCallback(() => {
@@ -284,6 +301,9 @@ export const EventDetail: React.FC<EventDetailProps> = ({
               eventId={id}
               endDate={dataDetail?.data?.endDate ?? ''}
             />
+          ) : filterTab[selectedIndex].filterName === 'Event.Detail.Income' ? (
+            // show "Income" if this user (artist) perform in event
+            <Income eventId={id} />
           ) : (
             <TopTiper
               dataTipper={dataTopTipper?.data}
