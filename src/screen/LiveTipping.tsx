@@ -460,7 +460,7 @@ export const LiveTipping: FC<LiveTippingProps> = ({
                   setCredit(credit - creditBySwipe);
                   setOnSwipe(true);
                   setCounter(counter + 1);
-                  setCounterTipping(counterTipping + creditBySwipe);
+                  setCounterTipping(counterTipping + 1);
                   startBgService();
                 } else {
                   setShowModalEmpty(true);
