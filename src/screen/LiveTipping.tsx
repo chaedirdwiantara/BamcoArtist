@@ -272,6 +272,17 @@ export const LiveTipping: FC<LiveTippingProps> = ({
     if (counterTipping > 0) storage.set('counterTipping', counterTipping);
   }, [counterTipping]);
 
+  const onPressCustomTipping = async (chip: number) => {
+    setCreditBySwipe(chip);
+    stopBgService();
+    setCounterTipping(0);
+    await sendTipping();
+    getCreditCount();
+    if (!dataVoucher?.data?.isGenerated) {
+      refetchVoucher();
+    }
+  };
+
   return (
     <View style={styles.root}>
       <TopNavigation.Type4
@@ -448,7 +459,7 @@ export const LiveTipping: FC<LiveTippingProps> = ({
                   setShowMoney(false);
                   setCredit(credit - creditBySwipe);
                   setOnSwipe(true);
-                  setCounter(counter + creditBySwipe);
+                  setCounter(counter + 1);
                   setCounterTipping(counterTipping + creditBySwipe);
                   startBgService();
                 } else {
@@ -501,8 +512,9 @@ export const LiveTipping: FC<LiveTippingProps> = ({
           )}
 
           <CustomTipping
-            containerStyles={{position: 'absolute', bottom: mvs(40)}}
-            onPress={creditAmount => setCreditBySwipe(creditAmount)}
+            containerStyles={styles.customTipping}
+            selectedChip={creditBySwipe}
+            onPress={creditAmount => onPressCustomTipping(creditAmount)}
           />
         </View>
       </View>
@@ -694,5 +706,10 @@ const styles = StyleSheet.create({
     width: widthResponsive(200),
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  customTipping: {
+    position: 'absolute',
+    right: widthResponsive(-25),
+    bottom: mvs(80),
   },
 });
