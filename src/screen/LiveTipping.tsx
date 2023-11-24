@@ -73,6 +73,7 @@ export const LiveTipping: FC<LiveTippingProps> = ({
   const [counterTipping, setCounterTipping] = useState<number>(0);
   const [creditBySwipe, setCreditBySwipe] = useState<number>(1);
   const [disabledSwipe, setDisabledSwipe] = useState<boolean>(false);
+  const [isSentATip, setIsSentATip] = useState<boolean>(false);
   const [moneyBatchURL, setMoneyBatchURL] = useState<ImageSourcePropType>(
     require('../assets/image/money-batch.png'),
   );
@@ -212,6 +213,9 @@ export const LiveTipping: FC<LiveTippingProps> = ({
     await new Promise(async (_resolve: any) => {
       for (let i = 0; BackgroundService.isRunning(); i++) {
         if (i === 2) {
+          // if the tip has been sent, then setIsSentATip = true
+          // so when changing custom credits, doesn't fetch the API
+          setIsSentATip(true);
           setCounterTipping(0);
           await sendTipping();
           getCreditCount();
@@ -273,14 +277,19 @@ export const LiveTipping: FC<LiveTippingProps> = ({
   }, [counterTipping]);
 
   const onPressCustomTipping = async (chip: number) => {
-    setCreditBySwipe(chip);
-    stopBgService();
-    setCounterTipping(0);
-    await sendTipping();
-    getCreditCount();
-    if (!dataVoucher?.data?.isGenerated) {
-      refetchVoucher();
+    if (!isSentATip && counter > 0) {
+      // setIsSentATip change to default
+      setIsSentATip(false);
+      stopBgService();
+      setCounterTipping(0);
+      setCounter(0);
+      await sendTipping();
+      getCreditCount();
+      if (!dataVoucher?.data?.isGenerated) {
+        refetchVoucher();
+      }
     }
+    setCreditBySwipe(chip);
   };
 
   return (
