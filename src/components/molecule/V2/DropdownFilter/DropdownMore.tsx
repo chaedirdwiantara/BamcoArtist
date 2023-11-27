@@ -65,7 +65,7 @@ const DropdownMore: React.FC<DropdownV2Props> = (props: DropdownV2Props) => {
   const [dropDownHeight, setDropdownHeight] = useState(0);
   const [heightPercent, setHeightPercent] = useState<number>(0);
 
-  const handleOnClose = () => {
+  useEffect(() => {
     if (menuSelected) {
       selectedMenu?.(menuSelected);
       setMenuSelected(undefined);
@@ -79,7 +79,7 @@ const DropdownMore: React.FC<DropdownV2Props> = (props: DropdownV2Props) => {
         selectedUserName?.(userName);
       }
     }
-  };
+  }, [menuSelected]);
 
   const handleSelectedOnPress = (data: DataDropDownType) => {
     setMenuSelected(data);
@@ -146,7 +146,6 @@ const DropdownMore: React.FC<DropdownV2Props> = (props: DropdownV2Props) => {
             marginVertical: mvs(4),
             marginHorizontal: ms(4),
           }}
-          onModalHide={handleOnClose}
         />
       )}
     </View>
