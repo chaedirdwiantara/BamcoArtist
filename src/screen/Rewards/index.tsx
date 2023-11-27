@@ -2,22 +2,26 @@ import {
   NativeModules,
   NativeScrollEvent,
   NativeSyntheticEvent,
-  Platform,
-  SafeAreaView,
   ScrollView,
   StyleSheet,
+  Text,
   View,
 } from 'react-native';
-import React, {useCallback, useEffect, useState} from 'react';
-import {color} from '../../theme';
-import {heightResponsive, widthResponsive} from '../../utils';
-import {ProfileHeader, TabFilter, TopNavigation} from '../../components';
+import React, {useCallback, useState} from 'react';
+import {color, font} from '../../theme';
+import {widthResponsive} from '../../utils';
+import {Button, Gap, ModalCustom, TabFilter} from '../../components';
 import {useProfileHook} from '../../hooks/use-profile.hook';
 import {useTranslation} from 'react-i18next';
 import {widthPercentageToDP} from 'react-native-responsive-screen';
 import {useFocusEffect} from '@react-navigation/native';
 import TabOneReward from './tabOne';
 import TabTwoRewards from './tabTwo';
+import InfoCard from '../../components/molecule/Reward/infoCard';
+import PointProgress from '../../components/molecule/Reward/pointProgress';
+import BackgroundHeader from '../../components/molecule/Reward/backgroundHeader';
+import {mvs} from 'react-native-size-matters';
+import RedeemSuccessIcon from '../../assets/icon/RedeemSuccess.icon';
 
 const {StatusBarManager} = NativeModules;
 const barHeight = StatusBarManager.HEIGHT;
@@ -37,6 +41,7 @@ const Rewards = () => {
     {filterName: 'Rewards.Mission'},
   ]);
   const [scrollEffect, setScrollEffect] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
   useFocusEffect(
     useCallback(() => {
@@ -54,95 +59,90 @@ const Rewards = () => {
     setSelectedIndex(index);
   };
 
-  const banners =
-    dataProfile?.data !== undefined && dataProfile?.data.banners?.length > 0
-      ? dataProfile?.data.banners[2].image
-      : '';
-
-  const avatar =
-    dataProfile?.data !== undefined &&
-    dataProfile?.data.imageProfileUrls?.length > 0
-      ? dataProfile?.data.imageProfileUrls[2].image
-      : '';
-
-  const profile = {
-    ...dataProfile?.data,
-    fullname: dataProfile?.data.fullname,
-    username: dataProfile?.data.username,
-    bio: dataProfile?.data.bio || t('Profile.Label.Description'),
-    backgroundUri: banners,
-    avatarUri: avatar,
-    totalFollowing: dataProfile?.data.following,
-    totalFollowers: dataProfile?.data.followers,
-    totalFans: dataProfile?.data.fans,
-    totalRelease: dataCountProfile?.countAlbumReleased,
-    totalPlaylist: dataCountProfile?.countPlaylist,
-    rank: dataProfile?.data.rank || 0,
+  const onClaimVoucher = (id: number) => {
+    console.log(id, 'id');
+    setShowModal(true);
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View>
-        <TopNavigation.Type2Animated
-          title={t('Rewards.Title')}
-          maxLengthTitle={20}
-          itemStrokeColor={'white'}
-          containerStyle={{
-            position: 'absolute',
-            paddingTop:
-              Platform.OS === 'ios' ? 0 : heightResponsive(barHeight + 15),
-            zIndex: 4,
-            backgroundColor: color.Dark[800],
-          }}
-        />
+    <View style={styles.container}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        scrollEventThrottle={16}
+        onScroll={handleScroll}>
+        <View style={styles.slide}>
+          <BackgroundHeader rankTitle={'bronze'} points={1800} />
+        </View>
 
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          scrollEventThrottle={16}
-          onScroll={handleScroll}>
-          {dataProfile?.data && (
-            <ProfileHeader
-              // type={!ownProfile ? 'user detail' : 'profile'}
-              avatarUri={profile.avatarUri}
-              backgroundUri={profile.backgroundUri}
-              fullname={profile.fullname}
-              username={profile.username}
-              bio={profile.bio ?? ''}
-              onPress={() => {}}
-              iconPress={() => {}}
-              scrollEffect={scrollEffect}
-              noEdit={true}
-              onPressImage={() => {}}
-            />
-          )}
+        <Gap height={14} />
+        <View style={{paddingHorizontal: widthResponsive(20)}}>
+          <PointProgress progress={1800} total={2000} nextLvl="2. Silver" />
+        </View>
 
-          <View style={styles.filterContainer}>
-            <TabFilter.Type1
-              filterData={filter}
-              onPress={tabFilterOnPress}
-              selectedIndex={selectedIndex}
-              translation={true}
-              flatlistContainerStyle={{
-                justifyContent: 'space-between',
-              }}
-              TouchableStyle={{width: widthPercentageToDP(45)}}
-            />
+        <Gap height={24} />
+        <View style={{paddingHorizontal: widthResponsive(20)}}>
+          <InfoCard
+            title={'Silver Streamer Badge is Closer '}
+            caption={
+              'You’re 200 Points away from being Silver. Let’s get ‘em by completing more mission!'
+            }
+            badgeType={'silver'}
+          />
+        </View>
+        <Gap height={16} />
 
-            <View style={styles.containerContent}>
-              {filter[selectedIndex].filterName === 'Rewards.Reward' ? (
-                <View>
-                  <TabOneReward />
-                </View>
-              ) : (
-                <View>
-                  <TabTwoRewards />
-                </View>
-              )}
-            </View>
+        <View style={styles.filterContainer}>
+          <TabFilter.Type1
+            filterData={filter}
+            onPress={tabFilterOnPress}
+            selectedIndex={selectedIndex}
+            translation={true}
+            flatlistContainerStyle={{
+              justifyContent: 'space-between',
+            }}
+            TouchableStyle={{width: widthPercentageToDP(45)}}
+          />
+
+          <View style={styles.containerContent}>
+            {filter[selectedIndex].filterName === 'Rewards.Reward' ? (
+              <View>
+                <TabOneReward onClaimVoucher={onClaimVoucher} />
+              </View>
+            ) : (
+              <View>
+                <TabTwoRewards />
+              </View>
+            )}
           </View>
-        </ScrollView>
-      </View>
-    </SafeAreaView>
+        </View>
+        <ModalCustom
+          modalVisible={showModal}
+          onPressClose={() => setShowModal(false)}
+          children={
+            <View style={styles.modalContainer}>
+              <RedeemSuccessIcon />
+              <Gap height={16} />
+              <Text style={styles.modalTitle}>
+                Congrats! You’ve Claimed 1 Voucher!
+              </Text>
+              <Gap height={8} />
+              <Text style={styles.modalCaption}>
+                Redeem for yourself or send to fellow fans. Visit My Rewards
+                Page for more details.
+              </Text>
+              <Gap height={20} />
+              <Button
+                label={'Dismiss'}
+                containerStyles={styles.btnClaim}
+                textStyles={styles.textButton}
+                onPress={() => setShowModal(false)}
+                type="border"
+              />
+            </View>
+          }
+        />
+      </ScrollView>
+    </View>
   );
 };
 
@@ -156,7 +156,7 @@ const styles = StyleSheet.create({
   },
   containerContent: {
     flex: 1,
-    marginTop: widthResponsive(20),
+    marginTop: widthResponsive(16),
     width: '100%',
   },
   filterContainer: {
@@ -164,5 +164,45 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     justifyContent: 'space-between',
+  },
+  slide: {
+    position: 'relative',
+    width: '100%',
+  },
+  btnClaim: {
+    aspectRatio: undefined,
+    width: undefined,
+    height: undefined,
+    paddingHorizontal: 3,
+    borderWidth: 0,
+  },
+  textButton: {
+    fontFamily: font.InterMedium,
+    fontSize: mvs(14),
+    fontWeight: '500',
+    color: color.Pink[200],
+  },
+  modalTitle: {
+    color: color.Neutral[10],
+    textAlign: 'center',
+    fontFamily: font.InterMedium,
+    fontWeight: '600',
+    fontSize: mvs(14),
+  },
+  modalCaption: {
+    color: color.Secondary[10],
+    textAlign: 'center',
+    fontFamily: font.InterRegular,
+    fontWeight: '400',
+    fontSize: mvs(10),
+  },
+  modalContainer: {
+    alignItems: 'center',
+    backgroundColor: color.Dark[800],
+    paddingTop: widthResponsive(32),
+    paddingHorizontal: widthResponsive(16),
+    paddingBottom: widthResponsive(16),
+    width: widthResponsive(244),
+    borderRadius: 16,
   },
 });

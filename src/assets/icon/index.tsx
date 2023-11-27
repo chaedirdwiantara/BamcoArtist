@@ -9,6 +9,16 @@ import ArrowUpIcon from './ArrowUp.icon';
 import ArrowUpGreenIcon from './ArrowUpGreen.icon';
 import ArrowDownIcon from './ArrowDown.icon';
 import AudioMusic from './AudioMusic.icon';
+import BadgeSilverIcon from './BadgeSilver.icon';
+import BadgeSilverMIcon from './BadgeSilverM.icon';
+import BadgeBronzeIcon from './BadgeBronze.icon';
+import BadgeBronzeMIcon from './BadgeBronzeM.icon';
+import BadgeGoldIcon from './BadgeGold.icon';
+import BadgeGoldMIcon from './BadgeGoldM.icon';
+import BadgePlatinumIcon from './BadgePlatinum.icon';
+import BadgePlatinumMIcon from './BadgePlatinumM.icon';
+import BadgeDiamondIcon from './BadgeDiamond.icon';
+import BadgeDiamondMIcon from './BadgeDiamondM.icon';
 import BellNotif from './BellNotif.icon';
 import BlitzIcon from './Blitz.icon';
 import BraveBrowserIcon from './BraveBrowser.icon';
@@ -40,10 +50,12 @@ import CollectionIcon from './Collection.icon';
 import CommentIcon from './Comment.icon';
 import CrackEggIcon from './CrackEgg.icon';
 import CrownIcon from './Crown.icon';
+import CupIcon from './Cup.icon';
 import {DefaultAvatar} from './DefaultAvatar.icon';
 import {DefaultImage} from './DefaultImage.icon';
 import DefaultBrowserIcon from './DefaultBrowser.icon';
 import DiagramIcon from './Diagram.icon';
+import DrinkRewardIcon from './DrinkReward.icon';
 import DropDownIcon from './Dropdown.icon';
 import DonateCoinIcon from './DonateCoin.icon';
 import EdgeBrowserIcon from './EdgeBrowser.icon';
@@ -81,6 +93,7 @@ import LockIcon from './Lock.icon.';
 import LogOutIcon from './Logout.icon';
 import LoveIcon from './Love.icon';
 import MedalIcon from './Medal.icon';
+import MediaRewardIcon from './MediaReward.icon';
 import MenuIcon from './Menu.icon';
 import MinusCircleIcon from './MinusCircle.icon';
 import MinusCircleWhiteIcon from './MinusCircleWhite.icon';
@@ -121,6 +134,7 @@ import SoundIcon from './Sound.icon';
 import ThreeDotsIcon from './ThreeDots.icon';
 import ThreeDotsHorizonIcon from './ThreeDotsHorizon.icon';
 import TickCircleIcon from './TickCircle.icon';
+import TicketRewardIcon from './TicketReward.icon';
 import TiktokIcon from './Tiktok.icon';
 import TooltipIcon from './Tooltip.icon';
 import TrashIcon from './Trash.icon';
@@ -163,6 +177,16 @@ export {
   ArrowUpGreenIcon,
   ArrowDownIcon,
   AudioMusic,
+  BadgeSilverIcon,
+  BadgeSilverMIcon,
+  BadgeBronzeIcon,
+  BadgeBronzeMIcon,
+  BadgeGoldIcon,
+  BadgeGoldMIcon,
+  BadgePlatinumIcon,
+  BadgePlatinumMIcon,
+  BadgeDiamondIcon,
+  BadgeDiamondMIcon,
   BellNotif,
   BraveBrowserIcon,
   BlitzIcon,
@@ -194,10 +218,12 @@ export {
   CommentIcon,
   CrackEggIcon,
   CrownIcon,
+  CupIcon,
   DefaultAvatar,
   DefaultImage,
   DefaultBrowserIcon,
   DiagramIcon,
+  DrinkRewardIcon,
   DropDownIcon,
   DonateCoinIcon,
   EdgeBrowserIcon,
@@ -234,6 +260,7 @@ export {
   LogOutIcon,
   LoveIcon,
   MedalIcon,
+  MediaRewardIcon,
   MenuIcon,
   MinusCircleIcon,
   MinusCircleWhiteIcon,
@@ -275,6 +302,7 @@ export {
   ThreeDotsIcon,
   ThreeDotsHorizonIcon,
   TickCircleIcon,
+  TicketRewardIcon,
   TiktokIcon,
   TooltipIcon,
   TrashIcon,
