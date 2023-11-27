@@ -46,16 +46,19 @@ const ListResultEvent: FC<Props> = ({keyword}: Props) => {
           <MerchListCard
             id={item.id}
             containerStyles={
-              index % 2 == 0 ? {marginRight: 10} : {marginLeft: 10}
+              index % 2 === 0 ? {marginRight: 10} : {marginLeft: 10}
             }
             image={item.pic}
-            title={item.name}
+            title={item.title}
             owner={item.organizer?.name}
             ownerImage={item.organizer?.pic}
-            price={item.price}
+            price={item.price / 100}
+            priceBeforeDisc={item.originalPrice / 100}
             desc={item.content}
             currency={item.currencyCode}
             type={'concert'}
+            charge={item.charge}
+            currencyCode={item.currencyCode}
           />
         )}
         estimatedItemSize={200}
