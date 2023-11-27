@@ -51,12 +51,13 @@ target 'Beamco for Artist' do
       :mac_catalyst_enabled => false
     )
     __apply_Xcode_12_5_M1_post_install_workaround(installer)
-       installer.pods_project.targets.each do |target|
-         if target.name == "React-Codegen"
-           target.build_configurations.each do |config|
-               config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '12.4'
-           end
-        end
+    installer.generated_projects.each do |project|
+      project.targets.each do |target|
+          target.build_configurations.each do |config|
+            config.build_settings["DEVELOPMENT_TEAM"] = "2385WX7747"
+          end
+      end
     end
   end
 end
+
