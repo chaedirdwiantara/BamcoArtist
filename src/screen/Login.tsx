@@ -156,16 +156,11 @@ export const LoginScreen: React.FC = () => {
       if (isRegisterSSO && authResult !== null) {
         storage.set('isLogin', true);
         storage.set('profile', JSON.stringify(authResult.data));
-        // BEAM-1436: Remove step wizard after sign up
-        // navigation.reset({
-        //   index: 0,
-        //   routes: [{name: 'Preference'}],
-        // });
-        // storage.set('isPreference', true);
         navigation.reset({
           index: 0,
-          routes: [{name: 'MainTab'}],
+          routes: [{name: 'Preference'}],
         });
+        storage.set('isPreference', true);
       } else {
         if (
           (watch('loginType') === 'email' && loginResult !== null) ||
@@ -181,19 +176,18 @@ export const LoginScreen: React.FC = () => {
             });
           } else {
             storage.set('isLogin', true);
-            // BEAM-1436: Remove step wizard after sign up
-            // if (loginResult === 'preference') {
-            //   navigation.reset({
-            //     index: 0,
-            //     routes: [{name: 'Preference'}],
-            //   });
-            //   storage.set('isPreference', true);
-            // } else {
-            navigation.reset({
-              index: 0,
-              routes: [{name: 'MainTab'}],
-            });
-            // }
+            if (loginResult === 'preference') {
+              navigation.reset({
+                index: 0,
+                routes: [{name: 'Preference'}],
+              });
+              storage.set('isPreference', true);
+            } else {
+              navigation.reset({
+                index: 0,
+                routes: [{name: 'MainTab'}],
+              });
+            }
           }
         } else if (
           watch('loginType') === 'phoneNumber' &&
