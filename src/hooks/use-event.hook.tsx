@@ -4,6 +4,7 @@ import {
   fetchListOrder,
   getEventDetail,
   getEventDetailVoucher,
+  getEventIncome,
   getEventLineUp,
   getEventLiveRank,
   getEventMusicianTipped,
@@ -104,6 +105,18 @@ export const useEventHook = () => {
     return useQuery(
       [`event/detail/toptipper/${events}`],
       () => getEventTopTipper(events, params),
+      {
+        enabled: true,
+        refetchInterval: 3000,
+        refetchIntervalInBackground: true,
+      },
+    );
+  };
+
+  const useEventIncome = (eventId: string, params?: ParamsProps) => {
+    return useQuery(
+      [`event/detail/income/${eventId}`],
+      () => getEventIncome(eventId, params),
       {
         enabled: true,
         refetchInterval: 3000,
@@ -243,6 +256,7 @@ export const useEventHook = () => {
     useEventLineUp,
     useOrderListBookYay,
     useEventTopTipper,
+    useEventIncome,
     useEventMusicianTipped,
     useEventMusicianLiveStatus,
     useEventRankerLiveTipping,

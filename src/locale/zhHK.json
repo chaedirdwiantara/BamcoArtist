@@ -514,6 +514,7 @@
       "Title": "活動詳情",
       "LineUp": "陣容",
       "TopTiper": "最佳Beamer",
+      "Income": "收入",
       "TipDistribution": "Beam分佈",
       "MusicianTipped": "Beamed音樂人",
       "Perform": "我要上台！",
@@ -537,6 +538,7 @@
         }
       }
     },
+    "Live": "現場",
     "EmptyState": {
       "Home": "目前沒有任何直播活動。敬請期待更多精彩體驗！",
       "Title": "探索直播活動",
@@ -549,6 +551,10 @@
       "LineUp": {
         "Title": "即將揭曉藝術家！",
         "Subtitle": "敬請期待令人興奮的藝術家公告！"
+      },
+      "Income": {
+        "Title": "咦，啲嘢啱啱係度好似冇啲嘈嘩啦！",
+        "Subtitle": "唱得有激情啲歌，希望啲掌聲（同埋小費）會隨之而來！"
       }
     },
     "ListVoucher": {

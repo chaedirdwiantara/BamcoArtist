@@ -515,6 +515,7 @@
       "Title": "Event Detail",
       "LineUp": "LINE UP",
       "TopTiper": "TOP BEAMERS",
+      "Income": "INCOME",
       "TipDistribution": "Beam Distribution",
       "MusicianTipped": "Artist Beamed",
       "Perform": "Pick Me!",
@@ -551,6 +552,10 @@
       "LineUp": {
         "Title": "Artist Unleashing Soon!",
         "Subtitle": "Stay tuned for exciting artist announcements!"
+      },
+      "Income": {
+        "Title": "Uh-oh, the stage looks a bit quiet!",
+        "Subtitle": "Set the mood, sing with your passion, and let the applause (and tips) follow"
       }
     },
     "ListVoucher": {
