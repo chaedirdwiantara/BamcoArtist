@@ -10,7 +10,13 @@ import {
 } from 'react-native';
 import React, {FC, useCallback, useEffect, useRef, useState} from 'react';
 import Color from '../theme/Color';
-import {AvatarProfile, Gap, ModalCustom, TopNavigation} from '../components';
+import {
+  AvatarProfile,
+  CustomTipping,
+  Gap,
+  ModalCustom,
+  TopNavigation,
+} from '../components';
 import {ArrowLeftIcon, ChevronUp, LiveIcon} from '../assets/icon';
 import {useTranslation} from 'react-i18next';
 import {heightResponsive, kFormatter, widthResponsive} from '../utils';
@@ -65,7 +71,9 @@ export const LiveTipping: FC<LiveTippingProps> = ({
   const [credit, setCredit] = useState<number>(creditCount);
   const [counter, setCounter] = useState<number>(0);
   const [counterTipping, setCounterTipping] = useState<number>(0);
+  const [creditBySwipe, setCreditBySwipe] = useState<number>(1);
   const [disabledSwipe, setDisabledSwipe] = useState<boolean>(false);
+  const [isSentATip, setIsSentATip] = useState<boolean>(false);
   const [moneyBatchURL, setMoneyBatchURL] = useState<ImageSourcePropType>(
     require('../assets/image/money-batch.png'),
   );
@@ -205,6 +213,9 @@ export const LiveTipping: FC<LiveTippingProps> = ({
     await new Promise(async (_resolve: any) => {
       for (let i = 0; BackgroundService.isRunning(); i++) {
         if (i === 2) {
+          // if the tip has been sent, then setIsSentATip = true
+          // so when changing custom credits, doesn't fetch the API
+          setIsSentATip(true);
           setCounterTipping(0);
           await sendTipping();
           getCreditCount();
@@ -257,13 +268,29 @@ export const LiveTipping: FC<LiveTippingProps> = ({
           : (dataDetailMusician?.imageProfileUrls[0].image as string),
       eventId: eventId,
       counter: storage.getNumber('counterTipping') ?? 0,
-      credit: 1,
+      credit: creditBySwipe,
     });
   };
 
   useEffect(() => {
     if (counterTipping > 0) storage.set('counterTipping', counterTipping);
   }, [counterTipping]);
+
+  const onPressCustomTipping = async (chip: number) => {
+    if (!isSentATip && counter > 0) {
+      // setIsSentATip change to default
+      setIsSentATip(false);
+      stopBgService();
+      setCounterTipping(0);
+      setCounter(0);
+      await sendTipping();
+      getCreditCount();
+      if (!dataVoucher?.data?.isGenerated) {
+        refetchVoucher();
+      }
+    }
+    setCreditBySwipe(chip);
+  };
 
   return (
     <View style={styles.root}>
@@ -439,7 +466,7 @@ export const LiveTipping: FC<LiveTippingProps> = ({
                 }
                 if (credit > 0) {
                   setShowMoney(false);
-                  setCredit(credit - 1);
+                  setCredit(credit - creditBySwipe);
                   setOnSwipe(true);
                   setCounter(counter + 1);
                   setCounterTipping(counterTipping + 1);
@@ -492,6 +519,12 @@ export const LiveTipping: FC<LiveTippingProps> = ({
               )}
             </Draggable>
           )}
+
+          <CustomTipping
+            containerStyles={styles.customTipping}
+            selectedChip={creditBySwipe}
+            onPress={creditAmount => onPressCustomTipping(creditAmount)}
+          />
         </View>
       </View>
 
@@ -682,5 +715,10 @@ const styles = StyleSheet.create({
     width: widthResponsive(200),
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  customTipping: {
+    position: 'absolute',
+    right: widthResponsive(-25),
+    bottom: mvs(80),
   },
 });

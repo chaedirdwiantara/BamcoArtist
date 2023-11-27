@@ -132,8 +132,8 @@ def reactNativeArchitectures() {
 }
 
 ext.versionMajor = 1
-ext.versionMinor = 3
-ext.versionPatch = 6
+ext.versionMinor = 4
+ext.versionPatch = 0
 ext.versionClassifier = null
 ext.isSnapshot = false
 

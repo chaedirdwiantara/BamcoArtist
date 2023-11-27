@@ -259,6 +259,7 @@ export interface EventLineUp {
   };
   totalTipping: number;
   statusLineupEvent: string;
+  startTime: string;
 }
 
 export interface EventListInterface {
@@ -304,8 +305,21 @@ export interface EventTopTipper {
   totalDonation: number;
 }
 
+export interface EventIncome {
+  UUID: string;
+  username: string;
+  fullname: string;
+  userType: string;
+  totalBeam: number;
+  image: string;
+}
+
 export interface EventTopTipperResponse extends BaseResponseApi {
   data: EventTopTipper[];
+}
+
+export interface EventIncomeResponse extends BaseResponseApi {
+  data: EventIncome[];
 }
 
 export interface EventMusicianTipped {

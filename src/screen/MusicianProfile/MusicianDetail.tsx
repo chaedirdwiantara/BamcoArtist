@@ -7,6 +7,8 @@ import {
   NativeSyntheticEvent,
   TouchableOpacity,
   Text,
+  RefreshControl,
+  Platform,
 } from 'react-native';
 import {
   EmptyState,
@@ -20,8 +22,10 @@ import {
   UserInfoCard,
 } from '../../components';
 import {
+  elipsisText,
   heightPercentage,
   heightResponsive,
+  width,
   widthPercentage,
   widthResponsive,
 } from '../../utils';
@@ -77,6 +81,8 @@ interface MusicianDetailProps {
   goToPlaylist: (id: number) => void;
   exclusiveContent?: DataExclusiveResponse;
   subsEC?: boolean;
+  refresh: boolean;
+  setRefresh: () => void;
   setRefreshing?: () => void;
   isLoading?: boolean;
 }
@@ -94,6 +100,8 @@ export const MusicianDetail: React.FC<MusicianDetailProps> = ({
   exclusiveContent,
   subsEC,
   dataAppearsOn,
+  refresh,
+  setRefresh,
   setRefreshing,
   isLoading,
 }) => {
@@ -277,7 +285,7 @@ export const MusicianDetail: React.FC<MusicianDetailProps> = ({
           />
         </TouchableOpacity>
         <Gap width={widthPercentage(20)} />
-        <Text style={styles.name}>{profile.fullname}</Text>
+        <Text style={styles.name}>{elipsisText(profile.fullname, 25)}</Text>
       </View>
     );
   };
@@ -304,6 +312,11 @@ export const MusicianDetail: React.FC<MusicianDetailProps> = ({
     dataAlbum.length > 0 ||
     dataAppearsOn.length > 0;
 
+  const cardInfoPosition =
+    Platform.OS === 'ios' && refresh
+      ? heightResponsive(10)
+      : heightResponsive(-20);
+
   return (
     <View style={styles.container}>
       <SsuStatusBar type={'black'} />
@@ -325,6 +338,13 @@ export const MusicianDetail: React.FC<MusicianDetailProps> = ({
       <ScrollView
         showsVerticalScrollIndicator={false}
         scrollEventThrottle={16}
+        refreshControl={
+          <RefreshControl
+            refreshing={refresh}
+            onRefresh={setRefresh}
+            tintColor={'transparent'}
+          />
+        }
         onScroll={handleScroll}>
         <ProfileHeader
           avatarUri={
@@ -345,8 +365,9 @@ export const MusicianDetail: React.FC<MusicianDetailProps> = ({
           onPressImage={showImage}
           blocked={profile.isBlock || profile.blockIs}
           dataBadge={dataBadge?.data}
+          refresh={refresh}
         />
-        <View style={styles.infoCard}>
+        <View style={[styles.infoCard, {marginTop: cardInfoPosition}]}>
           <UserInfoCard
             onPress={goToFollowers}
             profile={musicianProfile}
@@ -586,6 +607,7 @@ const styles = StyleSheet.create({
   containerLeftIcon: {
     flexDirection: 'row',
     alignItems: 'center',
+    width: width * 0.8,
   },
   name: {
     fontFamily: font.InterSemiBold,

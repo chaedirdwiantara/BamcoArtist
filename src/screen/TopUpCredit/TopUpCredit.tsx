@@ -7,7 +7,6 @@ import Color from '../../theme/Color';
 import {RootStackParams} from '../../navigations';
 import {TopUpCreditContent} from '../../components';
 import {usePlayerStore} from '../../store/player.store';
-import {TransactionHistoryPropsType} from '../../interface/credit.interface';
 
 export const TopUpCreditScreen: React.FC = () => {
   const navigation =
@@ -31,10 +30,6 @@ export const TopUpCreditScreen: React.FC = () => {
     navigation.navigate('Withdrawal');
   };
 
-  const goToDetailTransaction = (dataDetail: TransactionHistoryPropsType) => {
-    navigation.navigate('DetailHistoryTransaction', {dataDetail});
-  };
-
   const goToCredit = (type: number) => {
     navigation.navigate('Credit', {type});
   };
@@ -44,7 +39,6 @@ export const TopUpCreditScreen: React.FC = () => {
       <TopUpCreditContent
         onPressGoBack={onPressGoBack}
         onPressWithdrawal={onPressWithdrawal}
-        goToDetailTransaction={goToDetailTransaction}
         goToCredit={goToCredit}
       />
     </View>

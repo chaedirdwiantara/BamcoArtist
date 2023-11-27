@@ -7,6 +7,8 @@ import {
   NativeScrollEvent,
   NativeSyntheticEvent,
   Text,
+  RefreshControl,
+  Platform,
 } from 'react-native';
 import {useTranslation} from 'react-i18next';
 import {mvs} from 'react-native-size-matters';
@@ -36,6 +38,7 @@ import {
   widthPercentage,
   heightPercentage,
   widthResponsive,
+  elipsisText,
 } from '../../utils';
 import {ProfileFansResponseType} from '../../interface/profile.interface';
 import {useBlockHook} from '../../hooks/use-block.hook';
@@ -91,6 +94,8 @@ interface ProfileContentProps {
   playerVisible?: boolean;
   otherUserProfile?: boolean;
   onPressGoBack: () => void;
+  refresh: boolean;
+  setRefresh: () => void;
   setRefreshing: () => void;
 }
 
@@ -104,6 +109,8 @@ export const OtherUserProfileContent: React.FC<ProfileContentProps> = ({
   totalCountlikedSong,
   ownProfile = false,
   onPressGoBack,
+  refresh,
+  setRefresh,
   setRefreshing,
 }) => {
   const {t} = useTranslation();
@@ -238,10 +245,15 @@ export const OtherUserProfileContent: React.FC<ProfileContentProps> = ({
           />
         </TouchableOpacity>
         <Gap width={widthPercentage(20)} />
-        <Text style={styles.name}>{profile.fullname}</Text>
+        <Text style={styles.name}>{elipsisText(profile.fullname, 25)}</Text>
       </View>
     );
   };
+
+  const cardInfoPosition =
+    Platform.OS === 'ios' && refresh
+      ? heightPercentage(370)
+      : heightPercentage(310);
 
   return (
     <View style={{flex: 1}}>
@@ -263,6 +275,13 @@ export const OtherUserProfileContent: React.FC<ProfileContentProps> = ({
       <ScrollView
         showsVerticalScrollIndicator={false}
         scrollEventThrottle={16}
+        refreshControl={
+          <RefreshControl
+            refreshing={refresh}
+            onRefresh={setRefresh}
+            tintColor={'transparent'}
+          />
+        }
         onScroll={handleScroll}>
         <ProfileHeader
           avatarUri={profile.avatarUri}
@@ -277,11 +296,12 @@ export const OtherUserProfileContent: React.FC<ProfileContentProps> = ({
           backIcon={!ownProfile}
           onPressImage={showImage}
           dataBadge={dataBadge?.data}
+          refreshing={refresh}
         />
         <UserInfoCard
           profile={profile}
           type={ownProfile ? '' : 'self'}
-          containerStyles={styles.infoCard}
+          containerStyles={{...styles.infoCard, top: cardInfoPosition}}
           totalFollowing={profile.totalFollowing}
           onPress={() => onPressGoTo('Following')}
           selfProfile={selfProfile?.data}

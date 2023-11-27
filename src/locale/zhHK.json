@@ -14,6 +14,7 @@
     "Listeners": "聽眾",
     "GotIt": "好的，我知道了",
     "Share": {
+      "Share": "分享",
       "Feed": "分享動態",
       "Album": "分享專輯",
       "Music": "分享音樂",
@@ -514,6 +515,7 @@
       "Title": "活動詳情",
       "LineUp": "陣容",
       "TopTiper": "最佳Beamer",
+      "Income": "收入",
       "TipDistribution": "Beam分佈",
       "MusicianTipped": "Beamed音樂人",
       "Perform": "我要上台！",
@@ -525,13 +527,19 @@
         "TitleReward": "獲得有限時間的獎勵！",
         "SubtitleReward": "充值540學分以獲得有限時間的優惠券作為獎勵！",
         "Package1": {
-          "Title": "限時優惠！現只需$88便可獲得 to get",
+          "Title": "限時優惠！現只需$88便可獲得",
           "Subtitle1": "2 杯飲品",
           "Subtitle2": "540 BEAMCO 幣",
           "Subtitle3": "2張VIP演唱會門票（當你成為最佳Beamer)"
+        },
+        "SuccessTopup": {
+          "Title": "儲值成功！",
+          "Subtitle": "您現在有資格領取獎勵了！",
+          "ButtonClaim": "Claim Reward"
         }
       }
     },
+    "Live": "現場",
     "EmptyState": {
       "Home": "目前沒有任何直播活動。敬請期待更多精彩體驗！",
       "Title": "探索直播活動",
@@ -540,21 +548,29 @@
       "TopTipper": {
         "Title": "最佳Beamer將在此顯示",
         "Subtitle": "等待活動直播以查看最佳Beamer"
+      },
+      "LineUp": {
+        "Title": "即將揭曉藝術家！",
+        "Subtitle": "敬請期待令人興奮的藝術家公告！"
+      },
+      "Income": {
+        "Title": "咦，啲嘢啱啱係度好似冇啲嘈嘩啦！",
+        "Subtitle": "唱得有激情啲歌，希望啲掌聲（同埋小費）會隨之而來！"
       }
     },
     "ListVoucher": {
       "Title": "Vouchers Available",
       "EmptyState": "You don’t have any vouchers yet. You can get them by purchasing some credits!"
     },
-    "DetailVoucher":{
+    "DetailVoucher": {
       "Title": "Reward Details",
-      "PopUp":{
+      "PopUp": {
         "Title": "Congratulations!",
-        "Desc":"Here’s the QR code to redeem your free drink(s) at the bar.",
-        "ButtonTitle":"Dismiss"
+        "Desc": "Here’s the QR code to redeem your free drink(s) at the bar.",
+        "ButtonTitle": "Dismiss"
       },
       "Expired": "Valid Until",
-      "Tnc":"Terms & Conditions"
+      "Tnc": "Terms & Conditions"
     }
   },
   "Profile": {
@@ -1134,6 +1150,11 @@
     "Title": "通知"
   },
   "Modal": {
+    "TopupInfo": {
+      "Title": "購買點數",
+      "SubtitleIos": "如果您透過 iOS 應用程式購買的課程未出現在您的帳戶中，請檢查 Apple 是否有「等待中」的交易；此過程可能需要 24-48 小時。如果交易狀態有變但課程未添加，請將您的 Apple 收據發送給我們，以協助解決問題。",
+      "SubtitleAndroid": "如果您透過 Android 應用程式購買的課程未出現在您的帳戶中，請檢查 Google Play 是否有「等待中」的交易；此過程可能需要 24-48 小時。如果交易狀態有變但課程未添加，請將您的 Google Play 收據發送給我們，以協助解決問題。"
+    },
     "ModalInfo": {
       "TitleMerch": "Sell Your Merchandise Now!",
       "Subtitle1Merch": "To list your merchandise for sale, kindly log in to ",
@@ -1619,7 +1640,9 @@
   "LiveTipping": {
     "SwipeUp": "向上滑動以發送",
     "TooFast": "滑動太快，請重新再試！",
-    "EnjoyShow": "讓我們盡情享受表演！"
+    "EnjoyShow": "讓我們盡情享受表演！",
+    "Credit": "餘額",
+    "NowActive": "Now Active"
   },
   "DiscoverArtist": {
     "Title": "Discover Artist"

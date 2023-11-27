@@ -41,5 +41,6 @@ const styles = StyleSheet.create({
     fontSize: mvs(14),
     fontFamily: 'Inter-Medium',
     lineHeight: mvs(20),
+    marginBottom: mvs(5),
   },
 });

@@ -76,10 +76,23 @@ const ListTips: React.FC<ListTipsProps> = ({touchEnd, isRefreshing}) => {
 
   useEffect(() => {
     if (dataTips !== undefined) {
-      setListTips(
-        dataTips?.pages?.map((page: ListTipsDataType) => page.data).flat() ??
-          [],
-      );
+      if (listTips.length > 0) {
+        const oldData = listTips.filter(v => v.appreciate);
+        const newData =
+          dataTips?.pages?.map((page: ListTipsDataType) => page.data).flat() ??
+          [];
+        oldData.map(v => {
+          const index = newData.findIndex(x => x.id === v.id);
+          newData[index].appreciate = v.appreciate;
+        });
+
+        setListTips(newData);
+      } else {
+        setListTips(
+          dataTips?.pages?.map((page: ListTipsDataType) => page.data).flat() ??
+            [],
+        );
+      }
     }
   }, [dataTips]);
 

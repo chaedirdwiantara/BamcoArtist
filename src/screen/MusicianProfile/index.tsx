@@ -58,6 +58,7 @@ const MusicianProfile: FC<PostDetailProps> = ({route}: PostDetailProps) => {
   const [modalSuccessDonate, setModalSuccessDonate] = useState<boolean>(false);
   const [trigger2ndModal, setTrigger2ndModal] = useState<boolean>(false);
   const [modalGuestVisible, setModalGuestVisible] = useState<boolean>(false);
+  const [refresh, setRefresh] = useState<boolean>(false);
 
   useEffect(() => {
     if (modalDonate) getCreditCount();
@@ -74,7 +75,11 @@ const MusicianProfile: FC<PostDetailProps> = ({route}: PostDetailProps) => {
       getDetailMusician({id: uuid, myUUID: MyUuid});
       getPlaylist({uuid});
       getExclusiveContent({uuid: uuid});
-    }, [uuid]),
+
+      setTimeout(() => {
+        setRefresh(false);
+      }, 1000);
+    }, [uuid, refresh]),
   );
 
   //  ? Get Album Musician
@@ -82,7 +87,7 @@ const MusicianProfile: FC<PostDetailProps> = ({route}: PostDetailProps) => {
     useCallback(() => {
       getAlbum({uuid: uuid});
       getDataAppearsOn({uuid});
-    }, [uuid]),
+    }, [uuid, refresh]),
   );
 
   useEffect(() => {
@@ -173,11 +178,15 @@ const MusicianProfile: FC<PostDetailProps> = ({route}: PostDetailProps) => {
               : undefined
           }
           subsEC={alreadySubsEC}
+          refresh={refresh}
+          setRefresh={() => setRefresh(true)}
           setRefreshing={handleRefreshing}
           isLoading={isLoadingMusician || isLoadingAlbum}
         />
       )}
-      <ModalLoading visible={isLoadingMusician || isLoadingAlbum} />
+      <ModalLoading
+        visible={(isLoadingMusician || isLoadingAlbum) && !refresh}
+      />
       <ModalDonate
         userId={uuid}
         onPressDonate={onPressDonate}

@@ -1,4 +1,4 @@
-import React, {FC, useCallback, useEffect} from 'react';
+import React, {FC, useCallback, useEffect, useState} from 'react';
 import {View, StyleSheet} from 'react-native';
 import {
   useFocusEffect,
@@ -51,6 +51,7 @@ export const OtherUserProfile: FC<OtherProfileProps> = ({
     getUserCountLikedSong,
   } = useProfileHook();
   const MyUuid = profileStorage()?.uuid;
+  const [refresh, setRefresh] = useState<boolean>(false);
 
   const {dataPlaylist, getPlaylist} = usePlaylistHook();
   const isLogin = storage.getString('profile');
@@ -75,7 +76,11 @@ export const OtherUserProfile: FC<OtherProfileProps> = ({
       getPlaylist({uuid: data.id});
       getOtherProfileUser({id: data.id, myUUID: MyUuid});
       getUserCountLikedSong({uuid: data.id});
-    }, []),
+
+      setTimeout(() => {
+        setRefresh(false);
+      }, 1000);
+    }, [refresh]),
   );
 
   const profile: profile = {
@@ -136,11 +141,13 @@ export const OtherUserProfile: FC<OtherProfileProps> = ({
           totalCountlikedSong={dataCountLiked?.countLikedSong}
           playerVisible={playerVisible}
           otherUserProfile={true}
+          refresh={refresh}
+          setRefresh={() => setRefresh(true)}
           setRefreshing={handleRefreshing}
           onPressGoBack={onPressGoBack}
         />
       )}
-      <ModalLoading visible={isLoading} />
+      <ModalLoading visible={isLoading && !isLoading} />
     </View>
   );
 };

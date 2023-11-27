@@ -10,7 +10,7 @@ import {
   NativeScrollEvent,
   RefreshControl,
 } from 'react-native';
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import Color from '../../theme/Color';
 import {heightResponsive, width, widthResponsive} from '../../utils';
 import {
@@ -28,6 +28,7 @@ import {RootStackParams} from '../../navigations';
 import {useTranslation} from 'react-i18next';
 import LineUp from './LineUp';
 import TopTiper from './TopTiper';
+import Income from './Income';
 import dayjs from 'dayjs';
 import LoadingSpinner from '../../components/atom/Loading/LoadingSpinner';
 import {ModalLoading} from '../../components/molecule/ModalLoading/ModalLoading';
@@ -35,6 +36,7 @@ import {useEventHook} from '../../hooks/use-event.hook';
 import {useFocusEffect} from '@react-navigation/native';
 import {profileStorage} from '../../hooks/use-storage.hook';
 import {Image} from 'react-native';
+import {ModalSuccessTopupVoucher} from '../../components/molecule/Modal/ModalSuccessTopupVoucher';
 
 type OnScrollEventHandler = (
   event: NativeSyntheticEvent<NativeScrollEvent>,
@@ -57,11 +59,12 @@ export const EventDetail: React.FC<EventDetailProps> = ({
 
   const [scrollEffect, setScrollEffect] = useState<boolean>(false);
   const [selectedIndex, setSelectedIndex] = useState(-0);
-  const [filterTab] = useState([
+  const [filterTab, setFilterTab] = useState([
     {filterName: 'Event.Detail.LineUp'},
     {filterName: 'Event.Detail.TopTiper'},
   ]);
-  const [showModalTopup, setShowModaltopup] = useState<boolean>(false);
+  const [showModalTopup, setShowModalTopup] = useState<boolean>(false);
+  const [showModalSuccess, setShowModalSuccess] = useState<boolean>(false);
 
   const filterDataTab = (item: any, index: any) => {
     setSelectedIndex(index);
@@ -102,12 +105,27 @@ export const EventDetail: React.FC<EventDetailProps> = ({
     isRefetching: isRefetchingDetail,
   } = useEventDetail(id);
 
-  const {data: dataVoucher, refetch: refetchVoucher} =
-    useEventCheckGeneratedTopupVoucher({
-      userUUID: user?.uuid ?? '',
-      userType: 'musician',
-      eventId: id,
-    });
+  const {refetch: refetchVoucher} = useEventCheckGeneratedTopupVoucher({
+    userUUID: user?.uuid ?? '',
+    userType: 'musician',
+    eventId: id,
+  });
+
+  useEffect(() => {
+    // show third tab (income), if user show in line up
+    const self =
+      dataLineUp?.data &&
+      dataLineUp?.data?.filter(
+        item => item?.musician?.UUID === profileStorage()?.uuid,
+      ).length > 0;
+
+    let tab = [
+      {filterName: 'Event.Detail.LineUp'},
+      {filterName: 'Event.Detail.TopTiper'},
+    ];
+    const newTab = self ? [...tab, {filterName: 'Event.Detail.Income'}] : tab;
+    setFilterTab(newTab);
+  }, [dataLineUp]);
 
   useFocusEffect(
     useCallback(() => {
@@ -133,11 +151,11 @@ export const EventDetail: React.FC<EventDetailProps> = ({
             <TopNavigation.EventDetailNav
               onPressGift={() =>
                 navigation.navigate('ListVoucher', {
-                  id: dataDetail?.data.id,
+                  id: dataDetail?.data.id ?? '',
                 })
               }
               isGenerated={true}
-              onPressVoucher={() => setShowModaltopup(true)}
+              onPressVoucher={() => setShowModalTopup(true)}
             />
           }
           rightIconAction={() => null}
@@ -184,11 +202,11 @@ export const EventDetail: React.FC<EventDetailProps> = ({
                   <TopNavigation.EventDetailNav
                     onPressGift={() =>
                       navigation.navigate('ListVoucher', {
-                        id: dataDetail?.data.id,
+                        id: dataDetail?.data.id ?? '',
                       })
                     }
                     isGenerated={true}
-                    onPressVoucher={() => setShowModaltopup(true)}
+                    onPressVoucher={() => setShowModalTopup(true)}
                   />
                 }
               />
@@ -283,6 +301,9 @@ export const EventDetail: React.FC<EventDetailProps> = ({
               eventId={id}
               endDate={dataDetail?.data?.endDate ?? ''}
             />
+          ) : filterTab[selectedIndex].filterName === 'Event.Detail.Income' ? (
+            // show "Income" if this user (artist) perform in event
+            <Income eventId={id} />
           ) : (
             <TopTiper
               dataTipper={dataTopTipper?.data}
@@ -390,7 +411,7 @@ export const EventDetail: React.FC<EventDetailProps> = ({
                 justifyContent: 'space-around',
                 width: '100%',
               }}>
-              <TouchableOpacity onPress={() => setShowModaltopup(false)}>
+              <TouchableOpacity onPress={() => setShowModalTopup(false)}>
                 <Text
                   style={[
                     Typography.Body2,
@@ -414,6 +435,18 @@ export const EventDetail: React.FC<EventDetailProps> = ({
             </View>
           </View>
         }
+      />
+
+      <ModalSuccessTopupVoucher
+        modalVisible={showModalSuccess}
+        toggleModal={() => {
+          setShowModalSuccess(false);
+          setTimeout(() => {
+            navigation.navigate('ListVoucher', {
+              id: dataDetail?.data.id ?? '',
+            });
+          }, 500);
+        }}
       />
 
       <ModalLoading visible={isLoadingDetail} />

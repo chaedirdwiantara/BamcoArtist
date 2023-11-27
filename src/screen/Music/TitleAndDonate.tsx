@@ -1,23 +1,19 @@
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React, {FC} from 'react';
 import {color, font} from '../../theme';
-import {CoinCIcon} from '../../assets/icon';
 import {mvs} from 'react-native-size-matters';
 
 interface TitleAndDonateProps {
   title: string;
   artist: string;
   albumName?: string;
-  coinOnPress: () => void;
   artistOnPress: () => void;
-  showDonate?: boolean;
 }
 
 const TitleAndDonate: FC<TitleAndDonateProps> = (
   props: TitleAndDonateProps,
 ) => {
-  const {title, artist, albumName, coinOnPress, artistOnPress, showDonate} =
-    props;
+  const {title, artist, albumName, artistOnPress} = props;
   return (
     <View style={styles.container}>
       <View>
@@ -35,13 +31,6 @@ const TitleAndDonate: FC<TitleAndDonateProps> = (
           </Text>
         </View>
       </View>
-      {showDonate && (
-        <View style={styles.iconStyle}>
-          <TouchableOpacity onPress={coinOnPress}>
-            <CoinCIcon />
-          </TouchableOpacity>
-        </View>
-      )}
     </View>
   );
 };

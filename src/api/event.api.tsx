@@ -5,6 +5,7 @@ import {
   ClaimVoucherResponse,
   EventDetailResponse,
   EventHomeResponse,
+  EventIncomeResponse,
   EventLineUpResponse,
   EventMusicianResponse,
   EventMusicianTippedResponse,
@@ -126,6 +127,22 @@ export const getEventTopTipper = async (
     method: 'GET',
     params: {
       events,
+      ...props,
+    },
+  });
+
+  return data;
+};
+
+export const getEventIncome = async (
+  eventId: string,
+  props?: ParamsProps,
+): Promise<EventIncomeResponse> => {
+  const {data} = await KrakatauAPI().request<EventIncomeResponse>({
+    url: '/events/my-income',
+    method: 'GET',
+    params: {
+      eventId,
       ...props,
     },
   });

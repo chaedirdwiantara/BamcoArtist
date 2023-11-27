@@ -1,5 +1,13 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {StyleSheet, View, Text, ScrollView, RefreshControl} from 'react-native';
+import {
+  Text,
+  View,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  RefreshControl,
+  TouchableOpacity,
+} from 'react-native';
 import {useQuery} from 'react-query';
 import {useTranslation} from 'react-i18next';
 import {mvs} from 'react-native-size-matters';
@@ -16,54 +24,36 @@ import {
   DataDropDownNumberType,
 } from '../../../data/dropdown';
 import {Button} from '../../atom';
-import {CoinCard} from './CoinCard';
 import {TabFilter} from '../TabFilter';
+import ListTips from '../Revenue/ListTips';
+import ListSubs from '../Revenue/ListSubs';
 import {TopNavigation} from '../TopNavigation';
 import {WithdrawalCard} from './WithdrawalCard';
-import {TransactionCard} from './TransactionCard';
-import {ArrowLeftIcon} from '../../../assets/icon';
+import {ModalConfirm} from '../Modal/ModalConfirm';
 import {MyCreditInfoCard} from './MyCreditInfoCard';
 import {EmptyState} from '../EmptyState/EmptyState';
 import {color, font, typography} from '../../../theme';
-import {useIapHook} from '../../../hooks/use-iap.hook';
 import {useCreditHook} from '../../../hooks/use-credit.hook';
+import {dateFormatSubscribe} from '../../../utils/date-format';
+import {ArrowLeftIcon, TooltipIcon} from '../../../assets/icon';
 import {useWithdrawHook} from '../../../hooks/use-withdraw.hook';
 import {profileStorage, storage} from '../../../hooks/use-storage.hook';
 import {ListWithdrawPropsType} from '../../../interface/withdraw.interface';
-import {dateFormatSubscribe, dateLongMonth} from '../../../utils/date-format';
-import {TransactionHistoryPropsType} from '../../../interface/credit.interface';
-import ListTips from '../Revenue/ListTips';
-import ListSubs from '../Revenue/ListSubs';
 
 interface TopUpCreditProps {
   onPressGoBack: () => void;
   onPressWithdrawal: () => void;
-  goToDetailTransaction: (data: TransactionHistoryPropsType) => void;
   goToCredit: (type: number) => void;
 }
 
 export const TopUpCreditContent: React.FC<TopUpCreditProps> = ({
   onPressGoBack,
-  goToDetailTransaction,
   onPressWithdrawal,
   goToCredit,
 }) => {
   const {t} = useTranslation();
-  const {creditCount, getCreditCount, getTransactionHistory} = useCreditHook();
-  const {
-    iapProduct,
-    endIap,
-    getProductIap,
-    purchaseProduct,
-    loadIapListener,
-    purchaseUpdateListener,
-    purchaseErrorListener,
-  } = useIapHook();
+  const {creditCount, getCreditCount} = useCreditHook();
   const {getListWithdraw} = useWithdrawHook();
-  const {data: dataHistory, isLoading} = useQuery({
-    queryKey: ['transaction-history'],
-    queryFn: () => getTransactionHistory(),
-  });
   const {
     data: dataWithdraw,
     status: statusWithdraw,
@@ -84,6 +74,7 @@ export const TopUpCreditContent: React.FC<TopUpCreditProps> = ({
   ]);
   const [touchEnd, setTouchEnd] = useState<boolean>(false);
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
+  const [showModalTopupInfo, setShowModalTopupInfo] = useState<boolean>(false);
 
   useFocusEffect(
     useCallback(() => {
@@ -109,17 +100,6 @@ export const TopUpCreditContent: React.FC<TopUpCreditProps> = ({
     }, [statusWithdraw, dataWithdraw]),
   );
 
-  useEffect(() => {
-    getProductIap();
-    loadIapListener();
-
-    return () => {
-      endIap();
-      purchaseUpdateListener?.remove();
-      purchaseErrorListener?.remove();
-    };
-  }, []);
-
   const filterData = (item: any, index: number) => {
     setSelectedIndex(index);
   };
@@ -129,10 +109,6 @@ export const TopUpCreditContent: React.FC<TopUpCreditProps> = ({
     let newList = [...listWithdrawal];
     newList[index].isOpen = !newList[index].isOpen;
     setListWithdrawal(newList);
-  };
-
-  const onPressCardCoin = (productId: string) => {
-    purchaseProduct(productId);
   };
 
   const resultDataDropdown = (selectedMenu: DataDropDownNumberType) => {
@@ -155,6 +131,11 @@ export const TopUpCreditContent: React.FC<TopUpCreditProps> = ({
       contentSize.height - paddingToBottom
     );
   };
+
+  const subtitleModal =
+    Platform.OS === 'ios'
+      ? 'Modal.TopupInfo.SubtitleIos'
+      : 'Modal.TopupInfo.SubtitleAndroid';
 
   return (
     <View style={styles.root}>
@@ -190,8 +171,13 @@ export const TopUpCreditContent: React.FC<TopUpCreditProps> = ({
           />
         }>
         <View style={{justifyContent: 'center', alignItems: 'center'}}>
-          <Text style={[typography.Subtitle1, styles.text]}>
-            {t('TopUp.Subtitle1')}
+          <Text style={{textAlign: 'center'}}>
+            <Text style={[typography.Subtitle1, styles.text]}>
+              {t('TopUp.Subtitle1')}
+            </Text>
+            <TouchableOpacity onPress={() => setShowModalTopupInfo(true)}>
+              <TooltipIcon stroke={color.Pink[2]} style={styles.tooltipStyle} />
+            </TouchableOpacity>
           </Text>
           <Text style={[typography.Caption, styles.text]}>
             {t('TopUp.Subtitle2')}
@@ -257,6 +243,16 @@ export const TopUpCreditContent: React.FC<TopUpCreditProps> = ({
           </>
         )}
       </ScrollView>
+
+      <ModalConfirm
+        modalVisible={showModalTopupInfo}
+        oneButton={true}
+        title={t('Modal.TopupInfo.Title') || ''}
+        subtitle={t(subtitleModal) || ''}
+        yesText={t('General.Dismiss') || ''}
+        onPressOk={() => setShowModalTopupInfo(false)}
+        subtitleStyles={{fontSize: mvs(13)}}
+      />
     </View>
   );
 };
@@ -311,5 +307,12 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: color.Neutral[10],
     lineHeight: mvs(16),
+  },
+  tooltipStyle: {
+    position: 'absolute',
+    top: mvs(-15),
+    marginLeft: widthPercentage(10),
+    width: widthPercentage(17),
+    height: widthPercentage(17),
   },
 });

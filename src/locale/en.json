@@ -14,6 +14,7 @@
     "Listeners": "Listeners",
     "GotIt": "Ok, I Got It",
     "Share": {
+      "Share": "Share",
       "Feed": "Share Feed",
       "Album": "Share Album",
       "Music": "Share Music",
@@ -515,6 +516,7 @@
       "Title": "Event Detail",
       "LineUp": "LINE UP",
       "TopTiper": "TOP BEAMERS",
+      "Income": "INCOME",
       "TipDistribution": "Beam Distribution",
       "MusicianTipped": "Artist Beamed",
       "Perform": "Pick Me!",
@@ -530,6 +532,11 @@
           "Subtitle1": "2 drinks",
           "Subtitle2": "540 BEAMCO credits",
           "Subtitle3": "2 VIP concert tickets when you become the top Beamer"
+        },
+        "SuccessTopup": {
+          "Title": "Topup Success!",
+          "Subtitle": "You are now eligible to claim a reward!",
+          "ButtonClaim": "Claim Reward"
         }
       }
     },
@@ -542,6 +549,14 @@
       "TopTipper": {
         "Title": "Top Beamers Are Displayed Here",
         "Subtitle": "Wait until event goes live to view the top Beamers"
+      },
+      "LineUp": {
+        "Title": "Artist Unleashing Soon!",
+        "Subtitle": "Stay tuned for exciting artist announcements!"
+      },
+      "Income": {
+        "Title": "Uh-oh, the stage looks a bit quiet!",
+        "Subtitle": "Set the mood, sing with your passion, and let the applause (and tips) follow"
       }
     },
     "ListVoucher": {
@@ -1136,6 +1151,11 @@
     "Title": "Notification"
   },
   "Modal": {
+    "TopupInfo": {
+      "Title": "Credit Purchase",
+      "SubtitleIos": "If a course purchased through the iOS app isn’t in your account, check for a 'Pending' transaction in Apple; this may take 24-48 hours to process. If the status changes but the course isn't added, send us your Apple receipt to help resolve the issue.",
+      "SubtitleAndroid": "If a course purchased through the Android app isn’t in your account, check for a 'Pending' transaction in Google Play; this may take 24-48 hours to process. If the status changes but the course isn't added, send us your Google Play receipt to help resolve the issue."
+    },
     "ModalInfo": {
       "TitleMerch": "Sell Your Merchandise Now!",
       "Subtitle1Merch": "To list your merchandise for sale, kindly log in to ",
@@ -1624,7 +1644,9 @@
   "LiveTipping": {
     "SwipeUp": "Swipe Up To Beam",
     "TooFast": "You swipe to fast!",
-    "EnjoyShow": "Let’s enjoy the show\nand take a rest for few second"
+    "EnjoyShow": "Let’s enjoy the show\nand take a rest for few second",
+    "Credit": "Credit",
+    "NowActive": "Now Active"
   },
   "DiscoverArtist": {
     "Title": "Discover Artist"
