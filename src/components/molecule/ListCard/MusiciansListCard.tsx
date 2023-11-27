@@ -201,7 +201,9 @@ const MusiciansListCard: React.FC<ListProps> = (props: ListProps) => {
       </View>
       <View style={styles.rightContainer}>
         {point ? (
-          <Text style={styles.pointStyle}>{`${pointV} pts`}</Text>
+          <Text style={styles.pointStyle}>{`${pointV} ${t(
+            'LiveTipping.Credit',
+          )}`}</Text>
         ) : null}
         {activeMore && moreMenu()}
         {self && !isLineUp && (

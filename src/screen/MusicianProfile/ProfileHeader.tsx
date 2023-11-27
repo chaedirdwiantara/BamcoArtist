@@ -167,7 +167,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = (
 const styles = StyleSheet.create({
   root: {
     width,
-    height: heightPercentage(350),
+    height: heightPercentage(370),
     justifyContent: 'flex-start',
     alignItems: 'center',
   },
