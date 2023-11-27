@@ -67,7 +67,7 @@ const VoucherReward: React.FC<Props> = ({
       {/* Footer */}
       <View style={styles.footerContainer}>
         <View style={styles.dottedContainer}>
-          <DottedLine color={color.Dark[10]} />
+          <DottedLine color={color.Dark[11]} />
         </View>
         <View style={styles.footer}>
           {claimable ? (
