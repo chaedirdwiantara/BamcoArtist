@@ -121,9 +121,9 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
 
   const [filter2] = useState([
     // {filterName: 'Musician.Tab.Main'},// TODO: DISABLE FOR NOW
+    {filterName: 'Musician.Tab.Fans'},
     {filterName: 'Musician.Tab.Musician'},
     {filterName: 'Musician.Tab.Music'},
-    {filterName: 'Musician.Tab.Fans'},
     {filterName: 'Musician.Tab.Event'},
     {filterName: 'Musician.Tab.Profile'},
     {filterName: 'Musician.Tab.Merchandise'},
@@ -308,9 +308,7 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
               )}
             </View>
           ) : filter2[selectedIndex].filterName === 'Musician.Tab.Fans' ? (
-            <View style={{paddingHorizontal: widthResponsive(20)}}>
-              {uuid && <FansScreen uuid={uuid} />}
-            </View>
+            <View>{uuid && <FansScreen uuid={uuid} />}</View>
           ) : filter2[selectedIndex].filterName ===
             'Musician.Tab.Merchandise' ? (
             <MerchList musicianId={uuid} />
