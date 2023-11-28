@@ -24,6 +24,7 @@ type Props = {
   points: number;
   containerStyles?: ViewStyle;
   guest?: boolean;
+  activeOpacity?: number;
 };
 
 /** == COMPONENT === */
@@ -35,13 +36,17 @@ const Type5: React.FC<Props> = (props: Props) => {
       <>
         {props.profileUri ? (
           <TouchableOpacity
-            activeOpacity={1}
+            activeOpacity={props.activeOpacity ?? 1}
             style={topNavstyles.iconLeftContainer}
             onPress={props.leftIconAction}>
             <Avatar imgUri={props.profileUri} size={34} />
           </TouchableOpacity>
         ) : (
-          <DefaultAvatar.ProfileIcon />
+          <TouchableOpacity
+            onPress={props.leftIconAction}
+            activeOpacity={props.activeOpacity ?? 1}>
+            <DefaultAvatar.ProfileIcon />
+          </TouchableOpacity>
         )}
       </>
     );

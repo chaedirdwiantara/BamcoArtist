@@ -652,6 +652,11 @@
     "SendTip": "給您喜愛的藝術家發送小費，支持他們的成長",
     "EmptyStateFans": "藝術家沒有任何粉絲。"
   },
+  "Rewards": {
+    "Title": "Rewards",
+    "Reward": "Rewards",
+    "Mission": "Mission"
+  },
   "ExclusiveContent": {
     "Title": "獨家內容",
     "Content": "內容",

@@ -357,6 +357,18 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
     isLogin ? goToScreen('Notification') : setModalGuestVisible(true);
   };
 
+  const onPressProfile = () => {
+    console.log('you pressed profile');
+
+    // TODO: ENABLE AFTER REWARDS READY
+    // if (dataProfile) {
+    //   navigation.navigate('Profile', {
+    //     showToast: false,
+    //     deletePlaylist: false,
+    //   });
+    // }
+  };
+
   const onPressCoin = () => {
     isLogin ? goToScreen('TopUpCredit') : setModalGuestVisible(true);
   };
@@ -480,7 +492,7 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
       <TopNavigation.Type5
         name={dataProfile?.data?.fullname ?? ''}
         profileUri={dataProfile?.data?.imageProfileUrls[1]?.image || ''}
-        leftIconAction={() => null}
+        leftIconAction={onPressProfile}
         rightIcon={rightIconComp()}
         rightIconAction={onPressNotif}
         maxLengthTitle={14}
@@ -489,6 +501,7 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
         containerStyles={{paddingHorizontal: widthResponsive(24)}}
         onPressCoin={onPressCoin}
         guest={!isLogin}
+        activeOpacity={0}
       />
 
       {Platform.OS === 'ios' && refreshing && (
