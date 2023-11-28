@@ -75,10 +75,10 @@ export const LiveTipping: FC<LiveTippingProps> = ({
   const [disabledSwipe, setDisabledSwipe] = useState<boolean>(false);
   const [isSentATip, setIsSentATip] = useState<boolean>(false);
   const [moneyBatchURL, setMoneyBatchURL] = useState<ImageSourcePropType>(
-    require('../assets/image/money-batch.png'),
+    require('../assets/image/money-batch-1.png'),
   );
   const [moneyURL, setMoneyURL] = useState<ImageSourcePropType>(
-    require('../assets/image/money.png'),
+    require('../assets/image/money-1.png'),
   );
   const animatedValue = useRef(new Animated.Value(0)).current;
 
@@ -151,12 +151,24 @@ export const LiveTipping: FC<LiveTippingProps> = ({
 
   useEffect(() => {
     if (counter >= 25 && counter < 50) {
-      setMoneyBatchURL(require('../assets/image/money-batch-red.png'));
-      setMoneyURL(require('../assets/image/money-red.png'));
+      const moneyRed =
+        creditBySwipe === 1
+          ? require('../assets/image/money-red-1.png')
+          : creditBySwipe === 10
+          ? require('../assets/image/money-red-10.png')
+          : require('../assets/image/money-red-50.png');
+      const moneyBatchRed =
+        creditBySwipe === 1
+          ? require('../assets/image/money-batch-red-1.png')
+          : creditBySwipe === 10
+          ? require('../assets/image/money-batch-red-10.png')
+          : require('../assets/image/money-batch-red-50.png');
+      setMoneyBatchURL(moneyBatchRed);
+      setMoneyURL(moneyRed);
     }
     if (counter >= 50) {
       setDisabledSwipe(true);
-      setMoneyURL(require('../assets/image/money-onfire.png'));
+      // setMoneyURL(require('../assets/image/money-onfire.png'));
     }
 
     const timeoutCounter = setTimeout(() => {
@@ -164,8 +176,21 @@ export const LiveTipping: FC<LiveTippingProps> = ({
         getCreditCount();
         setCounter(0);
         setDisabledSwipe(false);
-        setMoneyBatchURL(require('../assets/image/money-batch.png'));
-        setMoneyURL(require('../assets/image/money.png'));
+
+        const money =
+          creditBySwipe === 1
+            ? require('../assets/image/money-1.png')
+            : creditBySwipe === 10
+            ? require('../assets/image/money-10.png')
+            : require('../assets/image/money-50.png');
+        const moneyBatch =
+          creditBySwipe === 1
+            ? require('../assets/image/money-batch-1.png')
+            : creditBySwipe === 10
+            ? require('../assets/image/money-batch-10.png')
+            : require('../assets/image/money-batch-50.png');
+        setMoneyBatchURL(moneyBatch);
+        setMoneyURL(money);
       }
     }, 3000);
     return () => clearTimeout(timeoutCounter);
@@ -216,13 +241,13 @@ export const LiveTipping: FC<LiveTippingProps> = ({
           // if the tip has been sent, then setIsSentATip = true
           // so when changing custom credits, doesn't fetch the API
           setIsSentATip(true);
+          stopBgService();
           setCounterTipping(0);
           await sendTipping();
           getCreditCount();
           if (!dataVoucher?.data?.isGenerated) {
             refetchVoucher();
           }
-          stopBgService();
         }
         await sleep(delay);
       }
@@ -290,6 +315,20 @@ export const LiveTipping: FC<LiveTippingProps> = ({
       }
     }
     setCreditBySwipe(chip);
+    const money =
+      chip === 1
+        ? require('../assets/image/money-1.png')
+        : chip === 10
+        ? require('../assets/image/money-10.png')
+        : require('../assets/image/money-50.png');
+    const moneyBatch =
+      chip === 1
+        ? require('../assets/image/money-batch-1.png')
+        : chip === 10
+        ? require('../assets/image/money-batch-10.png')
+        : require('../assets/image/money-batch-50.png');
+    setMoneyBatchURL(moneyBatch);
+    setMoneyURL(money);
   };
 
   return (
