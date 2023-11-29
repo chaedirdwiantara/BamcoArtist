@@ -1,15 +1,10 @@
 import React, {useEffect, useState} from 'react';
+import {Text, View, ViewStyle, Linking, TouchableOpacity} from 'react-native';
 import {
-  Text,
-  View,
-  ViewStyle,
-  Linking,
-  TouchableOpacity,
-  ScrollView,
-  Platform,
-} from 'react-native';
-import {Camera, useCameraDevices} from 'react-native-vision-camera';
-import {useScanBarcodes, BarcodeFormat} from 'vision-camera-code-scanner';
+  Camera,
+  useCameraDevice,
+  useCodeScanner,
+} from 'react-native-vision-camera';
 import styles from './styles';
 import Color from '../../../theme/Color';
 import Typography from '../../../theme/Typography';
@@ -100,8 +95,7 @@ export const ReferralContent: React.FC<ReferralContentProps> = ({
   const [isFocusInput, setIsFocusInput] = useState<boolean>(false);
 
   // Camera
-  const devices = useCameraDevices();
-  const device = devices.back;
+  const device = useCameraDevice('back');
 
   // Camera Handler
   async function getPermission() {
@@ -128,14 +122,6 @@ export const ReferralContent: React.FC<ReferralContentProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isValidRef]);
 
-  // QRCode
-  const [frameProcessor, barcodes] = useScanBarcodes([BarcodeFormat.QR_CODE]);
-
-  useEffect(() => {
-    togleActiveState();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [barcodes]);
-
   useEffect(() => {
     if (onPress && refCode !== '' && isScanning) {
       onPress(refCode);
@@ -144,20 +130,15 @@ export const ReferralContent: React.FC<ReferralContentProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [refCode]);
 
-  const togleActiveState = async () => {
-    if (barcodes && barcodes.length > 0 && isScanned === false) {
-      setIsScanned(true);
-
-      barcodes.forEach(async scannedBarcode => {
-        if (
-          scannedBarcode.rawValue !== '' &&
-          scannedBarcode.rawValue !== undefined
-        ) {
-          setRefCode(scannedBarcode.rawValue);
-        }
-      });
-    }
-  };
+  const codeScanner = useCodeScanner({
+    codeTypes: ['qr', 'ean-13'],
+    onCodeScanned: codes => {
+      if (codes.length > 0 && isScanned === false && codes[0].value) {
+        setIsScanned(true);
+        setRefCode(codes[0].value.split('=')[1]);
+      }
+    },
+  });
 
   const handleScanning = () => {
     setIsScanning(true);
@@ -195,8 +176,7 @@ export const ReferralContent: React.FC<ReferralContentProps> = ({
                 style={{flex: 1}}
                 device={device}
                 isActive={true}
-                frameProcessor={frameProcessor}
-                frameProcessorFps={5}
+                codeScanner={codeScanner}
               />
             ) : (
               ''

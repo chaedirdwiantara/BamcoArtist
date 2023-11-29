@@ -1,12 +1,4 @@
-import {
-  Image,
-  Linking,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {Image, Linking, ScrollView, StyleSheet, Text, View} from 'react-native';
 import React, {useCallback, useEffect, useState} from 'react';
 import {ArrowLeftIcon} from '../../../assets/icon';
 import {
@@ -23,8 +15,12 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParams} from '../../../navigations';
 import {heightResponsive, widthResponsive} from '../../../utils';
 import {mvs} from 'react-native-size-matters';
-import {Camera, useCameraDevices} from 'react-native-vision-camera';
-import {BarcodeFormat, useScanBarcodes} from 'vision-camera-code-scanner';
+import {
+  Camera,
+  useCameraDevice,
+  useCodeScanner,
+} from 'react-native-vision-camera';
+// import {BarcodeFormat, useScanBarcodes} from 'vision-camera-code-scanner';
 import {useQrCodeHook} from '../../../hooks/use-qrCode.hook';
 import {userProfile} from '../../../store/userProfile.store';
 import LoadingSpinner from '../../../components/atom/Loading/LoadingSpinner';
@@ -46,7 +42,7 @@ const Device = () => {
     getLinkedDevices,
     setLogoutDevice,
   } = useQrCodeHook();
-  const [frameProcessor, barcodes] = useScanBarcodes([BarcodeFormat.QR_CODE]);
+  // const [frameProcessor, barcodes] = useScanBarcodes([BarcodeFormat.QR_CODE]);
 
   const [refCode, setRefCode] = useState<string>();
   const [showScanner, setShowScanner] = useState<boolean>(false);
@@ -58,8 +54,7 @@ const Device = () => {
   }>();
 
   // Camera
-  const devices = useCameraDevices();
-  const device = devices.back;
+  const device = useCameraDevice('back');
 
   // Camera Handler
   async function getPermission() {
@@ -75,6 +70,13 @@ const Device = () => {
       getPermission();
     }
   }, [showScanner]);
+
+  const codeScanner = useCodeScanner({
+    codeTypes: ['qr', 'ean-13'],
+    onCodeScanned: codes => {
+      // TODO: handle scanner
+    },
+  });
 
   // ? getting linked devices when accessing this screen
   useFocusEffect(
@@ -106,23 +108,6 @@ const Device = () => {
       return () => clearTimeout(timer);
     }
   }, [linkedDone]);
-
-  useEffect(() => {
-    togleActiveState();
-  }, [barcodes]);
-
-  const togleActiveState = async () => {
-    if (barcodes && barcodes.length > 0) {
-      barcodes.forEach(async scannedBarcode => {
-        if (
-          scannedBarcode.rawValue !== '' &&
-          scannedBarcode.rawValue !== undefined
-        ) {
-          setRefCode(scannedBarcode.rawValue);
-        }
-      });
-    }
-  };
 
   // ? set linked devices to linked devices useState
   useEffect(() => {
@@ -224,8 +209,7 @@ const Device = () => {
             style={{flex: 1}}
             device={device}
             isActive={showScanner}
-            frameProcessor={frameProcessor}
-            frameProcessorFps={5}
+            codeScanner={codeScanner}
           />
         ) : (
           ''
