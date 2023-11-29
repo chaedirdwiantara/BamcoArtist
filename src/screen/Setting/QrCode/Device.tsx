@@ -20,7 +20,6 @@ import {
   useCameraDevice,
   useCodeScanner,
 } from 'react-native-vision-camera';
-// import {BarcodeFormat, useScanBarcodes} from 'vision-camera-code-scanner';
 import {useQrCodeHook} from '../../../hooks/use-qrCode.hook';
 import {userProfile} from '../../../store/userProfile.store';
 import LoadingSpinner from '../../../components/atom/Loading/LoadingSpinner';
@@ -42,7 +41,6 @@ const Device = () => {
     getLinkedDevices,
     setLogoutDevice,
   } = useQrCodeHook();
-  // const [frameProcessor, barcodes] = useScanBarcodes([BarcodeFormat.QR_CODE]);
 
   const [refCode, setRefCode] = useState<string>();
   const [showScanner, setShowScanner] = useState<boolean>(false);
