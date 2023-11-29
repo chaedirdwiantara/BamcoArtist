@@ -73,8 +73,9 @@ export const LiveTipping: FC<LiveTippingProps> = ({
   const [counter, setCounter] = useState<number>(0);
   const [counterTipping, setCounterTipping] = useState<number>(0);
   const [creditBySwipe, setCreditBySwipe] = useState<number>(1);
+  const [activeCredit, setActiveCredit] = useState<number>(1);
   const [disabledSwipe, setDisabledSwipe] = useState<boolean>(false);
-  const [isSentATip, setIsSentATip] = useState<boolean>(false);
+  const [stopSwipe, setStopSwipe] = useState<boolean>(false);
   const [moneyBatchURL, setMoneyBatchURL] = useState<ImageSourcePropType>(
     require('../assets/image/money-batch-1.png'),
   );
@@ -240,7 +241,6 @@ export const LiveTipping: FC<LiveTippingProps> = ({
         if (i === 2) {
           // if the tip has been sent, then setIsSentATip = true
           // so when changing custom credits, doesn't fetch the API
-          setIsSentATip(true);
           stopBgService();
           setCounterTipping(0);
           await sendTipping();
@@ -302,19 +302,19 @@ export const LiveTipping: FC<LiveTippingProps> = ({
   }, [counterTipping]);
 
   const onPressCustomTipping = async (chip: number) => {
-    if (!isSentATip && counter > 0) {
-      // setIsSentATip change to default
-      setIsSentATip(false);
-      stopBgService();
-      setCounterTipping(0);
-      setCounter(0);
-      await sendTipping();
-      getCreditCount();
-      if (!dataVoucher?.data?.isGenerated) {
-        refetchVoucher();
-      }
-    }
-    setCreditBySwipe(chip);
+    // if (!isSentATip && counter > 0) {
+    //   // setIsSentATip change to default
+    //   setIsSentATip(false);
+    //   stopBgService();
+    //   setCounterTipping(0);
+    //   setCounter(0);
+    //   await sendTipping();
+    //   getCreditCount();
+    //   if (!dataVoucher?.data?.isGenerated) {
+    //     refetchVoucher();
+    //   }
+    // }
+
     const money =
       chip === 1
         ? require('../assets/image/money-1.png')
@@ -329,6 +329,22 @@ export const LiveTipping: FC<LiveTippingProps> = ({
         : require('../assets/image/money-batch-50.png');
     setMoneyBatchURL(moneyBatch);
     setMoneyURL(money);
+    setActiveCredit(chip);
+
+    setStopSwipe(true);
+
+    if (BackgroundService.isRunning()) {
+      await stopBgService();
+      await sendTipping();
+      setCounterTipping(0);
+      setCounter(0);
+      getCreditCount();
+      setStopSwipe(false);
+    } else {
+      setStopSwipe(false);
+    }
+
+    setCreditBySwipe(chip);
   };
 
   return (
@@ -498,7 +514,7 @@ export const LiveTipping: FC<LiveTippingProps> = ({
 
           {showMoney && (
             <Draggable
-              disabled={disabledSwipe}
+              disabled={disabledSwipe || stopSwipe}
               x={widthResponsive(45)}
               y={
                 Platform.OS === 'android'
@@ -571,8 +587,10 @@ export const LiveTipping: FC<LiveTippingProps> = ({
 
           <CustomTipping
             containerStyles={styles.customTipping}
-            selectedChip={creditBySwipe}
-            onPress={creditAmount => onPressCustomTipping(creditAmount)}
+            selectedChip={activeCredit}
+            onPress={async creditAmount =>
+              await onPressCustomTipping(creditAmount)
+            }
           />
         </View>
       </View>
