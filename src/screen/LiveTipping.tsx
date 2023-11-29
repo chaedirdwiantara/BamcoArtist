@@ -73,6 +73,7 @@ export const LiveTipping: FC<LiveTippingProps> = ({
   const [counter, setCounter] = useState<number>(0);
   const [counterTipping, setCounterTipping] = useState<number>(0);
   const [creditBySwipe, setCreditBySwipe] = useState<number>(1);
+  const [activeCredit, setActiveCredit] = useState<number>(1);
   const [disabledSwipe, setDisabledSwipe] = useState<boolean>(false);
   const [stopSwipe, setStopSwipe] = useState<boolean>(false);
   const [moneyBatchURL, setMoneyBatchURL] = useState<ImageSourcePropType>(
@@ -328,6 +329,7 @@ export const LiveTipping: FC<LiveTippingProps> = ({
         : require('../assets/image/money-batch-50.png');
     setMoneyBatchURL(moneyBatch);
     setMoneyURL(money);
+    setActiveCredit(chip);
 
     setStopSwipe(true);
 
@@ -339,9 +341,7 @@ export const LiveTipping: FC<LiveTippingProps> = ({
       getCreditCount();
       setStopSwipe(false);
     } else {
-      setTimeout(() => {
-        setStopSwipe(false);
-      }, 1000);
+      setStopSwipe(false);
     }
 
     setCreditBySwipe(chip);
@@ -587,8 +587,10 @@ export const LiveTipping: FC<LiveTippingProps> = ({
 
           <CustomTipping
             containerStyles={styles.customTipping}
-            selectedChip={creditBySwipe}
-            onPress={creditAmount => onPressCustomTipping(creditAmount)}
+            selectedChip={activeCredit}
+            onPress={async creditAmount =>
+              await onPressCustomTipping(creditAmount)
+            }
           />
         </View>
       </View>
