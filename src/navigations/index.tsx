@@ -92,6 +92,7 @@ import {RecoverAccountScreen} from '../screen/Profile/RecoverAccount';
 
 // Rewards
 import Rewards from '../screen/Rewards';
+import DetailVoucherRewards from '../screen/Rewards/DetailVoucher';
 
 // Playlist
 import {PlaylistScreen} from '../screen/Playlist/Playlist';
@@ -177,6 +178,7 @@ import ListPlaylist from '../screen/Playlist/ListPlaylist';
 import {MyQRCode} from '../screen/Setting/MyQRCode';
 import {TransactionHistoryPropsType} from '../interface/credit.interface';
 import {BankAccountPropsType} from '../interface/withdraw.interface';
+import {DetailVoucherRewardsPropsType} from '../interface/rewards2.interface';
 
 export type RootStackParams = {
   AboutDeletion: undefined;
@@ -206,6 +208,10 @@ export type RootStackParams = {
     dataDetail: TransactionHistoryPropsType;
   };
   DetailVoucher: {id: number; eventId: string};
+  DetailVoucherRewards: {
+    dataDetail: DetailVoucherRewardsPropsType;
+    isRedeemed?: boolean;
+  };
   DiscoverArtist: undefined;
   DonationAndSubscription: undefined;
   EditProfile: {data: ProfileResponseData};
@@ -492,7 +498,7 @@ const TabScreen = () => {
           ),
         }}
       />
-      <MainTab.Screen
+      {/* <MainTab.Screen
         name="Profile"
         component={ProfileScreen}
         initialParams={{showToast: false, deletePlaylist: false}}
@@ -511,9 +517,9 @@ const TabScreen = () => {
             </TouchableOpacity>
           ),
         }}
-      />
+      /> */}
       {/* TODO : ENABLE AFTER REWARDS READY */}
-      {/* <MainTab.Screen
+      <MainTab.Screen
         name="Rewards"
         component={Rewards}
         options={{
@@ -526,7 +532,7 @@ const TabScreen = () => {
             </TouchableOpacity>
           ),
         }}
-      /> */}
+      />
     </MainTab.Navigator>
   );
 };
@@ -680,6 +686,10 @@ export const RootStackScreen = () => (
     <RootStack.Screen name="DiscoverArtist" component={DiscoverArtist} />
     <RootStack.Screen name="ListVoucher" component={ListVoucher} />
     <RootStack.Screen name="DetailVoucher" component={DetailVoucher} />
+    <RootStack.Screen
+      name="DetailVoucherRewards"
+      component={DetailVoucherRewards}
+    />
     {/* <RootStack.Screen name="Profile" component={ProfileScreen} /> */}
   </RootStack.Navigator>
 );

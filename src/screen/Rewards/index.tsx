@@ -14,7 +14,7 @@ import {Button, Gap, ModalCustom, TabFilter} from '../../components';
 import {useProfileHook} from '../../hooks/use-profile.hook';
 import {useTranslation} from 'react-i18next';
 import {widthPercentageToDP} from 'react-native-responsive-screen';
-import {useFocusEffect} from '@react-navigation/native';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import TabOneReward from './tabOne';
 import TabTwoRewards from './tabTwo';
 import InfoCard from '../../components/molecule/Reward/infoCard';
@@ -22,6 +22,10 @@ import PointProgress from '../../components/molecule/Reward/pointProgress';
 import BackgroundHeader from '../../components/molecule/Reward/backgroundHeader';
 import {mvs} from 'react-native-size-matters';
 import RedeemSuccessIcon from '../../assets/icon/RedeemSuccess.icon';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {RootStackParams} from '../../navigations';
+import {useRewards2Hook} from '../../hooks/use-rewards2.hook';
+import {profileStorage} from '../../hooks/use-storage.hook';
 
 const {StatusBarManager} = NativeModules;
 const barHeight = StatusBarManager.HEIGHT;
@@ -32,6 +36,8 @@ type OnScrollEventHandler = (
 
 const Rewards = () => {
   const {t} = useTranslation();
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParams>>();
   const {dataProfile, dataCountProfile, getProfileUser, getTotalCountProfile} =
     useProfileHook();
 
@@ -49,6 +55,17 @@ const Rewards = () => {
     }, []),
   );
 
+  const {useGetProgressRewards} = useRewards2Hook();
+  const {data: dataProgress, refetch: refetchProgress} = useGetProgressRewards(
+    profileStorage()?.uuid || '',
+  );
+
+  useFocusEffect(
+    useCallback(() => {
+      refetchProgress();
+    }, []),
+  );
+
   const handleScroll: OnScrollEventHandler = event => {
     let offsetY = event.nativeEvent.contentOffset.y;
     const scrolled = offsetY > 10;
@@ -62,6 +79,38 @@ const Rewards = () => {
   const onClaimVoucher = (id: number) => {
     console.log(id, 'id');
     setShowModal(true);
+  };
+
+  const goToDetailVoucher = (id: number) => {
+    const claimedRewards = dataProgress?.data;
+    const isRedeemed =
+      claimedRewards &&
+      claimedRewards?.filter(val => val.creditReward === 100).length > 0;
+
+    const param = {
+      id: 1,
+      title: '1000 Credit Bonus',
+      userType: 'Musician',
+      rewardTotal: 1000,
+      freeCredit: 100,
+      imageUrl: [],
+      startAt: '2023-11-01T00:00:00Z',
+      endAt: '2023-12-31T00:00:00Z',
+      quota: 1,
+      termsCondition: {
+        title: 'Terms & Conditions',
+        value: [
+          'This reward is only applicable for purchases made on 24 March 2023 at our online store.',
+          'This reward is only applicable for 1x use per customer.',
+          'This reward cannot be combined with other rewards.',
+          'This reward can be canceled or changed at any time without prior notice.',
+        ],
+      },
+    };
+    navigation.navigate('DetailVoucherRewards', {
+      dataDetail: param,
+      isRedeemed,
+    });
   };
 
   return (
@@ -106,7 +155,7 @@ const Rewards = () => {
           <View style={styles.containerContent}>
             {filter[selectedIndex].filterName === 'Rewards.Reward' ? (
               <View>
-                <TabOneReward onClaimVoucher={onClaimVoucher} />
+                <TabOneReward onClaimVoucher={goToDetailVoucher} />
               </View>
             ) : (
               <View>
