@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-               BuildableName = "Beamco for Artist.app"
-               BlueprintName = "Beamco for Artist"
-               ReferencedContainer = "container:Beamco for Artist.xcodeproj">
+               BuildableName = "beamcoArtist.app"
+               BlueprintName = "beamcoArtist"
+               ReferencedContainer = "container:beamcoArtist.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "Beamco for ArtistTests.xctest"
-               BlueprintName = "Beamco for ArtistTests"
-               ReferencedContainer = "container:Beamco for Artist.xcodeproj">
+               BuildableName = "beamcoArtistTests.xctest"
+               BlueprintName = "beamcoArtistTests"
+               ReferencedContainer = "container:beamcoArtist.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -55,9 +55,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "Beamco for Artist.app"
-            BlueprintName = "Beamco for Artist"
-            ReferencedContainer = "container:Beamco for Artist.xcodeproj">
+            BuildableName = "beamcoArtist.app"
+            BlueprintName = "beamcoArtist"
+            ReferencedContainer = "container:beamcoArtist.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -72,9 +72,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "Beamco for Artist.app"
-            BlueprintName = "Beamco for Artist"
-            ReferencedContainer = "container:Beamco for Artist.xcodeproj">
+            BuildableName = "beamcoArtist.app"
+            BlueprintName = "beamcoArtist"
+            ReferencedContainer = "container:beamcoArtist.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
