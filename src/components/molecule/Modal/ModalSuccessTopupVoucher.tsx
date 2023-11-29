@@ -23,31 +23,37 @@ export const ModalSuccessTopupVoucher: FC<ModalSuccessProps> = (
   const {t} = useTranslation();
   const {toggleModal, modalVisible, title, subtitle, buttonText} = props;
   return (
-    <Modal
-      isVisible={modalVisible}
-      onBackButtonPress={toggleModal}
-      style={styles.modalStyle}>
-      <View style={styles.container}>
-        <CheckGradientIcon style={styles.iconStyle} />
-        <Text style={[typography.Subtitle1, styles.textStyles]}>
-          {title ? title : t('Event.Detail.Popup.SuccessTopup.Title')}
-        </Text>
-        <Gap height={heightResponsive(8)} />
-        <Text style={[typography.Caption, styles.textStyles]}>
-          {subtitle ? subtitle : t('Event.Detail.Popup.SuccessTopup.Subtitle')}
-        </Text>
-        <Gap height={heightResponsive(18)} />
-        <Button
-          label={
-            buttonText
-              ? buttonText
-              : t('Event.Detail.Popup.SuccessTopup.ButtonClaim')
-          }
-          containerStyles={styles.btnDonate}
-          onPress={toggleModal}
-        />
-      </View>
-    </Modal>
+    <>
+      {modalVisible && (
+        <Modal
+          isVisible={modalVisible}
+          onBackButtonPress={toggleModal}
+          style={styles.modalStyle}>
+          <View style={styles.container}>
+            <CheckGradientIcon style={styles.iconStyle} />
+            <Text style={[typography.Subtitle1, styles.textStyles]}>
+              {title ? title : t('Event.Detail.Popup.SuccessTopup.Title')}
+            </Text>
+            <Gap height={heightResponsive(8)} />
+            <Text style={[typography.Caption, styles.textStyles]}>
+              {subtitle
+                ? subtitle
+                : t('Event.Detail.Popup.SuccessTopup.Subtitle')}
+            </Text>
+            <Gap height={heightResponsive(18)} />
+            <Button
+              label={
+                buttonText
+                  ? buttonText
+                  : t('Event.Detail.Popup.SuccessTopup.ButtonClaim')
+              }
+              containerStyles={styles.btnDonate}
+              onPress={toggleModal}
+            />
+          </View>
+        </Modal>
+      )}
+    </>
   );
 };
 

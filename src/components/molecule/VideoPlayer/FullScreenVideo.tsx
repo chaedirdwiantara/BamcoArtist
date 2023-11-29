@@ -105,127 +105,136 @@ const FullScreenVideo: FC<VideoProps> = (props: VideoProps) => {
   };
 
   return (
-    <Modal
-      isVisible={modalVisible}
-      backdropOpacity={1}
-      backdropColor={color.Dark[800]}
-      style={{marginHorizontal: 0}}
-      animationIn={'fadeIn'}
-      animationOut={'fadeOut'}
-      onBackButtonPress={handleClose}>
-      <SafeAreaView style={styles.container}>
-        <View style={styles.containerIcon}>
-          <TouchableOpacity onPress={handleClose} style={styles.closeButton}>
-            <CloseCircleIcon />
-          </TouchableOpacity>
-        </View>
+    <>
+      {modalVisible && (
+        <Modal
+          isVisible={modalVisible}
+          backdropOpacity={1}
+          backdropColor={color.Dark[800]}
+          style={{marginHorizontal: 0}}
+          animationIn={'fadeIn'}
+          animationOut={'fadeOut'}
+          onBackButtonPress={handleClose}>
+          <SafeAreaView style={styles.container}>
+            <View style={styles.containerIcon}>
+              <TouchableOpacity
+                onPress={handleClose}
+                style={styles.closeButton}>
+                <CloseCircleIcon />
+              </TouchableOpacity>
+            </View>
 
-        <View style={styles.mainContainer}>
-          <View>
-            <Video
-              source={{
-                uri: sourceUri,
-              }}
-              style={[styles.videoStyle, videoContainer]}
-              ref={videoRef}
-              volume={10}
-              fullscreenAutorotate={true}
-              playInBackground={false}
-              paused={paused}
-              resizeMode={'cover'}
-              poster={sourceUri}
-              onProgress={onProgress}
-              onLoad={onLoadEnd}
-              onEnd={onEnd}
-              repeat={true}
-              muted={mute}
-              // fullscreen={fullScreen}
-            />
+            <View style={styles.mainContainer}>
+              <View>
+                <Video
+                  source={{
+                    uri: sourceUri,
+                  }}
+                  style={[styles.videoStyle, videoContainer]}
+                  ref={videoRef}
+                  volume={10}
+                  fullscreenAutorotate={true}
+                  playInBackground={false}
+                  paused={paused}
+                  resizeMode={'cover'}
+                  poster={sourceUri}
+                  onProgress={onProgress}
+                  onLoad={onLoadEnd}
+                  onEnd={onEnd}
+                  repeat={true}
+                  muted={mute}
+                  // fullscreen={fullScreen}
+                />
 
-            {!isPlaying && (
-              <View style={styles.durationTimeTextCotainer}>
-                <View style={styles.durationTimeText}>
-                  <Text style={styles.durationText}>
-                    {timeToString(duration)}
-                  </Text>
-                </View>
-                <Gap width={7} />
-                {dataVideo && (
-                  <View style={styles.durationTimeText}>
-                    <Text style={styles.durationText}>
-                      {dataVideo.views} Views
-                    </Text>
+                {!isPlaying && (
+                  <View style={styles.durationTimeTextCotainer}>
+                    <View style={styles.durationTimeText}>
+                      <Text style={styles.durationText}>
+                        {timeToString(duration)}
+                      </Text>
+                    </View>
+                    <Gap width={7} />
+                    {dataVideo && (
+                      <View style={styles.durationTimeText}>
+                        <Text style={styles.durationText}>
+                          {dataVideo.views} Views
+                        </Text>
+                      </View>
+                    )}
                   </View>
                 )}
+                <View style={styles.playPausedVideo}>
+                  {paused && (
+                    <TouchableOpacity onPress={handlePlaying}>
+                      <PlayVideoIcon />
+                    </TouchableOpacity>
+                  )}
+                </View>
               </View>
-            )}
-            <View style={styles.playPausedVideo}>
-              {paused && (
-                <TouchableOpacity onPress={handlePlaying}>
-                  <PlayVideoIcon />
-                </TouchableOpacity>
-              )}
-            </View>
-          </View>
 
-          {isPlaying && (
-            <View>
-              <Slider
-                animateTransitions={true}
-                animationType={'timing'}
-                value={currentTime}
-                minimumValue={0}
-                maximumValue={duration}
-                minimumTrackTintColor={color.Success[400]}
-                maximumTrackTintColor={color.Dark[400]}
-                thumbTintColor={color.Success[400]}
-                onSlidingComplete={e => {
-                  const seekDuration = e as number[];
-                  onSeek(seekDuration[0]);
-                }}
-                thumbStyle={{width: 8, height: 8}}
-                containerStyle={{
-                  marginTop: widthResponsive(-50),
-                }}
-              />
-              <View
-                style={{
-                  flexDirection: 'row',
-                  width: '100%',
-                  justifyContent: 'space-between',
-                }}>
-                <View
-                  style={[styles.durationTimeTextPlaying, buttonIconsStyle]}>
-                  <TouchableOpacity
-                    onPress={() => setPaused(true)}
-                    style={{marginHorizontal: widthResponsive(10)}}>
-                    {!paused && <PauseIcon2 width={10} height={13} />}
-                  </TouchableOpacity>
+              {isPlaying && (
+                <View>
+                  <Slider
+                    animateTransitions={true}
+                    animationType={'timing'}
+                    value={currentTime}
+                    minimumValue={0}
+                    maximumValue={duration}
+                    minimumTrackTintColor={color.Success[400]}
+                    maximumTrackTintColor={color.Dark[400]}
+                    thumbTintColor={color.Success[400]}
+                    onSlidingComplete={e => {
+                      const seekDuration = e as number[];
+                      onSeek(seekDuration[0]);
+                    }}
+                    thumbStyle={{width: 8, height: 8}}
+                    containerStyle={{
+                      marginTop: widthResponsive(-50),
+                    }}
+                  />
                   <View
                     style={{
                       flexDirection: 'row',
-                      marginRight: widthResponsive(10),
+                      width: '100%',
+                      justifyContent: 'space-between',
                     }}>
-                    <TouchableOpacity onPress={() => setMute(!mute)}>
-                      <VolumeIcon />
-                    </TouchableOpacity>
+                    <View
+                      style={[
+                        styles.durationTimeTextPlaying,
+                        buttonIconsStyle,
+                      ]}>
+                      <TouchableOpacity
+                        onPress={() => setPaused(true)}
+                        style={{marginHorizontal: widthResponsive(10)}}>
+                        {!paused && <PauseIcon2 width={10} height={13} />}
+                      </TouchableOpacity>
+                      <View
+                        style={{
+                          flexDirection: 'row',
+                          marginRight: widthResponsive(10),
+                        }}>
+                        <TouchableOpacity onPress={() => setMute(!mute)}>
+                          <VolumeIcon />
+                        </TouchableOpacity>
 
-                    <Gap width={8} />
-                    <Text style={styles.durationText}>
-                      {timeToString(duration - currentTime)}
-                    </Text>
-                    <Gap width={10} />
-                    <TouchableOpacity onPress={handleClose}>
-                      <NormalScreenIcon />
-                    </TouchableOpacity>
+                        <Gap width={8} />
+                        <Text style={styles.durationText}>
+                          {timeToString(duration - currentTime)}
+                        </Text>
+                        <Gap width={10} />
+                        <TouchableOpacity onPress={handleClose}>
+                          <NormalScreenIcon />
+                        </TouchableOpacity>
+                      </View>
+                    </View>
                   </View>
                 </View>
-              </View>
+              )}
             </View>
-          )}
-        </View>
-      </SafeAreaView>
-    </Modal>
+          </SafeAreaView>
+        </Modal>
+      )}
+    </>
   );
 };
 

@@ -47,12 +47,16 @@ export const ModalLimit: React.FC<ModalLimitProps> = ({
   };
 
   return (
-    <Modal isVisible={modalVisible} style={{margin: 0}}>
-      <TouchableWithoutFeedback onPress={onPressClose}>
-        <View style={styles.modalOverlay} />
-      </TouchableWithoutFeedback>
-      <SsuSheet children={children()} />
-    </Modal>
+    <>
+      {modalVisible && (
+        <Modal isVisible={modalVisible} style={{margin: 0}}>
+          <TouchableWithoutFeedback onPress={onPressClose}>
+            <View style={styles.modalOverlay} />
+          </TouchableWithoutFeedback>
+          <SsuSheet children={children()} />
+        </Modal>
+      )}
+    </>
   );
 };
 

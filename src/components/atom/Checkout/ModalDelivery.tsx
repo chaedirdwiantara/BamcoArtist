@@ -82,12 +82,19 @@ export const ModalDelivery: React.FC<ModalDeliveryProps> = ({
   };
 
   return (
-    <Modal isVisible={modalVisible} style={{margin: 0}}>
-      <TouchableWithoutFeedback onPress={onPressClose}>
-        <View style={styles.modalOverlay} />
-      </TouchableWithoutFeedback>
-      <SsuSheet children={children()} containerStyle={{paddingHorizontal: 0}} />
-    </Modal>
+    <>
+      {modalVisible && (
+        <Modal isVisible={modalVisible} style={{margin: 0}}>
+          <TouchableWithoutFeedback onPress={onPressClose}>
+            <View style={styles.modalOverlay} />
+          </TouchableWithoutFeedback>
+          <SsuSheet
+            children={children()}
+            containerStyle={{paddingHorizontal: 0}}
+          />
+        </Modal>
+      )}
+    </>
   );
 };
 

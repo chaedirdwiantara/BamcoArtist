@@ -83,51 +83,57 @@ export const ModalConfirm: React.FC<ModalConfirmProps> = (
   };
 
   return (
-    <Modal
-      isVisible={modalVisible}
-      backdropOpacity={0.8}
-      animationIn="zoomInDown"
-      animationOut="zoomOutUp"
-      animationInTiming={600}
-      animationOutTiming={600}
-      backdropTransitionInTiming={600}
-      backdropTransitionOutTiming={600}>
-      <View style={styles.root}>
-        <View style={styles.card}>
-          <Text style={styles.title}>{title}</Text>
-          {textNavigate && subtitle ? (
-            renderHighlightedSubtitle(textNavigate, subtitle)
-          ) : (
-            <Text style={[styles.subtitle, subtitleStyles]}>{subtitle}</Text>
-          )}
-          {!oneButton ? (
-            <View style={styles.containerButton}>
-              <TouchableOpacity onPress={onPressClose}>
-                <Text style={styles.option}>
-                  {noText ? noText : t('General.No')}
+    <>
+      {modalVisible && (
+        <Modal
+          isVisible={modalVisible}
+          backdropOpacity={0.8}
+          animationIn="zoomInDown"
+          animationOut="zoomOutUp"
+          animationInTiming={600}
+          animationOutTiming={600}
+          backdropTransitionInTiming={600}
+          backdropTransitionOutTiming={600}>
+          <View style={styles.root}>
+            <View style={styles.card}>
+              <Text style={styles.title}>{title}</Text>
+              {textNavigate && subtitle ? (
+                renderHighlightedSubtitle(textNavigate, subtitle)
+              ) : (
+                <Text style={[styles.subtitle, subtitleStyles]}>
+                  {subtitle}
                 </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                disabled={disabled}
-                onPress={onPressOk}
-                style={rightButtonStyle}>
-                <Text style={styles.option}>
-                  {yesText ? yesText : t('General.Yes')}
-                </Text>
-              </TouchableOpacity>
+              )}
+              {!oneButton ? (
+                <View style={styles.containerButton}>
+                  <TouchableOpacity onPress={onPressClose}>
+                    <Text style={styles.option}>
+                      {noText ? noText : t('General.No')}
+                    </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    disabled={disabled}
+                    onPress={onPressOk}
+                    style={rightButtonStyle}>
+                    <Text style={styles.option}>
+                      {yesText ? yesText : t('General.Yes')}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              ) : (
+                <View style={styles.containerButton}>
+                  <TouchableOpacity onPress={onPressOk}>
+                    <Text style={styles.option}>
+                      {yesText ? yesText : t('General.Yes')}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              )}
             </View>
-          ) : (
-            <View style={styles.containerButton}>
-              <TouchableOpacity onPress={onPressOk}>
-                <Text style={styles.option}>
-                  {yesText ? yesText : t('General.Yes')}
-                </Text>
-              </TouchableOpacity>
-            </View>
-          )}
-        </View>
-      </View>
-    </Modal>
+          </View>
+        </Modal>
+      )}
+    </>
   );
 };
 

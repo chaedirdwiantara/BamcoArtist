@@ -22,48 +22,52 @@ export const ModalUpdate: React.FC<ModalUpdateProps> = (
   const {t} = useTranslation();
   const {modalVisible, showMaybeLater, onPressClose, onPressOk} = props;
   return (
-    <Modal
-      isVisible={modalVisible}
-      backdropOpacity={0.8}
-      animationIn="zoomInDown"
-      animationOut="zoomOutUp"
-      animationInTiming={600}
-      animationOutTiming={600}
-      backdropTransitionInTiming={600}
-      backdropTransitionOutTiming={600}>
-      <View style={styles.root}>
-        <View style={styles.card}>
-          <View style={styles.imageContainer}>
-            <Image source={require('../../../assets/image/update.png')} />
-          </View>
+    <>
+      {modalVisible && (
+        <Modal
+          isVisible={modalVisible}
+          backdropOpacity={0.8}
+          animationIn="zoomInDown"
+          animationOut="zoomOutUp"
+          animationInTiming={600}
+          animationOutTiming={600}
+          backdropTransitionInTiming={600}
+          backdropTransitionOutTiming={600}>
+          <View style={styles.root}>
+            <View style={styles.card}>
+              <View style={styles.imageContainer}>
+                <Image source={require('../../../assets/image/update.png')} />
+              </View>
 
-          <Text style={styles.title}>{t('Modal.Update.Title')}</Text>
-          <Text style={styles.subtitle}>{t('Modal.Update.Subtitle')}</Text>
+              <Text style={styles.title}>{t('Modal.Update.Title')}</Text>
+              <Text style={styles.subtitle}>{t('Modal.Update.Subtitle')}</Text>
 
-          <View style={styles.containerButton}>
-            <Button
-              label={t('Btn.Update')}
-              textStyles={{fontSize: mvs(14)}}
-              containerStyles={{
-                width: '100%',
-                marginBottom: heightPercentage(5),
-              }}
-              onPress={onPressOk}
-            />
-            {showMaybeLater && (
-              <Button
-                label={t('Btn.MaybeLater')}
-                type="border"
-                borderColor="transparent"
-                textStyles={{fontSize: mvs(14), color: color.Success[400]}}
-                containerStyles={{width: '100%'}}
-                onPress={onPressClose}
-              />
-            )}
+              <View style={styles.containerButton}>
+                <Button
+                  label={t('Btn.Update')}
+                  textStyles={{fontSize: mvs(14)}}
+                  containerStyles={{
+                    width: '100%',
+                    marginBottom: heightPercentage(5),
+                  }}
+                  onPress={onPressOk}
+                />
+                {showMaybeLater && (
+                  <Button
+                    label={t('Btn.MaybeLater')}
+                    type="border"
+                    borderColor="transparent"
+                    textStyles={{fontSize: mvs(14), color: color.Success[400]}}
+                    containerStyles={{width: '100%'}}
+                    onPress={onPressClose}
+                  />
+                )}
+              </View>
+            </View>
           </View>
-        </View>
-      </View>
-    </Modal>
+        </Modal>
+      )}
+    </>
   );
 };
 

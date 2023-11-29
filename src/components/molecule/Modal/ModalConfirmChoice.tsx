@@ -33,35 +33,39 @@ export const ModalConfirmChoice: React.FC<ModalConfirmProps> = (
   } = props;
 
   return (
-    <Modal
-      isVisible={modalVisible}
-      backdropOpacity={0.8}
-      animationIn="zoomInDown"
-      animationOut="zoomOutUp"
-      animationInTiming={600}
-      animationOutTiming={600}
-      backdropTransitionInTiming={600}
-      backdropTransitionOutTiming={600}
-      onBackdropPress={backdropOnPress}
-      onModalHide={onModalHide}>
-      <View style={styles.root}>
-        <TouchableOpacity
-          style={styles.choiceContainer}
-          onPress={() => choiceOnPress('choiceA')}>
-          {iconChoiceA ?? <GlobalIcon />}
-          <Gap width={9} />
-          <Text style={styles.textChoice}>{choiceA}</Text>
-        </TouchableOpacity>
-        <Gap height={28} />
-        <TouchableOpacity
-          style={styles.choiceContainer}
-          onPress={() => choiceOnPress('choiceB')}>
-          {iconChoiceB ?? <Gift2Icon />}
-          <Gap width={9} />
-          <Text style={styles.textChoice}>{choiceB}</Text>
-        </TouchableOpacity>
-      </View>
-    </Modal>
+    <>
+      {modalVisible && (
+        <Modal
+          isVisible={modalVisible}
+          backdropOpacity={0.8}
+          animationIn="zoomInDown"
+          animationOut="zoomOutUp"
+          animationInTiming={600}
+          animationOutTiming={600}
+          backdropTransitionInTiming={600}
+          backdropTransitionOutTiming={600}
+          onBackdropPress={backdropOnPress}
+          onModalHide={onModalHide}>
+          <View style={styles.root}>
+            <TouchableOpacity
+              style={styles.choiceContainer}
+              onPress={() => choiceOnPress('choiceA')}>
+              {iconChoiceA ?? <GlobalIcon />}
+              <Gap width={9} />
+              <Text style={styles.textChoice}>{choiceA}</Text>
+            </TouchableOpacity>
+            <Gap height={28} />
+            <TouchableOpacity
+              style={styles.choiceContainer}
+              onPress={() => choiceOnPress('choiceB')}>
+              {iconChoiceB ?? <Gift2Icon />}
+              <Gap width={9} />
+              <Text style={styles.textChoice}>{choiceB}</Text>
+            </TouchableOpacity>
+          </View>
+        </Modal>
+      )}
+    </>
   );
 };
 

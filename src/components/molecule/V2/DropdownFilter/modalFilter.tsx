@@ -63,44 +63,52 @@ const FilterModal: FC<ModalFilterProps> = (props: ModalFilterProps) => {
   };
 
   return (
-    <Modal
-      isVisible={modalVisible}
-      backdropOpacity={0}
-      backdropColor={color.Dark[800]}
-      onBackdropPress={toggleModal}
-      animationIn={'fadeIn'}
-      animationOut={'fadeOut'}
-      style={{marginHorizontal: 0}}
-      onBackButtonPress={toggleModal}
-      onModalHide={onModalHide}>
-      <View
-        style={[
-          styles.container,
-          {
-            position: 'absolute',
-            top: yPosition + 11,
-            left: xPosition,
-          },
-          containerStyle,
-        ]}>
-        {dataFilter.map((item, index) => (
-          <TouchableOpacity
-            key={index.toString()}
-            style={[styles.buttonContainer, buttonContainerStyle]}
-            onPress={() => filterButtonHandler(item)}
-            disabled={item?.disabled ?? false}>
-            <Text
-              style={[
-                styles.textFilter,
-                {color: item?.disabled ? color.Dark[100] : color.Neutral[10]},
-                textStyle,
-              ]}>
-              {translation ? t(item.label) : item.label}
-            </Text>
-          </TouchableOpacity>
-        ))}
-      </View>
-    </Modal>
+    <>
+      {modalVisible && (
+        <Modal
+          isVisible={modalVisible}
+          backdropOpacity={0}
+          backdropColor={color.Dark[800]}
+          onBackdropPress={toggleModal}
+          animationIn={'fadeIn'}
+          animationOut={'fadeOut'}
+          style={{marginHorizontal: 0}}
+          onBackButtonPress={toggleModal}
+          onModalHide={onModalHide}>
+          <View
+            style={[
+              styles.container,
+              {
+                position: 'absolute',
+                top: yPosition + 11,
+                left: xPosition,
+              },
+              containerStyle,
+            ]}>
+            {dataFilter.map((item, index) => (
+              <TouchableOpacity
+                key={index.toString()}
+                style={[styles.buttonContainer, buttonContainerStyle]}
+                onPress={() => filterButtonHandler(item)}
+                disabled={item?.disabled ?? false}>
+                <Text
+                  style={[
+                    styles.textFilter,
+                    {
+                      color: item?.disabled
+                        ? color.Dark[100]
+                        : color.Neutral[10],
+                    },
+                    textStyle,
+                  ]}>
+                  {translation ? t(item.label) : item.label}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        </Modal>
+      )}
+    </>
   );
 };
 
