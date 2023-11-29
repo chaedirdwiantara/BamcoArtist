@@ -73,6 +73,15 @@ const dateFormatHoursMinutes = (date: string) => {
   return hours + ':' + minutes;
 };
 
+const dateFormatDaily = (ISOStringDate: string) => {
+  const today = new Date(ISOStringDate);
+  const day = today.toLocaleString('default', {day: 'numeric'});
+  const month = today.toLocaleString('default', {month: 'long'});
+  const year = today.getFullYear();
+
+  return day + ' ' + month + ' ' + year;
+};
+
 export {
   dateFormat,
   dateFormatBirth,
@@ -83,4 +92,5 @@ export {
   dateFormatMonthOnly,
   dateFormatSubscribe,
   dateFormatHoursMinutes,
+  dateFormatDaily,
 };

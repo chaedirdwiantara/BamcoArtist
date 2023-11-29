@@ -655,7 +655,19 @@
   "Rewards": {
     "Title": "Rewards",
     "Reward": "Rewards",
-    "Mission": "Mission"
+    "Mission": "Mission",
+    "DetailVoucher": {
+      "QuotaLeft": "Quota Left",
+      "RedeemRewards": "Redeem Rewards",
+      "ModalSuccess": {
+        "Title": "Your Voucher has been sent!",
+        "Subtitle": "Thanks for sharing happiness with other fans and support the community"
+      },
+      "ModalFailed": {
+        "Title": "Your Rewards Cannot be Redeemed",
+        "Subtitle": "There has been a problem redeeming your credits. Please check the availability and try to redeem it again."
+      }
+    }
   },
   "ExclusiveContent": {
     "Title": "獨家內容",
