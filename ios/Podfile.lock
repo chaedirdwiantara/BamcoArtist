@@ -557,6 +557,8 @@ PODS:
     - react-native-video/Video (= 5.2.1)
   - react-native-video/Video (5.2.1):
     - React-Core
+  - react-native-view-shot (3.8.0):
+    - React-Core
   - react-native-webview (13.6.3):
     - React-Core
   - React-NativeModulesApple (0.72.7):
@@ -694,6 +696,8 @@ PODS:
     - React-Core
   - RNIap (12.11.0):
     - React-Core
+  - RNImageColors (1.5.2):
+    - React-Core
   - RNImageCropPicker (0.40.2):
     - React-Core
     - React-RCTImage
@@ -720,6 +724,8 @@ PODS:
     - React-Core
     - React-hermes
     - Sentry/HybridSDK (= 8.15.2)
+  - RNShare (10.0.1):
+    - React-Core
   - RNSVG (14.0.0):
     - React-Core
   - SDWebImage (5.11.1):
@@ -1109,6 +1115,7 @@ SPEC CHECKSUMS:
   react-native-ultimate-config: bc816775e31bb2056ccfe18b49e76a5ba2d39b6c
   react-native-version-check: 6cd36aad4e30b8e3216747e3b4ddeb09e0647af8
   react-native-video: c26780b224543c62d5e1b2a7244a5cd1b50e8253
+  react-native-view-shot: 6b7ed61d77d88580fed10954d45fad0eb2d47688
   react-native-webview: 88293a0f23eca8465c0433c023ec632930e644d0
   React-NativeModulesApple: b6868ee904013a7923128892ee4a032498a1024a
   React-perflogger: 31ea61077185eb1428baf60c0db6e2886f141a5a
@@ -1136,11 +1143,13 @@ SPEC CHECKSUMS:
   RNFlashList: 4b4b6b093afc0df60ae08f9cbf6ccd4c836c667a
   RNGoogleSignin: aac5c1ec73422109dec1da770247a1e410dcc620
   RNIap: fc9af04ee706894a80c9d8f979bae930b0dee191
+  RNImageColors: 9ac05083b52d5c350e6972650ae3ba0e556466c1
   RNImageCropPicker: d9616a0cb9b72e8551ff94a7a5021fbd29050aa5
   RNNotifee: f3c01b391dd8e98e67f539f9a35a9cbcd3bae744
   RNReanimated: 1dcf7602777a195cf34f1dcd658037a80a2c8af1
   RNScreens: 3c2d122f5e08c192e254c510b212306da97d2581
   RNSentry: ee1a9a80996414205d84ce9180c31bd855fd4641
+  RNShare: bed7c4fbe615f3d977f22feb0902af9a790c1660
   RNSVG: 255767813dac22db1ec2062c8b7e7b856d4e5ae6
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
   SDWebImageWebPCoder: 908b83b6adda48effe7667cd2b7f78c897e5111d
@@ -1154,6 +1163,6 @@ SPEC CHECKSUMS:
   Yoga: 4c3aa327e4a6a23eeacd71f61c81df1bcdf677d5
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: 35962ef216e6db07d2ad56ded11be38aeba62e73
+PODFILE CHECKSUM: c1003af6ffd5c71653c1e5728f395e255cbdcbf0
 
-COCOAPODS: 1.11.3
+COCOAPODS: 1.12.1
