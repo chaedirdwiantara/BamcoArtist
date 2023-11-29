@@ -25,28 +25,32 @@ export const ModalSuccessSubs: FC<ModalSuccessProps> = (
   const {toggleModal, modalVisible, title, subtitle, buttonText, artist} =
     props;
   return (
-    <Modal
-      isVisible={modalVisible}
-      onBackdropPress={toggleModal}
-      onBackButtonPress={toggleModal}
-      style={styles.modalStyle}>
-      <View style={styles.container}>
-        <CheckGradientIcon style={styles.iconStyle} />
-        <Text style={[typography.Subtitle1, styles.textStyles]}>
-          {title ? title : t('ExclusiveContent.Success', {artist: artist})}
-        </Text>
-        {subtitle && (
-          <Text style={[typography.Button2, styles.textStyles]}>
-            {subtitle}
-          </Text>
-        )}
-        <Button
-          label={buttonText ? buttonText : t('ExclusiveContent.View')}
-          containerStyles={styles.btnDonate}
-          onPress={toggleModal}
-        />
-      </View>
-    </Modal>
+    <>
+      {modalVisible && (
+        <Modal
+          isVisible={modalVisible}
+          onBackdropPress={toggleModal}
+          onBackButtonPress={toggleModal}
+          style={styles.modalStyle}>
+          <View style={styles.container}>
+            <CheckGradientIcon style={styles.iconStyle} />
+            <Text style={[typography.Subtitle1, styles.textStyles]}>
+              {title ? title : t('ExclusiveContent.Success', {artist: artist})}
+            </Text>
+            {subtitle && (
+              <Text style={[typography.Button2, styles.textStyles]}>
+                {subtitle}
+              </Text>
+            )}
+            <Button
+              label={buttonText ? buttonText : t('ExclusiveContent.View')}
+              containerStyles={styles.btnDonate}
+              onPress={toggleModal}
+            />
+          </View>
+        </Modal>
+      )}
+    </>
   );
 };
 

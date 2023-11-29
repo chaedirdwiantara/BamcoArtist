@@ -12,32 +12,36 @@ export const ModalLoading = (props: ModalLoadingProps) => {
   const {visible} = props;
 
   return (
-    <Modal
-      deviceHeight={height}
-      statusBarTranslucent
-      isVisible={visible}
-      style={styles.root}>
-      {Platform.OS === 'ios' ? (
-        <Lottie
-          source={require('../../../assets/animation/loading-beamco-musician.json')}
-          autoPlay
-          loop
-          style={{
-            padding: 0,
-            margin: 0,
-            width: widthResponsive(250),
-            height: heightResponsive(250),
-            aspectRatio: 1 / 1,
-          }}
-        />
-      ) : (
-        <Lottie
-          source={require('../../../assets/animation/loading-beamco-musician.json')}
-          autoPlay
-          loop
-        />
+    <>
+      {visible && (
+        <Modal
+          deviceHeight={height}
+          statusBarTranslucent
+          isVisible={visible}
+          style={styles.root}>
+          {Platform.OS === 'ios' ? (
+            <Lottie
+              source={require('../../../assets/animation/loading-beamco-musician.json')}
+              autoPlay
+              loop
+              style={{
+                padding: 0,
+                margin: 0,
+                width: widthResponsive(250),
+                height: heightResponsive(250),
+                aspectRatio: 1 / 1,
+              }}
+            />
+          ) : (
+            <Lottie
+              source={require('../../../assets/animation/loading-beamco-musician.json')}
+              autoPlay
+              loop
+            />
+          )}
+        </Modal>
       )}
-    </Modal>
+    </>
   );
 };
 

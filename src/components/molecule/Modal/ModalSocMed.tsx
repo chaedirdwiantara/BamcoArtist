@@ -192,12 +192,16 @@ export const ModalSocMed: React.FC<ModalSocMedProps> = ({
   };
 
   return (
-    <Modal avoidKeyboard isVisible={modalVisible} style={{margin: 0}}>
-      <TouchableWithoutFeedback onPress={onPressClose}>
-        <View style={styles.modalOverlay} />
-      </TouchableWithoutFeedback>
-      <SsuSheet children={children()} />
-    </Modal>
+    <>
+      {modalVisible && (
+        <Modal avoidKeyboard isVisible={modalVisible} style={{margin: 0}}>
+          <TouchableWithoutFeedback onPress={onPressClose}>
+            <View style={styles.modalOverlay} />
+          </TouchableWithoutFeedback>
+          <SsuSheet children={children()} />
+        </Modal>
+      )}
+    </>
   );
 };
 

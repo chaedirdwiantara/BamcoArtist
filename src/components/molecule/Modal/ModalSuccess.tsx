@@ -21,26 +21,32 @@ export const ModalSuccess: FC<ModalSuccessProps> = (
 ) => {
   const {onPress, modalVisible, title, subtitle, buttonText} = props;
   return (
-    <Modal
-      isVisible={modalVisible}
-      onBackdropPress={onPress}
-      onBackButtonPress={onPress}
-      style={styles.modalStyle}>
-      <View style={styles.container}>
-        <CheckGradientIcon style={styles.iconStyle} />
-        <Text style={[typography.Subtitle1, styles.textStyles]}>{title}</Text>
-        {subtitle && (
-          <Text style={[typography.Button2, styles.textStyles]}>
-            {subtitle}
-          </Text>
-        )}
-        <Button
-          label={buttonText || ''}
-          containerStyles={styles.btnDonate}
-          onPress={onPress}
-        />
-      </View>
-    </Modal>
+    <>
+      {modalVisible && (
+        <Modal
+          isVisible={modalVisible}
+          onBackdropPress={onPress}
+          onBackButtonPress={onPress}
+          style={styles.modalStyle}>
+          <View style={styles.container}>
+            <CheckGradientIcon style={styles.iconStyle} />
+            <Text style={[typography.Subtitle1, styles.textStyles]}>
+              {title}
+            </Text>
+            {subtitle && (
+              <Text style={[typography.Button2, styles.textStyles]}>
+                {subtitle}
+              </Text>
+            )}
+            <Button
+              label={buttonText || ''}
+              containerStyles={styles.btnDonate}
+              onPress={onPress}
+            />
+          </View>
+        </Modal>
+      )}
+    </>
   );
 };
 

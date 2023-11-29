@@ -38,67 +38,71 @@ export const ModalTipped: React.FC<ModalTippedProps> = (
   } = props;
   const {t} = useTranslation();
   return (
-    <Modal
-      isVisible={modalVisible}
-      backdropOpacity={0.8}
-      animationIn="zoomInDown"
-      animationOut="zoomOutUp"
-      animationInTiming={600}
-      animationOutTiming={600}
-      backdropTransitionInTiming={600}
-      backdropTransitionOutTiming={600}>
-      <View style={styles.root}>
-        <View style={styles.card}>
-          <Text style={styles.title}>{title}</Text>
-          <View>
-            {isLoading ? (
-              <LoadingSpinner />
-            ) : (
-              <MusiciansListCard
-                key={tipper?.tipperUUID}
-                musicianName={tipper?.tipperFullname ?? ''}
-                imgUri={tipper?.tipperImage || ''}
-                containerStyles={{marginTop: mvs(18)}}
-                activeMore={false}
-                showCredit={true}
-                creditCount={tipper?.totalDonation}
-                onPressImage={() => null}
-                onPressMore={() => null}
-              />
-            )}
-          </View>
-          <Gap height={heightResponsive(20)} />
-          <Text style={styles.secondTitle}>{secondTitle}</Text>
-          {isLoading ? (
-            <LoadingSpinner />
-          ) : (
-            <>
-              {musicianTipped?.map((v: EventMusicianTipped, _i: number) => {
-                return (
+    <>
+      {modalVisible && (
+        <Modal
+          isVisible={modalVisible}
+          backdropOpacity={0.8}
+          animationIn="zoomInDown"
+          animationOut="zoomOutUp"
+          animationInTiming={600}
+          animationOutTiming={600}
+          backdropTransitionInTiming={600}
+          backdropTransitionOutTiming={600}>
+          <View style={styles.root}>
+            <View style={styles.card}>
+              <Text style={styles.title}>{title}</Text>
+              <View>
+                {isLoading ? (
+                  <LoadingSpinner />
+                ) : (
                   <MusiciansListCard
-                    key={v?.musicianUUID}
-                    musicianName={v?.musicianFullname ?? ''}
-                    imgUri={v?.musicianImage || ''}
+                    key={tipper?.tipperUUID}
+                    musicianName={tipper?.tipperFullname ?? ''}
+                    imgUri={tipper?.tipperImage || ''}
                     containerStyles={{marginTop: mvs(18)}}
                     activeMore={false}
                     showCredit={true}
-                    creditCount={v?.totalDonation}
+                    creditCount={tipper?.totalDonation}
                     onPressImage={() => null}
                     onPressMore={() => null}
                   />
-                );
-              })}
-            </>
-          )}
+                )}
+              </View>
+              <Gap height={heightResponsive(20)} />
+              <Text style={styles.secondTitle}>{secondTitle}</Text>
+              {isLoading ? (
+                <LoadingSpinner />
+              ) : (
+                <>
+                  {musicianTipped?.map((v: EventMusicianTipped, _i: number) => {
+                    return (
+                      <MusiciansListCard
+                        key={v?.musicianUUID}
+                        musicianName={v?.musicianFullname ?? ''}
+                        imgUri={v?.musicianImage || ''}
+                        containerStyles={{marginTop: mvs(18)}}
+                        activeMore={false}
+                        showCredit={true}
+                        creditCount={v?.totalDonation}
+                        onPressImage={() => null}
+                        onPressMore={() => null}
+                      />
+                    );
+                  })}
+                </>
+              )}
 
-          <View style={styles.containerButton}>
-            <TouchableOpacity onPress={onPressClose}>
-              <Text style={styles.option}>{t('General.Dismiss')}</Text>
-            </TouchableOpacity>
+              <View style={styles.containerButton}>
+                <TouchableOpacity onPress={onPressClose}>
+                  <Text style={styles.option}>{t('General.Dismiss')}</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
           </View>
-        </View>
-      </View>
-    </Modal>
+        </Modal>
+      )}
+    </>
   );
 };
 

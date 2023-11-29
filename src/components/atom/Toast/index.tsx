@@ -14,16 +14,20 @@ const SsuToast: FC<ToastProps> = (props: ToastProps) => {
   const {modalVisible, onBackPressed, children, modalStyle, modalOnHide} =
     props;
   return (
-    <Modal
-      isVisible={modalVisible}
-      onBackButtonPress={onBackPressed}
-      onBackdropPress={onBackPressed}
-      backdropOpacity={0.1}
-      propagateSwipe={true}
-      children={children}
-      style={modalStyle}
-      onModalHide={modalOnHide}
-    />
+    <>
+      {modalVisible && (
+        <Modal
+          isVisible={modalVisible}
+          onBackButtonPress={onBackPressed}
+          onBackdropPress={onBackPressed}
+          backdropOpacity={0.1}
+          propagateSwipe={true}
+          children={children}
+          style={modalStyle}
+          onModalHide={modalOnHide}
+        />
+      )}
+    </>
   );
 };
 

@@ -23,28 +23,32 @@ export const ModalSuccessCheckout: FC<ModalSuccessProps> = (
   const {t} = useTranslation();
   const {toggleModal, modalVisible, title, subtitle, buttonText} = props;
   return (
-    <Modal
-      isVisible={modalVisible}
-      onBackdropPress={toggleModal}
-      onBackButtonPress={toggleModal}
-      style={styles.modalStyle}>
-      <View style={styles.container}>
-        <CheckGradientIcon style={styles.iconStyle} />
-        <Text style={[typography.Subtitle1, styles.textStyles]}>
-          {title ? title : t('Checkout.Modal.Title')}
-        </Text>
-        {subtitle && (
-          <Text style={[typography.Button2, styles.textStyles]}>
-            {subtitle}
-          </Text>
-        )}
-        <Button
-          label={buttonText ? buttonText : t('Checkout.Modal.Btn')}
-          containerStyles={styles.btnDonate}
-          onPress={toggleModal}
-        />
-      </View>
-    </Modal>
+    <>
+      {modalVisible && (
+        <Modal
+          isVisible={modalVisible}
+          onBackdropPress={toggleModal}
+          onBackButtonPress={toggleModal}
+          style={styles.modalStyle}>
+          <View style={styles.container}>
+            <CheckGradientIcon style={styles.iconStyle} />
+            <Text style={[typography.Subtitle1, styles.textStyles]}>
+              {title ? title : t('Checkout.Modal.Title')}
+            </Text>
+            {subtitle && (
+              <Text style={[typography.Button2, styles.textStyles]}>
+                {subtitle}
+              </Text>
+            )}
+            <Button
+              label={buttonText ? buttonText : t('Checkout.Modal.Btn')}
+              containerStyles={styles.btnDonate}
+              onPress={toggleModal}
+            />
+          </View>
+        </Modal>
+      )}
+    </>
   );
 };
 

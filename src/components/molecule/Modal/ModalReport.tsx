@@ -189,20 +189,24 @@ export const ModalReport: React.FC<ModalReportProps> = (
   };
 
   return (
-    <Modal
-      isVisible={modalVisible}
-      backdropOpacity={0.8}
-      animationIn="zoomInDown"
-      animationOut="zoomOutUp"
-      animationInTiming={600}
-      animationOutTiming={600}
-      backdropTransitionInTiming={600}
-      backdropTransitionOutTiming={600}
-      onModalHide={modalOnHide}>
-      <View style={styles.root}>
-        {!nextPage ? modalFirstPage() : modalSecondPage()}
-      </View>
-    </Modal>
+    <>
+      {modalVisible && (
+        <Modal
+          isVisible={modalVisible}
+          backdropOpacity={0.8}
+          animationIn="zoomInDown"
+          animationOut="zoomOutUp"
+          animationInTiming={600}
+          animationOutTiming={600}
+          backdropTransitionInTiming={600}
+          backdropTransitionOutTiming={600}
+          onModalHide={modalOnHide}>
+          <View style={styles.root}>
+            {!nextPage ? modalFirstPage() : modalSecondPage()}
+          </View>
+        </Modal>
+      )}
+    </>
   );
 };
 

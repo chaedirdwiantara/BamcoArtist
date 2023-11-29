@@ -280,17 +280,21 @@ export const ModalDonate: React.FC<ModalDonateProps> = ({
   };
 
   return (
-    <Modal
-      isVisible={modalVisible}
-      avoidKeyboard
-      style={{margin: 0}}
-      onModalHide={onModalHide}>
-      <TouchableWithoutFeedback onPress={onPressClose}>
-        <View style={styles.modalOverlay} />
-      </TouchableWithoutFeedback>
-      <SsuSheet children={children()} />
-      <ModalLoading visible={loadingDonate} />
-    </Modal>
+    <>
+      {modalVisible && (
+        <Modal
+          isVisible={modalVisible}
+          avoidKeyboard
+          style={{margin: 0}}
+          onModalHide={onModalHide}>
+          <TouchableWithoutFeedback onPress={onPressClose}>
+            <View style={styles.modalOverlay} />
+          </TouchableWithoutFeedback>
+          <SsuSheet children={children()} />
+          <ModalLoading visible={loadingDonate} />
+        </Modal>
+      )}
+    </>
   );
 };
 
