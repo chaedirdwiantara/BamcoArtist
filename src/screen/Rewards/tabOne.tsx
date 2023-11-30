@@ -1,5 +1,5 @@
 import {FlatList, StyleSheet, View} from 'react-native';
-import React, {FC, useEffect, useState} from 'react';
+import React, {FC, useCallback, useEffect, useState} from 'react';
 import VoucherReward from '../../components/molecule/Reward/reward';
 import {widthResponsive} from '../../utils';
 import {Button, EmptyState, Gap} from '../../components';
@@ -7,12 +7,18 @@ import {color, font} from '../../theme';
 import {mvs} from 'react-native-size-matters';
 import {rewardMenu} from '../../data/reward';
 import {useRewardHook} from '../../hooks/use-reward.hook';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {RootStackParams} from '../../navigations';
+import {ItemMasterReward} from '../../interface/reward.interface';
 
 type Props = {
   onClaimVoucher: (id: number) => void;
 };
 
 const TabOneReward: FC<Props> = ({onClaimVoucher}) => {
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParams>>();
   const [activeIndex, setactiveIndex] = useState<number>(0);
 
   const onPressMenu = (index: number) => {
@@ -21,7 +27,8 @@ const TabOneReward: FC<Props> = ({onClaimVoucher}) => {
 
   const {queryRewardMaster, queryProgressReward} = useRewardHook();
   const {data: dataRewardMaster} = queryRewardMaster();
-  const {data: dataProgressReward} = queryProgressReward();
+  const {data: dataProgressReward, refetch: refetchProgressReward} =
+    queryProgressReward();
   useEffect(() => {
     console.log(dataRewardMaster);
   }, [dataRewardMaster]);
@@ -29,6 +36,26 @@ const TabOneReward: FC<Props> = ({onClaimVoucher}) => {
   useEffect(() => {
     console.log(dataProgressReward);
   }, [dataProgressReward]);
+
+  useFocusEffect(
+    useCallback(() => {
+      refetchProgressReward();
+    }, []),
+  );
+
+  const goToDetailVoucher = (data: ItemMasterReward) => {
+    const claimedRewards = dataProgressReward?.data;
+    const isRedeemed =
+      claimedRewards &&
+      claimedRewards?.filter(
+        (val: {creditReward: number}) => val.creditReward === data.freeCredit,
+      ).length > 0;
+
+    navigation.navigate('DetailVoucherRewards', {
+      dataDetail: data,
+      isRedeemed,
+    });
+  };
 
   return (
     <View style={styles().container}>
@@ -65,7 +92,7 @@ const TabOneReward: FC<Props> = ({onClaimVoucher}) => {
             voucherTitle={'Free Credit'}
             freeCredit={item.freeCredit}
             voucherAvail={1}
-            onPress={() => onClaimVoucher(item.id)}
+            onPress={() => goToDetailVoucher(item)}
             containerStyle={styles().voucher}
             claimable={true}
             redeemable={true}

@@ -659,6 +659,9 @@
     "DetailVoucher": {
       "QuotaLeft": "Quota Left",
       "RedeemRewards": "Redeem Rewards",
+      "Expired": "Expired",
+      "Redeemed": "Redeemed",
+      "RewardAchievement": "Reward Achievement",
       "ModalSuccess": {
         "Title": "Your Voucher has been sent!",
         "Subtitle": "Thanks for sharing happiness with other fans and support the community"

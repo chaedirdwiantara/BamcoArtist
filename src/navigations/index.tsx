@@ -178,7 +178,7 @@ import ListPlaylist from '../screen/Playlist/ListPlaylist';
 import {MyQRCode} from '../screen/Setting/MyQRCode';
 import {TransactionHistoryPropsType} from '../interface/credit.interface';
 import {BankAccountPropsType} from '../interface/withdraw.interface';
-import {DetailVoucherRewardsPropsType} from '../interface/rewards2.interface';
+import {ItemMasterReward} from '../interface/reward.interface';
 
 export type RootStackParams = {
   AboutDeletion: undefined;
@@ -209,7 +209,7 @@ export type RootStackParams = {
   };
   DetailVoucher: {id: number; eventId: string};
   DetailVoucherRewards: {
-    dataDetail: DetailVoucherRewardsPropsType;
+    dataDetail: ItemMasterReward;
     isRedeemed?: boolean;
   };
   DiscoverArtist: undefined;
@@ -498,7 +498,7 @@ const TabScreen = () => {
           ),
         }}
       />
-      {/* <MainTab.Screen
+      <MainTab.Screen
         name="Profile"
         component={ProfileScreen}
         initialParams={{showToast: false, deletePlaylist: false}}
@@ -517,9 +517,9 @@ const TabScreen = () => {
             </TouchableOpacity>
           ),
         }}
-      /> */}
+      />
       {/* TODO : ENABLE AFTER REWARDS READY */}
-      <MainTab.Screen
+      {/* <MainTab.Screen
         name="Rewards"
         component={Rewards}
         options={{
@@ -532,7 +532,7 @@ const TabScreen = () => {
             </TouchableOpacity>
           ),
         }}
-      />
+      /> */}
     </MainTab.Navigator>
   );
 };

@@ -23,7 +23,7 @@ import {
 import {color, font} from '../../../theme';
 import {widthResponsive} from '../../../utils';
 import {RootStackParams} from '../../../navigations';
-import {redeemRewards} from '../../../api/rewards2.api';
+import {redeemRewards} from '../../../api/reward.api';
 import {dateFormatDaily} from '../../../utils/date-format';
 import {ArrowLeftIcon, ClockIcon} from '../../../assets/icon';
 import {profileStorage} from '../../../hooks/use-storage.hook';
@@ -83,6 +83,10 @@ const DetailVoucherRewards: FC<ListVoucherProps> = ({
     });
   };
 
+  const expiredDate = new Date(data.endAt);
+  const today = new Date();
+  const isExpired = today > expiredDate;
+
   return (
     <View style={styles.root}>
       {scrollEffect && (
@@ -100,9 +104,7 @@ const DetailVoucherRewards: FC<ListVoucherProps> = ({
         <View style={styles.slide}>
           <ImageBackground
             style={{width: '100%', height: 400}}
-            source={{
-              uri: data?.imageUrl[3]?.image,
-            }}>
+            source={require('../../../assets/image/bg-detail-voucher.png')}>
             <LinearGradient
               colors={['#00000000', color.Dark[800]]}
               style={{height: '100%', width: '100%'}}>
@@ -127,7 +129,9 @@ const DetailVoucherRewards: FC<ListVoucherProps> = ({
                 <View style={styles.titleContainer}>
                   <Text style={styles.vTitle}>{data.title}</Text>
                   <Gap height={5} />
-                  <Text style={styles.vSubTitle}>{data.title}</Text>
+                  <Text style={styles.vSubTitle}>
+                    {t('Rewards.DetailVoucher.RewardAchievement')}
+                  </Text>
                 </View>
               </View>
             </LinearGradient>
@@ -153,40 +157,47 @@ const DetailVoucherRewards: FC<ListVoucherProps> = ({
               </Text>
             </View>
           </View>
-          <View style={styles.tnc}>
-            <Text style={styles.normalTitle}>
-              {t('Event.DetailVoucher.Tnc')}
-            </Text>
-            <Gap height={4} />
-            {data?.termsCondition.value.map((val, i) => (
-              <View key={i} style={{flexDirection: 'row'}}>
-                <View
-                  style={{
-                    width: widthResponsive(20),
-                  }}>
-                  <Text style={styles.tncValue}>{i + 1}.</Text>
+          {data?.termsCondition.value !== null && (
+            <View style={styles.tnc}>
+              <Text style={styles.normalTitle}>
+                {t('Event.DetailVoucher.Tnc')}
+              </Text>
+              <Gap height={4} />
+              {data?.termsCondition.value.map((val, i) => (
+                <View key={i} style={{flexDirection: 'row'}}>
+                  <View
+                    style={{
+                      width: widthResponsive(20),
+                    }}>
+                    <Text style={styles.tncValue}>{i + 1}.</Text>
+                  </View>
+                  <Text style={[styles.tncValue, {flex: 1, textAlign: 'auto'}]}>
+                    {val}
+                  </Text>
                 </View>
-                <Text style={[styles.tncValue, {flex: 1, textAlign: 'auto'}]}>
-                  {val}
-                </Text>
-              </View>
-            ))}
-          </View>
+              ))}
+            </View>
+          )}
         </View>
       </ScrollView>
       <View style={styles.bottomContainer}>
         <Button
           label={
-            isRedeemed ? 'Redeemed' : t('Rewards.DetailVoucher.RedeemRewards')
+            isExpired
+              ? t('Rewards.DetailVoucher.Expired')
+              : isRedeemed
+              ? t('Rewards.DetailVoucher.Redeemed')
+              : t('Rewards.DetailVoucher.RedeemRewards')
           }
           containerStyles={{
             width: '100%',
             height: widthResponsive(40),
             aspectRatio: undefined,
-            backgroundColor: !isRedeemed ? color.Pink[10] : color.Dark[50],
+            backgroundColor:
+              !isExpired && !isRedeemed ? color.Pink[10] : color.Dark[50],
           }}
           onPress={handleRedeem}
-          disabled={isRedeemed}
+          disabled={isExpired || isRedeemed}
         />
       </View>
 
