@@ -7,6 +7,7 @@ import {
   StyleSheet,
   Dimensions,
   TouchableOpacity,
+  Platform,
 } from 'react-native';
 import Share from 'react-native-share';
 import {useTranslation} from 'react-i18next';
@@ -30,6 +31,7 @@ import {Beamco2Logo} from '../../assets/logo';
 import TitleAndDonate from './TitleAndDonate';
 import {RootStackParams} from '../../navigations';
 import {useSongHook} from '../../hooks/use-song.hook';
+import {useShareHook} from '../../hooks/use-share.hook';
 import {usePlayerHook} from '../../hooks/use-player.hook';
 import {profileStorage} from '../../hooks/use-storage.hook';
 import {heightResponsive, widthResponsive} from '../../utils';
@@ -44,12 +46,14 @@ export const MusicPlayer: FC<MusicProps> = ({navigation}: MusicProps) => {
   const scrollX = useRef(new Animated.Value(0)).current;
   const {playerProgress, currentTrack, seekPlayer} = usePlayerHook();
   const {setLikeSong, setUnlikeSong} = useSongHook();
+  const {setShareMusicToIG} = useShareHook();
   const [modalDonate, setModalDonate] = useState<boolean>(false);
   const [modalSuccessDonate, setModalSuccessDonate] = useState<boolean>(false);
   const [trigger2ndModal, setTrigger2ndModal] = useState<boolean>(false);
   const [colors, setColors] = useState();
   const [screenshot, setScreenshot] = useState<string>('');
   const [showShareImage, setShowShareImage] = useState<boolean>(true);
+  const [showShareIcon, setShowShareIcon] = useState<boolean>(false);
   const [isLiked, setIsLiked] = useState<boolean>(currentTrack?.isLiked);
 
   // const [songIndex, setSongIndex] = useState<number>(0);
@@ -77,6 +81,11 @@ export const MusicPlayer: FC<MusicProps> = ({navigation}: MusicProps) => {
     }
 
     fetchMyAPI();
+
+    // show share icon, when viewshot image is success
+    setTimeout(() => {
+      setShowShareIcon(true);
+    }, 1000);
   }, []);
 
   const RenderSongs = (item: SongsProps, index: number) => {
@@ -84,7 +93,7 @@ export const MusicPlayer: FC<MusicProps> = ({navigation}: MusicProps) => {
       <Animated.View style={styles.mainImageWrapper}>
         <View style={styles.imageWrapper}>
           {/* @ts-ignore */}
-          <Image source={{uri: item.artwork}} style={styles.musicImage} />
+          <Image source={{uri: item?.artwork}} style={styles.musicImage} />
         </View>
       </Animated.View>
     );
@@ -117,7 +126,7 @@ export const MusicPlayer: FC<MusicProps> = ({navigation}: MusicProps) => {
     navigation.goBack();
   };
 
-  const onCapture = useCallback(uri => {
+  const onCapture = useCallback((uri: React.SetStateAction<string>) => {
     setScreenshot(uri);
     setShowShareImage(false);
   }, []);
@@ -129,6 +138,12 @@ export const MusicPlayer: FC<MusicProps> = ({navigation}: MusicProps) => {
     };
 
     Share.open(shareOptions);
+
+    const payload = {
+      id: currentTrack?.id,
+      context: 'song',
+    };
+    setShareMusicToIG(payload);
   };
 
   const likeOnPress = async (isLikedSong: boolean) => {
@@ -138,6 +153,15 @@ export const MusicPlayer: FC<MusicProps> = ({navigation}: MusicProps) => {
 
     setIsLiked(!isLikedSong);
   };
+
+  const backgroundShareMusic =
+    Platform.OS === 'ios' ? colors?.background : colors?.lightMuted;
+  const backgroundShareImageMusic =
+    Platform.OS === 'ios'
+      ? colors?.secondary
+      : colors?.darkVibrant === '#000000'
+      ? colors?.darkMuted
+      : colors?.darkVibrant;
 
   return (
     <View style={styles.container}>
@@ -210,8 +234,12 @@ export const MusicPlayer: FC<MusicProps> = ({navigation}: MusicProps) => {
       </View>
       <View style={styles.footerStyle}>
         <TouchableOpacity style={styles.containerShare} onPress={shareMusic}>
-          <ShareIcon width={mvs(19)} height={mvs(19)} />
-          <Text style={styles.textShare}>{t('General.Share.Share')}</Text>
+          {showShareIcon && (
+            <>
+              <ShareIcon width={mvs(19)} height={mvs(19)} />
+              <Text style={styles.textShare}>{t('General.Share.Share')}</Text>
+            </>
+          )}
         </TouchableOpacity>
         <View style={styles.containerShare}>
           <TouchableOpacity onPress={() => likeOnPress(isLiked)}>
@@ -238,16 +266,19 @@ export const MusicPlayer: FC<MusicProps> = ({navigation}: MusicProps) => {
       </View>
 
       <Gap height={mvs(20)} />
-      {showShareImage && (
-        <ViewShot onCapture={onCapture} captureMode="mount">
+      {/* {showShareImage && ( */}
+      <ViewShot onCapture={onCapture} captureMode="continuous">
+        <View
+          style={{
+            width,
+            backgroundColor: backgroundShareMusic,
+            paddingVertical: mvs(50),
+          }}>
           <View
             style={[
               styles.containerMusic,
               {
-                backgroundColor:
-                  colors?.darkVibrant === '#000000'
-                    ? colors?.darkMuted
-                    : colors?.darkVibrant,
+                backgroundColor: backgroundShareImageMusic,
               },
             ]}>
             <Beamco2Logo />
@@ -262,8 +293,9 @@ export const MusicPlayer: FC<MusicProps> = ({navigation}: MusicProps) => {
             <Text style={styles.songTitle}>{currentTrack?.title}</Text>
             <Text style={styles.artistName}>{currentTrack?.artist}</Text>
           </View>
-        </ViewShot>
-      )}
+        </View>
+      </ViewShot>
+      {/* )} */}
 
       {/* modal */}
       <ModalDonate

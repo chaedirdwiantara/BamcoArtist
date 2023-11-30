@@ -23,3 +23,15 @@ export interface ShareLinkBodyReq {
   title: string;
   description: string;
 }
+
+export interface ShareMusicBodyReq {
+  id: number;
+  context: string;
+}
+
+export interface ShareMusicResponseType {
+  code: number;
+  data: null;
+  message: string;
+  status: number;
+}
