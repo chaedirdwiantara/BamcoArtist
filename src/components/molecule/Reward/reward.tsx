@@ -1,41 +1,34 @@
 import React from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  ViewStyle,
-} from 'react-native';
-import {Button, Circle, DottedLine, Gap} from '../../atom';
+import {View, Text, StyleSheet, ViewStyle} from 'react-native';
+import {Button, DottedLine, Gap} from '../../atom';
 import {color, font} from '../../../theme';
 import {widthResponsive} from '../../../utils';
 import {mvs} from 'react-native-size-matters';
-import {DrinkRewardIcon} from '../../../assets/icon';
+import {CoinIcon} from '../../../assets/icon';
+import WalletRewardIcon from '../../../assets/icon/WalletReward.icon';
 
 type Props = {
   points: number;
   voucherTitle: string;
-  voucherSubtitle: string;
-  voucherDesc?: string;
   voucherAvail: number;
   onPress: () => void;
   containerStyle?: ViewStyle;
   claimable: boolean;
   redeemable: boolean;
   completed: boolean;
+  freeCredit: number;
 };
 
 const VoucherReward: React.FC<Props> = ({
   points,
   voucherTitle,
-  voucherSubtitle,
-  voucherDesc,
   voucherAvail,
   onPress,
   containerStyle,
   claimable,
   redeemable,
   completed,
+  freeCredit,
 }) => {
   return (
     <View style={[styles.container, containerStyle]}>
@@ -48,20 +41,16 @@ const VoucherReward: React.FC<Props> = ({
             </View>
           )}
         </View>
-        <DrinkRewardIcon />
+        <WalletRewardIcon />
         <Gap height={3} />
-        <Text style={styles.pointsText}>{`${points} Points`}</Text>
+        <Text style={styles.pointsText}>{`${points} Credit Bonus`}</Text>
         <Text style={styles.voucherTitleText} numberOfLines={1}>
           {voucherTitle}
         </Text>
-        <Text style={styles.voucherText} numberOfLines={1}>
-          {voucherSubtitle}
-        </Text>
-        {voucherDesc && (
-          <Text style={styles.voucherDesc} numberOfLines={1}>
-            {voucherDesc}
-          </Text>
-        )}
+        <View style={styles.wrapperCoin}>
+          <CoinIcon />
+          <Text style={styles.coinText}>{freeCredit}</Text>
+        </View>
       </View>
 
       {/* Footer */}
@@ -189,6 +178,17 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     textAlign: 'right',
     color: color.Pink[200],
+  },
+  wrapperCoin: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  coinText: {
+    fontFamily: font.InterSemiBold,
+    color: color.Neutral[10],
+    fontSize: mvs(16),
+    fontWeight: '600',
+    marginLeft: widthResponsive(4),
   },
   btnClaim: {
     aspectRatio: undefined,
