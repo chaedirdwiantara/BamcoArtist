@@ -301,7 +301,7 @@ export const LiveTipping: FC<LiveTippingProps> = ({
     if (counterTipping > 0) storage.set('counterTipping', counterTipping);
   }, [counterTipping]);
 
-  const onPressCustomTipping = async (chip: number) => {
+  const onPressCustomTipping = (chip: number) => {
     // if (!isSentATip && counter > 0) {
     //   // setIsSentATip change to default
     //   setIsSentATip(false);
@@ -334,8 +334,8 @@ export const LiveTipping: FC<LiveTippingProps> = ({
     setStopSwipe(true);
 
     if (BackgroundService.isRunning()) {
-      await stopBgService();
-      await sendTipping();
+      stopBgService();
+      sendTipping();
       setCounterTipping(0);
       setCounter(0);
       getCreditCount();
@@ -588,9 +588,7 @@ export const LiveTipping: FC<LiveTippingProps> = ({
           <CustomTipping
             containerStyles={styles.customTipping}
             selectedChip={activeCredit}
-            onPress={async creditAmount =>
-              await onPressCustomTipping(creditAmount)
-            }
+            onPress={creditAmount => onPressCustomTipping(creditAmount)}
           />
         </View>
       </View>
