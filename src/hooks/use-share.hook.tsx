@@ -1,6 +1,9 @@
 import {useState} from 'react';
-import {ShareLinkBodyReq} from '../interface/share.interface';
-import {generateShareLink} from '../api/share';
+import {
+  ShareLinkBodyReq,
+  ShareMusicBodyReq,
+} from '../interface/share.interface';
+import {generateShareLink, shareMusicToIG} from '../api/share';
 import {
   AnalyticPostData,
   DetailPostData,
@@ -27,11 +30,18 @@ export const useShareHook = () => {
     }
   };
 
+  const setShareMusicToIG = async (props: ShareMusicBodyReq) => {
+    try {
+      await shareMusicToIG(props);
+    } catch (error) {}
+  };
+
   return {
     getShareLink,
     shareLink,
     successGetLink,
     setSelectedSharePost,
     selectedSharePost,
+    setShareMusicToIG,
   };
 };
