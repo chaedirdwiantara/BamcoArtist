@@ -1628,7 +1628,8 @@
       "qr": "二維碼",
       "share": "分享個人資料",
       "block": "封鎖",
-      "unblock": "解除封鎖"
+      "unblock": "解除封鎖",
+      "setting": "Setting"
     }
   },
   "ClaimReward": {

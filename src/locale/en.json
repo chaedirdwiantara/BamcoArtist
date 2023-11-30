@@ -1632,7 +1632,8 @@
       "qr": "QR Code",
       "share": "Share Profile",
       "block": "Block",
-      "unblock": "Unblock"
+      "unblock": "Unblock",
+      "setting": "Setting"
     }
   },
   "ClaimReward": {
