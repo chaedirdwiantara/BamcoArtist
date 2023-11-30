@@ -19,12 +19,14 @@ export const useIapHook = () => {
   const productId = Platform.select({
     ios: [
       'Credit_beamco_artist_100',
+      'Credit_beamco_artist_340',
       'Credit_beamco_artist_540',
       'Credit_beamco_artist_1200',
       'Credit_beamco_artist_6500',
     ],
     android: [
       'credit_beamco_artist_100',
+      'credit_beamco_artist_340',
       'credit_beamco_artist_540',
       'credit_beamco_artist_1200',
       'credit_beamco_artist_6500',
