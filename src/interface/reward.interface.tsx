@@ -36,3 +36,16 @@ export interface ProgressRewardRequestType {
   uuid: string;
   tran_type: number;
 }
+
+export type RedeemVoucherPropsType = {
+  userId: string;
+  credit: number;
+};
+
+export type RedeemVoucherResponseType = {
+  success: boolean;
+  messageTitle: string;
+  message: string;
+  responseTime: string;
+  data: null;
+};
