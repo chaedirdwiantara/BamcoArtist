@@ -39,6 +39,18 @@ export interface ProgressRewardRequestType {
   tran_type: number;
 }
 
+export interface ItemCreditRewardType {
+  creditReward: number;
+  userId: string;
+}
+export interface ProgressRewardResponseType {
+  data: ItemCreditRewardType[];
+  message: string;
+  messageTitle: string;
+  responseTime: string;
+  success: boolean;
+}
+
 export type RedeemVoucherPropsType = {
   userId: string;
   credit: number;

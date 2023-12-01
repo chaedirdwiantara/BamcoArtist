@@ -12,6 +12,7 @@ import {
   BadgeSilverIcon,
 } from '../../../assets/icon';
 import LinearGradient from 'react-native-linear-gradient';
+import {levelName} from '../../../screen/Rewards';
 
 type Props = {
   title: string;
@@ -20,7 +21,7 @@ type Props = {
   containerStyle?: ViewStyle;
   titleTxtStyle?: ViewStyle;
   captionTxtStyle?: ViewStyle;
-  badgeType: 'bronze' | 'silver' | 'gold' | 'platinum' | 'diamond';
+  badgeType: levelName;
 };
 
 const InfoCard: FC<Props> = ({

@@ -6,15 +6,16 @@ import {
   BadgeGoldMIcon,
   BadgePlatinumMIcon,
   BadgeSilverMIcon,
-  CupIcon,
+  CoinIcon,
 } from '../../../assets/icon';
 import {color, font} from '../../../theme';
 import {mvs} from 'react-native-size-matters';
 import {Gap} from '../../atom';
-import {widthResponsive} from '../../../utils';
+import {toCurrency, widthPercentage, widthResponsive} from '../../../utils';
+import {levelName} from '../../../screen/Rewards';
 
 type Props = {
-  rankTitle: 'bronze' | 'silver' | 'gold' | 'platinum' | 'diamond';
+  rankTitle: levelName;
   points: number;
 };
 
@@ -62,11 +63,13 @@ const BackgroundHeader: FC<Props> = ({rankTitle, points}) => {
       </View>
       <View style={styles.bottomStyle}>
         <View style={styles.pointStyle}>
-          <CupIcon width={18} height={18} />
+          <CoinIcon width={widthPercentage(15)} height={widthPercentage(15)} />
           <Gap width={5} />
-          <Text style={styles.primTxt}>{points}</Text>
+          <Text style={styles.primTxt}>
+            {toCurrency(points, {withFraction: false})}
+          </Text>
         </View>
-        <Text style={styles.scndTxt}>Your Loyalty Point</Text>
+        <Text style={styles.scndTxt}>Your Credit Bonus</Text>
         <Gap height={65} />
       </View>
     </ImageBackground>

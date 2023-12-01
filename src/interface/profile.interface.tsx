@@ -85,6 +85,9 @@ export type ProfileResponseData = {
     name: string;
   }[];
   isBanned: boolean;
+  rewards: {
+    credit: number;
+  };
 };
 
 export type ProfileResponseType = {

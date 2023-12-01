@@ -1,5 +1,4 @@
 import {
-  NativeModules,
   NativeScrollEvent,
   NativeSyntheticEvent,
   RefreshControl,
@@ -24,17 +23,21 @@ import BackgroundHeader from '../../components/molecule/Reward/backgroundHeader'
 import {mvs} from 'react-native-size-matters';
 import RedeemSuccessIcon from '../../assets/icon/RedeemSuccess.icon';
 
-const {StatusBarManager} = NativeModules;
-const barHeight = StatusBarManager.HEIGHT;
-
 type OnScrollEventHandler = (
   event: NativeSyntheticEvent<NativeScrollEvent>,
 ) => void;
 
+export type levelName = 'bronze' | 'silver' | 'gold' | 'platinum' | 'diamond';
+type itemLevel = {
+  name: levelName;
+  lowPoint: number;
+  highPoint: number;
+  label: string;
+};
+
 const Rewards = () => {
   const {t} = useTranslation();
-  const {dataProfile, dataCountProfile, getProfileUser, getTotalCountProfile} =
-    useProfileHook();
+  const {dataProfile, getProfileUser} = useProfileHook();
 
   const [selectedIndex, setSelectedIndex] = useState(-0);
   const [filter] = useState([
@@ -72,9 +75,68 @@ const Rewards = () => {
     setSelectedIndex(index);
   };
 
-  const onClaimVoucher = (id: number) => {
-    console.log(id, 'id');
-    setShowModal(true);
+  const calculateGamification = (): {
+    rankTitle: levelName;
+    nextMilestone: number;
+    nextLevelStage: levelName;
+    nextLabelName: string;
+    isMax: boolean;
+  } => {
+    const rewardLevel: itemLevel[] = [
+      {
+        name: 'bronze',
+        lowPoint: 0,
+        highPoint: 1000,
+        label: '1. Bronze',
+      },
+      {
+        name: 'silver',
+        lowPoint: 1001,
+        highPoint: 2000,
+        label: '2. Silver',
+      },
+      {
+        name: 'gold',
+        lowPoint: 2001,
+        highPoint: 6000,
+        label: '3. Gold',
+      },
+      {
+        name: 'platinum',
+        lowPoint: 6001,
+        highPoint: 10000,
+        label: '4. Platinum',
+      },
+      {
+        name: 'diamond',
+        lowPoint: 10001,
+        highPoint: 9999999999999,
+        label: '5. Diamond',
+      },
+    ];
+    const rewardsCredit = dataProfile?.data.rewards.credit || 0;
+    const currentLevel = rewardLevel.filter(
+      ar => rewardsCredit >= ar.lowPoint && rewardsCredit <= ar.highPoint,
+    )[0];
+    const indexCurrentLevel = rewardLevel.findIndex(
+      ar => rewardsCredit >= ar.lowPoint && rewardsCredit <= ar.highPoint,
+    );
+    const rankTitle = currentLevel.name;
+    const nextMilestone = currentLevel.highPoint;
+
+    return {
+      rankTitle,
+      nextMilestone,
+      nextLevelStage:
+        indexCurrentLevel < rewardLevel.length - 1
+          ? rewardLevel[indexCurrentLevel + 1].name
+          : rewardLevel[rewardLevel.length - 1].name,
+      nextLabelName:
+        indexCurrentLevel < rewardLevel.length - 1
+          ? rewardLevel[indexCurrentLevel + 1].label
+          : rewardLevel[rewardLevel.length - 1].label,
+      isMax: indexCurrentLevel === rewardLevel.length - 1,
+    };
   };
 
   return (
@@ -91,22 +153,43 @@ const Rewards = () => {
           />
         }>
         <View style={styles.slide}>
-          <BackgroundHeader rankTitle={'bronze'} points={1800} />
+          <BackgroundHeader
+            points={dataProfile?.data.rewards.credit || 0}
+            rankTitle={calculateGamification().rankTitle}
+          />
         </View>
 
         <Gap height={14} />
         <View style={{paddingHorizontal: widthResponsive(20)}}>
-          <PointProgress progress={1800} total={2000} nextLvl="2. Silver" />
+          <PointProgress
+            progress={dataProfile?.data.rewards.credit || 0}
+            total={calculateGamification().nextMilestone}
+            nextLvl={calculateGamification().nextLabelName}
+            isMax={calculateGamification().isMax}
+          />
         </View>
 
         <Gap height={24} />
         <View style={{paddingHorizontal: widthResponsive(20)}}>
           <InfoCard
-            title={'Silver Streamer Badge is Closer '}
-            caption={
-              'You’re 200 Points away from being Silver. Let’s get ‘em by completing more mission!'
+            title={
+              calculateGamification().isMax
+                ? 'Your Badge is Maxed Out'
+                : `${calculateGamification().nextLabelName.substring(
+                    3,
+                  )} Streamer Badge is Closer `
             }
-            badgeType={'silver'}
+            caption={
+              calculateGamification().isMax
+                ? `Congratulations! You've reached Diamond Badge Claim. Claim the rewards and be proud`
+                : `You’re ${
+                    calculateGamification().nextMilestone -
+                    (dataProfile?.data.rewards.credit || 0)
+                  } Points away from being ${calculateGamification().nextLabelName.substring(
+                    3,
+                  )}. Let’s get ‘em by completing more mission!`
+            }
+            badgeType={calculateGamification().nextLevelStage}
           />
         </View>
         <Gap height={16} />
@@ -126,7 +209,9 @@ const Rewards = () => {
           <View style={styles.containerContent}>
             {filter[selectedIndex].filterName === 'Rewards.Reward' ? (
               <View>
-                <TabOneReward onClaimVoucher={onClaimVoucher} />
+                <TabOneReward
+                  creditReward={dataProfile?.data.rewards.credit || 0}
+                />
               </View>
             ) : (
               <View>

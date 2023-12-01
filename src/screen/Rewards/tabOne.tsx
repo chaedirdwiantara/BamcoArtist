@@ -1,5 +1,5 @@
 import {FlatList, StyleSheet, View} from 'react-native';
-import React, {FC, useCallback, useEffect, useState} from 'react';
+import React, {FC, useCallback, useState} from 'react';
 import VoucherReward from '../../components/molecule/Reward/reward';
 import {widthResponsive} from '../../utils';
 import {Button, EmptyState, Gap} from '../../components';
@@ -13,10 +13,10 @@ import {RootStackParams} from '../../navigations';
 import {ItemMasterReward} from '../../interface/reward.interface';
 
 type Props = {
-  onClaimVoucher: (id: number) => void;
+  creditReward: number;
 };
 
-const TabOneReward: FC<Props> = ({onClaimVoucher}) => {
+const TabOneReward: FC<Props> = ({creditReward}) => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
   const [activeIndex, setactiveIndex] = useState<number>(0);
@@ -29,13 +29,6 @@ const TabOneReward: FC<Props> = ({onClaimVoucher}) => {
   const {data: dataRewardMaster} = queryRewardMaster();
   const {data: dataProgressReward, refetch: refetchProgressReward} =
     queryProgressReward();
-  useEffect(() => {
-    console.log(dataRewardMaster);
-  }, [dataRewardMaster]);
-
-  useEffect(() => {
-    console.log(dataProgressReward);
-  }, [dataProgressReward]);
 
   useFocusEffect(
     useCallback(() => {
@@ -94,9 +87,14 @@ const TabOneReward: FC<Props> = ({onClaimVoucher}) => {
             voucherAvail={1}
             onPress={() => goToDetailVoucher(item)}
             containerStyle={styles().voucher}
-            claimable={true}
-            redeemable={true}
-            completed={true}
+            redeemable={creditReward >= item.rewardTotal}
+            completed={
+              (dataProgressReward?.data &&
+                dataProgressReward?.data.filter(
+                  ar => ar.creditReward === item.freeCredit,
+                ).length > 0) ||
+              false
+            }
           />
         )}
         ListEmptyComponent={() => {
