@@ -224,7 +224,7 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
         }
         onScroll={handleScroll}>
         <ProfileHeader
-          // type={!ownProfile ? 'user detail' : 'profile'}
+          type={!ownProfile ? 'user detail' : 'profile'}
           avatarUri={profile.avatarUri}
           backgroundUri={profile.backgroundUri}
           fullname={profile.fullname}
@@ -234,7 +234,6 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
           iconPress={goToSetting}
           scrollEffect={scrollEffect}
           noEdit={!ownProfile}
-          backIcon={ownProfile}
           onPressImage={showImage}
           refreshing={refreshing}
           dataBadge={dataBadge?.data}
