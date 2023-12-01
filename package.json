@@ -60,7 +60,7 @@
     "react-native-size-matters": "^0.4.2",
     "react-native-svg": "^14.0.0",
     "react-native-swiper": "^1.6.0",
-    "react-native-track-player": "^4.0.1",
+    "react-native-track-player": "3.2.0",
     "react-native-ultimate-config": "^6.0.1",
     "react-native-version-check": "^3.4.7",
     "react-native-video": "^5.2.1",

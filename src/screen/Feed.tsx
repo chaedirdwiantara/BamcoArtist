@@ -141,7 +141,8 @@ const FeedScreenCopilot: React.FC = () => {
   const [toastVisible, setToastVisible] = useState<boolean>(false);
   const [showCoachmark, setShowCoachmark] = useState<boolean>(true);
 
-  const handleOnCloseModal = () => {
+  // ? HANDLE CREATE POST CHOICE
+  useEffect(() => {
     if (selectedCategory) {
       if (
         dataExclusiveContent === null &&
@@ -169,7 +170,7 @@ const FeedScreenCopilot: React.FC = () => {
         navigation.navigate('CreatePost', {audience: selectedCategory});
       }
     }
-  };
+  }, [selectedCategory]);
 
   const filterData = (item: any, index: any) => {
     setSelectedIndex(index);
@@ -497,7 +498,7 @@ const FeedScreenCopilot: React.FC = () => {
               buttonContainerStyle={{
                 paddingVertical: widthResponsive(10),
               }}
-              onModalHide={handleOnCloseModal}
+              // onModalHide={handleOnCloseModal}
             />
           )}
           <ModalConfirm

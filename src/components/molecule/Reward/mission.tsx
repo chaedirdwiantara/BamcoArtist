@@ -54,7 +54,12 @@ const Mission: React.FC<MissionProps> = ({data, onClaim, onGo}) => {
     data.amountToClaim
   }`;
   const progressRepeatable = dataProgress?.rowCount === 0 ? 0 / 1 : 1;
-  const progressTextRepeatable = `${dataProgress?.rowCount} Activity Detected`;
+  const progressTextRepeatable = `${dataProgress?.rowCount} ${
+    dataProgress?.function.includes('donation') ||
+    dataProgress?.function.includes('tipping')
+      ? 'Credit Detected'
+      : 'Activity Detected'
+  }`;
 
   const handleOnClaim = (
     dataProgress: DataListMissioProgress,
@@ -78,32 +83,39 @@ const Mission: React.FC<MissionProps> = ({data, onClaim, onGo}) => {
           </View>
         </View>
         <Gap height={12} />
-        <Progress.Bar
-          progress={progressBar}
-          width={null}
-          height={widthResponsive(11)}
-          borderWidth={0}
-          color={color.Pink[200]}
-          unfilledColor={color.Dark[300]}
-          borderRadius={4}
-          animated={false}
-          // animationType={'timing'}
-        />
-        {!dataProgress?.isClaimed ? (
-          <View style={styles.progressContainer}>
-            <Text style={styles.progressTxt}>
-              {data.taskType === 'based-reward'
-                ? progressTextRepeatable
-                : progressText}
-            </Text>
-          </View>
-        ) : (
-          <View style={styles.progressContainer}>
-            <CheckCircle2Icon width={10} height={10} />
-            <Gap width={4} />
-            <Text style={styles.progressTxt}>{'Completed'}</Text>
-          </View>
-        )}
+        <View style={styles.prgContainer}>
+          <Progress.Bar
+            progress={
+              data.taskType === 'based-reward'
+                ? progressRepeatable
+                : progressBar
+            }
+            width={null}
+            height={widthResponsive(11)}
+            borderWidth={0}
+            color={color.Pink[200]}
+            unfilledColor={color.Dark[300]}
+            borderRadius={4}
+            animated={false}
+            style={{width: '100%'}}
+            // animationType={'timing'}
+          />
+          {!dataProgress?.isClaimed ? (
+            <View style={styles.progressContainer}>
+              <Text style={styles.progressTxt}>
+                {data.taskType === 'based-reward'
+                  ? progressTextRepeatable
+                  : progressText}
+              </Text>
+            </View>
+          ) : (
+            <View style={styles.progressContainer}>
+              <CheckCircle2Icon width={10} height={10} />
+              <Gap width={4} />
+              <Text style={styles.progressTxt}>{'Completed'}</Text>
+            </View>
+          )}
+        </View>
       </View>
 
       {!dataProgress?.isClaimed && (
@@ -143,12 +155,13 @@ const styles = StyleSheet.create({
     position: 'relative',
     justifyContent: 'space-between',
   },
+  prgContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'relative',
+  },
   progressContainer: {
     position: 'absolute',
-    top: widthResponsive(28),
-    left: 0,
-    right: 0,
-    bottom: 0,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
