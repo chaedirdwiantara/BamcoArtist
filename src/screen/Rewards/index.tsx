@@ -2,12 +2,13 @@ import {
   NativeModules,
   NativeScrollEvent,
   NativeSyntheticEvent,
+  RefreshControl,
   ScrollView,
   StyleSheet,
   Text,
   View,
 } from 'react-native';
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {color, font} from '../../theme';
 import {widthResponsive} from '../../utils';
 import {Button, Gap, ModalCustom, TabFilter} from '../../components';
@@ -42,12 +43,24 @@ const Rewards = () => {
   ]);
   const [scrollEffect, setScrollEffect] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [refreshing, setRefreshing] = useState<boolean>(false);
 
   useFocusEffect(
     useCallback(() => {
       getProfileUser();
     }, []),
   );
+
+  useEffect(() => {
+    async function setRefreshDataMain() {
+      if (refreshing) {
+        await getProfileUser();
+        setRefreshing(false);
+      }
+    }
+
+    setRefreshDataMain();
+  }, [refreshing]);
 
   const handleScroll: OnScrollEventHandler = event => {
     let offsetY = event.nativeEvent.contentOffset.y;
@@ -69,7 +82,14 @@ const Rewards = () => {
       <ScrollView
         showsVerticalScrollIndicator={false}
         scrollEventThrottle={16}
-        onScroll={handleScroll}>
+        onScroll={handleScroll}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={() => setRefreshing(true)}
+            tintColor={'transparent'}
+          />
+        }>
         <View style={styles.slide}>
           <BackgroundHeader rankTitle={'bronze'} points={1800} />
         </View>
@@ -110,7 +130,10 @@ const Rewards = () => {
               </View>
             ) : (
               <View>
-                <TabTwoRewards />
+                <TabTwoRewards
+                  refreshing={refreshing}
+                  setRefreshing={setRefreshing}
+                />
               </View>
             )}
           </View>

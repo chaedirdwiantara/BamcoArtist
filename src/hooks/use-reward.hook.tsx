@@ -1,9 +1,33 @@
 import {useQuery} from 'react-query';
-import {masterReward, progressReward} from '../api/reward.api';
+import {
+  getMissionMasterEp,
+  getMissionProgressEp,
+  masterReward,
+  progressReward,
+  setClaimMissionEp,
+} from '../api/reward.api';
 import {profileStorage} from './use-storage.hook';
+import {GetMissionProgressParams} from '../interface/reward.interface';
 
 export const useRewardHook = () => {
   const uuid = profileStorage()?.uuid;
+
+  const useGetMissionMaster = () => {
+    return useQuery(['reward/get-mission-master'], () => getMissionMasterEp());
+  };
+
+  const useGetMissionProgress = (param: GetMissionProgressParams) => {
+    return useQuery(
+      ['reward/get-mission-progress', param.task_type, param.function],
+      () => getMissionProgressEp(param),
+    );
+  };
+
+  const useSetClaimMission = (functionTxt: string | undefined) => {
+    return useQuery(['reward/post-mission-claim'], () => {
+      functionTxt !== undefined && setClaimMissionEp(functionTxt);
+    });
+  };
 
   const queryRewardMaster = () =>
     useQuery({
@@ -21,5 +45,8 @@ export const useRewardHook = () => {
   return {
     queryRewardMaster,
     queryProgressReward,
+    useGetMissionMaster,
+    useGetMissionProgress,
+    useSetClaimMission,
   };
 };
