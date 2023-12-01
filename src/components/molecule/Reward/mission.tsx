@@ -54,7 +54,12 @@ const Mission: React.FC<MissionProps> = ({data, onClaim, onGo}) => {
     data.amountToClaim
   }`;
   const progressRepeatable = dataProgress?.rowCount === 0 ? 0 / 1 : 1;
-  const progressTextRepeatable = `${dataProgress?.rowCount} Activity Detected`;
+  const progressTextRepeatable = `${dataProgress?.rowCount} ${
+    dataProgress?.function.includes('donation') ||
+    dataProgress?.function.includes('tipping')
+      ? 'Credit Detected'
+      : 'Activity Detected'
+  }`;
 
   const handleOnClaim = (
     dataProgress: DataListMissioProgress,
