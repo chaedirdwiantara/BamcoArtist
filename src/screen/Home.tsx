@@ -404,7 +404,8 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
     });
   };
 
-  const handleOnModalHide = () => {
+  // ? HANDLE SHORTCUT CREATE POST CHOICE
+  useEffect(() => {
     if (postChoice === 'choiceA') {
       uriVideo && setUriVideo(null);
       setPostChoice(undefined);
@@ -423,7 +424,7 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
         navigation.navigate('CreatePost', {audience: 'Feed.Exclusive'});
       }
     }
-  };
+  }, [postChoice]);
 
   const handleMaybeLater = () => {
     setShowModalPost({
@@ -720,7 +721,7 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
         choiceA={'Post as Public Content'}
         choiceB={'Post as Exclusive Content'}
         choiceOnPress={handleChoiceOnPress}
-        onModalHide={handleOnModalHide}
+        // onModalHide={handleOnModalHide}
       />
 
       <ModalConfirm
