@@ -1,6 +1,6 @@
 import React from 'react';
-import {View, Text, StyleSheet, ViewStyle} from 'react-native';
-import {Button, DottedLine, Gap} from '../../atom';
+import {View, Text, StyleSheet, ViewStyle, Platform} from 'react-native';
+import {Button, DottedLineAndroid, DottedLineIos, Gap} from '../../atom';
 import {color, font} from '../../../theme';
 import {widthResponsive} from '../../../utils';
 import {mvs} from 'react-native-size-matters';
@@ -56,7 +56,11 @@ const VoucherReward: React.FC<Props> = ({
       {/* Footer */}
       <View style={styles.footerContainer}>
         <View style={styles.dottedContainer}>
-          <DottedLine color={color.Dark[11]} />
+          {Platform.OS === 'ios' ? (
+            <DottedLineIos color={color.Dark[10]} />
+          ) : (
+            <DottedLineAndroid color={color.Dark[10]} />
+          )}
         </View>
         <View style={styles.footer}>
           {claimable ? (
