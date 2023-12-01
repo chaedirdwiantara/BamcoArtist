@@ -5,6 +5,7 @@ import {
   MasterRewardResponseType,
   PaginationType,
   ProgressRewardRequestType,
+  ProgressRewardResponseType,
   RedeemVoucherPropsType,
   RedeemVoucherResponseType,
   SetClaimMission,
@@ -25,8 +26,8 @@ export const masterReward = async (
 
 export const progressReward = async (
   props: ProgressRewardRequestType,
-): Promise<any> => {
-  const {data} = await SsuAPI().request<any>({
+): Promise<ProgressRewardResponseType> => {
+  const {data} = await SsuAPI().request<ProgressRewardResponseType>({
     url: '/musician-app/rewards/progress',
     method: 'GET',
     params: props,
