@@ -13,7 +13,6 @@ type Props = {
   voucherAvail: number;
   onPress: () => void;
   containerStyle?: ViewStyle;
-  claimable: boolean;
   redeemable: boolean;
   completed: boolean;
   freeCredit: number;
@@ -25,7 +24,6 @@ const VoucherReward: React.FC<Props> = ({
   voucherAvail,
   onPress,
   containerStyle,
-  claimable,
   redeemable,
   completed,
   freeCredit,
@@ -63,31 +61,15 @@ const VoucherReward: React.FC<Props> = ({
           )}
         </View>
         <View style={styles.footer}>
-          {claimable ? (
-            <Button
-              label={'Claim Voucher'}
-              containerStyles={styles.btnClaim}
-              textStyles={styles.textButton}
-              onPress={onPress}
-            />
-          ) : redeemable ? (
-            <Button
-              label={'Redeem or Share'}
-              containerStyles={styles.btnClaim}
-              textStyles={styles.textButton}
-              onPress={onPress}
-            />
-          ) : completed ? (
-            <View style={{paddingVertical: widthResponsive(4)}}>
-              <Text style={styles.footerText}>Redeemed</Text>
-            </View>
-          ) : (
-            <View style={{paddingVertical: widthResponsive(4)}}>
-              <Text style={styles.footerText} numberOfLines={1}>
-                Need More Pts
-              </Text>
-            </View>
-          )}
+          <Button
+            label={
+              redeemable ? 'Redeem' : completed ? 'Redeemed' : 'Need More Pts'
+            }
+            containerStyles={redeemable ? styles.btnClaim : styles.btnBorder}
+            textStyles={redeemable ? styles.textButton : styles.footerText}
+            disabled={redeemable ? false : true}
+            onPress={onPress}
+          />
         </View>
       </View>
     </View>
@@ -198,6 +180,13 @@ const styles = StyleSheet.create({
     aspectRatio: undefined,
     width: '100%',
     backgroundColor: color.Pink[200],
+    paddingVertical: widthResponsive(4),
+  },
+  btnBorder: {
+    aspectRatio: undefined,
+    width: '100%',
+    backgroundColor: 'transparent',
+    borderWidth: 0,
     paddingVertical: widthResponsive(4),
   },
   textButton: {

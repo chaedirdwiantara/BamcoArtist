@@ -10,6 +10,7 @@ type Props = {
   progress: number;
   total: number;
   nextLvl: string;
+  isMax: boolean;
   containerStyle?: ViewStyle;
 };
 
@@ -17,15 +18,15 @@ const PointProgress: FC<Props> = ({
   progress,
   total,
   nextLvl,
+  isMax,
   containerStyle,
 }) => {
-  const progressBar = progress / total;
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, containerStyle]}>
       <Text style={styles.primerTxt}>Current Loyalty Points</Text>
       <Gap height={8} />
       <Progress.Bar
-        progress={progressBar}
+        progress={isMax ? 1 : progress / total}
         width={null}
         height={widthResponsive(8)}
         borderWidth={0}
@@ -37,13 +38,21 @@ const PointProgress: FC<Props> = ({
       />
       <Gap height={8} />
       <View style={styles.descStyle}>
-        <Text style={styles.primerTxt}>
-          {`Points ${progress}`}
-          <Text style={styles.scndTxt}>{`/${total}`}</Text>
-        </Text>
-        <Text style={styles.primerTxt}>
-          Next lvl: <Text style={styles.scndTxt}>{nextLvl}</Text>
-        </Text>
+        {isMax ? (
+          <Text style={styles.primerTxt}>{`Credit Bonus ${progress}`}</Text>
+        ) : (
+          <Text style={styles.primerTxt}>
+            {`Points ${progress}`}
+            <Text style={styles.scndTxt}>{`/${total}`}</Text>
+          </Text>
+        )}
+        {isMax ? (
+          <Text style={styles.primerTxt}>{`Lvl. Maxed`}</Text>
+        ) : (
+          <Text style={styles.primerTxt}>
+            Next lvl: {<Text style={styles.scndTxt}>{nextLvl}</Text>}
+          </Text>
+        )}
       </View>
     </View>
   );
