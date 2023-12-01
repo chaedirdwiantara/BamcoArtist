@@ -49,6 +49,7 @@ import {ModalConfirm} from './Modal/ModalConfirm';
 import {ModalCustom} from './Modal/ModalCustom';
 import {ModalDonate} from './Modal/ModalDonate';
 import {ModalImagePicker} from './Modal/ModalImagePicker';
+import {ModalInfoSendGift} from './Modal/ModalInfoSendGift';
 import {ModalShare} from './Modal/ModalShare';
 import {ModalSuccess} from './Modal/ModalSuccess';
 import {ModalSuccessDonate} from './Modal/ModalSuccessDonate';
@@ -141,6 +142,7 @@ export {
   ModalCustom,
   ModalDonate,
   ModalImagePicker,
+  ModalInfoSendGift,
   ModalShare,
   ModalSuccess,
   ModalSuccessDonate,

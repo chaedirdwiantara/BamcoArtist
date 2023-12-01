@@ -2,6 +2,8 @@ import {
   MasterRewardResponseType,
   PaginationType,
   ProgressRewardRequestType,
+  RedeemVoucherPropsType,
+  RedeemVoucherResponseType,
 } from '../interface/reward.interface';
 import SsuAPI from './baseRinjani';
 
@@ -24,6 +26,18 @@ export const progressReward = async (
     url: '/musician-app/rewards/progress',
     method: 'GET',
     params: props,
+  });
+
+  return data;
+};
+
+export const redeemRewards = async (
+  props: RedeemVoucherPropsType,
+): Promise<RedeemVoucherResponseType> => {
+  const {data} = await SsuAPI().request<RedeemVoucherResponseType>({
+    url: '/musician-app/rewards/claim',
+    method: 'POST',
+    data: props,
   });
 
   return data;

@@ -618,7 +618,22 @@
   "Rewards": {
     "Title": "Rewards",
     "Reward": "Rewards",
-    "Mission": "Mission"
+    "Mission": "Mission",
+    "DetailVoucher": {
+      "QuotaLeft": "Quota Left",
+      "RedeemRewards": "Redeem Rewards",
+      "Expired": "Expired",
+      "Redeemed": "Redeemed",
+      "RewardAchievement": "Reward Achievement",
+      "ModalSuccess": {
+        "Title": "Congrats! {{credit}} Credits have been claimed!",
+        "Subtitle": "Collect more rewards and watch your earning grows!"
+      },
+      "ModalFailed": {
+        "Title": "Your Rewards Cannot be Redeemed",
+        "Subtitle": "There has been a problem redeeming your credits. Please check the availability and try to redeem it again."
+      }
+    }
   },
   "Musician": {
     "Label": {
