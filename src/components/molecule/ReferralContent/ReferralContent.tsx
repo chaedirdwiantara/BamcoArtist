@@ -17,6 +17,7 @@ import {color} from '../../../theme';
 import {mvs} from 'react-native-size-matters';
 import ReferralQRSuccessImage from '../../../assets/image/ReferralQRSuccess.image';
 import SigninIcon from '../../../assets/icon/Signin.icon';
+import {ModalConfirm} from '../Modal/ModalConfirm';
 
 interface ReferralContentProps {
   containerStyle?: ViewStyle;
@@ -38,6 +39,7 @@ interface ReferralContentProps {
   setIsScanFailed: (value: boolean) => void;
   isManualEnter: boolean;
   setIsManualEnter: (value: boolean) => void;
+  isLoading: boolean;
 }
 
 interface ActivatedProps {
@@ -89,10 +91,11 @@ export const ReferralContent: React.FC<ReferralContentProps> = ({
   setIsScanFailed,
   isManualEnter,
   setIsManualEnter,
+  isLoading,
 }) => {
   const {t} = useTranslation();
   const [focusInput, setFocusInput] = useState<string | null>(null);
-  const [isFocusInput, setIsFocusInput] = useState<boolean>(false);
+  const [showModalFailed, setShowModalFailed] = useState<boolean>(false);
 
   // Camera
   const device = useCameraDevice('back');
@@ -100,49 +103,43 @@ export const ReferralContent: React.FC<ReferralContentProps> = ({
   // Camera Handler
   async function getPermission() {
     const permission = await Camera.requestCameraPermission();
-
     if (permission === 'denied') {
       await Linking.openSettings();
+    } else {
+      setIsScanning(true);
+      setIsManualEnter(false);
     }
   }
 
   useEffect(() => {
-    if (isScanning) {
-      getPermission();
+    if (!isLoading) {
+      if (isValidRef) {
+        setIsScanning(false);
+        setIsScanSuccess(isValidRef);
+      } else if (!isValidRef && isScanning) {
+        setShowModalFailed(true);
+        setIsScanned(false);
+      }
     }
-  }, [isScanning]);
-
-  useEffect(() => {
-    if (isValidRef) {
-      setIsScanSuccess(isValidRef);
-    } else if (!isValidRef && isScanning) {
-      setIsScanFailed(true);
-    }
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isValidRef]);
-
-  useEffect(() => {
-    if (onPress && refCode !== '' && isScanning) {
-      onPress(refCode);
-    }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [refCode]);
+  }, [isValidRef, isScanned, isLoading]);
 
   const codeScanner = useCodeScanner({
     codeTypes: ['qr', 'ean-13'],
     onCodeScanned: codes => {
       if (codes.length > 0 && isScanned === false && codes[0].value) {
+        const username = codes[0]?.value.split('=')[1];
+
+        setRefCode(username);
         setIsScanned(true);
-        setRefCode(codes[0].value.split('=')[1]);
+        // hit API when modal failed doesn't appear
+        if (!showModalFailed && onPress) onPress(username);
       }
     },
   });
 
   const handleScanning = () => {
-    setIsScanning(true);
-    setIsManualEnter(false);
+    getPermission();
   };
 
   const handleManualEnter = () => {
@@ -210,11 +207,9 @@ export const ReferralContent: React.FC<ReferralContentProps> = ({
             borderColor={Color.Pink.linear}
             onChangeText={(newText: string) => setRefCode(newText)}
             onFocus={() => {
-              setIsFocusInput(true);
               handleFocusInput('refcode');
             }}
             onBlur={() => {
-              setIsFocusInput(false);
               handleFocusInput(null);
             }}
             isFocus={focusInput === 'refcode'}
@@ -283,6 +278,16 @@ export const ReferralContent: React.FC<ReferralContentProps> = ({
           )}
         </View>
       </View>
+
+      <ModalConfirm
+        modalVisible={showModalFailed}
+        oneButton={true}
+        title={t('Setting.ReferralQR.ScanFailed.Title') || ''}
+        subtitle={t('Setting.ReferralQR.ScanFailed.Desc')}
+        yesText={t('General.Dismiss') || ''}
+        onPressOk={() => setShowModalFailed(false)}
+        subtitleStyles={{fontSize: mvs(13)}}
+      />
     </View>
   );
 };
