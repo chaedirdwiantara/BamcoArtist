@@ -1,45 +1,80 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import * as Progress from 'react-native-progress';
-import {CheckBoxIcon, CheckCircle2Icon, CupIcon} from '../../../assets/icon';
+import {
+  CheckBoxIcon,
+  CheckCircle2Icon,
+  CoinIcon,
+  CupIcon,
+} from '../../../assets/icon';
 import {widthResponsive} from '../../../utils';
 import {color, font} from '../../../theme';
 import {mvs} from 'react-native-size-matters';
 import {Button, Gap} from '../../atom';
+import {
+  DataListMissioProgress,
+  DataMissionMaster,
+} from '../../../interface/reward.interface';
+import {useRewardHook} from '../../../hooks/use-reward.hook';
 
 interface MissionProps {
-  progress: number; // Range from 0 to 1
-  total: number;
-  missionTitle: string;
-  onClaim: () => void;
+  data: DataMissionMaster;
+  onClaim: (rewardCount: number, data: DataMissionMaster) => void;
   onGo: () => void;
-  isClaimable: boolean;
-  isCompleted: boolean;
-  rewardCount: number;
 }
 
-const Mission: React.FC<MissionProps> = ({
-  progress,
-  total,
-  missionTitle,
-  onClaim,
-  onGo,
-  isClaimable,
-  isCompleted,
-  rewardCount,
-}) => {
-  const progressBar = progress / total;
-  const progressText = `${progress}/${total}`;
+const Mission: React.FC<MissionProps> = ({data, onClaim, onGo}) => {
+  const {useGetMissionProgress} = useRewardHook();
+  const [dataProgress, setDataProgress] = useState<DataListMissioProgress>();
+
+  const {
+    data: dataMissionPrg,
+    refetch: refetchMissionPrg,
+    isLoading: isLoadingMissionPrg,
+    isRefetching: isRefetchingMissionPrg,
+  } = useGetMissionProgress({
+    task_type: data.taskType,
+    function: data.function,
+  });
+
+  useEffect(() => {
+    refetchMissionPrg();
+  }, [data]);
+
+  useEffect(() => {
+    if (dataMissionPrg?.data) {
+      setDataProgress(dataMissionPrg.data);
+    }
+  }, [dataMissionPrg]);
+
+  const progressBar = dataProgress
+    ? dataProgress?.rowCount / data.amountToClaim
+    : 0 / data.amountToClaim;
+  const progressText = `${dataProgress ? dataProgress?.rowCount : 0}/${
+    data.amountToClaim
+  }`;
+  const progressRepeatable = dataProgress?.rowCount === 0 ? 0 / 1 : 1;
+  const progressTextRepeatable = `${dataProgress?.rowCount} Activity Detected`;
+
+  const handleOnClaim = (
+    dataProgress: DataListMissioProgress,
+    data: DataMissionMaster,
+  ) => {
+    if (data.taskType !== 'based-reward') {
+      setDataProgress({...dataProgress, isClaimed: true});
+    }
+    onClaim(dataProgress?.sumLoyaltyPoints!, data);
+  };
 
   return (
     <View style={styles.voteTopContainer}>
       <View style={styles.progressBarContainer}>
         <View style={styles.captionContainer}>
-          <Text style={styles.titleTxt}>{missionTitle}</Text>
+          <Text style={styles.titleTxt}>{data.taskName}</Text>
           <View style={styles.rewardCountContainer}>
-            <Text style={styles.rewardCountTxt}>{rewardCount}</Text>
+            <Text style={styles.rewardCountTxt}>{data.rewards}</Text>
             <Gap width={3} />
-            <CupIcon />
+            <CoinIcon />
           </View>
         </View>
         <Gap height={12} />
@@ -51,12 +86,16 @@ const Mission: React.FC<MissionProps> = ({
           color={color.Pink[200]}
           unfilledColor={color.Dark[300]}
           borderRadius={4}
-          animated={true}
-          animationType={'timing'}
+          animated={false}
+          // animationType={'timing'}
         />
-        {!isCompleted ? (
+        {!dataProgress?.isClaimed ? (
           <View style={styles.progressContainer}>
-            <Text style={styles.progressTxt}>{progressText}</Text>
+            <Text style={styles.progressTxt}>
+              {data.taskType === 'based-reward'
+                ? progressTextRepeatable
+                : progressText}
+            </Text>
           </View>
         ) : (
           <View style={styles.progressContainer}>
@@ -67,15 +106,15 @@ const Mission: React.FC<MissionProps> = ({
         )}
       </View>
 
-      {!isCompleted && (
+      {!dataProgress?.isClaimed && (
         <View style={styles.btnContainer}>
           <Gap width={16} />
-          {isClaimable ? (
+          {dataProgress?.isClaimable ? (
             <Button
               label={'Claim'}
               containerStyles={styles.btnClaim}
               textStyles={styles.textButton}
-              onPress={onClaim}
+              onPress={() => handleOnClaim(dataProgress, data)}
             />
           ) : (
             <Button
