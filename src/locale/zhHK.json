@@ -653,22 +653,22 @@
     "EmptyStateFans": "藝術家沒有任何粉絲。"
   },
   "Rewards": {
-    "Title": "Rewards",
-    "Reward": "Rewards",
-    "Mission": "Mission",
+    "Title": "獎勵",
+    "Reward": "獎勵",
+    "Mission": "任務",
     "DetailVoucher": {
-      "QuotaLeft": "Quota Left",
-      "RedeemRewards": "Redeem Rewards",
-      "Expired": "Expired",
-      "Redeemed": "Redeemed",
-      "RewardAchievement": "Reward Achievement",
+      "QuotaLeft": "剩餘額度",
+      "RedeemRewards": "兌換獎勵",
+      "Expired": "已過期",
+      "Redeemed": "已兌換",
+      "RewardAchievement": "獎勵成就",
       "ModalSuccess": {
-        "Title": "Your Voucher has been sent!",
-        "Subtitle": "Thanks for sharing happiness with other fans and support the community"
+        "Title": "恭喜！已領取{{credit}}積分！",
+        "Subtitle": "收集更多獎勵，看著你的收入增長吧！"
       },
       "ModalFailed": {
-        "Title": "Your Rewards Cannot be Redeemed",
-        "Subtitle": "There has been a problem redeeming your credits. Please check the availability and try to redeem it again."
+        "Title": "你的獎勵無法兌換",
+        "Subtitle": "兌換你的積分時出現問題。請檢查可用性，然後重試兌換。"
       }
     }
   },
