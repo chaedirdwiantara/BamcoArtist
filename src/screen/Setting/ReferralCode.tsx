@@ -4,8 +4,6 @@ import {
   Platform,
   ScrollView,
   StyleSheet,
-  Text,
-  TouchableOpacity,
   View,
 } from 'react-native';
 import {useTranslation} from 'react-i18next';
@@ -22,26 +20,22 @@ import Color from '../../theme/Color';
 import {ArrowLeftIcon} from '../../assets/icon';
 import {RootStackParams} from '../../navigations';
 import {useProfileHook} from '../../hooks/use-profile.hook';
-import {
-  heightPercentage,
-  width,
-  widthPercentage,
-  widthResponsive,
-} from '../../utils';
-import {color, typography} from '../../theme';
+import {heightPercentage, width, widthPercentage} from '../../utils';
+import {color} from '../../theme';
 import {mvs} from 'react-native-size-matters';
 import {userProfile} from '../../store/userProfile.store';
+import {KeyboardShift} from '../../components/molecule/KeyboardShift';
 
 export const ReferralCodeSetting: React.FC = () => {
   const {t} = useTranslation();
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
-  const {isValidReferral, errorMsg, applyReferralUser} = useProfileHook();
+  const {isValidReferral, errorMsg, applyReferralUser, isLoading} =
+    useProfileHook();
 
   const {profileStore} = userProfile();
 
   // Refferal Content
-  const [isScanFailed, setIsScanFailed] = useState<boolean>(false);
   const [refCode, setRefCode] = useState<string>('');
   const [isScanning, setIsScanning] = useState<boolean>(false);
   const [isScanSuccess, setIsScanSuccess] = useState<boolean>(false);
@@ -62,19 +56,12 @@ export const ReferralCodeSetting: React.FC = () => {
     } else setIsScanSuccess(false);
   }, [profileStore]);
 
-  const handleSkipFailed = () => {
-    setIsScanFailed(false);
-    setIsScanning(true);
-    setIsScanned(false);
-    setRefCode('');
-  };
-
   const [selectedIndex, setSelectedIndex] = useState(-0);
   const filter = [
     {filterName: t('Setting.Referral.ReferFriend.Title')},
     {
       filterName:
-        refCode !== ''
+        !isScanning && refCode !== ''
           ? t('Setting.Referral.ReferUsed.Title')
           : t('Setting.Referral.UseRefer.Title'),
     },
@@ -96,93 +83,74 @@ export const ReferralCodeSetting: React.FC = () => {
   };
 
   return (
-    <View style={styles.root}>
-      {isScanFailed && !isScanSuccess ? (
-        <View style={styles.backgroundFailed}>
-          <View style={styles.containerFailed}>
-            <Text style={[typography.Heading6, styles.titleStart]}>
-              {t('Setting.ReferralQR.ScanFailed.Title')}
-            </Text>
-            <Text style={[typography.Body1, styles.titleStart]}>
-              {t('Setting.ReferralQR.ScanFailed.Desc')}
-            </Text>
-            <TouchableOpacity onPress={handleSkipFailed}>
-              <Text style={[typography.Body2, styles.titleEnd]}>
-                {t('Setting.ReferralQR.ScanFailed.Btn')}
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      ) : (
-        ''
-      )}
+    <KeyboardShift>
+      <View style={styles.root}>
+        <TopNavigation.Type1
+          title={t('Setting.Referral.Title')}
+          leftIcon={<ArrowLeftIcon />}
+          itemStrokeColor={Color.Neutral[10]}
+          leftIconAction={onPressGoBack}
+          containerStyles={{
+            marginBottom: heightPercentage(15),
+            paddingHorizontal: widthPercentage(10),
+          }}
+        />
 
-      <TopNavigation.Type1
-        title={t('Setting.Referral.Title')}
-        leftIcon={<ArrowLeftIcon />}
-        itemStrokeColor={Color.Neutral[10]}
-        leftIconAction={onPressGoBack}
-        containerStyles={{
-          marginBottom: heightPercentage(15),
-          paddingHorizontal: widthPercentage(10),
-        }}
-      />
-
-      {profileStore && (
-        <KeyboardAvoidingView
-          behavior={'padding'}
-          keyboardVerticalOffset={Platform.OS === 'ios' ? 100 : 0}>
-          <View>
-            <TabFilter.Type1
-              filterData={filter}
-              onPress={filterData}
-              selectedIndex={selectedIndex}
-              TouchableStyle={{width: width * 0.45}}
-              translation={true}
-            />
-
-            {filter[selectedIndex].filterName ===
-            t('Setting.Referral.ReferFriend.Title') ? (
-              <ReferAFriend
-                username={profileStore.data.username}
-                handleWebview={handleWebview}
+        {profileStore && (
+          <KeyboardAvoidingView
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+            <View>
+              <TabFilter.Type1
+                filterData={filter}
+                onPress={filterData}
+                selectedIndex={selectedIndex}
+                TouchableStyle={{width: width * 0.45}}
+                translation={true}
               />
-            ) : (
-              <ScrollView
-                decelerationRate="fast"
-                showsVerticalScrollIndicator={false}
-                keyboardShouldPersistTaps="handled">
-                <View
-                  style={{
-                    alignItems: 'center',
-                    paddingTop: 40,
-                  }}>
-                  <UseReferralContent
-                    onPress={onApplyReferral}
-                    isError={errorMsg !== ''}
-                    errorMsg={errorMsg}
-                    isValidRef={isValidReferral}
-                    isScanFailed={isScanFailed}
-                    setIsScanFailed={setIsScanFailed}
-                    refCode={refCode}
-                    setRefCode={setRefCode}
-                    isScanning={isScanning}
-                    setIsScanning={setIsScanning}
-                    isScanSuccess={isScanSuccess}
-                    setIsScanSuccess={setIsScanSuccess}
-                    isScanned={isScanned}
-                    setIsScanned={setIsScanned}
-                    isManualEnter={isManualEnter}
-                    setIsManualEnter={setIsManualEnter}
-                    referralFrom={profileStore.data.referralFrom}
-                  />
-                </View>
-              </ScrollView>
-            )}
-          </View>
-        </KeyboardAvoidingView>
-      )}
-    </View>
+
+              {filter[selectedIndex].filterName ===
+              t('Setting.Referral.ReferFriend.Title') ? (
+                <ReferAFriend
+                  username={profileStore.data.username}
+                  handleWebview={handleWebview}
+                />
+              ) : (
+                <ScrollView
+                  decelerationRate="fast"
+                  showsVerticalScrollIndicator={false}
+                  keyboardShouldPersistTaps="handled">
+                  <View
+                    style={{
+                      flex: 1,
+                      alignItems: 'center',
+                      paddingTop: 40,
+                    }}>
+                    <UseReferralContent
+                      isLoading={isLoading}
+                      onPress={onApplyReferral}
+                      isError={errorMsg !== ''}
+                      errorMsg={errorMsg}
+                      isValidRef={isValidReferral}
+                      refCode={refCode}
+                      setRefCode={setRefCode}
+                      isScanning={isScanning}
+                      setIsScanning={setIsScanning}
+                      isScanSuccess={isScanSuccess}
+                      setIsScanSuccess={setIsScanSuccess}
+                      isScanned={isScanned}
+                      setIsScanned={setIsScanned}
+                      isManualEnter={isManualEnter}
+                      setIsManualEnter={setIsManualEnter}
+                      referralFrom={profileStore.data.referralFrom}
+                    />
+                  </View>
+                </ScrollView>
+              )}
+            </View>
+          </KeyboardAvoidingView>
+        )}
+      </View>
+    </KeyboardShift>
   );
 };
 
@@ -217,8 +185,5 @@ const styles = StyleSheet.create({
     marginTop: 220,
     backgroundColor: color.Dark[800],
     padding: 24,
-  },
-  containerScrollView: {
-    height: '100%',
   },
 });

@@ -1,5 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import {Text, View, ViewStyle, Linking, TouchableOpacity} from 'react-native';
+import {
+  Text,
+  View,
+  ViewStyle,
+  Linking,
+  TouchableOpacity,
+  Keyboard,
+} from 'react-native';
 import {
   Camera,
   useCameraDevice,
@@ -16,6 +23,7 @@ import {color} from '../../../theme';
 import {mvs} from 'react-native-size-matters';
 import SigninIcon from '../../../assets/icon/Signin.icon';
 import styles from '../ReferralContent/styles';
+import {ModalConfirm} from '../Modal/ModalConfirm';
 
 interface UseReferralContentProps {
   containerStyle?: ViewStyle;
@@ -33,10 +41,9 @@ interface UseReferralContentProps {
   setIsScanSuccess: (value: boolean) => void;
   isScanned: boolean;
   setIsScanned: (value: boolean) => void;
-  isScanFailed: boolean;
-  setIsScanFailed: (value: boolean) => void;
   isManualEnter: boolean;
   setIsManualEnter: (value: boolean) => void;
+  isLoading: boolean;
 }
 
 interface ActivatedProps {
@@ -88,13 +95,13 @@ export const UseReferralContent: React.FC<UseReferralContentProps> = ({
   setIsScanSuccess,
   isScanned,
   setIsScanned,
-  isScanFailed,
-  setIsScanFailed,
   isManualEnter,
   setIsManualEnter,
+  isLoading,
 }) => {
   const {t} = useTranslation();
   const [focusInput, setFocusInput] = useState<string | null>(null);
+  const [showModalFailed, setShowModalFailed] = useState<boolean>(false);
 
   // Camera
   const device = useCameraDevice('back');
@@ -102,48 +109,43 @@ export const UseReferralContent: React.FC<UseReferralContentProps> = ({
   // Camera Handler
   async function getPermission() {
     const permission = await Camera.requestCameraPermission();
-
     if (permission === 'denied') {
       await Linking.openSettings();
+    } else {
+      setIsScanning(true);
+      setIsManualEnter(false);
     }
   }
 
   useEffect(() => {
-    if (isScanning) {
-      getPermission();
+    if (!isLoading) {
+      if (isValidRef) {
+        setIsScanning(false);
+        setIsScanSuccess(isValidRef);
+      } else if (!isValidRef && isScanning) {
+        setShowModalFailed(true);
+        setIsScanned(false);
+      }
     }
-  }, [isScanning]);
-
-  useEffect(() => {
-    if (isValidRef) {
-      setIsScanSuccess(isValidRef);
-    } else if (!isValidRef && isScanning) {
-      setIsScanFailed(true);
-    }
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isValidRef]);
+  }, [isValidRef, isScanned, isLoading]);
 
   const codeScanner = useCodeScanner({
     codeTypes: ['qr', 'ean-13'],
     onCodeScanned: codes => {
-      if (codes.length > 0 && isScanned === false) {
-        // TODO: handle scanner referral
+      if (codes.length > 0 && isScanned === false && codes[0].value) {
+        const username = codes[0]?.value.split('=')[1];
+
+        setRefCode(username);
+        setIsScanned(true);
+        // hit API when modal failed doesn't appear
+        if (!showModalFailed && onPress) onPress(username);
       }
     },
   });
 
-  useEffect(() => {
-    if (onPress && isScanning) {
-      onPress(refCode);
-    }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [refCode]);
-
   const handleScanning = () => {
-    setIsScanning(true);
-    setIsManualEnter(false);
+    getPermission();
   };
 
   const handleManualEnter = () => {
@@ -159,6 +161,7 @@ export const UseReferralContent: React.FC<UseReferralContentProps> = ({
     return (
       <TouchableOpacity
         onPress={() => {
+          Keyboard.dismiss();
           onPress && onPress(refCode);
         }}>
         <SigninIcon stroke={Color.Neutral[10]} fill="white" />
@@ -166,21 +169,26 @@ export const UseReferralContent: React.FC<UseReferralContentProps> = ({
     );
   };
 
+  // if scan is succeed or have done a scan
+  const successScan = isScanSuccess || referralFrom !== null;
+
   return (
     <View style={[styles.root]}>
-      <View style={styles.containerText}>
+      <View
+        style={[
+          styles.containerText,
+          {marginBottom: successScan ? 0 : mvs(30)},
+        ]}>
         <Text
           style={[Typography.Heading6, styles.title, {textAlign: 'center'}]}>
-          {referralFrom !== null ? t(titleActivated) : t(titleToScan)}
+          {successScan ? t(titleActivated) : t(titleToScan)}
         </Text>
         <Text
           style={[
             styles.textSubtitle,
-            {marginBottom: referralFrom === null ? mvs(24) : 0},
+            {marginBottom: successScan ? 0 : mvs(24)},
           ]}>
-          {referralFrom === null
-            ? t('Setting.ReferralQR.OnBoard.Subtitle')
-            : ''}
+          {successScan ? '' : t('Setting.ReferralQR.OnBoard.Subtitle')}
         </Text>
       </View>
       {isScanning && !isScanSuccess ? (
@@ -284,7 +292,7 @@ export const UseReferralContent: React.FC<UseReferralContentProps> = ({
           ''
         )}
         {/* <View style={styles.container}> */}
-        {isScanSuccess || referralFrom !== null ? (
+        {successScan ? (
           <>
             <ReferralActivated refCode={referralFrom || refCode} />
           </>
@@ -293,6 +301,16 @@ export const UseReferralContent: React.FC<UseReferralContentProps> = ({
         )}
         {/* </View> */}
       </View>
+
+      <ModalConfirm
+        modalVisible={showModalFailed}
+        oneButton={true}
+        title={t('Setting.ReferralQR.ScanFailed.Title') || ''}
+        subtitle={t('Setting.ReferralQR.ScanFailed.Desc')}
+        yesText={t('General.Dismiss') || ''}
+        onPressOk={() => setShowModalFailed(false)}
+        subtitleStyles={{fontSize: mvs(13)}}
+      />
     </View>
   );
 };
