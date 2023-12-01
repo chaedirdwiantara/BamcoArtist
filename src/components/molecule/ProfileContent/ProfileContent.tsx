@@ -170,8 +170,6 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
   const resultDataDropdown = (selectedMenu: DataDropDownType) => {
     const value = t(selectedMenu.value);
 
-    console.log('value', value);
-
     switch (value) {
       case '1':
         onPressShareQR();
