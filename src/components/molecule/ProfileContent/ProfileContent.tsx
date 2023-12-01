@@ -45,12 +45,22 @@ import PostListProfile from '../../../screen/ListCard/PostListProfile';
 import DataMusician from '../../../screen/MusicianProfile/DataMusician';
 import {DataExclusiveResponse} from '../../../interface/setting.interface';
 import {ProfileFansResponseType} from '../../../interface/profile.interface';
-import {dropDownDataCategory, dropDownDataSort} from '../../../data/dropdown';
+import {
+  DataDropDownNumberType,
+  DataDropDownType,
+  dataMyProfileDropDown,
+  dropDownDataCategory,
+  dropDownDataSort,
+} from '../../../data/dropdown';
 import ExclusiveDailyContent from '../../../screen/MusicianProfile/ExclusiveDailyContent';
 import MerchList from '../../../screen/ListCard/MerchList';
 import ConcertList from '../../../screen/ListCard/ConcertList';
 import EventMusician from '../EventMusician';
 import {useBadgeHook} from '../../../hooks/use-badge.hook';
+import {TopNavigation} from '../TopNavigation';
+import {useNavigation} from '@react-navigation/native';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {RootStackParams} from '../../../navigations';
 
 type OnScrollEventHandler = (
   event: NativeSyntheticEvent<NativeScrollEvent>,
@@ -102,6 +112,8 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
   dataAppearsOn,
 }) => {
   const {t} = useTranslation();
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParams>>();
 
   // BADGE
   const {useCheckBadge} = useBadgeHook();
@@ -147,6 +159,29 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
     setScrollEffect(scrolled);
   };
 
+  const handleBackAction = () => {
+    navigation.goBack();
+  };
+
+  const onPressShareQR = () => {
+    navigation.navigate('MyQRCode', {uuid: '', type: 'myProfile'});
+  };
+
+  const resultDataDropdown = (selectedMenu: DataDropDownType) => {
+    const value = t(selectedMenu.value);
+
+    switch (value) {
+      case '1':
+        onPressShareQR();
+        break;
+      case '5':
+        navigation.navigate('Setting');
+        break;
+      default:
+        break;
+    }
+  };
+
   const topPosition =
     Platform.OS === 'ios' && refreshing
       ? heightPercentage(400)
@@ -165,6 +200,18 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
         </View>
       )}
 
+      <TopNavigation.Type1
+        type="user detail"
+        title={scrollEffect ? profile.fullname : ''}
+        leftIconAction={handleBackAction}
+        maxLengthTitle={25}
+        itemStrokeColor={'white'}
+        bgColor={scrollEffect ? color.Dark[800] : 'transparent'}
+        containerStyles={styles.topNavStyle}
+        dropdownData={dataMyProfileDropDown}
+        resultDataDropdown={resultDataDropdown}
+      />
+
       <ScrollView
         showsVerticalScrollIndicator={false}
         scrollEventThrottle={16}
@@ -177,7 +224,7 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
         }
         onScroll={handleScroll}>
         <ProfileHeader
-          type={!ownProfile ? 'user detail' : 'profile'}
+          // type={!ownProfile ? 'user detail' : 'profile'}
           avatarUri={profile.avatarUri}
           backgroundUri={profile.backgroundUri}
           fullname={profile.fullname}
@@ -367,6 +414,14 @@ const styles = StyleSheet.create({
   flashlistStyle: {
     width: '100%',
     height: '100%',
+  },
+  topNavStyle: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    zIndex: 100,
+    borderBottomWidth: 0,
+    paddingBottom: heightPercentage(15),
   },
   containerStickyHeader: {
     position: 'absolute',

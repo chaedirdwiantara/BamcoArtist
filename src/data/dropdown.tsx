@@ -278,3 +278,8 @@ export const dataCreditDropdown: DataDropDownNumberType[] = [
   {label: 'TopUp.Dropdown.TopUpCredit', value: 0},
   {label: 'TopUp.Dropdown.CreditTransaction', value: 1},
 ];
+
+export const dataMyProfileDropDown: DataDropDownType[] = [
+  {label: 'Dropdown.Profile.qr', value: '1', disabled: false},
+  {label: 'Dropdown.Profile.setting', value: '5', disabled: false},
+];
