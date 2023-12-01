@@ -29,6 +29,7 @@ import {UpdateProfilePropsType} from '../../../api/profile.api';
 import {PreferenceList} from '../../../interface/setting.interface';
 import {width, widthPercentage} from '../../../utils';
 import {useProfileHook} from '../../../hooks/use-profile.hook';
+import {KeyboardShift} from '../KeyboardShift';
 
 type OnScrollEventHandler = (
   event: NativeSyntheticEvent<NativeScrollEvent>,
@@ -80,6 +81,7 @@ export const ImageSlider: React.FC<ImageSliderProps> = ({
     applyReferralUser,
     dataProfile,
     getProfileUser,
+    isLoading: isLoadingReferral,
   } = useProfileHook();
   const scrollViewRef = useRef<ScrollView>(null);
   const [selectedRole, setSelectedRole] = useState<number[]>([]);
@@ -254,157 +256,165 @@ export const ImageSlider: React.FC<ImageSliderProps> = ({
         };
 
   return (
-    <View style={styles.root}>
-      {type === 'Preference' ? (
-        <>
-          {isScanFailed && !isScanSuccess ? (
-            <View style={styles.backgroundFailed}>
-              <View style={styles.containerFailed}>
-                <Text style={[typography.Heading6, styles.titleStart]}>
-                  {t('Setting.ReferralQR.ScanFailed.Title')}
-                </Text>
-                <Text style={[typography.Body1, styles.titleStart]}>
-                  {t('Setting.ReferralQR.ScanFailed.Desc')}
-                </Text>
-                <TouchableOpacity onPress={handleSkipFailed}>
-                  <Text style={[typography.Body2, styles.titleEnd]}>
-                    {t('Setting.ReferralQR.ScanFailed.Btn')}
+    <KeyboardShift>
+      <View style={styles.root}>
+        {type === 'Preference' ? (
+          <>
+            {isScanFailed && !isScanSuccess ? (
+              <View style={styles.backgroundFailed}>
+                <View style={styles.containerFailed}>
+                  <Text style={[typography.Heading6, styles.titleStart]}>
+                    {t('Setting.ReferralQR.ScanFailed.Title')}
                   </Text>
-                </TouchableOpacity>
+                  <Text style={[typography.Body1, styles.titleStart]}>
+                    {t('Setting.ReferralQR.ScanFailed.Desc')}
+                  </Text>
+                  <TouchableOpacity onPress={handleSkipFailed}>
+                    <Text style={[typography.Body2, styles.titleEnd]}>
+                      {t('Setting.ReferralQR.ScanFailed.Btn')}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
               </View>
-            </View>
-          ) : (
-            ''
-          )}
-          <ScrollView
-            ref={scrollViewRef}
-            horizontal={true}
-            pagingEnabled={true}
-            snapToInterval={width}
-            decelerationRate="fast"
-            scrollEventThrottle={200}
-            snapToAlignment={'center'}
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={[styles.containerScrollView, heightContent]}
-            scrollEnabled={false}>
-            {dataArray.map((item, index) => {
-              const selected =
-                index === 0 ? selectedRole : selectedExpectations;
-              const setSelected =
-                index === 0 ? setSelectedRole : setSelectedExpectations;
-              const marginBottom =
-                index === 1 ? 0 : index === 2 ? mvs(15) : mvs(20);
+            ) : (
+              ''
+            )}
+            <ScrollView
+              ref={scrollViewRef}
+              horizontal={true}
+              pagingEnabled={true}
+              snapToInterval={width}
+              decelerationRate="fast"
+              scrollEventThrottle={200}
+              snapToAlignment={'center'}
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={[
+                styles.containerScrollView,
+                heightContent,
+              ]}
+              scrollEnabled={false}>
+              {dataArray.map((item, index) => {
+                const selected =
+                  index === 0 ? selectedRole : selectedExpectations;
+                const setSelected =
+                  index === 0 ? setSelectedRole : setSelectedExpectations;
+                const marginBottom =
+                  index === 1 ? 0 : index === 2 ? mvs(15) : mvs(20);
 
-              return (
-                <>
-                  <KeyboardAvoidingView
+                return (
+                  <>
+                    <KeyboardAvoidingView
+                      key={index}
+                      behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+                      <TouchableOpacity
+                        style={styles.containerSkip}
+                        onPress={onPress}>
+                        <Text style={styles.textSkip}>{t('Btn.Skip')}</Text>
+                      </TouchableOpacity>
+
+                      <ScrollView
+                        decelerationRate="fast"
+                        showsVerticalScrollIndicator={false}
+                        keyboardShouldPersistTaps="handled">
+                        <View style={styles.containerStep}>
+                          <Text style={styles.textStep}>{item.step}</Text>
+                          <Text style={[typography.Heading4, styles.title]}>
+                            {isScanSuccess && index === 1
+                              ? t('Setting.ReferralQR.OnBoard.SuccessTitle')
+                              : item.title}
+                          </Text>
+                          <Text style={[styles.textSubtitle, {marginBottom}]}>
+                            {isScanSuccess && index === 1
+                              ? t('Setting.ReferralQR.OnBoard.SuccessDesc')
+                              : item.subtitle}
+                          </Text>
+
+                          {index === 1 && dataProfile ? (
+                            <ReferralContent
+                              isLoading={isLoadingReferral}
+                              onSkip={onPress}
+                              onPress={onApplyReferral}
+                              isError={errorMsg !== ''}
+                              errorMsg={errorMsg}
+                              isValidRef={isValidReferral}
+                              isScanFailed={isScanFailed}
+                              setIsScanFailed={setIsScanFailed}
+                              refCode={refCode}
+                              setRefCode={setRefCode}
+                              isScanning={isScanning}
+                              setIsScanning={setIsScanning}
+                              isScanSuccess={isScanSuccess}
+                              setIsScanSuccess={setIsScanSuccess}
+                              isScanned={isScanned}
+                              setIsScanned={setIsScanned}
+                              isManualEnter={isManualEnter}
+                              setIsManualEnter={setIsManualEnter}
+                              referralFrom={dataProfile.data.referralFrom}
+                            />
+                          ) : index === 2 ? (
+                            <StepProfile
+                              genres={genres}
+                              stateProfile={stateProfile}
+                              setStateProfile={setStateProfile}
+                              errorProfile={errorProfile}
+                              setErrorProfile={setErrorProfile}
+                            />
+                          ) : (
+                            <SelectBox
+                              selected={selected}
+                              setSelected={setSelected}
+                              data={item.list}
+                              type={index === 0 ? 'single' : 'multiple'}
+                            />
+                          )}
+                        </View>
+                      </ScrollView>
+                    </KeyboardAvoidingView>
+                  </>
+                );
+              })}
+            </ScrollView>
+          </>
+        ) : (
+          <>
+            <ScrollView
+              ref={scrollViewRef}
+              horizontal={true}
+              pagingEnabled={true}
+              snapToInterval={width}
+              decelerationRate="fast"
+              scrollEventThrottle={200}
+              snapToAlignment={'center'}
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={[
+                styles.containerScrollView,
+                heightContent,
+              ]}
+              onScroll={handleScroll}>
+              {data.map((item: DataOnboardType, index: number) => {
+                return (
+                  <Image
                     key={index}
-                    behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-                    keyboardVerticalOffset={Platform.OS === 'ios' ? 100 : 0}>
-                    <TouchableOpacity
-                      style={styles.containerSkip}
-                      onPress={onPress}>
-                      <Text style={styles.textSkip}>{t('Btn.Skip')}</Text>
-                    </TouchableOpacity>
-
-                    <ScrollView
-                      decelerationRate="fast"
-                      showsVerticalScrollIndicator={false}
-                      keyboardShouldPersistTaps="handled">
-                      <View style={styles.containerStep}>
-                        <Text style={styles.textStep}>{item.step}</Text>
-                        <Text style={[typography.Heading4, styles.title]}>
-                          {isScanSuccess && index === 1
-                            ? t('Setting.ReferralQR.OnBoard.SuccessTitle')
-                            : item.title}
-                        </Text>
-                        <Text style={[styles.textSubtitle, {marginBottom}]}>
-                          {isScanSuccess && index === 1
-                            ? t('Setting.ReferralQR.OnBoard.SuccessDesc')
-                            : item.subtitle}
-                        </Text>
-
-                        {index === 1 && dataProfile ? (
-                          <ReferralContent
-                            onSkip={onPress}
-                            onPress={onApplyReferral}
-                            isError={errorMsg !== ''}
-                            errorMsg={errorMsg}
-                            isValidRef={isValidReferral}
-                            isScanFailed={isScanFailed}
-                            setIsScanFailed={setIsScanFailed}
-                            refCode={refCode}
-                            setRefCode={setRefCode}
-                            isScanning={isScanning}
-                            setIsScanning={setIsScanning}
-                            isScanSuccess={isScanSuccess}
-                            setIsScanSuccess={setIsScanSuccess}
-                            isScanned={isScanned}
-                            setIsScanned={setIsScanned}
-                            isManualEnter={isManualEnter}
-                            setIsManualEnter={setIsManualEnter}
-                            referralFrom={dataProfile.data.referralFrom}
-                          />
-                        ) : index === 2 ? (
-                          <StepProfile
-                            genres={genres}
-                            stateProfile={stateProfile}
-                            setStateProfile={setStateProfile}
-                            errorProfile={errorProfile}
-                            setErrorProfile={setErrorProfile}
-                          />
-                        ) : (
-                          <SelectBox
-                            selected={selected}
-                            setSelected={setSelected}
-                            data={item.list}
-                            type={index === 0 ? 'single' : 'multiple'}
-                          />
-                        )}
-                      </View>
-                    </ScrollView>
-                  </KeyboardAvoidingView>
-                </>
-              );
-            })}
-          </ScrollView>
-        </>
-      ) : (
-        <>
-          <ScrollView
-            ref={scrollViewRef}
-            horizontal={true}
-            pagingEnabled={true}
-            snapToInterval={width}
-            decelerationRate="fast"
-            scrollEventThrottle={200}
-            snapToAlignment={'center'}
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={[styles.containerScrollView, heightContent]}
-            onScroll={handleScroll}>
-            {data.map((item: DataOnboardType, index: number) => {
-              return (
-                <Image
-                  key={index}
-                  source={item.uri}
-                  style={styles.image}
-                  resizeMode={'cover'}
-                />
-              );
-            })}
-          </ScrollView>
-        </>
-      )}
-      <FooterContent
-        type={type}
-        activeIndexSlide={activeIndexSlide}
-        data={type === 'Preference' ? dataArray : data}
-        onPressBack={onPressBack}
-        onPressGoTo={onPress}
-        onPressNext={onPressNext}
-      />
-      <ModalLoading visible={isLoading} />
-    </View>
+                    source={item.uri}
+                    style={styles.image}
+                    resizeMode={'cover'}
+                  />
+                );
+              })}
+            </ScrollView>
+          </>
+        )}
+        <FooterContent
+          type={type}
+          activeIndexSlide={activeIndexSlide}
+          data={type === 'Preference' ? dataArray : data}
+          onPressBack={onPressBack}
+          onPressGoTo={onPress}
+          onPressNext={onPressNext}
+        />
+        <ModalLoading visible={isLoading} />
+      </View>
+    </KeyboardShift>
   );
 };
 

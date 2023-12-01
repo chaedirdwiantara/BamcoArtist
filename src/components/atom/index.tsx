@@ -4,7 +4,8 @@ import {ButtonGradient} from './Button/ButtonGradient';
 import {ButtonGradientwithIcon} from './Button/ButtonGradientWithIcon';
 import CheckBox from './CheckBox';
 import Circle from './Circle';
-import DottedLine from './DottedLine';
+import DottedLineAndroid from './DottedLine/dottedLineAndroid';
+import DottedLineIos from './DottedLine/dottedLineiOs';
 import ErrorWarning from './ErrorWarning/ErrorWarning';
 import {Indicator} from './Indicator/Indicator';
 import Gap from './Gap/Gap';
@@ -27,7 +28,8 @@ export {
   ButtonGradientwithIcon,
   CheckBox,
   Circle,
-  DottedLine,
+  DottedLineAndroid,
+  DottedLineIos,
   ErrorWarning,
   Gap,
   Indicator,

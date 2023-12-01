@@ -87,11 +87,13 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = (
     return (
       <View style={[styles.iconRight, {flex: 1, flexDirection: 'row'}]}>
         <TouchableOpacity onPress={() => iconPress('backgroundUri')}>
-          {type === 'profile' ? (
-            !scrollEffect && <SettingIcon style={styles.settingIcon} />
-          ) : type === 'edit' ? (
-            <GalleryEditIcon />
-          ) : null}
+          {
+            // Hide because profile screen not in main tab
+            // type === 'profile' ? (
+            //   !scrollEffect && <SettingIcon style={styles.settingIcon} />
+            // ) :
+            type === 'edit' ? <GalleryEditIcon /> : null
+          }
         </TouchableOpacity>
       </View>
     );
