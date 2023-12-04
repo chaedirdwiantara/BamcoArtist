@@ -95,41 +95,13 @@ const TabTwoRewards: FC<Props> = ({refreshing, setRefreshing}) => {
     setactiveIndex(index);
   };
 
-  const setDataState = (rewardCount: number, data: DataMissionMaster) => {
-    const stateChoosen =
-      data.taskType === 'daily'
-        ? daily
-        : data.taskType === 'one-time'
-        ? oneTime
-        : repeatable;
-
-    // Remove the selected data from the stateChoosen list
-    const newDataMission = stateChoosen.filter(
-      mission => mission.id !== data.id,
-    );
-
-    // Add the selected data to the new state list
-    const dataFilter: DataMissionMaster[] = [
-      ...newDataMission,
-      {
-        ...data,
-        rewards: data.rewards + rewardCount,
-      },
-    ];
-
-    // Update the state
-    data.taskType === 'daily'
-      ? setDaily(dataFilter)
-      : data.taskType === 'one-time'
-      ? setOneTime(dataFilter)
-      : setRepeatable(dataFilter);
-  };
-
-  const onClaimMission = (rewardCount: number, data: DataMissionMaster) => {
-    setClaimedPoint(rewardCount);
-    setDataState(rewardCount, data);
-    setShowToast(true);
-    setParamClaim(data.function);
+  const onClaimMission = (
+    sumLoyaltyPoints: number,
+    data: DataMissionMaster,
+  ) => {
+    setClaimedPoint(sumLoyaltyPoints); // to show on toast
+    setShowToast(true); // show toast
+    setParamClaim(data.function); // to hit api
   };
 
   const onGoMission = (screenFn: RewardListFunction) => {
