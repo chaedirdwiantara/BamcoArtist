@@ -1,4 +1,4 @@
-import {FlatList, StyleSheet, View} from 'react-native';
+import {FlatList, StyleSheet, View, Text} from 'react-native';
 import React, {FC, useCallback, useState} from 'react';
 import VoucherReward from '../../components/molecule/Reward/reward';
 import {widthResponsive} from '../../utils';
@@ -11,12 +11,14 @@ import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParams} from '../../navigations';
 import {ItemMasterReward} from '../../interface/reward.interface';
+import {useTranslation} from 'react-i18next';
 
 type Props = {
   creditReward: number;
 };
 
 const TabOneReward: FC<Props> = ({creditReward}) => {
+  const {t} = useTranslation();
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
   const [activeIndex, setactiveIndex] = useState<number>(0);
@@ -52,24 +54,8 @@ const TabOneReward: FC<Props> = ({creditReward}) => {
 
   return (
     <View style={styles().container}>
-      <View style={styles().menuStyle}>
-        {rewardMenu.map((data, index) => {
-          return (
-            <>
-              <Button
-                label={data.label}
-                containerStyles={styles(activeIndex, index).btnClaim}
-                textStyles={styles().textButton}
-                onPress={() => onPressMenu(index)}
-              />
-              <Gap width={8} />
-            </>
-          );
-        })}
-      </View>
-
-      <Gap height={16} />
-
+      <Text style={styles().title}>{t('Rewards.AchievementRewards')}</Text>
+      <Gap height={mvs(20)} />
       <FlatList
         data={dataRewardMaster?.data}
         showsVerticalScrollIndicator={false}
@@ -119,6 +105,12 @@ const styles = (activeIndex?: number, index?: number) =>
   StyleSheet.create({
     container: {
       // backgroundColor: 'brown',
+    },
+    title: {
+      fontSize: mvs(13),
+      fontWeight: '700',
+      color: color.Neutral[10],
+      fontFamily: font.InterSemiBold,
     },
     voucher: {
       width: widthResponsive(156),
