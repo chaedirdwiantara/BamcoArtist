@@ -77,7 +77,11 @@ const Mission: React.FC<MissionProps> = ({data, onClaim, onGo}) => {
         <View style={styles.captionContainer}>
           <Text style={styles.titleTxt}>{data.taskName}</Text>
           <View style={styles.rewardCountContainer}>
-            <Text style={styles.rewardCountTxt}>{data.rewards}</Text>
+            <Text style={styles.rewardCountTxt}>
+              {dataProgress && dataProgress?.sumLoyaltyPoints > 0
+                ? dataProgress.sumLoyaltyPoints
+                : data.rewards}
+            </Text>
             <Gap width={3} />
             <CoinIcon />
           </View>
