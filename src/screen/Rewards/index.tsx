@@ -177,7 +177,7 @@ const Rewards = () => {
                 ? 'Your Badge is Maxed Out'
                 : `${calculateGamification().nextLabelName.substring(
                     3,
-                  )} Streamer Badge is Closer `
+                  )} Badge is Closer `
             }
             caption={
               calculateGamification().isMax
