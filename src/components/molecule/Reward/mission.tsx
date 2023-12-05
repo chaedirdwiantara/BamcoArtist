@@ -26,6 +26,7 @@ interface MissionProps {
 const Mission: React.FC<MissionProps> = ({data, onClaim, onGo}) => {
   const {useGetMissionProgress} = useRewardHook();
   const [dataProgress, setDataProgress] = useState<DataListMissioProgress>();
+  const [readyToRefetch, setreadyToRefetch] = useState<boolean>(false);
 
   const {
     data: dataMissionPrg,
@@ -47,6 +48,15 @@ const Mission: React.FC<MissionProps> = ({data, onClaim, onGo}) => {
     }
   }, [dataMissionPrg]);
 
+  useEffect(() => {
+    if (readyToRefetch) {
+      setTimeout(() => {
+        refetchMissionPrg();
+      }, 3000);
+      setreadyToRefetch(false);
+    }
+  }, [readyToRefetch]);
+
   const progressBar = dataProgress
     ? dataProgress?.rowCount / data.amountToClaim
     : 0 / data.amountToClaim;
@@ -66,8 +76,11 @@ const Mission: React.FC<MissionProps> = ({data, onClaim, onGo}) => {
     data: DataMissionMaster,
   ) => {
     if (data.taskType !== 'based-reward') {
-      setDataProgress({...dataProgress, isClaimed: true});
+      setDataProgress({...dataProgress, isClaimable: false, isClaimed: true});
+    } else {
+      setDataProgress({...dataProgress, isClaimable: false, isClaimed: false});
     }
+    setreadyToRefetch(true);
     onClaim(dataProgress?.sumLoyaltyPoints!, data);
   };
 
