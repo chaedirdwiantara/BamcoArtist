@@ -670,7 +670,11 @@
         "Title": "你的獎勵無法兌換",
         "Subtitle": "兌換你的積分時出現問題。請檢查可用性，然後重試兌換。"
       }
-    }
+    },
+    "ModalRankUp": {
+      "Title": "您剛剛獲得了一個新徽章！",
+      "Subtitle": "在獎勵頁面上查看，為您贏得更多獎勵"
+    }  
   },
   "ExclusiveContent": {
     "Title": "獨家內容",
