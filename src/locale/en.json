@@ -881,6 +881,7 @@
       "Filter": {
         "Duration": "Duration",
         "All": "All",
+        "Daily": "Daily",
         "OneTime": "One Time",
         "Weekly": "Weekly",
         "Monthly": "Monthly",
@@ -1158,7 +1159,8 @@
       "Visit": "Visit profile",
       "Report": "Report",
       "ReportSent": "Report sent!",
-      "Block": "Block"
+      "Block": "Block",
+      "setting": "Setting"
     }
   },
   "Notification": {
@@ -1645,7 +1647,8 @@
       "qr": "QR Code",
       "share": "Share profile",
       "block": "Block",
-      "unblock": "Unblock"
+      "unblock": "Unblock",
+      "setting": "Setting"
     }
   },
   "ClaimReward": {
@@ -1657,7 +1660,9 @@
   "LiveTipping": {
     "SwipeUp": "Swipe up to Beam",
     "TooFast": "You swipe too fast!",
-    "EnjoyShow": "Let’s enjoy the show\nand take a rest for few seconds"
+    "EnjoyShow": "Let’s enjoy the show\nand take a rest for few seconds",
+    "Credit": "Credit",
+    "NowActive": "Now Active"
   },
   "DiscoverArtist": {
     "Title": "Discover artists"

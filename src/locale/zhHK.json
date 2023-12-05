@@ -883,6 +883,7 @@
         "Duration": "時長",
         "All": "所有",
         "OneTime": "一次性",
+        "Daily": "每天",
         "Weekly": "每週",
         "Monthly": "每月",
         "Yearly": "每年"
@@ -1148,18 +1149,19 @@
       "Quote": "引用",
       "Media": "上傳媒體",
       "Preview": "添加預覽",
-      "Success":"Your post have been sent!",
-      "Warning":{
-        "Title":"Upload Video",
-        "Caption":"Oops! Your video is more than 15 sec. To make sure your upload goes through, try cutting it down and then uploading again.",
-        "Button":"Ok, Got It"
+      "Success": "Your post have been sent!",
+      "Warning": {
+        "Title": "Upload Video",
+        "Caption": "Oops! Your video is more than 15 sec. To make sure your upload goes through, try cutting it down and then uploading again.",
+        "Button": "Ok, Got It"
       }
     },
     "Dropdown": {
       "Visit": "訪問資料",
       "Report": "舉報",
       "ReportSent": "舉報已發送！",
-      "Block": "封鎖"
+      "Block": "封鎖",
+      "setting": "Setting"
     }
   },
   "Notification": {
