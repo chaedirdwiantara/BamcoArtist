@@ -97,31 +97,31 @@ const Rewards = () => {
         name: 'bronze',
         lowPoint: 0,
         highPoint: 1000,
-        label: '1. Bronze',
+        label: ' Bronze',
       },
       {
         name: 'silver',
         lowPoint: 1001,
         highPoint: 2000,
-        label: '2. Silver',
+        label: ' Silver',
       },
       {
         name: 'gold',
         lowPoint: 2001,
         highPoint: 6000,
-        label: '3. Gold',
+        label: ' Gold',
       },
       {
         name: 'platinum',
         lowPoint: 6001,
         highPoint: 10000,
-        label: '4. Platinum',
+        label: ' Platinum',
       },
       {
         name: 'diamond',
         lowPoint: 10001,
         highPoint: 9999999999999,
-        label: '5. Diamond',
+        label: ' Diamond',
       },
     ];
     const rewardsCredit = dataProfile?.data.rewards.credit || 0;

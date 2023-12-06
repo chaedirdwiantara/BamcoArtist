@@ -163,34 +163,23 @@ const TabTwoRewards: FC<Props> = ({refreshing, setRefreshing}) => {
         handleCreatePost('Feed.Exclusive');
         break;
       case 'get-followers':
-        navigation.navigate('Profile', {});
+        navigation.navigate('ExclusiveContentSetting');
         break;
       case 'get-fans':
-        navigation.navigate('Profile', {});
+        navigation.navigate('ExclusiveContentSetting');
         break;
       case 'get-subscriber':
-        navigation.navigate('Profile', {});
+        navigation.navigate('ExclusiveContentSetting');
         break;
       case 'upload-song':
         onUploadSongMission();
         break;
       case 'perform-event':
-        navigation2.navigate('Home', {showToast: false});
+        // TODO: NEED TO CHANGE HARDCODE ID, WE DID IT CZ OF EVENT 07 12 2023
+        navigation.navigate('EventDetail', {id: 'lShlckDSg'});
         break;
-      case 'get-500-tip-credits':
-        navigation2.navigate('Home', {showToast: false});
-        break;
-      case 'get-1000-tip-credits':
-        navigation2.navigate('Home', {showToast: false});
-        break;
-      case 'get-1500-tip-credits':
-        navigation2.navigate('Home', {showToast: false});
-        break;
-      case 'get-2000-tip-credits':
-        navigation2.navigate('Home', {showToast: false});
-        break;
-      case 'get-2500-tip-credits':
-        navigation2.navigate('Home', {showToast: false});
+      case 'get-tip-credits':
+        navigation.navigate('EventDetail', {id: 'lShlckDSg'});
         break;
     }
   };
