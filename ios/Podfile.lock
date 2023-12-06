@@ -202,9 +202,9 @@ PODS:
     - AppAuth/Core (~> 1.6)
     - GTMSessionFetcher/Core (< 4.0, >= 1.5)
   - GTMSessionFetcher/Core (3.1.1)
-  - hermes-engine (0.72.7):
-    - hermes-engine/Pre-built (= 0.72.7)
-  - hermes-engine/Pre-built (0.72.7)
+  - hermes-engine (0.72.6):
+    - hermes-engine/Pre-built (= 0.72.6)
+  - hermes-engine/Pre-built (0.72.6)
   - JWT (3.0.0-beta.14):
     - Base64 (~> 1.1.2)
   - libevent (2.1.12)
@@ -545,9 +545,9 @@ PODS:
     - React-Core
   - react-native-safe-area-context (4.7.4):
     - React-Core
-  - react-native-track-player (4.0.1):
+  - react-native-track-player (3.2.0):
     - React-Core
-    - SwiftAudioEx (= 1.0.0)
+    - SwiftAudioEx (= 0.15.3)
   - react-native-ultimate-config (6.0.1):
     - React-Core
   - react-native-version-check (3.4.7):
@@ -739,7 +739,7 @@ PODS:
   - SentryPrivate (8.15.2)
   - SocketRocket (0.6.1)
   - SSZipArchive (2.2.3)
-  - SwiftAudioEx (1.0.0)
+  - SwiftAudioEx (0.15.3)
   - TOCropViewController (2.6.1)
   - VisionCamera (3.6.12):
     - React
@@ -1080,7 +1080,7 @@ SPEC CHECKSUMS:
   GoogleUtilities: 0759d1a57ebb953965c2dfe0ba4c82e95ccc2e34
   GTMAppAuth: 99fb010047ba3973b7026e45393f51f27ab965ae
   GTMSessionFetcher: e8647203b65cee28c5f73d0f473d096653945e72
-  hermes-engine: 9180d43df05c1ed658a87cc733dc3044cf90c00a
+  hermes-engine: 8057e75cfc1437b178ac86c8654b24e7fead7f60
   JWT: ef71dfb03e1f842081e64dc42eef0e164f35d251
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
   libwebp: 1786c9f4ff8a279e4dac1e8f385004d5fc253009
@@ -1111,7 +1111,7 @@ SPEC CHECKSUMS:
   react-native-get-random-values: 384787fd76976f5aec9465aff6fa9e9129af1e74
   react-native-mmkv: e97c0c79403fb94577e5d902ab1ebd42b0715b43
   react-native-safe-area-context: 2cd91d532de12acdb0a9cbc8d43ac72a8e4c897c
-  react-native-track-player: 97d76dbbd35f27cc709e5f04540615e54264b3f9
+  react-native-track-player: 0c26d981b5097910486cbbeb6d8f5352d41be069
   react-native-ultimate-config: bc816775e31bb2056ccfe18b49e76a5ba2d39b6c
   react-native-version-check: 6cd36aad4e30b8e3216747e3b4ddeb09e0647af8
   react-native-video: c26780b224543c62d5e1b2a7244a5cd1b50e8253
@@ -1157,7 +1157,7 @@ SPEC CHECKSUMS:
   SentryPrivate: b2f7996f37781080f04a946eb4e377ff63c64195
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
   SSZipArchive: 62d4947b08730e4cda640473b0066d209ff033c9
-  SwiftAudioEx: 6f511018b7a0fdfd14ed1bb4081f953588245cc0
+  SwiftAudioEx: 83eabba2940924fc1c0d5cb0896049921365229c
   TOCropViewController: edfd4f25713d56905ad1e0b9f5be3fbe0f59c863
   VisionCamera: 4072a150c532927587d6f628f292f1c80ee21a98
   Yoga: b76f1acfda8212aa16b7e26bcce3983230c82603
