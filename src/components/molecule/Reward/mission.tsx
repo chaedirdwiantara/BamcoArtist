@@ -1,12 +1,7 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet} from 'react-native';
 import * as Progress from 'react-native-progress';
-import {
-  CheckBoxIcon,
-  CheckCircle2Icon,
-  CoinIcon,
-  CupIcon,
-} from '../../../assets/icon';
+import {CheckCircle2Icon, CoinIcon} from '../../../assets/icon';
 import {widthResponsive} from '../../../utils';
 import {color, font} from '../../../theme';
 import {mvs} from 'react-native-size-matters';
@@ -52,7 +47,7 @@ const Mission: React.FC<MissionProps> = ({data, onClaim, onGo}) => {
     : 0 / data.amountToClaim;
   const progressText = `${dataProgress ? dataProgress?.rowCount : 0}/${
     data.amountToClaim
-  }`;
+  }${dataProgress?.function.includes('profile') ? '%' : ''}`;
   const progressRepeatable = dataProgress?.rowCount === 0 ? 0 / 1 : 1;
   const progressTextRepeatable = `${dataProgress?.rowCount} ${
     dataProgress?.function.includes('donation') ||
