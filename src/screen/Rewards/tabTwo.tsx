@@ -145,7 +145,10 @@ const TabTwoRewards: FC<Props> = ({refreshing, setRefreshing}) => {
         navigation.navigate('ReferralCode');
         break;
       case 'share-social-media':
-        navigation2.navigate('Home', {showToast: false});
+        navigation2.navigate('Home', {
+          showToast: false,
+          shareMusicMission: true,
+        });
         break;
       case 'post-public-text':
         handleCreatePost('Feed.Public');

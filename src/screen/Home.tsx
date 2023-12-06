@@ -95,7 +95,7 @@ interface ModalPostState {
 }
 
 export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
-  const {showToast} = route.params;
+  const {showToast, shareMusicMission} = route.params;
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
   const {i18n, t} = useTranslation();
@@ -258,6 +258,12 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
       setToastText('Song have been added to playlist!');
     }
   }, [route.params]);
+
+  useEffect(() => {
+    if (shareMusicMission !== undefined) {
+      setSelectedIndexAnalytic(4);
+    }
+  }, [shareMusicMission]);
 
   useEffect(() => {
     const isRecoverSuccess = storage.getBoolean('recoverSuccess');

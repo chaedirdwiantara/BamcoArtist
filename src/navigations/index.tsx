@@ -412,6 +412,7 @@ export type MainTabParams = {
   Feed: undefined;
   Home: {
     showToast?: boolean;
+    shareMusicMission?: boolean;
   };
   Profile: {
     showToast?: boolean;
