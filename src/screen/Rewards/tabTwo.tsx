@@ -1,4 +1,4 @@
-import {FlatList, StyleSheet, View} from 'react-native';
+import {FlatList, Linking, StyleSheet, View} from 'react-native';
 import React, {FC, useCallback, useEffect, useState} from 'react';
 import Mission from '../../components/molecule/Reward/mission';
 import {missionMenu} from '../../data/reward';
@@ -175,8 +175,11 @@ const TabTwoRewards: FC<Props> = ({refreshing, setRefreshing}) => {
         onUploadSongMission();
         break;
       case 'perform-event':
-        // TODO: NEED TO CHANGE HARDCODE ID, WE DID IT CZ OF EVENT 07 12 2023
-        navigation.navigate('EventDetail', {id: 'lShlckDSg'});
+        Linking.openURL(
+          `mailto:team@thebeam.co?subject=${encodeURI(
+            t('Event.Detail.MailTitle'),
+          )}&body=${encodeURI(t('Event.Detail.MailBody'))}`,
+        );
         break;
       case 'get-tip-credits':
         navigation.navigate('EventDetail', {id: 'lShlckDSg'});

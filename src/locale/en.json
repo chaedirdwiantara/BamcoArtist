@@ -1,59 +1,58 @@
 {
   "General": {
     "Or": "Or",
-    "Begin": "Begin Today",
-    "TopDescription": "Sign In or Register to Unlock and Activate Full Features",
+    "Begin": "Begin today",
+    "TopDescription": "Sign in or register to unlock and access full features",
     "Yes": "Yes",
     "No": "No",
-    "NoVerifCode": "Didn’t receive a Verification Code? Click to Resend",
-    "Thanks": "Thank You!",
-    "LinkCopied": "Link have been copied to clipboard!",
+    "NoVerifCode": "Didn’t receive a verification code? Click to resend",
+    "Thanks": "Thank you!",
+    "LinkCopied": "Link has been copied to clipboard!",
     "Followers": "Followers",
     "FollowYou": "Follow you",
-    "ItsMe": "It's Me",
+    "ItsMe": "It's me",
     "Listeners": "Listeners",
-    "GotIt": "Ok, I Got It",
+    "GotIt": "Ok, I got it",
     "Share": {
-      "Share": "Share",
-      "Feed": "Share Feed",
-      "Album": "Share Album",
-      "Music": "Share Music",
-      "Playlist": "Share Playlist"
+      "Feed": "Share feed",
+      "Album": "Share album",
+      "Music": "Share music",
+      "Playlist": "Share playlist"
     },
-    "NoDescription": "No Description Given",
+    "NoDescription": "No description given",
     "Required": "Required",
     "Dismiss": "Dismiss",
     "BlockSucceed": "You've been blocked",
-    "Topup": "Top Up",
+    "Topup": "Top up",
     "BeamedYou": "Beamed you ",
     "StartSub": "Subscribed for ",
     "Appreciate": "Appreciate!",
     "Appreciated": "Appreciated!",
-    "BuyNow": "Buy Now"
+    "BuyNow": "Buy now"
   },
   "Onboarding": {
     "Step1": {
-      "Title": "Build Your Fan Community",
-      "Description": "We Help You Identify Your Top Fans"
+      "Title": "Build your fan community",
+      "Description": "We help you identify your top fans"
     },
     "Step2": {
-      "Title": "A New Way to Earn Income",
-      "Description": "Our Tools Enable Fans to Directly Contribute To You and Your Work"
+      "Title": "A new way to earn income",
+      "Description": "Our tools enable fans to directly contribute to you and your work"
     },
     "Step3": {
-      "Title": "Activate your Fans",
-      "Description": "Get Started Now!"
+      "Title": "Engage your fans",
+      "Description": "Get started now!"
     }
   },
   "Login": {
     "Title": "Login",
-    "Footer": "Sign In or Register to Unlock and Activate Full Features",
-    "ExploreGuest": "Explore as Guest",
-    "DontHaveAccount": "Don't Have an Account?",
-    "ForgotPassword": "I Forgot My Password",
+    "Footer": "Sign in or Register to unlock and access full features",
+    "ExploreGuest": "Explore as guest",
+    "DontHaveAccount": "Don't have an account?",
+    "ForgotPassword": "I forgot my password",
     "Form": {
       "Email": "Email",
-      "PhoneNumber": "Phone Number"
+      "PhoneNumber": "Phone number"
     },
     "Placeholder": {
       "EmailOrUsername": "Email or Username",
@@ -61,28 +60,28 @@
     }
   },
   "SignUp": {
-    "Title": "Sign Up",
+    "Title": "Sign up",
     "Email": "Email",
-    "Phone": "Phone Number",
-    "FullName": "Full Name",
+    "Phone": "Phone number",
+    "FullName": "Full name",
     "Password": "Password",
-    "PasswordRepeat": "Repeat Password",
+    "PasswordRepeat": "Repeat password",
     "TnC": {
-      "Phrase1": "I Understand and Agree with Beamco's ",
+      "Phrase1": "I understand and agree with Beamco's ",
       "Phrase2": "Terms & Conditions",
       "Phrase3": " and ",
       "Phrase4": "Privacy Policy"
     },
-    "Footer": "Already Have an Account? "
+    "Footer": "Already have an account? "
   },
 
   "OTP": {
     "Phone": {
-      "Title": "Please Enter OTP",
-      "Subtitle": "Please Enter the Code Sent to {{phone}}"
+      "Title": "Please enter OTP",
+      "Subtitle": "Please enter the code sent to {{phone}}"
     },
     "Email": {
-      "Title": "Email Verification Code",
+      "Title": "Email verification code",
       "Subtitle": "We have sent a 6-digit verification code to your email {{email}}. Check your inbox and enter the verification code here"
     },
     "ResendAfter": "You can resend recovery code after ",
@@ -95,57 +94,57 @@
     "Next": "Next",
     "Skip": "Skip",
     "Finish": "Finish",
-    "SignIn": "Sign In",
-    "SignUp": "Sign Up",
+    "SignIn": "Sign in",
+    "SignUp": "Sign up",
     "Submit": "Submit",
     "Back": "Back",
-    "ResendCode": "Resend Code",
-    "BuyNow": "Buy Now",
-    "AddToCart": "Add to Cart",
+    "ResendCode": "Resend code",
+    "BuyNow": "Buy now",
+    "AddToCart": "Add to cart",
     "Cancel": "Cancel",
     "Purchase": "Purchase",
     "Save": "Save",
     "Close": "Close",
     "Edit": "Edit",
-    "VerificationCode": "Send Verification Code",
-    "TurnOff": "Turn Off",
-    "TurnOn": "Turn On",
-    "SignOut": "Sign Out",
+    "VerificationCode": "Send verification code",
+    "TurnOff": "Turn off",
+    "TurnOn": "Turn on",
+    "SignOut": "Sign out",
     "MaybeLater": "Maybe Later",
     "Send": "Send",
     "Create": "Create",
     "Reply": "Reply",
-    "GoToHome": "Go To Home",
-    "CopyLink": "Copy Link",
+    "GoToHome": "Go to home",
+    "CopyLink": "Copy link",
     "Set": "Set",
     "Unset": "Unset",
     "Dismiss": "Dismiss",
     "Update": "Update",
     "Continue": "Continue",
-    "MyProfile": "My Profile"
+    "MyProfile": "My profile"
   },
 
   "ForgotPassword": {
-    "Title": "Update Your Password",
-    "Subtitle": "Enter Your Email Address to Recover Your Password",
+    "Title": "Update your password",
+    "Subtitle": "Enter your email address to recover your password",
     "Placeholder": {
-      "Email": "Enter Your Email Address"
+      "Email": "Enter your email address"
     },
     "Otp": {
       "Title": "Input OTP",
-      "Subtitle": "Please Enter the 6-Digit Recovery Code We Just Sent To"
+      "Subtitle": "Please enter the 6-digit recovery code we just sent to"
     },
     "Modal": {
       "Title": "Change Your Password",
-      "Subtitle": "All Unsaved Progress Will Be Lost"
+      "Subtitle": "All unsaved progress will be lost"
     }
   },
 
   "Preference": {
-    "Genre": "Select Your Favorite Genres",
-    "Mood": "Current Mood?",
-    "Support": "I’m Here To",
-    "Musician": "Who To Follow",
+    "Genre": "Select your favourite genres",
+    "Mood": "Current mood?",
+    "Support": "I’m here to",
+    "Musician": "Who to follow",
     "Follow": "Follow",
     "Following": "Following",
     "Step": {
@@ -156,14 +155,14 @@
     },
     "Title": {
       "Title1": "What type of Artist are you?",
-      "Title2": "Scan QR Code to Earn Bonuses!",
+      "Title2": "Scan QR code to earn bonuses!",
       "Title3": "What should we call you?",
       "Title4": "What do you want most out of our app?"
     },
     "Subtitle": {
-      "Subtitle1": "This Will Help You To Be Discovered By Fans",
-      "Subtitle2": "Scan Referral Code by Pressing 'Scan Now' for Bonuses",
-      "Subtitle3": "This is how others see you. You can use alphanumeric and number",
+      "Subtitle1": "This will help you get discovered by fans",
+      "Subtitle2": "Scan referral code by pressing 'Scan Now' for bonus rewards",
+      "Subtitle3": "This is how others see you. You can use letters and numbers",
       "Subtitle4": "Select for a better experience"
     }
   },
@@ -174,21 +173,21 @@
       "View": "View",
       "ModalInfo": {
         "Title": "Release your music with Beamco!",
-        "Subtitle1": "To drop your music, please sign in here on desktop: ",
+        "Subtitle1": "To drop your music, please sign in here on a desktop: ",
         "Subtitle2": " and complete your release details!"
       }
     },
     "OverviewCard": {
       "Title": "My Overview",
-      "FirstCard": "My Fans",
-      "SecondCard": "My Public Posts",
-      "ThirdCard": "My Exclusive Posts",
-      "FourthCard": "My Albums",
-      "FifthCard": "My Songs",
-      "SixthCard": "My Income",
+      "FirstCard": "My fans",
+      "SecondCard": "My public posts",
+      "ThirdCard": "My exclusive posts",
+      "FourthCard": "My albums",
+      "FifthCard": "My songs",
+      "SixthCard": "My income",
       "HideAnalytics": "Hide"
     },
-    "CreateNewPost": "Create New Post",
+    "CreateNewPost": "Create new post",
     "Topbar": {
       "Hi": "Hi, {{name}}",
       "Search": {
@@ -204,23 +203,23 @@
     },
     "Tab": {
       "TopMusician": {
-        "Title": "Top Artist",
+        "Title": "Top Artists",
         "Follow": "Follow",
         "Unfollow": "Unfollow",
         "Tip": "Beam",
-        "Profile": "Go to Artist"
+        "Profile": "Go to Artist profile"
       },
       "TopSong": {
-        "Title": "Top Songs",
-        "Playlist": "Add to Playlist",
+        "Title": "Top songs",
+        "Playlist": "Add to playlist",
         "Tip": "Beam",
-        "Queue": "Add to Queue",
-        "Share": "Share Music",
-        "Details": "Show Details",
-        "Credits": "Show Credits"
+        "Queue": "Add to queue",
+        "Share": "Share music",
+        "Details": "Show details",
+        "Credits": "Show credits"
       },
       "TopPost": {
-        "Title": "Top Post",
+        "Title": "Top posts",
         "Filter": {
           "Title": "Filter by",
           "Today": "Today",
@@ -230,40 +229,40 @@
         "Category": {
           "Title": "Category",
           "All": "All",
-          "ComingUp": "Coming Up",
+          "ComingUp": "Coming up",
           "Tour": "Tour",
-          "DailyLife": "Daily Life",
-          "BTS": "Behind the Scenes",
+          "DailyLife": "Daily life",
+          "BTS": "Behind the scenes",
           "Backstage": "Backstage",
           "Highlight": "Highlight"
         }
       },
       "Recomended": {
-        "Title": "Recomended"
+        "Title": "Recommended"
       },
       "Favorite": {
-        "Title": "Favorite"
+        "Title": "Favourite"
       },
       "NewSong": {
-        "Title": "New Songs"
+        "Title": "New songs"
       },
       "Analytic": {
         "Income": {
           "Title": "Income",
           "TopCard": {
-            "Tip": "Beam Earned",
-            "Subs": "Subs Earned"
+            "Tip": "Beam earned",
+            "Subs": "Subs earned"
           },
           "BottomCard": {
-            "Avg": "Avg {{range}} earn",
+            "Avg": "Average {{range}} earned",
             "Earned": "Earned this {{range}}"
           },
           "Main": {
-            "Title": "My Income"
+            "Title": "My income"
           },
           "Filter": {
             "Type": {
-              "All": "All Income",
+              "All": "All income",
               "Tip": "Beam",
               "Subs": "Subscription"
             },
@@ -280,7 +279,7 @@
         "Fans": {
           "Title": "Fans",
           "Main": {
-            "Title": "Fan Growth"
+            "Title": "Fan growth"
           },
           "Filter": {
             "Range": {
@@ -290,107 +289,107 @@
             }
           },
           "Growth": {
-            "BeFan": "Followers be a fans!",
+            "BeFan": "Became fans!",
             "FansEarn": "Fans earned"
           },
-          "FansInteract": "Top Active Fans",
+          "FansInteract": "Top active fans",
           "TopFans": {
-            "Title": "Your Top Fans",
-            "Link": "View All",
+            "Title": "Your top fans",
+            "Link": "View all",
             "Hide": "Hide",
-            "FullScreen": "Your Fans",
-            "EmptyState": "Oops! It looks like you currently don't have any Top Fans."
+            "FullScreen": "Your fans",
+            "EmptyState": "Oops! It looks like you don't have any top fans at the moment."
           },
           "FansAge": {
-            "Title": "Fan's Age"
+            "Title": "Fans' age"
           },
           "FansGender": {
-            "Title": "Fan's Gender"
+            "Title": "Fans' gender"
           },
           "FansCountry": {
             "Title": "Fan Country",
-            "EmptyState": "Oops! It looks like you currently don't have any Top Fans based in the selected Country"
+            "EmptyState": "Oops! It looks like you don't have any top fans based in the selected country at the moment"
           }
         },
         "Post": {
           "Title": "Post",
           "Popular": {
-            "Title": "Popular Posts",
-            "EmptyState": "Oops! We couldn't find your popular posts. Post something to grow your own cult!"
+            "Title": "Popular posts",
+            "EmptyState": "Oops! We couldn't find your popular posts. Post something to grow your fanbase!"
           },
           "Engagement": {
-            "Title": "Post Engagement Metrics",
-            "AvgView": "Average Number of Views Per Post",
-            "AvgLiked": "Average Number of Likes Per Post",
-            "AvgReply": "Average Number of Replies Per Post",
-            "AvgShared": "Average Number of Shares Per Post"
+            "Title": "Post engagement metrics",
+            "AvgView": "Average number of views per post",
+            "AvgLiked": "Average number of likes per post",
+            "AvgReply": "Average number of replies per post",
+            "AvgShared": "Average number of shares per post"
           }
         },
         "Album": {
-          "Title": "My Music",
+          "Title": "My music",
           "Filter": {
             "Range": {
-              "Alltime": "All Time",
+              "Alltime": "All time",
               "Monthly": "Monthly",
               "Weekly": "Weekly",
               "Daily": "Daily"
             }
           },
           "Listeners": {
-            "Title": "Your Active Listeners",
+            "Title": "Your active listeners",
             "Growth": {
               "FanStream": "Fans streams your song",
               "AvgListener": "Avg listeners streamed"
             }
           },
           "PopularAlbum": {
-            "Title": "Popular Albums",
-            "Link": "Explore Your Album",
-            "Subtitle": "Popular all the time",
-            "EmptyState": "Oops! We couldn't find your popular album. Drop a song or album to grow your own cult!"
+            "Title": "Popular albums",
+            "Link": "Explore your album",
+            "Subtitle": "Most popular",
+            "EmptyState": "Oops! We couldn't find your most popular album. Release a song or album to grow your fanbase!"
           },
           "TopSongs": {
-            "Title": "Your Top Songs",
-            "EmptyState": "Oops! We couldn't find your top songs. Drop a song to grow your own cult!"
+            "Title": "Your top songs",
+            "EmptyState": "Oops! We couldn't find your top songs. Release a song to grow your fanbase!"
           },
           "Listener": {
             "Title": "Listeners Country",
-            "EmptyState": "Oops! It looks like you currently don't have any Listeners based in the selected Country"
+            "EmptyState": "Oops! It looks like you don't have any listeners based in the selected country at the moment"
           },
           "ListenerLikes": {
-            "Title": "Listeners Also Like",
-            "EmptyState": "Oops! It looks like you currently don't have any Listeners...YET. So drop your first song and begin growing your cult!"
+            "Title": "Listeners also like",
+            "EmptyState": "Oops! It looks like you don't have any listeners yet. Release your first song to begin growing your fanbase!"
           },
           "MySong": {
-            "Title": "My Song",
+            "Title": "My song",
             "Album": {
               "Title": "Album"
             },
             "WhoListen": {
-              "Title": "Who Listen To This Album"
+              "Title": "Who listens to this Album"
             },
             "ListenerCountry": {
-              "Title": "Album Listeners Country"
+              "Title": "Album listeners country of origin"
             },
             "ListenerAlsoLike": {
-              "Title": "Album Listeners Also Like"
+              "Title": "Listeners also liked"
             }
           },
           "DetailSong": {
-            "Title": "Song Details",
+            "Title": "Song details",
             "Detail": {
               "Musician": "Artist",
               "Featuring": "Featuring",
               "Desc": "Description"
             },
             "WhoListen": {
-              "Title": "Listeners of This Song"
+              "Title": "Listeners of this song"
             },
             "ListenerCountry": {
-              "Title": "Song Listeners Country"
+              "Title": "Song listeners country of origin"
             },
             "ListenerAlsoLike": {
-              "Title": "Song Listeners Also Like"
+              "Title": "Listeners also liked"
             }
           }
         },
@@ -408,38 +407,38 @@
       "EmptyState": "Sorry, we don't have any music available for this genre at the moment. Check back soon as we're always adding new music!"
     },
     "DiveIn": {
-      "Title": "Dive In",
+      "Title": "Dive in",
       "Subtitle": "Based on your preferences",
       "Trending": {
-        "EmptyState": "We're sorry! There's no trending feed available right now. Check back soon, as we're always working to bring you the best music social media experience."
+        "EmptyState": "We're sorry! There are no trending posts available right now. Check back soon, we're always working to bring you the best music social media experience."
       },
       "Similar": {
-        "EmptyState": "We're sorry, but there are currently no feeds available from similar artists. Check back soon for new updates!"
+        "EmptyState": "We're sorry, but there are currently no posts available from similar artists. Check back soon for new updates!"
       },
       "MyArtist": {
-        "EmptyState": "Looks like there are no posts from the artists you follow. Follow more artists to see their posts in your feed."
+        "EmptyState": "Looks like there are no posts from the artists you follow. Follow more artists to see their posts on your feed."
       }
     },
     "ComingSoon": {
-      "Title": "Coming Soon",
-      "EmptyState": "Unfortunately, there are no new albums coming soon from any artists. We'll let you know as soon as something new is on the horizon."
+      "Title": "Coming soon",
+      "EmptyState": "Unfortunately, there are no new upcoming albums from any artists. We'll let you know as soon as something new is on the horizon."
     },
     "Song": {
-      "EmptyState": "Oops! We couldn't find any {{title}} for you. Check back soon as we're always adding new music!"
+      "EmptyState": "Oops! We couldn't find {{title}}. Check back soon as we're always adding new music!"
     },
     "Musician": {
-      "EmptyState": "We couldn't find any {{title}} for you. Check back soon as we're always adding new artist!"
+      "EmptyState": "We couldn't find {{title}}. Check back soon as we're always adding new artist!"
     },
     "Playlist": {
       "Title": "Playlist",
-      "EmptyState": "Oops! We couldn't find any playlists for you. Create your own & help other discover great music!"
+      "EmptyState": "Oops! We couldn't find this playlist for you. Create your own & help others discover great music!"
     }
   },
   "Feed": {
     "Title": "Feed",
     "Public": "Public",
     "Exclusive": "Exclusive",
-    "MyPost": "My Post",
+    "MyPost": "My post",
     "Sort": {
       "Title": "Sort by",
       "Latest": "Latest",
@@ -451,78 +450,77 @@
       "Exclusive": "Exclusive",
       "Public": "Public"
     },
-    "NoMore": "No more feeds",
-    "EmptyStateButtonCaption": "Create New Post!"
+    "NoMore": "Your feed is empty",
+    "EmptyStateButtonCaption": "Create new post!"
   },
   "Event": {
     "Title": "Action",
     "Quantity": "Quantity",
     "Description": "Description",
-    "ComingSoon": "Coming Soon\nStay tuned for the big reveal!",
+    "ComingSoon": "Coming soon\nStay tuned for the big reveal!",
     "Concert": {
       "Title": "Concert",
-      "NoConcert": "No Event Available",
-      "Detail": "Ticket Details",
-      "LineUp": "Line-Up",
-      "Class": "Select Class",
+      "NoConcert": "No event available",
+      "Detail": "Ticket details",
+      "LineUp": "Line-up",
+      "Class": "Select class",
       "Date": "Date",
       "Time": "Time",
       "Venue": "Venue",
-      "OpenGate": "Open Gate",
+      "OpenGate": "Open gate",
       "Duration": "Duration",
       "Location": "Location",
-      "ChooseDate": "Choose Date",
-      "Ticket": "Ticket Category",
-      "Total": "Total Price",
+      "ChooseDate": "Choose date",
+      "Ticket": "Ticket category",
+      "Total": "Total price",
       "Details": "Details",
       "ComingSoon": {
-        "Title": "Discover Ticket",
-        "Subtitle": "When artists list ticket, you’ll see them here"
+        "Title": "Discover tickets",
+        "Subtitle": "When artists list a ticket, you’ll see them here"
       },
-      "EmptyState": "Oops! We couldn't find any of your Event.\nYour event data will be displayed here.",
-      "BtnSell": "Start Selling Ticket!"
+      "EmptyState": "Oops! We couldn't find any of your events.\nYour event data will be displayed here.",
+      "BtnSell": "Start selling tickets!"
     },
     "Merch": {
       "Title": "Merch",
-      "NoMerch": "No Merch Available",
-      "Detail": "Merch Details",
-      "Size": "Select Size",
-      "Color": "Choose Color",
-      "Variant": "Choose Variant",
+      "NoMerch": "No merch available",
+      "Detail": "Merch details",
+      "Size": "Select size",
+      "Color": "Choose color",
+      "Variant": "Choose variant",
       "Condition": "Condition",
       "Sold": "Sold",
       "Product": "Product",
       "ComingSoon": {
-        "Title": "Discover Merchandise",
-        "Subtitle": "When artist list merchandise, you’ll see them here"
+        "Title": "Discover merchandise",
+        "Subtitle": "When Artists list merchandise, you’ll see them here"
       },
       "EmptyState": "Oops! We couldn't find any of your merchandise.\nYour merchandise will be displayed here.",
-      "BtnSell": "Start Selling Merch!"
+      "BtnSell": "Start selling merch!"
     },
     "Dropdown": {
       "Category": {
-        "All": "All Categories",
+        "All": "All categories",
         "Fashion": "Fashion",
         "Collection": "Collection"
       },
       "Sort": {
-        "Placeholder": "Sort By",
-        "HighestPrice": "Highest Price",
-        "LowestPrice": "Lowest Price",
-        "MostSold": "Most Sold"
+        "Placeholder": "Sort by",
+        "HighestPrice": "Highest price",
+        "LowestPrice": "Lowest price",
+        "MostSold": "Most sold"
       }
     },
     "Detail": {
-      "Title": "Event Detail",
+      "Title": "Event details",
       "LineUp": "LINE UP",
       "TopTiper": "TOP BEAMERS",
-      "Income": "INCOME",
-      "TipDistribution": "Beam Distribution",
-      "MusicianTipped": "Artist Beamed",
-      "Perform": "Pick Me!",
+      "TipDistribution": "Beam distribution",
+      "MusicianTipped": "Artist beamed",
+      "Perform": "Pick me!",
       "MailTitle": "I'd like to perform at the next Beamco Live!",
-      "MailBody": "Simply hit send to this email to register your interest in performing at the next Beamco Live! The Beamco Concierge will get in touch with you soon!",
-      "LimitedOffer": "Limited Offer",
+      "MailBody": "Simply hit 'send' to email us and register your interest in performing at the next Beamco Live! The Beamco Team will get in touch with you soon!",
+      "LimitedOffer": "Limited offer",
       "Freebies": "FREEBIES!",
       "Popup": {
         "TitleReward": "Get a limited time reward!",
@@ -534,24 +532,24 @@
           "Subtitle3": "2 VIP concert tickets when you become the top Beamer"
         },
         "SuccessTopup": {
-          "Title": "Topup Success!",
+          "Title": "Top-up success!",
           "Subtitle": "You are now eligible to claim a reward!",
-          "ButtonClaim": "Claim Reward"
+          "ButtonClaim": "Claim reward"
         }
       }
     },
     "Live": "Live",
     "EmptyState": {
-      "Home": "No live events are currently available at this time.\nStay tuned for exciting upcoming experiences!",
-      "Title": "Discover Live Event",
+      "Home": "There are no live events available at this time.\nStay tuned for future events!",
+      "Title": "Discover live events",
       "Profile": "You have no events, your events will be displayed here",
-      "Other": "Currently, this artist don’t have any event.",
+      "Other": "Currently, this artist doesn’t have any event.",
       "TopTipper": {
-        "Title": "Top Beamers Are Displayed Here",
-        "Subtitle": "Wait until event goes live to view the top Beamers"
+        "Title": "Top Beamers are displayed here",
+        "Subtitle": "Wait until the event goes live to view the top Beamers"
       },
       "LineUp": {
-        "Title": "Artist Unleashing Soon!",
+        "Title": "Artist lineup will be released soon!",
         "Subtitle": "Stay tuned for exciting artist announcements!"
       },
       "Income": {
@@ -560,36 +558,36 @@
       }
     },
     "ListVoucher": {
-      "Title": "Vouchers Available",
+      "Title": "Vouchers available",
       "EmptyState": "You don’t have any vouchers yet. You can get them by purchasing some credits!"
     },
-    "DetailVoucher":{
+    "DetailVoucher": {
       "Title": "Reward Details",
-      "PopUp":{
+      "PopUp": {
         "Title": "Congratulations!",
-        "Desc":"Here’s the QR code to redeem your free drink(s) at the bar.",
-        "ButtonTitle":"Dismiss"
+        "Desc": "Here’s the QR code to redeem your free drink(s) at the bar.",
+        "ButtonTitle": "Dismiss"
       },
       "Expired": "Valid Until",
-      "Tnc":"Terms & Conditions"
+      "Tnc": "Terms & Conditions"
     }
   },
   "Profile": {
     "Label": {
-      "Description": "I'm here to share my music career and connect further with my fans!",
+      "Description": "I'm here to share my music career and connect with my fans!",
       "Following": "FOLLOWING",
       "Liked": "LIKED SONGS",
       "Point": "EXPERIENCE",
       "CreatedBy": "Created by",
-      "NoPlaylist": "No Playlist have been made",
-      "NoMusician": "You don’t have contributions to any artists",
-      "NoMusicianOther": "This user don’t have contributions to any artists",
+      "NoPlaylist": "No playlists have been made",
+      "NoMusician": "You haven't made contributions to any artists",
+      "NoMusicianOther": "This user hasn't made contributions to any artists",
       "NoBadge": "You don’t have any badges",
-      "NoBadgeOther": "This user don’t have any badges"
+      "NoBadgeOther": "This user doesn't have any badges"
     },
     "Button": {
-      "Edit": "Edit Profile",
-      "CreatePlaylist": "Create New Playlist",
+      "Edit": "Edit profile",
+      "CreatePlaylist": "Create a new playlist",
       "NewPlaylist": "New Playlist"
     },
     "Tab": {
@@ -600,16 +598,16 @@
     "Edit": {
       "Title": "Edit Profile",
       "Bio": "Bio",
-      "ProfilePicture": "Edit Display Profile",
-      "HeaderPicture": "Edit Header",
-      "Take": "Take Photo",
-      "Add": "Add Photo From Gallery",
-      "AddVideo": "Add Video From Gallery",
-      "AddVideoCamera": "Add Video From Camera",
-      "Delete": "Delete Photo",
-      "AddBio": "Add Bio",
-      "AddWebsite": "Add Website or Social Media",
-      "Social": "Social Media Settings",
+      "ProfilePicture": "Edit display profile",
+      "HeaderPicture": "Edit header",
+      "Take": "Take photo",
+      "Add": "Add photo from gallery",
+      "AddVideo": "Add video from gallery",
+      "AddVideoCamera": "Add video from camera",
+      "Delete": "Delete photo",
+      "AddBio": "Add bio",
+      "AddWebsite": "Add website or social media",
+      "Social": "Social Media settings",
       "About": "Tell us about yourself",
       "Website": "Add your website address",
       "Photos": "Add Photos"
@@ -659,10 +657,10 @@
       "Photos": "Photos",
       "Album": "Album",
       "Merch": "Merch",
-      "Exclusive": "Exclusive Daily Content",
-      "Musicians": "People who might fit your interest",
-      "MyAlbum": "My Album",
-      "AppearsOn": "Appears On"
+      "Exclusive": "Exclusive daily content",
+      "Musicians": "Artists you might be interested in",
+      "MyAlbum": "My album",
+      "AppearsOn": "Appears on"
     },
     "Tab": {
       "Profile": "PROFILE",
@@ -675,8 +673,8 @@
       "Event": "LIVE"
     },
     "ShowAppreciate": "Show your appreciation",
-    "SendTip": "Send tip to support your favorite artist to see them growth",
-    "EmptyStateFans": "Artist do not have any fans."
+    "SendTip": "Tip your favourite artist to show your support and watch them grow!",
+    "EmptyStateFans": "This artist does not have any fans."
   },
   "ExclusiveContent": {
     "Title": "Exclusive Content",
@@ -690,62 +688,62 @@
     "Year": "Year",
     "Support": "Beam with your plan",
     "Optional": "Bonus Beam (optional)",
-    "InputBonus": "Input Bonus",
-    "ErrorCoinBonus": "Insufficient coin, add more coin to give bonus",
-    "ErrorCoinSubs": "Insufficient coin, add more coin to subscribe",
+    "InputBonus": "Input bonus",
+    "ErrorCoinBonus": "Insufficient coins, add more coins to give bonus",
+    "ErrorCoinSubs": "Insufficient coins, add more coins to subscribe",
     "Edit": "Edit My Exclusive Content",
     "Active": "Subscription Active",
     "Success": "Congratulations! You have successfully subscribed to {{artist}}'s exclusive content!",
-    "View": "View Exclusive Content",
-    "Subscribe": "Subscribe Exclusive Content"
+    "View": "View exclusive content",
+    "Subscribe": "Subscribe for exclusive content"
   },
   "Setting": {
     "Title": "Settings",
-    "EnterVerifCode": "Enter Verification Code",
+    "EnterVerifCode": "Enter verification code",
     "Account": {
       "Title": "Account",
       "AccountInformation": "Account Information",
       "Confirm": "Are you sure you want to update your account?",
       "Label": {
         "Username": "Username",
-        "Fullname": "Artist Name",
+        "Fullname": "Artist name",
         "Genre": "Genre",
         "Location": "Location",
         "Label": "Label",
-        "Active": "Years Active",
+        "Active": "Years active",
         "Origin": "Origin",
         "Member": "Member",
-        "AddMore": "Add More",
+        "AddMore": "Add more",
         "TypeOfMusician": "Type of Artist",
         "Gender": "Gender",
-        "DateOfBirth": "Date of Birth"
+        "DateOfBirth": "Date of birth"
       },
       "Placeholder": {
-        "Username": "Add Username",
+        "Username": "Add username",
         "UsernameStep": "I want to be known as @username",
-        "Fullname": "Add Artist Name",
+        "Fullname": "Add Artist name",
         "FullnameStep": "You can call me",
-        "Genre": "Select Genre",
-        "Location": "Select Location",
-        "Country": "Select Country",
-        "City": "Select City",
-        "Member": "Add Member",
-        "Active": "Select Year",
-        "Label": "Add Label Name",
-        "Gender": "Select Gender"
+        "Genre": "Select genre",
+        "Location": "Select location",
+        "Country": "Select country",
+        "City": "Select city",
+        "Member": "Add member",
+        "Active": "Select year",
+        "Label": "Add label name",
+        "Gender": "Select gender"
       },
       "Error": {
-        "Fullname": "Fullname allowed 3 to 50 character",
-        "Username": "Username should be between 3 to 30 alphanumeric characters"
+        "Fullname": "Your full name can be between 3-50 characters",
+        "Username": "Your username should be between 3 to 30 alphanumeric characters"
       }
     },
     "BlockedUser": {
-      "Title": "Blocked Users",
+      "Title": "Blocked users",
       "Unblock": "Unblock",
       "Cancel": "Cancel",
       "ModalConfirm": {
         "Title": "Are you sure you want to unblock @{{username}}?",
-        "Subtitle": "By unblocking @{{username}}, you will be able to see each others profiles"
+        "Subtitle": "By unblocking @{{username}} they will be able view your content, and you will be able to see content and notifications from @{{username}}"
       },
       "EmptyState": "There are no blocked users at the moment.\nAny blocked users will appear here.",
       "ToastSuccess": "@{{username}} has been unblocked!"
@@ -758,12 +756,12 @@
       "Subtitle": "Are you sure you want to delete your account?",
       "ToastDeletion": "Your account is being deleted",
       "About": {
-        "TitleDeletion": "About Account Deletion",
-        "FirstParagraph": "All of your assets and data associated with your account will be permanently deleted",
-        "SecondParagraph": "Unfortunately, this action cannot be reversed.",
-        "ThirdParagraph": "However, you will have 30 days to re-login to cancel your account deletion request. After 30 days, your account will be permanently deleted",
-        "TitleReason": "Reason for Deletion",
-        "FourthParagraph": "Please select a reason from the dropdown menu below : "
+        "TitleDeletion": "About deleting your account",
+        "FirstParagraph": "All of the assets and data associated with your account will be permanently deleted.",
+        "SecondParagraph": "This action is irreversible.",
+        "ThirdParagraph": "If you change your mind, you will have 30 days to login to cancel your account deletion request. After 30 days, your account will be permanently deleted.",
+        "TitleReason": "Reason for deletion",
+        "FourthParagraph": "Please select a reason from the dropdown menu below:"
       },
       "InputDeletion": {
         "ReasonInput": "Reason",
@@ -779,101 +777,101 @@
       }
     },
     "TnC&PP": {
-      "Title": "TnC & Privacy Policy"
+      "Title": "Terms and Conditions & Privacy"
     },
     "Password": {
       "Title": "Change Password",
       "Confirm": "Are you sure you want to change your password?",
       "Label": {
-        "Old": "Enter Old Password",
-        "New": "New Password",
-        "Repeat": "Repeat Password"
+        "Old": "Enter old password",
+        "New": "New password",
+        "Repeat": "Re-enter password"
       }
     },
     "Email": {
       "Title": "Email",
       "Toast": {
-        "Success": "Your Email has been updated!"
+        "Success": "Your email has been updated!"
       },
       "Label": {
-        "Add": "Add Email",
-        "Change": "Change Email",
-        "Old": "Old Email",
-        "New": "New Email",
-        "Sso": "SSO Email Can`t Be Changed",
-        "Password": "Current Password"
+        "Add": "Add email",
+        "Change": "Change email",
+        "Old": "Old email",
+        "New": "New email",
+        "Sso": "SSO email can't be changed",
+        "Password": "Current password"
       },
       "Placeholder": {
-        "Email": "Add Email"
+        "Email": "Add email"
       }
     },
     "Phone": {
       "Title": "Phone Number",
       "Label": {
-        "Change": "Change Phone Number",
-        "Add": "Add Phone Number",
-        "Old": "Old Phone Number",
-        "New": "New Phone Number",
-        "Password": "Current Password"
+        "Change": "Change phone number",
+        "Add": "Add phone number",
+        "Old": "Old phone number",
+        "New": "New phone number",
+        "Password": "Current password"
       }
     },
     "Shipping": {
       "Title": "Shipping Information",
-      "AddNewAddress": "+ Add New Address",
-      "MainAddress": "Main Address",
+      "AddNewAddress": "+ Add new address",
+      "MainAddress": "Main address",
       "New": "New",
-      "EditAddress": "Edit Address",
-      "ChangeMainAddress": "Change Main Address",
-      "Confirm2": "Are you sure you want to save your shipping information and continue your progress?",
+      "EditAddress": "Edit address",
+      "ChangeMainAddress": "Change main address",
+      "Confirm2": "Are you sure you want to save your shipping information and continue?",
       "ConfirmChangeMainAddress": "Are you sure you want to save changes?",
-      "AddAddress": "Add New Address",
-      "ConfirmAddAddress": "Are you sure you want to add new address?",
-      "ChangeAddress": "Change Address",
+      "AddAddress": "Add new address",
+      "ConfirmAddAddress": "Are you sure you want to add a new address?",
+      "ChangeAddress": "Change address",
       "ConfirmChangeAddress": "Are you sure you want to change your address?",
-      "DeleteAddress": "Delete Address",
+      "DeleteAddress": "Delete address",
       "ConfirmDeleteAddress": "Are you sure you want to delete your address?",
       "ToastMainAddress": "Your main address has been updated!",
       "ToastAddAddress": "Address has been added!",
       "ToastChangeAddress": "Address has been updated!",
       "ToastDeleteAddress": "Address has been deleted!",
-      "PhoneNumberInvalid": "Phone number is invalid, ensure phone number you've entered is correct",
+      "PhoneNumberInvalid": "Phone number is invalid, ensure the phone number you've entered is correct",
       "Label": {
         "Email": "Email",
-        "Phone": "Phone Number",
-        "Fullname": "Full Name",
+        "Phone": "Phone number",
+        "Fullname": "Full name",
         "State": "State/Province",
         "Country": "Country",
-        "Postal": "Postal Code",
+        "Postal": "Postal code",
         "City": "City",
         "Address": "Address",
-        "FirstName": "First Name",
-        "LastName": "Last Name"
+        "FirstName": "First name",
+        "LastName": "Last name"
       },
       "Placeholder": {
-        "Email": "Add Email",
-        "Phone": "Add Phone Number",
-        "Fullname": "Add Full Name",
+        "Email": "Add email",
+        "Phone": "Add phone number",
+        "Fullname": "Add full name",
         "State": "Select State/Province",
-        "Country": "Select Country",
-        "Postal": "Add Postal Code",
-        "City": "Select City",
-        "Address": "Add Address",
-        "FirstName": "Add First Name",
-        "LastName": "Add Last Name"
+        "Country": "Select country",
+        "Postal": "Add postal code",
+        "City": "Select city",
+        "Address": "Add address",
+        "FirstName": "Add first name",
+        "LastName": "Add last name"
       },
-      "EmptyState": "Please provide details of your shipping address"
+      "EmptyState": "Please provide your shipping details"
     },
     "Preference": {
       "Title": "Preferences",
       "Label": {
         "Genre": "Genre",
         "Mood": "Mood",
-        "GenrePreference": "Genre Preference",
-        "MoodPreference": "Mood Preference"
+        "GenrePreference": "Genre preference",
+        "MoodPreference": "Mood preference"
       },
       "Placeholder": {
-        "Genre": "Select Genres",
-        "Mood": "Select Moods"
+        "Genre": "Select genres",
+        "Mood": "Select moods"
       }
     },
     "Tips": {
@@ -887,6 +885,7 @@
       "Filter": {
         "Duration": "Duration",
         "All": "All",
+        "Daily": "Daily",
         "OneTime": "One Time",
         "Weekly": "Weekly",
         "Monthly": "Monthly",
@@ -895,46 +894,46 @@
       "Label": {
         "Past": "Past",
         "Current": "Current",
-        "TipType": "Do you want to beam the artist?",
+        "TipType": "Do you want to Beam this artist?",
         "ContinueSendTip": "Activate Recurring Beam?",
-        "AddMoreCoin": "Add more credit",
-        "YourCoin": "Your credit",
-        "InputDonation": "Add credit to beam",
-        "Success": "Congratulations! Your Beam\nhave been Sent!"
+        "AddMoreCoin": "Add more credits",
+        "YourCoin": "Your Beam credits",
+        "InputDonation": "Add credits to send Beam",
+        "Success": "Congratulations! Your Beam\nhas been Sent!"
       },
       "Menu": {
         "Donation": {
-          "GoToMusician": "Go To Artist",
+          "GoToMusician": "Go to Artist",
           "Stop": "Stop Beaming"
         },
         "Subs": {
-          "GoToMusician": "Go To Artist",
+          "GoToMusician": "Go to Artist",
           "Unsubs": "Unsubscribe"
         }
       }
     },
     "Referral": {
-      "Title": "Referral Code",
+      "Title": "Referral Codes",
       "ReferFriend": {
-        "Title": "Refer A Friend",
-        "Text1": "Refer a friend and earn 50 free Credits",
-        "Text2": "Use your @username as referral code",
-        "Btn1": "Refer a friend using link",
+        "Title": "Refer a friend",
+        "Text1": "Refer a friend to earn 50 free Credits",
+        "Text2": "Your @username is your referral code",
+        "Btn1": "Refer a friend using the link",
         "Btn2": "Read Terms and Conditions"
       },
       "UseRefer": {
-        "Title": "Use Referral",
-        "Text1": "Earn 50 free Credits",
+        "Title": "Use Referral Code",
+        "Text1": "Earn 50 free credits",
         "Text2": "Your Friend’s Referral Code",
         "Text3": "Referral code cannot be changed"
       },
       "ReferUsed": {
-        "Title": "Referral Used"
+        "Title": "Referral used"
       },
       "OnBoard": {
         "Title": "Do you have a referral code?",
         "Subtitle": "Enter your code to jumpstart your Beamco Journey!",
-        "Actived": "Referral Activated",
+        "Actived": "Referral activated",
         "Success": "Congratulations! now you will get 5% credits every transaction!"
       }
     },
@@ -942,102 +941,102 @@
       "Title": "Referral Code",
       "ReferFriend": {
         "Title": "REFER A FRIEND",
-        "Text1": "Refer a friend and earn 50 free credits",
-        "Text2": "Use your @username as referral code",
-        "Btn1": "Refer a friend using link",
+        "Text1": "Refer a friend to earn 50 free credits",
+        "Text2": "Your @username is your referral code",
+        "Btn1": "Refer a friend using the link",
         "Btn2": "Read Terms of Use"
       },
       "UseRefer": {
         "Title": "USE REFERRAL",
         "Text1": "Earn 50 free credits",
-        "Text2": "Your Friend’s Referral Code",
-        "Text3": "Referral code can not be changed",
-        "Invalid": "Scan Failed! Try Using Another Code"
+        "Text2": "Your friend’s referral code",
+        "Text3": "Referral code cannot be changed",
+        "Invalid": "Referral code invalid"
       },
       "OnBoard": {
-        "Title": "Scan QR Code to Earn Bonuses!",
-        "Subtitle": "Scan Referral Code by Pressing 'Scan Now' for Bonuses",
-        "Activated": "Your 5% Comission for every transaction have been activated!",
+        "Title": "Scan QR Code for Rewards!!",
+        "Subtitle": "Scan the referral code using the “Scan Now” button to earn rewards!",
+        "Activated": "You will now receive 5% for every successful transaction!", //123#yogialign
         "SuccessTitle": "Success!",
-        "SuccessDesc": "Congratulations! now you will get 5% credits every transaction!",
+        "SuccessDesc": "Congratulations! You will receive 5% credits for every successful transaction!",
         "Continue": "Continue",
         "Next": "Next",
         "DividerOnScan": "Or",
-        "DividerOnManualEnter": "Or Try Another Method",
-        "ReferralAdded": "Referral Code Added",
-        "BtnScan": "Scan Now",
-        "BtnManual": "Enter Manually"
+        "DividerOnManualEnter": "Or try another method",
+        "ReferralAdded": "Referral code added",
+        "BtnScan": "Scan now",
+        "BtnManual": "Enter manually"
       },
       "ScanFailed": {
         "Title": "Scan QR Code",
-        "Desc": "Scan Failed! Try Using Another Code",
+        "Desc": "Scan failed. Try using another code",
         "Btn": "Dismiss"
       },
       "ShareQR": {
-        "Subtitle": "Share this QR code to let others know the Beamco profile",
-        "BtnShare": "Share Profile",
+        "Subtitle": "Share your QR code to earn beam bonuses with every sign up!",
+        "BtnShare": "Share",
         "BtnBack": "Back"
       }
     },
     "Language": {
       "Title": "Language",
-      "Placeholder": "Select Language",
+      "Placeholder": "Select language",
       "Modal": {
-        "Title": "Change Language",
+        "Title": "Change language",
         "Subtitle": "Are you sure you want to change your language?"
       }
     },
     "Notification": {
-      "Title": "Push Notifications",
+      "Title": "Push notifications",
       "Label": {
-        "Title": "Turn On Push Notifications",
+        "Title": "Turn on push notifications",
         "Subtitle": "You haven't activated push notifications on your device. Select 'Activate Now' under 'Settings'"
       }
     },
     "Report": {
-      "Title": "Send Report",
+      "Title": "Send report",
       "Modal": {
         "Title": "Need help?",
-        "Bug": "Report a Bug",
+        "Bug": "Report a bug",
         "TextBug": "Something in the App is broken or is not working as expected",
-        "Suggest": "Suggest an Improvement",
-        "TextSuggest": "New ideas or desired enhancement for this app",
+        "Suggest": "Suggestions",
+        "TextSuggest": "New ideas or desired enhancements for this app",
         "Help": "Help",
-        "TextHelp": "If you want to know more contact us",
-        "SendAppeal": "Send Appeal",
+        "TextHelp": "Contact us for more information",
+        "SendAppeal": "Send an appeal",
         "TextSendAppeal": "Request account or content recovery"
       },
       "Placeholder": {
         "Email": "Enter your email",
-        "Text": "How can we improve your experience using this app?"
+        "Text": "How can we improve your experience with the app?"
       }
     },
     "SendAppeal": {
       "ReportedContent": {
-        "Title": "Send Appeal to recover your account and content",
+        "Title": "Send appeal to recover your account and content",
         "Subtitle": "Select content to recover : "
       },
       "ContentToRecover": "Content to recover",
       "ModalBanned": {
         "Title": "Oops! It looks like you've been banned",
-        "Subtitle": "Are you sure to send this appeal?",
+        "Subtitle": "Are you sure you want to send this appeal?",
         "Button1": "Let me think",
         "Button2": "Send"
       },
       "ModalSuccess": {
-        "Title": "Your Appeal has been received!",
-        "Subtitle": "We shall notify you in due course",
-        "Button": "Back to Settings"
+        "Title": "Your appeal has been received!",
+        "Subtitle": "We shall notify you after we have reviewed your appeal",
+        "Button": "Back to settings"
       },
       "Placeholder": "Add appeal reason"
     },
     "PreventInteraction": {
       "Title": "You've been banned",
-      "Subtitle": "You are not able to have an interaction with other people. Visit help in settings to send appeal and remove your banned by sending a valid reason",
+      "Subtitle": "We have restricted your interactions with others. Visit 'Help' in settings to send appeal if you believe this is an error.",
       "TextNavigate": "help in settings"
     },
     "Helps": {
-      "Title": "Helps"
+      "Title": "Help"
     },
     "TnC": {
       "Title": "Terms and Conditions"
@@ -1086,24 +1085,24 @@
   },
   "Music": {
     "Label": {
-      "NowPlaying": "Now Playing",
-      "SongDetails": "Song Details",
-      "SongDesc": "Song Description",
-      "AddToMyPlaylist": "Add to My Playlist",
+      "NowPlaying": "Now playing",
+      "SongDetails": "Song details",
+      "SongDesc": "Song description",
+      "AddToMyPlaylist": "Add to my playlist",
       "By": "by",
-      "SongList": "Song List",
-      "AddSong": "Add Song",
+      "SongList": "Song list",
+      "AddSong": "Add song",
       "CreatedOn": "Created on",
       "ComingSoon": "Coming soon",
       "NoSong": "No Song Added",
       "Songs": "Songs"
     },
     "NewPlaylist": {
-      "Title": "New Playlist",
-      "Cover": "Edit Playlist Cover",
+      "Title": "New playlist",
+      "Cover": "Edit playlist cover art",
       "Placeholder": {
-        "Name": "Playlist Name",
-        "Desc": "Playlist Description"
+        "Name": "Playlist name",
+        "Desc": "Playlist description"
       },
       "Visibility": {
         "Title": "Visibility",
@@ -1112,22 +1111,22 @@
       }
     },
     "Playlist": {
-      "Edit": "Edit Playlist",
-      "Delete": "Delete Playlist",
-      "Share": "Share Playlist",
-      "Success": "{{song}} successfully added to playlist {{playlist}}",
-      "Remove": "Remove from Playlist",
-      "ViewAlbum": "View Album"
+      "Edit": "Edit playlist",
+      "Delete": "Delete playlist",
+      "Share": "Share playlist",
+      "Success": "{{song}} successfully added to {{playlist}}",
+      "Remove": "Remove from playlist",
+      "ViewAlbum": "View album"
     },
     "Credit": {
-      "Title": "Show Credits",
-      "SingBy": "Sung by",
+      "Title": "Show Beam credits",
+      "SingBy": "Performer",
       "Featuring": "Featuring",
-      "Writer": "Song Writer",
+      "Writer": "Songwriter",
       "Format": "Format",
-      "Label": "Label Name",
+      "Label": "Label name",
       "Genre": "Genre",
-      "Release": "Release Date",
+      "Release": "Release date",
       "Copyright": "Copyright"
     }
   },
@@ -1135,36 +1134,37 @@
     "Title": "Post",
     "Label": {
       "RepliedTo": "replied to",
-      "ViewMoreReply": "View more reply",
-      "EditReply": "Edit Reply",
-      "DeleteReply": "Delete Reply",
-      "EditPost": "Edit Post",
-      "DeletePost": "Delete Post"
+      "ViewMoreReply": "View more replies",
+      "EditReply": "Edit reply",
+      "DeleteReply": "Delete reply",
+      "EditPost": "Edit post",
+      "DeletePost": "Delete post"
     },
     "Placeholder": {
       "Write": "Write your reply"
     },
     "Create": {
-      "PublicTitle": "Public Content",
-      "ExclusiveTitle": "Exclusive Content",
-      "Category": "Select Category",
-      "Write": "Write Something",
-      "Audience": "Set Audience",
-      "Quote": "Quote Music",
-      "Media": "Upload Media",
-      "Preview": "Add Preview",
-      "Success":"Your post have been sent!",
-      "Warning":{
-        "Title":"Upload Video",
-        "Caption":"Oops! Your video is more than 15 sec. To make sure your upload goes through, try cutting it down and then uploading again.",
-        "Button":"Ok, Got It"
+      "PublicTitle": "Public content",
+      "ExclusiveTitle": "Exclusive content",
+      "Category": "Select category",
+      "Write": "Write something",
+      "Audience": "Set audience",
+      "Quote": "Quote music",
+      "Media": "Upload media",
+      "Preview": "Add preview",
+      "Success": "Your post has been sent!",
+      "Warning": {
+        "Title": "Upload video",
+        "Caption": "Oops! Your video is more than 15 sec. Please crop the video before attempting to upload again.",
+        "Button": "Ok, Got It"
       }
     },
     "Dropdown": {
-      "Visit": "Visit Profile",
+      "Visit": "Visit profile",
       "Report": "Report",
-      "ReportSent": "Report Sent!",
-      "Block": "Block"
+      "ReportSent": "Report sent!",
+      "Block": "Block",
+      "setting": "Setting"
     }
   },
   "Notification": {
@@ -1173,84 +1173,84 @@
   "Modal": {
     "TopupInfo": {
       "Title": "Credit Purchase",
-      "SubtitleIos": "If a course purchased through the iOS app isn’t in your account, check for a 'Pending' transaction in Apple; this may take 24-48 hours to process. If the status changes but the course isn't added, send us your Apple receipt to help resolve the issue.",
-      "SubtitleAndroid": "If a course purchased through the Android app isn’t in your account, check for a 'Pending' transaction in Google Play; this may take 24-48 hours to process. If the status changes but the course isn't added, send us your Google Play receipt to help resolve the issue."
+      "SubtitleIos": "If the credits purchased through the iOS app are not in your account, check for a 'Pending' transaction from Apple; this may take 24-48 hours to process. If the status changes but the credits have not been added, send us your Apple receipt so we may assist you with the issue.",
+      "SubtitleAndroid": "If the credits purchased through the Android app are not in your account, check for a 'Pending' transaction from Google Play; this may take 24-48 hours to process. If the status changes but the credits have not been added, send us your Google Play receipt so we may assist you with the issue."
     },
     "ModalInfo": {
-      "TitleMerch": "Sell Your Merchandise Now!",
+      "TitleMerch": "Sell your merchandise now!",
       "Subtitle1Merch": "To list your merchandise for sale, kindly log in to ",
       "Subtitle2Merch": " and submit the necessary merchandise details.",
-      "TitleTicket": "Sell Your Ticket Now!",
+      "TitleTicket": "Sell your ticket now!",
       "Subtitle1Ticket": "To sell your ticket, please log in to ",
-      "Subtitle2Ticket": " and provide the necessary information about your ticket.",
-      "CheckboxText": "Don’t show me this information again"
+      "Subtitle2Ticket": "and provide the necessary information about your ticket.",
+      "CheckboxText": "Don’t show me this again"
     },
     "MusicianNotAvail": {
       "Title": "Featuring Artist",
-      "Subtitle": "Artist that you’ve looking for is not available in beam platform, we'll let you know as soon as something new is on the horizon."
+      "Subtitle": "The Artist that you are looking for is not available on the Beamco platform, make sure to look out for them in the future!"
     },
     "Limit": {
-      "Title": "Limit Reached",
-      "Subtitle1": "You have reached the limit of uploading 10 photos, please delete some of your photos to upload new ones.",
-      "Subtitle2": "Some of your photos cannot be uploaded because you have reached your limit. You can only upload up to 10 photos in your profile. Delete some photos to upload the new ones.",
-      "SubtitleSR1": "You have reached the limit of uploading 4 photos, please delete some of your photos to upload new ones.",
-      "SubtitleSR2": "Some of your photos cannot be uploaded because you have reached your limit. You can only upload up to 4 photos. Delete some photos to upload the new ones."
+      "Title": "Limit reached",
+      "Subtitle1": "You have reached the 10 photo limit, please delete some of your photos to upload new ones.",
+      "Subtitle2": "Some of your photos cannot be uploaded because you have reached the limit. You can only upload up to 10 photos onto your profile. Delete some photos to upload the new ones.",
+      "SubtitleSR1": "You have reached the 4 photo limit, please delete some of your photos to upload new ones.",
+      "SubtitleSR2": "Some of your photos cannot be uploaded because you have reached the limit. You can only upload up to 4 photos. Delete some photos to upload the new ones."
     },
     "EditProfile": {
       "Title": "Edit Profile",
-      "Subtitle": "Are you sure to finish edit profile?"
+      "Subtitle": "Are you sure you're finished editing your profile?"
     },
     "Playlist": {
       "Save": "Are you sure you want to save your new playlist?",
       "Update": "Are you sure you want to update your playlist?",
       "Delete": "Are you sure you want to delete this playlist?",
-      "Cover": "Edit Playlist Cover"
+      "Cover": "Edit playlist cover"
     },
     "Donation": {
       "Unsubs": "Are you sure you want to unsubscribe to {{name}}?"
     },
     "Email": {
-      "Add": "Are you sure you want to add new email?",
-      "Change": "Are you sure you want to save changes?"
+      "Add": "Are you sure you want to add a new email?",
+      "Change": "Are you sure you want to change your email?"
     },
     "Phone": {
-      "Add": "Are you sure you want to add new phone number?",
-      "Change": "Are you sure you want to change your phone number?"
+      "Add": "Are you sure you want to add a new phone number?",
+      "Change": "Are you sure you want to update your phone number?"
     },
     "Report": {
       "Success": "Thank you for your feedback!",
-      "Back": "Back to Settings"
+      "Back": "Back to settings"
     },
     "SignOut": "Are you sure you want to sign out?",
     "Guest": {
-      "Title": "Sign Up or Sign In",
-      "Subtitle": "You are exploring as guest, sign up or sign in to enoy full content"
+      "Title": "Sign up or Sign in",
+      "Subtitle": "You are exploring as a guest, sign up or sign in for access to more in-app content"
     },
     "Update": {
-      "Title": "New Version Available",
-      "Subtitle": "We've added new feautures to enhance your experience"
+      "Title": "New update available",
+      "Subtitle": "We've added new features to enhance your experience"
     },
     "ExclusiveContentConfirm": {
-      "Title": "Exclusive Content",
-      "Body": "To Continue, You Need to Fill in the Following Details",
+      "Title": "Exclusive content",
+      "Body": "To continue, please provide the following details",
       "ButtonOk": "Yes",
-      "ButtonCancel": "Maybe Later"
+      "ButtonCancel": "Maybe later"
     },
     "Unsub": {
       "Title": "Unsubscribe",
-      "Subtitle": "Are you sure you want to unsubscribe {{musician}}?"
+      "Subtitle": "Are you sure you want to unsubscribe to {{musician}}?"
     },
     "StopDonation": {
-      "Title": "Stop Beaming",
-      "Subtitle": "Are you sure you want to stop donation to {{musician}}?"
+      "Title": "Stop donation",
+      "Subtitle": "Are you sure you want to stop donations to {{musician}}?"
     },
     "CreditEmpty": {
-      "Title": "You have used all your Credits!",
-      "Subtitle": "Top-Up Now to continue Beaming"
+      "Title": "Aw, you've run out of Beamco credits!",
+      "Subtitle": "Top up your credits to continue Beaming"
     },
     "SessionEnd": {
-      "Title": "Session has been end!",
-      "Subtitle": "Let’s view other artist performer"
+      "Title": "Session has ended!",
+      "Subtitle": "Try viewing another Artist"
     },
     "ClaimReward": {
       "Title": "You have claimed your reward!",
@@ -1258,11 +1258,10 @@
     }
   },
   "EmptyState": {
-    "Donate": "Seems like you aren’t rewarded any artist yet, try to donate your favorite artist",
-    "Exclusive": "You don’t have access to any exclusive content. Try subscribing to your favorite artist",
+    "Donate": "Seems like you haven’t rewarded any artists yet. Show your support by Beaming them!",
+    "Exclusive": "Your feed is currently empty. Subscribe to more artists to see exclusive content!",
     "NoData": "No data available",
-    "FollowMusician": "This artist doesn't seem to have any posts right now. Try following more artists",
-    "DontHavePost": "You don't have any post",
+    "FollowMusician": "There are currently no posts by your favourite Artists. Follow more Artists",
     "Search": {
       "Album": "Album not found",
       "Event": "Event not found",
@@ -1272,47 +1271,47 @@
       "Song": "Song not found",
       "Fans": "Fans not found"
     },
-    "NoAlbum": "No Album Available.",
-    "NoMerch": "No Merch Available.",
-    "NoInfo": "No Information Given.",
-    "NoPhoto": "No Photos Available.",
-    "NoECSetting": "You have not set your exclusive content yet, let’s try to make one",
-    "NoECData": "You don’t have any exclusive content, try to make a new one!",
+    "NoAlbum": "No album available.",
+    "NoMerch": "No merch available.",
+    "NoInfo": "No information given.",
+    "NoPhoto": "No photos available.",
+    "NoECSetting": "You have not uploaded any exclusive content, try uploading some!",
+    "NoECData": "You don’t have any exclusive content, try creating some!",
     "NoFollowersTitle": "People follow this artist",
-    "NoFollowersSubtitle": "When people follow artist, you'll see them here",
-    "Subscribe": "You don’t have any subscription, try to subsrcibe your favorite artist",
-    "PopularPost": "Your Feed is currently empty. Create Posts for your Fans!",
-    "MostPlayed": "Your Feed is currently empty. Upload Songs for your Fans!",
-    "Merch": "Your Feed is currently empty. Sell Merch now to your Fans!",
-    "Released": "Your Feed is currently empty. Upload Songs Now!",
-    "Musician": "Oops! It’s seems you don’t have any post, your post will displayed here. \nLet’s create a new post!",
+    "NoFollowersSubtitle": "When people follow Artists, you'll see them here",
+    "Subscribe": "You don’t have any subscriptions. Try subscribing to your favourite Artists",
+    "PopularPost": "Your feed is currently empty. Try posting something for your fans!",
+    "MostPlayed": "Your feed is currently empty. Upload Songs for your Fans!",
+    "Merch": "Your feed is currently empty. Try selling some merch to your fans now!",
+    "Released": "Your feed is currently empty. Try uploading some music!",
+    "Musician": "Oops! It seems you don’t have any posts, your posts will displayed here. \nTry creating a new post!",
     "Revenue": {
-      "Tips": "You haven't received any Beams from your fans. Create content to encourage receiving some Beams.",
-      "Subs": "You haven't received any subscriptions from your fans. Create exclusive content to earn fans subscriptions."
+      "Tips": "You haven't received any Beams from your fans. Create content to get their support!",
+      "Subs": "You haven't received any subscriptions from your fans. Create exclusive content to get some subscriptions."
     }
   },
   "Guest": {
-    "Title": "Sign Up to Interact with Artist",
-    "Subtitle": "When you are sign up, you can",
-    "UnlimitedSong": "Play Unlimited Song",
-    "GetEvent": "Get Latest Event Update",
-    "GetExclusive": "Get Exclusive Content",
-    "Support": "Support Your Artist"
+    "Title": "Sign up to interact with Artists",
+    "Subtitle": "When you sign up, you can",
+    "UnlimitedSong": "Play unlimited songs",
+    "GetEvent": "Get the latest event updates",
+    "GetExclusive": "Get access to exclusive content",
+    "Support": "Support your favourite Artists"
   },
   "TopUp": {
     "Title": "Credits",
-    "Subtitle1": "Use Credits to Support and Engage with Your Favourite Artists",
-    "Subtitle2": "Beamco Credits allow you to participate in our Artist’s journey and join our rankings",
-    "Subtitle3": "Find an Artist you love? Reward them with Beamco Credits as support",
-    "MyCoin": "My Credits",
+    "Subtitle1": "Use credits to support and engage with your favourite Artists",
+    "Subtitle2": "Beamco credits allow you to participate in our Artist’s journey and join our rankings",
+    "Subtitle3": "Find an Artist you love? Reward them with Beamco credits to show your support",
+    "MyCoin": "My credits",
     "ButtonWithdraw": "Withdraw",
     "Filter": {
-      "Buy": "Buy Package",
+      "Buy": "Buy a package",
       "Transaction": "Transaction",
       "Withdrawal": "Withdraw"
     },
     "Transaction": {
-      "SuccessPurchased": "{{credit}} Coin have been purchased",
+      "SuccessPurchased": "{{credit}} Coins have been purchased",
       "Detail": {
         "Title": "Transaction Details",
         "StatusInfo": "Credits added successfully!",
@@ -1323,20 +1322,20 @@
         "Failed": "Failed",
         "Date": "Date",
         "Time": "Time",
-        "PaymentMethods": "Payment Methods",
+        "PaymentMethods": "Payment methods",
         "Total": "Total",
         "Credit": "Credits",
         "Bonus": "Bonus",
-        "NeedHelp": "Need Help?",
-        "ContactSupport": "Contact our support"
+        "NeedHelp": "Need help?",
+        "ContactSupport": "Contact our support team"
       }
     },
     "Withdrawal": {
-      "TransactionAmount": "Transaction Amount",
-      "ConversionAmount": "Conversion Amount to HKD",
+      "TransactionAmount": "Transaction amount",
+      "ConversionAmount": "Conversion amount to HKD",
       "To": "To",
       "Date": "Date",
-      "TransactionStatus": "Transaction Status",
+      "TransactionStatus": "Transaction status",
       "Notes": "Notes",
       "Status": {
         "Pending": "Pending",
@@ -1345,12 +1344,12 @@
       }
     },
     "EmptyState": {
-      "Transaction": "The transaction list will be displayed here, but as of now, no transactions have been made.",
-      "Withdrawal": "There are no transactions to display at the moment regarding withdrawals."
+      "Transaction": "Your list of transactions will be displayed here. As of now, no transactions have been made.",
+      "Withdrawal": "There are no withdrawal transactions to display at the moment."
     },
     "Dropdown": {
-      "TopUpCredit": "Top Up Credit",
-      "CreditTransaction": "Credit Transaction"
+      "TopUpCredit": "Top up credit",
+      "CreditTransaction": "Credit transaction"
     },
     "Credit": "Credit",
     "Estimation": "Fiat Money"
@@ -1358,69 +1357,69 @@
   "Withdrawal": {
     "Title": "Withdraw",
     "BankAccount": {
-      "BankAccount": "Account Name",
-      "AddAccount": "Add Account",
-      "AddBankAccount": "Add Account Name",
+      "BankAccount": "Account name",
+      "AddAccount": "Add account",
+      "AddBankAccount": "Add account name",
       "Number": "Number",
-      "AccountNumber": "Account Number",
-      "BankName": "Bank Name",
+      "AccountNumber": "Account number",
+      "BankName": "Bank name",
       "Action": "Action",
-      "EmptyState": "You will need a bank account to proceed with any withdrawals"
+      "EmptyState": "Please provide your bank details to proceed with the withdrawal"
     },
     "InputWithdrawal": {
       "WithdrawCredits": "You can withdraw your credits on the 14th or 28th day of every month. The process will take around 7 working days.",
-      "InputWithdrawalAmount": "Enter Withdrawal Amount",
-      "InputAmount": "Enter Amount",
-      "CreditToWithdraw": "Credits to Withdraw",
-      "TotalConversion": "Credits in HK$",
+      "InputWithdrawalAmount": "Enter withdrawal amount",
+      "InputAmount": "Enter amount",
+      "CreditToWithdraw": "Credits to withdraw",
+      "TotalConversion": "Credits in HKD$",
       "ErrorMsgMin": "The minimum amount for withdraw is 5000 Credits",
       "ErrorMsgMax": "You can’t withdraw more than your available credit"
     },
     "AddBankAccount": {
-      "Title": "Add Account",
+      "Title": "Add account",
       "ModalConfirm": {
-        "TitleUnsaved": "Unsaved Progress",
+        "TitleUnsaved": "Unsaved progress",
         "SubtitleAdd": "Are you sure you want to save changes?",
-        "SubtitleUnsaved": "Are you sure you want to go back? Your withdrawal account will be unsaved and you need to input your data again"
+        "SubtitleUnsaved": "Are you sure you want to go back? Your withdrawal request will be unsaved and you will need to input your data again"
       },
       "Label": {
         "Country": "Country",
-        "BankName": "Bank Name",
-        "AccountNumber": "Account Number",
-        "SwiftCode": "Swift Code",
-        "BankAddress": "Bank Address",
-        "NameOfAccountHolder": "Name of Account Holder",
-        "BeneficiaryName": "Beneficiary Name",
-        "BeneficiaryAddress": "Beneficiary Address",
-        "UploadPhotos": "Upload Photos of National ID or Passport"
+        "BankName": "Bank name",
+        "AccountNumber": "Account number",
+        "SwiftCode": "Swift code",
+        "BankAddress": "Bank address",
+        "NameOfAccountHolder": "Name of account holder",
+        "BeneficiaryName": "Beneficiary name",
+        "BeneficiaryAddress": "Beneficiary address",
+        "UploadPhotos": "Upload photos of National ID or Passport"
       },
       "Placeholder": {
-        "Country": "Select Country",
-        "BankName": "Select Bank Name",
-        "AccountNumber": "Add Account Number",
-        "SwiftCode": "Add Swift Code",
-        "BankAddress": "Add Bank Address",
-        "NameOfAccountHolder": "Add Name of Account Holder",
-        "BeneficiaryName": "Add Beneficiary Name",
-        "BeneficiaryAddress": "Add Beneficiary Address",
+        "Country": "Select country",
+        "BankName": "Select bank name",
+        "AccountNumber": "Add account number",
+        "SwiftCode": "Add swift code",
+        "BankAddress": "Add bank address",
+        "NameOfAccountHolder": "Add name of account holder",
+        "BeneficiaryName": "Add beneficiary name",
+        "BeneficiaryAddress": "Add beneficiary address",
         "UploadPhotos": "Upload"
       }
     },
     "EditBankAccount": {
-      "Title": "Edit Bank Account",
+      "Title": "Edit bank account",
       "ModalConfirm": {
-        "SubtitleEdit": "Are you sure your want to update your current Withdrawal Account?"
+        "SubtitleEdit": "Are you sure you want to update your current withdrawal account?"
       }
     },
     "DeleteBankAccount": {
       "ModalConfirm": {
-        "Title": "Delete Bank Account",
-        "Subtitle": "Are you sure you want to delete your bank account? You need to add new bank account to withdraw"
+        "Title": "Delete bank account",
+        "Subtitle": "Are you sure you want to delete your bank account? You will be required to add a new bank account to proceed with withdrawals"
       }
     },
     "VerifCode": {
-      "VerificationCode": "Verification Code",
-      "VerificationText": "Please Enter the Code Sent to {{email}}",
+      "VerificationCode": "Verification code",
+      "VerificationText": "Please enter the code sent to {{email}}",
       "Rejected": "Please enter a valid recovery code",
       "ResendAfter": "You can resend recovery code after "
     },
@@ -1428,41 +1427,41 @@
       "Title": "Congratulations! \nYour withdrawal is being processed!",
       "SubtitleFirstTime": "Once we have verified your bank details your funds will be on their way! This process can usually take up to 7 working days.",
       "SubtitleNextWithdraw": "This can take up to 7 working days. You will receive your funds upon successful confirmation.",
-      "CreateWithdrawalAccount": "Your withdrawal account have been saved!",
-      "EditWithdrawalAccount": "Your account have been edited!",
+      "CreateWithdrawalAccount": "Your withdrawal account has been saved!",
+      "EditWithdrawalAccount": "Your account has been edited!",
       "DeleteWithdrawalAccount": "Bank account has been deleted!",
-      "ButtonText": "Back to credit"
+      "ButtonText": "Back to credits"
     }
   },
   "RecoverAccount": {
     "Title": "Account Deletion",
-    "FirstParagraph": "You have signed in to your account which is currently bring deleted.",
+    "FirstParagraph": "You have signed into an account that is currently bring deleted.",
     "SecondParagraph": "Please keep in mind that you can still recover your account within the next 30 days.",
     "ThirdParagraph": "Once you delete your account, all of your data, including your saved preferences and settings, will be permanently erased.",
     "Btn": {
-      "Recover": "Recover My Account",
-      "SignOut": "No, Sign Out"
+      "Recover": "Recover my account",
+      "SignOut": "No, sign out"
     },
     "Modal": {
-      "Title": "Recover Account",
+      "Title": "Recover account",
       "Subtitle": "Are you sure you want to recover your account?"
     }
   },
   "Cart": {
     "Title": "Cart",
-    "SelectAll": "Select All",
+    "SelectAll": "Select all",
     "Delete": "Delete",
     "Checkout": "Checkout"
   },
   "Promo": {
     "Code": {
-      "Title": "Promo Code",
+      "Title": "Promo code",
       "Time": "Ended in {{time}}"
     },
     "Detail": {
-      "Title": "Promo Detail",
+      "Title": "Promo detail",
       "Time": "Ended in",
-      "Minimum": "Minimum Transactions",
+      "Minimum": "Minimum transaction",
       "TnC": "Terms & Conditions"
     }
   },
@@ -1489,12 +1488,12 @@
     },
     "Detail": {
       "Title": "Details",
-      "Product": "Detail Product",
+      "Product": "Product details",
       "Total": "Total",
       "Purchase": {
-        "Title": "Purchase Information",
-        "Date": "Purchasing Date",
-        "Cancel": "Auto Cancel On"
+        "Title": "Purchase information",
+        "Date": "Purchasing date",
+        "Cancel": "Auto cancel on"
       },
       "Shipping": {
         "Title": "Shipping Information",
@@ -1510,13 +1509,13 @@
       },
       "Ticket": "Ticket"
     },
-    "Finish": "Finish Order",
-    "Track": "Track Status",
-    "Cancel": "Cancel Order",
+    "Finish": "Finish order",
+    "Track": "Track status",
+    "Cancel": "Cancel order",
     "Order": {
-      "Title": "Finish Order",
-      "Confirm": "Are you sure to finish this order?",
-      "Finish": "Order Finished!"
+      "Title": "Complete order",
+      "Confirm": "Are you sure you want to complete this order?",
+      "Finish": "Order completed!"
     },
     "Dropdown": {
       "Category": {
@@ -1526,15 +1525,15 @@
         "Ticket": "Ticket"
       },
       "Sort": {
-        "Placeholder": "Sort By",
+        "Placeholder": "Sort by",
         "Newest": "Newest",
         "Oldest": "Oldest"
       }
     },
-    "EmptyState": "Oops! You don’t have any transaction.\nYour transaction will be displayed here"
+    "EmptyState": "Oops! You don’t have any transactions. Your recent transactions will be displayed here"
   },
   "Tracking": {
-    "Title": "Track Status"
+    "Title": "Track status"
   },
   "Shop": {
     "Title": "Shop"
@@ -1542,37 +1541,37 @@
   "Review": {
     "Title": "Review",
     "Rating": "Take a moment to rate this item",
-    "Input": "Have you satisfied about this product?",
-    "Placeholder": "Ex: I love this product, the finishing is very clean!"
+    "Input": "Are you satisfied with this product?",
+    "Placeholder": "Ex: I love this product, it has an extremely clean finish!"
   },
   "ProfileProgress": {
-    "Title": "Profile Progress",
+    "Title": "Profile progress",
     "Card": {
       "Title": "Profile & Account Information",
-      "Subtitle": "Tap to complete your account information"
+      "Subtitle": "Tap to complete your profile"
     },
-    "Title2": "Task To Complete",
+    "Title2": "Tasks To Complete",
     "Tab": {
       "AccountInformation": "Account Information",
       "ProfileInformation": "Profile Information"
     },
-    "SubtitleTooltip": "To finish this step, you need to fulfill this information below:",
-    "SubtitleTooltipFinish": "You have already completed your account information"
+    "SubtitleTooltip": "Complete your profile:",
+    "SubtitleTooltipFinish": "You have already completed your profile"
   },
   "ShareLink": {
     "Music": {
       "Title": "Listen To {{title}}",
-      "Playlist": "Playlist by {{owner}}",
-      "Song": "Song by {{owner}}",
-      "Album": "Album by {{owner}}"
+      "Playlist": "Curate a playlist for your every mood!",
+      "Song": "Check out these new releases!",
+      "Album": "Immerse yourself in a body of musical work"
     },
     "Feed": {
       "Title": "{{musician}}'s post",
-      "Subtitle": "Get the Latest Updates from Your Favorite Artist!"
+      "Subtitle": "Get the latest updates from your favourite artists!"
     },
     "Profile": {
       "Title": "Get in touch with {{name}}",
-      "Subtitle": "Discover Attention-Grabbing Artists to Explore!",
+      "Subtitle": "Discover more artists!",
       "LinkCopied": "The profile URL has been copied!"
     }
   },
@@ -1581,39 +1580,39 @@
       "Type": {
         "Song": {
           "FirstTitle": "Why are you reporting this song?",
-          "SecondTitle": "Are you sure to report this song?"
+          "SecondTitle": "Are you sure you would like to report this song?"
         },
         "Album": {
           "FirstTitle": "Why are you reporting this album?",
-          "SecondTitle": "Are you sure to report this album?"
+          "SecondTitle": "Are you sure you would like to report this album?"
         },
         "Post": {
           "FirstTitle": "Why are you reporting this post?",
-          "SecondTitle": "Are you sure to report this post?"
+          "SecondTitle": "Are you sure you would like to report this post?"
         },
         "Replies": {
-          "FirstTitle": "Why are you reporting this replies?",
-          "SecondTitle": "Are you sure to report this replies?"
+          "FirstTitle": "Why are you reporting this?",
+          "SecondTitle": "Are you sure you would like to report this?"
         }
       },
       "Category": {
-        "OptionA": "Abusive behavior and violent threats",
+        "OptionA": "Abusive behaviour and violent threats",
         "OptionB": "Spam and system abuse",
-        "OptionC": "Unauthorized use of copyrighted materials",
-        "OptionD": "Show sensitive or disturbing content"
+        "OptionC": "Unauthorised use of copyrighted materials",
+        "OptionD": "Sensitive or disturbing content"
       },
       "Button": {
         "Cancel": "Cancel",
         "Send": "Send",
         "Edit": "Let me edit"
       },
-      "Placeholder": "Add Reason",
+      "Placeholder": "Add Reason (others)",
       "Subtitle": {
         "Category": "Category",
         "Reason": "Reason"
       },
-      "Warning": "You need to select one of the report category",
-      "ReportSuccess": "Report have been sent!"
+      "Warning": "Please select one of the above",
+      "ReportSuccess": "Your report has been sent!"
     }
   },
   "Vote": {
@@ -1628,49 +1627,49 @@
   "Block": {
     "Modal": {
       "Title": "Block",
-      "Subtitle": "They will not be able to follow you or view your content, and you will not see content from",
+      "Subtitle": "They will not be able to follow you or view your content, and you will no longer see their content",
       "LeftButton": "Cancel",
       "RightButton": "Block"
     },
     "BlockUI": {
-      "isBlockCaption": "This comment is from the people you've been blocked visit user profile",
-      "blockIsCaption": "You've been blocked by the people who replies this content visit user profile",
-      "linkCaption": "visit user profile",
-      "isBlockedProfTitle": "is Blocked",
+      "isBlockCaption": "This comment is from someone you have blocked, visit their profile",
+      "blockIsCaption": "You've been blocked by the person responding to this content, visit user profile",
+      "linkCaption": "visit their profile",
+      "isBlockedProfTitle": "is blocked",
       "isBlockedProfCaption": "This page is currently unavailable",
-      "blockIsProfTitle": "You have been Blocked",
+      "blockIsProfTitle": "You have been blocked",
       "blockIsProfCaption": "You can't see replies or notification from",
-      "unBlockTitle": "Are you sure to unblock",
-      "unBlockCaptionA": "by unblocking",
-      "unBlockCaptionB": "They will not be able to follow you or view your content, and you will not see content or notifications from",
+      "unBlockTitle": "Are you sure you want to unblock?",
+      "unBlockCaptionA": "By unblocking",
+      "unBlockCaptionB": "you will be able to see each others profiles",
       "unblockButtonYes": "Unblock",
-      "unblockSuccess": "have been unblocked!"
+      "unblockSuccess": "has been unblocked!"
     }
   },
   "Dropdown": {
     "Profile": {
       "qr": "QR Code",
-      "share": "Share Profile",
+      "share": "Share profile",
       "block": "Block",
       "unblock": "Unblock",
       "setting": "Setting"
     }
   },
   "ClaimReward": {
-    "Title": "Reward Detail",
+    "Title": "Reward detail",
     "ValidUntil": "Valid until",
     "Claim": "Claim",
     "Claimed": "Claimed"
   },
   "LiveTipping": {
-    "SwipeUp": "Swipe Up To Beam",
-    "TooFast": "You swipe to fast!",
-    "EnjoyShow": "Let’s enjoy the show\nand take a rest for few second",
+    "SwipeUp": "Swipe up to Beam",
+    "TooFast": "You swipe too fast!",
+    "EnjoyShow": "Let’s enjoy the show\nand take a rest for few seconds",
     "Credit": "Credit",
     "NowActive": "Now Active"
   },
   "DiscoverArtist": {
-    "Title": "Discover Artist"
+    "Title": "Discover artists"
   },
   "Coachmark": {
     "Skip": "Skip",
@@ -1678,71 +1677,71 @@
     "Previous": "Previous",
     "Finish": "Finish",
     "Credit": "Credit",
-    "SubtitleCredit": "Place where you can withdraw, view Beam & Subscribe report",
+    "SubtitleCredit": "Where you can withdraw and view Beam & subscribe reports",
     "Live": "Live",
-    "SubtitleLive": "You can view schedule of live event here",
+    "SubtitleLive": "You can view the schedule of the live event here",
     "Overview": "Overview",
-    "SubtitleOverview": "Place where you can view summary of your income, fans, total exclusive post, total of public post, total songs and album",
-    "CreateNewPost": "Create New Post",
-    "SubtitleCreateNewPost": "Place where you can create your own public and exclusive content",
-    "UploadMusic": "How to Upload Music",
-    "SubtitleUploadMusic": "This is information guide about how to upload music from dashboard app",
-    "FansAnalytic": "Fans Analytic",
-    "SubtitleFansAnalytic": "Summary of your fans behavior and demography",
-    "FansGrowth": "Fans Growth",
-    "SubtitleFansGrowth": "Report of your fans growth by fans earned and followers become fans",
+    "SubtitleOverview": "Where you can view the summary of your income, fans, total exclusive posts, total public posts, total songs and albums",
+    "CreateNewPost": "Create new post",
+    "SubtitleCreateNewPost": "Where you can create your own public and exclusive content",
+    "UploadMusic": "How to upload music",
+    "SubtitleUploadMusic": "This is a guide that will teach you how to upload your music on the platform",
+    "FansAnalytic": "Fans analytics",
+    "SubtitleFansAnalytic": "Summary of your fans behaviour and demographic",
+    "FansGrowth": "Fan growth",
+    "SubtitleFansGrowth": "A report on the growth of your fanbase",
     "TopFans": "Your Top Fans",
-    "SubtitleTopFans": "Report of your top fans ranking based on their contribution",
-    "FansInteraction": "Fans Interaction",
-    "SubtitleFansInteraction": "Percentage of fans interaction with your content",
-    "FansAge": "Fans Age",
+    "SubtitleTopFans": "A report on your top fans' ranking based on their contributions",
+    "FansInteraction": "Fan interactions",
+    "SubtitleFansInteraction": "Percentage of fans that interaction with your content",
+    "FansAge": "Fans' age",
     "SubtitleFansAge": "Percentage of your fans sorted by age",
-    "FansGender": "Fans Gender",
-    "SubtitleFansGender": "Percentage of your fans sorted by gender",
-    "FansCountry": "Fans Country",
-    "SubtitleFansCountry": "Total of your fans based on country",
+    "FansGender": "Fans' gender",
+    "SubtitleFansGender": "Percentages of gender identities that make up your fanbase",
+    "FansCountry": "Fans' country of origin",
+    "SubtitleFansCountry": "Fans and their country of origin",
     "Income": "Income",
-    "SubtitleIncome": "Monitor your beam income here",
+    "SubtitleIncome": "Monitor your Beam income here",
     "Beam&Sub": "Beam & Sub Earned",
     "SubtitleBeam&Sub": "Monitor your Beam and sub income here",
-    "MyIncome": "My Income",
+    "MyIncome": "My income",
     "SubtitleMyIncome": "You can view of Beam and subscription trend to help your engagement decision",
     "PostTab": "Post Tab",
-    "SubtitlePostTab": "View analytic from your post activity and engagement",
-    "PopularPost": "Popular Post",
-    "SubtitlePopularPost": "View your popular post based on filter",
-    "PostEngagementRate": "Post Engagement Rate",
-    "SubtitlePostEngagementRate": "Measure how is your engagement rate in every post you create",
+    "SubtitlePostTab": "View analytics from your posts' activity and engagement",
+    "PopularPost": "Popular Posts",
+    "SubtitlePopularPost": "View your most popular post",
+    "PostEngagementRate": "Post engagement rate",
+    "SubtitlePostEngagementRate": "Measure your engagement rate for every post you've created",
     "MyMusic": "My Music",
     "SubtitleMyMusic": "You can view your album and song summary",
     "PopularAlbum": "Popular Album",
-    "SubtitlePopularAlbum": "This is your most popular album among your audience",
+    "SubtitlePopularAlbum": "This is your most popular album based on your audience engagement",
     "TopSong": "Top Song",
-    "SubtitleTopSong": "This is your top song based on like and stream",
-    "ActiveListener": "Your Active Listener",
-    "SubtitleActiveListener": "You can view your active listener, average listener streamed and fans stream you song based on filter",
+    "SubtitleTopSong": "This is your top song based on you likes and streams",
+    "ActiveListener": "Your most active listeners",
+    "SubtitleActiveListener": "You can view your most active listeners on your songs",
     "ListenerCountry": "Listener Country",
-    "SubtitleListenerCountry": "Your audience demography based on country",
+    "SubtitleListenerCountry": "See where your fans are from!",
     "ListenerAlsoLike": "Listener Also Like",
-    "SubtitleListenerAlsoLike": "Similar artists that your fans listen into",
+    "SubtitleListenerAlsoLike": "Similar Artists that your fans listen into",
     "Discover": "Discover",
-    "SubtitleDiscover": "The place where you can keep updated about the community",
+    "SubtitleDiscover": "The place where you can get updates on the community",
     "ComingSoon": "Coming Soon",
-    "SubtitleComingSoon": "This is the list of upcoming album, stay tune!",
+    "SubtitleComingSoon": "This is the list of upcoming albums, stay tuned!",
     "TopSongs": "Top Songs",
-    "SubtitleTopSongs": "Try to expand your music horizon by listen to the top song chart where most of the fans listen into it",
+    "SubtitleTopSongs": "These are the top songs on the platform right now",
     "NewSong": "New Song",
-    "SubtitleNewSong": "Try new release from another musician by exploring new songs here",
-    "Playlist": "Playlist",
-    "SubtitlePlaylist": "Explore new songs and expand your music horizon",
-    "TwoPost": "There are two post",
+    "SubtitleNewSong": "Listen to these new Artist releases here!",
+    "Playlist": "Playlists",
+    "SubtitlePlaylist": "Explore new music through specially curated playlists",
+    "TwoPost": "There are two posts",
     "PublicContent": "Public Content",
-    "SubtitlePublicContent": "When you post public content, it will visible for all of your followers",
+    "SubtitlePublicContent": "When you post public content, it will be visible to all of your followers",
     "ExclusiveContent": "Exclusive Content",
-    "SubtitleExclusiveContent": "When you post for exclusive content it will only visible to the one who subscribed your content",
+    "SubtitleExclusiveContent": "When you post exclusive content, it will only visible to people who have subscribed to your content",
     "TypeContent": "Type your content",
-    "SubtitleTypeContent": "Express your self, tell what happens to your fans",
+    "SubtitleTypeContent": "Express yourself, let your fans know what's up!",
     "Category": "Category",
-    "SubtitleCategory": "Select category situation about your post and tap post to post your feed"
+    "SubtitleCategory": "Select a category for your post and before sharing it to your feed!"
   }
 }
