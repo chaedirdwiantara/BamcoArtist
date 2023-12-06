@@ -45,9 +45,11 @@ const Mission: React.FC<MissionProps> = ({data, onClaim, onGo}) => {
   const progressBar = dataProgress
     ? dataProgress?.rowCount / data.amountToClaim
     : 0 / data.amountToClaim;
-  const progressText = `${dataProgress ? dataProgress?.rowCount : 0}/${
-    data.amountToClaim
-  }${dataProgress?.function.includes('profile') ? '%' : ''}`;
+  const progressText = `${dataProgress ? dataProgress?.rowCount : 0}${
+    dataProgress?.function.includes('profile') ? '%' : ''
+  }/${data.amountToClaim}${
+    dataProgress?.function.includes('profile') ? '%' : ''
+  }`;
   const progressRepeatable = dataProgress?.rowCount === 0 ? 0 / 1 : 1;
   const progressTextRepeatable = `${dataProgress?.rowCount} ${
     dataProgress?.function.includes('donation') ||
