@@ -22,6 +22,14 @@ import PointProgress from '../../components/molecule/Reward/pointProgress';
 import BackgroundHeader from '../../components/molecule/Reward/backgroundHeader';
 import {mvs} from 'react-native-size-matters';
 import RedeemSuccessIcon from '../../assets/icon/RedeemSuccess.icon';
+import {
+  BadgeBronzeMIcon,
+  BadgeDiamondMIcon,
+  BadgeGoldMIcon,
+  BadgePlatinumMIcon,
+  BadgeSilverMIcon,
+} from '../../assets/icon';
+import {dataMissionStore} from '../../store/reward.store';
 
 type OnScrollEventHandler = (
   event: NativeSyntheticEvent<NativeScrollEvent>,
@@ -38,6 +46,7 @@ type itemLevel = {
 const Rewards = () => {
   const {t} = useTranslation();
   const {dataProfile, getProfileUser} = useProfileHook();
+  const {storedBadgeTitle, setStoredBadgeTitle} = dataMissionStore();
 
   const [selectedIndex, setSelectedIndex] = useState(-0);
   const [filter] = useState([
@@ -47,6 +56,7 @@ const Rewards = () => {
   const [scrollEffect, setScrollEffect] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [refreshing, setRefreshing] = useState<boolean>(false);
+  const [modalNewRank, setModalNewRank] = useState<boolean>(false);
 
   useFocusEffect(
     useCallback(() => {
@@ -138,6 +148,21 @@ const Rewards = () => {
       isMax: indexCurrentLevel === rewardLevel.length - 1,
     };
   };
+
+  useEffect(() => {
+    if (
+      storedBadgeTitle &&
+      calculateGamification().rankTitle !== storedBadgeTitle
+    ) {
+      setStoredBadgeTitle(calculateGamification().rankTitle);
+      setModalNewRank(true);
+    } else if (
+      !storedBadgeTitle &&
+      calculateGamification().rankTitle !== 'bronze'
+    ) {
+      setStoredBadgeTitle(calculateGamification().rankTitle);
+    }
+  }, [calculateGamification().rankTitle]);
 
   return (
     <View style={styles.container}>
@@ -244,6 +269,43 @@ const Rewards = () => {
                 containerStyles={styles.btnClaim}
                 textStyles={styles.textButton}
                 onPress={() => setShowModal(false)}
+                type="border"
+              />
+            </View>
+          }
+        />
+        <ModalCustom
+          modalVisible={modalNewRank}
+          onPressClose={() => setModalNewRank(false)}
+          children={
+            <View style={styles.modalContainer}>
+              <Text style={styles.modalTitle}>
+                {t('Rewards.ModalRankUp.Title')}
+              </Text>
+              <Gap height={16} />
+              {storedBadgeTitle === 'Bronze' ? (
+                <BadgeBronzeMIcon />
+              ) : storedBadgeTitle === 'Silver' ? (
+                <BadgeSilverMIcon />
+              ) : storedBadgeTitle === 'Gold' ? (
+                <BadgeGoldMIcon />
+              ) : storedBadgeTitle === 'Platinum' ? (
+                <BadgePlatinumMIcon />
+              ) : storedBadgeTitle === 'Diamond' ? (
+                <BadgeDiamondMIcon />
+              ) : null}
+              <Gap height={16} />
+              <Text style={styles.modalTitle}>{storedBadgeTitle}</Text>
+              <Gap height={8} />
+              <Text style={styles.modalCaption}>
+                {t('Rewards.ModalRankUp.Subtitle')}
+              </Text>
+              <Gap height={20} />
+              <Button
+                label={'Dismiss'}
+                containerStyles={styles.btnClaim}
+                textStyles={styles.textButton}
+                onPress={() => setModalNewRank(false)}
                 type="border"
               />
             </View>

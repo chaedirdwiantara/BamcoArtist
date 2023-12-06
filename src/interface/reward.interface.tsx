@@ -132,3 +132,9 @@ export interface GetMissionProgress extends BaseResponseApi {
 export interface SetClaimMission extends BaseResponseApi {
   data: null;
 }
+
+export interface DataMissionStoreProps {
+  id: number;
+  typeOnIndex: number;
+  isClaimable: boolean;
+}
