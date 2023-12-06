@@ -75,7 +75,9 @@ const Mission: React.FC<MissionProps> = ({data, onClaim, onGo}) => {
           <Text style={styles.titleTxt}>{data.taskName}</Text>
           <View style={styles.rewardCountContainer}>
             <Text style={styles.rewardCountTxt}>
-              {dataProgress && dataProgress?.sumLoyaltyPoints > 0
+              {data.taskType === 'based-reward' &&
+              dataProgress &&
+              dataProgress?.sumLoyaltyPoints > 0
                 ? dataProgress.sumLoyaltyPoints
                 : data.rewards}
             </Text>
