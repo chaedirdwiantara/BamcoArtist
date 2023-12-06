@@ -98,6 +98,7 @@ export const dropDownDataSubscription: DataDropDownType[] = [
 export const dropDownDataDonation: DataDropDownType[] = [
   {label: 'Setting.Tips.Filter.All', value: ''},
   {label: 'Setting.Tips.Filter.OneTime', value: 'onetime'},
+  {label: 'Setting.Tips.Filter.Daily', value: 'daily'},
   {label: 'Setting.Tips.Filter.Weekly', value: 'weekly'},
   {label: 'Setting.Tips.Filter.Monthly', value: 'monthly'},
   {label: 'Setting.Tips.Filter.Yearly', value: 'yearly'},

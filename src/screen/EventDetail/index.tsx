@@ -12,8 +12,14 @@ import {
 } from 'react-native';
 import React, {useCallback, useEffect, useState} from 'react';
 import Color from '../../theme/Color';
-import {heightResponsive, width, widthResponsive} from '../../utils';
 import {
+  heightPercentage,
+  heightResponsive,
+  width,
+  widthResponsive,
+} from '../../utils';
+import {
+  Button,
   Gap,
   ModalCustom,
   SsuDivider,
@@ -37,6 +43,7 @@ import {useFocusEffect} from '@react-navigation/native';
 import {profileStorage} from '../../hooks/use-storage.hook';
 import {Image} from 'react-native';
 import {ModalSuccessTopupVoucher} from '../../components/molecule/Modal/ModalSuccessTopupVoucher';
+import {mvs} from 'react-native-size-matters';
 
 type OnScrollEventHandler = (
   event: NativeSyntheticEvent<NativeScrollEvent>,
@@ -262,20 +269,35 @@ export const EventDetail: React.FC<EventDetailProps> = ({
             {dataDetail?.data?.fullAddress}
           </Text>
           <Gap height={heightResponsive(10)} />
-          <TouchableOpacity onPress={onClickMap} style={styles.map}>
-            <LocationIcon
-              width={widthResponsive(18)}
-              stroke={Color.Pink.linear}
+          <View style={[styles.map, {justifyContent: 'space-between'}]}>
+            <TouchableOpacity onPress={onClickMap} style={styles.map}>
+              <LocationIcon
+                width={widthResponsive(18)}
+                stroke={Color.Pink.linear}
+              />
+              <Gap width={widthResponsive(4)} />
+              <Text
+                style={[
+                  Typography.Body4,
+                  {color: Color.Pink.linear, textTransform: 'uppercase'},
+                ]}>
+                View Location on map
+              </Text>
+            </TouchableOpacity>
+
+            <Button
+              onPress={() =>
+                Linking.openURL(
+                  `mailto:team@thebeam.co?subject=${encodeURI(
+                    t('Event.Detail.MailTitle'),
+                  )}&body=${encodeURI(t('Event.Detail.MailBody'))}`,
+                )
+              }
+              label={t('Event.Detail.Perform')}
+              containerStyles={styles.button}
+              textStyles={styles.buttonText}
             />
-            <Gap width={widthResponsive(4)} />
-            <Text
-              style={[
-                Typography.Body4,
-                {color: Color.Pink.linear, textTransform: 'uppercase'},
-              ]}>
-              View Location on map
-            </Text>
-          </TouchableOpacity>
+          </View>
 
           <SsuDivider
             containerStyle={{
@@ -512,5 +534,13 @@ const styles = StyleSheet.create({
     width: widthResponsive(120),
     height: heightResponsive(120),
     alignItems: 'center',
+  },
+  button: {
+    width: width * 0.25,
+    aspectRatio: heightPercentage(120 / 30),
+    backgroundColor: Color.Pink.linear,
+  },
+  buttonText: {
+    fontSize: mvs(10),
   },
 });
