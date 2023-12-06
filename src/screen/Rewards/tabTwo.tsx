@@ -1,8 +1,8 @@
-import {FlatList, StyleSheet, View} from 'react-native';
+import {FlatList, Linking, StyleSheet, View} from 'react-native';
 import React, {FC, useCallback, useEffect, useState} from 'react';
 import Mission from '../../components/molecule/Reward/mission';
 import {missionMenu} from '../../data/reward';
-import {Button, EmptyState, Gap, SuccessToast} from '../../components';
+import {Button, Gap, ModalConfirm, SuccessToast} from '../../components';
 import {color, font} from '../../theme';
 import {mvs} from 'react-native-size-matters';
 import {widthResponsive} from '../../utils';
@@ -14,6 +14,9 @@ import {
 } from '../../interface/reward.interface';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {MainTabParams, RootStackParams} from '../../navigations';
+import {userProfile} from '../../store/userProfile.store';
+import {useTranslation} from 'react-i18next';
+import {ModalInfo} from '../../components/molecule/Modal/ModalInfo';
 
 type Props = {
   refreshing: boolean;
@@ -24,6 +27,9 @@ const TabTwoRewards: FC<Props> = ({refreshing, setRefreshing}) => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
   const navigation2 = useNavigation<NativeStackNavigationProp<MainTabParams>>();
+  const {profileStore} = userProfile();
+  const {t} = useTranslation();
+
   const [activeIndex, setactiveIndex] = useState<number>(0);
   const [daily, setDaily] = useState<DataMissionMaster[]>([]);
   const [oneTime, setOneTime] = useState<DataMissionMaster[]>([]);
@@ -31,6 +37,8 @@ const TabTwoRewards: FC<Props> = ({refreshing, setRefreshing}) => {
   const [showToast, setShowToast] = useState<boolean>(false);
   const [claimedPoint, setClaimedPoint] = useState<number>(0);
   const [paramClaim, setParamClaim] = useState<string>();
+  const [modalBan, setModalBan] = useState<boolean>(false);
+  const [modalInfoMusic, setModalInfoMusic] = useState<boolean>(false);
 
   const {useGetMissionMaster, useSetClaimMission} = useRewardHook();
 
@@ -104,61 +112,77 @@ const TabTwoRewards: FC<Props> = ({refreshing, setRefreshing}) => {
     setParamClaim(data.function); // to hit api
   };
 
+  const handleCreatePost = (screen: string) => {
+    if (profileStore.data.isBanned) {
+      setModalBan(true);
+    } else {
+      navigation.navigate('CreatePost', {audience: screen});
+    }
+  };
+
+  const handleCloseBanModal = () => {
+    setModalBan(false);
+  };
+
+  const handleOkBanModal = () => {
+    setModalBan(false);
+    navigation.navigate('Setting');
+  };
+
+  const onUploadSongMission = () => {
+    setModalInfoMusic(true);
+  };
+
   const onGoMission = (screenFn: RewardListFunction) => {
     switch (screenFn) {
       case 'complete-profile':
-        navigation.navigate('Setting');
+        navigation.navigate('ProfileProgress');
         break;
       case 'daily-sign-in':
         console.log('nothing to do here');
         break;
       case 'refer-artist':
-        navigation2.navigate('Home', {showToast: false});
+        navigation.navigate('ReferralCode');
         break;
       case 'share-social-media':
-        navigation2.navigate('Home', {showToast: false});
+        navigation2.navigate('Home', {
+          showToast: false,
+          shareMusicMission: true,
+        });
         break;
       case 'post-public-text':
-        navigation2.navigate('Feed');
+        handleCreatePost('Feed.Public');
         break;
       case 'post-public-photo':
-        navigation2.navigate('Feed');
+        handleCreatePost('Feed.Public');
         break;
       case 'post-public-video':
-        navigation2.navigate('Feed');
+        handleCreatePost('Feed.Public');
         break;
       case 'post-exclusive-content':
-        navigation2.navigate('Feed');
+        handleCreatePost('Feed.Exclusive');
         break;
       case 'get-followers':
-        navigation.navigate('Profile', {});
+        navigation.navigate('ExclusiveContentSetting');
         break;
       case 'get-fans':
-        navigation.navigate('Profile', {});
+        navigation.navigate('ExclusiveContentSetting');
         break;
       case 'get-subscriber':
-        navigation.navigate('Profile', {});
+        navigation.navigate('ExclusiveContentSetting');
         break;
       case 'upload-song':
-        navigation2.navigate('Home', {showToast: false});
+        onUploadSongMission();
         break;
       case 'perform-event':
-        navigation2.navigate('Home', {showToast: false});
+        Linking.openURL(
+          `mailto:team@thebeam.co?subject=${encodeURI(
+            t('Event.Detail.MailTitle'),
+          )}&body=${encodeURI(t('Event.Detail.MailBody'))}`,
+        );
         break;
-      case 'get-500-tip-credits':
-        navigation2.navigate('Home', {showToast: false});
-        break;
-      case 'get-1000-tip-credits':
-        navigation2.navigate('Home', {showToast: false});
-        break;
-      case 'get-1500-tip-credits':
-        navigation2.navigate('Home', {showToast: false});
-        break;
-      case 'get-2000-tip-credits':
-        navigation2.navigate('Home', {showToast: false});
-        break;
-      case 'get-2500-tip-credits':
-        navigation2.navigate('Home', {showToast: false});
+      case 'get-tip-credits':
+        navigation.navigate('EventDetail', {id: 'lShlckDSg'});
         break;
     }
   };
@@ -212,6 +236,29 @@ const TabTwoRewards: FC<Props> = ({refreshing, setRefreshing}) => {
           toastVisible={showToast}
           onBackPressed={() => setShowToast(false)}
           caption={`Success Claim ${claimedPoint} Bonus`}
+        />
+      )}
+      {/* //? Banned user modal */}
+      <ModalConfirm
+        modalVisible={modalBan}
+        title={`${t('Setting.PreventInteraction.Title')}`}
+        subtitle={`${t('Setting.PreventInteraction.Subtitle')}`}
+        yesText={`${t('Btn.Send')}`}
+        noText={`${t('Btn.Cancel')}`}
+        onPressClose={handleCloseBanModal}
+        onPressOk={handleOkBanModal}
+        textNavigate={`${t('Setting.PreventInteraction.TextNavigate')}`}
+        textOnPress={handleOkBanModal}
+      />
+
+      {modalInfoMusic && (
+        <ModalInfo
+          title={t('Home.UploadMusic.ModalInfo.Title')}
+          subtitle1={t('Home.UploadMusic.ModalInfo.Subtitle1')}
+          url={'https://artists.thebeam.co'}
+          subtitle2={t('Home.UploadMusic.ModalInfo.Subtitle2')}
+          visible={modalInfoMusic}
+          onPressClose={() => setModalInfoMusic(false)}
         />
       )}
     </View>

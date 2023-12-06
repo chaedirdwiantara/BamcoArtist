@@ -632,6 +632,10 @@
         "Title": "Your Rewards Cannot be Redeemed",
         "Subtitle": "There has been a problem redeeming your credits. Please check the availability and try to redeem it again."
       }
+    },
+    "ModalRankUp": {
+      "Title": "You’ve just earned a new badge!",
+      "Subtitle": "Earn more rewards just for you check on Reward Page"
     }
   },
   "Musician": {

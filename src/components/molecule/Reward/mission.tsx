@@ -1,12 +1,7 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet} from 'react-native';
 import * as Progress from 'react-native-progress';
-import {
-  CheckBoxIcon,
-  CheckCircle2Icon,
-  CoinIcon,
-  CupIcon,
-} from '../../../assets/icon';
+import {CheckCircle2Icon, CoinIcon} from '../../../assets/icon';
 import {widthResponsive} from '../../../utils';
 import {color, font} from '../../../theme';
 import {mvs} from 'react-native-size-matters';
@@ -26,6 +21,7 @@ interface MissionProps {
 const Mission: React.FC<MissionProps> = ({data, onClaim, onGo}) => {
   const {useGetMissionProgress} = useRewardHook();
   const [dataProgress, setDataProgress] = useState<DataListMissioProgress>();
+  const [readyToRefetch, setreadyToRefetch] = useState<boolean>(false);
 
   const {
     data: dataMissionPrg,
@@ -47,11 +43,22 @@ const Mission: React.FC<MissionProps> = ({data, onClaim, onGo}) => {
     }
   }, [dataMissionPrg]);
 
+  useEffect(() => {
+    if (readyToRefetch) {
+      setTimeout(() => {
+        refetchMissionPrg();
+      }, 3000);
+      setreadyToRefetch(false);
+    }
+  }, [readyToRefetch]);
+
   const progressBar = dataProgress
     ? dataProgress?.rowCount / data.amountToClaim
     : 0 / data.amountToClaim;
-  const progressText = `${dataProgress ? dataProgress?.rowCount : 0}/${
-    data.amountToClaim
+  const progressText = `${dataProgress ? dataProgress?.rowCount : 0}${
+    dataProgress?.function.includes('profile') ? '%' : ''
+  }/${data.amountToClaim}${
+    dataProgress?.function.includes('profile') ? '%' : ''
   }`;
   const progressRepeatable = dataProgress?.rowCount === 0 ? 0 / 1 : 1;
   const progressTextRepeatable = `${dataProgress?.rowCount} ${
@@ -66,8 +73,11 @@ const Mission: React.FC<MissionProps> = ({data, onClaim, onGo}) => {
     data: DataMissionMaster,
   ) => {
     if (data.taskType !== 'based-reward') {
-      setDataProgress({...dataProgress, isClaimed: true});
+      setDataProgress({...dataProgress, isClaimable: false, isClaimed: true});
+    } else {
+      setDataProgress({...dataProgress, isClaimable: false, isClaimed: false});
     }
+    setreadyToRefetch(true);
     onClaim(dataProgress?.sumLoyaltyPoints!, data);
   };
 
@@ -78,7 +88,9 @@ const Mission: React.FC<MissionProps> = ({data, onClaim, onGo}) => {
           <Text style={styles.titleTxt}>{data.taskName}</Text>
           <View style={styles.rewardCountContainer}>
             <Text style={styles.rewardCountTxt}>
-              {dataProgress && dataProgress?.sumLoyaltyPoints > 0
+              {data.taskType === 'based-reward' &&
+              dataProgress &&
+              dataProgress?.sumLoyaltyPoints > 0
                 ? dataProgress.sumLoyaltyPoints
                 : data.rewards}
             </Text>

@@ -84,11 +84,7 @@ export type RewardListFunction =
   | 'get-subscriber'
   | 'upload-song'
   | 'perform-event'
-  | 'get-500-tip-credits'
-  | 'get-1000-tip-credits'
-  | 'get-1500-tip-credits'
-  | 'get-2000-tip-credits'
-  | 'get-2500-tip-credits';
+  | 'get-tip-credits';
 
 export type TaskType = 'daily' | 'based-reward' | 'one-time';
 
@@ -131,4 +127,10 @@ export interface GetMissionProgress extends BaseResponseApi {
 
 export interface SetClaimMission extends BaseResponseApi {
   data: null;
+}
+
+export interface DataMissionStoreProps {
+  id: number;
+  typeOnIndex: number;
+  isClaimable: boolean;
 }
