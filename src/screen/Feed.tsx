@@ -248,7 +248,6 @@ const FeedScreenCopilot: React.FC = () => {
       setAllowToRefresh(false);
       setToastVisible(true); //show toast
       setIsErrorVideo(false);
-      console.log('FAILED TO UPLOAD', isErrorVideo);
     }
   }, [isErrorVideo]);
 
@@ -333,7 +332,6 @@ const FeedScreenCopilot: React.FC = () => {
       setToastVisible(true); //show toast
       setIsErrorVideo(false);
       setCreatePostError(false);
-      console.log('FAILED TO POST', createPostError);
     }
   }, [createPostError]);
 
@@ -513,9 +511,9 @@ const FeedScreenCopilot: React.FC = () => {
           <SsuToast
             modalVisible={toastVisible}
             onBackPressed={() => setToastVisible(false)}
-            modalOnHide={() =>
-              console.log('modal upload failed already hidden')
-            }
+            modalOnHide={() => {
+              // TODO: do something?
+            }}
             children={
               <View style={[styles.modalContainer]}>
                 <InfoCircleIcon />
