@@ -68,7 +68,7 @@ const MusicListCard: React.FC<ListProps> = ({
   const {t} = useTranslation();
   // ? Dropdown Menu Example
   const dataMore = [
-    {label: t('Home.Tab.TopSong.Playlist'), value: '1'},
+    // {label: t('Home.Tab.TopSong.Playlist'), value: '1'},
     {label: t('Home.Tab.TopSong.Tip'), value: '2'},
     {label: t('Home.Tab.TopSong.Queue'), value: '3'},
     {label: t('Home.Tab.TopSong.Share'), value: '4'},

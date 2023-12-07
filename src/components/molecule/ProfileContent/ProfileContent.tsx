@@ -126,7 +126,7 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [scrollEffect, setScrollEffect] = useState(false);
   const [filter] = useState([
-    {filterName: 'Profile.Tab.Playlist'},
+    // {filterName: 'Profile.Tab.Playlist'},
     {filterName: 'Profile.Tab.TopMusician'},
     {filterName: 'Profile.Tab.Badge'},
   ]);

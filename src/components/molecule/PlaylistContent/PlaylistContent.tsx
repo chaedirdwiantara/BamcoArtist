@@ -132,7 +132,7 @@ export const PlaylistContent: React.FC<Props> = ({
   ];
 
   const songDataMoreOther = [
-    {label: t('Home.Tab.TopSong.Playlist'), value: 'AddToPlaylist'},
+    // {label: t('Home.Tab.TopSong.Playlist'), value: 'AddToPlaylist'},
     {label: t('Home.Tab.TopSong.Queue'), value: 'AddToQueue'},
     {label: t('Music.Playlist.ViewAlbum'), value: 'ViewAlbum'},
     {label: t('Home.Tab.TopSong.Share'), value: 'ShareSong'},
