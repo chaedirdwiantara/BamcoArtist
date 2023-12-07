@@ -60,11 +60,11 @@ const TabOneReward: FC<Props> = ({creditReward}) => {
         data={dataRewardMaster?.data}
         showsVerticalScrollIndicator={false}
         keyExtractor={(_, index) => index.toString()}
-        numColumns={2}
-        columnWrapperStyle={{
-          justifyContent: 'space-between',
-          marginBottom: widthResponsive(16),
-        }}
+        // numColumns={2}
+        // columnWrapperStyle={{
+        //   justifyContent: 'space-between',
+        //   marginBottom: widthResponsive(16),
+        // }}
         renderItem={({item}) => (
           <VoucherReward
             points={item.rewardTotal}
@@ -113,7 +113,7 @@ const styles = (activeIndex?: number, index?: number) =>
       fontFamily: font.InterSemiBold,
     },
     voucher: {
-      width: widthResponsive(156),
+      marginBottom: widthResponsive(16),
     },
     btnClaim: {
       aspectRatio: undefined,
