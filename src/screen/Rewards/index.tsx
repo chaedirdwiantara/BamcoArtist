@@ -218,7 +218,7 @@ const Rewards = () => {
                       (dataProfile?.data.rewards.credit || 0)
                     } Points away from being ${calculateGamification().nextLabelName.substring(
                       3,
-                    )}. Let’s get ‘em by completing more mission!`
+                    )}. Let’s get them by completing more mission!`
               }
               badgeType={calculateGamification().nextLevelStage}
             />
