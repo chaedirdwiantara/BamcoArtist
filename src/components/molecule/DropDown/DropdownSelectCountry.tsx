@@ -104,7 +104,7 @@ const DropdownSelectCountry: FC<SelectCountryProps> = (
   };
 
   const onEndEditing = () => {
-    console.log('pressed end editing');
+    // TODO: do something
   };
 
   const renderItem = (item: any) => {
