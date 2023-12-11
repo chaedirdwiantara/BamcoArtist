@@ -31,6 +31,7 @@ import {
 } from '../../assets/icon';
 import {dataMissionStore} from '../../store/reward.store';
 import LoadingSpinner from '../../components/atom/Loading/LoadingSpinner';
+import {RewardsSkeleton} from '../../skeleton/Rewards';
 
 type OnScrollEventHandler = (
   event: NativeSyntheticEvent<NativeScrollEvent>,
