@@ -42,7 +42,7 @@ const DetailVoucherRewards: FC<ListVoucherProps> = ({
 }: ListVoucherProps) => {
   const {t} = useTranslation();
   const data = route.params.dataDetail;
-  const isRedeemed = route.params.isRedeemed;
+  const {redeemable, completed} = route.params;
   const [scrollEffect, setScrollEffect] = useState<boolean>(false);
   const [modalInfo, setModalInfo] = useState<boolean>(false);
   const [modalType, setModalType] = useState<'success' | 'failed'>('success');
@@ -185,19 +185,21 @@ const DetailVoucherRewards: FC<ListVoucherProps> = ({
           label={
             isExpired
               ? t('Rewards.DetailVoucher.Expired')
-              : isRedeemed
+              : redeemable
+              ? t('Rewards.DetailVoucher.RedeemRewards')
+              : completed
               ? t('Rewards.DetailVoucher.Redeemed')
-              : t('Rewards.DetailVoucher.RedeemRewards')
+              : t('Rewards.DetailVoucher.NeedMorePts')
           }
           containerStyles={{
             width: '100%',
             height: widthResponsive(40),
             aspectRatio: undefined,
             backgroundColor:
-              !isExpired && !isRedeemed ? color.Pink[10] : color.Dark[50],
+              !isExpired && redeemable ? color.Pink[10] : color.Dark[50],
           }}
           onPress={handleRedeem}
-          disabled={isExpired || isRedeemed}
+          disabled={isExpired || !redeemable || completed}
         />
       </View>
 

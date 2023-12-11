@@ -662,6 +662,7 @@
       "RedeemRewards": "兌換獎勵",
       "Expired": "已過期",
       "Redeemed": "已兌換",
+      "NeedMorePts": "Need More Pts",
       "RewardAchievement": "獎勵成就",
       "ModalSuccess": {
         "Title": "恭喜！已領取{{credit}}積分！",
