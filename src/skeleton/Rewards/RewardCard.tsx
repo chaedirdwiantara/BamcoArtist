@@ -28,8 +28,8 @@ export const RewardCardSkeleton: React.FC<RewardCardProps> = ({}) => {
                 {/* IMAGE REWARD */}
                 <SkeletonPlaceholder.Item
                   alignSelf="center"
-                  width={mvs(40)}
-                  height={mvs(40)}
+                  width={mvs(35)}
+                  height={mvs(35)}
                   borderRadius={mvs(4)}
                 />
                 {/* TITLE REWARD */}
@@ -64,7 +64,7 @@ export const RewardCardSkeleton: React.FC<RewardCardProps> = ({}) => {
                 style={{
                   flexDirection: 'row',
                   justifyContent: 'space-between',
-                  paddingHorizontal: mvs(15),
+                  paddingHorizontal: mvs(20),
                 }}>
                 <SkeletonPlaceholder.Item width={mvs(70)} height={mvs(10)} />
                 <SkeletonPlaceholder.Item width={mvs(70)} height={mvs(10)} />
@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   containerBadge: {
-    width: '90%',
+    width: '88%',
     paddingVertical: mvs(12),
     backgroundColor: '#1A2435',
     borderRadius: mvs(8),
