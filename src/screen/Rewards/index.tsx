@@ -167,158 +167,158 @@ const Rewards = () => {
 
   return (
     <View style={styles.container}>
-      {isLoading ? (
-        <View style={styles.loadingSpinner}>
-          <LoadingSpinner />
-        </View>
-      ) : (
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          scrollEventThrottle={16}
-          onScroll={handleScroll}
-          refreshControl={
-            <RefreshControl
-              refreshing={refreshing}
-              onRefresh={() => setRefreshing(true)}
-              tintColor={'transparent'}
-            />
-          }>
-          <View style={styles.slide}>
-            <BackgroundHeader
-              points={dataProfile?.data.rewards.credit || 0}
-              rankTitle={calculateGamification().rankTitle}
-            />
-          </View>
-
-          <Gap height={14} />
-          <View style={{paddingHorizontal: widthResponsive(20)}}>
-            <PointProgress
-              progress={dataProfile?.data.rewards.credit || 0}
-              total={calculateGamification().nextMilestone}
-              nextLvl={calculateGamification().nextLabelName}
-              isMax={calculateGamification().isMax}
-            />
-          </View>
-
-          <Gap height={24} />
-          <View style={{paddingHorizontal: widthResponsive(20)}}>
-            <InfoCard
-              title={
-                calculateGamification().isMax
-                  ? 'Your Badge is Maxed Out'
-                  : `${calculateGamification().nextLabelName.substring(
-                      3,
-                    )} Badge is Closer `
-              }
-              caption={
-                calculateGamification().isMax
-                  ? `Congratulations! You've reached Diamond Badge Claim. Claim the rewards and be proud`
-                  : `You’re ${
-                      calculateGamification().nextMilestone -
-                      (dataProfile?.data.rewards.credit || 0)
-                    } Points away from being ${calculateGamification().nextLabelName.substring(
-                      3,
-                    )}. Let’s get them by completing more mission!`
-              }
-              badgeType={calculateGamification().nextLevelStage}
-            />
-          </View>
-          <Gap height={16} />
-
-          <View style={styles.filterContainer}>
-            <TabFilter.Type1
-              filterData={filter}
-              onPress={tabFilterOnPress}
-              selectedIndex={selectedIndex}
-              translation={true}
-              flatlistContainerStyle={{
-                justifyContent: 'space-between',
-              }}
-              TouchableStyle={{width: widthPercentageToDP(45)}}
-            />
-
-            <View style={styles.containerContent}>
-              {filter[selectedIndex].filterName === 'Rewards.Reward' ? (
-                <View>
-                  <TabOneReward
-                    creditReward={dataProfile?.data.rewards.credit || 0}
-                  />
-                </View>
-              ) : (
-                <View>
-                  <TabTwoRewards
-                    refreshing={refreshing}
-                    setRefreshing={setRefreshing}
-                  />
-                </View>
-              )}
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        scrollEventThrottle={16}
+        onScroll={handleScroll}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={() => setRefreshing(true)}
+            tintColor={'transparent'}
+          />
+        }>
+        {isLoading ? (
+          <RewardsSkeleton />
+        ) : (
+          <>
+            <View style={styles.slide}>
+              <BackgroundHeader
+                points={dataProfile?.data.rewards.credit || 0}
+                rankTitle={calculateGamification().rankTitle}
+              />
             </View>
+
+            <Gap height={14} />
+            <View style={{paddingHorizontal: widthResponsive(20)}}>
+              <PointProgress
+                progress={dataProfile?.data.rewards.credit || 0}
+                total={calculateGamification().nextMilestone}
+                nextLvl={calculateGamification().nextLabelName}
+                isMax={calculateGamification().isMax}
+              />
+            </View>
+
+            <Gap height={24} />
+            <View style={{paddingHorizontal: widthResponsive(20)}}>
+              <InfoCard
+                title={
+                  calculateGamification().isMax
+                    ? 'Your Badge is Maxed Out'
+                    : `${calculateGamification().nextLabelName.substring(
+                        3,
+                      )} Badge is Closer `
+                }
+                caption={
+                  calculateGamification().isMax
+                    ? `Congratulations! You've reached Diamond Badge Claim. Claim the rewards and be proud`
+                    : `You’re ${
+                        calculateGamification().nextMilestone -
+                        (dataProfile?.data.rewards.credit || 0)
+                      } Points away from being ${calculateGamification().nextLabelName.substring(
+                        3,
+                      )}. Let’s get them by completing more mission!`
+                }
+                badgeType={calculateGamification().nextLevelStage}
+              />
+            </View>
+          </>
+        )}
+        <Gap height={16} />
+
+        <View style={styles.filterContainer}>
+          <TabFilter.Type1
+            filterData={filter}
+            onPress={tabFilterOnPress}
+            selectedIndex={selectedIndex}
+            translation={true}
+            flatlistContainerStyle={{
+              justifyContent: 'space-between',
+            }}
+            TouchableStyle={{width: widthPercentageToDP(45)}}
+          />
+
+          <View style={styles.containerContent}>
+            {filter[selectedIndex].filterName === 'Rewards.Reward' ? (
+              <View>
+                <TabOneReward
+                  creditReward={dataProfile?.data.rewards.credit || 0}
+                />
+              </View>
+            ) : (
+              <View>
+                <TabTwoRewards
+                  refreshing={refreshing}
+                  setRefreshing={setRefreshing}
+                />
+              </View>
+            )}
           </View>
-          <ModalCustom
-            modalVisible={showModal}
-            onPressClose={() => setShowModal(false)}
-            children={
-              <View style={styles.modalContainer}>
-                <RedeemSuccessIcon />
-                <Gap height={16} />
-                <Text style={styles.modalTitle}>
-                  Congrats! You’ve Claimed 1 Voucher!
-                </Text>
-                <Gap height={8} />
-                <Text style={styles.modalCaption}>
-                  Redeem for yourself or send to fellow fans. Visit My Rewards
-                  Page for more details.
-                </Text>
-                <Gap height={20} />
-                <Button
-                  label={'Dismiss'}
-                  containerStyles={styles.btnClaim}
-                  textStyles={styles.textButton}
-                  onPress={() => setShowModal(false)}
-                  type="border"
-                />
-              </View>
-            }
-          />
-          <ModalCustom
-            modalVisible={modalNewRank}
-            onPressClose={() => setModalNewRank(false)}
-            children={
-              <View style={styles.modalContainer}>
-                <Text style={styles.modalTitle}>
-                  {t('Rewards.ModalRankUp.Title')}
-                </Text>
-                <Gap height={16} />
-                {storedBadgeTitle === 'Bronze' ? (
-                  <BadgeBronzeMIcon />
-                ) : storedBadgeTitle === 'Silver' ? (
-                  <BadgeSilverMIcon />
-                ) : storedBadgeTitle === 'Gold' ? (
-                  <BadgeGoldMIcon />
-                ) : storedBadgeTitle === 'Platinum' ? (
-                  <BadgePlatinumMIcon />
-                ) : storedBadgeTitle === 'Diamond' ? (
-                  <BadgeDiamondMIcon />
-                ) : null}
-                <Gap height={16} />
-                <Text style={styles.modalTitle}>{storedBadgeTitle}</Text>
-                <Gap height={8} />
-                <Text style={styles.modalCaption}>
-                  {t('Rewards.ModalRankUp.Subtitle')}
-                </Text>
-                <Gap height={20} />
-                <Button
-                  label={'Dismiss'}
-                  containerStyles={styles.btnClaim}
-                  textStyles={styles.textButton}
-                  onPress={() => setModalNewRank(false)}
-                  type="border"
-                />
-              </View>
-            }
-          />
-        </ScrollView>
-      )}
+        </View>
+        <ModalCustom
+          modalVisible={showModal}
+          onPressClose={() => setShowModal(false)}
+          children={
+            <View style={styles.modalContainer}>
+              <RedeemSuccessIcon />
+              <Gap height={16} />
+              <Text style={styles.modalTitle}>
+                Congrats! You’ve Claimed 1 Voucher!
+              </Text>
+              <Gap height={8} />
+              <Text style={styles.modalCaption}>
+                Redeem for yourself or send to fellow fans. Visit My Rewards
+                Page for more details.
+              </Text>
+              <Gap height={20} />
+              <Button
+                label={'Dismiss'}
+                containerStyles={styles.btnClaim}
+                textStyles={styles.textButton}
+                onPress={() => setShowModal(false)}
+                type="border"
+              />
+            </View>
+          }
+        />
+        <ModalCustom
+          modalVisible={modalNewRank}
+          onPressClose={() => setModalNewRank(false)}
+          children={
+            <View style={styles.modalContainer}>
+              <Text style={styles.modalTitle}>
+                {t('Rewards.ModalRankUp.Title')}
+              </Text>
+              <Gap height={16} />
+              {storedBadgeTitle === 'Bronze' ? (
+                <BadgeBronzeMIcon />
+              ) : storedBadgeTitle === 'Silver' ? (
+                <BadgeSilverMIcon />
+              ) : storedBadgeTitle === 'Gold' ? (
+                <BadgeGoldMIcon />
+              ) : storedBadgeTitle === 'Platinum' ? (
+                <BadgePlatinumMIcon />
+              ) : storedBadgeTitle === 'Diamond' ? (
+                <BadgeDiamondMIcon />
+              ) : null}
+              <Gap height={16} />
+              <Text style={styles.modalTitle}>{storedBadgeTitle}</Text>
+              <Gap height={8} />
+              <Text style={styles.modalCaption}>
+                {t('Rewards.ModalRankUp.Subtitle')}
+              </Text>
+              <Gap height={20} />
+              <Button
+                label={'Dismiss'}
+                containerStyles={styles.btnClaim}
+                textStyles={styles.textButton}
+                onPress={() => setModalNewRank(false)}
+                type="border"
+              />
+            </View>
+          }
+        />
+      </ScrollView>
     </View>
   );
 };
