@@ -1,5 +1,12 @@
 import React from 'react';
-import {View, Text, StyleSheet, ViewStyle, Platform} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ViewStyle,
+  Platform,
+  TouchableOpacity,
+} from 'react-native';
 import {Button, DottedLineAndroid, DottedLineIos, Gap} from '../../atom';
 import {color, font} from '../../../theme';
 import {widthResponsive} from '../../../utils';
@@ -29,7 +36,9 @@ const VoucherReward: React.FC<Props> = ({
   freeCredit,
 }) => {
   return (
-    <View style={[styles.container, containerStyle]}>
+    <TouchableOpacity
+      style={[styles.container, containerStyle]}
+      onPress={onPress}>
       {/* Body */}
       <View style={styles.bodyContainer}>
         <WalletRewardIcon />
@@ -96,7 +105,7 @@ const VoucherReward: React.FC<Props> = ({
           />
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 
