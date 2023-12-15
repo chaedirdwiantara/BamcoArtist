@@ -120,7 +120,7 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
   // artist type = 2
   const {data: dataBadge} = useCheckBadge({
     userType: 2,
-    point: profile.point?.pointLifetime,
+    point: profile.rewards.credit,
   });
 
   const [selectedIndex, setSelectedIndex] = useState(0);
