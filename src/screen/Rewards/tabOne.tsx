@@ -1,5 +1,5 @@
 import {FlatList, StyleSheet, View, Text} from 'react-native';
-import React, {FC, useCallback, useState} from 'react';
+import React, {FC, useCallback} from 'react';
 import VoucherReward from '../../components/molecule/Reward/reward';
 import {widthResponsive} from '../../utils';
 import {EmptyState, Gap} from '../../components';
@@ -21,11 +21,6 @@ const TabOneReward: FC<Props> = ({creditReward}) => {
   const {t} = useTranslation();
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
-  const [activeIndex, setactiveIndex] = useState<number>(0);
-
-  const onPressMenu = (index: number) => {
-    setactiveIndex(index);
-  };
 
   const {queryRewardMaster, queryProgressReward} = useRewardHook();
   const {data: dataRewardMaster, isLoading: isLoadingReward} =
@@ -69,7 +64,7 @@ const TabOneReward: FC<Props> = ({creditReward}) => {
           renderItem={({item}) => (
             <VoucherReward
               points={item.rewardTotal}
-              voucherTitle={'Free Credit'}
+              voucherTitle={t('Rewards.FreeCredit')}
               freeCredit={item.freeCredit}
               voucherAvail={1}
               onPress={() => goToDetailVoucher(item)}
@@ -87,9 +82,8 @@ const TabOneReward: FC<Props> = ({creditReward}) => {
           ListEmptyComponent={() => {
             return (
               <EmptyState
-                text="All Voucher is Already Claimed"
-                subtitle="Voucher limit reached. Keep an eye out for 
-      future opportunities!"
+                text={t('Rewards.EmptyState.RewardTitle')}
+                subtitle={t('Rewards.EmptyState.RewardSubtitle')}
                 hideIcon
                 containerStyle={{height: 300}}
               />

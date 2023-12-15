@@ -240,7 +240,9 @@ const TabTwoRewards: FC<Props> = ({refreshing, setRefreshing}) => {
         <SuccessToast
           toastVisible={showToast}
           onBackPressed={() => setShowToast(false)}
-          caption={`Success Claim ${claimedPoint} Bonus`}
+          caption={t('Rewards.MissionTab.ClaimToast', {
+            claimedPoint: claimedPoint,
+          })}
         />
       )}
       {/* //? Banned user modal */}
