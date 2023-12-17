@@ -18,7 +18,6 @@ import {RootStackParams} from '../navigations';
 import {useProfileHook} from '../hooks/use-profile.hook';
 import {MenuText} from '../components/atom/MenuText/MenuText';
 import {Gap, ModalCustom, TopNavigation} from '../components';
-import {listRequiredAccount, listRequiredProfile} from '../data/home';
 import {ProgressCard} from '../components/molecule/ListCard/ProgressCard';
 import {ModalLoading} from '../components/molecule/ModalLoading/ModalLoading';
 
@@ -109,8 +108,6 @@ export const ProfileProgressScreen: React.FC = () => {
   };
 
   const children = (type: string) => {
-    const content =
-      type === 'account' ? listRequiredAccount : listRequiredProfile;
     const title =
       type === 'account'
         ? t('ProfileProgress.Tab.AccountInformation')
@@ -129,21 +126,15 @@ export const ProfileProgressScreen: React.FC = () => {
         </Text>
         <Text style={styles.subtitleModal}>{uncompleteSubtitle}</Text>
         {uncompleteListTemp.length > 0 &&
-          content.map(val => {
-            const unFilled =
-              uncompleteListTemp.filter(item => item === t(val)).length > 0;
-            const index = uncompleteListTemp.indexOf(t(val));
-
-            if (unFilled) {
-              return (
-                <View style={styles.containerItem} key={index}>
-                  <Text style={styles.listItem}>{index + 1 + '. '}</Text>
-                  <Text style={styles.listItem}>{t(val)}</Text>
-                  <Gap width={ms(7)} />
-                  <InfoCircle2Icon />
-                </View>
-              );
-            }
+          uncompleteListTemp.map((val, index) => {
+            return (
+              <View style={styles.containerItem} key={index}>
+                <Text style={styles.listItem}>{index + 1 + '. '}</Text>
+                <Text style={styles.listItem}>{t(val)}</Text>
+                <Gap width={ms(7)} />
+                <InfoCircle2Icon />
+              </View>
+            );
           })}
         <View style={styles.dismissContainer}>
           <TouchableOpacity
