@@ -75,7 +75,7 @@ const Type5: React.FC<Props> = (props: Props) => {
         ]}>
         <TouchableOpacity
           style={topNavstyles.leftContainer}
-          onPress={() => (props.profileUri ? props.leftIconAction() : null)}>
+          onPress={props.leftIconAction}>
           {props.guest ? <DefaultAvatar.ProfileIcon /> : iconLeft()}
           <Gap width={8} />
           <Text
