@@ -11,6 +11,7 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParams} from '../../navigations';
 import {ItemMasterReward} from '../../interface/reward.interface';
 import {useTranslation} from 'react-i18next';
+import {RewardCardSkeleton} from '../../skeleton/Rewards/RewardCard';
 
 type Props = {
   creditReward: number;
@@ -56,44 +57,44 @@ const TabOneReward: FC<Props> = ({creditReward}) => {
     <View style={styles().container}>
       <Text style={styles().title}>{t('Rewards.AchievementRewards')}</Text>
       <Gap height={mvs(20)} />
-      {/* {isLoadingReward ? (
+      {isLoadingReward ? (
         <RewardCardSkeleton />
-      ) : ( */}
-      <FlatList
-        data={dataRewardMaster?.data}
-        showsVerticalScrollIndicator={false}
-        keyExtractor={(_, index) => index.toString()}
-        renderItem={({item}) => (
-          <VoucherReward
-            points={item.rewardTotal}
-            voucherTitle={'Free Credit'}
-            freeCredit={item.freeCredit}
-            voucherAvail={1}
-            onPress={() => goToDetailVoucher(item)}
-            containerStyle={styles().voucher}
-            redeemable={creditReward >= item.rewardTotal}
-            completed={
-              (dataProgressReward?.data &&
-                dataProgressReward?.data.filter(
-                  ar => ar.creditReward === item.freeCredit,
-                ).length > 0) ||
-              false
-            }
-          />
-        )}
-        ListEmptyComponent={() => {
-          return (
-            <EmptyState
-              text="All Voucher is Already Claimed"
-              subtitle="Voucher limit reached. Keep an eye out for 
-      future opportunities!"
-              hideIcon
-              containerStyle={{height: 300}}
+      ) : (
+        <FlatList
+          data={dataRewardMaster?.data}
+          showsVerticalScrollIndicator={false}
+          keyExtractor={(_, index) => index.toString()}
+          renderItem={({item}) => (
+            <VoucherReward
+              points={item.rewardTotal}
+              voucherTitle={'Free Credit'}
+              freeCredit={item.freeCredit}
+              voucherAvail={1}
+              onPress={() => goToDetailVoucher(item)}
+              containerStyle={styles().voucher}
+              redeemable={creditReward >= item.rewardTotal}
+              completed={
+                (dataProgressReward?.data &&
+                  dataProgressReward?.data.filter(
+                    ar => ar.creditReward === item.freeCredit,
+                  ).length > 0) ||
+                false
+              }
             />
-          );
-        }}
-      />
-      {/* )} */}
+          )}
+          ListEmptyComponent={() => {
+            return (
+              <EmptyState
+                text="All Voucher is Already Claimed"
+                subtitle="Voucher limit reached. Keep an eye out for 
+      future opportunities!"
+                hideIcon
+                containerStyle={{height: 300}}
+              />
+            );
+          }}
+        />
+      )}
     </View>
   );
 };
