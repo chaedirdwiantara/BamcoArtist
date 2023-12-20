@@ -41,15 +41,17 @@ const TabOneReward: FC<Props> = ({creditReward}) => {
 
   const goToDetailVoucher = (data: ItemMasterReward) => {
     const claimedRewards = dataProgressReward?.data;
-    const isRedeemed =
-      claimedRewards &&
-      claimedRewards?.filter(
-        (val: {creditReward: number}) => val.creditReward === data.freeCredit,
-      ).length > 0;
+    const completed =
+      (claimedRewards &&
+        claimedRewards?.filter(
+          (val: {creditReward: number}) => val.creditReward === data.freeCredit,
+        ).length > 0) ||
+      false;
 
     navigation.navigate('DetailVoucherRewards', {
       dataDetail: data,
-      isRedeemed,
+      redeemable: creditReward >= data.rewardTotal,
+      completed,
     });
   };
 
