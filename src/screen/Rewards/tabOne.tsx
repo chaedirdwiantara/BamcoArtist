@@ -2,10 +2,9 @@ import {FlatList, StyleSheet, View, Text} from 'react-native';
 import React, {FC, useCallback, useState} from 'react';
 import VoucherReward from '../../components/molecule/Reward/reward';
 import {widthResponsive} from '../../utils';
-import {Button, EmptyState, Gap} from '../../components';
+import {EmptyState, Gap} from '../../components';
 import {color, font} from '../../theme';
 import {mvs} from 'react-native-size-matters';
-import {rewardMenu} from '../../data/reward';
 import {useRewardHook} from '../../hooks/use-reward.hook';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
@@ -64,11 +63,6 @@ const TabOneReward: FC<Props> = ({creditReward}) => {
         data={dataRewardMaster?.data}
         showsVerticalScrollIndicator={false}
         keyExtractor={(_, index) => index.toString()}
-        numColumns={2}
-        columnWrapperStyle={{
-          justifyContent: 'space-between',
-          marginBottom: widthResponsive(16),
-        }}
         renderItem={({item}) => (
           <VoucherReward
             points={item.rewardTotal}
@@ -118,7 +112,7 @@ const styles = (activeIndex?: number, index?: number) =>
       fontFamily: font.InterSemiBold,
     },
     voucher: {
-      width: widthResponsive(156),
+      marginBottom: widthResponsive(16),
     },
     btnClaim: {
       aspectRatio: undefined,
