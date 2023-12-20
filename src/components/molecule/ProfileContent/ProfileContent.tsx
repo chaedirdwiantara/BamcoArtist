@@ -160,7 +160,10 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
   };
 
   const handleBackAction = () => {
-    navigation.goBack();
+    navigation.reset({
+      index: 0,
+      routes: [{name: 'MainTab'}],
+    });
   };
 
   const onPressShareQR = () => {

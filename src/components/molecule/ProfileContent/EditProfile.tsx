@@ -406,14 +406,17 @@ export const EditProfile: React.FC<EditProfileProps> = ({
         title={t('Modal.EditProfile.Title') || ''}
         subtitle={t('Modal.EditProfile.Subtitle') || ''}
         onPressClose={closeModal}
-        onPressOk={() =>
+        onPressOk={() => {
           onPressSave({
             bio,
             about,
             website,
             photos: dataResponseImg.slice(savedPhotos, dataResponseImg.length),
-          })
-        }
+          });
+          setTimeout(() => {
+            closeModal();
+          }, 1000);
+        }}
       />
 
       <ModalLoading visible={isLoadingImage} />
