@@ -657,15 +657,34 @@
     "Reward": "獎勵",
     "Mission": "任務",
     "AchievementRewards": "成就獎勵",
+    "FreeCredit": "免費積分",
+    "Left": "剩下",
+    "BgHeader": {
+      "RankTitle": "你的排名",
+      "CreditTitle": "你的積分獎勵"
+    },
+    "CurrentPrg": {
+      "Title": "當前積分獎勵",
+      "CreditsBonus": "積分獎勵",
+      "NextLvl": "下一級：",
+      "LvlMax": "等級已達最高"
+    },
+    "InfoCard": {
+      "NextLvl": "{{whatNextLvl}} 徽章即將到來",
+      "LvlMax": "你的徽章已達最高級",
+      "Desc": "你離成為 {{whatNextLvl}} 只差 {{pointNeeded}} 積分獎勵。通過完成更多任務來獲得它們吧！",
+      "MaxLvlDesc": "恭喜！你已經達到鑽石徽章。領取獎勵並感到自豪吧！"
+    },
     "DetailVoucher": {
+      "Redeem": "兌換",
       "QuotaLeft": "剩餘額度",
       "RedeemRewards": "兌換獎勵",
       "Expired": "已過期",
       "Redeemed": "已兌換",
-      "NeedMorePts": "Need More Pts",
+      "NeedMorePts": "需要更多積分",
       "RewardAchievement": "獎勵成就",
       "ModalSuccess": {
-        "Title": "恭喜！已領取{{credit}}積分！",
+        "Title": "恭喜！已領取 {{credit}} 積分！",
         "Subtitle": "收集更多獎勵，看著你的收入增長吧！"
       },
       "ModalFailed": {
@@ -676,7 +695,17 @@
     "ModalRankUp": {
       "Title": "您剛剛獲得了一個新徽章！",
       "Subtitle": "在獎勵頁面上查看，為您贏得更多獎勵"
-    }  
+    },
+    "MissionTab": {
+      "ClaimToast": "成功領取 {{claimedPoint}} 積分獎勵",
+      "BtnCompleted": "已完成",
+      "BtnClaim": "領取",
+      "BtnGo": "前往"
+    },
+    "EmptyState": {
+      "RewardTitle": "目前沒有可用的獎勵",
+      "RewardSubtitle": "如果有的話，它會顯示在這裡。請定期訪問此頁面，以便及時獲取更新。"
+    }
   },
   "ExclusiveContent": {
     "Title": "獨家內容",

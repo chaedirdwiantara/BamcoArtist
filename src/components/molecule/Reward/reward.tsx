@@ -13,6 +13,7 @@ import {widthResponsive} from '../../../utils';
 import {mvs} from 'react-native-size-matters';
 import {CoinIcon} from '../../../assets/icon';
 import WalletRewardIcon from '../../../assets/icon/WalletReward.icon';
+import {useTranslation} from 'react-i18next';
 
 type Props = {
   points: number;
@@ -35,6 +36,7 @@ const VoucherReward: React.FC<Props> = ({
   completed,
   freeCredit,
 }) => {
+  const {t} = useTranslation();
   return (
     <TouchableOpacity
       style={[styles.container, containerStyle]}
@@ -78,7 +80,9 @@ const VoucherReward: React.FC<Props> = ({
         </View>
         {voucherAvail > 1 && (
           <View style={styles.voucherLeftContainer}>
-            <Text style={styles.voucherLeft}>{voucherAvail} Left</Text>
+            <Text style={styles.voucherLeft}>
+              {voucherAvail} {t('Rewards.Left')}
+            </Text>
           </View>
         )}
       </View>
@@ -93,10 +97,16 @@ const VoucherReward: React.FC<Props> = ({
           )}
         </View>
         <View style={styles.footer}>
-          <Text style={styles.pointsText}>{`${points} Credit Bonus`}</Text>
+          <Text style={styles.pointsText}>{`${points} ${t(
+            'Rewards.CurrentPrg.CreditsBonus',
+          )}`}</Text>
           <Button
             label={
-              redeemable ? 'Redeem' : completed ? 'Redeemed' : 'Need More Pts'
+              redeemable
+                ? t('Rewards.DetailVoucher.Redeem')
+                : completed
+                ? t('Rewards.DetailVoucher.Redeemed')
+                : t('Rewards.DetailVoucher.NeedMorePts')
             }
             containerStyles={redeemable ? styles.btnClaim : styles.btnBorder}
             textStyles={redeemable ? styles.textButton : styles.footerText}

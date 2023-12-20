@@ -56,7 +56,6 @@ const Rewards = () => {
     {filterName: 'Rewards.Mission'},
   ]);
   const [scrollEffect, setScrollEffect] = useState(false);
-  const [showModal, setShowModal] = useState(false);
   const [refreshing, setRefreshing] = useState<boolean>(false);
   const [modalNewRank, setModalNewRank] = useState<boolean>(false);
 
@@ -99,31 +98,31 @@ const Rewards = () => {
         name: 'bronze',
         lowPoint: 0,
         highPoint: 1000,
-        label: ' Bronze',
+        label: 'Bronze',
       },
       {
         name: 'silver',
         lowPoint: 1001,
         highPoint: 2000,
-        label: ' Silver',
+        label: 'Silver',
       },
       {
         name: 'gold',
         lowPoint: 2001,
         highPoint: 6000,
-        label: ' Gold',
+        label: 'Gold',
       },
       {
         name: 'platinum',
         lowPoint: 6001,
         highPoint: 10000,
-        label: ' Platinum',
+        label: 'Platinum',
       },
       {
         name: 'diamond',
         lowPoint: 10001,
         highPoint: 9999999999999,
-        label: ' Diamond',
+        label: 'Diamond',
       },
     ];
     const rewardsCredit = dataProfile?.data.rewards.credit || 0;
@@ -205,20 +204,20 @@ const Rewards = () => {
               <InfoCard
                 title={
                   calculateGamification().isMax
-                    ? 'Your Badge is Maxed Out'
-                    : `${calculateGamification().nextLabelName.substring(
-                        3,
-                      )} Badge is Closer `
+                    ? t('Rewards.InfoCard.LvlMax')
+                    : t('Rewards.InfoCard.NextLvl', {
+                        whatNextLvl: calculateGamification().nextLabelName,
+                      })
                 }
                 caption={
                   calculateGamification().isMax
-                    ? `Congratulations! You've reached Diamond Badge Claim. Claim the rewards and be proud`
-                    : `You’re ${
-                        calculateGamification().nextMilestone -
-                        (dataProfile?.data.rewards.credit || 0)
-                      } Points away from being ${calculateGamification().nextLabelName.substring(
-                        3,
-                      )}. Let’s get them by completing more mission!`
+                    ? t('Rewards.InfoCard.MaxLvlDesc')
+                    : t('Rewards.InfoCard.Desc', {
+                        pointNeeded:
+                          calculateGamification().nextMilestone -
+                          (dataProfile?.data.rewards.credit || 0),
+                        whatNextLvl: calculateGamification().nextLabelName,
+                      })
                 }
                 badgeType={calculateGamification().nextLevelStage}
               />
@@ -257,32 +256,6 @@ const Rewards = () => {
           </View>
         </View>
         <ModalCustom
-          modalVisible={showModal}
-          onPressClose={() => setShowModal(false)}
-          children={
-            <View style={styles.modalContainer}>
-              <RedeemSuccessIcon />
-              <Gap height={16} />
-              <Text style={styles.modalTitle}>
-                Congrats! You’ve Claimed 1 Voucher!
-              </Text>
-              <Gap height={8} />
-              <Text style={styles.modalCaption}>
-                Redeem for yourself or send to fellow fans. Visit My Rewards
-                Page for more details.
-              </Text>
-              <Gap height={20} />
-              <Button
-                label={'Dismiss'}
-                containerStyles={styles.btnClaim}
-                textStyles={styles.textButton}
-                onPress={() => setShowModal(false)}
-                type="border"
-              />
-            </View>
-          }
-        />
-        <ModalCustom
           modalVisible={modalNewRank}
           onPressClose={() => setModalNewRank(false)}
           children={
@@ -310,7 +283,7 @@ const Rewards = () => {
               </Text>
               <Gap height={20} />
               <Button
-                label={'Dismiss'}
+                label={t('General.Dismiss')}
                 containerStyles={styles.btnClaim}
                 textStyles={styles.textButton}
                 onPress={() => setModalNewRank(false)}

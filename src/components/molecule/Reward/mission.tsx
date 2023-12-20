@@ -11,6 +11,7 @@ import {
   DataMissionMaster,
 } from '../../../interface/reward.interface';
 import {useRewardHook} from '../../../hooks/use-reward.hook';
+import {useTranslation} from 'react-i18next';
 
 interface MissionProps {
   data: DataMissionMaster;
@@ -19,6 +20,7 @@ interface MissionProps {
 }
 
 const Mission: React.FC<MissionProps> = ({data, onClaim, onGo}) => {
+  const {t} = useTranslation();
   const {useGetMissionProgress} = useRewardHook();
   const [dataProgress, setDataProgress] = useState<DataListMissioProgress>();
   const [readyToRefetch, setreadyToRefetch] = useState<boolean>(false);
@@ -128,7 +130,9 @@ const Mission: React.FC<MissionProps> = ({data, onClaim, onGo}) => {
             <View style={styles.progressContainer}>
               <CheckCircle2Icon width={10} height={10} />
               <Gap width={4} />
-              <Text style={styles.progressTxt}>{'Completed'}</Text>
+              <Text style={styles.progressTxt}>
+                {t('Rewards.MissionTab.BtnCompleted')}
+              </Text>
             </View>
           )}
         </View>
@@ -139,14 +143,14 @@ const Mission: React.FC<MissionProps> = ({data, onClaim, onGo}) => {
           <Gap width={16} />
           {dataProgress?.isClaimable ? (
             <Button
-              label={'Claim'}
+              label={t('Rewards.MissionTab.BtnClaim')}
               containerStyles={styles.btnClaim}
               textStyles={styles.textButton}
               onPress={() => handleOnClaim(dataProgress, data)}
             />
           ) : (
             <Button
-              label={'Go'}
+              label={t('Rewards.MissionTab.BtnGo')}
               containerStyles={styles.btnGo}
               textStyles={styles.textGoButton}
               onPress={onGo}
