@@ -12,7 +12,7 @@ import {
   BadgeSilverIcon,
 } from '../../../assets/icon';
 import LinearGradient from 'react-native-linear-gradient';
-import {levelName} from '../../../screen/Rewards';
+import {levelName} from '../../../utils/calculateGamification';
 
 type Props = {
   title: string;
