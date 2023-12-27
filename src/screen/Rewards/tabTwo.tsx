@@ -18,13 +18,15 @@ import {userProfile} from '../../store/userProfile.store';
 import {useTranslation} from 'react-i18next';
 import {ModalInfo} from '../../components/molecule/Modal/ModalInfo';
 import {MissionCardSkeleton} from '../../skeleton/Rewards/MissionCard';
+import {levelName} from '../../utils/calculateGamification';
 
 type Props = {
   refreshing: boolean;
   setRefreshing: (item: boolean) => void;
+  rankTitle: levelName;
 };
 
-const TabTwoRewards: FC<Props> = ({refreshing, setRefreshing}) => {
+const TabTwoRewards: FC<Props> = ({refreshing, setRefreshing, rankTitle}) => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
   const navigation2 = useNavigation<NativeStackNavigationProp<MainTabParams>>();
@@ -43,6 +45,7 @@ const TabTwoRewards: FC<Props> = ({refreshing, setRefreshing}) => {
 
   const {useGetMissionMaster, useSetClaimMission} = useRewardHook();
 
+  // TODO: Waiting for update API Mission from BE
   const {
     data: dataMission,
     refetch: refetchMissionMaster,
@@ -190,37 +193,21 @@ const TabTwoRewards: FC<Props> = ({refreshing, setRefreshing}) => {
 
   return (
     <View style={styles().container}>
-      <View style={styles().menuStyle}>
-        {missionMenu.map((data, index) => {
-          return (
-            <>
-              <Button
-                label={data.label}
-                containerStyles={styles(activeIndex, index).btnClaim}
-                textStyles={styles().textButton}
-                onPress={() => onPressMenu(index)}
-              />
-              <Gap width={8} />
-            </>
-          );
-        })}
-      </View>
-
       <Gap height={16} />
-
       {isLoadingMissionMaster ? (
         <MissionCardSkeleton />
       ) : (
         dataMission?.data && (
           <FlatList
             data={
-              activeIndex === 0
-                ? daily
-                : activeIndex === 1
-                ? oneTime
-                : activeIndex === 2
-                ? repeatable
-                : daily
+              // activeIndex === 0
+              //   ? daily
+              //   : activeIndex === 1
+              //   ?
+              oneTime
+              // : activeIndex === 2
+              // ? repeatable
+              // : daily
             }
             showsVerticalScrollIndicator={false}
             keyExtractor={(_, index) => index.toString()}
@@ -230,6 +217,7 @@ const TabTwoRewards: FC<Props> = ({refreshing, setRefreshing}) => {
                 data={item}
                 onClaim={onClaimMission}
                 onGo={() => onGoMission(item.function)}
+                rankTitle={rankTitle}
               />
             )}
           />

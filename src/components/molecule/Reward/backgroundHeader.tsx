@@ -12,7 +12,7 @@ import {color, font} from '../../../theme';
 import {mvs} from 'react-native-size-matters';
 import {Gap} from '../../atom';
 import {toCurrency, widthPercentage, widthResponsive} from '../../../utils';
-import {levelName} from '../../../screen/Rewards';
+import {levelName} from '../../../utils/calculateGamification';
 import {useTranslation} from 'react-i18next';
 
 type Props = {

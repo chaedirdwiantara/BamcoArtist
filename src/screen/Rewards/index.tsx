@@ -21,7 +21,6 @@ import InfoCard from '../../components/molecule/Reward/infoCard';
 import PointProgress from '../../components/molecule/Reward/pointProgress';
 import BackgroundHeader from '../../components/molecule/Reward/backgroundHeader';
 import {mvs} from 'react-native-size-matters';
-import RedeemSuccessIcon from '../../assets/icon/RedeemSuccess.icon';
 import {
   BadgeBronzeMIcon,
   BadgeDiamondMIcon,
@@ -30,25 +29,18 @@ import {
   BadgeSilverMIcon,
 } from '../../assets/icon';
 import {dataMissionStore} from '../../store/reward.store';
-import LoadingSpinner from '../../components/atom/Loading/LoadingSpinner';
 import {RewardsSkeleton} from '../../skeleton/Rewards';
+import {calculateGamification} from '../../utils/calculateGamification';
 
 type OnScrollEventHandler = (
   event: NativeSyntheticEvent<NativeScrollEvent>,
 ) => void;
 
-export type levelName = 'bronze' | 'silver' | 'gold' | 'platinum' | 'diamond';
-type itemLevel = {
-  name: levelName;
-  lowPoint: number;
-  highPoint: number;
-  label: string;
-};
-
 const Rewards = () => {
   const {t} = useTranslation();
   const {dataProfile, isLoading, getProfileUser} = useProfileHook();
   const {storedBadgeTitle, setStoredBadgeTitle} = dataMissionStore();
+  const credit = dataProfile?.data.rewards.credit || 0;
 
   const [selectedIndex, setSelectedIndex] = useState(-0);
   const [filter] = useState([
@@ -86,84 +78,20 @@ const Rewards = () => {
     setSelectedIndex(index);
   };
 
-  const calculateGamification = (): {
-    rankTitle: levelName;
-    nextMilestone: number;
-    nextLevelStage: levelName;
-    nextLabelName: string;
-    isMax: boolean;
-  } => {
-    const rewardLevel: itemLevel[] = [
-      {
-        name: 'bronze',
-        lowPoint: 0,
-        highPoint: 1000,
-        label: 'Bronze',
-      },
-      {
-        name: 'silver',
-        lowPoint: 1001,
-        highPoint: 2000,
-        label: 'Silver',
-      },
-      {
-        name: 'gold',
-        lowPoint: 2001,
-        highPoint: 6000,
-        label: 'Gold',
-      },
-      {
-        name: 'platinum',
-        lowPoint: 6001,
-        highPoint: 10000,
-        label: 'Platinum',
-      },
-      {
-        name: 'diamond',
-        lowPoint: 10001,
-        highPoint: 9999999999999,
-        label: 'Diamond',
-      },
-    ];
-    const rewardsCredit = dataProfile?.data.rewards.credit || 0;
-    const currentLevel = rewardLevel.filter(
-      ar => rewardsCredit >= ar.lowPoint && rewardsCredit <= ar.highPoint,
-    )[0];
-    const indexCurrentLevel = rewardLevel.findIndex(
-      ar => rewardsCredit >= ar.lowPoint && rewardsCredit <= ar.highPoint,
-    );
-    const rankTitle = currentLevel.name;
-    const nextMilestone = currentLevel.highPoint;
-
-    return {
-      rankTitle,
-      nextMilestone,
-      nextLevelStage:
-        indexCurrentLevel < rewardLevel.length - 1
-          ? rewardLevel[indexCurrentLevel + 1].name
-          : rewardLevel[rewardLevel.length - 1].name,
-      nextLabelName:
-        indexCurrentLevel < rewardLevel.length - 1
-          ? rewardLevel[indexCurrentLevel + 1].label
-          : rewardLevel[rewardLevel.length - 1].label,
-      isMax: indexCurrentLevel === rewardLevel.length - 1,
-    };
-  };
-
   useEffect(() => {
     if (
       storedBadgeTitle &&
-      calculateGamification().rankTitle !== storedBadgeTitle
+      calculateGamification(credit).rankTitle !== storedBadgeTitle
     ) {
-      setStoredBadgeTitle(calculateGamification().rankTitle);
+      setStoredBadgeTitle(calculateGamification(credit).rankTitle);
       setModalNewRank(true);
     } else if (
       !storedBadgeTitle &&
-      calculateGamification().rankTitle !== 'bronze'
+      calculateGamification(credit).rankTitle !== 'bronze'
     ) {
-      setStoredBadgeTitle(calculateGamification().rankTitle);
+      setStoredBadgeTitle(calculateGamification(credit).rankTitle);
     }
-  }, [calculateGamification().rankTitle]);
+  }, [calculateGamification(credit).rankTitle]);
 
   return (
     <View style={styles.container}>
@@ -185,7 +113,7 @@ const Rewards = () => {
             <View style={styles.slide}>
               <BackgroundHeader
                 points={dataProfile?.data.rewards.credit || 0}
-                rankTitle={calculateGamification().rankTitle}
+                rankTitle={calculateGamification(credit).rankTitle}
               />
             </View>
 
@@ -193,9 +121,9 @@ const Rewards = () => {
             <View style={{paddingHorizontal: widthResponsive(20)}}>
               <PointProgress
                 progress={dataProfile?.data.rewards.credit || 0}
-                total={calculateGamification().nextMilestone}
-                nextLvl={calculateGamification().nextLabelName}
-                isMax={calculateGamification().isMax}
+                total={calculateGamification(credit).nextMilestone}
+                nextLvl={calculateGamification(credit).nextLabelName}
+                isMax={calculateGamification(credit).isMax}
               />
             </View>
 
@@ -203,23 +131,25 @@ const Rewards = () => {
             <View style={{paddingHorizontal: widthResponsive(20)}}>
               <InfoCard
                 title={
-                  calculateGamification().isMax
+                  calculateGamification(credit).isMax
                     ? t('Rewards.InfoCard.LvlMax')
                     : t('Rewards.InfoCard.NextLvl', {
-                        whatNextLvl: calculateGamification().nextLabelName,
+                        whatNextLvl:
+                          calculateGamification(credit).nextLabelName,
                       })
                 }
                 caption={
-                  calculateGamification().isMax
+                  calculateGamification(credit).isMax
                     ? t('Rewards.InfoCard.MaxLvlDesc')
                     : t('Rewards.InfoCard.Desc', {
                         pointNeeded:
-                          calculateGamification().nextMilestone -
+                          calculateGamification(credit).nextMilestone -
                           (dataProfile?.data.rewards.credit || 0),
-                        whatNextLvl: calculateGamification().nextLabelName,
+                        whatNextLvl:
+                          calculateGamification(credit).nextLabelName,
                       })
                 }
-                badgeType={calculateGamification().nextLevelStage}
+                badgeType={calculateGamification(credit).nextLevelStage}
               />
             </View>
           </>
@@ -250,6 +180,7 @@ const Rewards = () => {
                 <TabTwoRewards
                   refreshing={refreshing}
                   setRefreshing={setRefreshing}
+                  rankTitle={calculateGamification(credit).rankTitle}
                 />
               </View>
             )}
