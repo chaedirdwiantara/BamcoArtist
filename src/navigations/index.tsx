@@ -210,7 +210,8 @@ export type RootStackParams = {
   DetailVoucher: {id: number; eventId: string};
   DetailVoucherRewards: {
     dataDetail: ItemMasterReward;
-    isRedeemed?: boolean;
+    redeemable: boolean;
+    completed: boolean;
   };
   DiscoverArtist: undefined;
   DonationAndSubscription: undefined;

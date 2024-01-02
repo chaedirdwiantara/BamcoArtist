@@ -1,11 +1,19 @@
 import React from 'react';
-import {View, Text, StyleSheet, ViewStyle, Platform} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ViewStyle,
+  Platform,
+  TouchableOpacity,
+} from 'react-native';
 import {Button, DottedLineAndroid, DottedLineIos, Gap} from '../../atom';
 import {color, font} from '../../../theme';
 import {widthResponsive} from '../../../utils';
 import {mvs} from 'react-native-size-matters';
 import {CoinIcon} from '../../../assets/icon';
 import WalletRewardIcon from '../../../assets/icon/WalletReward.icon';
+import {useTranslation} from 'react-i18next';
 
 type Props = {
   points: number;
@@ -28,27 +36,55 @@ const VoucherReward: React.FC<Props> = ({
   completed,
   freeCredit,
 }) => {
+  const {t} = useTranslation();
   return (
-    <View style={[styles.container, containerStyle]}>
+    <TouchableOpacity
+      style={[styles.container, containerStyle]}
+      onPress={onPress}>
       {/* Body */}
       <View style={styles.bodyContainer}>
-        <View style={styles.absoluteTextContainer}>
-          {voucherAvail > 1 && (
-            <View style={styles.voucherLeftContainer}>
-              <Text style={styles.voucherLeft}>{voucherAvail} Left</Text>
-            </View>
-          )}
-        </View>
         <WalletRewardIcon />
-        <Gap height={3} />
-        <Text style={styles.pointsText}>{`${points} Credit Bonus`}</Text>
-        <Text style={styles.voucherTitleText} numberOfLines={1}>
-          {voucherTitle}
-        </Text>
-        <View style={styles.wrapperCoin}>
-          <CoinIcon />
-          <Text style={styles.coinText}>{freeCredit}</Text>
+        <Gap width={16} />
+
+        <View style={{flex: 1}}>
+          <Text
+            style={[
+              styles.voucherTitleText,
+              {
+                color: redeemable
+                  ? color.Pink[200]
+                  : completed
+                  ? color.Dark[100]
+                  : color.Dark[100],
+              },
+            ]}
+            numberOfLines={3}>
+            {voucherTitle}
+          </Text>
+          <View style={styles.wrapperCoin}>
+            <CoinIcon />
+            <Text
+              style={[
+                styles.coinText,
+                {
+                  color: redeemable
+                    ? color.Neutral[10]
+                    : completed
+                    ? color.Dark[100]
+                    : color.Dark[100],
+                },
+              ]}>
+              {freeCredit}
+            </Text>
+          </View>
         </View>
+        {voucherAvail > 1 && (
+          <View style={styles.voucherLeftContainer}>
+            <Text style={styles.voucherLeft}>
+              {voucherAvail} {t('Rewards.Left')}
+            </Text>
+          </View>
+        )}
       </View>
 
       {/* Footer */}
@@ -61,9 +97,16 @@ const VoucherReward: React.FC<Props> = ({
           )}
         </View>
         <View style={styles.footer}>
+          <Text style={styles.pointsText}>{`${points} ${t(
+            'Rewards.CurrentPrg.CreditsBonus',
+          )}`}</Text>
           <Button
             label={
-              redeemable ? 'Redeem' : completed ? 'Redeemed' : 'Need More Pts'
+              redeemable
+                ? t('Rewards.DetailVoucher.Redeem')
+                : completed
+                ? t('Rewards.DetailVoucher.Redeemed')
+                : t('Rewards.DetailVoucher.NeedMorePts')
             }
             containerStyles={redeemable ? styles.btnClaim : styles.btnBorder}
             textStyles={redeemable ? styles.textButton : styles.footerText}
@@ -72,7 +115,7 @@ const VoucherReward: React.FC<Props> = ({
           />
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 
@@ -84,28 +127,31 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   bodyContainer: {
+    flex: 1,
     width: '100%',
     backgroundColor: '#1A2435',
     borderRadius: 8,
     paddingHorizontal: widthResponsive(16),
     paddingTop: widthResponsive(16),
     paddingBottom: widthResponsive(11),
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   pointsText: {
-    color: color.Dark[50],
+    color: color.Pink[200],
     fontFamily: font.InterRegular,
-    fontWeight: '400',
-    fontSize: mvs(10),
+    fontWeight: '600',
+    fontSize: mvs(11),
   },
   eventContainer: {
     // Style for the event name container
   },
   voucherTitleText: {
-    color: color.Pink[200],
     fontFamily: font.InterSemiBold,
     fontWeight: '600',
-    fontSize: mvs(16),
+    fontSize: mvs(14),
     lineHeight: widthResponsive(22),
+    maxWidth: '80%',
   },
   voucherText: {
     color: color.Neutral[10],
@@ -128,9 +174,11 @@ const styles = StyleSheet.create({
   },
   footer: {
     paddingVertical: widthResponsive(10),
-    paddingHorizontal: widthResponsive(8),
+    paddingHorizontal: widthResponsive(16),
     width: '100%',
     alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
   footerText: {
     fontFamily: font.InterSemiBold,
@@ -142,21 +190,11 @@ const styles = StyleSheet.create({
     width: '100%',
     paddingHorizontal: widthResponsive(5),
   },
-  absoluteTextContainer: {
-    position: 'absolute',
-    top: 0,
-    right: 0,
-    bottom: 0,
-    left: 0,
-  },
   voucherLeftContainer: {
     backgroundColor: color.Dark[800],
     borderRadius: 4,
     paddingHorizontal: widthResponsive(6),
     paddingVertical: widthResponsive(2),
-    alignSelf: 'flex-end',
-    marginTop: widthResponsive(9),
-    marginRight: widthResponsive(9),
   },
   voucherLeft: {
     fontFamily: font.InterRegular,
@@ -171,23 +209,24 @@ const styles = StyleSheet.create({
   },
   coinText: {
     fontFamily: font.InterSemiBold,
-    color: color.Neutral[10],
-    fontSize: mvs(16),
+    fontSize: mvs(14),
     fontWeight: '600',
     marginLeft: widthResponsive(4),
   },
   btnClaim: {
     aspectRatio: undefined,
-    width: '100%',
+    width: undefined,
     backgroundColor: color.Pink[200],
     paddingVertical: widthResponsive(4),
+    paddingHorizontal: widthResponsive(8),
   },
   btnBorder: {
     aspectRatio: undefined,
-    width: '100%',
+    width: undefined,
     backgroundColor: 'transparent',
     borderWidth: 0,
     paddingVertical: widthResponsive(4),
+    // paddingHorizontal: widthResponsive(8),
   },
   textButton: {
     fontFamily: font.InterRegular,

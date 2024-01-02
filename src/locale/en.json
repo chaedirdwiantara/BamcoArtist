@@ -618,11 +618,31 @@
     "Reward": "Rewards",
     "Mission": "Mission",
     "AchievementRewards": "Achievement Rewards",
+    "FreeCredit": "Free Credit",
+    "Left": "Left",
+    "BgHeader": {
+      "RankTitle": "Your Rank",
+      "CreditTitle": "Your Credits Bonus"
+    },
+    "CurrentPrg": {
+      "Title": "Current Credits Bonus",
+      "CreditsBonus": "Credits Bonus",
+      "NextLvl": "Next Lvl:",
+      "LvlMax": "Lvl. Maxed"
+    },
+    "InfoCard": {
+      "NextLvl": "{{whatNextLvl}} Badge is Closer",
+      "LvlMax": "Your Badge is Maxed Out",
+      "Desc": "You’re {{pointNeeded}} Credit Bonus away from being a {{whatNextLvl}}. Let’s get them by completing more quest!",
+      "MaxLvlDesc": "Congratulations! You've reached Diamond Badge. Claim the rewards and be proud!"
+    },
     "DetailVoucher": {
+      "Redeem": "Redeem",
       "QuotaLeft": "Quota Left",
       "RedeemRewards": "Redeem Rewards",
       "Expired": "Expired",
       "Redeemed": "Redeemed",
+      "NeedMorePts": "Need More Pts",
       "RewardAchievement": "Reward Achievement",
       "ModalSuccess": {
         "Title": "Congrats! {{credit}} Credits have been claimed!",
@@ -636,6 +656,16 @@
     "ModalRankUp": {
       "Title": "You’ve just earned a new badge!",
       "Subtitle": "Earn more rewards just for you check on Reward Page"
+    },
+    "MissionTab": {
+      "ClaimToast": "Success Claim {{claimedPoint}} Bonus",
+      "BtnCompleted": "Completed",
+      "BtnClaim": "Claim",
+      "BtnGo": "Go"
+    },
+    "EmptyState": {
+      "RewardTitle": "No Rewards is Available",
+      "RewardSubtitle": "If there is one, it will show up here. Visit this page regularly so you can keep updated."
     }
   },
   "Musician": {

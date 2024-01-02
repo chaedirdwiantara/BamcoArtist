@@ -73,7 +73,9 @@ const Type5: React.FC<Props> = (props: Props) => {
           },
           props.containerStyles,
         ]}>
-        <View style={topNavstyles.leftContainer}>
+        <TouchableOpacity
+          style={topNavstyles.leftContainer}
+          onPress={props.leftIconAction}>
           {props.guest ? <DefaultAvatar.ProfileIcon /> : iconLeft()}
           <Gap width={8} />
           <Text
@@ -89,7 +91,7 @@ const Type5: React.FC<Props> = (props: Props) => {
                   props.maxLengthTitle ?? 20,
                 )}
           </Text>
-        </View>
+        </TouchableOpacity>
         <View style={topNavstyles.rightContainer}>
           <StepCopilot
             children={

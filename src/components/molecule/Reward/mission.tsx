@@ -1,27 +1,40 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import * as Progress from 'react-native-progress';
-import {CheckCircle2Icon, CoinIcon} from '../../../assets/icon';
+import {
+  BadgeBronzeMissionIcon,
+  BadgeDiamondMissionIcon,
+  BadgeGoldMissionIcon,
+  BadgePlatinumMissionIcon,
+  BadgeSilverMissionIcon,
+  CheckCircle2Icon,
+} from '../../../assets/icon';
 import {widthResponsive} from '../../../utils';
 import {color, font} from '../../../theme';
 import {mvs} from 'react-native-size-matters';
-import {Button, Gap} from '../../atom';
+import {Gap} from '../../atom';
 import {
   DataListMissioProgress,
   DataMissionMaster,
 } from '../../../interface/reward.interface';
 import {useRewardHook} from '../../../hooks/use-reward.hook';
+import {useTranslation} from 'react-i18next';
+import {levelName} from '../../../utils/calculateGamification';
+import {ModalHowToGetCredit} from '../Modal/ModalHowToGetCredit';
 
 interface MissionProps {
   data: DataMissionMaster;
   onClaim: (rewardCount: number, data: DataMissionMaster) => void;
   onGo: () => void;
+  rankTitle: levelName;
 }
 
-const Mission: React.FC<MissionProps> = ({data, onClaim, onGo}) => {
+const Mission: React.FC<MissionProps> = ({data, onClaim, onGo, rankTitle}) => {
+  const {t} = useTranslation();
   const {useGetMissionProgress} = useRewardHook();
   const [dataProgress, setDataProgress] = useState<DataListMissioProgress>();
   const [readyToRefetch, setreadyToRefetch] = useState<boolean>(false);
+  const [showModal, setShowModal] = useState<boolean>(false);
 
   const {
     data: dataMissionPrg,
@@ -82,78 +95,69 @@ const Mission: React.FC<MissionProps> = ({data, onClaim, onGo}) => {
   };
 
   return (
-    <View style={styles.voteTopContainer}>
-      <View style={styles.progressBarContainer}>
-        <View style={styles.captionContainer}>
+    <View>
+      <TouchableOpacity onPress={onGo} style={styles.voteTopContainer}>
+        <View style={styles.containerBadge}>
+          {rankTitle === 'bronze' ? (
+            <BadgeBronzeMissionIcon />
+          ) : rankTitle === 'silver' ? (
+            <BadgeSilverMissionIcon />
+          ) : rankTitle === 'gold' ? (
+            <BadgeGoldMissionIcon />
+          ) : rankTitle === 'platinum' ? (
+            <BadgePlatinumMissionIcon />
+          ) : rankTitle === 'diamond' ? (
+            <BadgeDiamondMissionIcon />
+          ) : null}
+          <Text style={styles.rewardCountTxt}>
+            {data.taskType === 'based-reward' &&
+            dataProgress &&
+            dataProgress?.sumLoyaltyPoints > 0
+              ? dataProgress.sumLoyaltyPoints
+              : data.rewards}
+          </Text>
+        </View>
+        <Gap width={widthResponsive(12)} />
+        <View style={styles.progressBarContainer}>
           <Text style={styles.titleTxt}>{data.taskName}</Text>
-          <View style={styles.rewardCountContainer}>
-            <Text style={styles.rewardCountTxt}>
-              {data.taskType === 'based-reward' &&
-              dataProgress &&
-              dataProgress?.sumLoyaltyPoints > 0
-                ? dataProgress.sumLoyaltyPoints
-                : data.rewards}
-            </Text>
-            <Gap width={3} />
-            <CoinIcon />
+          <Gap height={mvs(5)} />
+          <View style={styles.prgContainer}>
+            <Progress.Bar
+              progress={
+                data.taskType === 'based-reward'
+                  ? progressRepeatable
+                  : progressBar
+              }
+              width={null}
+              height={widthResponsive(11)}
+              borderWidth={0}
+              color={color.Pink[200]}
+              unfilledColor={color.Dark[300]}
+              borderRadius={4}
+              animated={false}
+              style={{width: '100%'}}
+              // animationType={'timing'}
+            />
+            {!dataProgress?.isClaimed ? (
+              <View style={styles.progressContainer}>
+                <Text style={styles.progressTxt}>
+                  {data.taskType === 'based-reward'
+                    ? progressTextRepeatable
+                    : progressText}
+                </Text>
+              </View>
+            ) : (
+              <View style={styles.progressContainer}>
+                <CheckCircle2Icon width={10} height={10} />
+                <Gap width={4} />
+                <Text style={styles.progressTxt}>
+                  {t('Rewards.MissionTab.BtnCompleted')}
+                </Text>
+              </View>
+            )}
           </View>
         </View>
-        <Gap height={12} />
-        <View style={styles.prgContainer}>
-          <Progress.Bar
-            progress={
-              data.taskType === 'based-reward'
-                ? progressRepeatable
-                : progressBar
-            }
-            width={null}
-            height={widthResponsive(11)}
-            borderWidth={0}
-            color={color.Pink[200]}
-            unfilledColor={color.Dark[300]}
-            borderRadius={4}
-            animated={false}
-            style={{width: '100%'}}
-            // animationType={'timing'}
-          />
-          {!dataProgress?.isClaimed ? (
-            <View style={styles.progressContainer}>
-              <Text style={styles.progressTxt}>
-                {data.taskType === 'based-reward'
-                  ? progressTextRepeatable
-                  : progressText}
-              </Text>
-            </View>
-          ) : (
-            <View style={styles.progressContainer}>
-              <CheckCircle2Icon width={10} height={10} />
-              <Gap width={4} />
-              <Text style={styles.progressTxt}>{'Completed'}</Text>
-            </View>
-          )}
-        </View>
-      </View>
-
-      {!dataProgress?.isClaimed && (
-        <View style={styles.btnContainer}>
-          <Gap width={16} />
-          {dataProgress?.isClaimable ? (
-            <Button
-              label={'Claim'}
-              containerStyles={styles.btnClaim}
-              textStyles={styles.textButton}
-              onPress={() => handleOnClaim(dataProgress, data)}
-            />
-          ) : (
-            <Button
-              label={'Go'}
-              containerStyles={styles.btnGo}
-              textStyles={styles.textGoButton}
-              onPress={onGo}
-            />
-          )}
-        </View>
-      )}
+      </TouchableOpacity>
     </View>
   );
 };
@@ -166,10 +170,13 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     marginBottom: widthResponsive(16),
   },
+  containerBadge: {
+    alignItems: 'center',
+  },
   progressBarContainer: {
     flex: 1,
     position: 'relative',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
   },
   prgContainer: {
     justifyContent: 'center',
@@ -229,7 +236,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   rewardCountTxt: {
-    color: color.Warning[750],
+    color: color.Pink[200],
     fontFamily: font.InterRegular,
     fontSize: mvs(12),
     fontWeight: '500',

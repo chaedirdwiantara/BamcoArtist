@@ -120,7 +120,7 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
   // artist type = 2
   const {data: dataBadge} = useCheckBadge({
     userType: 2,
-    point: profile.point?.pointLifetime,
+    point: profile.rewards.credit,
   });
 
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -160,7 +160,10 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
   };
 
   const handleBackAction = () => {
-    navigation.goBack();
+    navigation.reset({
+      index: 0,
+      routes: [{name: 'MainTab'}],
+    });
   };
 
   const onPressShareQR = () => {

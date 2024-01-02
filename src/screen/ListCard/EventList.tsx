@@ -59,10 +59,11 @@ const EventList: FC<EventListProps> = ({type, isLoading}) => {
         width: dataEvent?.pages[0]?.meta?.total > 3 ? 'auto' : '100%',
         paddingLeft: widthResponsive(24),
       }}>
-      {dataEvent?.pages?.map((page: EventHomeResponse) => {
+      {dataEvent?.pages?.map((page: EventHomeResponse, index: number) => {
         if (page?.data?.length > 0) {
           return (
             <View
+              key={index}
               style={{
                 marginRight: ms(18),
                 flex: 1,

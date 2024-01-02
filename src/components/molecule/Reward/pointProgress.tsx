@@ -5,6 +5,7 @@ import {widthResponsive} from '../../../utils';
 import {color, font} from '../../../theme';
 import {mvs} from 'react-native-size-matters';
 import {Gap} from '../../atom';
+import {useTranslation} from 'react-i18next';
 
 type Props = {
   progress: number;
@@ -21,9 +22,10 @@ const PointProgress: FC<Props> = ({
   isMax,
   containerStyle,
 }) => {
+  const {t} = useTranslation();
   return (
     <View style={[styles.container, containerStyle]}>
-      <Text style={styles.primerTxt}>Current Loyalty Points</Text>
+      <Text style={styles.primerTxt}>{t('Rewards.CurrentPrg.Title')}</Text>
       <Gap height={8} />
       <Progress.Bar
         progress={isMax ? 1 : progress / total}
@@ -39,18 +41,21 @@ const PointProgress: FC<Props> = ({
       <Gap height={8} />
       <View style={styles.descStyle}>
         {isMax ? (
-          <Text style={styles.primerTxt}>{`Credit Bonus ${progress}`}</Text>
+          <Text style={styles.primerTxt}>{`${t(
+            'Rewards.CurrentPrg.CreditsBonus',
+          )} ${progress}`}</Text>
         ) : (
           <Text style={styles.primerTxt}>
-            {`Points ${progress}`}
+            {`${t('Rewards.CurrentPrg.CreditsBonus')} ${progress}`}
             <Text style={styles.scndTxt}>{`/${total}`}</Text>
           </Text>
         )}
         {isMax ? (
-          <Text style={styles.primerTxt}>{`Lvl. Maxed`}</Text>
+          <Text style={styles.primerTxt}>{t('Rewards.CurrentPrg.LvlMax')}</Text>
         ) : (
           <Text style={styles.primerTxt}>
-            Next lvl: {<Text style={styles.scndTxt}>{nextLvl}</Text>}
+            {t('Rewards.CurrentPrg.NextLvl')}{' '}
+            {<Text style={styles.scndTxt}>{nextLvl}</Text>}
           </Text>
         )}
       </View>

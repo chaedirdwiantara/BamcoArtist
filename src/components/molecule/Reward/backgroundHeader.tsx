@@ -12,7 +12,8 @@ import {color, font} from '../../../theme';
 import {mvs} from 'react-native-size-matters';
 import {Gap} from '../../atom';
 import {toCurrency, widthPercentage, widthResponsive} from '../../../utils';
-import {levelName} from '../../../screen/Rewards';
+import {levelName} from '../../../utils/calculateGamification';
+import {useTranslation} from 'react-i18next';
 
 type Props = {
   rankTitle: levelName;
@@ -20,6 +21,7 @@ type Props = {
 };
 
 const BackgroundHeader: FC<Props> = ({rankTitle, points}) => {
+  const {t} = useTranslation();
   const Bronze = '../../../assets/image/Bg1.png';
   const Silver = '../../../assets/image/Bg2.png';
   const Gold = '../../../assets/image/Bg2.png';
@@ -43,7 +45,7 @@ const BackgroundHeader: FC<Props> = ({rankTitle, points}) => {
     >
       <View style={styles.topStyle}>
         <Gap height={45} />
-        <Text style={styles.scndTxt}>Your rank</Text>
+        <Text style={styles.scndTxt}>{t('Rewards.BgHeader.RankTitle')}</Text>
         <Text style={styles.primTxt}>
           {rankTitle.charAt(0).toUpperCase() + rankTitle.slice(1)}
         </Text>
@@ -69,7 +71,7 @@ const BackgroundHeader: FC<Props> = ({rankTitle, points}) => {
             {toCurrency(points, {withFraction: false})}
           </Text>
         </View>
-        <Text style={styles.scndTxt}>Your Credit Bonus</Text>
+        <Text style={styles.scndTxt}>{t('Rewards.BgHeader.CreditTitle')}</Text>
         <Gap height={65} />
       </View>
     </ImageBackground>
