@@ -27,7 +27,7 @@ export const getAccessToken = async (): Promise<string | null> => {
             .then(res => {
               profileObject.accessToken = res.data.accessToken;
               profileObject.refreshToken = res.data.refreshToken;
-              storage.set('profile', JSON.stringify(JSONProfile));
+              storage.set('profile', JSON.stringify(profileObject));
               resolve(res.data.accessToken);
             })
             .catch(err => {
