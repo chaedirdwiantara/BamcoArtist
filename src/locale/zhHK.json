@@ -700,7 +700,19 @@
       "ClaimToast": "成功領取 {{claimedPoint}} 積分獎勵",
       "BtnCompleted": "已完成",
       "BtnClaim": "領取",
-      "BtnGo": "前往"
+      "BtnGo": "前往",
+      "ModalGetCredit": {
+        "HowToGetCredit": "How to Get Credit",
+        "Title1": "Post Public Content",
+        "Title2": "Make Exclusive Content",
+        "Title3": "Perform in Beamco Event",
+        "Subtitle1": "Earn Support by Sharing Exciting Updates Post captivating news or updates and watch your fans shower you with credits.",
+        "Subtitle2": "Earn Credits by Setting Up Exclusive Content & Post it! Let’s setting up your profile for subscriptions",
+        "Subtitle3": "Step into the Limelight at Beamco Live Events! captivate your audience, and earn credits for your live performance.",
+        "Button1": "Make a Post Public",
+        "Button2": "Set Exclusive Content",
+        "Button3": "Request to Perform"
+      }
     },
     "EmptyState": {
       "RewardTitle": "目前沒有可用的獎勵",
