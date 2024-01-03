@@ -63,7 +63,7 @@ export const getMissionProgressEp = async (
   const {data} = await SsuAPI().request<GetMissionProgress>({
     url: `/missions/progress/${params.function}`,
     method: 'GET',
-    params: {task_type: params.task_type},
+    params: {task_type: params.task_type, campaignId: params.campaignId},
   });
 
   return data;
