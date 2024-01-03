@@ -702,16 +702,16 @@
       "BtnClaim": "領取",
       "BtnGo": "前往",
       "ModalGetCredit": {
-        "HowToGetCredit": "How to Get Credit",
-        "Title1": "Post Public Content",
-        "Title2": "Make Exclusive Content",
-        "Title3": "Perform in Beamco Event",
-        "Subtitle1": "Earn Support by Sharing Exciting Updates Post captivating news or updates and watch your fans shower you with credits.",
-        "Subtitle2": "Earn Credits by Setting Up Exclusive Content & Post it! Let’s setting up your profile for subscriptions",
-        "Subtitle3": "Step into the Limelight at Beamco Live Events! captivate your audience, and earn credits for your live performance.",
-        "Button1": "Make a Post Public",
-        "Button2": "Set Exclusive Content",
-        "Button3": "Request to Perform"
+        "HowToGetCredit": "點樣賺取積分",
+        "Title1": "發佈公開內容",
+        "Title2": "製作獨家內容",
+        "Title3": "參與 Beamco 活動",
+        "Subtitle1": "透過分享新聞或更新賺取支持，觀眾會以積分回饋你。",
+        "Subtitle2": "設置獨家內容並發佈，賺取積分！讓我們為你的訂閱設置個人資料。",
+        "Subtitle3": "踏入 Beamco 直播活動的聚光燈下！吸引你的觀眾，並為現場表演賺取積分。",
+        "Button1": "發佈公開",
+        "Button2": "設置獨家內容",
+        "Button3": "申請表演"
       }
     },
     "EmptyState": {
