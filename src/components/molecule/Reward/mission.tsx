@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity, Linking} from 'react-native';
 import * as Progress from 'react-native-progress';
 import {
   BadgeBronzeMissionIcon,
@@ -35,7 +35,7 @@ interface MissionProps {
   rankTitle: levelName;
 }
 
-const Mission: React.FC<MissionProps> = ({data, rankTitle}) => {
+const Mission: React.FC<MissionProps> = ({data, onGo, rankTitle}) => {
   const {t} = useTranslation();
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
@@ -96,15 +96,39 @@ const Mission: React.FC<MissionProps> = ({data, rankTitle}) => {
   const progressBar = dataProgress
     ? dataProgress?.rowCount / data.amountToClaim
     : 0 / data.amountToClaim;
-  const progressText = `${dataProgress ? dataProgress?.rowCount : 0}${
-    dataProgress?.function.includes('profile') ? '%' : ''
-  } ${dataProgress?.function.includes('profile') ? '%' : 'Credits'}`;
+  const postfix = data.postfix === '%' ? '%' : ' ' + data.postfix;
+  const progressText = `${dataProgress ? dataProgress?.rowCount : 0}${postfix}`;
+  const titleModal =
+    data.postfix === 'Fans'
+      ? t('Rewards.MissionTab.ModalGetCredit.HowToGetFans')
+      : t('Rewards.MissionTab.ModalGetCredit.HowToGetCredit');
+  const progressCompleted = dataProgress?.isClaimed;
+
+  const onPressCard = () => {
+    if (data.postfix === '%') {
+      onGo();
+    } else if (data.postfix === 'Perform') {
+      Linking.openURL(
+        `mailto:team@thebeam.co?subject=${encodeURI(
+          t('Event.Detail.MailTitle'),
+        )}&body=${encodeURI(t('Event.Detail.MailBody'))}`,
+      );
+    } else if (data.postfix === 'Post') {
+      onPressExclusive();
+    } else {
+      setShowModalGetCredit(true);
+    }
+  };
 
   return (
     <View>
       <TouchableOpacity
-        onPress={() => setShowModalGetCredit(true)}
-        style={styles.voteTopContainer}>
+        disabled={progressCompleted}
+        onPress={onPressCard}
+        style={[
+          styles.voteTopContainer,
+          {opacity: progressCompleted ? 0.6 : 1},
+        ]}>
         <View style={styles.containerBadge}>
           {rankTitle === 'bronze' ? (
             <BadgeBronzeMissionIcon />
@@ -139,7 +163,7 @@ const Mission: React.FC<MissionProps> = ({data, rankTitle}) => {
               animated={false}
               style={{width: '100%'}}
             />
-            {!dataProgress?.isClaimed ? (
+            {!progressCompleted ? (
               <View style={styles.progressContainer}>
                 <Text style={styles.progressTxt}>{progressText}</Text>
               </View>
@@ -157,6 +181,7 @@ const Mission: React.FC<MissionProps> = ({data, rankTitle}) => {
       </TouchableOpacity>
 
       <ModalHowToGetCredit
+        title={titleModal}
         visible={showModalGetCredit}
         onPressClose={() => setShowModalGetCredit(false)}
         onPressExclusive={onPressExclusive}

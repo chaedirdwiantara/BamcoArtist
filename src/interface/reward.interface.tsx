@@ -104,6 +104,7 @@ export interface DataMissionMaster {
   amountType: number;
   maxClaim: number;
   campaignId: number;
+  postfix: string;
   createdAt: string;
   updatedAt: string;
 }
