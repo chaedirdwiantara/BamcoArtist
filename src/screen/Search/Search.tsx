@@ -1,5 +1,5 @@
-import React, {useCallback, useState} from 'react';
-import {View, StyleSheet} from 'react-native';
+import React, {useCallback, useEffect, useState} from 'react';
+import {View, StyleSheet, ScrollView} from 'react-native';
 import {Gap, SearchBar, TabFilter, TopNavigation} from '../../components';
 import Color from '../../theme/Color';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
@@ -18,26 +18,28 @@ import ListResultMerch from './ListResultMerch';
 import ListResultEvent from './ListResultEvent';
 import {useTranslation} from 'react-i18next';
 import {usePlayerStore} from '../../store/player.store';
+import ListResultLiveEvent from './ListSearchLiveEvent';
 
 export const SearchScreen: React.FC = () => {
-  const {t} = useTranslation();
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
+  const {t} = useTranslation();
   const {setWithoutBottomTab, show} = usePlayerStore();
 
   const [state, setState] = useState<string>('');
   const [forTrigger, setForTrigger] = useState<boolean>(false);
+  const [triggerSuggest, setTriggerSuggest] = useState<boolean>(false);
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [modalVisible, setModalVisible] = useState(false);
   const [typeSearch, setTypeSearch] = useState<string>('');
 
   const filter: string[] = [
-    t('Home.Topbar.Search.Song'),
+    // t('Home.Topbar.Search.Song'),
     t('Home.Topbar.Search.Musician'),
     t('Home.Topbar.Search.Fans'),
-    t('Home.Topbar.Search.Album'),
-    t('Home.Topbar.Search.Playlist'),
-    t('Home.Topbar.Search.Merch'),
+    // t('Home.Topbar.Search.Album'),
+    // t('Home.Topbar.Search.Playlist'),
+    // t('Home.Topbar.Search.Merch'),
     t('Home.Topbar.Search.Event'),
   ];
 
@@ -49,9 +51,16 @@ export const SearchScreen: React.FC = () => {
     }, [show]),
   );
 
+  useEffect(() => {
+    if (state.length > 0) {
+      setTriggerSuggest(true);
+    }
+  }, [state]);
+
   const filterData = (item: string, index: number) => {
     setSelectedIndex(index);
     setTypeSearch(item);
+    setForTrigger(true);
   };
 
   const goToSongDetails = () => {
@@ -77,18 +86,17 @@ export const SearchScreen: React.FC = () => {
           <SearchBar
             value={state}
             onChangeText={(newText: string) => setState(newText)}
-            onSubmitEditing={() => setForTrigger(true)}
             rightIcon={state !== '' && true}
             reset={() => setState('')}
           />
           <Gap height={16} />
+          <TabFilter.Type2
+            filterData={filter}
+            onPress={filterData}
+            selectedIndex={selectedIndex}
+          />
           {forTrigger ? (
             <>
-              <TabFilter.Type2
-                filterData={filter}
-                onPress={filterData}
-                selectedIndex={selectedIndex}
-              />
               {typeSearch === t('Home.Topbar.Search.Musician') && (
                 <ListResultMusician keyword={state} />
               )}
@@ -108,9 +116,15 @@ export const SearchScreen: React.FC = () => {
                 <ListResultMerch keyword={state} />
               )}
               {typeSearch === t('Home.Topbar.Search.Event') && (
-                <ListResultEvent keyword={state} />
+                <ListResultLiveEvent keyword={state} />
               )}
             </>
+          ) : triggerSuggest && state.length > 0 ? (
+            <ScrollView>
+              <ListResultMusician keyword={state} listType="suggest" />
+              <ListResultFans keyword={state} listType="suggest" />
+              <ListResultLiveEvent keyword={state} listType="suggest" />
+            </ScrollView>
           ) : null}
         </View>
         {modalVisible && <ModalPlayMusic onPressModal={goToSongDetails} />}

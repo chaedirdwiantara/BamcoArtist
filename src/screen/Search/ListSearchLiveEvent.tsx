@@ -1,33 +1,42 @@
 import {FlatList, RefreshControl, StyleSheet, Text, View} from 'react-native';
 import React, {FC, useEffect} from 'react';
-import MusicianSection from '../../components/molecule/MusicianSection/MusicianSection';
+import {EmptyState, ListCard} from '../../components';
 import {mvs} from 'react-native-size-matters';
+import {useNavigation} from '@react-navigation/native';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {RootStackParams} from '../../navigations';
 import {useQuery} from 'react-query';
 import {useSearchHook} from '../../hooks/use-search.hook';
-import {widthResponsive} from '../../utils';
 import Color from '../../theme/Color';
-import {EmptyState} from '../../components';
+import {heightPercentage, heightResponsive, widthResponsive} from '../../utils';
 import {useTranslation} from 'react-i18next';
 import LoadingSpinner from '../../components/atom/Loading/LoadingSpinner';
 import {font} from '../../theme';
+import {dateFormat, dateFormatFullYear} from '../../utils/date-format';
 
 interface Props {
   keyword: string;
   listType?: 'suggest';
 }
 
-const ListResultFans: FC<Props> = (props: Props) => {
-  const {keyword, listType} = props;
+const ListResultLiveEvent: FC<Props> = ({keyword, listType}: Props) => {
   const {t} = useTranslation();
-  const {getSearchFans} = useSearchHook();
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParams>>();
+
+  const handleOnPress = (eventId: string) => {
+    navigation.navigate('EventDetail', {id: eventId});
+  };
+
+  const {getSearchLiveEvent} = useSearchHook();
 
   const {
-    data: dataSearchFans,
+    data: dataSearchLiveEvent,
     refetch,
     isRefetching,
     isLoading,
-  } = useQuery(['/search-fans'], () =>
-    getSearchFans({
+  } = useQuery(['/search-live-event'], () =>
+    getSearchLiveEvent({
       keyword: keyword,
       perPage: listType === 'suggest' ? 3 : undefined,
     }),
@@ -37,7 +46,6 @@ const ListResultFans: FC<Props> = (props: Props) => {
     refetch();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [keyword]);
-
   return (
     <View style={styles(listType).container}>
       {(isRefetching || isLoading) && (
@@ -47,39 +55,32 @@ const ListResultFans: FC<Props> = (props: Props) => {
       )}
 
       {listType === 'suggest' &&
-      dataSearchFans?.data &&
-      dataSearchFans?.data.length > 0 ? (
-        <Text style={styles().titleTab}>Fans</Text>
+      dataSearchLiveEvent?.data &&
+      dataSearchLiveEvent?.data.length > 0 ? (
+        <Text style={styles().titleTab}>Event</Text>
       ) : null}
 
       <FlatList
         contentContainerStyle={styles(listType).ListContainer}
         showsVerticalScrollIndicator={false}
-        data={dataSearchFans?.data}
+        data={dataSearchLiveEvent?.data ?? []}
         scrollEnabled={listType === 'suggest' ? false : true}
         renderItem={({item, index}) => (
-          <MusicianSection
-            musicianNum={(index + 1).toLocaleString('en-US', {
-              minimumIntegerDigits: 2,
-              useGrouping: false,
-            })}
-            musicianName={item.fullname}
-            imgUri={
-              item.imageProfileUrls.length > 0
-                ? item.imageProfileUrls[0].image
-                : ''
-            }
+          <ListCard.MusicList
+            imgUri={item.imageCover[0]?.image ?? null}
+            musicTitle={item.name}
+            singerName={`${item.locationCity}, ${dateFormatFullYear(
+              item.startDate,
+            )}`}
             containerStyles={{marginTop: mvs(20)}}
-            userId={item.uuid}
-            activeMore={false}
-            type="fans"
-            isHideNum
+            onPressCard={() => handleOnPress(item.id)}
+            hideDropdownMore
           />
         )}
         ListEmptyComponent={
           !isLoading && !isRefetching && listType !== 'suggest' ? (
             <EmptyState
-              text={t('EmptyState.Search.Fans') || ''}
+              text={t('EmptyState.Search.Song') || ''}
               containerStyle={styles().containerEmpty}
             />
           ) : null
@@ -92,7 +93,7 @@ const ListResultFans: FC<Props> = (props: Props) => {
   );
 };
 
-export default ListResultFans;
+export default ListResultLiveEvent;
 
 const styles = (listType?: 'suggest') =>
   StyleSheet.create({
@@ -109,11 +110,11 @@ const styles = (listType?: 'suggest') =>
     },
     loadingContainer: {
       alignItems: 'center',
-      paddingVertical: widthResponsive(20),
+      paddingVertical: heightPercentage(20),
     },
     containerEmpty: {
       flex: 0,
-      height: widthResponsive(500),
+      height: heightResponsive(500),
     },
     titleTab: {
       fontSize: mvs(14),

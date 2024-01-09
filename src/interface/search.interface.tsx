@@ -210,3 +210,27 @@ export type ListSearchPlaylistsResponseType = {
 export interface KeywordProps {
   keyword: string;
 }
+
+export type DataSearchLiveEvent = {
+  id: string;
+  name: string;
+  locationCountry: string;
+  locationCity: string;
+  startDate: string;
+  endDate: string;
+  urlGoogle: string;
+  imageCover: imageTypes[];
+  status: string;
+};
+
+export type ListDataSearchLiveEvent = {
+  code: number;
+  data: DataSearchLiveEvent[];
+  message: string;
+  meta: {
+    page: number;
+    perPage: number;
+    total: number;
+  };
+  status: number;
+};
