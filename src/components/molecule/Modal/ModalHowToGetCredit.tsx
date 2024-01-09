@@ -1,8 +1,15 @@
+import {
+  Text,
+  View,
+  Image,
+  Linking,
+  StyleSheet,
+  TouchableOpacity,
+} from 'react-native';
 import React, {useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {ms, mvs} from 'react-native-size-matters';
 import {useNavigation} from '@react-navigation/native';
-import {Text, View, Image, StyleSheet, TouchableOpacity} from 'react-native';
 
 import {ModalCustom} from './ModalCustom';
 import {color, font} from '../../../theme';
@@ -12,6 +19,7 @@ import {ArrowLeftIcon, ArrowRightIcon} from '../../../assets/icon';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
 interface ModalHowToGetCreditProps {
+  title: string;
   visible: boolean;
   onPressClose: () => void;
   onPressExclusive: () => void;
@@ -67,18 +75,26 @@ export const ModalHowToGetCredit: React.FC<ModalHowToGetCreditProps> = (
       btnText: t('Rewards.MissionTab.ModalGetCredit.Button1'),
       navigate: () =>
         navigation.navigate('CreatePost', {audience: 'Feed.Public'}),
+      imageSrc: require('../../../assets/image/post_public.png'),
     },
     {
       title: t('Rewards.MissionTab.ModalGetCredit.Title2'),
       subtitle: t('Rewards.MissionTab.ModalGetCredit.Subtitle2'),
       btnText: t('Rewards.MissionTab.ModalGetCredit.Button2'),
       navigate: () => props.onPressExclusive(),
+      imageSrc: require('../../../assets/image/post_exclusive.png'),
     },
     {
       title: t('Rewards.MissionTab.ModalGetCredit.Title3'),
       subtitle: t('Rewards.MissionTab.ModalGetCredit.Subtitle3'),
       btnText: t('Rewards.MissionTab.ModalGetCredit.Button3'),
-      navigate: () => navigation.navigate('CreatePost'),
+      navigate: () =>
+        Linking.openURL(
+          `mailto:team@thebeam.co?subject=${encodeURI(
+            t('Event.Detail.MailTitle'),
+          )}&body=${encodeURI(t('Event.Detail.MailBody'))}`,
+        ),
+      imageSrc: require('../../../assets/image/perform.png'),
     },
   ];
 
@@ -95,10 +111,8 @@ export const ModalHowToGetCredit: React.FC<ModalHowToGetCreditProps> = (
   const children = () => (
     <View style={styles.card}>
       <View style={styles.containerContent}>
-        <Text style={styles.title}>
-          {t('Rewards.MissionTab.ModalGetCredit.HowToGetCredit')}
-        </Text>
-        <Image source={require('../../../assets/image/feed.png')} />
+        <Text style={styles.title}>{props.title}</Text>
+        <Image source={dataArray[activeIndexSlide].imageSrc} />
         <Text style={[styles.title, {marginTop: mvs(15)}]}>
           {dataArray[activeIndexSlide].title}
         </Text>
