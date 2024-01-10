@@ -82,10 +82,10 @@ const UserInfoCard: FC<UserInfoCardProps> = (props: UserInfoCardProps) => {
       point: profile?.totalRelease ? profile.totalRelease : 0,
       title: t('Musician.Label.Releases'),
     },
-    {
-      point: profile?.totalPlaylist ? profile.totalPlaylist : 0,
-      title: t('Musician.Label.Playlists'),
-    },
+    // {
+    //   point: profile?.totalPlaylist ? profile.totalPlaylist : 0,
+    //   title: t('Musician.Label.Playlists'),
+    // },
     {
       point: profile?.rank ? profile.rank : 0,
       title: t('Musician.Label.Rank'),

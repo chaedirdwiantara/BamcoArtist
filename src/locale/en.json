@@ -14,6 +14,7 @@
     "Listeners": "Listeners",
     "GotIt": "Ok, I got it",
     "Share": {
+      "Share": "Share",
       "Feed": "Share feed",
       "Album": "Share album",
       "Music": "Share music",
@@ -661,7 +662,20 @@
       "ClaimToast": "Success Claim {{claimedPoint}} Bonus",
       "BtnCompleted": "Completed",
       "BtnClaim": "Claim",
-      "BtnGo": "Go"
+      "BtnGo": "Go",
+      "ModalGetCredit": {
+        "HowToGetCredit": "How to Get Credit",
+        "HowToGetFans": "How to Get Fans",
+        "Title1": "Post Public Content",
+        "Title2": "Make Exclusive Content",
+        "Title3": "Perform in Beamco Event",
+        "Subtitle1": "Earn Support by Sharing Exciting Updates Post captivating news or updates and watch your fans shower you with credits.",
+        "Subtitle2": "Earn Credits by Setting Up Exclusive Content & Post it! Let’s setting up your profile for subscriptions",
+        "Subtitle3": "Step into the Limelight at Beamco Live Events! captivate your audience, and earn credits for your live performance.",
+        "Button1": "Make a Post Public",
+        "Button2": "Set Exclusive Content",
+        "Button3": "Request to Perform"
+      }
     },
     "EmptyState": {
       "RewardTitle": "No Rewards is Available",

@@ -21,8 +21,13 @@ export const MerchScreen: React.FC = () => {
 
   useFocusEffect(
     useCallback(() => {
-      getBookyayToken();
-      setLoading(false);
+      const token = async () => {
+        setLoading(true);
+        await getBookyayToken();
+        setLoading(false);
+      };
+
+      token();
 
       // use settimeout because loading must appear first
       setTimeout(() => {

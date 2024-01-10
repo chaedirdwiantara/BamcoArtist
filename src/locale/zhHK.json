@@ -700,7 +700,20 @@
       "ClaimToast": "成功領取 {{claimedPoint}} 積分獎勵",
       "BtnCompleted": "已完成",
       "BtnClaim": "領取",
-      "BtnGo": "前往"
+      "BtnGo": "前往",
+      "ModalGetCredit": {
+        "HowToGetCredit": "點樣賺取積分",
+        "HowToGetFans": "How to Get Fans",
+        "Title1": "發佈公開內容",
+        "Title2": "製作獨家內容",
+        "Title3": "參與 Beamco 活動",
+        "Subtitle1": "透過分享新聞或更新賺取支持，觀眾會以積分回饋你。",
+        "Subtitle2": "設置獨家內容並發佈，賺取積分！讓我們為你的訂閱設置個人資料。",
+        "Subtitle3": "踏入 Beamco 直播活動的聚光燈下！吸引你的觀眾，並為現場表演賺取積分。",
+        "Button1": "發佈公開",
+        "Button2": "設置獨家內容",
+        "Button3": "申請表演"
+      }
     },
     "EmptyState": {
       "RewardTitle": "目前沒有可用的獎勵",

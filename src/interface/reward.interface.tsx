@@ -68,6 +68,7 @@ export interface GetMissionProgressParams {
   //   amount_to_claim?: number;
   //   max_claim?: number;
   function: string;
+  campaignId: number;
 }
 
 export type RewardListFunction =
@@ -102,6 +103,8 @@ export interface DataMissionMaster {
   taskType: TaskType;
   amountType: number;
   maxClaim: number;
+  campaignId: number;
+  postfix: string;
   createdAt: string;
   updatedAt: string;
 }

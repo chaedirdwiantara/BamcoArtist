@@ -21,8 +21,13 @@ export const TicketScreen: React.FC = () => {
 
   useFocusEffect(
     useCallback(() => {
-      getBookyayToken();
-      setLoading(false);
+      const token = async () => {
+        setLoading(true);
+        await getBookyayToken();
+        setLoading(false);
+      };
+
+      token();
 
       // use settimeout because loading must appear first
       setTimeout(() => {
@@ -31,6 +36,18 @@ export const TicketScreen: React.FC = () => {
         const showModal = getExpDateModal !== dateFormat(new Date());
         setShowModalInfo(showModal);
       }, 2000);
+    }, []),
+  );
+
+  useFocusEffect(
+    useCallback(() => {
+      const token = async () => {
+        setLoading(true);
+        await getBookyayToken();
+        setLoading(false);
+      };
+
+      token();
     }, []),
   );
 

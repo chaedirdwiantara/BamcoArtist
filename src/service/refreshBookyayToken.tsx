@@ -15,7 +15,7 @@ export const getBookyayToken = async (): Promise<string | null> => {
     let now = Math.round(Date.now() / 1000);
     if (JSONProfile) {
       const profileObject = JSON.parse(JSONProfile) as AuthType;
-      bookyayToken = profileObject.accessToken;
+      bookyayToken = profileObject.bookyayToken;
       let decodedBookyayToken = jwtDecode(
         bookyayToken,
       ) as TokenBookyayDecodeType;
@@ -34,7 +34,7 @@ export const getBookyayToken = async (): Promise<string | null> => {
               profileObject.accessToken = res.data.accessToken;
               profileObject.refreshToken = res.data.refreshToken;
               profileObject.bookyayToken = res.data.bookyayToken;
-              storage.set('profile', JSON.stringify(JSONProfile));
+              storage.set('profile', JSON.stringify(profileObject));
               resolve(res.data.accessToken);
             })
             .catch(err => {

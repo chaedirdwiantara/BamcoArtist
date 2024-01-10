@@ -315,7 +315,10 @@ export interface EventIncome {
 }
 
 export interface EventTopTipperResponse extends BaseResponseApi {
-  data: EventTopTipper[];
+  data: {
+    list: EventTopTipper[];
+    message: string;
+  };
 }
 
 export interface EventIncomeResponse extends BaseResponseApi {
