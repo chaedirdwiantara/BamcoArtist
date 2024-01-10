@@ -34,9 +34,6 @@ const TabTwoRewards: FC<Props> = ({refreshing, setRefreshing, rankTitle}) => {
   const {t} = useTranslation();
 
   const [activeIndex, setactiveIndex] = useState<number>(0);
-  const [daily, setDaily] = useState<DataMissionMaster[]>([]);
-  const [oneTime, setOneTime] = useState<DataMissionMaster[]>([]);
-  const [repeatable, setRepeatable] = useState<DataMissionMaster[]>([]);
   const [showToast, setShowToast] = useState<boolean>(false);
   const [claimedPoint, setClaimedPoint] = useState<number>(0);
   const [paramClaim, setParamClaim] = useState<string>();
@@ -45,7 +42,6 @@ const TabTwoRewards: FC<Props> = ({refreshing, setRefreshing, rankTitle}) => {
 
   const {useGetMissionMaster, useSetClaimMission} = useRewardHook();
 
-  // TODO: Waiting for update API Mission from BE
   const {
     data: dataMission,
     refetch: refetchMissionMaster,
@@ -67,25 +63,6 @@ const TabTwoRewards: FC<Props> = ({refreshing, setRefreshing, rankTitle}) => {
       setactiveIndex(0);
     }, []),
   );
-
-  // ! 2. SEPARATE RESPONSE DATA BASED ON THEIR MISSION TYPE
-  useEffect(() => {
-    if (dataMission) {
-      const dailyMissions = dataMission?.data.filter(
-        data => data.taskType === 'daily',
-      );
-      const oneTimeMissions = dataMission?.data.filter(
-        data => data.taskType === 'one-time',
-      );
-      const repeatableMissions = dataMission?.data.filter(
-        data => data.taskType === 'based-reward',
-      );
-
-      setDaily(dailyMissions);
-      setOneTime(oneTimeMissions);
-      setRepeatable(repeatableMissions);
-    }
-  }, [dataMission]);
 
   useEffect(() => {
     async function fetchClaim() {
@@ -199,16 +176,7 @@ const TabTwoRewards: FC<Props> = ({refreshing, setRefreshing, rankTitle}) => {
       ) : (
         dataMission?.data && (
           <FlatList
-            data={
-              // activeIndex === 0
-              //   ? daily
-              //   : activeIndex === 1
-              //   ?
-              oneTime
-              // : activeIndex === 2
-              // ? repeatable
-              // : daily
-            }
+            data={dataMission.data}
             showsVerticalScrollIndicator={false}
             keyExtractor={(_, index) => index.toString()}
             scrollEnabled={false}

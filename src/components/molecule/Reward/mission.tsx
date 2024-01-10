@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from 'react';
-import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import React, {useCallback, useEffect, useState} from 'react';
+import {View, Text, StyleSheet, TouchableOpacity, Linking} from 'react-native';
 import * as Progress from 'react-native-progress';
 import {
   BadgeBronzeMissionIcon,
@@ -21,6 +21,12 @@ import {useRewardHook} from '../../../hooks/use-reward.hook';
 import {useTranslation} from 'react-i18next';
 import {levelName} from '../../../utils/calculateGamification';
 import {ModalHowToGetCredit} from '../Modal/ModalHowToGetCredit';
+import {ModalConfirm} from '../Modal/ModalConfirm';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {RootStackParams} from '../../../navigations';
+import {useSettingHook} from '../../../hooks/use-setting.hook';
+import {profileStorage} from '../../../hooks/use-storage.hook';
 
 interface MissionProps {
   data: DataMissionMaster;
@@ -29,22 +35,24 @@ interface MissionProps {
   rankTitle: levelName;
 }
 
-const Mission: React.FC<MissionProps> = ({data, onClaim, onGo, rankTitle}) => {
+const Mission: React.FC<MissionProps> = ({data, onGo, rankTitle}) => {
   const {t} = useTranslation();
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParams>>();
+
   const {useGetMissionProgress} = useRewardHook();
+  const {dataExclusiveContent, getExclusiveContent} = useSettingHook();
   const [dataProgress, setDataProgress] = useState<DataListMissioProgress>();
   const [readyToRefetch, setreadyToRefetch] = useState<boolean>(false);
-  const [showModal, setShowModal] = useState<boolean>(false);
+  const [showModalGetCredit, setShowModalGetCredit] = useState<boolean>(false);
+  const [showModalExclusive, setShowModalExclusive] = useState<boolean>(false);
 
-  const {
-    data: dataMissionPrg,
-    refetch: refetchMissionPrg,
-    isLoading: isLoadingMissionPrg,
-    isRefetching: isRefetchingMissionPrg,
-  } = useGetMissionProgress({
-    task_type: data.taskType,
-    function: data.function,
-  });
+  const {data: dataMissionPrg, refetch: refetchMissionPrg} =
+    useGetMissionProgress({
+      task_type: data.taskType,
+      function: data.function,
+      campaignId: data.campaignId,
+    });
 
   useEffect(() => {
     refetchMissionPrg();
@@ -65,38 +73,62 @@ const Mission: React.FC<MissionProps> = ({data, onClaim, onGo, rankTitle}) => {
     }
   }, [readyToRefetch]);
 
+  useFocusEffect(
+    useCallback(() => {
+      const uuid = profileStorage()?.uuid;
+      getExclusiveContent({uuid});
+    }, []),
+  );
+
+  const handleConfirmModal = () => {
+    setShowModalExclusive(false);
+    navigation.navigate('ExclusiveContentSetting', {type: 'navToCreatePost'});
+  };
+
+  const onPressExclusive = () => {
+    if (dataExclusiveContent === null) {
+      setShowModalExclusive(true);
+    } else {
+      navigation.navigate('CreatePost', {audience: 'Feed.Exclusive'});
+    }
+  };
+
   const progressBar = dataProgress
     ? dataProgress?.rowCount / data.amountToClaim
     : 0 / data.amountToClaim;
-  const progressText = `${dataProgress ? dataProgress?.rowCount : 0}${
-    dataProgress?.function.includes('profile') ? '%' : ''
-  }/${data.amountToClaim}${
-    dataProgress?.function.includes('profile') ? '%' : ''
-  }`;
-  const progressRepeatable = dataProgress?.rowCount === 0 ? 0 / 1 : 1;
-  const progressTextRepeatable = `${dataProgress?.rowCount} ${
-    dataProgress?.function.includes('donation') ||
-    dataProgress?.function.includes('tipping')
-      ? 'Credit Detected'
-      : 'Activity Detected'
-  }`;
+  const postfix = data.postfix === '%' ? '%' : ' ' + data.postfix;
+  const progressText = `${dataProgress ? dataProgress?.rowCount : 0}${postfix}`;
+  const titleModal =
+    data.postfix === 'Fans'
+      ? t('Rewards.MissionTab.ModalGetCredit.HowToGetFans')
+      : t('Rewards.MissionTab.ModalGetCredit.HowToGetCredit');
+  const progressCompleted = dataProgress?.isClaimed;
 
-  const handleOnClaim = (
-    dataProgress: DataListMissioProgress,
-    data: DataMissionMaster,
-  ) => {
-    if (data.taskType !== 'based-reward') {
-      setDataProgress({...dataProgress, isClaimable: false, isClaimed: true});
+  const onPressCard = () => {
+    if (data.postfix === '%') {
+      onGo();
+    } else if (data.postfix === 'Perform') {
+      Linking.openURL(
+        `mailto:team@thebeam.co?subject=${encodeURI(
+          t('Event.Detail.MailTitle'),
+        )}&body=${encodeURI(t('Event.Detail.MailBody'))}`,
+      );
+    } else if (data.postfix === 'Post') {
+      onPressExclusive();
     } else {
-      setDataProgress({...dataProgress, isClaimable: false, isClaimed: false});
+      setShowModalGetCredit(true);
     }
-    setreadyToRefetch(true);
-    onClaim(dataProgress?.sumLoyaltyPoints!, data);
   };
 
   return (
     <View>
-      <TouchableOpacity onPress={onGo} style={styles.voteTopContainer}>
+      <TouchableOpacity
+        disabled={progressCompleted}
+        onPress={onPressCard}
+        style={[
+          styles.voteTopContainer,
+          {opacity: progressCompleted ? 0.6 : 1},
+        ]}>
         <View style={styles.containerBadge}>
           {rankTitle === 'bronze' ? (
             <BadgeBronzeMissionIcon />
@@ -110,9 +142,7 @@ const Mission: React.FC<MissionProps> = ({data, onClaim, onGo, rankTitle}) => {
             <BadgeDiamondMissionIcon />
           ) : null}
           <Text style={styles.rewardCountTxt}>
-            {data.taskType === 'based-reward' &&
-            dataProgress &&
-            dataProgress?.sumLoyaltyPoints > 0
+            {dataProgress && dataProgress?.sumLoyaltyPoints > 0
               ? dataProgress.sumLoyaltyPoints
               : data.rewards}
           </Text>
@@ -123,11 +153,7 @@ const Mission: React.FC<MissionProps> = ({data, onClaim, onGo, rankTitle}) => {
           <Gap height={mvs(5)} />
           <View style={styles.prgContainer}>
             <Progress.Bar
-              progress={
-                data.taskType === 'based-reward'
-                  ? progressRepeatable
-                  : progressBar
-              }
+              progress={progressBar}
               width={null}
               height={widthResponsive(11)}
               borderWidth={0}
@@ -136,15 +162,10 @@ const Mission: React.FC<MissionProps> = ({data, onClaim, onGo, rankTitle}) => {
               borderRadius={4}
               animated={false}
               style={{width: '100%'}}
-              // animationType={'timing'}
             />
-            {!dataProgress?.isClaimed ? (
+            {!progressCompleted ? (
               <View style={styles.progressContainer}>
-                <Text style={styles.progressTxt}>
-                  {data.taskType === 'based-reward'
-                    ? progressTextRepeatable
-                    : progressText}
-                </Text>
+                <Text style={styles.progressTxt}>{progressText}</Text>
               </View>
             ) : (
               <View style={styles.progressContainer}>
@@ -158,6 +179,23 @@ const Mission: React.FC<MissionProps> = ({data, onClaim, onGo, rankTitle}) => {
           </View>
         </View>
       </TouchableOpacity>
+
+      <ModalHowToGetCredit
+        title={titleModal}
+        visible={showModalGetCredit}
+        onPressClose={() => setShowModalGetCredit(false)}
+        onPressExclusive={onPressExclusive}
+      />
+
+      <ModalConfirm
+        modalVisible={showModalExclusive}
+        title={t('Modal.ExclusiveContentConfirm.Title') || ''}
+        subtitle={t('Modal.ExclusiveContentConfirm.Body') || ''}
+        yesText={t('Modal.ExclusiveContentConfirm.ButtonOk') || ''}
+        noText={t('Modal.ExclusiveContentConfirm.ButtonCancel') || ''}
+        onPressClose={() => setShowModalExclusive(false)}
+        onPressOk={handleConfirmModal}
+      />
     </View>
   );
 };
@@ -168,7 +206,7 @@ const styles = StyleSheet.create({
     backgroundColor: color.Dark[700],
     padding: widthResponsive(16),
     borderRadius: 4,
-    marginBottom: widthResponsive(16),
+    marginBottom: widthResponsive(12),
   },
   containerBadge: {
     alignItems: 'center',
