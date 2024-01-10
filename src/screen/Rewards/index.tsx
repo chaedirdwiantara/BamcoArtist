@@ -113,49 +113,6 @@ const Rewards = () => {
           <RewardsSkeleton />
         ) : (
           <>
-            {/* <View style={styles.slide}>
-              <BackgroundHeader
-                points={dataProfile?.data.rewards.credit || 0}
-                rankTitle={calculateGamification(credit).rankTitle}
-              />
-            </View>
-
-            <Gap height={14} />
-            <View style={{paddingHorizontal: widthResponsive(20)}}>
-              <PointProgress
-                progress={dataProfile?.data.rewards.credit || 0}
-                total={calculateGamification(credit).nextMilestone}
-                nextLvl={calculateGamification(credit).nextLabelName}
-                isMax={calculateGamification(credit).isMax}
-              />
-            </View>
-
-            <Gap height={24} />
-            <View style={{paddingHorizontal: widthResponsive(20)}}>
-              <InfoCard
-                title={
-                  calculateGamification(credit).isMax
-                    ? t('Rewards.InfoCard.LvlMax')
-                    : t('Rewards.InfoCard.NextLvl', {
-                        whatNextLvl:
-                          calculateGamification(credit).nextLabelName,
-                      })
-                }
-                caption={
-                  calculateGamification(credit).isMax
-                    ? t('Rewards.InfoCard.MaxLvlDesc')
-                    : t('Rewards.InfoCard.Desc', {
-                        pointNeeded:
-                          calculateGamification(credit).nextMilestone -
-                          (dataProfile?.data.rewards.credit || 0),
-                        whatNextLvl:
-                          calculateGamification(credit).nextLabelName,
-                      })
-                }
-                badgeType={calculateGamification(credit).nextLevelStage}
-              />
-            </View> */}
-
             <HeaderSwiper
               currentLvl={calculateGamification(credit).rankTitle}
             />
@@ -174,7 +131,10 @@ const Rewards = () => {
             </View>
             <Gap height={19} />
             <View style={{paddingHorizontal: widthResponsive(20)}}>
-              {storedSlideIndex && <BenefitCard id={storedSlideIndex + 1} />}
+              <BenefitCard
+                id={storedSlideIndex ? storedSlideIndex + 1 : 1}
+                currentLvl={calculateGamification(credit).rankTitle}
+              />
             </View>
           </>
         )}

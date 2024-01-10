@@ -94,7 +94,14 @@ const PointProgress: FC<Props> = ({
   };
 
   return (
-    <View style={[styles.container, containerStyle]}>
+    <View
+      style={[
+        styles.container,
+        containerStyle,
+        {
+          opacity: lvlOnNum === storedSlideIndex ? 1 : 0.6,
+        },
+      ]}>
       <Progress.Bar
         progress={
           isMax

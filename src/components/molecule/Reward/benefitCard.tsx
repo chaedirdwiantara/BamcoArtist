@@ -18,9 +18,10 @@ import {RootStackParams} from '../../../navigations';
 
 type Props = {
   id: number;
+  currentLvl: string;
 };
 
-const BenefitCard: FC<Props> = ({id}) => {
+const BenefitCard: FC<Props> = ({id, currentLvl}) => {
   const {useGetBenefit} = useRewardHook();
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
@@ -47,33 +48,49 @@ const BenefitCard: FC<Props> = ({id}) => {
     navigation.navigate('DetailBenefit', {benefitId: id});
   };
 
+  const lvlOnNum =
+    currentLvl === 'Bronze'
+      ? 1
+      : currentLvl === 'Silver'
+      ? 2
+      : currentLvl === 'Gold'
+      ? 3
+      : currentLvl === 'Platinum'
+      ? 4
+      : 5;
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.textStyle}>Benefit</Text>
-      <Gap height={10} />
-      <FlatList
-        data={dataBenefit?.data}
-        showsVerticalScrollIndicator={false}
-        keyExtractor={(_, index) => index.toString()}
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        renderItem={({item}) => (
-          <TouchableOpacity
-            style={styles.compContainer}
-            onPress={handleOnPress}>
-            <Image
-              source={{uri: item.imageUrl[0].image}}
-              style={styles.iconStyle}
-            />
-            <Gap width={6} />
-            <Text style={styles.textStyle}>{item.title}</Text>
-          </TouchableOpacity>
-        )}
-        ListEmptyComponent={() => {
-          return <View></View>;
-        }}
-      />
-    </View>
+    <>
+      {dataBenefit?.data && (
+        <View style={[styles.container, {opacity: lvlOnNum === id ? 1 : 0.6}]}>
+          <Text style={styles.textStyle}>Benefit</Text>
+          <Gap height={10} />
+          <FlatList
+            data={dataBenefit?.data}
+            showsVerticalScrollIndicator={false}
+            keyExtractor={(_, index) => index.toString()}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            renderItem={({item}) => (
+              <TouchableOpacity
+                style={styles.compContainer}
+                disabled={lvlOnNum !== id}
+                onPress={handleOnPress}>
+                <Image
+                  source={{uri: item.imageUrl[0].image}}
+                  style={styles.iconStyle}
+                />
+                <Gap width={6} />
+                <Text style={styles.textStyle}>{item.title}</Text>
+              </TouchableOpacity>
+            )}
+            ListEmptyComponent={() => {
+              return <View></View>;
+            }}
+          />
+        </View>
+      )}
+    </>
   );
 };
 
