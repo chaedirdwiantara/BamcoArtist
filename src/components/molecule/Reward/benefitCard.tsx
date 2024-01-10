@@ -94,6 +94,7 @@ const styles = StyleSheet.create({
   compContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    marginRight: widthResponsive(28),
   },
   iconStyle: {
     width: mvs(24),
