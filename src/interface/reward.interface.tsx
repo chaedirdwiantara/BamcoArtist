@@ -1,4 +1,4 @@
-import {BaseResponseApi} from './base.interface';
+import {BaseResponseApi, imageTypes} from './base.interface';
 
 export interface PaginationType {
   page: number;
@@ -133,4 +133,37 @@ export interface DataMissionStoreProps {
   id: number;
   typeOnIndex: number;
   isClaimable: boolean;
+}
+
+export interface DataBenefitProps {
+  id: number;
+  title: string;
+  imageUrl: imageTypes[];
+  type: string;
+  tier: {
+    value: number;
+    name: string;
+  };
+}
+export interface GetBenefits extends BaseResponseApi {
+  data: DataBenefitProps[];
+}
+
+export interface DataDetailBenefitProps {
+  id: number;
+  title: string;
+  description: string;
+  tnc: {
+    title: string;
+    value: string[];
+  };
+  imageUrl: imageTypes[];
+  type: string;
+  tier: {
+    value: number;
+    name: string;
+  };
+}
+export interface DetailBenefitsResponse extends BaseResponseApi {
+  data: DataDetailBenefitProps;
 }

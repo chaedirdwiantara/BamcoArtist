@@ -1,4 +1,6 @@
 import {
+  DetailBenefitsResponse,
+  GetBenefits,
   GetMissionMaster,
   GetMissionProgress,
   GetMissionProgressParams,
@@ -11,6 +13,8 @@ import {
   SetClaimMission,
 } from '../interface/reward.interface';
 import SsuAPI from './baseRinjani';
+import SsuAPIKrakatau from './baseKrakatau';
+import {ParamsProps} from '../interface/base.interface';
 
 export const masterReward = async (
   props?: PaginationType,
@@ -75,6 +79,28 @@ export const setClaimMissionEp = async (
   const {data} = await SsuAPI().request<SetClaimMission>({
     url: `musician-app/missions/${functionTxt}/claim`,
     method: 'POST',
+  });
+
+  return data;
+};
+
+export const getBenefitEp = async (
+  params: ParamsProps,
+): Promise<GetBenefits> => {
+  const {data} = await SsuAPIKrakatau().request<GetBenefits>({
+    url: `/benefits/tier/${params.id}`,
+    method: 'GET',
+  });
+
+  return data;
+};
+
+export const getDetailBenefitEp = async (
+  params: ParamsProps,
+): Promise<DetailBenefitsResponse> => {
+  const {data} = await SsuAPIKrakatau().request<DetailBenefitsResponse>({
+    url: `/benefits/detail/${params.id}`,
+    method: 'GET',
   });
 
   return data;

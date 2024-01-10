@@ -28,10 +28,11 @@ import {
   BadgePlatinumMIcon,
   BadgeSilverMIcon,
 } from '../../assets/icon';
-import {dataMissionStore} from '../../store/reward.store';
+import {dataMissionStore, slideIndexStore} from '../../store/reward.store';
 import {RewardsSkeleton} from '../../skeleton/Rewards';
 import {calculateGamification} from '../../utils/calculateGamification';
 import HeaderSwiper from '../../components/molecule/Reward/headerSwiper';
+import BenefitCard from '../../components/molecule/Reward/benefitCard';
 
 type OnScrollEventHandler = (
   event: NativeSyntheticEvent<NativeScrollEvent>,
@@ -41,6 +42,7 @@ const Rewards = () => {
   const {t} = useTranslation();
   const {dataProfile, isLoading, getProfileUser} = useProfileHook();
   const {storedBadgeTitle, setStoredBadgeTitle} = dataMissionStore();
+  const {storedSlideIndex} = slideIndexStore();
   const credit = dataProfile?.data.rewards.credit || 0;
 
   const [selectedIndex, setSelectedIndex] = useState(-0);
@@ -161,7 +163,6 @@ const Rewards = () => {
             <View
               style={{
                 paddingHorizontal: widthResponsive(20),
-                marginBottom: 5,
               }}>
               <PointProgress
                 progress={dataProfile?.data.rewards.credit || 0}
@@ -170,6 +171,10 @@ const Rewards = () => {
                 isMax={calculateGamification(credit).isMax}
                 currentLvl={calculateGamification(credit).rankTitle}
               />
+            </View>
+            <Gap height={19} />
+            <View style={{paddingHorizontal: widthResponsive(20)}}>
+              {storedSlideIndex && <BenefitCard id={storedSlideIndex + 1} />}
             </View>
           </>
         )}
