@@ -66,19 +66,19 @@ const DetailBenefit: FC<ListVoucherProps> = ({
 
   return (
     <>
-      {dataDetail && (
-        <View style={styles.root}>
-          {scrollEffect && (
-            <TopNavigation.Type1
-              title={''}
-              maxLengthTitle={20}
-              itemStrokeColor={'white'}
-              leftIcon={<ArrowLeftIcon />}
-              leftIconAction={handleBackAction}
-              containerStyles={styles.topNavStyle}
-              rightIconAction={() => {}}
-            />
-          )}
+      <View style={styles.root}>
+        {scrollEffect && (
+          <TopNavigation.Type1
+            title={''}
+            maxLengthTitle={20}
+            itemStrokeColor={'white'}
+            leftIcon={<ArrowLeftIcon />}
+            leftIconAction={handleBackAction}
+            containerStyles={styles.topNavStyle}
+            rightIconAction={() => {}}
+          />
+        )}
+        {dataDetail?.data ? (
           <ScrollView
             onScroll={handleScroll}
             showsVerticalScrollIndicator={false}>
@@ -162,8 +162,18 @@ const DetailBenefit: FC<ListVoucherProps> = ({
               )}
             </View>
           </ScrollView>
-        </View>
-      )}
+        ) : (
+          <TopNavigation.Type1
+            title={''}
+            maxLengthTitle={20}
+            itemStrokeColor={'white'}
+            leftIcon={<ArrowLeftIcon />}
+            leftIconAction={handleBackAction}
+            containerStyles={styles.topNavStyle}
+            rightIconAction={() => {}}
+          />
+        )}
+      </View>
     </>
   );
 };
