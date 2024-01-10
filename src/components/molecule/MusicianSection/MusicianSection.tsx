@@ -35,6 +35,7 @@ interface MusicianProps {
   isLive?: boolean;
   showCredit?: boolean;
   creditCount?: number;
+  isHideNum?: boolean;
 }
 
 interface DataMore {

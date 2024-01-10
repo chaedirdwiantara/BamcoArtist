@@ -7,6 +7,7 @@ import {
   playlistSearch,
   listFollowers,
   listFanss,
+  liveEventSearch,
 } from '../api/search.api';
 import {
   SearchProps,
@@ -142,6 +143,17 @@ export const useSearchHook = () => {
     }
   };
 
+  const getSearchLiveEvent = async (props?: SearchProps) => {
+    try {
+      const response = await liveEventSearch(props);
+      return {
+        data: response?.data,
+      };
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return {
     searchLoading,
     dataFollowers,
@@ -155,5 +167,6 @@ export const useSearchHook = () => {
     getSearchMusicians,
     getSearchPlaylists,
     getListMusiciansFans,
+    getSearchLiveEvent,
   };
 };

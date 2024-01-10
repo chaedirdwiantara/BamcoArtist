@@ -31,6 +31,7 @@ import {
 import {dataMissionStore} from '../../store/reward.store';
 import {RewardsSkeleton} from '../../skeleton/Rewards';
 import {calculateGamification} from '../../utils/calculateGamification';
+import HeaderSwiper from '../../components/molecule/Reward/headerSwiper';
 
 type OnScrollEventHandler = (
   event: NativeSyntheticEvent<NativeScrollEvent>,
@@ -110,7 +111,7 @@ const Rewards = () => {
           <RewardsSkeleton />
         ) : (
           <>
-            <View style={styles.slide}>
+            {/* <View style={styles.slide}>
               <BackgroundHeader
                 points={dataProfile?.data.rewards.credit || 0}
                 rankTitle={calculateGamification(credit).rankTitle}
@@ -150,6 +151,24 @@ const Rewards = () => {
                       })
                 }
                 badgeType={calculateGamification(credit).nextLevelStage}
+              />
+            </View> */}
+
+            <HeaderSwiper
+              currentLvl={calculateGamification(credit).rankTitle}
+            />
+            <Gap height={15} />
+            <View
+              style={{
+                paddingHorizontal: widthResponsive(20),
+                marginBottom: 5,
+              }}>
+              <PointProgress
+                progress={dataProfile?.data.rewards.credit || 0}
+                total={calculateGamification(credit).nextMilestone}
+                nextLvl={calculateGamification(credit).nextLabelName}
+                isMax={calculateGamification(credit).isMax}
+                currentLvl={calculateGamification(credit).rankTitle}
               />
             </View>
           </>

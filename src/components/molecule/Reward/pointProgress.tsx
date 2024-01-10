@@ -6,10 +6,18 @@ import {color, font} from '../../../theme';
 import {mvs} from 'react-native-size-matters';
 import {Gap} from '../../atom';
 import {useTranslation} from 'react-i18next';
+import {slideIndexStore} from '../../../store/reward.store';
+import {
+  BadgeDiamondIcon,
+  BadgeGoldIcon,
+  BadgePlatinumIcon,
+  BadgeSilverIcon,
+} from '../../../assets/icon';
 
 type Props = {
   progress: number;
   total: number;
+  currentLvl: string;
   nextLvl: string;
   isMax: boolean;
   containerStyle?: ViewStyle;
@@ -18,47 +26,107 @@ type Props = {
 const PointProgress: FC<Props> = ({
   progress,
   total,
+  currentLvl,
   nextLvl,
   isMax,
   containerStyle,
 }) => {
   const {t} = useTranslation();
+  const {storedSlideIndex} = slideIndexStore();
+
+  const lvlOnNum =
+    currentLvl === 'Bronze'
+      ? 0
+      : currentLvl === 'Silver'
+      ? 1
+      : currentLvl === 'Gold'
+      ? 2
+      : currentLvl === 'Platinum'
+      ? 3
+      : 4;
+
+  const iconNextRank = () => {
+    return (
+      <View style={styles.nextRank}>
+        <View style={styles.nxtLvlCtr}>
+          <Text style={styles.nxtLvlTxt}>{nextLvl}</Text>
+        </View>
+        {nextLvl === 'Silver' ? (
+          <BadgeSilverIcon width={25} height={25} />
+        ) : nextLvl === 'Gold' ? (
+          <BadgeGoldIcon width={25} height={25} />
+        ) : nextLvl === 'Platinum' ? (
+          <BadgePlatinumIcon width={25} height={25} />
+        ) : nextLvl === 'Diamond' ? (
+          <BadgeDiamondIcon width={25} height={25} />
+        ) : null}
+      </View>
+    );
+  };
+
+  const iconUpdateStateRank = () => {
+    return (
+      <View style={styles.nextRank}>
+        <View style={styles.nxtLvlCtr}>
+          <Text style={styles.nxtLvlTxt}>
+            {storedSlideIndex === 0
+              ? 'Silver'
+              : storedSlideIndex === 1
+              ? 'Gold'
+              : storedSlideIndex === 2
+              ? 'Platinum'
+              : storedSlideIndex === 3
+              ? 'Diamond'
+              : ''}
+          </Text>
+        </View>
+        {storedSlideIndex === 0 ? (
+          <BadgeSilverIcon width={25} height={25} />
+        ) : storedSlideIndex === 1 ? (
+          <BadgeGoldIcon width={25} height={25} />
+        ) : storedSlideIndex === 2 ? (
+          <BadgePlatinumIcon width={25} height={25} />
+        ) : storedSlideIndex === 3 ? (
+          <BadgeDiamondIcon width={25} height={25} />
+        ) : null}
+      </View>
+    );
+  };
+
   return (
     <View style={[styles.container, containerStyle]}>
-      <Text style={styles.primerTxt}>{t('Rewards.CurrentPrg.Title')}</Text>
-      <Gap height={8} />
       <Progress.Bar
-        progress={isMax ? 1 : progress / total}
+        progress={
+          isMax
+            ? 1
+            : storedSlideIndex !== undefined && lvlOnNum > storedSlideIndex
+            ? 1
+            : storedSlideIndex !== undefined && lvlOnNum < storedSlideIndex
+            ? 0
+            : progress / total
+        }
         width={null}
-        height={widthResponsive(8)}
-        borderWidth={0}
+        height={widthResponsive(10)}
+        borderWidth={2}
+        borderColor={color.Dark[300]}
         color={color.Pink[11]}
         unfilledColor={color.Dark[300]}
-        borderRadius={4}
+        borderRadius={30}
         animated={true}
         animationType={'timing'}
       />
-      <Gap height={8} />
-      <View style={styles.descStyle}>
-        {isMax ? (
-          <Text style={styles.primerTxt}>{`${t(
-            'Rewards.CurrentPrg.CreditsBonus',
-          )} ${progress}`}</Text>
-        ) : (
-          <Text style={styles.primerTxt}>
-            {`${t('Rewards.CurrentPrg.CreditsBonus')} ${progress}`}
-            <Text style={styles.scndTxt}>{`/${total}`}</Text>
-          </Text>
-        )}
-        {isMax ? (
-          <Text style={styles.primerTxt}>{t('Rewards.CurrentPrg.LvlMax')}</Text>
-        ) : (
-          <Text style={styles.primerTxt}>
-            {t('Rewards.CurrentPrg.NextLvl')}{' '}
-            {<Text style={styles.scndTxt}>{nextLvl}</Text>}
-          </Text>
-        )}
+      <View style={styles.progressContainer}>
+        <Text style={styles.progressTxt}>
+          {lvlOnNum === storedSlideIndex
+            ? `${progress} / ${total}`
+            : storedSlideIndex !== undefined && lvlOnNum > storedSlideIndex
+            ? 'You have completed this level'
+            : storedSlideIndex !== undefined && lvlOnNum < storedSlideIndex
+            ? 'Complete Previous Level to Unlock'
+            : ''}
+        </Text>
       </View>
+      {storedSlideIndex !== undefined ? iconUpdateStateRank() : iconNextRank()}
     </View>
   );
 };
@@ -66,7 +134,11 @@ const PointProgress: FC<Props> = ({
 export default PointProgress;
 
 const styles = StyleSheet.create({
-  container: {},
+  container: {
+    justifyContent: 'center',
+    position: 'relative',
+    width: '100%',
+  },
   descStyle: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -82,5 +154,41 @@ const styles = StyleSheet.create({
     fontFamily: font.InterRegular,
     fontSize: mvs(10),
     fontWeight: '600',
+  },
+  progressContainer: {
+    position: 'absolute',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'center',
+  },
+  progressTxt: {
+    color: color.Neutral[20],
+    fontFamily: font.InterRegular,
+    fontSize: mvs(10),
+    fontWeight: '600',
+    lineHeight: widthResponsive(12),
+  },
+  nextRank: {
+    position: 'absolute',
+    alignSelf: 'flex-end',
+    right: -1,
+  },
+  nxtLvlCtr: {
+    position: 'absolute',
+    alignSelf: 'center',
+    width: widthResponsive(50),
+  },
+  nxtLvlTxt: {
+    position: 'absolute',
+    top: -18,
+    left: 0,
+    right: 0,
+    color: color.Neutral[10],
+    fontSize: mvs(10),
+    fontFamily: font.InterRegular,
+    textAlign: 'center',
+    fontWeight: '500',
+    zIndex: 1,
   },
 });

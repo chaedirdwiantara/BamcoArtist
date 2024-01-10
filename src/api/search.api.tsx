@@ -1,5 +1,6 @@
 import {
   FollowersProps,
+  ListDataSearchLiveEvent,
   ListFansResponseType,
   ListSearchAlbumsResponseType,
   ListSearchFansResponseType,
@@ -89,6 +90,18 @@ export const listFanss = async (
   const {data} = await SsuAPI().request<ListFansResponseType>({
     url: `/public/list-fans-musician/${props.uuid}`,
     method: 'GET',
+  });
+
+  return data;
+};
+
+export const liveEventSearch = async (
+  props?: SearchProps,
+): Promise<ListDataSearchLiveEvent> => {
+  const {data} = await SsuAPI().request<ListDataSearchLiveEvent>({
+    url: '/public/events',
+    method: 'GET',
+    params: props,
   });
 
   return data;
