@@ -666,6 +666,9 @@
     "EmptyState": {
       "RewardTitle": "No Rewards is Available",
       "RewardSubtitle": "If there is one, it will show up here. Visit this page regularly so you can keep updated."
+    },
+    "DetailBenefit": {
+      "Available": "Available for"
     }
   },
   "Musician": {

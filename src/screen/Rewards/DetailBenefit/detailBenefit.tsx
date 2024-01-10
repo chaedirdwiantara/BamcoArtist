@@ -65,99 +65,106 @@ const DetailBenefit: FC<ListVoucherProps> = ({
   };
 
   return (
-    <View style={styles.root}>
-      {scrollEffect && (
-        <TopNavigation.Type1
-          title={t('Event.DetailVoucher.Title')}
-          maxLengthTitle={20}
-          itemStrokeColor={'white'}
-          leftIcon={<ArrowLeftIcon />}
-          leftIconAction={handleBackAction}
-          containerStyles={styles.topNavStyle}
-          rightIconAction={() => {}}
-        />
-      )}
-      <ScrollView onScroll={handleScroll} showsVerticalScrollIndicator={false}>
-        <View style={styles.slide}>
-          <ImageBackground
-            style={{width: '100%', height: 400}}
-            source={require('../../../assets/image/bg-detail-voucher.png')}>
-            <LinearGradient
-              colors={['#00000000', color.Dark[800]]}
-              style={{height: '100%', width: '100%'}}>
-              <View style={styles.headerContent}>
-                {!scrollEffect ? (
-                  <TopNavigation.Type1
-                    title={t('Event.DetailVoucher.Title')}
-                    maxLengthTitle={20}
-                    itemStrokeColor={'white'}
-                    leftIcon={<ArrowLeftIcon />}
-                    leftIconAction={handleBackAction}
-                    rightIconAction={() => {}}
-                    containerStyles={{
-                      borderBottomColor: 'transparent',
-                      paddingHorizontal: widthResponsive(24),
-                    }}
-                  />
-                ) : (
-                  <View />
-                )}
+    <>
+      {dataDetail && (
+        <View style={styles.root}>
+          {scrollEffect && (
+            <TopNavigation.Type1
+              title={''}
+              maxLengthTitle={20}
+              itemStrokeColor={'white'}
+              leftIcon={<ArrowLeftIcon />}
+              leftIconAction={handleBackAction}
+              containerStyles={styles.topNavStyle}
+              rightIconAction={() => {}}
+            />
+          )}
+          <ScrollView
+            onScroll={handleScroll}
+            showsVerticalScrollIndicator={false}>
+            <View style={styles.slide}>
+              <ImageBackground
+                style={{width: '100%', height: 400}}
+                source={require('../../../assets/image/bg-detail-voucher.png')}>
+                <LinearGradient
+                  colors={['#00000000', color.Dark[800]]}
+                  style={{height: '100%', width: '100%'}}>
+                  <View style={styles.headerContent}>
+                    {!scrollEffect ? (
+                      <TopNavigation.Type1
+                        title={''}
+                        maxLengthTitle={20}
+                        itemStrokeColor={'white'}
+                        leftIcon={<ArrowLeftIcon />}
+                        leftIconAction={handleBackAction}
+                        rightIconAction={() => {}}
+                        containerStyles={{
+                          borderBottomColor: 'transparent',
+                          paddingHorizontal: widthResponsive(24),
+                        }}
+                      />
+                    ) : (
+                      <View />
+                    )}
+                  </View>
+                </LinearGradient>
+              </ImageBackground>
+            </View>
 
-                <View style={styles.titleContainer}>
-                  <Text style={styles.vTitle}>{dataDetail?.data.title}</Text>
-                  <Gap height={5} />
-                  <Text style={styles.vSubTitle}>
-                    {t('Rewards.DetailVoucher.RewardAchievement')}
-                  </Text>
-                </View>
-              </View>
-            </LinearGradient>
-          </ImageBackground>
-        </View>
-
-        <View style={styles.content}>
-          <View style={styles.expired}>
-            <View style={styles.textIcon}>
-              <View style={{flexDirection: 'row'}}>
-                <ClockIcon
-                  stroke={color.Pink[200]}
-                  width={mvs(16)}
-                  height={mvs(16)}
-                />
-                <Gap width={8} />
-                <Text style={styles.normalTitle}>
-                  {t('Event.DetailVoucher.Expired')}
+            <View style={styles.content}>
+              <View style={styles.titleContainer}>
+                <Text style={styles.vTitle}>{dataDetail?.data.title}</Text>
+                <Gap height={5} />
+                <Text style={styles.vSubTitle}>
+                  {dataDetail?.data.description}
                 </Text>
               </View>
-              <Text style={[styles.normalTitle, {color: color.Success[400]}]}>
-                {dataDetail?.data.tier.name}
-              </Text>
-            </View>
-          </View>
-          {dataDetail?.data.tnc.value !== null && (
-            <View style={styles.tnc}>
-              <Text style={styles.normalTitle}>
-                {t('Event.DetailVoucher.Tnc')}
-              </Text>
-              <Gap height={4} />
-              {dataDetail?.data.tnc.value.map((val, i) => (
-                <View key={i} style={{flexDirection: 'row'}}>
-                  <View
-                    style={{
-                      width: widthResponsive(20),
-                    }}>
-                    <Text style={styles.tncValue}>{i + 1}.</Text>
+              <View style={styles.expired}>
+                <View style={styles.textIcon}>
+                  <View style={{flexDirection: 'row'}}>
+                    <ClockIcon
+                      stroke={color.Pink[200]}
+                      width={mvs(16)}
+                      height={mvs(16)}
+                    />
+                    <Gap width={8} />
+                    <Text style={styles.normalTitle}>
+                      {t('Rewards.DetailBenefit.Available')}
+                    </Text>
                   </View>
-                  <Text style={[styles.tncValue, {flex: 1, textAlign: 'auto'}]}>
-                    {val}
+                  <Text
+                    style={[styles.normalTitle, {color: color.Success[400]}]}>
+                    {dataDetail?.data.tier.name}
                   </Text>
                 </View>
-              ))}
+              </View>
+              {dataDetail?.data.tnc.value !== null && (
+                <View style={styles.tnc}>
+                  <Text style={styles.normalTitle}>
+                    {t('Event.DetailVoucher.Tnc')}
+                  </Text>
+                  <Gap height={4} />
+                  {dataDetail?.data.tnc.value.map((val, i) => (
+                    <View key={i} style={{flexDirection: 'row'}}>
+                      <View
+                        style={{
+                          width: widthResponsive(20),
+                        }}>
+                        <Text style={styles.tncValue}>{i + 1}.</Text>
+                      </View>
+                      <Text
+                        style={[styles.tncValue, {flex: 1, textAlign: 'auto'}]}>
+                        {val}
+                      </Text>
+                    </View>
+                  ))}
+                </View>
+              )}
             </View>
-          )}
+          </ScrollView>
         </View>
-      </ScrollView>
-    </View>
+      )}
+    </>
   );
 };
 
@@ -194,7 +201,7 @@ const styles = StyleSheet.create({
     fontFamily: font.InterRegular,
     fontSize: mvs(12),
     fontWeight: '500',
-    color: color.Success[400],
+    color: color.Neutral[10],
   },
   content: {},
   expired: {

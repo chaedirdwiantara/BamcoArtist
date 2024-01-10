@@ -705,6 +705,9 @@
     "EmptyState": {
       "RewardTitle": "目前沒有可用的獎勵",
       "RewardSubtitle": "如果有的話，它會顯示在這裡。請定期訪問此頁面，以便及時獲取更新。"
+    },
+    "DetailBenefit": {
+      "Available": "適用於"
     }
   },
   "ExclusiveContent": {
