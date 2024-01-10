@@ -185,7 +185,7 @@ const Explore = (props: ExploreProps) => {
       <Gap height={heightPercentage(20)} />
 
       {/* Playlist */}
-      {dataPlaylist?.data && dataPlaylist?.data.length > 0 ? (
+      {/* {dataPlaylist?.data && dataPlaylist?.data.length > 0 ? (
         <StepCopilot
           children={
             <ListPlaylistHome
@@ -198,7 +198,7 @@ const Explore = (props: ExploreProps) => {
           name={t('Coachmark.Playlist')}
           text={t('Coachmark.SubtitlePlaylist')}
         />
-      ) : null}
+      ) : null} */}
       {/* End of Playlist */}
 
       <Gap height={heightPercentage(40)} />
