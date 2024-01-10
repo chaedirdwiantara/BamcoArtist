@@ -477,7 +477,7 @@ export const LiveTipping: FC<LiveTippingProps> = ({
 
           {!isLoadingMusician && (
             <View style={styles.rowCenter}>
-              {formatRanker(dataRanker?.data ?? []).map((v, i) => {
+              {formatRanker(dataRanker?.data?.list ?? []).map((v, i) => {
                 return (
                   <React.Fragment key={i}>
                     <RankCard

@@ -190,7 +190,10 @@ export const EventDetail: React.FC<EventDetailProps> = ({
           <ImageBackground
             style={{width: '100%', height: 400}}
             source={{
-              uri: dataDetail?.data?.imageCover?.[0]?.image,
+              uri:
+                dataDetail?.data?.imageCover?.find(
+                  item => item.presetName === 'large',
+                )?.image ?? '',
             }}>
             <LinearGradient
               colors={['#00000000', Color.Dark[800]]}
