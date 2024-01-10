@@ -71,7 +71,7 @@ def jscFlavor = 'org.webkit:android-jsc:+'
 
 ext.versionMajor = 1
 ext.versionMinor = 5
-ext.versionPatch = 2
+ext.versionPatch = 3
 ext.versionClassifier = null
 ext.isSnapshot = false
 
