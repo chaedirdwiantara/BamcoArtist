@@ -1710,7 +1710,8 @@
     "TooFast": "You swipe too fast!",
     "EnjoyShow": "Let’s enjoy the show\nand take a rest for few seconds",
     "Credit": "Credit",
-    "NowActive": "Now Active"
+    "NowActive": "Now Active",
+    "LeaderTipper": "Leaderboard Tipper"
   },
   "DiscoverArtist": {
     "Title": "Discover artists"
