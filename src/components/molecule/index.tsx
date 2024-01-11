@@ -49,7 +49,7 @@ import {ModalConfirm} from './Modal/ModalConfirm';
 import {ModalCustom} from './Modal/ModalCustom';
 import {ModalDonate} from './Modal/ModalDonate';
 import {ModalImagePicker} from './Modal/ModalImagePicker';
-import {ModalInfoSendGift} from './Modal/ModalInfoSendGift';
+import {ModalInfoClaimCredit} from './Modal/ModalInfoClaimCredit';
 import {ModalHowToGetCredit} from './Modal/ModalHowToGetCredit';
 import {ModalShare} from './Modal/ModalShare';
 import {ModalSuccess} from './Modal/ModalSuccess';
@@ -143,7 +143,7 @@ export {
   ModalCustom,
   ModalDonate,
   ModalImagePicker,
-  ModalInfoSendGift,
+  ModalInfoClaimCredit,
   ModalHowToGetCredit,
   ModalShare,
   ModalSuccess,
