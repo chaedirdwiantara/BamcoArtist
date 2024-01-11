@@ -32,7 +32,7 @@ const TabOneReward: FC<Props> = ({creditReward}) => {
     queryProgressReward();
 
   const [freeCredit, setFreeCredit] = useState<number>(0);
-  const [modalInfo, setModalInfo] = useState<boolean>(true);
+  const [modalInfo, setModalInfo] = useState<boolean>(false);
   const [modalType, setModalType] = useState<'success' | 'failed'>('success');
 
   useFocusEffect(
