@@ -17,7 +17,7 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {
   Button,
   Gap,
-  ModalInfoSendGift,
+  ModalInfoClaimCredit,
   TopNavigation,
 } from '../../../components';
 import {color, font} from '../../../theme';
@@ -203,7 +203,7 @@ const DetailVoucherRewards: FC<ListVoucherProps> = ({
         />
       </View>
 
-      <ModalInfoSendGift
+      <ModalInfoClaimCredit
         type={modalType}
         credit={data.freeCredit}
         modalVisible={modalInfo}

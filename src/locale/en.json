@@ -646,8 +646,8 @@
       "NeedMorePts": "Need More Pts",
       "RewardAchievement": "Reward Achievement",
       "ModalSuccess": {
-        "Title": "Congrats! {{credit}} Credits have been claimed!",
-        "Subtitle": "Collect more rewards and watch your earning grows!"
+        "Title": "Reward Claimed!",
+        "Subtitle": "Congratulations! Your {{credit}} Free Credit has been claimed!"
       },
       "ModalFailed": {
         "Title": "Your Rewards Cannot be Redeemed",

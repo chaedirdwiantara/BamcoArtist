@@ -1,8 +1,8 @@
 import {FlatList, StyleSheet, View, Text} from 'react-native';
-import React, {FC, useCallback} from 'react';
+import React, {FC, useCallback, useState} from 'react';
 import VoucherReward from '../../components/molecule/Reward/reward';
 import {widthResponsive} from '../../utils';
-import {EmptyState, Gap} from '../../components';
+import {EmptyState, Gap, ModalInfoClaimCredit} from '../../components';
 import {color, font} from '../../theme';
 import {mvs} from 'react-native-size-matters';
 import {useRewardHook} from '../../hooks/use-reward.hook';
@@ -12,6 +12,9 @@ import {RootStackParams} from '../../navigations';
 import {ItemMasterReward} from '../../interface/reward.interface';
 import {useTranslation} from 'react-i18next';
 import {RewardCardSkeleton} from '../../skeleton/Rewards/RewardCard';
+import {useMutation} from 'react-query';
+import {redeemRewards} from '../../api/reward.api';
+import {profileStorage} from '../../hooks/use-storage.hook';
 
 type Props = {
   creditReward: number;
@@ -28,31 +31,41 @@ const TabOneReward: FC<Props> = ({creditReward}) => {
   const {data: dataProgressReward, refetch: refetchProgressReward} =
     queryProgressReward();
 
+  const [freeCredit, setFreeCredit] = useState<number>(0);
+  const [modalInfo, setModalInfo] = useState<boolean>(true);
+  const [modalType, setModalType] = useState<'success' | 'failed'>('success');
+
   useFocusEffect(
     useCallback(() => {
       refetchProgressReward();
     }, []),
   );
 
-  const goToDetailVoucher = (data: ItemMasterReward) => {
-    const claimedRewards = dataProgressReward?.data;
-    const completed =
-      (claimedRewards &&
-        claimedRewards?.filter(
-          (val: {creditReward: number}) => val.creditReward === data.freeCredit,
-        ).length > 0) ||
-      false;
+  const setRedeemRewards = useMutation({
+    mutationKey: ['claim-voucher'],
+    mutationFn: redeemRewards,
+    onSuccess(res) {
+      if (res?.success) {
+        setModalInfo(true);
+        setModalType('success');
+      } else {
+        setModalInfo(true);
+        setModalType('failed');
+      }
+    },
+  });
 
-    navigation.navigate('DetailVoucherRewards', {
-      dataDetail: data,
-      redeemable: creditReward >= data.rewardTotal,
-      completed,
+  // eslint-disable-next-line @typescript-eslint/no-shadow
+  const handleRedeem = (freeCredit: number) => {
+    setFreeCredit(freeCredit);
+    setRedeemRewards.mutate({
+      userId: profileStorage()?.uuid || '',
+      credit: freeCredit,
     });
   };
 
   return (
     <View style={styles().container}>
-      <Text style={styles().title}>{t('Rewards.AchievementRewards')}</Text>
       <Gap height={mvs(20)} />
       {isLoadingReward ? (
         <RewardCardSkeleton />
@@ -61,14 +74,15 @@ const TabOneReward: FC<Props> = ({creditReward}) => {
           data={dataRewardMaster?.data}
           showsVerticalScrollIndicator={false}
           keyExtractor={(_, index) => index.toString()}
+          contentContainerStyle={{alignSelf: 'center'}}
+          numColumns={2}
           renderItem={({item}) => (
             <VoucherReward
               points={item.rewardTotal}
-              voucherTitle={t('Rewards.FreeCredit')}
+              image={item.image}
               freeCredit={item.freeCredit}
-              voucherAvail={1}
-              onPress={() => goToDetailVoucher(item)}
               containerStyle={styles().voucher}
+              onPress={() => handleRedeem(item.freeCredit)}
               redeemable={creditReward >= item.rewardTotal}
               completed={
                 (dataProgressReward?.data &&
@@ -91,6 +105,13 @@ const TabOneReward: FC<Props> = ({creditReward}) => {
           }}
         />
       )}
+
+      <ModalInfoClaimCredit
+        type={modalType}
+        credit={freeCredit}
+        modalVisible={modalInfo}
+        onPressClose={() => setModalInfo(false)}
+      />
     </View>
   );
 };

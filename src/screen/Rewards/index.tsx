@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import React, {useCallback, useEffect, useState} from 'react';
 import {color, font} from '../../theme';
-import {widthResponsive} from '../../utils';
+import {bgColorTab, toCurrency, widthResponsive} from '../../utils';
 import {Button, Gap, ModalCustom, TabFilter} from '../../components';
 import {useProfileHook} from '../../hooks/use-profile.hook';
 import {useTranslation} from 'react-i18next';
@@ -27,6 +27,7 @@ import {
   BadgeGoldMIcon,
   BadgePlatinumMIcon,
   BadgeSilverMIcon,
+  CoinIcon,
 } from '../../assets/icon';
 import {dataMissionStore} from '../../store/reward.store';
 import {RewardsSkeleton} from '../../skeleton/Rewards';
@@ -75,7 +76,7 @@ const Rewards = () => {
     setScrollEffect(scrolled);
   };
 
-  const tabFilterOnPress = (params: string, index: number) => {
+  const tabFilterOnPress = (index: number) => {
     setSelectedIndex(index);
   };
 
@@ -176,16 +177,35 @@ const Rewards = () => {
         <Gap height={16} />
 
         <View style={styles.filterContainer}>
-          <TabFilter.Type1
-            filterData={filter}
-            onPress={tabFilterOnPress}
-            selectedIndex={selectedIndex}
-            translation={true}
-            flatlistContainerStyle={{
-              justifyContent: 'space-between',
-            }}
-            TouchableStyle={{width: widthPercentageToDP(45)}}
-          />
+          <View style={styles.menuStyle}>
+            <View style={{flexDirection: 'row'}}>
+              {filter.map((data, index) => {
+                return (
+                  <View key={index}>
+                    <Button
+                      label={t(data.filterName)}
+                      containerStyles={{
+                        ...styles.containerTab,
+                        backgroundColor: bgColorTab(selectedIndex, index),
+                      }}
+                      textStyles={styles.textTab}
+                      onPress={() => tabFilterOnPress(index)}
+                    />
+                  </View>
+                );
+              })}
+            </View>
+
+            <View style={styles.containerPoint}>
+              <CoinIcon />
+              <Gap width={widthResponsive(20)} />
+              <Text style={[styles.textTab, {fontWeight: '600'}]}>
+                {toCurrency(dataProfile?.data.rewards.credit || 0, {
+                  withFraction: false,
+                })}
+              </Text>
+            </View>
+          </View>
 
           <View style={styles.containerContent}>
             {filter[selectedIndex].filterName === 'Rewards.Reward' ? (
@@ -309,5 +329,34 @@ const styles = StyleSheet.create({
   loadingSpinner: {
     alignItems: 'center',
     paddingVertical: mvs(20),
+  },
+  menuStyle: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  textTab: {
+    fontFamily: font.InterRegular,
+    fontSize: mvs(10),
+    fontWeight: '500',
+    color: color.Neutral[10],
+  },
+  containerTab: {
+    aspectRatio: undefined,
+    width: undefined,
+    height: undefined,
+    paddingVertical: widthResponsive(6),
+    paddingHorizontal: widthResponsive(16),
+    borderRadius: 30,
+    marginRight: widthResponsive(10),
+  },
+  containerPoint: {
+    flexDirection: 'row',
+    backgroundColor: '#1B3868',
+    borderWidth: mvs(1),
+    borderColor: '#375795',
+    borderRadius: mvs(30),
+    paddingVertical: widthResponsive(6),
+    paddingHorizontal: widthResponsive(10),
+    alignItems: 'center',
   },
 });

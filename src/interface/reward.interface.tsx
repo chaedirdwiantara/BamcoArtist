@@ -9,7 +9,7 @@ export interface ItemMasterReward {
   endAt: string;
   freeCredit: number;
   id: number;
-  imageUrl: string[];
+  image: string;
   quota: number;
   rewardTotal: number;
   startAt: string;
