@@ -13,6 +13,7 @@ import {WordReplacerType} from '../../../interface/notification.interface';
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParams} from '../../../navigations';
+import {storage} from '../../../hooks/use-storage.hook';
 
 const {width} = Dimensions.get('screen');
 
@@ -26,12 +27,13 @@ interface ListAvatarProps {
   size?: number;
   desc?: string;
   wordReplacer?: WordReplacerType[];
+  type?: string;
 }
 
 export const ListAvatar: React.FC<ListAvatarProps> = (
   props: ListAvatarProps,
 ) => {
-  const {data = [], size = width * 0.08, desc, wordReplacer} = props;
+  const {data = [], size = width * 0.08, desc, wordReplacer, type} = props;
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
   const moreThanThree = `+${data.length - 3}`;
@@ -79,6 +81,7 @@ export const ListAvatar: React.FC<ListAvatarProps> = (
       : color.Pink[200];
 
   const onPressSecondSpecialText = () => {
+    type === '3' && storage.set('tabActiveRewards', 1);
     //@ts-ignore this should be fine since the screen page comes from api response
     navigation.navigate(linkSettings);
   };
