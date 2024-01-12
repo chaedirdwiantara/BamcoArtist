@@ -41,6 +41,7 @@ const VoucherReward: React.FC<Props> = ({
         {opacity: rewardActive ? 1 : 0.4},
         containerStyle,
       ]}
+      disabled={!rewardActive}
       onPress={onPress}>
       <Image
         style={{width: '100%', height: mvs(100)}}

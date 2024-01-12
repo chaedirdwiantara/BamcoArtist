@@ -32,7 +32,7 @@ const TabOneReward: FC<Props> = ({creditReward}) => {
     queryProgressReward();
 
   const [freeCredit, setFreeCredit] = useState<number>(0);
-  const [modalInfo, setModalInfo] = useState<boolean>(true);
+  const [modalInfo, setModalInfo] = useState<boolean>(false);
   const [modalType, setModalType] = useState<'success' | 'failed'>('success');
 
   useFocusEffect(
@@ -48,6 +48,7 @@ const TabOneReward: FC<Props> = ({creditReward}) => {
       if (res?.success) {
         setModalInfo(true);
         setModalType('success');
+        refetchProgressReward();
       } else {
         setModalInfo(true);
         setModalType('failed');
@@ -66,7 +67,6 @@ const TabOneReward: FC<Props> = ({creditReward}) => {
 
   return (
     <View style={styles().container}>
-      <Gap height={mvs(20)} />
       {isLoadingReward ? (
         <RewardCardSkeleton />
       ) : (
