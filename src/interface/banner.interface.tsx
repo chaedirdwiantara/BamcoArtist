@@ -16,6 +16,8 @@ export type BannerList = {
     presetName: string;
   }[];
   isDefault?: boolean;
+  type?: 'artist' | 'event' | 'external';
+  key?: string;
 };
 
 export type ListBannerResponseType = {
