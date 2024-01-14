@@ -48,6 +48,7 @@ const TabOneReward: FC<Props> = ({creditReward}) => {
       if (res?.success) {
         setModalInfo(true);
         setModalType('success');
+        refetchProgressReward();
       } else {
         setModalInfo(true);
         setModalType('failed');
@@ -66,7 +67,6 @@ const TabOneReward: FC<Props> = ({creditReward}) => {
 
   return (
     <View style={styles().container}>
-      <Gap height={mvs(20)} />
       {isLoadingReward ? (
         <RewardCardSkeleton />
       ) : (

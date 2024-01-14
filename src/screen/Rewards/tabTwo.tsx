@@ -170,7 +170,6 @@ const TabTwoRewards: FC<Props> = ({refreshing, setRefreshing, rankTitle}) => {
 
   return (
     <View style={styles().container}>
-      <Gap height={16} />
       {isLoadingMissionMaster ? (
         <MissionCardSkeleton />
       ) : (
