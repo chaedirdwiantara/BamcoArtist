@@ -117,6 +117,7 @@ const Color = {
   DarkBlue: {
     100: '#15233A',
     200: '#456696',
+    300: '#212B3A',
     800: '#0F1A2C',
   },
   RedVelvet: {

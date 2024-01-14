@@ -1,5 +1,7 @@
 import {useQuery} from 'react-query';
 import {
+  getBenefitEp,
+  getDetailBenefitEp,
   getMissionMasterEp,
   getMissionProgressEp,
   masterReward,
@@ -8,6 +10,7 @@ import {
 } from '../api/reward.api';
 import {profileStorage} from './use-storage.hook';
 import {GetMissionProgressParams} from '../interface/reward.interface';
+import {ParamsProps} from '../interface/base.interface';
 
 export const useRewardHook = () => {
   const uuid = profileStorage()?.uuid;
@@ -47,11 +50,23 @@ export const useRewardHook = () => {
     });
   };
 
+  const useGetBenefit = (param: ParamsProps) => {
+    return useQuery(['reward/get-benefit'], () => getBenefitEp(param));
+  };
+
+  const useGetDetailBenefit = (param: ParamsProps) => {
+    return useQuery(['reward/get-detail-benefit'], () =>
+      getDetailBenefitEp(param),
+    );
+  };
+
   return {
     queryRewardMaster,
     queryProgressReward,
     useGetMissionMaster,
     useGetMissionProgress,
     useSetClaimMission,
+    useGetBenefit,
+    useGetDetailBenefit,
   };
 };

@@ -28,10 +28,11 @@ import {
   BadgePlatinumMIcon,
   BadgeSilverMIcon,
 } from '../../assets/icon';
-import {dataMissionStore} from '../../store/reward.store';
+import {dataMissionStore, slideIndexStore} from '../../store/reward.store';
 import {RewardsSkeleton} from '../../skeleton/Rewards';
 import {calculateGamification} from '../../utils/calculateGamification';
 import HeaderSwiper from '../../components/molecule/Reward/headerSwiper';
+import BenefitCard from '../../components/molecule/Reward/benefitCard';
 
 type OnScrollEventHandler = (
   event: NativeSyntheticEvent<NativeScrollEvent>,
@@ -41,6 +42,7 @@ const Rewards = () => {
   const {t} = useTranslation();
   const {dataProfile, isLoading, getProfileUser} = useProfileHook();
   const {storedBadgeTitle, setStoredBadgeTitle} = dataMissionStore();
+  const {storedSlideIndex} = slideIndexStore();
   const credit = dataProfile?.data.rewards.credit || 0;
 
   const [selectedIndex, setSelectedIndex] = useState(-0);
@@ -111,49 +113,6 @@ const Rewards = () => {
           <RewardsSkeleton />
         ) : (
           <>
-            {/* <View style={styles.slide}>
-              <BackgroundHeader
-                points={dataProfile?.data.rewards.credit || 0}
-                rankTitle={calculateGamification(credit).rankTitle}
-              />
-            </View>
-
-            <Gap height={14} />
-            <View style={{paddingHorizontal: widthResponsive(20)}}>
-              <PointProgress
-                progress={dataProfile?.data.rewards.credit || 0}
-                total={calculateGamification(credit).nextMilestone}
-                nextLvl={calculateGamification(credit).nextLabelName}
-                isMax={calculateGamification(credit).isMax}
-              />
-            </View>
-
-            <Gap height={24} />
-            <View style={{paddingHorizontal: widthResponsive(20)}}>
-              <InfoCard
-                title={
-                  calculateGamification(credit).isMax
-                    ? t('Rewards.InfoCard.LvlMax')
-                    : t('Rewards.InfoCard.NextLvl', {
-                        whatNextLvl:
-                          calculateGamification(credit).nextLabelName,
-                      })
-                }
-                caption={
-                  calculateGamification(credit).isMax
-                    ? t('Rewards.InfoCard.MaxLvlDesc')
-                    : t('Rewards.InfoCard.Desc', {
-                        pointNeeded:
-                          calculateGamification(credit).nextMilestone -
-                          (dataProfile?.data.rewards.credit || 0),
-                        whatNextLvl:
-                          calculateGamification(credit).nextLabelName,
-                      })
-                }
-                badgeType={calculateGamification(credit).nextLevelStage}
-              />
-            </View> */}
-
             <HeaderSwiper
               currentLvl={calculateGamification(credit).rankTitle}
             />
@@ -161,13 +120,19 @@ const Rewards = () => {
             <View
               style={{
                 paddingHorizontal: widthResponsive(20),
-                marginBottom: 5,
               }}>
               <PointProgress
                 progress={dataProfile?.data.rewards.credit || 0}
                 total={calculateGamification(credit).nextMilestone}
                 nextLvl={calculateGamification(credit).nextLabelName}
                 isMax={calculateGamification(credit).isMax}
+                currentLvl={calculateGamification(credit).rankTitle}
+              />
+            </View>
+            <Gap height={19} />
+            <View style={{paddingHorizontal: widthResponsive(20)}}>
+              <BenefitCard
+                id={storedSlideIndex ? storedSlideIndex + 1 : 1}
                 currentLvl={calculateGamification(credit).rankTitle}
               />
             </View>
