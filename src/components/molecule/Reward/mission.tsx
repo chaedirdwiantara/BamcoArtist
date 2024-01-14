@@ -102,7 +102,7 @@ const Mission: React.FC<MissionProps> = ({data, onGo, rankTitle}) => {
     data.postfix === 'Fans'
       ? t('Rewards.MissionTab.ModalGetCredit.HowToGetFans')
       : t('Rewards.MissionTab.ModalGetCredit.HowToGetCredit');
-  const progressCompleted = dataProgress?.isClaimed;
+  const progressCompleted = progressBar === 1;
 
   const onPressCard = () => {
     if (data.postfix === '%') {
@@ -163,7 +163,7 @@ const Mission: React.FC<MissionProps> = ({data, onGo, rankTitle}) => {
               animated={false}
               style={{width: '100%'}}
             />
-            {!progressCompleted ? (
+            {!dataProgress?.isClaimed ? (
               <View style={styles.progressContainer}>
                 <Text style={styles.progressTxt}>{progressText}</Text>
               </View>

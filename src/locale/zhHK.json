@@ -684,8 +684,8 @@
       "NeedMorePts": "需要更多積分",
       "RewardAchievement": "獎勵成就",
       "ModalSuccess": {
-        "Title": "恭喜！已領取 {{credit}} 積分！",
-        "Subtitle": "收集更多獎勵，看著你的收入增長吧！"
+        "Title": "Reward Claimed!",
+        "Subtitle": "Congratulations! Your {{credit}} Free Credit has been claimed!"
       },
       "ModalFailed": {
         "Title": "你的獎勵無法兌換",

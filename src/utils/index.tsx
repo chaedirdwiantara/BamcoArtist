@@ -1,3 +1,4 @@
+export * from './bgColorTab';
 export * from './currency-format';
 export * from './checkEmptyProperties';
 export * from './dimensionFormat';

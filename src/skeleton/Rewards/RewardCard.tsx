@@ -1,12 +1,10 @@
 import React from 'react';
-import {View, StyleSheet, Platform} from 'react-native';
+import {View, StyleSheet} from 'react-native';
 import {ms, mvs} from 'react-native-size-matters';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 
 import {color} from '../../theme';
-import {width} from '../../utils';
-import DottedLineIos from '../../components/atom/DottedLine/dottedLineiOs';
-import DottedLineAndroid from '../../components/atom/DottedLine/dottedLineAndroid';
+import {height, width} from '../../utils';
 
 interface RewardCardProps {}
 
@@ -22,52 +20,25 @@ export const RewardCardSkeleton: React.FC<RewardCardProps> = ({}) => {
               borderRadius={mvs(10)}>
               <View
                 style={{
-                  flexDirection: 'row',
+                  // flexDirection: 'row',
                   paddingHorizontal: mvs(15),
                 }}>
                 {/* IMAGE REWARD */}
                 <SkeletonPlaceholder.Item
                   alignSelf="center"
-                  width={mvs(35)}
-                  height={mvs(35)}
+                  width={'97%'}
+                  height={mvs(100)}
                   borderRadius={mvs(4)}
                 />
                 {/* TITLE REWARD */}
-                <View
-                  style={{
-                    marginLeft: mvs(15),
-                    marginTop: mvs(8),
-                  }}>
-                  <SkeletonPlaceholder.Item width={mvs(220)} height={mvs(10)} />
+                <View style={{marginTop: mvs(15)}}>
+                  <SkeletonPlaceholder.Item width={mvs(90)} height={mvs(10)} />
                   <SkeletonPlaceholder.Item
-                    width={mvs(220)}
+                    width={mvs(50)}
                     height={mvs(10)}
                     marginVertical={mvs(10)}
                   />
                 </View>
-              </View>
-            </SkeletonPlaceholder>
-            {/* DASHED LINE */}
-            <View style={styles.dottedContainer}>
-              {Platform.OS === 'ios' ? (
-                <DottedLineIos color={color.Dark[10]} length="450%" />
-              ) : (
-                <DottedLineAndroid color={color.Dark[10]} />
-              )}
-            </View>
-            {/* POINTS & BUTTON */}
-            <SkeletonPlaceholder
-              highlightColor={color.Dark[800]}
-              backgroundColor="#2B3240"
-              borderRadius={mvs(10)}>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  paddingHorizontal: mvs(20),
-                }}>
-                <SkeletonPlaceholder.Item width={mvs(70)} height={mvs(10)} />
-                <SkeletonPlaceholder.Item width={mvs(70)} height={mvs(10)} />
               </View>
             </SkeletonPlaceholder>
           </View>
@@ -79,13 +50,16 @@ export const RewardCardSkeleton: React.FC<RewardCardProps> = ({}) => {
 
 const styles = StyleSheet.create({
   containerCard: {
-    width,
+    width: width,
+    flexWrap: 'wrap',
+    flexDirection: 'row',
     alignSelf: 'center',
     alignItems: 'center',
     justifyContent: 'center',
   },
   containerBadge: {
-    width: '88%',
+    width: '42%',
+    height: height * 0.23,
     paddingVertical: mvs(12),
     backgroundColor: '#1A2435',
     borderRadius: mvs(8),

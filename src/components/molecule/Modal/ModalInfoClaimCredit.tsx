@@ -7,22 +7,22 @@ import {ModalCustom} from './ModalCustom';
 import {color, font} from '../../../theme';
 import {width, widthPercentage} from '../../../utils';
 
-interface ModalInfoSendGift {
+interface ModalInfoClaimCredit {
   modalVisible: boolean;
   credit: number;
   type: 'success' | 'failed';
   onPressClose: () => void;
 }
 
-export const ModalInfoSendGift: FC<ModalInfoSendGift> = (
-  props: ModalInfoSendGift,
+export const ModalInfoClaimCredit: FC<ModalInfoClaimCredit> = (
+  props: ModalInfoClaimCredit,
 ) => {
   const {t} = useTranslation();
   const {modalVisible, type, credit, onPressClose} = props;
 
   const imageUrl =
     type === 'success'
-      ? require('../../../assets/image/gift-claimed.png')
+      ? require('../../../assets/image/default_rewards_round.png')
       : require('../../../assets/image/alert.png');
 
   const titleText =
@@ -39,8 +39,8 @@ export const ModalInfoSendGift: FC<ModalInfoSendGift> = (
     return (
       <View style={styles.card}>
         <Image source={imageUrl} />
-        <Text style={styles.title}>{t(titleText, {credit})}</Text>
-        <Text style={styles.subtitle}>{t(subtitleText)}</Text>
+        <Text style={styles.title}>{t(titleText)}</Text>
+        <Text style={styles.subtitle}>{t(subtitleText, {credit})}</Text>
         <TouchableOpacity onPress={onPressClose}>
           <Text style={styles.btn}>{t('Btn.Dismiss')}</Text>
         </TouchableOpacity>
@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
     fontFamily: font.InterMedium,
     fontSize: mvs(11),
     color: '#BDBDBD',
-    marginTop: mvs(5),
+    marginTop: mvs(15),
   },
   btn: {
     textAlign: 'center',
