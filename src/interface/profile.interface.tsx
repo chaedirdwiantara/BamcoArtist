@@ -211,8 +211,7 @@ export type GetLastStepResponseType = {
 export type ProfileProgressResponseType = {
   stepProgress: string;
   uncompleteList: {
-    accountInformation: string[];
-    profileInformation: string[];
+    profileAndAccountInformation: string[];
   };
 };
 
