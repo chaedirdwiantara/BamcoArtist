@@ -21,16 +21,6 @@ import {Gap, ModalCustom, TopNavigation} from '../components';
 import {ProgressCard} from '../components/molecule/ListCard/ProgressCard';
 import {ModalLoading} from '../components/molecule/ModalLoading/ModalLoading';
 
-interface CompletedType {
-  account: boolean;
-  profile: boolean;
-}
-
-interface UncompleteListType {
-  account: string[];
-  profile: string[];
-}
-
 export const ProfileProgressScreen: React.FC = () => {
   const {t} = useTranslation();
   const navigation =
@@ -42,18 +32,9 @@ export const ProfileProgressScreen: React.FC = () => {
     getProfileUser,
     getProfileProgress,
   } = useProfileHook();
-  const [completed, setCompleted] = useState<CompletedType>({
-    account: false,
-    profile: false,
-  });
-  const [modalInfo, setModalInfo] = useState({
-    show: false,
-    type: 'account',
-  });
-  const [uncompleteList, setUncompleteList] = useState<UncompleteListType>({
-    account: [],
-    profile: [],
-  });
+  const [completed, setCompleted] = useState<boolean>(false);
+  const [modalInfo, setModalInfo] = useState<boolean>(false);
+  const [uncompleteList, setUncompleteList] = useState<string[]>([]);
 
   useFocusEffect(
     useCallback(() => {
@@ -65,14 +46,9 @@ export const ProfileProgressScreen: React.FC = () => {
   useEffect(() => {
     // all required input = done, if unchecked list is empty.
     if (profileProgress) {
-      setCompleted({
-        account: profileProgress.uncompleteList.accountInformation.length === 0,
-        profile: profileProgress.uncompleteList.profileInformation.length === 0,
-      });
-      setUncompleteList({
-        account: profileProgress.uncompleteList.accountInformation,
-        profile: profileProgress.uncompleteList.profileInformation,
-      });
+      const list = profileProgress.uncompleteList.profileAndAccountInformation;
+      setCompleted(list.length === 0);
+      setUncompleteList(list);
     }
   }, [profileProgress]);
 
@@ -88,62 +64,45 @@ export const ProfileProgressScreen: React.FC = () => {
     }
   };
 
-  const onPressGoTo = (
-    screenName: 'AccountInformation' | 'EditProfile',
-    isCompleted: boolean,
-  ) => {
+  const onPressGoTo = (isCompleted: boolean) => {
     if (isCompleted) {
       null;
     } else {
       if (dataProfile) {
-        if (screenName === 'AccountInformation') {
-          navigation.navigate(screenName, {
-            fromScreen: 'progress',
-          });
-        } else {
-          navigation.navigate(screenName, {data: dataProfile?.data});
-        }
+        navigation.navigate('EditProfile', {data: dataProfile?.data});
       }
     }
   };
 
-  const children = (type: string) => {
-    const title =
-      type === 'account'
-        ? t('ProfileProgress.Tab.AccountInformation')
-        : t('ProfileProgress.Tab.ProfileInformation');
-    const uncompleteListTemp =
-      type === 'account' ? uncompleteList.account : uncompleteList.profile;
+  const children = () => {
     const uncompleteSubtitle =
-      uncompleteListTemp.length > 0
+      uncompleteList.length > 0
         ? t('ProfileProgress.SubtitleTooltip')
         : t('ProfileProgress.SubtitleTooltipFinish');
 
     return (
       <View style={styles.card}>
-        <Text style={[typography.Heading6, {color: color.Neutral[10]}]}>
-          {title}
+        <Text
+          style={[
+            typography.Heading6,
+            {color: color.Neutral[10], fontWeight: '600'},
+          ]}>
+          {t('ProfileProgress.Tab.ProfileAccountInformation')}
         </Text>
         <Text style={styles.subtitleModal}>{uncompleteSubtitle}</Text>
-        {uncompleteListTemp.length > 0 &&
-          uncompleteListTemp.map((val, index) => {
+        {uncompleteList.length > 0 &&
+          uncompleteList.map((val, index) => {
             return (
               <View style={styles.containerItem} key={index}>
                 <Text style={styles.listItem}>{index + 1 + '. '}</Text>
-                <Text style={styles.listItem}>{t(val)}</Text>
+                <Text style={styles.listItem}>{val}</Text>
                 <Gap width={ms(7)} />
                 <InfoCircle2Icon />
               </View>
             );
           })}
         <View style={styles.dismissContainer}>
-          <TouchableOpacity
-            onPress={() =>
-              setModalInfo({
-                show: false,
-                type: 'account',
-              })
-            }>
+          <TouchableOpacity onPress={() => setModalInfo(false)}>
             <Text style={styles.option}>{t('Btn.Dismiss')}</Text>
           </TouchableOpacity>
         </View>
@@ -168,44 +127,20 @@ export const ProfileProgressScreen: React.FC = () => {
       <View style={styles.containerContent}>
         <Text style={styles.title}>{t('ProfileProgress.Title2')}</Text>
         <MenuText.RightIcon
-          text={t('ProfileProgress.Tab.AccountInformation') ?? '-'}
+          text={t('ProfileProgress.Tab.ProfileAccountInformation') ?? '-'}
           containerStyles={{marginTop: mvs(10)}}
-          icon={iconRight(completed.account)}
+          icon={iconRight(completed)}
           tooltip={<TooltipIcon style={{marginLeft: ms(5)}} />}
-          activeOpacity={completed.account ? 1 : 0}
-          onPress={() => onPressGoTo('AccountInformation', completed.account)}
-          onPressTooltip={() =>
-            setModalInfo({
-              show: true,
-              type: 'account',
-            })
-          }
-        />
-        <MenuText.RightIcon
-          text={t('ProfileProgress.Tab.ProfileInformation') ?? '-'}
-          containerStyles={{marginTop: mvs(10)}}
-          icon={iconRight(completed.profile)}
-          tooltip={<TooltipIcon style={{marginLeft: ms(5)}} />}
-          activeOpacity={completed.profile ? 1 : 0}
-          onPress={() => onPressGoTo('EditProfile', completed.profile)}
-          onPressTooltip={() =>
-            setModalInfo({
-              show: true,
-              type: 'profile',
-            })
-          }
+          activeOpacity={completed ? 1 : 0}
+          onPress={() => onPressGoTo(completed)}
+          onPressTooltip={() => setModalInfo(true)}
         />
       </View>
       <ModalLoading visible={isLoading} />
       <ModalCustom
-        modalVisible={modalInfo.show}
-        children={children(modalInfo.type)}
-        onPressClose={() =>
-          setModalInfo({
-            ...modalInfo,
-            show: false,
-          })
-        }
+        modalVisible={modalInfo}
+        children={children()}
+        onPressClose={() => setModalInfo(false)}
       />
     </View>
   );
@@ -241,7 +176,8 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     lineHeight: mvs(16),
     color: color.Neutral[10],
-    marginVertical: mvs(10),
+    marginTop: mvs(10),
+    marginBottom: mvs(5),
   },
   uncompleteList: {
     flexDirection: 'row',

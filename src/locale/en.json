@@ -1593,17 +1593,18 @@
     "Placeholder": "Ex: I love this product, it has an extremely clean finish!"
   },
   "ProfileProgress": {
-    "Title": "Profile progress",
+    "Title": "Profiling Progress",
     "Card": {
       "Title": "Profile & Account Information",
       "Subtitle": "Tap to complete your profile"
     },
-    "Title2": "Tasks To Complete",
+    "Title2": "Task To Complete",
     "Tab": {
       "AccountInformation": "Account Information",
-      "ProfileInformation": "Profile Information"
+      "ProfileInformation": "Profile Information",
+      "ProfileAccountInformation": "Profile & Account Information"
     },
-    "SubtitleTooltip": "Complete your profile:",
+    "SubtitleTooltip": "To finish this step, you need to fulfill this information below:",
     "SubtitleTooltipFinish": "You have already completed your profile"
   },
   "ShareLink": {

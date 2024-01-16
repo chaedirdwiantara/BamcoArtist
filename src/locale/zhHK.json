@@ -1590,18 +1590,19 @@
     "Placeholder": "例如：我喜歡這個產品，品質很高！"
   },
   "ProfileProgress": {
-    "Title": "個人資料進度",
+    "Title": "Profiling Progress",
     "Card": {
       "Title": "個人及帳戶資料",
       "Subtitle": "點擊以完成你的帳戶資料"
     },
-    "Title2": "待完成的任務",
+    "Title2": "Task To Complete",
     "Tab": {
       "AccountInformation": "帳戶資料",
-      "ProfileInformation": "個人資料"
+      "ProfileInformation": "個人資料",
+      "ProfileAccountInformation": "Profile & Account Information"
     },
-    "SubtitleTooltip": "完成你的個人資料：",
-    "SubtitleTooltipFinish": "你已經完成了你的帳戶資料"
+    "SubtitleTooltip": "To finish this step, you need to fulfill this information below:",
+    "SubtitleTooltipFinish": "你已完成你的帳戶資料"
   },
   "ShareLink": {
     "Music": {
