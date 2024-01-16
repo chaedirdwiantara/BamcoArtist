@@ -114,7 +114,7 @@ const ChildrenCard: FC<ChildrenCardProps> = (props: ChildrenCardProps) => {
                 blurModeOn={blurModeOn}
                 disabled={false}
               />
-              {data.images.length === 0 && data.quoteToPost.encodeHlsUrl ? (
+              {/* {data.images.length === 0 && data.quoteToPost.encodeHlsUrl ? (
                 <MusicListPreview
                   hideClose
                   targetId={data.quoteToPost.targetId}
@@ -140,7 +140,7 @@ const ChildrenCard: FC<ChildrenCardProps> = (props: ChildrenCardProps) => {
                   seekPlayer={seekPlayer}
                   isIdNowPlaying={isIdNowPlaying}
                 />
-              ) : null}
+              ) : null} */}
               {data.video.encodeHlsUrl !== '' && (
                 <TouchableOpacity>
                   <VideoComp

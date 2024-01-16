@@ -32,30 +32,30 @@ export const listOverviewCard: OverviewCardType[] = [
     title: 'Home.OverviewCard.FirstCard',
     path: require('../assets/image/my_fans.png'),
   },
-  {
-    id: 3,
-    amount: 1200,
-    title: 'Home.OverviewCard.SecondCard',
-    path: require('../assets/image/my_public_post.png'),
-  },
-  {
-    id: 4,
-    amount: 1500,
-    title: 'Home.OverviewCard.ThirdCard',
-    path: require('../assets/image/my_exclusive_post.png'),
-  },
-  {
-    id: 5,
-    amount: 78,
-    title: 'Home.OverviewCard.FourthCard',
-    path: require('../assets/image/my_album.png'),
-  },
-  {
-    id: 6,
-    amount: 12,
-    title: 'Home.OverviewCard.FifthCard',
-    path: require('../assets/image/my_songs.png'),
-  },
+  // {
+  //   id: 3,
+  //   amount: 1200,
+  //   title: 'Home.OverviewCard.SecondCard',
+  //   path: require('../assets/image/my_public_post.png'),
+  // },
+  // {
+  //   id: 4,
+  //   amount: 1500,
+  //   title: 'Home.OverviewCard.ThirdCard',
+  //   path: require('../assets/image/my_exclusive_post.png'),
+  // },
+  // {
+  //   id: 5,
+  //   amount: 78,
+  //   title: 'Home.OverviewCard.FourthCard',
+  //   path: require('../assets/image/my_album.png'),
+  // },
+  // {
+  //   id: 6,
+  //   amount: 12,
+  //   title: 'Home.OverviewCard.FifthCard',
+  //   path: require('../assets/image/my_songs.png'),
+  // },
 ];
 
 export const listRequiredAccount: string[] = [

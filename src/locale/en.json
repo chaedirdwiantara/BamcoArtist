@@ -516,6 +516,7 @@
       "Title": "Event details",
       "LineUp": "LINE UP",
       "TopTiper": "TOP BEAMERS",
+      "Income": "INCOME",
       "TipDistribution": "Beam distribution",
       "MusicianTipped": "Artist beamed",
       "Perform": "Pick me!",
@@ -646,8 +647,8 @@
       "NeedMorePts": "Need More Pts",
       "RewardAchievement": "Reward Achievement",
       "ModalSuccess": {
-        "Title": "Congrats! {{credit}} Credits have been claimed!",
-        "Subtitle": "Collect more rewards and watch your earning grows!"
+        "Title": "Reward Claimed!",
+        "Subtitle": "Congratulations! Your {{credit}} Free Credit has been claimed!"
       },
       "ModalFailed": {
         "Title": "Your Rewards Cannot be Redeemed",
@@ -1592,17 +1593,18 @@
     "Placeholder": "Ex: I love this product, it has an extremely clean finish!"
   },
   "ProfileProgress": {
-    "Title": "Profile progress",
+    "Title": "Profiling Progress",
     "Card": {
       "Title": "Profile & Account Information",
       "Subtitle": "Tap to complete your profile"
     },
-    "Title2": "Tasks To Complete",
+    "Title2": "Task To Complete",
     "Tab": {
       "AccountInformation": "Account Information",
-      "ProfileInformation": "Profile Information"
+      "ProfileInformation": "Profile Information",
+      "ProfileAccountInformation": "Profile & Account Information"
     },
-    "SubtitleTooltip": "Complete your profile:",
+    "SubtitleTooltip": "To finish this step, you need to fulfill this information below:",
     "SubtitleTooltipFinish": "You have already completed your profile"
   },
   "ShareLink": {
@@ -1713,7 +1715,8 @@
     "TooFast": "You swipe too fast!",
     "EnjoyShow": "Let’s enjoy the show\nand take a rest for few seconds",
     "Credit": "Credit",
-    "NowActive": "Now Active"
+    "NowActive": "Now Active",
+    "LeaderTipper": "Leaderboard Tipper"
   },
   "DiscoverArtist": {
     "Title": "Discover artists"

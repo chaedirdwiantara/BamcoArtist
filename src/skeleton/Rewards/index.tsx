@@ -21,36 +21,20 @@ export const RewardsSkeleton: React.FC<RewardsProps> = ({}) => {
           borderRadius={mvs(10)}>
           {/* BADGE */}
           <View style={styles.containerRank}>
+            {/* IMAGE */}
+            <SkeletonPlaceholder.Item
+              alignSelf="center"
+              width={mvs(85)}
+              height={mvs(85)}
+              borderRadius={mvs(40)}
+              marginTop={mvs(20)}
+            />
             {/* RANK */}
             <SkeletonPlaceholder.Item
               alignSelf="center"
               width={mvs(70)}
-              height={mvs(10)}
-              marginBottom={mvs(5)}
-            />
-            <SkeletonPlaceholder.Item
-              alignSelf="center"
-              width={mvs(100)}
-              height={mvs(20)}
-            />
-            {/* IMAGE */}
-            <SkeletonPlaceholder.Item
-              alignSelf="center"
-              width={mvs(110)}
-              height={mvs(110)}
-              marginVertical={mvs(25)}
-            />
-            {/* CREDIT BONUS */}
-            <SkeletonPlaceholder.Item
-              alignSelf="center"
-              width={mvs(70)}
-              height={mvs(20)}
-            />
-            <SkeletonPlaceholder.Item
-              alignSelf="center"
-              width={mvs(100)}
-              height={mvs(10)}
-              marginTop={mvs(5)}
+              height={mvs(15)}
+              marginTop={mvs(20)}
             />
           </View>
         </SkeletonPlaceholder>
@@ -61,38 +45,56 @@ export const RewardsSkeleton: React.FC<RewardsProps> = ({}) => {
         backgroundColor="#2B3240"
         borderRadius={mvs(10)}>
         <View style={styles.containerLoyalty}>
-          <SkeletonPlaceholder.Item width={mvs(110)} height={mvs(10)} />
           <SkeletonPlaceholder.Item
             width={'100%'}
-            height={mvs(10)}
+            height={mvs(12)}
             marginVertical={mvs(6)}
           />
-          <View style={styles.containerPoint}>
-            <SkeletonPlaceholder.Item width={mvs(90)} height={mvs(10)} />
-            <SkeletonPlaceholder.Item width={mvs(90)} height={mvs(10)} />
-          </View>
         </View>
       </SkeletonPlaceholder>
-      {/* NEXT RANK / BADGE */}
-      <View style={styles.containerBadge}>
+      {/* BENEFIT */}
+      <View style={styles.containerBenefit}>
         <SkeletonPlaceholder
           highlightColor={color.Dark[800]}
           backgroundColor="#2B3240"
           borderRadius={mvs(10)}>
-          <View style={{flexDirection: 'row', paddingHorizontal: mvs(15)}}>
+          <View>
             <SkeletonPlaceholder.Item
-              alignSelf="center"
-              width={mvs(40)}
-              height={mvs(40)}
+              width={mvs(55)}
+              height={mvs(10)}
+              marginLeft={mvs(12)}
+              marginTop={mvs(2)}
             />
-            <View style={{marginLeft: mvs(15)}}>
-              <SkeletonPlaceholder.Item width={mvs(180)} height={mvs(10)} />
-              <SkeletonPlaceholder.Item
-                width={mvs(220)}
-                height={mvs(10)}
-                marginVertical={mvs(8)}
-              />
-              <SkeletonPlaceholder.Item width={mvs(150)} height={mvs(10)} />
+            <View
+              style={{
+                flexDirection: 'row',
+                marginTop: mvs(12),
+              }}>
+              {Array.from(Array(3).keys()).map((val, index) => {
+                return (
+                  <View
+                    style={{marginLeft: mvs(12), flexDirection: 'row'}}
+                    key={index}>
+                    <SkeletonPlaceholder.Item
+                      alignSelf="center"
+                      width={mvs(28)}
+                      height={mvs(28)}
+                      borderRadius={mvs(28)}
+                    />
+                    <View style={{alignSelf: 'center', marginLeft: mvs(5)}}>
+                      <SkeletonPlaceholder.Item
+                        width={mvs(38)}
+                        height={mvs(9)}
+                      />
+                      <SkeletonPlaceholder.Item
+                        width={mvs(53)}
+                        height={mvs(9)}
+                        marginTop={mvs(5)}
+                      />
+                    </View>
+                  </View>
+                );
+              })}
             </View>
           </View>
         </SkeletonPlaceholder>
@@ -108,23 +110,24 @@ const styles = StyleSheet.create({
   },
   containerContent: {
     width: '100%',
-    height: widthResponsive(400),
+    height: widthResponsive(250),
   },
   containerRank: {
     width: '100%',
-    height: widthResponsive(400),
+    height: widthResponsive(250),
     justifyContent: 'center',
     alignItems: 'center',
   },
   containerLoyalty: {
     paddingHorizontal: widthResponsive(24),
-    marginVertical: mvs(20),
+    marginTop: mvs(20),
+    marginBottom: mvs(10),
   },
   containerPoint: {
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
-  containerBadge: {
+  containerBenefit: {
     paddingVertical: mvs(12),
     marginHorizontal: widthResponsive(24),
     backgroundColor: '#1A2435',

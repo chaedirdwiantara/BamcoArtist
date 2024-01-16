@@ -170,6 +170,7 @@ import UploadIcon from './Upload.icon';
 import CalendarIcon from './Calendar.icon';
 import LiveIcon from './Live.icon';
 import TicketEventIcon from './TicketEvent.icon';
+import RankStarIcon from './RankStar.icon';
 
 export {
   AddIcon,
@@ -345,4 +346,5 @@ export {
   CalendarIcon,
   LiveIcon,
   TicketEventIcon,
+  RankStarIcon,
 };

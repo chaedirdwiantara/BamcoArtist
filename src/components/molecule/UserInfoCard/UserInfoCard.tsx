@@ -78,18 +78,18 @@ const UserInfoCard: FC<UserInfoCardProps> = (props: UserInfoCardProps) => {
       point: followersCount,
       title: t('Musician.Label.Followers'),
     },
-    {
-      point: profile?.totalRelease ? profile.totalRelease : 0,
-      title: t('Musician.Label.Releases'),
-    },
+    // {
+    //   point: profile?.totalRelease ? profile.totalRelease : 0,
+    //   title: t('Musician.Label.Releases'),
+    // },
     // {
     //   point: profile?.totalPlaylist ? profile.totalPlaylist : 0,
     //   title: t('Musician.Label.Playlists'),
     // },
-    {
-      point: profile?.rank ? profile.rank : 0,
-      title: t('Musician.Label.Rank'),
-    },
+    // {
+    //   point: profile?.rank ? profile.rank : 0,
+    //   title: t('Musician.Label.Rank'),
+    // },
   ];
 
   const infoProfileUser = [
@@ -101,14 +101,14 @@ const UserInfoCard: FC<UserInfoCardProps> = (props: UserInfoCardProps) => {
       point: 0,
       title: 'LINE',
     },
-    {
-      point: totalCountlikedSong ? totalCountlikedSong : 0,
-      title: t('Profile.Label.Liked'),
-    },
-    {
-      point: 0,
-      title: 'LINE',
-    },
+    // {
+    //   point: totalCountlikedSong ? totalCountlikedSong : 0,
+    //   title: t('Profile.Label.Liked'),
+    // },
+    // {
+    //   point: 0,
+    //   title: 'LINE',
+    // },
     {
       point: selfProfile?.point.daily ? selfProfile.point.daily : totalPoint,
       title: t('Profile.Label.Point'),

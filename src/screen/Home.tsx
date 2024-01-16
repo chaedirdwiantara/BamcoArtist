@@ -82,6 +82,7 @@ import {useCopilot} from 'react-native-copilot';
 import {useCopilotStore} from '../store/copilot.store';
 import {useCoachmarkHook} from '../hooks/use-coachmark.hook';
 import {CarouselAutoPlay} from '../components/molecule/Carousel/BannerAutoPlay';
+import {useVersionHook} from '../hooks/use-version.hook';
 
 type OnScrollEventHandler = (
   event: NativeSyntheticEvent<NativeScrollEvent>,
@@ -101,6 +102,7 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
   const {i18n, t} = useTranslation();
   const currentLanguage = i18n.language;
+  const {saveVersionStorage} = useVersionHook();
   const {isLoadingBanner, dataBanner, getListDataBanner} = useBannerHook();
   const {
     dataProfile,
@@ -271,6 +273,7 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
     setToastVisible(isRecoverSuccess || false);
     setToastText('Welcome back to Beamco!');
     storage.set('recoverSuccess', false);
+    saveVersionStorage();
   }, []);
 
   useEffect(() => {
@@ -292,8 +295,8 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
 
     const onNotification = (data: FirebaseMessagingTypes.RemoteMessage) => {
       FCMService.showNotification({
-        title: data.data?.title,
-        message: data.data?.body,
+        title: data.data?.title as string,
+        message: data.data?.body as string,
       });
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -317,8 +320,8 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
     {filterName: 'Home.Tab.Analytic.Fans.Title'},
     {filterName: 'Home.Tab.Analytic.Income.Title'},
     {filterName: 'Home.Tab.Analytic.Post.Title'},
-    {filterName: 'Home.Tab.Analytic.Album.Title'},
-    {filterName: 'Home.Tab.Analytic.Explore.Title'},
+    // {filterName: 'Home.Tab.Analytic.Album.Title'},
+    // {filterName: 'Home.Tab.Analytic.Explore.Title'},
   ]);
 
   const filterDataAnalytic = (item: any, index: any, nameCopilot: string) => {
@@ -650,7 +653,7 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
           text={t('Coachmark.SubtitleCreateNewPost')}
         />
 
-        <StepCopilot
+        {/* <StepCopilot
           children={
             <>
               {dataSongAlbum?.countAlbumReleased === 0 && (
@@ -663,7 +666,7 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
           order={5}
           name={t('Coachmark.UploadMusic')}
           text={t('Coachmark.SubtitleUploadMusic')}
-        />
+        /> */}
 
         {profileProgress?.stepProgress !== '100%' ? (
           <ProgressCard

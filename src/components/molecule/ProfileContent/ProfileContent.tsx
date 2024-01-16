@@ -135,7 +135,7 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
     // {filterName: 'Musician.Tab.Main'},// TODO: DISABLE FOR NOW
     {filterName: 'Musician.Tab.Fans'},
     {filterName: 'Musician.Tab.Musician'},
-    {filterName: 'Musician.Tab.Music'},
+    // {filterName: 'Musician.Tab.Music'},
     {filterName: 'Musician.Tab.Event'},
     {filterName: 'Musician.Tab.Profile'},
     {filterName: 'Musician.Tab.Merchandise'},
@@ -160,10 +160,11 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
   };
 
   const handleBackAction = () => {
-    navigation.reset({
-      index: 0,
-      routes: [{name: 'MainTab'}],
-    });
+    // navigation.reset({
+    //   index: 0,
+    //   routes: [{name: 'MainTab'}],
+    // });
+    navigation.goBack();
   };
 
   const onPressShareQR = () => {

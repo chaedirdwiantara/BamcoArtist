@@ -684,8 +684,8 @@
       "NeedMorePts": "需要更多積分",
       "RewardAchievement": "獎勵成就",
       "ModalSuccess": {
-        "Title": "恭喜！已領取 {{credit}} 積分！",
-        "Subtitle": "收集更多獎勵，看著你的收入增長吧！"
+        "Title": "Reward Claimed!",
+        "Subtitle": "Congratulations! Your {{credit}} Free Credit has been claimed!"
       },
       "ModalFailed": {
         "Title": "你的獎勵無法兌換",
@@ -1590,18 +1590,19 @@
     "Placeholder": "例如：我喜歡這個產品，品質很高！"
   },
   "ProfileProgress": {
-    "Title": "個人資料進度",
+    "Title": "Profiling Progress",
     "Card": {
       "Title": "個人及帳戶資料",
       "Subtitle": "點擊以完成你的帳戶資料"
     },
-    "Title2": "待完成的任務",
+    "Title2": "Task To Complete",
     "Tab": {
       "AccountInformation": "帳戶資料",
-      "ProfileInformation": "個人資料"
+      "ProfileInformation": "個人資料",
+      "ProfileAccountInformation": "Profile & Account Information"
     },
-    "SubtitleTooltip": "完成你的個人資料：",
-    "SubtitleTooltipFinish": "你已經完成了你的帳戶資料"
+    "SubtitleTooltip": "To finish this step, you need to fulfill this information below:",
+    "SubtitleTooltipFinish": "你已完成你的帳戶資料"
   },
   "ShareLink": {
     "Music": {
@@ -1711,7 +1712,8 @@
     "TooFast": "滑動太快，請重新再試！",
     "EnjoyShow": "讓我們盡情享受表演！",
     "Credit": "餘額",
-    "NowActive": "Now Active"
+    "NowActive": "Now Active",
+    "LeaderTipper": "Leaderboard Tipper"
   },
   "DiscoverArtist": {
     "Title": "Discover Artist"

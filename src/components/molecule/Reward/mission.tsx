@@ -54,9 +54,11 @@ const Mission: React.FC<MissionProps> = ({data, onGo, rankTitle}) => {
       campaignId: data.campaignId,
     });
 
-  useEffect(() => {
-    refetchMissionPrg();
-  }, [data]);
+  useFocusEffect(
+    useCallback(() => {
+      refetchMissionPrg();
+    }, []),
+  );
 
   useEffect(() => {
     if (dataMissionPrg?.data) {
@@ -93,11 +95,14 @@ const Mission: React.FC<MissionProps> = ({data, onGo, rankTitle}) => {
     }
   };
 
+  const amount = dataProgress?.function.includes('tip')
+    ? dataProgress?.sumLoyaltyPoints
+    : dataProgress?.rowCount || 0;
   const progressBar = dataProgress
-    ? dataProgress?.rowCount / data.amountToClaim
+    ? amount / data.amountToClaim
     : 0 / data.amountToClaim;
   const postfix = data.postfix === '%' ? '%' : ' ' + data.postfix;
-  const progressText = `${dataProgress ? dataProgress?.rowCount : 0}${postfix}`;
+  const progressText = `${dataProgress ? amount : 0}${postfix}`;
   const titleModal =
     data.postfix === 'Fans'
       ? t('Rewards.MissionTab.ModalGetCredit.HowToGetFans')
