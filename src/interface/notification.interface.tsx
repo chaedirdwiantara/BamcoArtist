@@ -14,6 +14,7 @@ export type PaginationType = {
 export type WordReplacerType = {
   text: string;
   link: string;
+  linkType: 'screen' | 'url';
   color: string;
   fontWeight: string;
 };
