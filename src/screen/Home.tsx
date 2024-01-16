@@ -316,8 +316,8 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
     {filterName: 'Home.Tab.Analytic.Fans.Title'},
     {filterName: 'Home.Tab.Analytic.Income.Title'},
     {filterName: 'Home.Tab.Analytic.Post.Title'},
-    {filterName: 'Home.Tab.Analytic.Album.Title'},
-    {filterName: 'Home.Tab.Analytic.Explore.Title'},
+    // {filterName: 'Home.Tab.Analytic.Album.Title'},
+    // {filterName: 'Home.Tab.Analytic.Explore.Title'},
   ]);
 
   const filterDataAnalytic = (item: any, index: any, nameCopilot: string) => {
@@ -640,7 +640,7 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
           text={t('Coachmark.SubtitleCreateNewPost')}
         />
 
-        <StepCopilot
+        {/* <StepCopilot
           children={
             <>
               {dataSongAlbum?.countAlbumReleased === 0 && (
@@ -653,7 +653,7 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
           order={5}
           name={t('Coachmark.UploadMusic')}
           text={t('Coachmark.SubtitleUploadMusic')}
-        />
+        /> */}
 
         {profileProgress?.stepProgress !== '100%' ? (
           <ProgressCard

@@ -133,7 +133,7 @@ export const MusicianDetail: React.FC<MusicianDetailProps> = ({
     // {filterName: 'Musician.Tab.Main'}, TODO: Disable for NOW
     {filterName: 'Musician.Tab.Fans'},
     {filterName: 'Musician.Tab.Musician'},
-    {filterName: 'Musician.Tab.Music'},
+    // {filterName: 'Musician.Tab.Music'},
     {filterName: 'Musician.Tab.Event'},
     {filterName: 'Musician.Tab.Profile'},
     {filterName: 'Musician.Tab.Merchandise'},

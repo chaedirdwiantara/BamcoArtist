@@ -37,10 +37,10 @@ const CreatePostShortcut: FC<CreatePostShortcutProps> = (
           <TouchableOpacity onPress={compOnPress}>
             <ImportPhotoIcon fill={color.Pink[200]} />
           </TouchableOpacity>
-          <Gap width={16} />
+          {/* <Gap width={16} />
           <TouchableOpacity onPress={compOnPress}>
             <ImportMusicIcon fill={color.Pink[200]} />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
           <Gap width={16} />
           <TouchableOpacity onPress={compOnPress}>
             <AddVoteIcon fill={color.Pink[200]} />
