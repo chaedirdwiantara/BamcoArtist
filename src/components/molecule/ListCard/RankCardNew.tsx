@@ -112,7 +112,7 @@ const styles = StyleSheet.create({
   root: {
     flex: 1,
     position: 'relative',
-    maxWidth: widthResponsive(100),
+    width: widthResponsive(100),
     paddingHorizontal: widthResponsive(8),
   },
   inner: {
