@@ -105,7 +105,16 @@ export const ListAvatar: React.FC<ListAvatarProps> = (
           <TouchableWithoutFeedback
             key={index}
             onPress={() => onPressFirstSpecialText()}>
-            <Text style={[styles.fullname, {color: colorLinkTNC}]}>
+            <Text
+              style={[
+                styles.fullname,
+                {
+                  color:
+                    wordReplacer && wordReplacer?.length > 0
+                      ? wordReplacer[1].color
+                      : color.Neutral[10],
+                },
+              ]}>
               {wordReplacer && wordReplacer?.length > 0
                 ? wordReplacer[1].text
                 : word}{' '}
@@ -117,7 +126,16 @@ export const ListAvatar: React.FC<ListAvatarProps> = (
           <TouchableWithoutFeedback
             key={index}
             onPress={() => onPressSecondSpecialText()}>
-            <Text style={[styles.fullname, {color: colorLinkSettings}]}>
+            <Text
+              style={[
+                styles.fullname,
+                {
+                  color:
+                    wordReplacer && wordReplacer?.length > 0
+                      ? wordReplacer[2].color
+                      : color.Pink[200],
+                },
+              ]}>
               {wordReplacer && wordReplacer?.length > 0
                 ? wordReplacer[2].text
                 : word}{' '}
@@ -153,7 +171,9 @@ export const ListAvatar: React.FC<ListAvatarProps> = (
       )}
 
       <View style={{width: '100%', maxWidth: '90%'}}>
-        <Text style={styles.fullname}>{renderDesc(desc)}</Text>
+        <Text style={styles.fullname}>
+          {wordReplacer && wordReplacer?.length > 0 ? renderDesc(desc) : desc}
+        </Text>
       </View>
     </>
   );
