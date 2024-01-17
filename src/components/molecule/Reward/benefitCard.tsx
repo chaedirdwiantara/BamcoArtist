@@ -1,6 +1,7 @@
 import {
   FlatList,
   Image,
+  ImageSourcePropType,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -59,6 +60,14 @@ const BenefitCard: FC<Props> = ({id, currentLvl}) => {
       ? 4
       : 5;
 
+  const imageByRank: Record<number, ImageSourcePropType> = {
+    1: require('../../../assets/image/badgeBronze.png'),
+    2: require('../../../assets/image/badgeSilver.png'),
+    3: require('../../../assets/image/badgeGold.png'),
+    4: require('../../../assets/image/badgePlatinum.png'),
+    5: require('../../../assets/image/badgeDiamond.png'),
+  };
+
   return (
     <>
       {dataBenefit?.data && (
@@ -76,10 +85,7 @@ const BenefitCard: FC<Props> = ({id, currentLvl}) => {
                 style={styles.compContainer}
                 disabled={lvlOnNum !== id}
                 onPress={handleOnPress}>
-                <Image
-                  source={{uri: item.imageUrl[0].image}}
-                  style={styles.iconStyle}
-                />
+                <Image source={imageByRank[id]} style={styles.iconStyle} />
                 <Gap width={6} />
                 <Text style={styles.textStyle}>{item.title}</Text>
               </TouchableOpacity>

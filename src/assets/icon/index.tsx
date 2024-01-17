@@ -147,6 +147,7 @@ import TwitterIcon from './Twitter.icon';
 import UserIcon from './User.icon';
 import UserProfileIcon from './UserProfile.icon';
 import UserRewardsIcon from './UserRewards.icon';
+import VoucherNotif from './Voucher.icon';
 import VkIcon from './Vk.icon';
 import VolumeIcon from './Volume.icon';
 import WeiboIcon from './Weibo.icon';
@@ -321,6 +322,7 @@ export {
   UserIcon,
   UserProfileIcon,
   UserRewardsIcon,
+  VoucherNotif,
   VkIcon,
   VolumeIcon,
   WeiboIcon,

@@ -81,6 +81,7 @@ import {useHomeHook} from '../hooks/use-home.hook';
 import {useCopilot} from 'react-native-copilot';
 import {useCopilotStore} from '../store/copilot.store';
 import {useCoachmarkHook} from '../hooks/use-coachmark.hook';
+import {CarouselAutoPlay} from '../components/molecule/Carousel/BannerAutoPlay';
 import {useVersionHook} from '../hooks/use-version.hook';
 
 type OnScrollEventHandler = (
@@ -452,11 +453,20 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
     navigation.navigate('ExclusiveContentSetting', {type: 'navToCreatePost'});
   };
 
-  const handleWebview = (title: string, url: string) => {
-    navigation.navigate('Webview', {
-      title: title,
-      url: url,
-    });
+  const bannerOnPress = (
+    title: string,
+    url: string,
+    type: 'artist' | 'event' | 'external',
+    key: string,
+  ) => {
+    type === 'artist'
+      ? navigation.navigate('MusicianProfile', {id: key})
+      : type === 'event'
+      ? navigation.navigate('EventDetail', {id: key})
+      : navigation.navigate('Webview', {
+          title: title,
+          url: url,
+        });
   };
 
   const handleMiniPlayerOnPress = () => {
@@ -537,9 +547,9 @@ export const HomeScreen: React.FC<HomeProps> = ({route}: HomeProps) => {
           />
         </TouchableOpacity>
 
-        <Carousel
+        <CarouselAutoPlay
           data={dataBanner?.length > 0 ? dataBanner : defaultBanner}
-          onPressBanner={handleWebview}
+          onPressBanner={bannerOnPress}
         />
 
         {/* Event List */}

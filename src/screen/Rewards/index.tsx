@@ -132,10 +132,12 @@ const Rewards = () => {
             </View>
             <Gap height={19} />
             <View style={{paddingHorizontal: widthResponsive(20)}}>
-              <BenefitCard
-                id={storedSlideIndex ? storedSlideIndex + 1 : 1}
-                currentLvl={calculateGamification(credit).rankTitle}
-              />
+              {storedSlideIndex !== undefined && (
+                <BenefitCard
+                  id={storedSlideIndex ? storedSlideIndex + 1 : 1}
+                  currentLvl={calculateGamification(credit).rankTitle}
+                />
+              )}
             </View>
           </>
         )}

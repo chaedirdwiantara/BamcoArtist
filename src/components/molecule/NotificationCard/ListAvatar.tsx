@@ -13,6 +13,7 @@ import {WordReplacerType} from '../../../interface/notification.interface';
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParams} from '../../../navigations';
+import {storage} from '../../../hooks/use-storage.hook';
 
 const {width} = Dimensions.get('screen');
 
@@ -26,97 +27,51 @@ interface ListAvatarProps {
   size?: number;
   desc?: string;
   wordReplacer?: WordReplacerType[];
+  type?: string;
 }
 
 export const ListAvatar: React.FC<ListAvatarProps> = (
   props: ListAvatarProps,
 ) => {
-  const {data = [], size = width * 0.08, desc, wordReplacer} = props;
+  const {data = [], size = width * 0.08, desc, wordReplacer, type} = props;
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
   const moreThanThree = `+${data.length - 3}`;
 
-  //? #0 AREA
-  const userNameFontWeight: any =
-    wordReplacer && wordReplacer?.length > 0
-      ? wordReplacer[0]?.fontWeight
-      : '400';
-  const userNameFontColor =
-    wordReplacer &&
-    wordReplacer?.length > 0 &&
-    wordReplacer[0].color &&
-    wordReplacer[0].color !== ''
-      ? wordReplacer[0]?.color
-      : color.Neutral[10];
-
-  // ? #1 AREA
-  const linkTNC =
-    wordReplacer && wordReplacer?.length > 0
-      ? wordReplacer[1]?.link
-      : 'https://www.thebeam.co/termsandcondition';
-
-  const colorLinkTNC =
-    wordReplacer && wordReplacer?.length > 0
-      ? wordReplacer[1]?.color
-      : color.Neutral[10];
-
-  const onPressFirstSpecialText = () => {
-    navigation.navigate('Webview', {
-      title: 'Terms and Conditions',
-      url: linkTNC,
-    });
-  };
-
-  // ? #2 AREA
-  const linkSettings =
-    wordReplacer && wordReplacer?.length > 0
-      ? wordReplacer[2]?.link
-      : 'SendAppeal';
-
-  const colorLinkSettings =
-    wordReplacer && wordReplacer?.length > 0
-      ? wordReplacer[1]?.color
-      : color.Pink[200];
-
-  const onPressSecondSpecialText = () => {
-    //@ts-ignore this should be fine since the screen page comes from api response
-    navigation.navigate(linkSettings);
+  const onPressLink = (link: string) => {
+    type === '3' && storage.set('tabActiveRewards', 1);
+    link.includes('://')
+      ? navigation.navigate('Webview', {
+          title: 'Terms and Conditions',
+          url: link,
+        })
+      : //@ts-ignore this should be fine since the screen page comes from api response
+        navigation.navigate(link);
   };
 
   const renderDesc = (text: string | undefined) => {
     return text?.split(' ').map((word, index) => {
-      if (word.includes('#0')) {
-        return (
-          <Text
-            style={[
-              styles.fullname,
-              {color: userNameFontColor, fontWeight: userNameFontWeight},
-            ]}>
-            {wordReplacer && wordReplacer?.length > 0
-              ? wordReplacer[0].text
-              : word}{' '}
-          </Text>
-        );
-      } else if (word.includes('#1')) {
+      if (wordReplacer && word.includes('#')) {
+        // Find the character after '#'
+        const indexOfHash = word.indexOf('#');
+        const ixChoosen = parseInt(word.charAt(indexOfHash + 1), 10);
+
         return (
           <TouchableWithoutFeedback
             key={index}
-            onPress={() => onPressFirstSpecialText()}>
-            <Text style={[styles.fullname, {color: colorLinkTNC}]}>
+            disabled={wordReplacer[ixChoosen].link.length === 0}
+            onPress={() => onPressLink(wordReplacer[ixChoosen].link)}>
+            <Text
+              style={[
+                styles.fullname,
+                //@ts-ignore
+                {
+                  color: wordReplacer[ixChoosen]?.color,
+                  fontWeight: wordReplacer[ixChoosen]?.fontWeight,
+                },
+              ]}>
               {wordReplacer && wordReplacer?.length > 0
-                ? wordReplacer[1].text
-                : word}{' '}
-            </Text>
-          </TouchableWithoutFeedback>
-        );
-      } else if (word.includes('#2')) {
-        return (
-          <TouchableWithoutFeedback
-            key={index}
-            onPress={() => onPressSecondSpecialText()}>
-            <Text style={[styles.fullname, {color: colorLinkSettings}]}>
-              {wordReplacer && wordReplacer?.length > 0
-                ? wordReplacer[2].text
+                ? wordReplacer[ixChoosen].text
                 : word}{' '}
             </Text>
           </TouchableWithoutFeedback>
@@ -150,7 +105,9 @@ export const ListAvatar: React.FC<ListAvatarProps> = (
       )}
 
       <View style={{width: '100%', maxWidth: '90%'}}>
-        <Text style={styles.fullname}>{renderDesc(desc)}</Text>
+        <Text style={styles.fullname}>
+          {wordReplacer && wordReplacer?.length > 0 ? renderDesc(desc) : desc}
+        </Text>
       </View>
     </>
   );
