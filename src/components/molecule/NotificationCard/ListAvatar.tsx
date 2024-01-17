@@ -38,16 +38,15 @@ export const ListAvatar: React.FC<ListAvatarProps> = (
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
   const moreThanThree = `+${data.length - 3}`;
 
-  const onPressLink = (link: string, linkType: 'screen' | 'url') => {
+  const onPressLink = (link: string) => {
     type === '3' && storage.set('tabActiveRewards', 1);
-    linkType === 'url'
+    link.includes('://')
       ? navigation.navigate('Webview', {
           title: 'Terms and Conditions',
           url: link,
         })
-      : linkType === 'screen' //@ts-ignore this should be fine since the screen page comes from api response
-      ? navigation.navigate(link)
-      : null;
+      : //@ts-ignore this should be fine since the screen page comes from api response
+        navigation.navigate(link);
   };
 
   const renderDesc = (text: string | undefined) => {
@@ -61,12 +60,7 @@ export const ListAvatar: React.FC<ListAvatarProps> = (
           <TouchableWithoutFeedback
             key={index}
             disabled={wordReplacer[ixChoosen].link.length === 0}
-            onPress={() =>
-              onPressLink(
-                wordReplacer[ixChoosen].link,
-                wordReplacer[ixChoosen].linkType,
-              )
-            }>
+            onPress={() => onPressLink(wordReplacer[ixChoosen].link)}>
             <Text
               style={[
                 styles.fullname,
