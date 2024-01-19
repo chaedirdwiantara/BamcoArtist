@@ -47,7 +47,7 @@ export type ProfileResponseData = {
   username: string;
   email: string;
   fullname: string;
-  about: string | null;
+  about: string;
   banners: ListImageType[];
   photos: ListPhotosType[];
   imageProfileUrls: ListImageType[];
@@ -67,7 +67,7 @@ export type ProfileResponseData = {
   gender: string;
   followers: number;
   fans: number;
-  bio: string | null;
+  bio: string;
   labels: string;
   originCountry: string;
   originCity: string;
