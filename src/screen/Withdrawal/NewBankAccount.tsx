@@ -482,7 +482,7 @@ export const NewBankAccountScreen: React.FC<BankAccountProps> = ({
             sendUriMultiple={() => null}
             onDeleteImage={() => setAttachment(null)}
             onPressClose={() => setShowModalImage(false)}
-            hideMenuDelete={attachment !== null && attachment !== undefined}
+            showDeleteImage={attachment !== null && attachment !== undefined}
             includeBase64={true}
           />
 

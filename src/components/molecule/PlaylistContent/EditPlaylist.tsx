@@ -148,7 +148,7 @@ export const EditPlaylistContent: React.FC<EditPlaylistProps> = ({
     }
   };
 
-  const hideMenuDelete =
+  const showDeleteImage =
     playlistUri?.path !== undefined && playlistUri?.path !== '';
 
   const maxColorTitle =
@@ -277,7 +277,7 @@ export const EditPlaylistContent: React.FC<EditPlaylistProps> = ({
           sendUriMultiple={() => null}
           onDeleteImage={resetImage}
           onPressClose={closeModal}
-          hideMenuDelete={hideMenuDelete}
+          showDeleteImage={showDeleteImage}
         />
 
         <ModalConfirm

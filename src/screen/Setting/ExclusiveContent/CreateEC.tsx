@@ -246,7 +246,7 @@ export const CreateEC: React.FC<CreateProps> = ({data, onPress}) => {
         sendUriMultiple={() => {}}
         onDeleteImage={resetImage}
         onPressClose={() => setModalVisible(false)}
-        hideMenuDelete={firstUri !== undefined}
+        showDeleteImage={firstUri !== undefined}
       />
     </View>
   );
