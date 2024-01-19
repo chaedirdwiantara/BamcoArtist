@@ -1,11 +1,11 @@
-import React, {useEffect, useState} from 'react';
-import {View, StyleSheet} from 'react-native';
+import React, {useCallback, useEffect, useState} from 'react';
+import {View, StyleSheet, InteractionManager} from 'react-native';
 import {
   NativeStackNavigationProp,
   NativeStackScreenProps,
 } from '@react-navigation/native-stack';
 import {useTranslation} from 'react-i18next';
-import {useNavigation} from '@react-navigation/native';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
 
 import Color from '../../theme/Color';
 import {ProfileContent} from '../../components';
@@ -46,8 +46,13 @@ export const ProfileScreen: React.FC<ProfileProps> = ({
 
   const uuid = dataProfile?.data.uuid;
 
+  useFocusEffect(
+    useCallback(() => {
+      getProfileUser();
+    }, [refreshing]),
+  );
+
   useEffect(() => {
-    getProfileUser();
     if (uuid) {
       getTotalCountProfile({uuid});
       getDetailMusician({id: uuid});
@@ -62,15 +67,24 @@ export const ProfileScreen: React.FC<ProfileProps> = ({
     storage.set('fetchingProfile', false);
   }, [uuid, refreshing, showToast, deletePlaylist, isFetching]);
 
-  useEffect(() => {
-    if (showToast && !deletePlaylist) {
-      setToastVisible(showToast);
-      setToastText('Your Profile have been updated!');
-    } else if (deletePlaylist) {
-      setToastVisible(deletePlaylist);
-      setToastText('Playlist have been deleted!');
-    }
-  }, [route.params]);
+  // useEffect(() => {
+  //   if (showToast && !deletePlaylist) {
+  //     setToastVisible(showToast);
+  //     setToastText('Your Profile have been updated!');
+  //   } else if (deletePlaylist) {
+  //     setToastVisible(deletePlaylist);
+  //     setToastText('Playlist have been deleted!');
+  //   }
+  // }, [route.params]);
+
+  useFocusEffect(
+    useCallback(() => {
+      const tabActive = storage.getBoolean('editProfileSuccess') || false;
+      InteractionManager.runAfterInteractions(() => setToastVisible(tabActive));
+      setToastText('Profile & Account Information have been saved!');
+      storage.delete('editProfileSuccess');
+    }, []),
+  );
 
   useEffect(() => {
     toastVisible &&
