@@ -14,6 +14,7 @@ type Props = {
   leftIcon?: React.ReactNode;
   rightIcon: React.ReactNode;
   rightIconAction?: () => void;
+  disabledRightIcon?: boolean;
   containerStyles?: ViewStyle;
 };
 
@@ -39,7 +40,8 @@ const Type4: React.FC<Props> = (props: Props) => {
     return (
       <TouchableOpacity
         style={topNavstyles.iconRightContainer}
-        onPress={props.rightIconAction}>
+        onPress={props.rightIconAction}
+        disabled={props.disabledRightIcon}>
         {props.rightIcon}
       </TouchableOpacity>
     );
