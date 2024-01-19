@@ -17,12 +17,12 @@ import SsuAPIKrakatau from './baseKrakatau';
 import {ParamsProps} from '../interface/base.interface';
 
 export const masterReward = async (
-  props?: PaginationType,
+  params: ParamsProps,
 ): Promise<MasterRewardResponseType> => {
   const {data} = await SsuAPI().request<MasterRewardResponseType>({
     url: '/musician-app/rewards',
     method: 'GET',
-    params: props,
+    params: params,
   });
 
   return data;
