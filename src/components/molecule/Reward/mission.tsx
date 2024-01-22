@@ -115,10 +115,7 @@ const Mission: React.FC<MissionProps> = ({data, onGo, rankTitle}) => {
   // ? set data complete & data progressed into global state
   useEffect(() => {
     if (data && dataMissionPrg) {
-      const progressBarZ = dataMissionPrg.data
-        ? dataMissionPrg.data?.rowCount / data.amountToClaim
-        : 0 / data.amountToClaim;
-      if (dataMissionPrg.data.isClaimable || progressBarZ === 1) {
+      if (dataMissionPrg.data.isClaimed) {
         const newMission: DataMissionStoreProps = {
           id: data.id,
           isClaimable: dataMissionPrg.data.isClaimable,
