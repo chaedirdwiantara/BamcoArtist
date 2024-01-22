@@ -10,16 +10,13 @@ import {
 import React, {useCallback, useEffect, useState} from 'react';
 import {color, font} from '../../theme';
 import {bgColorTab, toCurrency, widthResponsive} from '../../utils';
-import {Button, Gap, ModalCustom, TabFilter} from '../../components';
+import {Button, Gap, ModalCustom} from '../../components';
 import {useProfileHook} from '../../hooks/use-profile.hook';
 import {useTranslation} from 'react-i18next';
-import {widthPercentageToDP} from 'react-native-responsive-screen';
 import {useFocusEffect} from '@react-navigation/native';
 import TabOneReward from './tabOne';
 import TabTwoRewards from './tabTwo';
-import InfoCard from '../../components/molecule/Reward/infoCard';
 import PointProgress from '../../components/molecule/Reward/pointProgress';
-import BackgroundHeader from '../../components/molecule/Reward/backgroundHeader';
 import {mvs} from 'react-native-size-matters';
 import {
   BadgeBronzeMIcon,

@@ -134,8 +134,8 @@ export interface SetClaimMission extends BaseResponseApi {
 
 export interface DataMissionStoreProps {
   id: number;
-  typeOnIndex: number;
-  isClaimable: boolean;
+  typeOnIndex?: number;
+  isClaimable?: boolean;
 }
 
 export interface DataBenefitProps {
