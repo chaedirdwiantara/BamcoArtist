@@ -26,16 +26,10 @@ export const EditProfileScreen: React.FC = () => {
   const {isLoading, dataProfile, getProfileUser, deleteValueProfile} =
     useProfileHook();
   const [selectedCountry, setSelectedCountry] = useState<number>(0);
-  const [triggerGetProfile, setTriggerGetProfile] = useState<boolean>(false);
 
   useFocusEffect(
     useCallback(() => {
       getProfileUser();
-    }, [triggerGetProfile]),
-  );
-
-  useFocusEffect(
-    useCallback(() => {
       getDataAllCountry();
       getListMoodGenre({page: 0, perPage: 30});
       getListRolesInIndustry();
@@ -70,9 +64,7 @@ export const EditProfileScreen: React.FC = () => {
             moods={listMood}
             genres={listGenre}
             roles={listRoles}
-            triggerGetProfile={triggerGetProfile}
             setSelectedCountry={setSelectedCountry}
-            setTriggerGetProfile={setTriggerGetProfile}
           />
         )}
         <ModalLoading visible={isLoading} />

@@ -66,11 +66,9 @@ interface EditProfileProps {
   roles: ListRoleType[];
   moods: PreferenceList[];
   genres: PreferenceList[];
-  triggerGetProfile: boolean;
   dataCitiesOfCountry: DataDropDownType[];
   deleteValueProfile: (props?: ParamsProps) => void;
   setSelectedCountry: (value: number) => void;
-  setTriggerGetProfile: (val: boolean) => void;
 }
 
 interface InputProps {
@@ -115,10 +113,8 @@ export const EditProfile: React.FC<EditProfileProps> = ({
   genres,
   dataAllCountry,
   dataCitiesOfCountry,
-  triggerGetProfile,
   deleteValueProfile,
   setSelectedCountry,
-  setTriggerGetProfile,
 }) => {
   const {t} = useTranslation();
   const navigation =
@@ -152,7 +148,6 @@ export const EditProfile: React.FC<EditProfileProps> = ({
   const [modalLimitType, setModalLimitType] = useState<string>('');
   const [members, setMembers] = useState<string[]>([]);
   const [changes, setChanges] = useState(false);
-  const [showModal, setShowModal] = useState(false);
   const [disabledButton, setDisabledButton] = useState<boolean>(true);
   const [isSubmit, setIsSubmit] = useState<boolean>(false);
   const [valueGenres, setValueGenres] = useState<(number | undefined)[]>([]);
@@ -334,7 +329,6 @@ export const EditProfile: React.FC<EditProfileProps> = ({
   }, [isValidating, isValid, dataProfile, valueGenres, valueTypeOfMusician]);
 
   const onPressConfirm = async () => {
-    setShowModal(false);
     try {
       const payload = {
         username: getValues('username'),
@@ -613,11 +607,9 @@ export const EditProfile: React.FC<EditProfileProps> = ({
             onChangeText={(newText: string) => setBio(newText)}
             containerStyles={{marginTop: heightPercentage(15)}}
           />
-          <Text
-            style={[
-              styles.length,
-              {color: newColorBio},
-            ]}>{`${bio?.length}/110`}</Text>
+          <Text style={[styles.length, {color: newColorBio}]}>{`${
+            bio?.length || 0
+          }/110`}</Text>
 
           <SsuInput.InputLabel
             label={t('Musician.Label.About') || ''}
@@ -628,11 +620,9 @@ export const EditProfile: React.FC<EditProfileProps> = ({
             onChangeText={(newText: string) => setAbout(newText)}
             containerStyles={{marginTop: heightPercentage(15)}}
           />
-          <Text
-            style={[
-              styles.length,
-              {color: newColorAbout},
-            ]}>{`${about?.length}/600`}</Text>
+          <Text style={[styles.length, {color: newColorAbout}]}>{`${
+            about?.length || 0
+          }/600`}</Text>
 
           <SsuInput.InputLabel
             label={t('Musician.Label.Website') || ''}
@@ -641,11 +631,9 @@ export const EditProfile: React.FC<EditProfileProps> = ({
             onChangeText={(newText: string) => setWebsite(newText)}
             containerStyles={{marginTop: heightPercentage(15)}}
           />
-          <Text
-            style={[
-              styles.length,
-              {color: newColorAbout},
-            ]}>{`${website?.length}/600`}</Text>
+          <Text style={[styles.length, {color: newColorAbout}]}>{`${
+            website?.length || 0
+          }/600`}</Text>
 
           <Text style={{marginTop: heightPercentage(20)}}>
             <Text style={styles.title}>{t('Musician.Label.Social')}</Text>
@@ -1039,10 +1027,7 @@ export const EditProfile: React.FC<EditProfileProps> = ({
       <ModalSocMed
         titleModal={t('Musician.Label.Social')}
         modalVisible={isModalVisible.modalSocMed}
-        onPressClose={() => {
-          setTriggerGetProfile(!triggerGetProfile);
-          closeModal();
-        }}
+        onPressClose={closeModal}
       />
 
       <ModalLimit
