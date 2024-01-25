@@ -146,6 +146,8 @@ export const MusicianDetail: React.FC<MusicianDetailProps> = ({
   const [modalBlock, setModalBlock] = useState<boolean>(false);
   const [toastUnblock, settoastUnblock] = useState<boolean>(false);
   const [toastBlock, setToastBlock] = useState<boolean>(false);
+  const [endReached, setEndReached] = useState<boolean>(false);
+  const [allowPagination, setAllowPagination] = useState<boolean>(true);
 
   const showPopUp: boolean | undefined = storage.getBoolean('showPopUp');
 
@@ -190,7 +192,19 @@ export const MusicianDetail: React.FC<MusicianDetailProps> = ({
     let offsetY = event.nativeEvent.contentOffset.y;
     const scrolled = offsetY > 10;
     setScrollEffect(scrolled);
+
+    const height = event.nativeEvent.layoutMeasurement.height;
+    const contentHeight = event.nativeEvent.contentSize.height;
+
+    if (offsetY + height >= contentHeight && allowPagination) {
+      setAllowPagination(false);
+      setEndReached(true);
+    }
   };
+
+  useEffect(() => {
+    setAllowPagination(true);
+  }, [selectedIndex]);
 
   const goToFollowers = () => {
     navigation.navigate('Followers', {uuid});
@@ -438,10 +452,19 @@ export const MusicianDetail: React.FC<MusicianDetailProps> = ({
                     {exclusiveContent ? (
                       <PostListProfile
                         uuidMusician={uuid}
+                        endReached={endReached}
+                        setEndReached={setEndReached}
+                        setAllowPagination={setAllowPagination}
                         {...exclusiveContent}
                       />
                     ) : (
-                      <PostListProfile uuidMusician={uuid} pricingPlans={[]} />
+                      <PostListProfile
+                        uuidMusician={uuid}
+                        pricingPlans={[]}
+                        endReached={endReached}
+                        setEndReached={setEndReached}
+                        setAllowPagination={setAllowPagination}
+                      />
                     )}
                   </View>
                 ) : filter[selectedIndex].filterName ===

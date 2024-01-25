@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   StyleSheet,
@@ -143,6 +143,8 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
   ]);
   const [isModalVisible, setModalVisible] = useState<boolean>(false);
   const [zoomImage, setZoomImage] = useState<string[]>([]);
+  const [endReached, setEndReached] = useState<boolean>(false);
+  const [allowPagination, setAllowPagination] = useState<boolean>(true);
 
   const showImage = (uri: string) => {
     setModalVisible(!isModalVisible);
@@ -157,7 +159,19 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
     let offsetY = event.nativeEvent.contentOffset.y;
     const scrolled = offsetY > 10;
     setScrollEffect(scrolled);
+
+    const height = event.nativeEvent.layoutMeasurement.height;
+    const contentHeight = event.nativeEvent.contentSize.height;
+
+    if (offsetY + height >= contentHeight && allowPagination) {
+      setAllowPagination(false);
+      setEndReached(true);
+    }
   };
+
+  useEffect(() => {
+    setAllowPagination(true);
+  }, [selectedIndex]);
 
   const handleBackAction = () => {
     // navigation.reset({
@@ -313,9 +327,21 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
               }}>
               {ownProfile ? (
                 exclusiveContent ? (
-                  <PostListProfile uuidMusician={uuid} {...exclusiveContent} />
+                  <PostListProfile
+                    uuidMusician={uuid}
+                    {...exclusiveContent}
+                    endReached={endReached}
+                    setEndReached={setEndReached}
+                    setAllowPagination={setAllowPagination}
+                  />
                 ) : (
-                  <PostListProfile uuidMusician={uuid} pricingPlans={[]} />
+                  <PostListProfile
+                    uuidMusician={uuid}
+                    pricingPlans={[]}
+                    endReached={endReached}
+                    setEndReached={setEndReached}
+                    setAllowPagination={setAllowPagination}
+                  />
                 )
               ) : (
                 <PostListPublic
