@@ -1,7 +1,13 @@
-import React, {useCallback, useEffect, useState} from 'react';
-import {View, StyleSheet, Text, TouchableOpacity} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  InteractionManager,
+} from 'react-native';
 import {useTranslation} from 'react-i18next';
 import {ms, mvs} from 'react-native-size-matters';
+import React, {useCallback, useEffect, useState} from 'react';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
@@ -12,12 +18,13 @@ import {
   InfoCircle2Icon,
   CheckCircle2Icon,
 } from '../assets/icon';
+import {RootStackParams} from '../navigations';
 import {width, widthPercentage} from '../utils';
 import {color, font, typography} from '../theme';
-import {RootStackParams} from '../navigations';
+import {storage} from '../hooks/use-storage.hook';
 import {useProfileHook} from '../hooks/use-profile.hook';
 import {MenuText} from '../components/atom/MenuText/MenuText';
-import {Gap, ModalCustom, TopNavigation} from '../components';
+import {Gap, ModalCustom, SsuToast, TopNavigation} from '../components';
 import {ProgressCard} from '../components/molecule/ListCard/ProgressCard';
 import {ModalLoading} from '../components/molecule/ModalLoading/ModalLoading';
 
@@ -35,6 +42,7 @@ export const ProfileProgressScreen: React.FC = () => {
   const [completed, setCompleted] = useState<boolean>(false);
   const [modalInfo, setModalInfo] = useState<boolean>(false);
   const [uncompleteList, setUncompleteList] = useState<string[]>([]);
+  const [toastVisible, setToastVisible] = useState<boolean>(false);
 
   useFocusEffect(
     useCallback(() => {
@@ -42,6 +50,21 @@ export const ProfileProgressScreen: React.FC = () => {
       getProfileProgress();
     }, []),
   );
+
+  useFocusEffect(
+    useCallback(() => {
+      const tabActive = storage.getBoolean('editProfileSuccess') || false;
+      InteractionManager.runAfterInteractions(() => setToastVisible(tabActive));
+      storage.delete('editProfileSuccess');
+    }, []),
+  );
+
+  useEffect(() => {
+    toastVisible &&
+      setTimeout(() => {
+        setToastVisible(false);
+      }, 3000);
+  }, [toastVisible]);
 
   useEffect(() => {
     // all required input = done, if unchecked list is empty.
@@ -142,6 +165,19 @@ export const ProfileProgressScreen: React.FC = () => {
         children={children()}
         onPressClose={() => setModalInfo(false)}
       />
+      <SsuToast
+        modalVisible={toastVisible}
+        onBackPressed={() => setToastVisible(false)}
+        children={
+          <View style={[styles.modalContainer]}>
+            <CheckCircle2Icon />
+            <Gap width={4} />
+            <Text style={[styles.textStyle]} numberOfLines={2}>
+              {'Profile & Account Information have been saved!'}
+            </Text>
+          </View>
+        }
+      />
     </View>
   );
 };
@@ -205,5 +241,19 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginTop: mvs(10),
+  },
+  modalContainer: {
+    width: '100%',
+    position: 'absolute',
+    bottom: mvs(22),
+    height: mvs(36),
+    backgroundColor: color.Success[400],
+    paddingHorizontal: widthPercentage(12),
+    borderRadius: 4,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  textStyle: {
+    color: color.Neutral[10],
   },
 });

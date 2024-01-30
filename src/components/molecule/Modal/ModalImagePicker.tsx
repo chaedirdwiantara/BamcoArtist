@@ -25,7 +25,7 @@ interface ModalImagePickerProps {
   sendUriVideo?: (params: Video) => void;
   sendUriMultiple: (params: Image[]) => void;
   onDeleteImage: () => void;
-  hideMenuDelete?: boolean;
+  showDeleteImage?: boolean;
   multiple?: boolean;
   maxFiles?: number;
   showVideo?: boolean;
@@ -41,7 +41,7 @@ export const ModalImagePicker: React.FC<ModalImagePickerProps> = ({
   sendUriMultiple,
   onPressClose,
   onDeleteImage,
-  hideMenuDelete,
+  showDeleteImage,
   multiple,
   maxFiles,
   showVideo,
@@ -163,7 +163,7 @@ export const ModalImagePicker: React.FC<ModalImagePickerProps> = ({
               </Text>
             </TouchableOpacity>
           )}
-          {hideMenuDelete && (
+          {showDeleteImage && (
             <TouchableOpacity
               style={{width: '100%', marginVertical: 10}}
               onPress={onDeleteImage}>

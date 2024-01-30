@@ -181,7 +181,7 @@ export const StepProfile: React.FC<AccountProps> = ({
           sendUri={sendUri}
           onDeleteImage={resetImage}
           onPressClose={() => setShowModalImage(false)}
-          hideMenuDelete={stateProfile.imageProfileUrl !== ''}
+          showDeleteImage={stateProfile.imageProfileUrl !== ''}
           sendUriMultiple={() => null}
         />
 

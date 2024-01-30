@@ -145,7 +145,7 @@ export const CreateNewPlaylistContent: React.FC<Props> = ({
   const colorDisabled = [color.Dark[50], color.Dark[50]];
   const defaultGradient = [color.Success[400], color.Success[400]];
 
-  const hideMenuDelete =
+  const showDeleteImage =
     playlistUri?.path !== undefined && playlistUri?.path !== '';
 
   const maxColorTitle =
@@ -256,7 +256,7 @@ export const CreateNewPlaylistContent: React.FC<Props> = ({
           sendUri={sendUri}
           onDeleteImage={resetImage}
           onPressClose={closeModal}
-          hideMenuDelete={hideMenuDelete}
+          showDeleteImage={showDeleteImage}
           sendUriMultiple={() => null}
         />
 
