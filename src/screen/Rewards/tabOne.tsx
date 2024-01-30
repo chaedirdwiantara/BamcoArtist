@@ -1,5 +1,5 @@
 import {FlatList, StyleSheet, View, Text} from 'react-native';
-import React, {FC, useCallback, useState} from 'react';
+import React, {FC, useCallback, useEffect, useState} from 'react';
 import VoucherReward from '../../components/molecule/Reward/reward';
 import {widthResponsive} from '../../utils';
 import {EmptyState, Gap, ModalInfoClaimCredit} from '../../components';
@@ -15,6 +15,7 @@ import {RewardCardSkeleton} from '../../skeleton/Rewards/RewardCard';
 import {useMutation} from 'react-query';
 import {redeemRewards} from '../../api/reward.api';
 import {profileStorage} from '../../hooks/use-storage.hook';
+import {tabRewardStore} from '../../store/reward.store';
 
 type Props = {
   creditReward: number;
@@ -22,15 +23,25 @@ type Props = {
 
 const TabOneReward: FC<Props> = ({creditReward}) => {
   const {t} = useTranslation();
+  const {metaReward, setAllowUpdateMeta} = tabRewardStore();
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
 
   const {queryRewardMaster, queryProgressReward} = useRewardHook();
-  const {data: dataRewardMaster, isLoading: isLoadingReward} =
-    queryRewardMaster();
+  const {
+    data: dataRewardMaster,
+    isLoading: isLoadingReward,
+    refetch: refetchRewardMaster,
+  } = queryRewardMaster({
+    page: metaReward.page,
+    perPage: metaReward.perPage,
+  });
   const {data: dataProgressReward, refetch: refetchProgressReward} =
     queryProgressReward();
 
+  const [dataStateRewardMaster, setDataStateRewardMaster] = useState<
+    ItemMasterReward[] | undefined
+  >([]);
   const [freeCredit, setFreeCredit] = useState<number>(0);
   const [modalInfo, setModalInfo] = useState<boolean>(false);
   const [modalType, setModalType] = useState<'success' | 'failed'>('success');
@@ -40,6 +51,30 @@ const TabOneReward: FC<Props> = ({creditReward}) => {
       refetchProgressReward();
     }, []),
   );
+
+  useEffect(() => {
+    refetchRewardMaster();
+    setTimeout(() => {
+      dataStateRewardMaster &&
+      dataRewardMaster?.meta &&
+      dataStateRewardMaster?.length < dataRewardMaster?.meta?.total
+        ? setAllowUpdateMeta(true)
+        : null;
+    }, 1000);
+  }, [metaReward]);
+
+  useEffect(() => {
+    if (metaReward.page === 1) {
+      setDataStateRewardMaster(dataRewardMaster?.data);
+    } else {
+      if (dataStateRewardMaster && dataRewardMaster?.data) {
+        const updatedVouchers = dataStateRewardMaster.concat(
+          dataRewardMaster.data,
+        );
+        setDataStateRewardMaster(updatedVouchers);
+      }
+    }
+  }, [dataRewardMaster]);
 
   const setRedeemRewards = useMutation({
     mutationKey: ['claim-voucher'],
@@ -71,10 +106,11 @@ const TabOneReward: FC<Props> = ({creditReward}) => {
         <RewardCardSkeleton />
       ) : (
         <FlatList
-          data={dataRewardMaster?.data}
+          data={dataStateRewardMaster}
           showsVerticalScrollIndicator={false}
           keyExtractor={(_, index) => index.toString()}
           contentContainerStyle={{alignSelf: 'center'}}
+          scrollEnabled={false}
           numColumns={2}
           renderItem={({item}) => (
             <VoucherReward

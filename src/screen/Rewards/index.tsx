@@ -10,16 +10,13 @@ import {
 import React, {useCallback, useEffect, useState} from 'react';
 import {color, font} from '../../theme';
 import {bgColorTab, toCurrency, widthResponsive} from '../../utils';
-import {Button, Gap, ModalCustom, TabFilter} from '../../components';
+import {Button, Gap, ModalCustom} from '../../components';
 import {useProfileHook} from '../../hooks/use-profile.hook';
 import {useTranslation} from 'react-i18next';
-import {widthPercentageToDP} from 'react-native-responsive-screen';
 import {useFocusEffect} from '@react-navigation/native';
 import TabOneReward from './tabOne';
 import TabTwoRewards from './tabTwo';
-import InfoCard from '../../components/molecule/Reward/infoCard';
 import PointProgress from '../../components/molecule/Reward/pointProgress';
-import BackgroundHeader from '../../components/molecule/Reward/backgroundHeader';
 import {mvs} from 'react-native-size-matters';
 import {
   BadgeBronzeMIcon,
@@ -29,7 +26,11 @@ import {
   BadgeSilverMIcon,
   CoinIcon,
 } from '../../assets/icon';
-import {dataMissionStore, slideIndexStore} from '../../store/reward.store';
+import {
+  dataMissionStore,
+  slideIndexStore,
+  tabRewardStore,
+} from '../../store/reward.store';
 import {RewardsSkeleton} from '../../skeleton/Rewards';
 import {calculateGamification} from '../../utils/calculateGamification';
 import HeaderSwiper from '../../components/molecule/Reward/headerSwiper';
@@ -44,6 +45,8 @@ const Rewards = () => {
   const {dataProfile, isLoading, getProfileUser} = useProfileHook();
   const {storedBadgeTitle, setStoredBadgeTitle} = dataMissionStore();
   const {storedSlideIndex} = slideIndexStore();
+  const {metaReward, setMetaReward, allowUpdateMeta, setAllowUpdateMeta} =
+    tabRewardStore();
   const credit = dataProfile?.data.rewards.credit || 0;
 
   const [selectedIndex, setSelectedIndex] = useState(-0);
@@ -76,10 +79,24 @@ const Rewards = () => {
     let offsetY = event.nativeEvent.contentOffset.y;
     const scrolled = offsetY > 10;
     setScrollEffect(scrolled);
+
+    const height = event.nativeEvent.layoutMeasurement.height;
+    const contentHeight = event.nativeEvent.contentSize.height;
+    if (offsetY + height >= contentHeight && allowUpdateMeta) {
+      setAllowUpdateMeta(false);
+      setMetaReward({
+        ...metaReward,
+        page: metaReward.page + 1,
+      });
+    }
   };
 
   const tabFilterOnPress = (index: number) => {
     setSelectedIndex(index);
+    setMetaReward({
+      page: 1,
+      perPage: 10,
+    });
   };
 
   useEffect(() => {

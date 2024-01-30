@@ -37,10 +37,10 @@ export const useRewardHook = () => {
     });
   };
 
-  const queryRewardMaster = () =>
+  const queryRewardMaster = (param: ParamsProps) =>
     useQuery({
       queryKey: ['queryRewardMaster'],
-      queryFn: () => masterReward(),
+      queryFn: () => masterReward(param),
     });
 
   const queryProgressReward = () => {

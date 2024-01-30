@@ -16,6 +16,7 @@ import {Gap} from '../../atom';
 import {
   DataListMissioProgress,
   DataMissionMaster,
+  DataMissionStoreProps,
 } from '../../../interface/reward.interface';
 import {useRewardHook} from '../../../hooks/use-reward.hook';
 import {useTranslation} from 'react-i18next';
@@ -27,6 +28,7 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParams} from '../../../navigations';
 import {useSettingHook} from '../../../hooks/use-setting.hook';
 import {profileStorage} from '../../../hooks/use-storage.hook';
+import {dataMissionStore} from '../../../store/reward.store';
 
 interface MissionProps {
   data: DataMissionMaster;
@@ -41,6 +43,7 @@ const Mission: React.FC<MissionProps> = ({data, onGo, rankTitle}) => {
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
 
   const {useGetMissionProgress} = useRewardHook();
+  const {storedDataMission, setStoredDataMission} = dataMissionStore();
   const {dataExclusiveContent, getExclusiveContent} = useSettingHook();
   const [dataProgress, setDataProgress] = useState<DataListMissioProgress>();
   const [readyToRefetch, setreadyToRefetch] = useState<boolean>(false);
@@ -108,6 +111,23 @@ const Mission: React.FC<MissionProps> = ({data, onGo, rankTitle}) => {
       ? t('Rewards.MissionTab.ModalGetCredit.HowToGetFans')
       : t('Rewards.MissionTab.ModalGetCredit.HowToGetCredit');
   const progressCompleted = dataProgress?.isClaimed;
+
+  // ? set data complete & data progressed into global state
+  useEffect(() => {
+    if (data && dataMissionPrg) {
+      if (dataMissionPrg.data.isClaimed) {
+        const newMission: DataMissionStoreProps = {
+          id: data.id,
+          isClaimable: dataMissionPrg.data.isClaimable,
+        };
+        const filterData = storedDataMission.filter(
+          data => data.id !== newMission.id,
+        );
+        const updatedDataMission = [...filterData, newMission];
+        setStoredDataMission(updatedDataMission);
+      }
+    }
+  }, [data, dataMissionPrg]);
 
   const onPressCard = () => {
     if (data.postfix === '%') {

@@ -25,3 +25,25 @@ export const slideIndexStore = create<SlideIndexStatusProps>(set => ({
   setStoredSlideIndex: (value: number | undefined) =>
     set({storedSlideIndex: value}),
 }));
+
+type metaProps = {
+  page: number;
+  perPage: number;
+};
+
+interface TabRewardProps {
+  metaReward: metaProps;
+  setMetaReward: (value: metaProps) => void;
+  allowUpdateMeta: boolean;
+  setAllowUpdateMeta: (value: boolean) => void;
+}
+
+export const tabRewardStore = create<TabRewardProps>(set => ({
+  metaReward: {
+    page: 1,
+    perPage: 10,
+  },
+  setMetaReward: (value: metaProps) => set({metaReward: value}),
+  allowUpdateMeta: true,
+  setAllowUpdateMeta: (value: boolean) => set({allowUpdateMeta: value}),
+}));

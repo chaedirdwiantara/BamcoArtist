@@ -1,8 +1,7 @@
 import {FlatList, Linking, StyleSheet, View} from 'react-native';
 import React, {FC, useCallback, useEffect, useState} from 'react';
 import Mission from '../../components/molecule/Reward/mission';
-import {missionMenu} from '../../data/reward';
-import {Button, Gap, ModalConfirm, SuccessToast} from '../../components';
+import {ModalConfirm, SuccessToast} from '../../components';
 import {color, font} from '../../theme';
 import {mvs} from 'react-native-size-matters';
 import {widthResponsive} from '../../utils';
@@ -19,6 +18,7 @@ import {useTranslation} from 'react-i18next';
 import {ModalInfo} from '../../components/molecule/Modal/ModalInfo';
 import {MissionCardSkeleton} from '../../skeleton/Rewards/MissionCard';
 import {levelName} from '../../utils/calculateGamification';
+import {dataMissionStore} from '../../store/reward.store';
 
 type Props = {
   refreshing: boolean;
@@ -39,8 +39,11 @@ const TabTwoRewards: FC<Props> = ({refreshing, setRefreshing, rankTitle}) => {
   const [paramClaim, setParamClaim] = useState<string>();
   const [modalBan, setModalBan] = useState<boolean>(false);
   const [modalInfoMusic, setModalInfoMusic] = useState<boolean>(false);
+  const [dataStateMission, setDataStateMission] =
+    useState<DataMissionMaster[]>();
 
   const {useGetMissionMaster, useSetClaimMission} = useRewardHook();
+  const {storedDataMission, setStoredDataMission} = dataMissionStore();
 
   const {
     data: dataMission,
@@ -63,6 +66,25 @@ const TabTwoRewards: FC<Props> = ({refreshing, setRefreshing, rankTitle}) => {
       setactiveIndex(0);
     }, []),
   );
+
+  useEffect(() => {
+    if (dataMission?.data && storedDataMission) {
+      // check if the number exists in storedDataMission
+      const exInStored = (num: number) =>
+        storedDataMission.some(el => el.id === num);
+
+      // Sorting
+      const sorted = [...dataMission.data].sort((a, b) => {
+        if (exInStored(a.id) && !exInStored(b.id)) {
+          return 1; // Move 'a' to end if it exists in exInStored
+        } else if (!exInStored(a.id) && exInStored(b.id)) {
+          return -1; // Keep 'a' before 'b' if only 'b' exists in exInStored
+        }
+        return 0; // No change in order if both or neither are in exInStored
+      });
+      setDataStateMission(sorted);
+    }
+  }, [dataMission?.data, storedDataMission]);
 
   useEffect(() => {
     async function fetchClaim() {
@@ -173,9 +195,9 @@ const TabTwoRewards: FC<Props> = ({refreshing, setRefreshing, rankTitle}) => {
       {isLoadingMissionMaster ? (
         <MissionCardSkeleton />
       ) : (
-        dataMission?.data && (
+        dataStateMission && (
           <FlatList
-            data={dataMission.data}
+            data={dataStateMission}
             showsVerticalScrollIndicator={false}
             keyExtractor={(_, index) => index.toString()}
             scrollEnabled={false}
