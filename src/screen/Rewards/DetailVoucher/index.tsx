@@ -165,12 +165,6 @@ const DetailVoucherRewards: FC<ListVoucherProps> = ({
               <Gap height={4} />
               {data?.termsCondition.value.map((val, i) => (
                 <View key={i} style={{flexDirection: 'row'}}>
-                  <View
-                    style={{
-                      width: widthResponsive(20),
-                    }}>
-                    <Text style={styles.tncValue}>{i + 1}.</Text>
-                  </View>
                   <Text style={[styles.tncValue, {flex: 1, textAlign: 'auto'}]}>
                     {val}
                   </Text>
